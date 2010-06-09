@@ -99,6 +99,8 @@ def user_is_context_owner(context):
     
 def setBungeniOwner(context):
     user_id = get_principal_id()
+    if not user_id: 
+        user_id = "-"
     owner_id = getOwnerId(context)
     log.debug("setBungeniOwner [%s] user_id:%s owner_id:%s" % (
                                                 context, user_id, owner_id))
