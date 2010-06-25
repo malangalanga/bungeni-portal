@@ -24,9 +24,9 @@ Returns information about the operating system
 class OsInfo:
 
 	def __init__(self):
-	"""
-	Initialize the release id and release number variables
-	"""
+		"""
+		Initialize the release id and release number variables
+		"""
 		self.release_id = ''
 		self.release_no = ''
 
@@ -149,8 +149,8 @@ class BungeniConfigReader:
 	def __init__(self):
 		self.config = ConfigObj("bungeni.ini")
 
-	def get_config(self, config_name):
-		return self.config[config_name]
+	def get_config(self, section_name, config_name):
+		return self.config[section_name][config_name]
 	
 			
 
@@ -168,8 +168,8 @@ class BungeniConfigs:
 		Required build parameters - setup paths etc.
 		""" 
 		self.bungeniConfig = BungeniConfigReader()
-		self.user_build_root = get_config('system_root') + '/cbild'
-		self.user_install_root = get_config('system_root') + '/cinst'
+		self.user_build_root = get_config('global','system_root') + '/cbild'
+		self.user_install_root = get_config('global','system_root') + '/cinst'
 		self.user_python25_home = self.user_install_root + "/python25"
 		self.user_python25 = self.user_python25_home + "/bin/python"
 		self.user_python24_home = self.user_install_root + "/python24"
@@ -244,13 +244,12 @@ class PloneTasks:
 def presetup():
 	osInfo = OsInfo()
 	osEssent = OsEssentials()
-	print "I am " + osInfo.release_id() + " " + osInfo.release_no()
-	print "Required = " + str(osEssent.get_reqd_libs(osInfo.release_id(), osInfo.release_no()))
-	bungenipre = BungeniPresetup()
-	bungenipre.essentials()
+	read_configs()
 
 def read_configs():
-	pass
+	configs = BungeniConfigReader()
+	print configs.get_config("global", "system_root")
+	print configs.get_config("bungeni", "build")
 
 
 
