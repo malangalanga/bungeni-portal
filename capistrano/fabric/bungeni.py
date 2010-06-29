@@ -1,4 +1,4 @@
-from fabric.api import run,sudo, env
+from fabric.api import run,sudo,cd,env
 from configobj import ConfigObj
 
 """
@@ -15,6 +15,19 @@ class Utils:
 	def get_basename(self, url_or_filepath):
 		from posixpath import basename
 		return basename(url_or_filepath)
+
+	def get_basename_prefix(self, url_or_filepath):
+		from posixpath import basename
+		from os import path
+		afile = url_or_filepath
+		while(True):
+			l = path.splitext(afile)[0]
+			if (l[1] == ''):
+				afile = l[0]
+				break
+			else:
+				afile = l[0]
+		return basename(afile)
 
 
 
@@ -76,6 +89,7 @@ class OsEssentials:
 			  'Suse' : 'yum install ',
 			  'Redhat' : 'rpm -Uvh ' 
 			 }	
+
 
 
 	"""
@@ -167,9 +181,11 @@ class BungeniConfigs:
 		"""
 		Required build parameters - setup paths etc.
 		""" 
-		self.bungeniConfig = BungeniConfigReader()
-		self.user_build_root = get_config('global','system_root') + '/cbild'
-		self.user_install_root = get_config('global','system_root') + '/cinst'
+		self.cfg = BungeniConfigReader()
+		self.gandi_deploy = self.cfg.get_config('global','gandi_deploy')
+		self.user_build_root = self.cfg.get_config('global','system_root') + '/cbild'
+		self.user_install_root = self.cfg.get_config('global','system_root') + '/cinst'
+		self.linux_headers = 'linux-headers-`uname -r`'
 		self.user_python25_home = self.user_install_root + "/python25"
 		self.user_python25 = self.user_python25_home + "/bin/python"
 		self.user_python24_home = self.user_install_root + "/python24"
@@ -178,49 +194,131 @@ class BungeniConfigs:
 		""" 
 		Python 2.5 build parameters 
 		"""
+		self.python25_install_url = self.cfg.get_config('python25','download_url')
 		self.user_python25_build_path = self.user_build_root + "/python25"
 		self.user_python25_runtime = self.user_install_root + "/python25"
-		self.python25_download_file = self.commonutils.get_basename(python25_install_url)
+		self.python25 = self.user_python25_runtime + "/bin/python"
+		self.python25_download_file = self.commonutils.get_basename(self.python25_install_url)
+		self.python25_src_dir = self.commonutils.get_basename_prefix(self.python25_install_url)
+		self.python25_download_command = self.get_download_command(self.python25_install_url)
 		""" 
 		Python 2.4 build parameters 
 		"""
+		self.python24_install_url = self.cfg.get_config('python24','download_url')
 		self.user_python24_build_path = self.user_build_root + "/python24"
 		self.user_python24_runtime = self.user_install_root + "/python24"
-		self.python24_download_file = self.commonutils.get_basename(python25_install_url)
+		self.python24 = self.user_python24_runtime + "/bin/python"
+		self.python24_download_file = self.commonutils.get_basename(self.python24_install_url)
+		self.python24_src_dir = self.commonutils.get_basename_prefix(self.python24_install_url)
+		self.python24_download_command = self.get_download_command(self.python24_install_url)
+		"""
+		Python Imaging parameters 
+		"""
+		self.python_imaging_download_url = self.cfg.get_config('imaging','download_url')
+		self.python_imaging_build_path = self.user_build_root + "/imaging"
+		self.python_imaging_download_command = self.get_download_command(self.python_imaging_download_url)
+		self.python_imaging_download_file = self.commonutils.get_basename(self.python_imaging_download_url)
+		self.python_imaging_src_dir = self.commonutils.get_basename_prefix(self.python_imaging_download_file)
 		"""
 		Supervisord 
 		"""
-		self.supervisord = self.user_python_home + "/bin/supervisord"
-		self.supervisorctl = self.user_python_home + "/bin/supervisorctl"
+		self.supervisord = self.user_python25_home + "/bin/supervisord"
+		self.supervisorctl = self.user_python25_home + "/bin/supervisorctl"
 
+	def get_download_command (self, strURL):
+		if (strURL.startswith("http") or strURL.startswith("ftp")):
+			return "wget " + strURL
+		else:
+			return "cp " + strURL + " ."
+	
+
+	
 
 
 
 """
 This class does the pre-configuration and environment setup for installing bungeni
 """
-class BungeniPresetup:
+class Presetup:
 
 
 	def __init__(self):
-		pass
+		self.cfg = BungeniConfigs()
+		self.osinfo = OsInfo()
+		self.ossent = OsEssentials()
 
 	def presetup(self):
 		pass
 
 	def essentials(self):
-		osInfo = OsInfo()
-		osEssent = OsEssentials()
 		"""
 		Returns the required libraries for this operating system
 		"""
-		liLibs = osEssent.get_reqd_libs(osInfo.get_release_id(), osInfo.get_release_no())
+		liLibs = self.ossent.get_reqd_libs(osinfo.get_release_id(), osinfo.get_release_no())
 		"""
 		Install the required packages using the specific installation method.
 		"""
-		sudo(osEssent.get_install_method(osInfo.get_release_id()) + " ".join(liLibs))
+		sudo(self.ossent.get_install_method(osinfo.get_release_id()) + " ".join(liLibs))
+		if (self.cfg.gandi_deploy <> True) :
+			"""
+			This is not a gandi deployment
+			"""
+			sudo(ossent.get_install_method(osinfo.get_release_id()) + " " + self.cfg.linux_headers
 
-		
+
+					
+	"""
+	Builds Python 2.5 from source 	
+	"""
+	def build_py25(self):
+		run("mkdir -p " + self.cfg.user_python25_build_path)
+		run("rm -rf " + self.cfg.user_python25_build_path + "/*.*" )
+		run("mkdir -p " + self.cfg.user_python25_runtime)
+		with cd(self.cfg.user_python25_build_path):
+			run(self.cfg.python25_download_command)
+			run("tar xvzf " + self.cfg.python25_download_file)
+			with cd(self.cfg.python25_src_dir):
+				run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl ./configure --prefix=" + self.cfg.user_python25_runtime + " USE=sqlite")
+				run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
+				run("make install")
+
+	"""
+	Builds Python 2.4 from source
+	"""
+	def build_py24(self):
+		run("mkdir -p " + self.cfg.user_python24_build_path)
+		run("rm -rf " + self.cfg.user_python24_build_path + "/*.*" )
+		run("mkdir -p " + self.cfg.user_python24_runtime)
+		with cd(self.cfg.user_python24_build_path):
+			run(self.cfg.python24_download_command)
+			run("tar xvzf " + self.cfg.python24_download_file)
+			with cd(self.cfg.python24_src_dir):
+				run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl ./configure --prefix=" + self.cfg.user_python24_runtime )
+				run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
+				run("make install")
+	
+	"""
+	Builds Python imaging from source
+	Installs it for both Python 2.4 and 2.5
+	"""
+	def build_imaging(self):
+		run("mkdir -p " + self.cfg.python_imaging_build_path)
+		with cd(self.cfg.python_imaging_build_path):
+			run("rm -rf " + self.cfg.python_imaging_download_file)
+			run("wget " + self.cfg.python_imaging_download_url)	
+			run("rm -rf " + self.cfg.python_imaging_src_dir)
+			run("tar xvzf " + self.cfg.python_imaging_download_file)
+			with cd(self.cfg.python_imaging_src_dir):
+				if (os.path.isfile(self.cfg.python25):
+					run(self.cfg.python25 +" setup.py build_ext -i")
+					run(self.cfg.python25 +" setup.py install")
+				if (os.path.isfile(self.cfg.python24):
+					run(self.cfg.python24 + " setup.py build_ext -i")
+					run(self.cfg.python24 + " setup.py install")
+
+
+
+	
 
 
 class BungeniTasks:
