@@ -21,6 +21,13 @@
     </class>   
     <browser:page
       for=".interfaces.ITranscribable"
+      name="display_transcripts"
+      class=".browser.browser.DisplayTranscripts"
+      permission="zope.View"
+      template="browser/transcripts.pt"
+      />
+    <browser:page
+      for=".interfaces.ITranscribable"
       name="transcripts"
       class=".browser.browser.MainView"
       permission="zope.View"
@@ -33,6 +40,7 @@
       permission="zope.View"
       template="browser/main.pt"
       />
+      
       <browser:page
       for=".interfaces.ITranscribable"
       name="add_transcript"

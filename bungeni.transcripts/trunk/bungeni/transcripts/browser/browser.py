@@ -15,6 +15,8 @@ from zope.component import getMultiAdapter
 from bungeni import models
 from zope.security.proxy import removeSecurityProxy
 from zope.formlib.form import AddForm
+from zope.app.form.browser import TextWidget
+from zope.app.form.browser import TextAreaWidget
 class MainView(BrowserView):
     def __call__(self):
         self.group = self.get_group()
@@ -40,16 +42,22 @@ class MainView(BrowserView):
         else:
             media_path = None
         return media_path
+    def get_transcripts(self):
+        session = Session()
+        transcripts = session.query(domain.Transcript).filter(domain.Transcript.sitting_id == self.context.sitting_id).order_by(domain.Transcript.start_time)
+        return transcripts
+    
+
+class DisplayTranscripts(BrowserView):
+    def __call__(self):
+        self.transcripts = self.get_transcripts()
+        return super(DisplayTranscripts, self).__call__()
     
     def get_transcripts(self):
         session = Session()
         transcripts = session.query(domain.Transcript).filter(domain.Transcript.sitting_id == self.context.sitting_id).order_by(domain.Transcript.start_time)
-        new_t = []
-        for t in transcripts:
-            t.version_link = absoluteURL(t, self.context)  + '/version'
-            new_t.append(t);
         return transcripts
-
+        
 class EditMediaPath(ui.EditForm):
     class IEditMediaPathForm(interface.Interface):
         media_path = schema.URI(
@@ -104,22 +112,39 @@ class EditMediaPath(ui.EditForm):
             sitting.media_path =  data['media_path']
         session.commit()
         #import pdb; pdb.set_trace()
-        self._next_url = absoluteURL(self.context, self.request)
+        self._next_url = absoluteURL(self.context, self.request)+"/transcripts"
         self.request.response.redirect(self._next_url)
     @form.action(_(u"Cancel"))  
     def handle_cancel(self, action, data):
         self._next_url = absoluteURL(self.context, self.request) 
         self.request.response.redirect(self._next_url)
-            
+        
+def startTimeWidget(field, request):
+    widget = TextWidget(field, request)
+    widget.cssClass = u"start_time_widget"
+    return widget
+def endTimeWidget(field, request):
+    widget = TextWidget(field, request)
+    widget.cssClass = u"end_time_widget"
+    return widget
+def speechWidget(field, request):
+    widget = TextAreaWidget(field, request)
+    widget.cssClass = u"speech_widget"
+    return widget
+def personWidget(field, request):
+    widget = TextWidget(field, request)
+    widget.cssClass = u"person_widget"
+    return widget
+                 
 class Add(AddForm):
-    class IReportingForm(interface.Interface):
+    class IAddTranscriptForm(interface.Interface):
         start_time = schema.TextLine(
             title=_(u"Start Time"),
             required=True)
         end_time = schema.TextLine(
             title=_(u"EndTime"),
             required=True)
-        text = schema.Text(title=u'Speech Text',
+        speech = schema.Text(title=u'Speech Text',
                    required=False,
                    )
         person = schema.TextLine(title=u'Person',
@@ -128,16 +153,23 @@ class Add(AddForm):
         
     #template = namedtemplate.NamedTemplate('alchemist.form')
     template = ViewPageTemplateFile('empty.pt')
-    form_fields = form.Fields(IReportingForm)
+    form_fields = form.Fields(IAddTranscriptForm)
+    
+    form_fields['start_time'].custom_widget = startTimeWidget
+    form_fields['end_time'].custom_widget = endTimeWidget
+    form_fields['speech'].custom_widget = speechWidget
+    form_fields['person'].custom_widget = personWidget
+    #form_fields['start_time'].field.cssClass = u"asdfasdfasdf" 
+    #import pdb; pdb.set_trace();
     def setUpWidgets(self, ignore_request=False):
         class context:
             start_time = None
             end_time = None
-            text = None
+            speech = None
             person = None
             
         self.adapters = {
-            self.IReportingForm: context
+            self.IAddTranscriptForm: context
             }
         self.widgets = form.setUpEditWidgets(
             self.form_fields, self.prefix, self.context, self.request,
@@ -153,16 +185,21 @@ class Add(AddForm):
         return errors
         
     @form.action(_(u"Save"))  
-    def handle_preview(self, action, data):
+    def handle_save(self, action, data):
         session = Session()
         transcript = domain.Transcript()
         transcript.start_time =  data['start_time']                    
         transcript.end_time =  data['end_time']                      
-        transcript.text = data['text']
+        transcript.text = data['speech']
         transcript.person = data['person'] 
         transcript.sitting_id = self.context.sitting_id
         session.add(transcript)
         session.commit()
+        
+    @form.action(_(u"Cancel"))
+    def handle_cancel(self, action, data):
+        pass
+    
         '''
         ob = self.createAndAdd(data)
         

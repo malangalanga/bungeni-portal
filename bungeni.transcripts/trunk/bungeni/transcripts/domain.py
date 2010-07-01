@@ -6,7 +6,6 @@ from alchemist.traversal.managed import one2many
 from zope.location.interfaces import ILocation
 import sqlalchemy.sql.expression as sql
 
-from bungeni.models import files
 from bungeni.models.domain import ItemLog
 from bungeni.models.domain import ItemVersions
 import logging

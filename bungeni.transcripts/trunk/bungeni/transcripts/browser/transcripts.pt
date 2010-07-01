@@ -1,24 +1,5 @@
-<metal:block define-macro="body">
-    <link rel="stylesheet" type="text/css" media="all" href="transcripts.css"
-      tal:attributes="href context/++resource++transcripts.css" /> 
-    <script type="text/javascript" src="transcript.js"
-     tal:attributes="src context/++resource++transcripts.js"></script>
-    <script type="text/javascript" src="ui.slider.js"
-     tal:attributes="src context/++resource++ui.slider.js"></script>
-    <metal:main> 
-    <div id="transcripts_main">
-        <div id="transcript_video">
-            <span tal:content="view/sitting_id"/><br/>
-            <span tal:condition="view/sitting_media_path | nothing">
-	            <video tal:attributes="src view/sitting_media_path" controls="controls" width="400" height="300">
-                    your browser does not support the video tag
-                </video>
-            </span>
-            <span tal:condition="not: view/sitting_media_path">
-	            <img tal:attributes="src context/++resource++no_media.png"></img>
-            </span>
-        </div>  
-        <div id="video_side_bar">
+<metal:block define-macro="transcripts">
+<metal:main>
             <fieldset id="video_side_bar_fieldset"  >
                 <legend >
                     <a href="javascript:add_transcript()">New transcript</a>
@@ -47,9 +28,5 @@
                     </fieldset>
                 </tal:loop>
             </fieldset>
-            
-        </div>  
-    </div>
-    </metal:main>
-
-</metal:block>
+     </metal:main>
+ </metal:block>
