@@ -28,6 +28,12 @@ class Utils:
 			return filename.replace(ext,"")
 		return filename
 
+	def parse_boolean(self, boolval):
+		bool_map = {'true':True, 'false':False}
+		if (boolval==True) or (boolval==False):
+			return boolval
+		return bool_map[boolval.strip().lower()]
+
 
 
 """
@@ -176,19 +182,20 @@ class BungeniConfigs:
 		"""
 		Required initializations
 		"""
-		self.commonutils = Utils()
+		self.utils = Utils()
+		self.cfg = BungeniConfigReader()
 		"""
 		Scm parameters
 		"""
-		self.svn_user = self.cfg.get_config('global','svn_user')
-		self.svn_password = self.cfg.get_config('global', 'svn_pass')
-		self.svn_repo = self.cfg.get_config('global','svn_repo')
+		self.svn_user = self.cfg.get_config('scm','user')
+		self.svn_password = self.cfg.get_config('scm', 'pass')
 		"""
 		Required build parameters - setup paths for python(s), builds etc.
 		""" 
 		self.cfg = BungeniConfigReader()
-		self.development_build = self.cfg.get_config('global', 'development_build')
-		self.gandi_deploy = self.cfg.get_config('global','gandi_deploy')
+		self.development_build = self.utils.parse_boolean(self.cfg.get_config('global', 'development_build'))
+		self.local_cache = self.utils.parse_boolean(self.cfg.get_config('global','local_cache'))
+		self.gandi_deploy = self.utils.parse_boolean(self.cfg.get_config('global','gandi_deploy'))
 		self.user_build_root = self.cfg.get_config('global','system_root') + '/cbild'
 		self.user_install_root = self.cfg.get_config('global','system_root') + '/cinst'
 		self.linux_headers = 'linux-headers-`uname -r`'
@@ -209,8 +216,8 @@ class BungeniConfigs:
 		self.user_python25_build_path = self.user_build_root + "/python25"
 		self.user_python25_runtime = self.user_install_root + "/python25"
 		self.python25 = self.user_python25_runtime + "/bin/python"
-		self.python25_download_file = self.commonutils.get_basename(self.python25_install_url)
-		self.python25_src_dir = self.commonutils.get_basename_prefix(self.python25_install_url)
+		self.python25_download_file = self.utils.get_basename(self.python25_install_url)
+		self.python25_src_dir = self.utils.get_basename_prefix(self.python25_install_url)
 		self.python25_download_command = self.get_download_command(self.python25_install_url)
 		""" 
 		Python 2.4 build parameters 
@@ -219,8 +226,8 @@ class BungeniConfigs:
 		self.user_python24_build_path = self.user_build_root + "/python24"
 		self.user_python24_runtime = self.user_install_root + "/python24"
 		self.python24 = self.user_python24_runtime + "/bin/python"
-		self.python24_download_file = self.commonutils.get_basename(self.python24_install_url)
-		self.python24_src_dir = self.commonutils.get_basename_prefix(self.python24_install_url)
+		self.python24_download_file = self.utils.get_basename(self.python24_install_url)
+		self.python24_src_dir = self.utils.get_basename_prefix(self.python24_install_url)
 		self.python24_download_command = self.get_download_command(self.python24_install_url)
 		"""
 		Python Imaging parameters 
@@ -228,8 +235,29 @@ class BungeniConfigs:
 		self.python_imaging_download_url = self.cfg.get_config('imaging','download_url')
 		self.python_imaging_build_path = self.user_build_root + "/imaging"
 		self.python_imaging_download_command = self.get_download_command(self.python_imaging_download_url)
-		self.python_imaging_download_file = self.commonutils.get_basename(self.python_imaging_download_url)
-		self.python_imaging_src_dir = self.commonutils.get_basename_prefix(self.python_imaging_download_file)
+		self.python_imaging_download_file = self.utils.get_basename(self.python_imaging_download_url)
+		self.python_imaging_src_dir = self.utils.get_basename_prefix(self.python_imaging_download_file)
+		"""
+		Buildout configs - Bungeni
+		"""
+		self.bungeni_repo = self.cfg.get_config('bungeni','repo')
+		self.bungeni_general_buildout_config = "buildout.cfg"
+		self.bungeni_local_buildout_config = "buildout_local.cfg"
+		self.bungeni_buildout_config = self.bungeni_general_buildout_config if self.local_cache==False else self.bungeni_local_buildout_config
+		"""
+		Buildout configs - Plone
+		"""		
+		self.plone_repo = self.cfg.get_config('plone','repo')
+		self.plone_general_buildout_config = "buildout.cfg"
+		self.plone_local_buildout_config = "buildout_local.cfg"
+		self.plone_buildout_config = self.plone_general_buildout_config if self.local_cache==False else self.plone_local_buildout_config
+		"""
+		Buildout configs - Portal 
+		"""
+		self.portal_repo = self.cfg.get_config('portal','repo')
+		self.portal_general_buildout_config = "buildout.cfg"
+		self.portal_local_buildout_config = "buildout_local.cfg"
+		self.portal_buildout_config = self.portal_general_buildout_config if self.local_cache==False else self.portal_local_buildout_config
 		"""
 		Supervisord 
 		"""
@@ -380,30 +408,99 @@ class SCM:
 
 
 
+"""
+Class used for general buildout tasks
+Used by bungeni, plone and portal buildout tasks
+"""
+class Tasks:
+	def __init__(self, cfg, repo,  working_folder):
+	    """
+	    cfg - BungeniConfigs object
+	    repo - Address of svn repository
+            working_folder - working folder for checkout and for running buildout
+	    """
+	    self.cfg = cfg
+	    self.scm = SCM(self.cfg.development_build, repo, self.cfg.svn_user, self.cfg.svn_password, working_folder)
+	
+	def src_checkout(self):
+	    run("mkdir -p %s" % self.scm.working_copy)
+	    self.scm.checkout()	
 
+	def buildout(self, boprefix, boparam, boconfig):
+	    with cd(self.scm.working_copy):
+		run("%s ./bin/buildout -t 3600 %s -c %s" % (boprefix, boparam, boconfig))
+
+        def bootstrap(self, pythonexec):
+	    path_prefix = ""
+            if (os.path.isfile(self.scm.working_copy+"/bootstrap.py")):	
+                path_prefix="./"
+ 	    else:
+		path_prefix="../"
+            with cd(self.scm.working_copy):
+		run("%s %sbootstrap.py" % (pythonexec,path_prefix))
+	
+	
+class PloneTasks:
+	def __init__(self):
+	   self.cfg = BungeniConfigs()
+	   self.tasks = Tasks(self.cfg, self.cfg.plone_repo, self.cfg.user_plone)
 	   
+        def setup(self):
+	   self.tasks.src_checkout()
+	   self.tasks.bootstrap(self.cfg.python24)
+	  
+        def build(self):
+	   tasks.buildout("PYTHON=%s" % self.cfg.python24, "", self.cfg.plone_buildout_config)
 
-	
-	
-	
+	def build_opt(self):
+	   tasks.buildout("PYTHON=%s" % self.cfg.python24, "-N", self.cfg.plone_buildout_config)
+		
+
+class PortalTasks:
+	def __init__(self):
+	   self.cfg = BungeniConfigs()
+	   self.tasks = Tasks(self.cfg, self.cfg.portal_repo, self.cfg.user_portal)
+	   
+        def setup(self):
+	   self.tasks.src_checkout()
+	   self.tasks.bootstrap(self.cfg.python25)
+	  
+        def build(self):
+	   self.tasks.buildout("PYTHON=%s" % self.cfg.python25, "", self.cfg.portal_buildout_config)
+
+	def build_opt(self):
+	   self.tasks.buildout("PYTHON=%s" % self.cfg.python25, "-N", self.cfg.portal_buildout_config)
 
 class BungeniTasks:
 	def __init__(self):
 	   self.cfg = BungeniConfigs()
-	   self.scm = SCM(self.cfg.development_build, self.cfg.svn_repo, self.cfg.svn_user, self.cfg.svn_pass, self.cfg.user_bungeni)
+	   self.scm = SCM(self.cfg.development_build, self.cfg.bungeni_repo, self.cfg.svn_user, self.cfg.svn_password, self.cfg.user_bungeni)
 
 	def src_checkout(self):
 	   run("mkdir -p %s" % self.cfg.user_bungeni)
-	   run(self.scm.checkout())
+	   self.scm.checkout()
 
 	def bootstrap(self):
 	   with cd(self.cfg.user_bungeni):
+	      print "%s bootstrap.py" % str(self.cfg.python25)
 	      run("%s bootstrap.py" % self.cfg.python25)
 
-	def buildout(self, boconfig):
+	def buildout(self, boparam, boconfig):
 	   with cd(self.cfg.user_bungeni):
-	      run("%s ./bin/buildout -c %s" % (prefix, boconfig))
+	      run("PYTHON=%s ./bin/buildout -t 3600 %s -c %s" % (self.cfg.python25, boparam, boconfig))
 	    
+	def buildout_opt(self):
+	    self.buildout("-N", self.cfg.bungeni_buildout_config)
+
+	def buildout_full(self):
+	    print self.cfg.local_cache
+	    self.buildout("", self.cfg.bungeni_buildout_config)
+
+
+class BungeniInstall:
+	def __init__(self):
+	   self.tasks = BungeniTasks()
+
 
 
 class PlonePresetup:

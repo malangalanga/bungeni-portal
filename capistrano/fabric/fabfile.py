@@ -1,5 +1,6 @@
 import bungeni
 
+
 """
 Build python 2.5
 """
@@ -35,3 +36,32 @@ def setup_pylibs():
 	"""
 	bungenipre = bungeni.Presetup()
 	bungenipre.required_pylibs()
+
+
+
+
+def bungeni_checkout():
+	"""
+	Checks out bungeni source 
+	"""
+	tasks = bungeni.BungeniTasks()
+	tasks.src_checkout()
+	tasks.bootstrap()
+
+def bungeni_bo_full():
+	"""
+	Runs the bungeni buildout
+	"""
+	tasks = bungeni.BungeniTasks()
+	tasks.buildout_full()
+
+def bungeni_bo_opt():
+	tasks = bungeni.BungeniTasks()
+	tasks.buildout_opt()
+
+
+def portal_install():
+	tasks = bungeni.PortalTasks()
+	tasks.setup()
+	tasks.build()
+		
