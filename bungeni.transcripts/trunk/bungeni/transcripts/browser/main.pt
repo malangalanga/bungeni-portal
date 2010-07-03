@@ -10,7 +10,7 @@
         <div id="transcript_video">
             <span tal:content="view/sitting_id"/><br/>
             <span tal:condition="view/sitting_media_path | nothing">
-	            <video tal:attributes="src view/sitting_media_path" controls="controls" width="400" height="300">
+	            <video tal:attributes="src view/sitting_media_path; duration view/duration" controls="controls" width="400" height="300">
                     your browser does not support the video tag
                 </video>
             </span>

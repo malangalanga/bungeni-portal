@@ -14,9 +14,11 @@ from zope.traversing.browser import absoluteURL
 from zope.component import getMultiAdapter
 from bungeni import models
 from zope.security.proxy import removeSecurityProxy
-from zope.formlib.form import AddForm
+from zope.formlib.form import AddForm, EditForm
 from zope.app.form.browser import TextWidget
 from zope.app.form.browser import TextAreaWidget
+from bungeni.ui.utils import url
+
 class MainView(BrowserView):
     def __call__(self):
         self.group = self.get_group()
@@ -56,6 +58,7 @@ class DisplayTranscripts(BrowserView):
     def get_transcripts(self):
         session = Session()
         transcripts = session.query(domain.Transcript).filter(domain.Transcript.sitting_id == self.context.sitting_id).order_by(domain.Transcript.start_time)
+        transcripts.edit_url = url.absoluteURL()+"/edit";
         return transcripts
         
 class EditMediaPath(ui.EditForm):
@@ -136,7 +139,7 @@ def personWidget(field, request):
     widget.cssClass = u"person_widget"
     return widget
                  
-class Add(AddForm):
+class AddTranscript(AddForm):
     class IAddTranscriptForm(interface.Interface):
         start_time = schema.TextLine(
             title=_(u"Start Time"),
@@ -163,10 +166,12 @@ class Add(AddForm):
     #import pdb; pdb.set_trace();
     def setUpWidgets(self, ignore_request=False):
         class context:
-            start_time = None
-            end_time = None
-            speech = None
-            person = None
+            if IGroupSitting.providedBy(self.context):
+                start_time = None
+                end_time = None
+                speech = None
+                person = None
+            
             
         self.adapters = {
             self.IAddTranscriptForm: context
@@ -176,12 +181,11 @@ class Add(AddForm):
             adapters=self.adapters, ignore_request=ignore_request)
     
     def update(self):
-        self.status = self.request.get('portal_status_message', '')
-        super(Add, self).update()
+        super(AddTranscript, self).update()
         set_widget_errors(self.widgets, self.errors)
 
     def validate(self, action, data):    
-        errors = super(Add, self).validate(action, data)
+        errors = super(AddTranscript, self).validate(action, data)
         return errors
         
     @form.action(_(u"Save"))  
@@ -209,5 +213,42 @@ class Add(AddForm):
             self._next_url = absoluteURL(
                 ob, self.request) + \
                 '?portal_status_message=%s added' % name'''
-       
+class EditTranscript(EditForm, AddTranscript):
+    def setUpWidgets(self, ignore_request=False):
+        class context:
+                start_time = self.context.start_time
+                end_time = self.context.end_time
+                speech = self.context.speech
+                person = self.context.person
+            
+            
+        self.adapters = {
+            self.IEditTranscriptForm: context
+            }
+        self.widgets = form.setUpEditWidgets(
+            self.form_fields, self.prefix, self.context, self.request,
+            adapters=self.adapters, ignore_request=ignore_request)
+    
+    def update(self):
+        self.status = self.request.get('portal_status_message', '')
+        super(EditTranscript, self).update()
+        set_widget_errors(self.widgets, self.errors)
+
+    def validate(self, action, data):    
+        errors = super(EditTranscript, self).validate(action, data)
+        return errors
+    @form.action(_(u"Save"))  
+    def handle_save(self, action, data):
+        session = Session()
+        transcript = self.context
+        transcript.start_time =  data['start_time']                    
+        transcript.end_time =  data['end_time']                      
+        transcript.text = data['speech']
+        transcript.person = data['person']
+        session.commit()
+        
+    @form.action(_(u"Cancel"))
+    def handle_cancel(self, action, data):
+        pass
+           
                 
