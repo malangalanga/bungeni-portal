@@ -25,7 +25,6 @@ class MainView(BrowserView):
         self.group_id = self.context.group_id
         self.sitting_id = self.context.sitting_id
         self.sitting_media_path = self.get_media_path()
-        self.transcripts = self.get_transcripts()
         return super(MainView, self).__call__()
         
     def get_group(self):
@@ -44,10 +43,6 @@ class MainView(BrowserView):
         else:
             media_path = None
         return media_path
-    def get_transcripts(self):
-        session = Session()
-        transcripts = session.query(domain.Transcript).filter(domain.Transcript.sitting_id == self.context.sitting_id).order_by(domain.Transcript.start_time)
-        return transcripts
     
 
 class DisplayTranscripts(BrowserView):
@@ -58,8 +53,13 @@ class DisplayTranscripts(BrowserView):
     def get_transcripts(self):
         session = Session()
         transcripts = session.query(domain.Transcript).filter(domain.Transcript.sitting_id == self.context.sitting_id).order_by(domain.Transcript.start_time)
-        transcripts.edit_url = url.absoluteURL()+"/edit";
-        return transcripts
+        #import pdb; pdb.set_trace()
+        ts = []
+        for transcript in transcripts:
+            t = removeSecurityProxy(transcript)
+            t.edit_url = "javascript:edit_transcript("+url.absoluteURL(t, self.request)+"/edit_transcript)";
+            ts.append(t)
+        return t
         
 class EditMediaPath(ui.EditForm):
     class IEditMediaPathForm(interface.Interface):
@@ -166,7 +166,6 @@ class AddTranscript(AddForm):
     #import pdb; pdb.set_trace();
     def setUpWidgets(self, ignore_request=False):
         class context:
-            if IGroupSitting.providedBy(self.context):
                 start_time = None
                 end_time = None
                 speech = None
@@ -213,7 +212,7 @@ class AddTranscript(AddForm):
             self._next_url = absoluteURL(
                 ob, self.request) + \
                 '?portal_status_message=%s added' % name'''
-class EditTranscript(EditForm, AddTranscript):
+class EditTranscript(AddTranscript):
     def setUpWidgets(self, ignore_request=False):
         class context:
                 start_time = self.context.start_time
@@ -230,7 +229,6 @@ class EditTranscript(EditForm, AddTranscript):
             adapters=self.adapters, ignore_request=ignore_request)
     
     def update(self):
-        self.status = self.request.get('portal_status_message', '')
         super(EditTranscript, self).update()
         set_widget_errors(self.widgets, self.errors)
 

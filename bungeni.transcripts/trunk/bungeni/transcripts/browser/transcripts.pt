@@ -13,7 +13,7 @@
                                 <img tal:attributes="src context/++resource++control_play_blue.png"/>
                                 <span tal:replace="transcript/start_time | nothing"/> to <span tal:replace="transcript/end_time | nothing"/>
                             </a> | 
-                            <a href="javascript:edit_transcript()">Edit</a> |
+                            <a tal:attributes="href view/edit_url">Edit</a> |
                             <a href="javascript:delete_transcript()">Delete</a> | 
                             <a href="javascript:edit_transcript()">Versions</a> |
                             <a href="javascript:edit_transcript()">Audit Log</a>
