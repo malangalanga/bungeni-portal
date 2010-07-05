@@ -1,14 +1,15 @@
 <metal:block define-macro="body">
     <link rel="stylesheet" type="text/css" media="all" href="transcripts.css"
       tal:attributes="href context/++resource++transcripts.css" /> 
+      <!-- script type="text/javascript" src="ui.slider.js"
+     tal:attributes="src context/++resource++ui.slider.js"></script -->
     <script type="text/javascript" src="transcript.js"
      tal:attributes="src context/++resource++transcripts.js"></script>
-    <script type="text/javascript" src="ui.slider.js"
-     tal:attributes="src context/++resource++ui.slider.js"></script>
+    
     <metal:main> 
     <div id="transcripts_main">
         <div id="transcript_video">
-            <span tal:content="view/sitting_id"/><br/>
+            <div id="testslider"></div>
             <span tal:condition="view/sitting_media_path | nothing">
 	            <video tal:attributes="src view/sitting_media_path; duration view/duration" controls="controls" width="400" height="300">
                     your browser does not support the video tag

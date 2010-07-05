@@ -2,7 +2,7 @@ from zope.interface import Interface
 from zope import schema
 from bungeni.ui.i18n import _
 
-class ITranscriptForm(Interface):
+class ITranscriptForm():
         start_time = schema.TextLine(
             title=_(u"Start Time"),
             required=True)

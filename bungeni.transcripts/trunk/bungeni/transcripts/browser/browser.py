@@ -14,17 +14,19 @@ from zope.traversing.browser import absoluteURL
 from zope.component import getMultiAdapter
 from bungeni import models
 from zope.security.proxy import removeSecurityProxy
-from zope.formlib.form import AddForm, EditForm
+from zope.formlib.form import AddForm, EditForm, PageForm
 from zope.app.form.browser import TextWidget
 from zope.app.form.browser import TextAreaWidget
 from bungeni.ui.utils import url
-
+from bungeni.transcripts.interfaces import ITranscriptForm
+from zope.component import createObject, getMultiAdapter
 class MainView(BrowserView):
     def __call__(self):
         self.group = self.get_group()
         self.group_id = self.context.group_id
         self.sitting_id = self.context.sitting_id
         self.sitting_media_path = self.get_media_path()
+        self.duration =  self.context.end_date - self.context.start_date
         return super(MainView, self).__call__()
         
     def get_group(self):
@@ -59,7 +61,7 @@ class DisplayTranscripts(BrowserView):
             t = removeSecurityProxy(transcript)
             t.edit_url = "javascript:edit_transcript("+url.absoluteURL(t, self.request)+"/edit_transcript)";
             ts.append(t)
-        return t
+        return transcripts
         
 class EditMediaPath(ui.EditForm):
     class IEditMediaPathForm(interface.Interface):
@@ -138,47 +140,21 @@ def personWidget(field, request):
     widget = TextWidget(field, request)
     widget.cssClass = u"person_widget"
     return widget
-                 
-class AddTranscript(AddForm):
-    class IAddTranscriptForm(interface.Interface):
-        start_time = schema.TextLine(
-            title=_(u"Start Time"),
-            required=True)
-        end_time = schema.TextLine(
-            title=_(u"EndTime"),
-            required=True)
-        speech = schema.Text(title=u'Speech Text',
-                   required=False,
-                   )
-        person = schema.TextLine(title=u'Person',
-                   required=False,
-                   )
-        
-    #template = namedtemplate.NamedTemplate('alchemist.form')
+
+class TranscriptBaseForm(PageForm):
     template = ViewPageTemplateFile('empty.pt')
-    form_fields = form.Fields(IAddTranscriptForm)
-    
+    form_fields = form.Fields(ITranscriptForm) 
     form_fields['start_time'].custom_widget = startTimeWidget
     form_fields['end_time'].custom_widget = endTimeWidget
     form_fields['speech'].custom_widget = speechWidget
     form_fields['person'].custom_widget = personWidget
-    #form_fields['start_time'].field.cssClass = u"asdfasdfasdf" 
-    #import pdb; pdb.set_trace();
-    def setUpWidgets(self, ignore_request=False):
-        class context:
-                start_time = None
-                end_time = None
-                speech = None
-                person = None
-            
-            
-        self.adapters = {
-            self.IAddTranscriptForm: context
-            }
-        self.widgets = form.setUpEditWidgets(
-            self.form_fields, self.prefix, self.context, self.request,
-            adapters=self.adapters, ignore_request=ignore_request)
-    
+                 
+class AddTranscript(AddForm, TranscriptBaseForm):      
+    def create(self, data):
+        document = createObject(u'ITranscript')
+        applyChanges(document, self.form_fields, data)
+        return document
+        
     def update(self):
         super(AddTranscript, self).update()
         set_widget_errors(self.widgets, self.errors)
@@ -186,8 +162,8 @@ class AddTranscript(AddForm):
     def validate(self, action, data):    
         errors = super(AddTranscript, self).validate(action, data)
         return errors
-        
-    @form.action(_(u"Save"))  
+    
+    @form.action(_(u"Save"))
     def handle_save(self, action, data):
         session = Session()
         transcript = domain.Transcript()
@@ -198,35 +174,13 @@ class AddTranscript(AddForm):
         transcript.sitting_id = self.context.sitting_id
         session.add(transcript)
         session.commit()
-        
+        return 'Save'
+    
     @form.action(_(u"Cancel"))
     def handle_cancel(self, action, data):
-        pass
-    
-        '''
-        ob = self.createAndAdd(data)
+        return 'Cancel'
         
-        name = self.context.domain_model.__name__
-
-        if not self._next_url:
-            self._next_url = absoluteURL(
-                ob, self.request) + \
-                '?portal_status_message=%s added' % name'''
-class EditTranscript(AddTranscript):
-    def setUpWidgets(self, ignore_request=False):
-        class context:
-                start_time = self.context.start_time
-                end_time = self.context.end_time
-                speech = self.context.speech
-                person = self.context.person
-            
-            
-        self.adapters = {
-            self.IEditTranscriptForm: context
-            }
-        self.widgets = form.setUpEditWidgets(
-            self.form_fields, self.prefix, self.context, self.request,
-            adapters=self.adapters, ignore_request=ignore_request)
+class EditTranscript(EditForm, TranscriptBaseForm):
     
     def update(self):
         super(EditTranscript, self).update()
@@ -235,18 +189,30 @@ class EditTranscript(AddTranscript):
     def validate(self, action, data):    
         errors = super(EditTranscript, self).validate(action, data)
         return errors
+        
     @form.action(_(u"Save"))  
     def handle_save(self, action, data):
-        session = Session()
-        transcript = self.context
-        transcript.start_time =  data['start_time']                    
-        transcript.end_time =  data['end_time']                      
-        transcript.text = data['speech']
-        transcript.person = data['person']
-        session.commit()
+        changed = form.applyChanges(self.context, self.form_fields, data)
+        return 'saved'
+
         
     @form.action(_(u"Cancel"))
     def handle_cancel(self, action, data):
-        pass
+        return 'cancel'
            
-                
+class GenerateTakes(PageForm):
+
+class Takes(BrowserView):  
+    def __call__(self):
+        self.takes = self.get_takes()
+        return super(Takes, self).__call__()
+    
+    def get_takes(self):
+        session = Session()
+        takes = session.query(domain.Takes).filter(domain.Takes.sitting_id == self.context.sitting_id).order_by(domain.Takes.start_time)
+        #import pdb; pdb.set_trace()
+        return takes
+
+class Staff(BrowserView):
+       
+           

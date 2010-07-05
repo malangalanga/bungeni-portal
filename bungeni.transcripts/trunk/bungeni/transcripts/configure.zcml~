@@ -61,21 +61,6 @@
       class=".browser.browser.EditMediaPath"
       permission="zope.ManageContent"
       />
-      
-      <browser:page
-      for=".interfaces.ITranscribable"
-      name="staff"
-      class=".browser.browser.Staff"
-      permission="zope.ManageContent"
-      />
-      
-      <browser:page
-      for=".interfaces.ITranscribable"
-      name="takes"
-      class=".browser.browser.Takes"
-      permission="zope.ManageContent"
-      />
-      
     <browser:menuItem
      menu="context_actions"
      for=".interfaces.ITranscribable"

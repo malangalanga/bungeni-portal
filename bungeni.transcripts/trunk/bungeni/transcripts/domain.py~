@@ -38,12 +38,12 @@ class Entity( object ):
                         self.__class__.__name__, k))
 
 
-class Sitting( Entity ):
-    """ A Sitting """
-    interface.implements( interfaces.IBungeniTranscriptsSitting  )
-    
-    transcripts = one2many("trans", "bungeni.transcripts.domain.TranscriptContainer", "sitting_id")
-    
+#class Sitting( Entity ):
+#    """ A Sitting """
+#    interface.implements( interfaces.IBungeniTranscriptsSitting  )
+#    
+#    transcripts = one2many("trans", "bungeni.transcripts.domain.TranscriptContainer", "sitting_id")
+#    
     
 class Transcript( Entity ):    
     """

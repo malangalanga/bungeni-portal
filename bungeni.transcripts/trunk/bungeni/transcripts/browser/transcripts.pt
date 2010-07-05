@@ -7,13 +7,14 @@
                 <div id="new_transcript">
                 </div>
                 <tal:loop tal:repeat="transcript view/transcripts">
+                    <div tal:attribute="id view/transcript/transcript_id">
                     <fieldset id="transcript_fieldset" >
                         <legend>
                             <a href="javascript:play();" style="font-weight: bold; color: rgb(0, 0, 0);">
                                 <img tal:attributes="src context/++resource++control_play_blue.png"/>
                                 <span tal:replace="transcript/start_time | nothing"/> to <span tal:replace="transcript/end_time | nothing"/>
                             </a> | 
-                            <a tal:attributes="href view/edit_url">Edit</a> |
+                            <a >Edit</a> |
                             <a href="javascript:delete_transcript()">Delete</a> | 
                             <a href="javascript:edit_transcript()">Versions</a> |
                             <a href="javascript:edit_transcript()">Audit Log</a>
@@ -26,6 +27,7 @@
                         </div>
                         
                     </fieldset>
+                    </div>
                 </tal:loop>
             </fieldset>
      </metal:main>

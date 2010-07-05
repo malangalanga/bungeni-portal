@@ -1,7 +1,7 @@
 function add_transcript(){
     $('#new_transcript').height('200px');
     $('#new_transcript').load('add_transcript', function() {
-        $('#transcripts_add_form').append("<div id=transcript_slider>asdfas</div>");
+        $('#transcripts_add_form').append('<div id="transcript_slider"></div>');
         $("#transcript_slider").slider();
         $('#transcripts_add_form').ajaxForm(function() {
                     $('#video_side_bar').load('display_transcripts');
@@ -14,7 +14,7 @@ function add_transcript(){
 function edit_transcript(url){
     $('#new_transcript').height('200px');
     $('#new_transcript').load('add_transcript', function() {
-        $('#transcripts_add_form').append("<div id=transcript_slider>asdfas</div>");
+        $('#transcripts_add_form').append('<div id="transcript_slider"></div>');
         $("#transcript_slider").slider();
         $('#transcripts_add_form').ajaxForm(function() {
                     $('#video_side_bar').load('display_transcripts');
@@ -25,6 +25,12 @@ function edit_transcript(url){
 }
 
 $(document).ready(function() {
-    //$('#new_transcript').hide();
+    $('#testslider').slider();
     $('#video_side_bar').load('display_transcripts');
+    $('#form.actions.cancel').click( function(){
+            $('#new_transcript').hide();
+            alert("asdsdf");
+            return false;
+        }
+    )
 });
