@@ -58,3 +58,16 @@ class Transcript( Entity ):
         "content_id")    
 TranscriptChange = ItemLog.makeLogFactory( "TranscriptChange")
 TranscriptVersion = ItemVersions.makeVersionFactory("TranscriptVersion")
+
+
+class Take( Entity ):    
+    """
+    A Take
+    """
+    interface.implements( interfaces.IBungeniTake  ) 
+
+class Assignment( Entity ):    
+    """
+    A Take
+    """
+    interface.implements( interfaces.IBungeniAssignment ) 

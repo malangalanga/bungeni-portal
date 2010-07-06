@@ -201,7 +201,8 @@ class EditTranscript(EditForm, TranscriptBaseForm):
         return 'cancel'
            
 class GenerateTakes(PageForm):
-
+    pass
+    
 class Takes(BrowserView):  
     def __call__(self):
         self.takes = self.get_takes()
@@ -213,6 +214,25 @@ class Takes(BrowserView):
         #import pdb; pdb.set_trace()
         return takes
 
-class Staff(BrowserView):
-       
+class Assignment(BrowserView):
+    def __call__(self):
+        self.available_editors = self.get_available_editors()
+        self.available_readers = self.get_available_readers()
+        self.available_reporters = self.get_available_reporters()
+        self.assigned_editors = self.get_assigned_editors()
+        self.assigned_readers = self.get_assigned_readers()
+        self.assigned_reporters = self.get_assigned_reporters()
+        return super(Takes, self).__call__()
+    def get_available_reporters():
+        pass 
+    def get_available_readers():
+        pass
+    def get_available_editors():
+        pass  
+    def get_assigned_reporters():
+        pass 
+    def get_assigned_readers():
+        pass
+    def get_assigned_editors():
+        pass
            

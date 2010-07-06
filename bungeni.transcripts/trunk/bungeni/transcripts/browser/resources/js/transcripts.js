@@ -25,7 +25,7 @@ function edit_transcript(url){
 }
 
 $(document).ready(function() {
-    $('#testslider').slider();
+    //$('#testslider').slider();
     $('#video_side_bar').load('display_transcripts');
     $('#form.actions.cancel').click( function(){
             $('#new_transcript').hide();

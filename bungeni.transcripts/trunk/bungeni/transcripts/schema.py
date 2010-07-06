@@ -85,6 +85,27 @@ sitting = rdb.Table(
     rdb.Column('media_path', rdb.UnicodeText, nullable=False), 
     )
 
+takes = rdb.Table(
+    "takes",
+    metadata,
+    rdb.Column('take_id', rdb.Integer, primary_key=True),
+    rdb.Column('start_time', rdb.Unicode(80), nullable=False ),
+    rdb.Column('end_time', rdb.Unicode(80), nullable=False),
+    rdb.Column('staff_id', rdb.Integer,nullable=False),
+    rdb.Column("sitting_id", rdb.Integer, nullable=False ),
+    )
+    
+assignment = rdb.Table(
+    "assignment",
+    metadata,
+    rdb.Column('assignment_id', rdb.Integer, primary_key=True),
+    rdb.Column('reporter_id', rdb.Integer, nullable=False),
+    rdb.Column('reader_id', rdb.Integer, nullable=False),
+    rdb.Column('editor_id', rdb.Integer, nullable=False),
+    rdb.Column("sitting_id", rdb.Integer, nullable=False ),
+    )
+    
+    
 db = rdb.create_engine('postgres://localhost/bungeni', echo=False)
 metadata.bind = db
 #metadata.drop_all()

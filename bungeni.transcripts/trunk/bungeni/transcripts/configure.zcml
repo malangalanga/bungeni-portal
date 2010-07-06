@@ -65,8 +65,9 @@
       <browser:page
       for=".interfaces.ITranscribable"
       name="staff"
-      class=".browser.browser.Staff"
+      class=".browser.browser.Assignment"
       permission="zope.ManageContent"
+      template="browser/assignment.pt"
       />
       
       <browser:page
@@ -74,6 +75,7 @@
       name="takes"
       class=".browser.browser.Takes"
       permission="zope.ManageContent"
+      template="browser/takes.pt"
       />
       
     <browser:menuItem
@@ -99,9 +101,18 @@
     
     <browser:menuItem
      menu="context_edit_transcript"
-     for="*"
-     title="edit media path"
-     action="edit_media_path"
+     for=".interfaces.ITranscribable"
+     title="generate takes"
+     action="takes"
      permission="zope.ManageContent"
      />
+     
+     <browser:menuItem
+     menu="context_edit_transcript"
+     for=".interfaces.ITranscribable"
+     title="assign staff"
+     action="staff"
+     permission="zope.ManageContent"
+     />
+     
 </configure>

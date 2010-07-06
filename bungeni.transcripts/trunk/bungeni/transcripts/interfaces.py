@@ -30,6 +30,12 @@ class IVersion( Interface ):
     a version of an object is identical in attributes to the actual object, based
     on that object's domain schema
     """
+
+class IBungeniTake(Interface):
+    '''Take Marker Interface'''
+
+class IBungeniAssignment(Interface):
+    '''Assignment Marker Interface'''
     
 class IBungeniTranscriptsSitting(Interface):
     pass

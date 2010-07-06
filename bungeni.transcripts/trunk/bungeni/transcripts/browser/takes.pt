@@ -6,11 +6,14 @@
     <metal:block define-macro="body">
     
     <metal:main>
-    <div>Generate Takes. Please specify duration of takes in minutes
+    <div><fieldset>Generate Takes. Please specify duration of takes in minutes
+    <form>
     <input type="text"></input>
     <input type="submit"></input>
-    </div> 
+    </form>
+    </fieldset></div> 
     <div id="takes_main">
+    <fieldset>
         <table>
             <tr>
                 <th>
@@ -36,6 +39,7 @@
                 </tr>
             </tal:loop>
         </table>
+       </fieldset>
     </div>
     </metal:main>
 
