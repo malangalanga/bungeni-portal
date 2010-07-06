@@ -13,7 +13,7 @@
     <include package="bungeni.core" />
     <include package=".browser" />
     <include package="bungeni.models" />
-    
+    <include file="catalyst.zcml"/>
     <class class="bungeni.models.domain.GroupSitting">
         <implements
             interface="bungeni.transcripts.interfaces.ITranscribable"

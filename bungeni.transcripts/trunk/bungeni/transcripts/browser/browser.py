@@ -39,7 +39,7 @@ class MainView(BrowserView):
     
     def get_media_path(self):
         session = Session()
-        sitting = session.query(domain.Sitting).filter(domain.Sitting.sitting_id == self.context.sitting_id).first()
+        sitting = session.query(domain.Sitting).filter(domain.Sitting.sitting_id==self.context.sitting_id).first()
         if sitting is not None:
             media_path = sitting.media_path
         else:
@@ -54,14 +54,16 @@ class DisplayTranscripts(BrowserView):
     
     def get_transcripts(self):
         session = Session()
-        transcripts = session.query(domain.Transcript).filter(domain.Transcript.sitting_id == self.context.sitting_id).order_by(domain.Transcript.start_time)
+        transcripts = session.query(domain.Transcript).filter(domain.Transcript.sitting_id==self.context.sitting_id).order_by(domain.Transcript.start_time)
         #import pdb; pdb.set_trace()
         ts = []
         for transcript in transcripts:
             t = removeSecurityProxy(transcript)
-            t.edit_url = "javascript:edit_transcript("+url.absoluteURL(t, self.request)+"/edit_transcript)";
+            #t.__name__ = "transcripts"
+            #t.__parent__ = self.context
+            t.edit_url = url.absoluteURL(t, self.request)+"/edit_transcript";
             ts.append(t)
-        return transcripts
+        return ts
         
 class EditMediaPath(ui.EditForm):
     class IEditMediaPathForm(interface.Interface):
