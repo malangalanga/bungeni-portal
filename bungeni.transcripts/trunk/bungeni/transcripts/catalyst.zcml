@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:db="http://namespaces.objectrealms.net/rdb"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="bungeni.ui">
+    
+    <db:catalyst
+    class="bungeni.transcripts.domain.Transcript"
+    descriptor=".descriptor.TranscriptDescriptor"
+    interface_module="bungeni.transcripts.interfaces"
+    ui_module="bungeni.ui.content"
+    echo="False"
+    />
+</configure>
