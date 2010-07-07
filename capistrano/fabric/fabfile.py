@@ -64,4 +64,20 @@ def portal_install():
 	tasks = bungeni.PortalTasks()
 	tasks.setup()
 	tasks.build()
-		
+
+def portal_build():
+	tasks = bungeni.PortalTasks()
+	tasks.build()	
+
+def __check(tasks):
+	missing = tasks.check_versions()
+	print len(missing), " packages"
+	if len(missing) > 0 :
+	    print "\n".join(missing)
+
+def portal_check():
+	tasks = bungeni.PortalTasks()
+	__check(tasks)
+
+
+	

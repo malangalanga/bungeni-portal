@@ -1,6 +1,7 @@
 import os
 from fabric.api import *
-from configobj import ConfigObj
+from ConfigParser import SafeConfigParser
+import checkversions
 
 """
 Class to store util functions
@@ -165,11 +166,12 @@ Provides access to the bungeni.ini build configuration file
 """
 class BungeniConfigReader:
 
-	def __init__(self):
-		self.config = ConfigObj("bungeni.ini")
+	def __init__(self, inifile):
+	        self.config = SafeConfigParser()
+		self.config.read(inifile)
 
 	def get_config(self, section_name, config_name):
-		return self.config[section_name][config_name]
+		return self.config.get(section_name, config_name).strip()
 	
 			
 
@@ -183,7 +185,7 @@ class BungeniConfigs:
 		Required initializations
 		"""
 		self.utils = Utils()
-		self.cfg = BungeniConfigReader()
+		self.cfg = BungeniConfigReader("bungeni.ini")
 		"""
 		Scm parameters
 		"""
@@ -192,7 +194,6 @@ class BungeniConfigs:
 		"""
 		Required build parameters - setup paths for python(s), builds etc.
 		""" 
-		self.cfg = BungeniConfigReader()
 		self.development_build = self.utils.parse_boolean(self.cfg.get_config('global', 'development_build'))
 		self.local_cache = self.utils.parse_boolean(self.cfg.get_config('global','local_cache'))
 		self.gandi_deploy = self.utils.parse_boolean(self.cfg.get_config('global','gandi_deploy'))
@@ -209,6 +210,7 @@ class BungeniConfigs:
 		self.user_bungeni = self.user_install_root + "/bungeni"
 		self.user_plone = self.user_bungeni + "/plone"
 		self.user_portal  = self.user_bungeni +  "/portal" 
+		print "user_bungeni , " , self.user_bungeni
 		""" 
 		Python 2.5 build parameters 
 		"""
@@ -266,9 +268,9 @@ class BungeniConfigs:
 
 	def get_download_command (self, strURL):
 		if (strURL.startswith("http") or strURL.startswith("ftp")):
-			return "wget " + strURL
+			return "wget %(download_url)s" % {"download_url":strURL}
 		else:
-			return "cp " + strURL + " ."
+			return "cp %(file_path)s " % {"file_path" : strURL}
 	
 
 	
@@ -317,7 +319,7 @@ class Presetup:
 		      run(self.cfg.python25_download_command)
 		      run("tar xvzf " + self.cfg.python25_download_file)
 		      with cd(self.cfg.python25_src_dir):
-		 	run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl ./configure --prefix=" + self.cfg.user_python25_runtime + " USE=sqlite")
+		 	run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl ./configure --prefix=%(python_runtime)s USE=sqlite" % {"python_runtime":self.cfg.user_python25_runtime})
 			run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
 			run("make install")
 
@@ -389,6 +391,7 @@ class SCM:
 	   self.user = user
            self.password = password
 	   self.address = address
+	   print "working copy = " , workingcopy
 	   self.working_copy = workingcopy
 
 	def checkout(self):
@@ -423,14 +426,51 @@ class Tasks:
 	    self.scm = SCM(self.cfg.development_build, repo, self.cfg.svn_user, self.cfg.svn_password, working_folder)
 	
 	def src_checkout(self):
+            """
+	    Checks out the source code from subversion 
+            """
 	    run("mkdir -p %s" % self.scm.working_copy)
 	    self.scm.checkout()	
 
 	def buildout(self, boprefix, boparam, boconfig):
+	    """
+	    Runs the buildout for the currently set working copy
+	    boprefix = any prefix paths, variables etc
+            boparam = any buildout params e.g. -N
+	    boconfig =  buildout configuration file
+	    """
 	    with cd(self.scm.working_copy):
 		run("%s ./bin/buildout -t 3600 %s -c %s" % (boprefix, boparam, boconfig))
 
+	def get_buildout_index(self, boconfig):
+	    """	
+	    Returns the index being used by the buildout configuration file
+	    This is specificed in :
+	    [buildout]
+            index = 
+	    """
+	    path_to_bo_config = "%(buildout_folder)s/%(buildout_config)s" % {'buildout_folder':self.scm.working_copy, 'buildout_config': boconfig}
+	    print " getting buildout index from ", path_to_bo_config
+            buildout_config = SafeConfigParser()
+	    buildout_config.read("%(buildout_folder)s/%(buildout_config)s" % {'buildout_folder':self.scm.working_copy, 'buildout_config': boconfig})
+	    return buildout_config.get('buildout','index')
+
+        def check_versions(self, boconfig, py_ver):
+	    """
+            
+            """
+	    versions_file = self.scm.working_copy + "/versions.cfg"
+	    print "boconfig = ", boconfig
+	    checkVer = checkversions.CheckVersions(versions_file, self.get_buildout_index(boconfig), py_ver )
+	    return checkVer.checkVersion()
+            
+
+
         def bootstrap(self, pythonexec):
+	    """
+	    Bootstraps a buildout
+	    Checks if bootstrap.py exists in the current folder, if not, uses the one from the parent folder
+            """
 	    path_prefix = ""
             if (os.path.isfile(self.scm.working_copy+"/bootstrap.py")):	
                 path_prefix="./"
@@ -471,6 +511,28 @@ class PortalTasks:
 	def build_opt(self):
 	   self.tasks.buildout("PYTHON=%s" % self.cfg.python25, "-N", self.cfg.portal_buildout_config)
 
+        def check_versions(self):
+	   return self.tasks.check_versions(self.cfg.portal_buildout_config, "2.5")
+
+
+class BungeniTasks:
+	def __init__(self):
+	   self.cfg = BungeniConfigs()
+	   self.tasks = Tasks(self.cfg, self.cfg.bungeni_repo, self.cfg.user_bungeni)
+	   
+        def setup(self):
+	   self.tasks.src_checkout()
+	   self.tasks.bootstrap(self.cfg.python25)
+	  
+        def build(self):
+	   self.tasks.buildout("PYTHON=%s" % self.cfg.python25, "", self.cfg.bungeni_buildout_config)
+
+	def build_opt(self):
+	   self.tasks.buildout("PYTHON=%s" % self.cfg.python25, "-N", self.cfg.bungeni_buildout_config)
+
+        def check_versions(self):
+	   return self.tasks.check_versions(self.cfg.portal_buildout_config, "2.5")
+""""
 class BungeniTasks:
 	def __init__(self):
 	   self.cfg = BungeniConfigs()
@@ -496,24 +558,8 @@ class BungeniTasks:
 	    print self.cfg.local_cache
 	    self.buildout("", self.cfg.bungeni_buildout_config)
 
-
-class BungeniInstall:
-	def __init__(self):
-	   self.tasks = BungeniTasks()
-
-
-
-class PlonePresetup:
-	def __init__(self):
-		pass
-
-
-class PloneTasks:
-	def __init__(self):
-		pass
-
 	
-
+"""
 
 
 
