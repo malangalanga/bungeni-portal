@@ -1,6 +1,13 @@
 import bungeni
 
 
+def essentials():
+	"""
+	Installs the required operating system packages as specified in distro.ini
+	"""
+	bungenipre = bungeni.Presetup()
+	bungenipre.essentials()
+
 """
 Build python 2.5
 """
@@ -48,6 +55,8 @@ def bungeni_checkout():
 	tasks.src_checkout()
 	tasks.bootstrap()
 
+
+
 def bungeni_bo_full():
 	"""
 	Runs the bungeni buildout
@@ -59,6 +68,9 @@ def bungeni_bo_opt():
 	tasks = bungeni.BungeniTasks()
 	tasks.buildout_opt()
 
+def supervisord_config():
+	pre = bungeni.Presetup()
+	pre.supervisord_config()	
 
 def portal_install():
 	tasks = bungeni.PortalTasks()
@@ -79,5 +91,8 @@ def portal_check():
 	tasks = bungeni.PortalTasks()
 	__check(tasks)
 
+def bungeni_check():
+	tasks = bungeni.BungeniTasks()
+	__check(tasks)
 
-	
+

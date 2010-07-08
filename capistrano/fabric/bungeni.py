@@ -1,6 +1,9 @@
 import os
 from fabric.api import *
 from ConfigParser import SafeConfigParser
+"""
+Check versions is only required for the package checker functionality
+"""
 import checkversions
 
 """
@@ -9,6 +12,9 @@ Class to store util functions
 class Utils:
 
 	def __init__(self):
+	    """
+	    
+	    """
 	    self.allowed_archive_exts = [".tar.gz", ".tgz"]
 	    self.file_extract_methods = {
 					".tar.gz" : "tar xvf " ,
@@ -35,6 +41,8 @@ class Utils:
 			return boolval
 		return bool_map[boolval.strip().lower()]
 
+	def get_fab_path(self):
+		return os.path.abspath(os.path.join(env.real_fabfile,".."))
 
 
 """
@@ -46,39 +54,57 @@ class OsInfo:
 		"""
 		Initialize the release id and release number variables
 		"""
-		self.release_id = self.get_release_id()
-		self.release_no = self.get_release_no()
+		self.release_id = self.__get_release_id()
+		self.release_no = self.__get_release_no()
 
 	"""
 	Returns the distribution name for the operating system. Requires lsb_release on the operating system
 	"""
-	def get_release_id(self):
-		if (len(self.release_id) == 0 ):
-			self.release_id = run("lsb_release --id -s")
-
-		return self.release_no
+	def __get_release_id(self):
+		rel_id =  run("lsb_release --id -s")
+		return rel_id
 
 	"""
 	Returns the version of the distribution of the operating system. Requires lsb_release on the operating system
 	"""
-	def get_release_no(self):
-		if (len(self.release_no) == 0):
-			self.release_no = run("lsb_release --r -s")
+	def __get_release_no(self):
+		rel_no = run("lsb_release --r -s")
+		return rel_no	
 
-		return self.release_no
 
 
 """
 Provides info about required packages for a specific operating system
+Reads the required packages from distro.ini
 """
 class OsEssentials:
         def __init__(self):
-                pass
+		utils = Utils()
+		distro_ini = utils.get_fab_path() + "/distro.ini"
+		self.distro = SafeConfigParser()
+		self.distro.read(distro_ini)
+
+	def __parse_config(self,dist_id, dist_rel):
+		pkgs = self.distro.get(dist_id, dist_rel)
+		lipkgs = pkgs.splitlines()
+		# remove blank entries in list
+		lipkgs = filter(lambda x: len(x)>0, lipkgs)
+		# remove items that start with #
+		lipkgs = filter(lambda x: not x.startswith('#'), lipkgs)
+		return lipkgs
+
+	def is_gandi_server(self):
+		"""
+		Checks if this is a gandi server
+		"""
+		return os.path.exists('/etc/gandi')		
+
+
 	"""
 	Returns the list of required package names based on distribution
 	"""	
 	def get_reqd_libs(self, dist_id, dist_rel):
-		return self.requiredLibs[dist_id][dist_rel]
+		return self.__parse_config(dist_id, dist_rel)
 
 	"""
 	Returns the installation command for packages based on distribution
@@ -98,68 +124,6 @@ class OsEssentials:
 
 
 
-	"""
-	Identifies required package names by distribution name and distribution version
-	"""
-        requiredLibs = {
-                        'Ubuntu' : {
-					'8.04' : 
-						[
-						"wget",
-						"zip",
-						"unzip",
-						"build-essential", # for building from source
-						"libjpeg62-dev", # for python
-						"libfreetype6-dev", # for python
-						"libbz2-dev", # for python bz2 processing
-						"libxslt1-dev", # for python lxml
-						"libxml2-dev", # for python lxml
-						"libpng12-dev", # for python
-						"openssl", # for python
-						"libopenssl-dev", # for python
-						"bison",  # for postgresql
-						"flex" , # for postgresql
-						"libreadline5-dev" , # for postgresql
-						"zlib1g-dev" , # for postgresql
-						"libtool" , # for svn
-						"automake" ,  # for svn
-						"autoconf" , # for svn
-						"libsqlite3-dev", #for python unit tests
-						"uuid-dev", # for ubuntu 9.04 xapian
-						"openoffice.org-headless", #for generating pdf reports
-						"python-uno", #for generating pdf reports
-						"libtidy-dev" #required by tidy
-						],
-					'10.04' :
-						[
-						"wget",
-						"zip",
-						"unzip",
-						"build-essential", # for building from source
-						"libjpeg62-dev", # for python
-						"libfreetype6-dev", # for python
-						"libbz2-dev", # for python bz2 processing
-						"libxslt1-dev", # for python lxml
-						"libxml2-dev", # for python lxml
-						"libpng12-dev", # for python
-						"openssl", # for python
-						"libssl-dev", # for python
-						"bison",  # for postgresql
-						"flex" , # for postgresql
-						"libreadline5-dev" , # for postgresql
-						"zlib1g-dev" , # for postgresql
-						"libtool" , # for svn
-						"automake" ,  # for svn
-						"autoconf" , # for svn
-						"libsqlite3-dev", #for python unit tests
-						"uuid-dev", # for ubuntu 9.04 xapian
-						"openoffice.org-headless", #for generating pdf reports
-						"python-uno", #for generating pdf reports
-						"libtidy-dev" #required by tidy
-						],
-					}
-				}
-		
 		
 """
 Provides access to the bungeni.ini build configuration file
@@ -195,8 +159,8 @@ class BungeniConfigs:
 		Required build parameters - setup paths for python(s), builds etc.
 		""" 
 		self.development_build = self.utils.parse_boolean(self.cfg.get_config('global', 'development_build'))
+	        self.app_host = self.cfg.get_config('global','app_host')
 		self.local_cache = self.utils.parse_boolean(self.cfg.get_config('global','local_cache'))
-		self.gandi_deploy = self.utils.parse_boolean(self.cfg.get_config('global','gandi_deploy'))
 		self.user_build_root = self.cfg.get_config('global','system_root') + '/cbild'
 		self.user_install_root = self.cfg.get_config('global','system_root') + '/cinst'
 		self.linux_headers = 'linux-headers-`uname -r`'
@@ -210,6 +174,7 @@ class BungeniConfigs:
 		self.user_bungeni = self.user_install_root + "/bungeni"
 		self.user_plone = self.user_bungeni + "/plone"
 		self.user_portal  = self.user_bungeni +  "/portal" 
+		self.user_config = self.user_install_root + "/config"
 		print "user_bungeni , " , self.user_bungeni
 		""" 
 		Python 2.5 build parameters 
@@ -291,6 +256,7 @@ class Presetup:
 		self.cfg = BungeniConfigs()
 		self.osinfo = OsInfo()
 		self.ossent = OsEssentials()
+		self.templates = Templates(self.cfg)
 
 	def presetup(self):
 		pass
@@ -299,16 +265,19 @@ class Presetup:
 		"""
 		Returns the required libraries for this operating system
 		"""
-		liLibs = self.ossent.get_reqd_libs(osinfo.release_id, osinfo.release_no)
+		liLibs = self.ossent.get_reqd_libs(self.osinfo.release_id, self.osinfo.release_no)
 		"""
 		Install the required packages using the specific installation method.
 		"""
-		sudo(self.ossent.get_install_method(osinfo.release_id) + " ".join(liLibs))
+		sudo(self.ossent.get_install_method(self.osinfo.release_id) + " ".join(liLibs))
 		"""
 		Install linux headers only for non-Gandi deployments; on Gandi deployments the development headers are baked into the vm
 		"""
-		if (self.cfg.gandi_deploy != True) :
-			sudo(ossent.get_install_method(osinfo.release_id) + " " + self.cfg.linux_headers)
+		if (not self.ossent.is_gandi_server()) :
+			print "Installing Linux Headers"
+			sudo(self.ossent.get_install_method(self.osinfo.release_id) + " " + self.cfg.linux_headers)
+		else:
+			print "This server was identified as a Gandi virtual server"
 
 					
 	def build_py25(self):
@@ -375,6 +344,21 @@ class Presetup:
 	def supervisor(self):
 		run(self.cfg.user_python25_home + "/bin/easy_install supervisor")
 
+
+	def supervisord_config(self):
+	    """
+	    Configure supervisor using the installation template
+	    """
+	    template_map = {
+			     "user_bungeni":self.cfg.user_bungeni,
+		  	     "user_plone":self.cfg.user_plone,
+			     "user_portal":self.cfg.user_portal,
+ 		             "app_host":self.cfg.app_host,
+		 	     "user_config":self.cfg.user_config,
+			   }
+	    run("mkdir -p %s" % self.cfg.user_config)
+	    self.templates.new_file("supervisord.conf.tmpl", template_map, self.cfg.user_config)
+
 	def required_pylibs(self):
 		self.setuptools()
 		self.supervisor()
@@ -391,14 +375,15 @@ class SCM:
 	   self.user = user
            self.password = password
 	   self.address = address
-	   print "working copy = " , workingcopy
 	   self.working_copy = workingcopy
 
 	def checkout(self):
 	   cmd  = ''
 	   if (self.devmode == True):
+		print "Checking out in dev-mode with username = ", self.user
 		cmd = "svn co https://%s --username=%s --password=%s %s" % (self.address, self.user, self.password, self.working_copy)	
 	   else:
+		print "Checkout out anonymously"
 		cmd = "svn co http://%s %s" % (self.address, self.working_copy)
 	   run(cmd)
 
@@ -409,7 +394,26 @@ class SCM:
 
 
 
+class Templates:
+	def __init__(self, cfg):
+	    self.cfg = cfg
+	    utils = Utils()
+	    self.template_folder = utils.get_fab_path() + "/templates"
+            
+        def template (self, template_file, template_map):
+            ftmpl = open("%s/%s" % (self.template_folder, template_file))
+            fcontents = ftmpl.read()
+ 	    return fcontents % template_map
 
+	def new_file(self, template_file, template_map, output_dir):
+	    print "in new file " , template_file, template_map, output_dir
+	    contents = self.template(template_file, template_map)
+	    from posixpath import basename
+ 	    new_file = basename(template_file).strip(".tmpl")
+	    fnewfile = open("%(out_dir)s/%(file.conf)s" % {"out_dir":output_dir, "file.conf":new_file},"w" )
+	    fnewfile.write(contents)
+	    fnewfile.close()
+	     
 
 """
 Class used for general buildout tasks
@@ -464,7 +468,10 @@ class Tasks:
 	    checkVer = checkversions.CheckVersions(versions_file, self.get_buildout_index(boconfig), py_ver )
 	    return checkVer.checkVersion()
             
+	    
 
+
+	
 
         def bootstrap(self, pythonexec):
 	    """
@@ -532,6 +539,7 @@ class BungeniTasks:
 
         def check_versions(self):
 	   return self.tasks.check_versions(self.cfg.portal_buildout_config, "2.5")
+
 """"
 class BungeniTasks:
 	def __init__(self):
