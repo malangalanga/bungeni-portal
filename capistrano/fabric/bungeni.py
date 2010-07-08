@@ -5,7 +5,6 @@ from ConfigParser import SafeConfigParser
 Check versions is only required for the package checker functionality
 """
 import checkversions
-
 """
 Class to store util functions
 """ 

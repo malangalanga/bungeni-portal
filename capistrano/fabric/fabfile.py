@@ -3,7 +3,7 @@ import bungeni
 
 def essentials():
 	"""
-	Installs the required operating system packages as specified in distro.ini
+	Installs reqd OS packages as specified in distro.ini
 	"""
 	bungenipre = bungeni.Presetup()
 	bungenipre.essentials()
@@ -65,19 +65,31 @@ def bungeni_bo_full():
 	tasks.buildout_full()
 
 def bungeni_bo_opt():
+	"""
+	Runs an optimistic bungeni buildout (-N)
+	"""
 	tasks = bungeni.BungeniTasks()
 	tasks.buildout_opt()
 
 def supervisord_config():
+	"""
+	Generates the supervisor configuration
+	"""
 	pre = bungeni.Presetup()
 	pre.supervisord_config()	
 
 def portal_install():
+	"""
+	Setup and builds the portal
+	"""
 	tasks = bungeni.PortalTasks()
 	tasks.setup()
 	tasks.build()
 
 def portal_build():
+	"""
+	Build the portal
+	"""
 	tasks = bungeni.PortalTasks()
 	tasks.build()	
 
@@ -88,10 +100,16 @@ def __check(tasks):
 	    print "\n".join(missing)
 
 def portal_check():
+	"""
+	Checks if there are any missing packages for portal
+	"""
 	tasks = bungeni.PortalTasks()
 	__check(tasks)
 
 def bungeni_check():
+	"""	
+	Checks if there are any missing packages for bungeni
+	"""
 	tasks = bungeni.BungeniTasks()
 	__check(tasks)
 
