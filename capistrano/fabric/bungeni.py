@@ -1,3 +1,4 @@
+from __future__ import with_statement
 import os
 from fabric.api import *
 from ConfigParser import SafeConfigParser
@@ -207,28 +208,39 @@ class BungeniConfigs:
 		Buildout configs - Bungeni
 		"""
 		self.bungeni_repo = self.cfg.get_config('bungeni','repo')
+	        self.bungeni_local_index = self.cfg.get_config('bungeni','local_index')
 		self.bungeni_general_buildout_config = "buildout.cfg"
-		self.bungeni_local_buildout_config = "buildout_local.cfg"
+		self.bungeni_local_buildout_config = "bungeni_local.cfg"
 		self.bungeni_buildout_config = self.bungeni_general_buildout_config if self.local_cache==False else self.bungeni_local_buildout_config
 		"""
 		Buildout configs - Plone
 		"""		
 		self.plone_repo = self.cfg.get_config('plone','repo')
+	        self.plone_local_index = self.cfg.get_config('plone', 'local_index')
 		self.plone_general_buildout_config = "buildout.cfg"
-		self.plone_local_buildout_config = "buildout_local.cfg"
+		self.plone_local_buildout_config = "plone_local.cfg"
 		self.plone_buildout_config = self.plone_general_buildout_config if self.local_cache==False else self.plone_local_buildout_config
 		"""
 		Buildout configs - Portal 
 		"""
 		self.portal_repo = self.cfg.get_config('portal','repo')
+		self.portal_local_index = self.cfg.get_config('portal','local_index')
 		self.portal_general_buildout_config = "buildout.cfg"
-		self.portal_local_buildout_config = "buildout_local.cfg"
+		self.portal_local_buildout_config = "portal_local.cfg"
 		self.portal_buildout_config = self.portal_general_buildout_config if self.local_cache==False else self.portal_local_buildout_config
 		"""
 		Supervisord 
 		"""
 		self.supervisord = self.user_python25_home + "/bin/supervisord"
 		self.supervisorctl = self.user_python25_home + "/bin/supervisorctl"
+		"""
+		Other configs
+		"""
+		self.postgresql_local_url = self.cfg.get_config('postgresql','local_url')
+		self.xapian_local_url = self.cfg.get_config('xapian','local_url')
+		self.xapian_bindings_local_url = self.cfg.get_config('xapian-bindings','local_url')
+		
+
 
 	def get_download_command (self, strURL):
 		if (strURL.startswith("http") or strURL.startswith("ftp")):
@@ -424,7 +436,9 @@ class Templates:
 	def new_file(self, template_file, template_map, output_dir):
 	    contents = self.template(template_file, template_map)
 	    from posixpath import basename
- 	    new_file = basename(template_file).strip(".tmpl")
+	    print "generating from template file ", template_file
+ 	    new_file = basename(template_file).rstrip(".tmpl")
+	    print "new file from template going to be created ", new_file
 	    fnewfile = open("%(out_dir)s/%(file.conf)s" % {"out_dir":output_dir, "file.conf":new_file},"w" )
 	    fnewfile.write(contents)
 	    fnewfile.close()
@@ -490,12 +504,7 @@ class Tasks:
 	    print "boconfig = ", boconfig
 	    checkVer = checkversions.CheckVersions(versions_file, self.get_buildout_index(boconfig), py_ver )
 	    return checkVer.checkVersion()
-            
 	    
-
-
-	
-
         def bootstrap(self, pythonexec):
 	    """
 	    Bootstraps a buildout
@@ -509,6 +518,14 @@ class Tasks:
             with cd(self.scm.working_copy):
 		run("%s %sbootstrap.py" % (pythonexec,path_prefix))
 	
+
+	def local_config(self, template_file, template_map, bo_localconfig):
+	   if (self.cfg.local_cache == True):
+		if (not os.path.exists(self.scm.working_copy + "/" + bo_localconfig)):
+    		   templates = Templates(self.cfg)
+	  	   templates.new_file(template_file, template_map, self.scm.working_copy)
+		   
+
 	
 class PloneTasks:
 	def __init__(self):
@@ -536,14 +553,23 @@ class PortalTasks:
 	   self.tasks.bootstrap(self.cfg.python25)
 	  
         def build(self):
+	   self.local_config()
 	   self.tasks.buildout("PYTHON=%s" % self.cfg.python25, "", self.cfg.portal_buildout_config)
 
 	def build_opt(self):
+	   self.local_config()
 	   self.tasks.buildout("PYTHON=%s" % self.cfg.python25, "-N", self.cfg.portal_buildout_config)
 
         def check_versions(self):
 	   return self.tasks.check_versions(self.cfg.portal_buildout_config, "2.5")
 
+	def local_config(self):
+	   template_map = {
+			"portal_local_index" : self.cfg.portal_local_index,
+			 }	   
+	   template_file = "%(portal_local_cfg)s.tmpl" % {"portal_local_cfg": self.cfg.portal_local_buildout_config}
+	   self.tasks.local_config(template_file, template_map, self.cfg.portal_local_buildout_config)
+	   print "Local config ", self.cfg.portal_local_buildout_config, " generated from " , template_file
 
 class BungeniTasks:
 	def __init__(self):
@@ -555,12 +581,26 @@ class BungeniTasks:
 	   self.tasks.bootstrap(self.cfg.python25)
 	  
         def build(self):
+	   self.local_config()
 	   self.tasks.buildout("PYTHON=%s" % self.cfg.python25, "", self.cfg.bungeni_buildout_config)
 
 	def build_opt(self):
+	   self.local_config()
 	   self.tasks.buildout("PYTHON=%s" % self.cfg.python25, "-N", self.cfg.bungeni_buildout_config)
 
         def check_versions(self):
 	   return self.tasks.check_versions(self.cfg.portal_buildout_config, "2.5")
+
+
+	def local_config(self):
+	   template_map = {
+			"bungeni_local_index" : self.cfg.bungeni_local_index,
+			"postgresql_local_url" : self.cfg.postgresql_local_url,
+			"xapian_local_url" : self.cfg.xapian_local_url,
+			"xapian_bindings_local_url" : self.cfg.xapian_bindings_local_url,
+			 }	   
+	   template_file = "%(bungeni_local_cfg)s.tmpl" % {"bungeni_local_cfg": self.cfg.bungeni_local_buildout_config}
+	   self.tasks.local_config(template_file, template_map, self.cfg.bungeni_local_buildout_config)
+
 
 

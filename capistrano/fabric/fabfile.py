@@ -62,19 +62,24 @@ def bungeni_install():
 	tasks.setup()
 	tasks.build()
 
-def bungeni_bo_full():
+def bungeni_local_config():
+	tasks = bungeni.BungeniTasks()
+	tasks.local_config()
+
+
+def bungeni_build():
 	"""
 	Runs the bungeni buildout
 	"""
 	tasks = bungeni.BungeniTasks()
-	tasks.buildout_full()
+	tasks.build()
 
-def bungeni_bo_opt():
+def bungeni_build_opt():
 	"""
 	Runs an optimistic bungeni buildout (-N)
 	"""
 	tasks = bungeni.BungeniTasks()
-	tasks.buildout_opt()
+	tasks.build_opt()
 
 def supervisord_config():
 	"""
