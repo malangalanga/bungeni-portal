@@ -31,7 +31,7 @@ def build_python24():
 
 def build_imaging():
 	"""
-	Builds python imaging extensions for Python 2.5 and 2.4
+	Build python imaging for Python 2.5 and 2.4
 	"""
 	bungenipre = bungeni.Presetup()
 	bungenipre.build_imaging()
@@ -39,7 +39,7 @@ def build_imaging():
 
 def setup_pylibs():
 	"""
-	Installs setuptools and supervisor for the built Pythons (2.5 and 2.4)
+	Install setuptools & supervisor  Pythons(2.5,2.4)
 	"""
 	bungenipre = bungeni.Presetup()
 	bungenipre.required_pylibs()
@@ -47,15 +47,20 @@ def setup_pylibs():
 
 
 
-def bungeni_checkout():
+def bungeni_setup():
 	"""
-	Checks out bungeni source 
+	Checks out  & bootstrap bungeni source 
 	"""
 	tasks = bungeni.BungeniTasks()
-	tasks.src_checkout()
-	tasks.bootstrap()
+	tasks.setup()
 
-
+def bungeni_install():
+	"""
+	Checkout,bootstrap and build bungeni
+	"""
+	tasks = bungeni.BungeniTasks()
+	tasks.setup()
+	tasks.build()
 
 def bungeni_bo_full():
 	"""
@@ -93,6 +98,14 @@ def portal_build():
 	tasks = bungeni.PortalTasks()
 	tasks.build()	
 
+def portal_setup():
+	"""
+	Checkout and bootstrap portal source
+	"""
+	tasks = bungeni.PortalTasks()
+	tasks.setup()
+
+
 def __check(tasks):
 	missing = tasks.check_versions()
 	print len(missing), " packages"
@@ -101,16 +114,18 @@ def __check(tasks):
 
 def portal_check():
 	"""
-	Checks if there are any missing packages for portal
+	Check missing packages for portal.buildout
 	"""
 	tasks = bungeni.PortalTasks()
 	__check(tasks)
 
 def bungeni_check():
-	"""	
-	Checks if there are any missing packages for bungeni
+	"""
+	Check missing packages for bungeni.buildout
 	"""
 	tasks = bungeni.BungeniTasks()
 	__check(tasks)
+
+
 
 

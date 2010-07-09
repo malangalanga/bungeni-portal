@@ -341,12 +341,15 @@ class Presetup:
 		self.__setuptools(self.cfg.python24, self.cfg.user_python24_home)
 
 	def supervisor(self):
+		"""
+		Install Supervisord
+		"""
 		run(self.cfg.user_python25_home + "/bin/easy_install supervisor")
 
 
 	def supervisord_config(self):
 	    """
-	    Configure supervisor using the installation template
+	    Generate a supervisord config file  using the installation template
 	    """
 	    template_map = {
 			     "user_bungeni":self.cfg.user_bungeni,
@@ -359,6 +362,9 @@ class Presetup:
 	    self.templates.new_file("supervisord.conf.tmpl", template_map, self.cfg.user_config)
 
 	def required_pylibs(self):
+	        """
+		Installs required python libraries - setuptools and supervisor
+		"""
 		self.setuptools()
 		self.supervisor()
 
@@ -369,6 +375,11 @@ Does a secure checkout when devmode is set to True
 Does a http:// non updatable checkout when devmode is set to False
 """
 class SCM:
+	"""
+	Interaction with SVN
+	Does a secure checkout when devmode is set to True
+	Does a http:// non updatable checkout when devmode is set to False
+	"""
 	def __init__(self, mode, address, user , password, workingcopy):
 	   self.devmode = mode
 	   self.user = user
@@ -377,6 +388,9 @@ class SCM:
 	   self.working_copy = workingcopy
 
 	def checkout(self):
+	   """
+	   Checks out the source code either in dev-mode or anonymously
+	   """
 	   cmd  = ''
 	   if (self.devmode == True):
 		print "Checking out in dev-mode with username = ", self.user
@@ -388,6 +402,9 @@ class SCM:
 
 
 	def update(self):
+	   """
+	   Updates the working copy
+	   """
 	   with cd(self.working_copy):
 		run("svn up")
 
@@ -405,15 +422,22 @@ class Templates:
  	    return fcontents % template_map
 
 	def new_file(self, template_file, template_map, output_dir):
-	    print "in new file " , template_file, template_map, output_dir
 	    contents = self.template(template_file, template_map)
 	    from posixpath import basename
  	    new_file = basename(template_file).strip(".tmpl")
 	    fnewfile = open("%(out_dir)s/%(file.conf)s" % {"out_dir":output_dir, "file.conf":new_file},"w" )
 	    fnewfile.write(contents)
 	    fnewfile.close()
-	     
+	    print new_file, " was created in ", output_dir 
 
+
+class Services:
+	"""
+	Start and stop bungeni related services using the Supervisord service manager
+	"""
+	def __init__(self):
+	    pass
+	    
 """
 Class used for general buildout tasks
 Used by bungeni, plone and portal buildout tasks
@@ -538,38 +562,5 @@ class BungeniTasks:
 
         def check_versions(self):
 	   return self.tasks.check_versions(self.cfg.portal_buildout_config, "2.5")
-
-""""
-class BungeniTasks:
-	def __init__(self):
-	   self.cfg = BungeniConfigs()
-	   self.scm = SCM(self.cfg.development_build, self.cfg.bungeni_repo, self.cfg.svn_user, self.cfg.svn_password, self.cfg.user_bungeni)
-
-	def src_checkout(self):
-	   run("mkdir -p %s" % self.cfg.user_bungeni)
-	   self.scm.checkout()
-
-	def bootstrap(self):
-	   with cd(self.cfg.user_bungeni):
-	      print "%s bootstrap.py" % str(self.cfg.python25)
-	      run("%s bootstrap.py" % self.cfg.python25)
-
-	def buildout(self, boparam, boconfig):
-	   with cd(self.cfg.user_bungeni):
-	      run("PYTHON=%s ./bin/buildout -t 3600 %s -c %s" % (self.cfg.python25, boparam, boconfig))
-	    
-	def buildout_opt(self):
-	    self.buildout("-N", self.cfg.bungeni_buildout_config)
-
-	def buildout_full(self):
-	    print self.cfg.local_cache
-	    self.buildout("", self.cfg.bungeni_buildout_config)
-
-	
-"""
-
-
-
-
 
 
