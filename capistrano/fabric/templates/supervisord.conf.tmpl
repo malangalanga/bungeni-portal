@@ -48,7 +48,7 @@ redirect_stderr = true
 
 [program:postgres]
 command = %(user_bungeni)s/parts/postgresql/bin/postmaster -D %(user_bungeni)s/parts/db
-stdout_logfile = %(user_bungeni)s/log/postgres.log
+stdout_logfile = %(user_bungeni)s/logs/postgres.log
 priority = 40
 redirect_stderr = true
 stopsignal = INT

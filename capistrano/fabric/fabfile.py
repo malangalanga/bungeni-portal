@@ -61,8 +61,13 @@ def bungeni_install():
 	tasks = bungeni.BungeniTasks()
 	tasks.setup()
 	tasks.build()
+	tasks.setupdb()
 
 def bungeni_local_config():
+	"""
+	Generate a local buildout configuration.
+	This is relevant only if you are using a local cache
+	"""
 	tasks = bungeni.BungeniTasks()
 	tasks.local_config()
 
@@ -73,6 +78,20 @@ def bungeni_build():
 	"""
 	tasks = bungeni.BungeniTasks()
 	tasks.build()
+
+def bungeni_setupdb():
+	"""
+	Sets up the postgresql db
+	"""
+	tasks = bungeni.BungeniTasks()
+	tasks.setupdb()
+	
+def bungeni_update():
+        """
+        Update the bungeni source
+ 	"""
+	tasks = bungeni.BungeniTasks()
+	tasks.update()
 
 def bungeni_build_opt():
 	"""
@@ -130,6 +149,60 @@ def bungeni_check():
 	"""
 	tasks = bungeni.BungeniTasks()
 	__check(tasks)
+
+def start_bungeni():
+	"""
+	Start bungeni
+	"""
+	service = bungeni.Services()
+	service.start_service("bungeni")
+
+def stop_bungeni():
+	"""
+	Stop bungeni
+	"""
+	service = bungeni.Services()
+	service.stop_service("bungeni")
+
+
+def start_portal():
+	"""
+	Start the portal
+	"""
+	service = bungeni.Services()
+	service.start_service("portal")
+
+
+def stop_portal():
+	"""
+	Stop the portal
+	"""
+	service = bungeni.Services()
+	service.stop_service("portal")
+
+
+def start_postgres():
+	"""
+	Start postgres
+	"""
+	service = bungeni.Services()
+	service.start_service("postgres")
+
+def start_monitor():
+	"""
+	Start the supervisord service
+	"""
+	service = bungeni.Services()
+	service.start_monitor()
+
+def stop_monitor():
+	"""
+	Stop the supervisord service
+	"""
+	service = bungeni.Services()
+	service.stop_monitor()
+
+
 
 
 

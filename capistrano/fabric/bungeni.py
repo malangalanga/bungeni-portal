@@ -496,6 +496,12 @@ class Tasks:
 	    run("mkdir -p %s" % self.scm.working_copy)
 	    self.scm.checkout()	
 
+	def src_update(self):
+	    """
+	    Update the source of the working copy
+	    """
+	    self.scm.update()
+
 	def buildout(self, boprefix, boparam, boconfig):
 	    """
 	    Runs the buildout for the currently set working copy
@@ -603,6 +609,16 @@ class BungeniTasks:
 	   self.tasks.src_checkout()
 	   self.tasks.bootstrap(self.cfg.python25)
 	  
+        def update(self):
+	   """
+	   Update the bungeni source folder
+           """
+           self.tasks.src_update()
+	   with cd(user.bungeni):
+              with cd("src"):
+                run("svn up")
+
+
         def build(self):
 	   self.local_config()
 	   self.tasks.buildout("PYTHON=%s" % self.cfg.python25, "", self.cfg.bungeni_buildout_config)
@@ -624,6 +640,14 @@ class BungeniTasks:
 			 }	   
 	   template_file = "%(bungeni_local_cfg)s.tmpl" % {"bungeni_local_cfg": self.cfg.bungeni_local_buildout_config}
 	   self.tasks.local_config(template_file, template_map, self.cfg.bungeni_local_buildout_config)
+
+	def setupdb(self):
+	   """
+	   Setup the postgresql db - this needs to be run just once for the lifetime of the installation
+	   """
+	   with cd(user.bungeni):
+	      run("./bin/setup-database")
+
 
 
 
