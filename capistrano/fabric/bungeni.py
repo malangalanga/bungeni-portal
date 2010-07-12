@@ -233,6 +233,8 @@ class BungeniConfigs:
 		"""
 		self.supervisord = self.user_python25_home + "/bin/supervisord"
 		self.supervisorctl = self.user_python25_home + "/bin/supervisorctl"
+		self.supervisorconf = self.user_config + "/supervisord.conf"
+
 		"""
 		Other configs
 		"""
@@ -450,7 +452,28 @@ class Services:
 	Start and stop bungeni related services using the Supervisord service manager
 	"""
 	def __init__(self):
-	    pass
+	    self.cfg = BungeniConfigs()
+	    self.service_map = {"supervisorctl" : self.cfg.supervisorctl, "supervisorconf" : self.cfg.supervisorconf}
+
+	def start_service(self, service):
+	    service_map = self.service_map.copy()
+	    service_map["service"]= service
+	    run("%(supervisorctl)s -c %(supervisorconf)s start %(service)s" % service_map)
+
+	def stop_service(self, service):
+	    service_map = self.service_map.copy()
+	    service_map["service"]= service
+	    run("%(supervisorctl)s -c %(supervisorconf)s stop %(service)s" % service_map)
+ 
+	def start_monitor(self):
+	    service_map = self.service_map.copy()
+	    service_map.pop('supervisorctl')
+	    service_map['supervisord'] = self.cfg.supervisord
+	    run("%(supervisord)s -c %(supervisorconf)s" % service_map)
+
+	def stop_monitor(self):
+	    run("%(supervisorctl)s -c %(supervisorconf)s shutdown" % self.service_map)
+
 	    
 """
 Class used for general buildout tasks
