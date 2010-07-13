@@ -82,6 +82,7 @@
       name="plone.contentactions"
       for="*"
       manager=".interfaces.IContentViewsManager"
+      layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin"
       template="templates/contentactions.pt"
       permission="zope.Public"
       weight="20"
