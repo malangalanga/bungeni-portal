@@ -100,7 +100,7 @@ def bungeni_build_opt():
 	tasks = bungeni.BungeniTasks()
 	tasks.build_opt()
 
-def supervisord_config():
+def config_supervisord():
 	"""
 	Generates the supervisor configuration
 	"""
@@ -142,6 +142,15 @@ def portal_check():
 	"""
 	tasks = bungeni.PortalTasks()
 	__check(tasks)
+
+
+def portal_local_config():
+	"""
+	Generate a local buildout configuration.
+	This is relevant only if you are using a local cache
+	"""
+	tasks = bungeni.PortalTasks()
+	tasks.local_config()
 
 def bungeni_check():
 	"""
@@ -201,6 +210,32 @@ def stop_monitor():
 	"""
 	service = bungeni.Services()
 	service.stop_monitor()
+
+
+def db_load_demodata():
+	"""
+	Load demo data from the testdatadmp folder
+	"""
+	stop_bungeni()
+	stop_portal()
+	tasks = bungeni.BungeniTasks()
+	tasks.reset_db()
+	tasks.load_demo_data()	
+	start_bungeni()
+	start_portal()
+
+
+def db_load_mindata():
+	"""
+	Load minimal data from the testdatadmp folder
+	"""
+	stop_bungeni()
+	stop_portal()
+	tasks = bungeni.BungeniTasks()
+	tasks.reset_db()
+	tasks.load_min_data()	
+	start_bungeni()
+	start_portal()
 
 
 

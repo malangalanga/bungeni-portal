@@ -6,14 +6,13 @@ from ConfigParser import SafeConfigParser
 Check versions is only required for the package checker functionality
 """
 import checkversions
-"""
-Class to store util functions
-""" 
 class Utils:
-
+	"""
+	Class to store util functions
+	""" 
 	def __init__(self):
 	    """
-	    
+	    Defines the allowed archive extensions and their extraction methods	    
 	    """
 	    self.allowed_archive_exts = [".tar.gz", ".tgz"]
 	    self.file_extract_methods = {
@@ -21,10 +20,11 @@ class Utils:
 					".tgz" : "tar xvf ",
 					}
 
-	"""
-	Returns the basename of a url or path
-	"""
+
 	def get_basename(self, url_or_filepath):
+		"""
+		Returns the basename of a url or path
+		"""
 		from posixpath import basename
 		return basename(url_or_filepath)
 
@@ -36,48 +36,69 @@ class Utils:
 		return filename
 
 	def parse_boolean(self, boolval):
+		"""
+		Parses a boolean string from the config file into a Boolean type
+		"""
 		bool_map = {'true':True, 'false':False}
 		if (boolval==True) or (boolval==False):
 			return boolval
 		return bool_map[boolval.strip().lower()]
 
 	def get_fab_path(self):
+		"""
+		Returns the parent path of the currently running fabric file
+		"""
 		return os.path.abspath(os.path.join(env.real_fabfile,".."))
 
 
-"""
-Returns information about the operating system
-"""
-class OsInfo:
 
-	def __init__(self):
+class OsInfo:
+	"""
+	Returns information about the operating system.
+	This information can be overriden using the distro_override configuration parameter
+	"""
+
+	def __init__(self, distro_override):
 		"""
 		Initialize the release id and release number variables
 		"""
-		self.release_id = self.__get_release_id()
-		self.release_no = self.__get_release_no()
+		if (len(distro_override.strip()) == 0 ) :
+		    """
+	            check if distro_override is set, if not set return the info from the oS
+		    """
+		    self.release_id = self.__get_release_id()
+		    self.release_no = self.__get_release_no()
+		else:
+		    """
+		    If distro_override is set use its value to return distribution info
+		    """
+	 	    l_distro = distro_override.split(":")
+		    self.release_id = l_distro[0]
+		    self.release_no  = l_distro[1]
 
-	"""
-	Returns the distribution name for the operating system. Requires lsb_release on the operating system
-	"""
 	def __get_release_id(self):
+		"""
+		Returns the distribution name for the operating system. Requires lsb_release on the operating system
+		"""
 		rel_id =  run("lsb_release --id -s")
 		return rel_id
 
-	"""
-	Returns the version of the distribution of the operating system. Requires lsb_release on the operating system
-	"""
 	def __get_release_no(self):
+		"""
+		Returns the version of the distribution of the operating system. Requires lsb_release on the operating system
+		"""
 		rel_no = run("lsb_release --r -s")
 		return rel_no	
 
 
 
-"""
-Provides info about required packages for a specific operating system
-Reads the required packages from distro.ini
-"""
+
 class OsEssentials:
+	"""
+	Provides info about required packages for a specific operating system
+	Reads the required packages from distro.ini
+	Also checks to see if the current OS is installed on a Gandi server
+	"""
         def __init__(self):
 		utils = Utils()
 		distro_ini = utils.get_fab_path() + "/distro.ini"
@@ -95,21 +116,21 @@ class OsEssentials:
 
 	def is_gandi_server(self):
 		"""
-		Checks if this is a gandi server
+		Checks if this is a gandi server by looking for the /etc/gandi folder
 		"""
 		return os.path.exists('/etc/gandi')		
 
 
-	"""
-	Returns the list of required package names based on distribution
-	"""	
 	def get_reqd_libs(self, dist_id, dist_rel):
+		"""
+		Returns the list of required package names based on distribution
+		"""	
 		return self.__parse_config(dist_id, dist_rel)
 
-	"""
-	Returns the installation command for packages based on distribution
-	"""
 	def get_install_method(self, dist_id) :
+		"""
+		Returns the installation command for packages based on distribution
+		"""
 		return self.installMethods[dist_id]
 
 	"""
@@ -125,24 +146,32 @@ class OsEssentials:
 
 
 		
-"""
-Provides access to the bungeni.ini build configuration file
-"""
 class BungeniConfigReader:
-
+	"""
+	Provides access to the bungeni.ini build configuration file
+	"""
 	def __init__(self, inifile):
 	        self.config = SafeConfigParser()
 		self.config.read(inifile)
 
 	def get_config(self, section_name, config_name):
-		return self.config.get(section_name, config_name).strip()
+		if (self.config.has_section(section_name)):
+		   if (self.config.has_option(section_name, config_name)):
+			return self.config.get(section_name, config_name).strip()
+		   else:
+			print "warning : section [",section_name,"] does not have option name ", config_name , " !!!!"
+			return ""
+		else:
+		   print "warning: section [", section_name, "] does not exist !!!"
+		   return ""
 	
 			
 
-"""
-Captures build specific configuration information
-"""
+
 class BungeniConfigs:
+	"""
+	Captures build specific configuration information
+	"""
 
 	def __init__(self):
 		"""
@@ -160,9 +189,12 @@ class BungeniConfigs:
 		""" 
 		self.development_build = self.utils.parse_boolean(self.cfg.get_config('global', 'development_build'))
 	        self.app_host = self.cfg.get_config('global','app_host')
+		self.supervisor_host = self.cfg.get_config('global','supervisor_host')
+	        self.supervisor_port = self.cfg.get_config('global','supervisor_port')
 		self.local_cache = self.utils.parse_boolean(self.cfg.get_config('global','local_cache'))
 		self.user_build_root = self.cfg.get_config('global','system_root') + '/cbild'
 		self.user_install_root = self.cfg.get_config('global','system_root') + '/cinst'
+	        self.distro_override = self.cfg.get_config('global','distro_override')
 		self.linux_headers = 'linux-headers-`uname -r`'
 		self.user_python25_home = self.user_install_root + "/python25"
 		self.user_python25 = self.user_python25_home + "/bin/python"
@@ -175,7 +207,6 @@ class BungeniConfigs:
 		self.user_plone = self.user_bungeni + "/plone"
 		self.user_portal  = self.user_bungeni +  "/portal" 
 		self.user_config = self.user_install_root + "/config"
-		print "user_bungeni , " , self.user_bungeni
 		""" 
 		Python 2.5 build parameters 
 		"""
@@ -209,6 +240,7 @@ class BungeniConfigs:
 		"""
 		self.bungeni_repo = self.cfg.get_config('bungeni','repo')
 	        self.bungeni_local_index = self.cfg.get_config('bungeni','local_index')
+	        self.bungeni_dump_file = self.cfg.get_config('bungeni','dump_file')
 		self.bungeni_general_buildout_config = "buildout.cfg"
 		self.bungeni_local_buildout_config = "bungeni_local.cfg"
 		self.bungeni_buildout_config = self.bungeni_general_buildout_config if self.local_cache==False else self.bungeni_local_buildout_config
@@ -241,7 +273,10 @@ class BungeniConfigs:
 		self.postgresql_local_url = self.cfg.get_config('postgresql','local_url')
 		self.xapian_local_url = self.cfg.get_config('xapian','local_url')
 		self.xapian_bindings_local_url = self.cfg.get_config('xapian-bindings','local_url')
-		
+		"""
+		This is a script that updates the user name in a postgresql db dump
+	        """	
+		self.db_dump_update_script = self.utils.get_fab_path() + "/scripts/upd-dbdump.sh" 
 
 
 	def get_download_command (self, strURL):
@@ -255,11 +290,9 @@ class BungeniConfigs:
 
 
 
-"""
-This class does the pre-configuration and environment setup for installing bungeni
-"""
 class Presetup:
 	"""
+	This class does the pre-configuration and environment setup for installing bungeni
 	Setup the required objects for this class
 	cfg provides access to build config info
 	osinfo provides info about the operating system for the build to automatically setup required packages
@@ -267,7 +300,7 @@ class Presetup:
 	"""
 	def __init__(self):
 		self.cfg = BungeniConfigs()
-		self.osinfo = OsInfo()
+		self.osinfo = OsInfo(self.cfg.distro_override)
 		self.ossent = OsEssentials()
 		self.templates = Templates(self.cfg)
 
@@ -305,10 +338,11 @@ class Presetup:
 			run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
 			run("make install")
 
-	"""
-	Builds Python 2.4 from source
-	"""
+
 	def build_py24(self):
+		"""
+		Builds Python 2.4 from source
+		"""
 		run("mkdir -p " + self.cfg.user_python24_build_path)
 		run("rm -rf " + self.cfg.user_python24_build_path + "/*.*" )
 		run("mkdir -p " + self.cfg.user_python24_runtime)
@@ -320,11 +354,12 @@ class Presetup:
 				run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
 				run("make install")
 	
-	"""
-	Builds Python imaging from source
-	Installs it for both Python 2.4 and 2.5
-	"""
+
 	def build_imaging(self):
+		"""
+		Builds Python imaging from source
+		Installs it for both Python 2.4 and 2.5
+		"""
 		run("mkdir -p " + self.cfg.python_imaging_build_path)
 		with cd(self.cfg.python_imaging_build_path):
 			run("rm -rf " + self.cfg.python_imaging_download_file)
@@ -347,10 +382,11 @@ class Presetup:
 			   run(pybin + " ./ez_setup.py")
 		
 
-	"""
-	Install setuptools for python
-	"""
+
 	def setuptools(self):
+		"""
+		Install setuptools for python
+		"""
 		self.__setuptools(self.cfg.python25, self.cfg.user_python25_home)
 		self.__setuptools(self.cfg.python24, self.cfg.user_python24_home)
 
@@ -370,6 +406,8 @@ class Presetup:
 		  	     "user_plone":self.cfg.user_plone,
 			     "user_portal":self.cfg.user_portal,
  		             "app_host":self.cfg.app_host,
+			     "supervisor_host":self.cfg.supervisor_host,
+		             "supervisor_port":self.cfg.supervisor_port,
 		 	     "user_config":self.cfg.user_config,
 			   }
 	    run("mkdir -p %s" % self.cfg.user_config)
@@ -383,16 +421,17 @@ class Presetup:
 		self.supervisor()
 
 	
-"""
-Interaction with SVN
-Does a secure checkout when devmode is set to True
-Does a http:// non updatable checkout when devmode is set to False
-"""
 class SCM:
 	"""
 	Interaction with SVN
 	Does a secure checkout when devmode is set to True
 	Does a http:// non updatable checkout when devmode is set to False
+	Takes 5 input parameters - 
+		devmode  - True / False indicatiing development mode
+		user - svn user name
+		password - svn password
+		working_copy - path to working copy
+		address - svn address of repository
 	"""
 	def __init__(self, mode, address, user , password, workingcopy):
 	   self.devmode = mode
@@ -475,11 +514,12 @@ class Services:
 	    run("%(supervisorctl)s -c %(supervisorconf)s shutdown" % self.service_map)
 
 	    
-"""
-Class used for general buildout tasks
-Used by bungeni, plone and portal buildout tasks
-"""
+
 class Tasks:
+	"""
+	Class used for general buildout tasks
+	Used by bungeni, plone and portal buildout tasks
+	"""
 	def __init__(self, cfg, repo,  working_folder):
 	    """
 	    cfg - BungeniConfigs object
@@ -603,8 +643,12 @@ class PortalTasks:
 class BungeniTasks:
 	def __init__(self):
 	   self.cfg = BungeniConfigs()
+	   self.data_dump_folder = self.cfg.user_bungeni + "/testdatadmp"
+	   self.data_dump_file = self.data_dump_folder + "/" + self.cfg.bungeni_dump_file
+	   self.min_dump_file = self.data_dump_folder + "/dumpmin-undesa.txt"
 	   self.tasks = Tasks(self.cfg, self.cfg.bungeni_repo, self.cfg.user_bungeni)
 	   
+
         def setup(self):
 	   self.tasks.src_checkout()
 	   self.tasks.bootstrap(self.cfg.python25)
@@ -614,12 +658,15 @@ class BungeniTasks:
 	   Update the bungeni source folder
            """
            self.tasks.src_update()
-	   with cd(user.bungeni):
+	   with cd(self.cfg.user_bungeni):
               with cd("src"):
                 run("svn up")
 
 
         def build(self):
+	   """
+	   Run a buildout of the bungeni installation
+	   """
 	   self.local_config()
 	   self.tasks.buildout("PYTHON=%s" % self.cfg.python25, "", self.cfg.bungeni_buildout_config)
 
@@ -630,6 +677,35 @@ class BungeniTasks:
         def check_versions(self):
 	   return self.tasks.check_versions(self.cfg.portal_buildout_config, "2.5")
 
+	def reset_db(self):
+	   with cd(self.cfg.user_bungeni):
+		run("./parts/postgresql/bin/dropdb bungeni")
+		run("./parts/postgresql/bin/createdb bungeni")
+
+	def reset_schema(self):
+	   with cd(self.cfg.user_bungeni):
+		run("./bin/reset-db")
+
+	def load_demo_data(self):
+	   """	
+	   Updates the demo data for bungeni to use the current user name and then loads it into the db
+	   """
+	   with cd(self.cfg.user_bungeni):
+	        """
+		First update the db dump with the currently running user name
+		"""
+		dict_dump_update = {
+				    "db_dump_update_script":self.cfg.db_dump_update_script,
+				    "data_dump_file": self.data_dump_file,
+				    "output_file" : self.data_dump_folder + "/dmp_upd.txt",
+				    "output_user" : env['user']
+				   }
+		run("%(db_dump_update_script)s %(data_dump_file)s %(output_file)s undesa %(output_user)s" % dict_dump_update)
+		run("./bin/psql bungeni < %s" % dict_dump_update['output_file'])
+
+	def load_min_data(self):
+	   with cd(self.cfg.user_bungeni):
+		run("./bin/psql bungeni < %s" % self.min_dump_file)
 
 	def local_config(self):
 	   template_map = {
@@ -645,7 +721,7 @@ class BungeniTasks:
 	   """
 	   Setup the postgresql db - this needs to be run just once for the lifetime of the installation
 	   """
-	   with cd(user.bungeni):
+	   with cd(self.cfg.user_bungeni):
 	      run("./bin/setup-database")
 
 

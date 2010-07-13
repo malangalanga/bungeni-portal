@@ -4,7 +4,7 @@
 # user_portal = portal buildout folder
 
 [inet_http_server]
-port = 8888
+port = %(supervisor_host)s:%(supervisor_port)s
 username = admin
 password = admin
 
@@ -17,7 +17,7 @@ pidfile = %(user_config)s/supervisord.pid
 nodaemon = false
 
 [supervisorctl]
-serverurl = http://%(app_host)s:8888
+serverurl = http://%(supervisor_host)s:8888
 username = admin
 password = admin
 
