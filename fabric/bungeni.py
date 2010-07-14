@@ -276,6 +276,7 @@ class BungeniConfigs:
 		"""
 		This is a script that updates the user name in a postgresql db dump
 	        """	
+	        self.postgresql_bin = self.user_bungeni + "/parts/postgresql/bin" 
 		self.db_dump_update_script = self.utils.get_fab_path() + "/scripts/upd-dbdump.sh" 
 
 
@@ -552,6 +553,12 @@ class Tasks:
 	    with cd(self.scm.working_copy):
 		run("%s ./bin/buildout -t 3600 %s -c %s" % (boprefix, boparam, boconfig))
 
+	def build_exists(self, li_files):
+	    for file in li_files:
+		if not os.path.exists(file):
+		   return False
+	    return True
+
 	def get_buildout_index(self, boconfig):
 	    """	
 	    Returns the index being used by the buildout configuration file
@@ -600,17 +607,40 @@ class PloneTasks:
 	def __init__(self):
 	   self.cfg = BungeniConfigs()
 	   self.tasks = Tasks(self.cfg, self.cfg.plone_repo, self.cfg.user_plone)
+	   self.exists_check = [self.cfg.user_bungeni, self.cfg.user_bungeni + "/bin/paster", self.cfg.postgresql_bin]
+	   if not self.tasks.build_exists(self.exists_check):
+		abort("The Plone buildout requires an existing bungeni buildout")
 	   
         def setup(self):
 	   self.tasks.src_checkout()
 	   self.tasks.bootstrap(self.cfg.python24)
 	  
         def build(self):
-	   tasks.buildout("PYTHON=%s" % self.cfg.python24, "", self.cfg.plone_buildout_config)
+	   """
+	   Runs a full plone buildout
+	   """
+	   self.tasks.buildout("PATH=%s:$PATH PYTHON=%s" % (self.cfg.postgresql_bin,self.cfg.python24), "", self.cfg.plone_buildout_config)
 
 	def build_opt(self):
-	   tasks.buildout("PYTHON=%s" % self.cfg.python24, "-N", self.cfg.plone_buildout_config)
+	   """	
+	   Runs a optimistic plone buildout
+	   """
+	   self.tasks.buildout("PATH=%s:$PATH PYTHON=%s" % (self.cfg.postgresql_bin, self.cfg.python24), "-N", self.cfg.plone_buildout_config)
 		
+
+        def check_versions(self):
+	   """
+	   Verifies packages in the plone version index
+	   """
+	   return self.tasks.check_versions(self.cfg.plone_buildout_config, "2.5")
+
+	def local_config(self):
+	   template_map = {
+			"plone_local_index" : self.cfg.plone_local_index,
+			 }	   
+	   template_file = "%(plone_local_cfg)s.tmpl" % {"plone_local_cfg": self.cfg.plone_local_buildout_config}
+	   self.tasks.local_config(template_file, template_map, self.cfg.plone_local_buildout_config)
+	   print "Local config ", self.cfg.plone_local_buildout_config, " generated from " , template_file
 
 class PortalTasks:
 	def __init__(self):
@@ -668,11 +698,11 @@ class BungeniTasks:
 	   Run a buildout of the bungeni installation
 	   """
 	   self.local_config()
-	   self.tasks.buildout("PYTHON=%s" % self.cfg.python25, "", self.cfg.bungeni_buildout_config)
+	   self.tasks.buildout("PATH=%s:$PATH PYTHON=%s" % (self.cfg.postgresql_bin, self.cfg.python25), "", self.cfg.bungeni_buildout_config)
 
 	def build_opt(self):
 	   self.local_config()
-	   self.tasks.buildout("PYTHON=%s" % self.cfg.python25, "-N", self.cfg.bungeni_buildout_config)
+	   self.tasks.buildout("PATH=%s:$PATH PYTHON=%s" % (self.cfg.postgresql_bin,self.cfg.python25), "-N", self.cfg.bungeni_buildout_config)
 
         def check_versions(self):
 	   return self.tasks.check_versions(self.cfg.portal_buildout_config, "2.5")

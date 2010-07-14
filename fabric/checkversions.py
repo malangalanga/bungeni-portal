@@ -15,7 +15,7 @@ class CheckVersions():
 		package_index - the URL of the package index
 		python version - 2.4 or 2.5
 		"""
-	        #print "versions ", versions_file , "\npackage_url ", package_url, "\npython_version " , python_version
+	        print "versions ", versions_file , "\npackage_url ", package_url, "\npython_version " , python_version
 		self.versions_cfg = versions_file
 		self.package_index = package_url
 		self.python_version = python_version
@@ -45,12 +45,12 @@ class CheckVersions():
 		#print iversions
 		iversions_keys = [value[0] for value in iversions]
 		for prod in iversions_keys:
-			#print 'checking ' + prod + ' .....'
+			print 'checking ' + prod + ' .....'
 			prod_exists = 0
 			for ext in self.allowed_ext:
 				if prod_exists == 0:
 					prod_url = self.package_index + "/" + prod+"/" + prod + "-" + config.get('versions',prod)+ext
-					#print '\tchecking ' + prod_url
+					print '\tchecking ' + prod_url
 					link_exists = self.checkLink(prod_url)
 					if (link_exists == 1) :
 						#print '\t\tfound ' + prod_url
@@ -59,7 +59,7 @@ class CheckVersions():
 						pass
 						#print '\t\tnot found ' + prod_url
 			if prod_exists == 0:
-				#print 'adding missing ' + prod + ' == ' + config.get('versions',prod)
+				print 'adding missing ' + prod + ' == ' + config.get('versions',prod)
 				missing_products.append(prod + ' == ' + config.get('versions',prod))
 		#print 'Missing Products = ' + str(len(missing_products))
 	        return missing_products		

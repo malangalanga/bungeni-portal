@@ -107,6 +107,45 @@ def config_supervisord():
 	pre = bungeni.Presetup()
 	pre.supervisord_config()	
 
+
+
+def plone_install():
+	"""
+	Setup and build plone
+	"""
+	tasks = bungeni.PloneTasks()
+	tasks.setup()
+	tasks.build()
+
+
+def plone_setup():
+	"""
+	Checkout and bootstrap plone
+	"""
+	tasks = bungeni.PloneTasks()
+	tasks.setup()
+
+def plone_build():
+	"""	
+	Run the plone buildout
+	"""
+	tasks = bungeni.PloneTasks()
+	tasks.build()
+
+def plone_check():
+	"""	
+	Check the plone index for missing pkgs
+	"""
+	tasks = bungeni.PloneTasks()
+	__check(tasks)
+
+def plone_local_config():
+	tasks = bungeni.PloneTasks()
+	tasks.local_config()
+
+
+
+
 def portal_install():
 	"""
 	Setup and builds the portal
@@ -188,6 +227,21 @@ def stop_portal():
 	"""
 	service = bungeni.Services()
 	service.stop_service("portal")
+
+def start_plone():
+	"""
+	Start the plone service
+	"""
+	service = bungeni.Services()
+	service.start_service("plone")
+
+def stop_plone():
+	"""
+	Stop the plone service
+	"""
+	service = bungeni.Services()
+	service.stop_service("plone")
+
 
 
 def start_postgres():
