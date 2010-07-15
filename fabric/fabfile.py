@@ -1,4 +1,4 @@
-import bungeni
+from modules import bungeni
 
 
 def essentials():
@@ -8,9 +8,6 @@ def essentials():
 	bungenipre = bungeni.Presetup()
 	bungenipre.essentials()
 
-"""
-Build python 2.5
-"""
 def build_python25():
 	"""
 	Builds Python 2.5 from source
@@ -18,9 +15,6 @@ def build_python25():
 	bungenipre = bungeni.Presetup()
 	bungenipre.build_py25()
 	
-"""
-Build python 2.4
-"""	
 def build_python24():
 	"""
 	Builds Python 2.4 from source
@@ -116,6 +110,7 @@ def plone_install():
 	tasks = bungeni.PloneTasks()
 	tasks.setup()
 	tasks.build()
+	tasks.update_conf()
 
 
 def plone_setup():
@@ -132,6 +127,13 @@ def plone_build():
 	tasks = bungeni.PloneTasks()
 	tasks.build()
 
+
+def plone_conf():
+	tasks = bungeni.PloneTasks()
+	tasks.update_conf()
+
+
+
 def plone_check():
 	"""	
 	Check the plone index for missing pkgs
@@ -140,6 +142,9 @@ def plone_check():
 	__check(tasks)
 
 def plone_local_config():
+	"""
+	Generate local config for plone build
+	"""
 	tasks = bungeni.PloneTasks()
 	tasks.local_config()
 
@@ -160,6 +165,14 @@ def portal_build():
 	"""
 	tasks = bungeni.PortalTasks()
 	tasks.build()	
+
+
+def portal_build_opt():
+	"""
+	Build the portal with (-N)
+	"""
+	tasks = bungeni.PortalTasks()
+	tasks.build_opt()	
 
 def portal_setup():
 	"""

@@ -449,6 +449,7 @@ class SCM:
 	   if (self.devmode == True):
 		print "Checking out in dev-mode with username = ", self.user
 		cmd = "svn co https://%s --username=%s --password=%s %s" % (self.address, self.user, self.password, self.working_copy)	
+		self.svn_perm()
 	   else:
 		print "Checkout out anonymously"
 		cmd = "svn co http://%s %s" % (self.address, self.working_copy)
@@ -460,8 +461,27 @@ class SCM:
 	   Updates the working copy
 	   """
 	   with cd(self.working_copy):
+		self.svn_perm()
 		run("svn up")
 
+	def svn_perm(self):
+	   """
+	   Subversion can occasionaly ask the user to verify a https certificate 
+	   This method accepts the certificate temporarily
+	   """
+	   if self.devmode == True:
+		working_copy_map = {"working_folder":self.working_copy}
+		if not os.path.exists("%(working_folder)s/svn_ans_t.txt" % working_copy_map):
+		    run("echo 't' > %(working_folder)s/svn_ans_t.txt" % {"working_folder":self.working_copy})
+		svn_perm_map = {
+				"repo":self.address,
+				"working_folder":self.working_copy,
+			 	"user":self.user,
+				"password":self.password,
+			       }	
+		run("svn info %(repo)s --username=%(user)s --password=%(password)s <%(working_folder)s/svn_ans_t.txt" % svn_perm_map)
+	   else:
+		return   
 
 
 class Templates:
@@ -642,10 +662,28 @@ class PloneTasks:
 	   self.tasks.local_config(template_file, template_map, self.cfg.plone_local_buildout_config)
 	   print "Local config ", self.cfg.plone_local_buildout_config, " generated from " , template_file
 
+	def update_conf(self):
+	   with cd(self.cfg.user_plone):
+		"""
+		Create folder for data.fs
+		"""
+	        run("mkdir -p ./var/filestorage")
+		with cd("etc"):
+		   """
+		   Update config files appropriately
+		   """	
+		   run("sed -i 's|%%define INSTANCE \.|%%define INSTANCE %(plone_home)s|g' ./zope.conf" % {"plone_home":self.cfg.user_plone})
+		   run("sed -i 's|debug-mode on|debug-mode off|g' ./zope.conf")
+		   run("sed -i 's|#!/usr/bin/python|#!%(python24)s|g' ./import-data.py" % {"python24": self.cfg.python24}) 
+
+
 class PortalTasks:
 	def __init__(self):
 	   self.cfg = BungeniConfigs()
 	   self.tasks = Tasks(self.cfg, self.cfg.portal_repo, self.cfg.user_portal)
+	   self.exists_check = [self.cfg.user_bungeni, self.cfg.user_bungeni + "/bin/paster"]
+	   if not self.tasks.build_exists(self.exists_check):
+	        abort("Portal build requires a working bungeni buildout")
 	   
         def setup(self):
 	   self.tasks.src_checkout()
@@ -677,7 +715,9 @@ class BungeniTasks:
 	   self.data_dump_file = self.data_dump_folder + "/" + self.cfg.bungeni_dump_file
 	   self.min_dump_file = self.data_dump_folder + "/dumpmin-undesa.txt"
 	   self.tasks = Tasks(self.cfg, self.cfg.bungeni_repo, self.cfg.user_bungeni)
-	   
+	   self.exists_check = [self.cfg.python25]
+	   if not self.tasks.build_exists(self.exists_check):
+		abort("Bungeni build requires a working python 2.5")	   
 
         def setup(self):
 	   self.tasks.src_checkout()
