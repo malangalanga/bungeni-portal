@@ -137,8 +137,8 @@ class OsEssentials:
 	Describes the different installation mechanisms by distribution 
 	"""
 	installMethods = {
-			  'Ubuntu' : 'apt-get install ',
-			  'Debian' : 'apt-get install ' ,
+			  'Ubuntu' : 'apt-get install -y ',
+			  'Debian' : 'apt-get install -y ' ,
 			  'Suse' : 'yum install ',
 			  'Redhat' : 'rpm -Uvh ' 
 			 }	

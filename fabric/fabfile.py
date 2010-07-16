@@ -54,6 +54,7 @@ def bungeni_install():
 	"""
 	tasks = bungeni.BungeniTasks()
 	tasks.setup()
+	tasks.local_config()
 	tasks.build()
 	tasks.setupdb()
 
@@ -109,6 +110,7 @@ def plone_install():
 	"""
 	tasks = bungeni.PloneTasks()
 	tasks.setup()
+	tasks.local_config()
 	tasks.build()
 	tasks.update_conf()
 
@@ -157,6 +159,7 @@ def portal_install():
 	"""
 	tasks = bungeni.PortalTasks()
 	tasks.setup()
+	tasks.local_config()
 	tasks.build()
 
 def portal_build():
