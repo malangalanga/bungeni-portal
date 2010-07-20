@@ -66,9 +66,6 @@ def bungeni_local_config():
 	tasks = bungeni.BungeniTasks()
 	tasks.local_config()
 
-def bungeni_set_port():
-	task = bungeni.BungeniTasks()
-	tasks.update_port()
 
 
 def bungeni_build():
@@ -118,7 +115,7 @@ def config_ini(which_ini):
 		abort("Nothing to do ! option must be one of : bungeni, plone or portal")
 		return
 	tasks.deploy_ini()
-	tasks.update_port()	
+	tasks.update_deployini()
 
 def plone_install():
 	"""

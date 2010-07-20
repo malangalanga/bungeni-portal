@@ -178,7 +178,7 @@ class BungeniConfigs:
 		Required initializations
 		"""
 		self.utils = Utils()
-		self.cfg = BungeniConfigReader("bungeni.ini")
+		self.cfg = BungeniConfigReader("setup.ini")
 		"""
 		Scm parameters
 		"""
@@ -264,6 +264,7 @@ class BungeniConfigs:
 		self.portal_general_buildout_config = "buildout.cfg"
 		self.portal_local_buildout_config = "portal_local.cfg"
 	        self.portal_deploy_ini = self.user_portal + "/portal.ini"
+		self.portal_rules_xml_uri = "file:"+ self.user_bungeni + "/src/bungeni.main/bungeni/portal/static/themes/rules.xml"
 		self.portal_buildout_config = self.portal_general_buildout_config if self.local_cache==False else self.portal_local_buildout_config
 		self.portal_http_port = self.cfg.get_config('portal','http_port')
 		"""
@@ -630,10 +631,10 @@ class Tasks:
     		   templates = Templates(self.cfg)
 	  	   templates.new_file(template_file, template_map, self.scm.working_copy)
 		   
-	def update_port(self, ini_file, port):
+	def update_ini(self, ini_file, section, option, value):
 	   deploy_cfg = SafeConfigParser()
 	   deploy_cfg.read(ini_file)
-	   deploy_cfg.set('server:main', 'port', port)
+	   deploy_cfg.set(section, option, value)
 	   deploy_cfg.write(open(ini_file, "w"))
 
 	
@@ -694,8 +695,8 @@ class PloneTasks:
 		   run("sed -i 's|debug-mode on|debug-mode off|g' ./zope.conf")
 		   run("sed -i 's|#!/usr/bin/python|#!%(python24)s|g' ./import-data.py" % {"python24": self.cfg.python24}) 
 
-	def update_port(self):
-	    self.tasks.update_port(self.cfg.plone_deploy_ini, self.cfg.plone_http_port)
+	def update_deployini(self):
+	    self.tasks.update_ini(self.cfg.plone_deploy_ini, "server:main","port", self.cfg.plone_http_port)
 
 class PortalTasks:
 	def __init__(self):
@@ -732,9 +733,15 @@ class PortalTasks:
 	   self.tasks.local_config(template_file, template_map, self.cfg.portal_local_buildout_config)
 	   print "Local config ", self.cfg.portal_local_buildout_config, " generated from " , template_file
 
-
-	def update_port(self):
-	    self.tasks.update_port(self.cfg.portal_deploy_ini, self.cfg.portal_http_port)
+	
+	
+	def update_deployini(self):
+	    print("Updating portal portal.ini")
+	    self.tasks.update_ini(self.cfg.portal_deploy_ini, "DEFAULT", "deliverance_port", self.cfg.portal_http_port)
+	    self.tasks.update_ini(self.cfg.portal_deploy_ini, "DEFAULT", "bungeni_port", self.cfg.bungeni_http_port)
+	    self.tasks.update_ini(self.cfg.portal_deploy_ini, "DEFAULT", "plone_port", self.cfg.plone_http_port)
+	    self.tasks.update_ini(self.cfg.portal_deploy_ini, "DEFAULT", "host_name", self.cfg.app_host)
+	    self.tasks.update_ini(self.cfg.portal_deploy_ini, "filter:deliverance", "rule_uri", self.cfg.portal_rules_xml_uri)
 
 class BungeniTasks:
 	def __init__(self):
@@ -827,7 +834,7 @@ class BungeniTasks:
 	      run("./bin/setup-database")
 
 
-	def update_port(self):
-	    self.tasks.update_port(self.cfg.bungeni_deploy_ini, self.cfg.bungeni_http_port)
+	def update_deployini(self):
+	    self.tasks.update_ini(self.cfg.bungeni_deploy_ini,"server:main", "port", self.cfg.bungeni_http_port)
 
 
