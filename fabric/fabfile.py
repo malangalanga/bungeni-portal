@@ -1,5 +1,5 @@
 from modules import bungeni
-
+from fabric.api import *
 
 def essentials():
 	"""
@@ -66,6 +66,10 @@ def bungeni_local_config():
 	tasks = bungeni.BungeniTasks()
 	tasks.local_config()
 
+def bungeni_set_port():
+	task = bungeni.BungeniTasks()
+	tasks.update_port()
+
 
 def bungeni_build():
 	"""
@@ -102,7 +106,19 @@ def config_supervisord():
 	pre = bungeni.Presetup()
 	pre.supervisord_config()	
 
-
+def config_ini(which_ini):
+	tasks = None
+	if which_ini == "bungeni":
+		tasks = bungeni.BungeniTasks()
+	elif which_ini == "plone":
+		tasks = bungeni.PloneTasks()
+	elif which_ini == "portal":
+		tasks = bungeni.PortalTasks()
+	else:
+		abort("Nothing to do ! option must be one of : bungeni, plone or portal")
+		return
+	tasks.deploy_ini()
+	tasks.update_port()	
 
 def plone_install():
 	"""

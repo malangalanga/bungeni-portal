@@ -243,7 +243,9 @@ class BungeniConfigs:
 	        self.bungeni_dump_file = self.cfg.get_config('bungeni','dump_file')
 		self.bungeni_general_buildout_config = "buildout.cfg"
 		self.bungeni_local_buildout_config = "bungeni_local.cfg"
+		self.bungeni_deploy_ini = self.user_bungeni + "/bungeni.ini"
 		self.bungeni_buildout_config = self.bungeni_general_buildout_config if self.local_cache==False else self.bungeni_local_buildout_config
+		self.bungeni_http_port = self.cfg.get_config('bungeni','http_port')
 		"""
 		Buildout configs - Plone
 		"""		
@@ -251,7 +253,9 @@ class BungeniConfigs:
 	        self.plone_local_index = self.cfg.get_config('plone', 'local_index')
 		self.plone_general_buildout_config = "buildout.cfg"
 		self.plone_local_buildout_config = "plone_local.cfg"
+	        self.plone_deploy_ini = self.user_plone + "/etc/plone.ini"
 		self.plone_buildout_config = self.plone_general_buildout_config if self.local_cache==False else self.plone_local_buildout_config
+		self.plone_http_port = self.cfg.get_config('plone','http_port')
 		"""
 		Buildout configs - Portal 
 		"""
@@ -259,7 +263,9 @@ class BungeniConfigs:
 		self.portal_local_index = self.cfg.get_config('portal','local_index')
 		self.portal_general_buildout_config = "buildout.cfg"
 		self.portal_local_buildout_config = "portal_local.cfg"
+	        self.portal_deploy_ini = self.user_portal + "/portal.ini"
 		self.portal_buildout_config = self.portal_general_buildout_config if self.local_cache==False else self.portal_local_buildout_config
+		self.portal_http_port = self.cfg.get_config('portal','http_port')
 		"""
 		Supervisord 
 		"""
@@ -410,6 +416,9 @@ class Presetup:
 			     "supervisor_host":self.cfg.supervisor_host,
 		             "supervisor_port":self.cfg.supervisor_port,
 		 	     "user_config":self.cfg.user_config,
+			     "bungeni_ini":self.cfg.bungeni_deploy_ini,
+			     "plone_ini":self.cfg.plone_deploy_ini,
+			     "portal_ini":self.cfg.portal_deploy_ini,
 			   }
 	    run("mkdir -p %s" % self.cfg.user_config)
 	    self.templates.new_file("supervisord.conf.tmpl", template_map, self.cfg.user_config)
@@ -621,6 +630,11 @@ class Tasks:
     		   templates = Templates(self.cfg)
 	  	   templates.new_file(template_file, template_map, self.scm.working_copy)
 		   
+	def update_port(self, ini_file, port):
+	   deploy_cfg = SafeConfigParser()
+	   deploy_cfg.read(ini_file)
+	   deploy_cfg.set('server:main', 'port', port)
+	   deploy_cfg.write(open(ini_file, "w"))
 
 	
 class PloneTasks:
@@ -634,6 +648,7 @@ class PloneTasks:
         def setup(self):
 	   self.tasks.src_checkout()
 	   self.tasks.bootstrap(self.cfg.python24)
+	   self.deploy_ini()
 	  
         def build(self):
 	   """
@@ -648,7 +663,10 @@ class PloneTasks:
 	   self.tasks.buildout("PATH=%s:$PATH PYTHON=%s" % (self.cfg.postgresql_bin, self.cfg.python24), "-N", self.cfg.plone_buildout_config)
 		
 
-        def check_versions(self):
+	def deploy_ini(self):
+	   run("cp %(plone)s/etc/deploy.ini %(deploy_ini)s" % {"plone":self.cfg.user_plone, "deploy_ini":self.cfg.plone_deploy_ini})
+        
+	def check_versions(self):
 	   """
 	   Verifies packages in the plone version index
 	   """
@@ -676,6 +694,8 @@ class PloneTasks:
 		   run("sed -i 's|debug-mode on|debug-mode off|g' ./zope.conf")
 		   run("sed -i 's|#!/usr/bin/python|#!%(python24)s|g' ./import-data.py" % {"python24": self.cfg.python24}) 
 
+	def update_port(self):
+	    self.tasks.update_port(self.cfg.plone_deploy_ini, self.cfg.plone_http_port)
 
 class PortalTasks:
 	def __init__(self):
@@ -688,6 +708,7 @@ class PortalTasks:
         def setup(self):
 	   self.tasks.src_checkout()
 	   self.tasks.bootstrap(self.cfg.python25)
+	   self.deploy_ini()
 	  
         def build(self):
 	   self.local_config()
@@ -700,6 +721,9 @@ class PortalTasks:
         def check_versions(self):
 	   return self.tasks.check_versions(self.cfg.portal_buildout_config, "2.5")
 
+	def deploy_ini(self):
+	   run("cp %(portal)s/deploy.ini %(deploy_ini)s" % {"portal":self.cfg.user_portal, "deploy_ini":self.cfg.portal_deploy_ini})
+	
 	def local_config(self):
 	   template_map = {
 			"portal_local_index" : self.cfg.portal_local_index,
@@ -707,6 +731,10 @@ class PortalTasks:
 	   template_file = "%(portal_local_cfg)s.tmpl" % {"portal_local_cfg": self.cfg.portal_local_buildout_config}
 	   self.tasks.local_config(template_file, template_map, self.cfg.portal_local_buildout_config)
 	   print "Local config ", self.cfg.portal_local_buildout_config, " generated from " , template_file
+
+
+	def update_port(self):
+	    self.tasks.update_port(self.cfg.portal_deploy_ini, self.cfg.portal_http_port)
 
 class BungeniTasks:
 	def __init__(self):
@@ -722,7 +750,11 @@ class BungeniTasks:
         def setup(self):
 	   self.tasks.src_checkout()
 	   self.tasks.bootstrap(self.cfg.python25)
-	  
+	   self.deploy_ini()
+	 
+	def deploy_ini(self):
+	   run("cp %(bungeni)s/deploy.ini %(deploy_ini)s" % {"bungeni":self.cfg.user_bungeni, "deploy_ini":self.cfg.bungeni_deploy_ini})
+ 
         def update(self):
 	   """
 	   Update the bungeni source folder
@@ -795,5 +827,7 @@ class BungeniTasks:
 	      run("./bin/setup-database")
 
 
+	def update_port(self):
+	    self.tasks.update_port(self.cfg.bungeni_deploy_ini, self.cfg.bungeni_http_port)
 
 

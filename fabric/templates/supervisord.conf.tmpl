@@ -26,21 +26,21 @@ supervisor.rpcinterface_factory=supervisor.rpcinterface:make_main_rpcinterface
 
 
 [program:bungeni]
-command = %(user_bungeni)s/bin/paster serve %(user_bungeni)s/deploy.ini --log-file=%(user_bungeni)s/bungeni.log --pid-file=%(user_bungeni)s/bungeni.pid
+command = %(user_bungeni)s/bin/paster serve %(bungeni_ini)s --log-file=%(user_config)s/bungeni.log --pid-file=%(user_config)s/bungeni.pid
 process_name = bungeni
 directory = %(user_bungeni)s/bin
 priority = 10
 redirect_stderr = true
 
 [program:plone]
-command = %(user_plone)s/bin/paster serve %(user_plone)s/etc/deploy.ini --log-file=%(user_plone)s/plone.log --pid-file=%(user_plone)s/plone.pid
+command = %(user_plone)s/bin/paster serve %(plone_ini)s --log-file=%(user_config)s/plone.log --pid-file=%(user_config)s/plone.pid
 process_name = plone
 directory = %(user_plone)s/bin
 priority = 20
 redirect_stderr = true
 
 [program:portal]
-command = %(user_portal)s/bin/paster serve %(user_portal)s/deploy.ini --log-file=%(user_portal)s/portal.log --pid-file=%(user_portal)s/portal.pid
+command = %(user_portal)s/bin/paster serve %(portal_ini)s --log-file=%(user_config)s/portal.log --pid-file=%(user_config)s/portal.pid
 process_name = portal
 directory = %(user_portal)s/bin
 priority = 30
