@@ -17,7 +17,7 @@ pidfile = %(user_config)s/supervisord.pid
 nodaemon = false
 
 [supervisorctl]
-serverurl = http://%(supervisor_host)s:8888
+serverurl = http://%(supervisor_host)s:%(supervisor_port)s
 username = admin
 password = admin
 
