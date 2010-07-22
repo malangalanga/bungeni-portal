@@ -340,7 +340,7 @@ class Presetup:
 		run("mkdir -p " + self.cfg.user_python25_runtime)
 		with cd(self.cfg.user_python25_build_path):
 		      run(self.cfg.python25_download_command)
-		      run("tar xvzf " + self.cfg.python25_download_file)
+		      run("tar xvf " + self.cfg.python25_download_file)
 		      with cd(self.cfg.python25_src_dir):
 		 	run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl ./configure --prefix=%(python_runtime)s USE=sqlite" % {"python_runtime":self.cfg.user_python25_runtime})
 			run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
@@ -356,7 +356,7 @@ class Presetup:
 		run("mkdir -p " + self.cfg.user_python24_runtime)
 		with cd(self.cfg.user_python24_build_path):
 			run(self.cfg.python24_download_command)
-			run("tar xvzf " + self.cfg.python24_download_file)
+			run("tar xvf " + self.cfg.python24_download_file)
 			with cd(self.cfg.python24_src_dir):
 				run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl ./configure --prefix=" + self.cfg.user_python24_runtime )
 				run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
