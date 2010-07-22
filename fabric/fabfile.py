@@ -126,7 +126,7 @@ def plone_install():
 	tasks.local_config()
 	tasks.build()
 	tasks.update_conf()
-
+	tasks.add_admin()
 
 def plone_setup():
 	"""
@@ -147,6 +147,9 @@ def plone_conf():
 	tasks = bungeni.PloneTasks()
 	tasks.update_conf()
 
+def plone_admin_user():
+	tasks = bungeni.PloneTasks()
+	tasks.add_admin()
 
 
 def plone_check():

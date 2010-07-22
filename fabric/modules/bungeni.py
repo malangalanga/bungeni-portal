@@ -739,7 +739,9 @@ class PortalTasks:
 	   self.tasks.local_config(template_file, template_map, self.cfg.portal_local_buildout_config)
 	   print "Local config ", self.cfg.portal_local_buildout_config, " generated from " , template_file
 
-	
+	def add_admin(self):
+	    with cd(self.user_plone):
+		run("./bin/addzope2user admin admin")	
 	
 	def update_deployini(self):
 	    print("Updating portal portal.ini")
