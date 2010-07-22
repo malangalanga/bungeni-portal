@@ -227,6 +227,21 @@ def bungeni_check():
 	tasks = bungeni.BungeniTasks()
 	__check(tasks)
 
+def start_service(service_name):
+	"""
+	Starts a named service
+	"""
+	service = bungeni.Services()
+	service.start_service(service_name)
+
+
+def stop_service(service_name):
+	"""
+	Stops a named service
+	"""
+	service = bungeni.Services()
+	service.stop_service(service_name)
+
 def start_bungeni():
 	"""
 	Start bungeni
@@ -315,7 +330,7 @@ def db_load_mindata():
 	stop_bungeni()
 	stop_portal()
 	tasks = bungeni.BungeniTasks()
-	tasks.reset_db()
+	tasks.reset_schema()
 	tasks.load_min_data()	
 	start_bungeni()
 	start_portal()

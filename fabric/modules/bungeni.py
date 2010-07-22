@@ -463,6 +463,7 @@ class SCM:
 	   else:
 		print "Checkout out anonymously"
 		cmd = "svn co http://%s %s" % (self.address, self.working_copy)
+		self.svn_perm()
 	   run(cmd)
 
 
@@ -479,19 +480,24 @@ class SCM:
 	   Subversion can occasionaly ask the user to verify a https certificate 
 	   This method accepts the certificate temporarily
 	   """
+	   
+	   working_copy_map = {"working_folder":self.working_copy}
+	   if not os.path.exists("%(working_folder)s/svn_ans_t.txt" % working_copy_map):
+		    run("echo 'p' > %(working_folder)s/svn_ans_t.txt" % working_copy_map)
 	   if self.devmode == True:
-		working_copy_map = {"working_folder":self.working_copy}
-		if not os.path.exists("%(working_folder)s/svn_ans_t.txt" % working_copy_map):
-		    run("echo 't' > %(working_folder)s/svn_ans_t.txt" % {"working_folder":self.working_copy})
 		svn_perm_map = {
 				"repo":self.address,
 				"working_folder":self.working_copy,
 			 	"user":self.user,
 				"password":self.password,
 			       }	
-		run("svn info %(repo)s --username=%(user)s --password=%(password)s <%(working_folder)s/svn_ans_t.txt" % svn_perm_map)
+		run("svn info https://%(repo)s --username=%(user)s --password=%(password)s <%(working_folder)s/svn_ans_t.txt" % svn_perm_map)
 	   else:
-		return   
+		svn_perm_map = {
+				"repo":self.address,
+				"working_folder":self.working_copy,
+			       }
+		run("svn info https://%(repo)s <%(working_folder)s/svn_ans_t.txt" % svn_perm_map)
 
 
 class Templates:
