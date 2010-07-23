@@ -256,6 +256,14 @@ def __check(tasks):
         print '\n'.join(missing)
 
 
+def portal_update():
+    """
+    Update the portal
+    """
+    tasks = bungeni.PortalTasks()
+    tasks.update()
+
+
 def portal_check():
     """
     Check missing packages for portal.buildout

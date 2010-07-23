@@ -876,6 +876,14 @@ class PortalTasks:
                               'filter:deliverance', 'rule_uri',
                               self.cfg.portal_rules_xml_uri)
 
+    def update(self):
+       """
+       Update the portal
+       """
+
+       self.tasks.src_update()
+
+
 
 class BungeniTasks:
 
