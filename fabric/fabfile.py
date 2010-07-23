@@ -419,6 +419,19 @@ def db_load_mindata():
     start_portal()
 
 
+def db_load_largedata():
+    """
+    Load large metadata
+    """
+    stop_bungeni()
+    stop_portal()
+    tasks = bungeni.BungeniTasks()
+    tasks.reset_db()
+    tasks.load_large_data()
+    start_bungeni()
+    start_portal()
+
+
 def db_make_empty():
     """
     Make the bungeni db blank

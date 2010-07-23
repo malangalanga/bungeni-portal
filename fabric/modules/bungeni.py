@@ -284,6 +284,8 @@ class BungeniConfigs:
         self.portal_deploy_ini = self.user_portal + '/portal.ini'
         self.portal_rules_xml_uri = 'file:' + self.user_bungeni \
             + '/src/bungeni.main/bungeni/portal/static/themes/rules.xml'
+        self.portal_theme_uri = 'file:' + self.user_bungeni \
+            + '/src/bungeni.main/bungeni/portal/static/themes/layout.html'
         self.portal_buildout_config = \
             (self.portal_general_buildout_config if self.local_cache
              == False else self.portal_local_buildout_config)
@@ -894,6 +896,8 @@ class BungeniTasks:
             + self.cfg.bungeni_dump_file
         self.min_dump_file = self.data_dump_folder \
             + '/dumpmin-undesa.txt'
+        self.large_dump_file = self.data_dump_folder \
+            + '/dmp_undesa_large.txt'
         self.tasks = Tasks(self.cfg, self.cfg.bungeni_repo,
                            self.cfg.user_bungeni)
         self.exists_check = [self.cfg.python25]
@@ -957,20 +961,38 @@ class BungeniTasks:
        """
 
        with cd(self.cfg.user_bungeni):
-           dict_dump_update = {
-                'db_dump_update_script': self.cfg.db_dump_update_script,
-                'data_dump_file': self.data_dump_file,
-                'output_file': self.data_dump_folder + '/dmp_upd.txt',
-                'output_user': env['user'],
-                }
-           run('%(db_dump_update_script)s %(data_dump_file)s %(output_file)s undesa %(output_user)s'
-                 % dict_dump_update)
+           demo_dmp = self.__dump_update(self.data_dump_file)
            run('./bin/psql bungeni < %s'
-                % dict_dump_update['output_file'])
+                % demo_dmp)
 
     def load_min_data(self):
         with cd(self.cfg.user_bungeni):
-            run('./bin/psql bungeni < %s' % self.min_dump_file)
+            min_dump = self.__dump_update(self.min_dump_file)
+            run('./bin/psql bungeni < %s' % min_dump)
+
+    def load_large_data(self):
+        with cd(self.cfg.user_bungeni + "/testdatadmp"):
+             run("if [ -f %(large_dump)s ]; then rm %(large_dump)s ; fi" % {"large_dump":self.large_dump_file})
+             large_file_gz = run("basename $(head -1 large.txt)")
+             run("if [ -f  %s ]; then echo 'file exists'; else head -1 large.txt | xargs wget; fi")
+             run("basename $(head -1 large.txt) | xargs tar xvf") 
+             run("basename $(head -1 large.txt) | xargs rm")
+             large_dump = self.__dump_update(self.large_dump_file)
+             run('../bin/psql bungeni < %s' %  large_dump)
+
+        
+    def  __dump_update(self, dump_file):
+        with cd(self.cfg.user_bungeni):
+           dict_dump_update = {
+                'db_dump_update_script': self.cfg.db_dump_update_script,
+                'data_dump_file': dump_file,
+                'output_file': self.data_dump_folder + '/dmp_upd.txt',
+                'output_user': env['user'],
+                }
+           run('%(db_dump_update_script)s %(data_dump_file)s %(output_file)s undesa %(output_user)s' % dict_dump_update)
+           return self.data_dump_folder + '/dmp_upd.txt'
+
+
 
     def local_config(self):
         template_map = {
