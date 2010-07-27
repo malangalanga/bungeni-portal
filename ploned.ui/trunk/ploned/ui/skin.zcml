@@ -29,35 +29,11 @@
      layer=".interfaces.IPlonedSkin"
      />
 
-  <!-- Icon View for Site -->
-  <browser:view
-     for="zope.traversing.interfaces.IContainmentRoot"
-     name="favicon.ico"
-     layer=".interfaces.IPlonedSkin"
-     class=".images.FavIconView"
-     permission="zope.Public"
-     />
-
-  <!-- Skin CSS -->
-  <browser:resourceDirectory
-     name="css"
-     directory="css"
-     layer=".interfaces.IPlonedSkin"
-     />
-
   <!-- Skin JavaScript ??? -->
   <browser:resourceDirectory
      name="js"
      directory="js"
      layer=".interfaces.IPlonedSkin"
      />
-
-  <!-- Skin Images -->
-  <browser:resourceDirectory
-     name="images"
-     directory="images"
-     layer=".interfaces.IPlonedSkin"
-     />
-
 
 </configure>
