@@ -52,11 +52,8 @@
                        tal:attributes="href subMenuItem/url|subMenuItem/action;
                                        title subMenuItem/description;
                                        id subMenuItem/extra/id | nothing;
-                                       class subMenuItem/extra/class | nothing"
+                                       class subMenuItem/selected"
                        i18n:attributes="title">
-                        <span tal:omit-tag=""
-                          tal:condition="subMenuItem/selected"
-                          >&bull;</span>
                         <img width="16"
                              height="16"
                              alt=""
