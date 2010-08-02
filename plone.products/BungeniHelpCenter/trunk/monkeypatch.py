@@ -281,12 +281,13 @@ def getItemsBySections(self, **kwargs):
                          'section' : t,
                          'title' : t,
                          'items'   : []})
-
     # Then insert each how-to in the appropriate audience/section
     for b in brains:
-        if len(b.getSections) > 1:
+        if hasattr(b, 'getSections'):
             itemSections = b.getSections
         else:
+            itemSections = b.getObject().getSections()
+        if len(itemSections) < 1:
             itemSections = ['No category']
         matchedSections = [s for s in sections if s['section'] in itemSections]
         for s in matchedSections:
