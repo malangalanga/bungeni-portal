@@ -48,6 +48,17 @@ def setup_pylibs():
     bungenipre = bungeni.Presetup()
     bungenipre.required_pylibs()
 
+def presetup():
+    """
+    Runs essentials, python installation (2.4,2.5) and reqd libs
+    """
+    
+    essentials()
+    build_python25()
+    build_python24()
+    build_imaging()
+    setup_pylibs() 
+    
 
 def bungeni_setup():
     """
