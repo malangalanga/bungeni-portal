@@ -217,6 +217,8 @@ class BungeniConfigs:
         self.user_plone = self.user_bungeni + '/plone'
         self.user_portal = self.user_bungeni + '/portal'
         self.user_config = self.user_install_root + '/config'
+        self.user_logs = self.user_install_root + '/logs'
+        self.user_pid = self.user_install_root + '/pid'
         self.python25_install_url = self.cfg.get_config('python25',
                 'download_url')
         self.user_python25_build_path = self.user_build_root \
@@ -441,11 +443,15 @@ class Presetup:
             'supervisor_host': self.cfg.supervisor_host,
             'supervisor_port': self.cfg.supervisor_port,
             'user_config': self.cfg.user_config,
+            'user_logs': self.cfg.user_logs,
+            'user_pid':self.cfg.user_pid,
             'bungeni_ini': self.cfg.bungeni_deploy_ini,
             'plone_ini': self.cfg.plone_deploy_ini,
             'portal_ini': self.cfg.portal_deploy_ini,
             }
         run('mkdir -p %s' % self.cfg.user_config)
+        run('mkdir -p %s' % self.cfg.user_logs)
+        run('mkdir -p %s' % self.cfg.user_pid)
         self.templates.new_file('supervisord.conf.tmpl', template_map,
                                 self.cfg.user_config)
 
