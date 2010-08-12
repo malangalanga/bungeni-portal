@@ -22,3 +22,6 @@ echo "Creating Bungeni Test Database"
 echo "Loading Bungeni Schema"
 # create the database schema
 %(bin-directory)s/python %(directory)s/data/scripts/setup-schema.py
+
+# stop the database server 
+%(bin-directory)s/pg_ctl stop
