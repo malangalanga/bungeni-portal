@@ -286,8 +286,7 @@ class BungeniConfigs:
         self.portal_deploy_ini = self.user_portal + '/portal.ini'
         self.portal_rules_xml_uri = 'file:' + self.user_bungeni \
             + '/src/bungeni.main/bungeni/portal/static/themes/rules.xml'
-        self.portal_theme_uri = 'file:' + self.user_bungeni \
-            + '/src/bungeni.main/bungeni/portal/static/themes/layout.html'
+        self.portal_theme_uri = "http://%(rule_host)s/static/themes/" + self.cfg.get_config('portal', 'theme')
         self.portal_buildout_config = \
             (self.portal_general_buildout_config if self.local_cache
              == False else self.portal_local_buildout_config)
@@ -883,6 +882,9 @@ class PortalTasks:
         self.tasks.update_ini(self.cfg.portal_deploy_ini,
                               'filter:deliverance', 'rule_uri',
                               self.cfg.portal_rules_xml_uri)
+        self.tasks.update_ini(self.cfg.portal_deploy_ini,
+                              'filter:deliverance', 'theme_uri',
+                              self.cfg.portal_theme_uri)
 
     def update(self):
        """
