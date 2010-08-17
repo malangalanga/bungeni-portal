@@ -21,7 +21,9 @@ from zope.app.publisher.interfaces.browser import IBrowserSubMenuItem
 from zope.app.publisher.browser.menu import BrowserMenu, getMenu
 from zope.app.publisher.interfaces.browser import IBrowserMenu
 from zope.app.component.hooks import getSite
-from zope.app.pagetemplate import ViewPageTemplateFile
+
+#from zope.app.pagetemplate import ViewPageTemplateFile
+from bungeni.ui import z3evoque
 
 from bungeni.ui.utils import url, debug
 #from ploned.ui.interfaces import IViewView
@@ -134,7 +136,6 @@ class PloneBrowserMenu(BrowserMenu):
         
         if selected_index is not None:
             items[selected_index]['selected'] = u'selected'
-        
         return items
 
 class ContentMenuProvider(object):
@@ -148,8 +149,11 @@ class ContentMenuProvider(object):
 
     def update(self):
         pass
-
-    render = ViewPageTemplateFile('templates/contentmenu.pt')
+    
+    # evoque
+    render = z3evoque.ViewTemplateFile("ploned.html#action_menus")
+    # zpt
+    #render = ViewPageTemplateFile("templates/contentmenu.pt")
     
     # !+ WTF:
     # 
