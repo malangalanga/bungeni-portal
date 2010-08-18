@@ -130,6 +130,7 @@ class PloneBrowserMenu(BrowserMenu):
                 'action': item.action,
                 'url': _url,
                 'selected': u'',
+                # !+MENU_ICON(mr, aug-2010) remove, icon always managed via CSS
                 'icon': item.icon,
                 'extra': extra,
                 'submenu': submenu})
