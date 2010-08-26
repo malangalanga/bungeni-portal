@@ -8,10 +8,10 @@
     <div metal:define-macro="main"
        tal:define="fullToc python:here.getTOC(current = here);
                    tocInfo python:here.getTOCInfo(fullToc);
-                   currentIdx tocInfo/currentIdx;
+                   currentIdx tocInfo/currentIdx|nothing;
                    tocList    tocInfo/tocList;
-                   currentInfo    python:tocList[currentIdx];
-                   toc     tocInfo/localTOC">
+                   currentInfo    python:currentIdx and tocList[currentIdx] or here;
+                   toc     tocInfo/localTOC|nothing">
 
     <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'top']">
     <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
