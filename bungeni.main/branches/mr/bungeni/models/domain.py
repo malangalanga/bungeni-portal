@@ -479,6 +479,7 @@ class AgendaItem(ParliamentaryItem):
 AgendaItemChange = ItemLog.makeLogFactory("AgendaItemChange")
 AgendaItemVersion = ItemVersions.makeVersionFactory("AgendaItemVersion")
 
+
 class ListQuestion(ListEntity):
     pass
 
@@ -494,22 +495,19 @@ class Question(ParliamentaryItem):
     sort_on = ['question_number', 'submission_date']
     sort_dir = 'desc'
     listings_class = ListQuestion
-
+    
     def getParentQuestion(self):
         if self.supplement_parent_id:
             session = Session()
             parent = session.query(Question).get(self.supplement_parent_id)
             return parent.short_name
 
-
-
-
 QuestionChange = ItemLog.makeLogFactory("QuestionChange")
 QuestionVersion = ItemVersions.makeVersionFactory("QuestionVersion")
 
+
 class ListMotion(ListEntity):
     pass
-
 
 class Motion(ParliamentaryItem):
     consignatory = one2many("consignatory", "bungeni.models.domain.ConsignatoryContainer", "item_id")

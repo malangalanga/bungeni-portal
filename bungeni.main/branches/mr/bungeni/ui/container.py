@@ -26,7 +26,7 @@ from bungeni.models.interfaces import IMemberOfParliamentContainer
 from bungeni.models.interfaces import ICommitteeMemberContainer
 from bungeni.models.interfaces import ICommitteeStaffContainer
 
-from bungeni.core.translation import translate_obj
+from bungeni.core import translation
 
 from bungeni.ui.utils import url, date, debug
 from bungeni.ui.cookies import get_date_range
@@ -478,9 +478,10 @@ class ContainerJSONListing(BrowserView):
         """
         import sys
         t_nodes = []
+        lang = translation.get_request_language()
         for node in nodes:
             try:
-                t_nodes.append(translate_obj(node))
+                t_nodes.append(translation.translate_obj(node, lang))
             except (AssertionError,): # node is not ITranslatable
                 debug.log_exc_info(sys.exc_info(), log_handler=log.warn)
                 t_nodes.append(node)
