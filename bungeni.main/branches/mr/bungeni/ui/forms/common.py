@@ -22,7 +22,7 @@ from ore.alchemist import Session
 from alchemist.catalyst import ui
 from alchemist.ui.core import null_validator
 from ore.alchemist.model import queryModelDescriptor
-#from ore.alchemist.container import stringKey
+#from bungeni.ui.container import stringKey
 #from ore.workflow.interfaces import IWorkflowInfo
 #from alchemist.ui.core import handle_edit_action
 from alchemist.ui.core import setUpFields
