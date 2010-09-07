@@ -10,7 +10,6 @@ from zope import interface
 from zope import component
 from zope.security import proxy
 from zope.security import checkPermission
-from zope.security.proxy import ProxyFactory
 from zope.publisher.browser import BrowserView
 from zope.annotation.interfaces import IAnnotations
 
@@ -57,12 +56,44 @@ def getFields(context):
 
 
 def secured_iterator(permission, query, parent):
+    #from zope.security.proxy import ProxyFactory
     for item in query:
         item.__parent__ = parent
-        proxied = ProxyFactory(item)
-        if checkPermission(u"zope.View", proxied):
+        #proxied = ProxyFactory(item)
+        #if checkPermission(permission, proxied):
+        #    yield item
+        if checkPermission(permission, item):
             yield item
+        #yield item
+        '''
+!+checkPermissionSQLAlchemy(mr, sep-2010) NOT calling checkPermission gives 
+    the following TWO problems further downstream:
+    
+1) All object primary key tuples, as returned by
+    sqlalchemy.orm.mapper.primary_key_from_instance(obj)
+   are tuples of None... so the rendered URL for every object (in all views) 
+   is broken, ending up being (for single pk classes) "obj-None/"
 
+2) for the business/questions/ view (when the question.ministry relation is
+    configured to be lazy (in orm.py) doing a question.ministry attrubute 
+    lookup gives an UnboundExecutionError: 
+
+  File "/home/undesa/bungeni/cap_installs/bungeni_install/bungeni/releases/20100305100101/src/bungeni.main/bungeni/ui/container.py", line 467, in __call__
+    batch = self.getBatch(start, limit)
+  File "/home/undesa/bungeni/cap_installs/bungeni_install/bungeni/releases/20100305100101/src/bungeni.main/bungeni/ui/container.py", line 442, in getBatch
+    self._get_anno_getters_by_field_name(self.context))
+  File "/home/undesa/bungeni/cap_installs/bungeni_install/bungeni/releases/20100305100101/src/bungeni.main/bungeni/ui/container.py", line 401, in _jsonValues
+    d[f] = v = getter(n, field)
+  File "/home/undesa/bungeni/cap_installs/bungeni_install/bungeni/releases/20100305100101/src/bungeni.main/bungeni/ui/descriptor.py", line 214, in getter
+    obj = translate_obj(item.ministry)
+  File "/home/undesa/bungeni/cap_installs/bungeni_install/bungeni/releases/20100305100101/eggs/SQLAlchemy-0.5.8-py2.5.egg/sqlalchemy/orm/attributes.py", line 158, in __get__
+    return self.impl.get(instance_state(instance), instance_dict(instance))
+  File "/home/undesa/bungeni/cap_installs/bungeni_install/bungeni/releases/20100305100101/eggs/SQLAlchemy-0.5.8-py2.5.egg/sqlalchemy/orm/attributes.py", line 377, in get
+    value = callable_()
+  File "/home/undesa/bungeni/cap_installs/bungeni_install/bungeni/releases/20100305100101/eggs/SQLAlchemy-0.5.8-py2.5.egg/sqlalchemy/orm/strategies.py", line 556, in __call__
+    (mapperutil.state_str(state), self.key)
+UnboundExecutionError: Parent instance <Question at 0x8149ef8> is not bound to a Session; lazy load operation of attribute 'ministry' cannot proceed
+        '''
 
 def get_query(context, request, query=None, domain_model=None):
     """Prepare query.
@@ -408,6 +439,7 @@ class ContainerJSONListing(BrowserView):
                     d[f] = v.strftime("%F %I:%M %p")
                 elif isinstance(v, datetime.date):
                     d[f] = v.strftime("%F")
+            # !+checkPermissionSQLAlchemy(mr, sep-2010)
             d["object_id"] = url.set_url_context(stringKey(n))
             values.append(d)
         return values
@@ -459,7 +491,6 @@ class ContainerJSONListing(BrowserView):
         self.domain_model = context.domain_model
         self.domain_interface = queryModelInterface(self.domain_model)
         self.domain_annotation = queryModelDescriptor(self.domain_interface)
-        session = Session()
         self.set_size = 0
         self.fields = list(getFields(self.context))
         start, limit = self.getOffsets()
@@ -472,7 +503,6 @@ class ContainerJSONListing(BrowserView):
             dir=self.request.get("dir", "asc"),
             nodes=batch
         )
-        session.close()
         return simplejson.dumps(data)
 
 
