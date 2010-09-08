@@ -29,6 +29,8 @@ from alchemist.ui.core import setUpFields
 from alchemist.ui.core import unique_columns
 from zope.app.form.interfaces import IDisplayWidget
 
+import bungeni.ui.container
+
 # !+sqlalchemy.exc(mr, jul-2010) why this try/except ?
 try:
     from sqlalchemy.exceptions import IntegrityError
@@ -496,27 +498,30 @@ class EditForm(BaseForm, ui.EditForm):
                 # attach widget as ``render_original``
                 widget.render_original = display_widget
     
+    def _do_save(self, data):
+        for key in data.keys():
+            if isinstance(data[key], str):
+                data[key] = unescape(data[key])
+        formlib.form.applyChanges(self.context, self.form_fields, data)
+        # invalidate cache for this domain object type
+        bungeni.ui.container.invalidate_cache_for(
+            self.context.__class__.__name__)
+    
     @formlib.form.action(_(u"Save"), condition=formlib.form.haveInputWidgets)
     def handle_edit_save(self, action, data):
         """Saves the document and goes back to edit page"""
-        for key in data.keys():
-            if isinstance(data[key], str): 
-                data[key] = unescape(data[key])
-        formlib.form.applyChanges(self.context, self.form_fields, data)
+        self._do_save(data)
     
     @formlib.form.action(
         _(u"Save and view"), condition=formlib.form.haveInputWidgets)
     def handle_edit_save_and_view(self, action, data):
         """Saves the  document and redirects to its view page"""
-        for key in data.keys():
-            if isinstance(data[key], str): 
-                data[key] = unescape(data[key])
-    	formlib.form.applyChanges(self.context, self.form_fields, data)
+        self._do_save(data)
         if not self._next_url:
             self._next_url = url.absoluteURL(self.context, self.request) + \
                 "?portal_status_message= Saved"
         self.request.response.redirect(self._next_url)
- 
+    
     @formlib.form.action(_(u"Cancel"), validator=null_validator)
     def handle_edit_cancel(self, action, data):
         """Cancelling redirects to the listing."""
@@ -583,11 +588,14 @@ class TranslateForm(AddForm):
              mapping={"title": translate(props.title, context=self.request),
                       "language": language}) 
         else:
-            return _(
-                u"translate_item_help",
-                default=u'The document "$title" has not yet been translated into $language. Use this form to add the translation',
-                mapping={"title": translate(props.title, context=self.request),
-                         "language": language})
+            return _(u"translate_item_help",
+                default=u'The document "$title" has not yet been translated ' \
+                    u'into $language. Use this form to add the translation',
+                mapping={
+                    "title": translate(props.title, context=self.request),
+                    "language": language
+                }
+            )
     
     @property
     def title(self):

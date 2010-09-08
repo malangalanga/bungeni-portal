@@ -29,7 +29,9 @@ from bungeni.core import translation
 
 from bungeni.ui.utils import url, date, debug
 from bungeni.ui.cookies import get_date_range
-from bungeni.ui.interfaces import IBusinessSectionLayer, IMembersSectionLayer
+from bungeni.ui.interfaces import IBungeniAuthenticatedSkin
+from bungeni.ui.interfaces import IBusinessSectionLayer
+from bungeni.ui.interfaces import IMembersSectionLayer
 
 def stringKey(obj):
     """Replacement for ore.alchemist.container.stringKey
@@ -48,8 +50,8 @@ def stringKey(obj):
     unproxied = proxy.removeSecurityProxy(obj)
     mapper = orm.object_mapper(unproxied)
     #primary_key = mapper.primary_key_from_instance(unproxied)
-    primary_key = [ getattr(unproxied, c.name) for c in mapper.primary_key ]
-    identity_key = '-'.join(map(str, primary_key))
+    identity_values = [ getattr(unproxied, c.name) for c in mapper.primary_key ]
+    identity_key = '-'.join(map(str, identity_values))
     return "obj-%s" % (identity_key)
 
 
@@ -106,8 +108,7 @@ def get_query(context, request, query=None, domain_model=None):
     session = Session()
     if not query:
         query = unproxied._query
-    if (
-        (IBusinessSectionLayer.providedBy(request) and
+    if ((IBusinessSectionLayer.providedBy(request) and
             ICommitteeContainer.providedBy(context)) or 
         (IMembersSectionLayer.providedBy(request) and
             IMemberOfParliamentContainer.providedBy(context)) or 
@@ -257,6 +258,110 @@ class ContainerJSONTableHeaders(BrowserView):
         return simplejson.dumps(th)
 
 
+# json listing caches
+
+from evoque.collection import Cache
+
+class JSLCache(object):
+    """JSON Listing Cache"""
+    def __init__(self, max_size, class_name, qs_params):
+        """ max_size:int - max number of items to cache, 0 implies unlimited,
+                oldest in excess of max are discarded
+            class_name:str - name of target domain class
+            qs_params:[(param_name:str, default:str)] - query string params
+        """
+        self.cache = Cache(max_size)
+        self.qs_params = qs_params
+        self.class_name = class_name
+
+JSLCaches = {
+    "committees": JSLCache(99, "Committee", [
+        ("sort", u""),
+        ("dir", u"asc"),
+        ("filter_full_name", u""),
+        ("filter_short_name", u""),
+        ('filter_start_date', u""),
+        ('filter_end_date', u""),
+        ('filter_committee_type_id', u""),
+    ]),
+    "bills": JSLCache(99, "Bill", [
+        ("sort", u""),
+        ("dir", u"asc"),
+        ("filter_short_name", u""),
+        ("filter_owner_id", u""),
+        ("filter_submission_date", u""),
+        ("filter_status", u""),
+        ("filter_status_date", u""),
+        ("filter_publication_date", u""),
+    ]),
+    "questions": JSLCache(199, "Question", [
+        ("sort", u""),
+        ("dir", u"asc"),
+        ("filter_short_name", u""),
+        ("filter_owner_id", u""),
+        ("filter_submission_date", u""),
+        ("filter_status", u""),
+        ("filter_status_date", u""),
+        ("filter_question_number", u""),
+        ("filter_ministry_id", u""),
+    ]),
+    "motions": JSLCache(99, "Motion", [
+        ("sort", u""),
+        ("dir", u"asc"),
+        ("filter_short_name", u""),
+        ("filter_owner_id", u""),
+        ("filter_submission_date", u""),
+        ("filter_status", u""),
+        ("filter_status_date", u""),
+        ("filter_motion_number", u""),
+    ]),
+    "tableddocuments": JSLCache(99, "TabledDocument", [
+        ("sort", u""),
+        ("dir", u"asc"),
+        ("filter_short_name", u""),
+        ("filter_owner_id", u""),
+        ("filter_submission_date", u""),
+        ("filter_status", u""),
+        ("filter_status_date", u""),
+    ]),
+    "agendaitems": JSLCache(99, "AgendaItem", [
+        ("sort", u""),
+        ("dir", u"asc"),
+        ("filter_short_name", u""),
+        ("filter_owner_id", u""),
+        ("filter_submission_date", u""),
+        ("filter_status", u""),
+        ("filter_status_date", u""),
+    ]),
+    # sittings
+    "preports": JSLCache(99, "Report", [
+        ("sort", u""),
+        ("dir", u"asc"),
+        ("filter_short_name", u""),
+        ("filter_owner_id", u""),
+        ("filter_submission_date", u""),
+        ("filter_status", u""),
+        ("filter_status_date", u""),
+        ("filter_publication_date", u""),
+    ]),
+}
+CacheByClassname = dict(
+    [ (jslc.class_name, jslc.cache) for jslc in JSLCaches.values() ]
+)
+
+def invalidate_cache_for(class_name):
+    if class_name in CacheByClassname:
+        c = CacheByClassname[class_name]
+        log.info("Invalidating cache [num items: %i] for class_name: %s" % (
+            len(c.order), class_name))
+        # !+ encapsulate as a clear() method on evoque.collection.Cache
+        c.cache.clear()
+        c.order[:] = []
+    else:
+        log.warn("No cache for class_name: %s" % class_name)
+
+#
+
 class ContainerJSONListing(BrowserView):
     """Paging, batching, sorting, json contents of a container.
     """
@@ -387,7 +492,8 @@ class ContainerJSONListing(BrowserView):
     
     def getOffsets(self):
         nodes = []
-        start, limit = self.request.get("start",0), self.request.get("limit", 25)
+        start = self.request.get("start", 0)
+        limit = self.request.get("limit", 25)
         try:
             start, limit = int(start), int(limit)
             if not limit:
@@ -395,7 +501,7 @@ class ContainerJSONListing(BrowserView):
         except ValueError:
             start, limit = 0, 100
         return start, limit 
-
+    
     def _get_secured_batch(self, query, start, limit):
         secured_query = secured_iterator("zope.View", query, self.context)
         nodes = []
@@ -410,12 +516,14 @@ class ContainerJSONListing(BrowserView):
         domain_interface = queryModelInterface(domain_model)
         domain_annotation = queryModelDescriptor(domain_interface)
         # dict of domain_annotation field getters by name, for fast lookup
-        return dict([ 
+        da_getters = dict([ 
             (da_field.name, getattr(da_field.listing_column, "getter", None)) 
             for da_field in domain_annotation.fields
         ])
+        # !+ AttributeError: 'AgendaItem' object has no attribute 'start_date'
+        return da_getters
     
-    def _jsonValues(self, nodes, fields, context, getters_by_field_name={}):
+    def _jsonValues(self, nodes, fields, getters_by_field_name={}):
         """
         filter values from the nodes to respresent in json, currently
         that means some footwork around, probably better as another
@@ -447,9 +555,9 @@ class ContainerJSONListing(BrowserView):
     # replaces the logic in:
     #   - alchemist.ui.container.ContainerJSONListing.getBatch()
     #   - ore.alchemist.container.AlchemistContainer.batch()
-    def getBatch(self, start=0, limit=20):
+    def getBatch(self, start=0, limit=20, lang=None):
         context = proxy.removeSecurityProxy(self.context)
-        query = get_query(self.context, self.request)
+        query = get_query(context, self.request)
         # filters
         filter_by = dateFilter(self.request)
         if filter_by:
@@ -467,17 +575,18 @@ class ContainerJSONListing(BrowserView):
         # ore.alchemist.container.AlchemistContainer.batch()
         # nodes: [<bungeni.models.domain.Question]
         nodes = self._get_secured_batch(query, start, limit)
-        nodes = self.translate_objects(nodes)
-        batch = self._jsonValues(nodes, self.fields, self.context,
-            self._get_anno_getters_by_field_name(self.context))
+        nodes = self.translate_objects(nodes, lang)
+        batch = self._jsonValues(nodes, self.fields,
+            self._get_anno_getters_by_field_name(context))
         return batch
     
-    def translate_objects(self, nodes):
+    def translate_objects(self, nodes, lang=None):
         """ (nodes:[ITranslatable]) -> [nodes]
         """
         import sys
         t_nodes = []
-        lang = translation.get_request_language()
+        if lang is None:
+            lang = translation.get_request_language()
         for node in nodes:
             try:
                 t_nodes.append(translation.translate_obj(node, lang))
@@ -486,19 +595,45 @@ class ContainerJSONListing(BrowserView):
                 t_nodes.append(node)
         return t_nodes
     
+    def get_cache_key(self, context, start, limit, lang):
+        qs_params = tuple(
+            self.request.get(name, default)
+            for name, default in JSLCaches[context.__name__].qs_params
+        )
+        return (self.__class__.__name__, context.__name__,
+                lang, start, limit, qs_params)
+    
     def __call__(self):
+        # prepare required parameters
+        start, limit = self.getOffsets() # ? start=0&limit=25
+        lang = self.request.locale.getLocaleID() # get_request_language()
         context = proxy.removeSecurityProxy(self.context)
         self.domain_model = context.domain_model
         self.domain_interface = queryModelInterface(self.domain_model)
         self.domain_annotation = queryModelDescriptor(self.domain_interface)
-        self.set_size = 0
-        self.fields = list(getFields(self.context))
-        start, limit = self.getOffsets()
-        batch = self.getBatch(start, limit)
+        self.fields = tuple(getFields(context))
+        # only go thru cache for an anonymous user OR for
+        # the business or members sections !+ is this needed?
+        if (not IBungeniAuthenticatedSkin.providedBy(self.request) or 
+            IBusinessSectionLayer.providedBy(self.request) or 
+            IMembersSectionLayer.providedBy(self.request)
+        ):
+            cache_key = self.get_cache_key(context, start, limit, lang)
+            cache = JSLCaches[context.__name__].cache
+            if not cache.has(cache_key):
+                log.info("SETTING CACHE for key: %s" % (cache_key,))
+                cache.set(cache_key, self._cached__call__(start, limit, lang))
+            return cache.get(cache_key)
+        else:
+            # not via cache, regenerate fresh !+ is this needed?
+            self._cached__call__(start, limit, lang)
+    
+    def _cached__call__(self, start, limit, lang):
+        batch = self.getBatch(start, limit, lang)
         data = dict(
-            length=self.set_size,
+            length=self.set_size, # set in getBatch() -> _get_secured_batch()
             start=start,
-            recordsReturned=len(batch),
+            recordsReturned=len(batch), # !+ why length AND recordsReturned ?
             sort=self.request.get("sort"),
             dir=self.request.get("dir", "asc"),
             nodes=batch
