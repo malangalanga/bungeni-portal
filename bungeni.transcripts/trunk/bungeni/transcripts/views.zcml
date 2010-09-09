@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser" 
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="bungeni.ui">
+    <browser:page
+      for=".interfaces.ITranscribable"
+      name="display_transcripts"
+      class=".browser.browser.DisplayTranscripts"
+      permission="zope.View"
+      template="browser/transcripts.pt"
+      />
+    <browser:page
+      for=".interfaces.ITranscribable"
+      name="transcripts"
+      class=".browser.browser.MainView"
+      permission="zope.View"
+      template="browser/main_page.pt"
+      />
+      <browser:page
+      for=".interfaces.ITranscribable"
+      name="main_transcripts"
+      class=".browser.browser.MainView"
+      permission="zope.View"
+      template="browser/main.pt"
+      />
+      
+      <browser:page
+      for=".interfaces.ITranscribable"
+      name="add_transcript"
+      class=".browser.browser.AddTranscript"
+      permission="zope.View"
+      />
+      
+      <browser:page
+      for=".interfaces.ITranscript"
+      name="edit_transcript"
+      class=".browser.browser.EditTranscript"
+      permission="zope.View"
+      />
+      
+      <browser:page
+      for=".interfaces.ITranscribable"
+      name="edit_media_path"
+      class=".browser.browser.EditMediaPath"
+      permission="zope.ManageContent"
+      />
+      
+      <browser:page
+      for=".interfaces.ITranscribable"
+      name="staff"
+      class=".browser.browser.Assignment"
+      permission="zope.ManageContent"
+      template="browser/assignment.pt"
+      />
+      
+      <browser:page
+      for=".interfaces.ITranscribable"
+      name="takes"
+      class=".browser.browser.Takes"
+      permission="zope.ManageContent"
+      template="browser/takes.pt"
+      />    
+</configure>

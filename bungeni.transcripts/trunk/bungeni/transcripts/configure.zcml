@@ -1,6 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:db="http://namespaces.objectrealms.net/rdb">
     <!-- Bind Application Model to Database -->
     <include package="zope.app.zcmlfiles" />
@@ -9,74 +10,18 @@
     <include package="ore.alchemist" />  
     <include package="alchemist.catalyst" file="meta.zcml" />
     <include package="alchemist.ui" />
-
     <include package="bungeni.core" />
-    <include package=".browser" />
     <include package="bungeni.models" />
+    <include package=".browser" />
+    
     <include file="catalyst.zcml"/>
     <class class="bungeni.models.domain.GroupSitting">
         <implements
             interface="bungeni.transcripts.interfaces.ITranscribable"
        /> 
     </class>   
-    <browser:page
-      for=".interfaces.ITranscribable"
-      name="display_transcripts"
-      class=".browser.browser.DisplayTranscripts"
-      permission="zope.View"
-      template="browser/transcripts.pt"
-      />
-    <browser:page
-      for=".interfaces.ITranscribable"
-      name="transcripts"
-      class=".browser.browser.MainView"
-      permission="zope.View"
-      template="browser/main_page.pt"
-      />
-      <browser:page
-      for=".interfaces.ITranscribable"
-      name="main_transcripts"
-      class=".browser.browser.MainView"
-      permission="zope.View"
-      template="browser/main.pt"
-      />
-      
-      <browser:page
-      for=".interfaces.ITranscribable"
-      name="add_transcript"
-      class=".browser.browser.AddTranscript"
-      permission="zope.View"
-      />
-      
-      <browser:page
-      for=".interfaces.ITranscript"
-      name="edit_transcript"
-      class=".browser.browser.EditTranscript"
-      permission="zope.View"
-      />
-      
-      <browser:page
-      for=".interfaces.ITranscribable"
-      name="edit_media_path"
-      class=".browser.browser.EditMediaPath"
-      permission="zope.ManageContent"
-      />
-      
-      <browser:page
-      for=".interfaces.ITranscribable"
-      name="staff"
-      class=".browser.browser.Assignment"
-      permission="zope.ManageContent"
-      template="browser/assignment.pt"
-      />
-      
-      <browser:page
-      for=".interfaces.ITranscribable"
-      name="takes"
-      class=".browser.browser.Takes"
-      permission="zope.ManageContent"
-      template="browser/takes.pt"
-      />
+    <!-- Include Views -->
+    <include file="views.zcml" />
       
     <browser:menuItem
      menu="context_actions"
@@ -93,12 +38,18 @@
      <browser:subMenuItem
         menu="plone_contentmenu"
         for=".interfaces.ITranscribable"
-        title="edit transcript"
+        title="manage transcripts"
         action="edit_media_path"
         permission="zope.ManageContent"
         submenu="context_edit_transcript"
     />
-    
+    <browser:menuItem
+     menu="context_edit_transcript"
+     for=".interfaces.ITranscribable"
+     title="media paths"
+     action="edit_media_path"
+     permission="zope.ManageContent"
+     />
     <browser:menuItem
      menu="context_edit_transcript"
      for=".interfaces.ITranscribable"
@@ -114,5 +65,4 @@
      action="staff"
      permission="zope.ManageContent"
      />
-     
 </configure>
