@@ -29,8 +29,6 @@ from alchemist.ui.core import setUpFields
 from alchemist.ui.core import unique_columns
 from zope.app.form.interfaces import IDisplayWidget
 
-import bungeni.ui.container
-
 # !+sqlalchemy.exc(mr, jul-2010) why this try/except ?
 try:
     from sqlalchemy.exceptions import IntegrityError
@@ -51,6 +49,7 @@ from bungeni.ui.i18n import _
 from bungeni.ui import browser
 from bungeni.ui import z3evoque
 from bungeni.ui.utils import url, debug
+from bungeni.ui.container import invalidate_caches_for
 
 import re
 import htmlentitydefs
@@ -347,15 +346,25 @@ class AddForm(BaseForm, ui.AddForm):
 
     def finishConstruction(self, ob):
         """Adapt the custom fields to the object."""
-
         adapts = self.Adapts
         if adapts is None:
             adapts = self.model_schema
-            
         self.adapters = {
             adapts : ob
-            }
-            
+        }
+    
+    def createAndAdd(self, data):
+        added_obj = super(AddForm, self).createAndAdd(data)
+        # invalidate caches for this domain object type
+        invalidate_caches_for(added_obj.__class__.__name__, "add")
+        # !+ADD_invalidate_CACHE(mr, sep-2010) should noyt be necessary as 
+        # all domain items are created into a "draft" workflow state that 
+        # is NOT public, so in theory any existing cache of listings of public 
+        # items should NOT be affected. Plus, a subsequent modification of the
+        # item, and possible passage to a public state, will anyway
+        # invalidate the cache.
+        return added_obj
+    
     @formlib.form.action(
         _(u"Save and view"), 
         condition=formlib.form.haveInputWidgets)
@@ -503,9 +512,8 @@ class EditForm(BaseForm, ui.EditForm):
             if isinstance(data[key], str):
                 data[key] = unescape(data[key])
         formlib.form.applyChanges(self.context, self.form_fields, data)
-        # invalidate cache for this domain object type
-        bungeni.ui.container.invalidate_cache_for(
-            self.context.__class__.__name__)
+        # invalidate caches for this domain object type
+        invalidate_caches_for(self.context.__class__.__name__, "edit")
     
     @formlib.form.action(_(u"Save"), condition=formlib.form.haveInputWidgets)
     def handle_edit_save(self, action, data):
@@ -572,7 +580,6 @@ class TranslateForm(AddForm):
     @property
     def form_name(self):
         language = get_language_by_name(self.language)["name"]
-                
         return _(u"translate_item_legend",
                  default=u"Add $language translation",
                  mapping={"language": language})
@@ -600,10 +607,9 @@ class TranslateForm(AddForm):
     @property
     def title(self):
         language = get_language_by_name(self.language)["name"]
-
         return _(u"translate_item_title", default=u"Adding $language translation",
                  mapping={"language": language})
-
+    
     @property
     def domain_model(self):
         return type(removeSecurityProxy(self.context))
@@ -832,6 +838,9 @@ class DeleteForm(PageForm):
 
             return self.render()
         session.close()
+        # invalidate caches for this domain object type
+        invalidate_caches_for(self.context.__class__.__name__, "delete")
+        
         #TODO: check that it is removed from the index!
         notify(ObjectRemovedEvent(
             self.context, oldParent=container, oldName=self.context.__name__))
