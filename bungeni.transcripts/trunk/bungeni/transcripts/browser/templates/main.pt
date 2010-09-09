@@ -1,0 +1,33 @@
+<metal:block define-macro="body">
+    <link rel="stylesheet" type="text/css" media="all" href="transcripts.css"
+      tal:attributes="href context/++resource++transcripts.css" /> 
+      <!-- script type="text/javascript" src="ui.slider.js"
+     tal:attributes="src context/++resource++ui.slider.js"></script -->
+    <script type="text/javascript" src="transcript.js"
+     tal:attributes="src context/++resource++transcripts.js"></script>
+     <script type="text/javascript" src="jquery-1.4.2.min.js" 
+            tal:attributes="src context/++resource++jquery-1.4.2.min.js"></script>
+    <link rel="stylesheet" href="mwEmbed-player-static.css" 
+          tal:attributes="href context/++resource++mwEmbed-player-static.css"></link>
+    <script type="text/javascript" src="mwEmbed-player-static.js" 
+            tal:attributes="src context/++resource++mwEmbed-player-static.js"></script>
+    <metal:main> 
+    <div id="transcripts_main">
+        <div id="transcript_video">
+            <div id="testslider"></div>
+            <span tal:condition="view/sitting_media_path | nothing">
+                <video style="width:400px;height:300px" durationHint="7:52">
+                    <source src="myOgg.ogg" tal:attributes="src view/sitting_media_path; duration view/duration"/>
+                </video>
+            </span>
+            <span tal:condition="not: view/sitting_media_path">
+	            <img tal:attributes="src context/++resource++no_media.png"></img>
+            </span>
+        </div>  
+        <div id="video_side_bar">
+            
+        </div>  
+    </div>
+    </metal:main>
+
+</metal:block>
