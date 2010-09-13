@@ -30,7 +30,6 @@ from bungeni.core import translation
 
 from bungeni.ui.utils import url, date, debug
 from bungeni.ui.cookies import get_date_range
-from bungeni.ui.interfaces import IBungeniAuthenticatedSkin
 from bungeni.ui.interfaces import IBusinessSectionLayer
 from bungeni.ui.interfaces import IMembersSectionLayer
 
@@ -531,7 +530,9 @@ class ContainerWFStatesJSONListing(ContainerJSONListing):
             self.request.get(name, default)
             for name, default in JSLCaches[context.__name__].qs_params
         )
-        return (self.__class__.__name__, context.__name__,
+        # class name and context name are actually unnecessary to guarantee 
+        # uniqueness for each item within *this* cache:
+        return (#self.__class__.__name__, context.__name__,
                 lang, start, limit, qs_params)
     
     def __call__(self):
@@ -623,10 +624,11 @@ class JSLCache(object):
             qs_params:[(param_name:str, default:str)] - query string params
         """
         self.cache = Cache(max_size)
-        self.qs_params = qs_params
         self.class_names = class_names
+        self.qs_params = qs_params
 
 JSLCaches = {
+    # /business/...
     "committees": JSLCache(99, ["Committee"], [
         ("sort", u""),
         ("dir", u"asc"),
@@ -655,7 +657,7 @@ JSLCaches = {
         ("filter_status", u""),
         ("filter_status_date", u""),
         ("filter_question_number", u""),
-        ("filter_ministry_id", u""),
+        ("filter_ministry_id", u""), # !+FILTER(mr, sep-2010) on i18n'ed text !
     ]),
     "motions": JSLCache(99, ["Motion"], [
         ("sort", u""),
@@ -696,7 +698,92 @@ JSLCaches = {
         ("filter_status_date", u""),
         ("filter_publication_date", u""),
     ]),
+    # /members/...
+    "current": JSLCache(99, 
+        ["MemberOfParliament", "Constituency", "Province", "Region",
+         "PoliticalParty"], [
+        ("sort", u""),
+        ("dir", u"asc"),
+        ("filter_user_id", u""),
+        ("filter_elected_nominated", u""),
+        ("filter_start_date", u""),
+        ("filter_constituency_id", u""), # !+FILTER(mr, sep-2010)
+        ("filter_province_id", u""), # !+FILTER(mr, sep-2010)
+        ("filter_region_id", u""), # !+FILTER(mr, sep-2010)
+        ("filter_party_id", u""), # !+FILTER(mr, sep-2010)
+    ]),
+    "political-groups": JSLCache(99, ["PoliticalGroup"], [
+        ("sort", u""),
+        ("dir", u"asc"),
+        ("filter_full_name", u""),
+        ("filter_short_name", u""),
+        ("filter_start_date", u""),
+        ("filter_end_date", u""),
+    ]),
+    # /archive/browse/...
+    "parliaments": JSLCache(99, ["Parliament"], [
+        ("sort", u""),
+        ("dir", u"asc"),
+        ("filter_full_name", u""),
+        ("filter_short_name", u""),
+        ("filter_start_date", u""),
+        ("filter_end_date", u""),
+    ]),
+    "governments": JSLCache(99, ["Government"], [
+        ("sort", u""),
+        ("dir", u"asc"),
+        ("filter_short_name", u""),
+        ("filter_start_date", u""),
+        ("filter_end_date", u""),
+    ]),
+    "sessions": JSLCache(99, ["ParliamentSession"], [
+        ("sort", u""),
+        ("dir", u"asc"),
+        ("filter_short_name", u""),
+        ("filter_start_date", u""),
+        ("filter_end_date", u""),
+    ]),
+    "sittings": JSLCache(99, ["GroupSitting"], [
+        ("sort", u""),
+        ("dir", u"asc"),
+        ("filter_sitting_type_id", u""),
+        ("filter_start_date", u""),
+    ]),
+    "committeestaff": JSLCache(99, ["CommitteeStaff"], [
+        ("sort", u""),
+        ("dir", u"asc"),
+        ("filter_user_id", u""),
+        ("filter_short_name", u""),
+    ]),
+    "committeemembers": JSLCache(99, ["CommitteeMember"], [
+        ("sort", u""),
+        ("dir", u"asc"),
+        ("filter_user_id", u""),
+        ("filter_short_name", u""),
+    ]),
+    "ministries": JSLCache(99, ["Ministry"], [
+        ("sort", u""),
+        ("dir", u"asc"),
+        ("filter_short_name", u""),
+        ("filter_full_name", u""),
+        ("filter_start_date", u""),
+        ("filter_end_date", u""),
+    ]),
+    # politicalgroups -- same as for /members/political-groups
+    # committees -- same as under /business/
+    "constituencies": JSLCache(99, ["Parliament"], [
+        ("sort", u""),
+        ("dir", u"asc"),
+        ("filter_name", u""),
+        ("filter_start_date", u""),
+        ("filter_end_date", u""),
+    ]),
 }
+# aliases for same JSLCache instances
+# /browse/politicalgroups
+JSLCaches["politicalgroups"] = JSLCaches["political-groups"] 
+# /browse/constituencies/
+JSLCaches["parliamentmembers"] = JSLCaches["current"] 
 
 
 def get_CacheByClassName():

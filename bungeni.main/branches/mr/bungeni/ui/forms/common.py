@@ -357,11 +357,11 @@ class AddForm(BaseForm, ui.AddForm):
         added_obj = super(AddForm, self).createAndAdd(data)
         # invalidate caches for this domain object type
         invalidate_caches_for(added_obj.__class__.__name__, "add")
-        # !+ADD_invalidate_CACHE(mr, sep-2010) should noyt be necessary as 
+        # !+ADD_invalidate_CACHE(mr, sep-2010) should not be necessary as 
         # all domain items are created into a "draft" workflow state that 
         # is NOT public, so in theory any existing cache of listings of public 
-        # items should NOT be affected. Plus, a subsequent modification of the
-        # item, and possible passage to a public state, will anyway
+        # items are NOT affected. Plus, the required subsequent modification 
+        # of the item (to transit the item into a public state) will anyway
         # invalidate the cache.
         return added_obj
     
