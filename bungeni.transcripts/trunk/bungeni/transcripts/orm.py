@@ -29,3 +29,16 @@ mapper( domain.TranscriptVersion,
 mapper( domain.Sitting, schema.sitting, )
 mapper( domain.Take, schema.takes, )
 mapper( domain.Assignment, schema.assignment, )
+'''
+mapper(domain.TranscriptionGroup, schema.transcriptiongroup,
+    inherits=bungeni_domain.Group,
+    polymorphic_on=bungeni_schema.groups.c.type,
+    polymorphic_identity="office"
+)
+
+
+mapper(domain.TranscriptionStaff,
+    inherits=bungeni_domain.GroupMembership,
+    polymorphic_on=bungeni_schema.user_group_memberships.c.membership_type,
+    polymorphic_identity="transcriptionstaff",
+)'''

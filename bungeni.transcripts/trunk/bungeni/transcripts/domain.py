@@ -5,7 +5,7 @@ from ore.alchemist import model, Session
 from alchemist.traversal.managed import one2many
 from zope.location.interfaces import ILocation
 import sqlalchemy.sql.expression as sql
-from bungeni.models.domain import ItemLog, ItemVersions, Entity, GroupSitting, ParliamentaryItem
+from bungeni.models.domain import ItemLog, ItemVersions, Entity, GroupSitting, ParliamentaryItem, Group, GroupMembership
 import logging
 import interfaces
 
@@ -45,3 +45,9 @@ class Assignment( Entity ):
     A Take
     """
     interface.implements( interfaces.IBungeniAssignment ) 
+    
+'''class TranscriptionGroup(Group):
+    transctiptionstaff = one2many("transcriptionstaff", "bungeni.models.domain.TranscriptionStaffContainer", "group_id")
+
+class TranscriptionStaff(GroupMembership):
+    titles = one2many("titles", "bungeni.models.domain.MemberRoleTitleContainer", "membership_id")'''
