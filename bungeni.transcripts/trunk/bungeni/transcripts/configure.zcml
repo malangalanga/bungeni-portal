@@ -65,4 +65,20 @@
      action="staff"
      permission="zope.ManageContent"
      />
+     
+     <utility
+            component=".browser.vocabulary.ActiveEditors"
+            name="ActiveEditors"
+            provides="zope.schema.interfaces.IVocabularyFactory"
+            />
+    <utility
+            component=".browser.vocabulary.ActiveReaders"
+            name="ActiveReaders"
+            provides="zope.schema.interfaces.IVocabularyFactory"
+            />
+     <utility
+            component=".browser.vocabulary.ActiveReporters"
+            name="ActiveReporters"
+            provides="zope.schema.interfaces.IVocabularyFactory"
+            />
 </configure>
