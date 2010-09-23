@@ -8,6 +8,7 @@ from bungeni.ui.i18n import _
 from bungeni.ui.forms.common import set_widget_errors
 from ore.alchemist import Session
 from bungeni.transcripts import domain
+from bungeni.models import domain as main_domain
 from bungeni.transcripts import orm
 from alchemist.catalyst import ui
 from zope.traversing.browser import absoluteURL
@@ -20,6 +21,9 @@ from zope.app.form.browser import TextAreaWidget
 from bungeni.ui.utils import url
 from bungeni.transcripts.interfaces import ITranscriptForm
 from zope.component import createObject, getMultiAdapter
+from bungeni.transcripts.browser import vocabulary
+from zope.app.form.browser import MultiCheckBoxWidget as _MultiCheckBoxWidget
+from bungeni.transcripts.utils.misc import get_assigned_staff
 class MainView(BrowserView):
     def __call__(self):
         self.group = self.get_group()
@@ -59,9 +63,7 @@ class DisplayTranscripts(BrowserView):
         ts = []
         for transcript in transcripts:
             t = removeSecurityProxy(transcript)
-            #t.__name__ = "transcripts"
-            #t.__parent__ = self.context
-            t.edit_url = url.absoluteURL(t, self.request)+"/edit_transcript";
+            t.edit_url =""
             ts.append(t)
         return ts
         
@@ -144,7 +146,7 @@ def personWidget(field, request):
     return widget
 
 class TranscriptBaseForm(PageForm):
-    template = ViewPageTemplateFile('empty.pt')
+    template = ViewPageTemplateFile('templates/empty.pt')
     form_fields = form.Fields(ITranscriptForm) 
     form_fields['start_time'].custom_widget = startTimeWidget
     form_fields['end_time'].custom_widget = endTimeWidget
@@ -203,38 +205,116 @@ class EditTranscript(EditForm, TranscriptBaseForm):
         return 'cancel'
            
 class GenerateTakes(PageForm):
-    pass
+    class IGenerateTakes(interface.Interface):
+        duration = schema.Int(
+            title = "Duration of takes",
+            required = True,
+                    )
+    form_fields = form.Fields(IGenerateTakes)
+    template = namedtemplate.NamedTemplate('alchemist.form')
     
+    def setUpWidgets(self, ignore_request=False):
+        class context:
+            duration = 15
+        self.adapters = {
+            self.IAssignmentForm: context
+            }
+        self.widgets = form.setUpEditWidgets(
+            self.form_fields, self.prefix, self.context, self.request,
+                    adapters=self.adapters, ignore_request=ignore_request)
+    
+    @form.action(_(u"Generate Takes"))
+    def handle_assignment(self, action, data):
+        self.request.response.redirect('./takes') 
+        
 class Takes(BrowserView):  
+    template = ViewPageTemplateFile("templates/takes.pt")
+    generated = False
     def __call__(self):
+        
+        rendered = self.render()
+        return rendered
+        
+    def render(self):
         self.takes = self.get_takes()
-        return super(Takes, self).__call__()
-    
+        return self.template()
+        
     def get_takes(self):
         session = Session()
-        takes = session.query(domain.Takes).filter(domain.Takes.sitting_id == self.context.sitting_id).order_by(domain.Takes.start_time)
+        takes = session.query(domain.Take).filter(
+            domain.Take.sitting_id == self.context.sitting_id).order_by(domain.Take.start_time)
         #import pdb; pdb.set_trace()
         return takes
 
-class Assignment(BrowserView):
-    def __call__(self):
-        self.available_editors = self.get_available_editors()
-        self.available_readers = self.get_available_readers()
-        self.available_reporters = self.get_available_reporters()
-        self.assigned_editors = self.get_assigned_editors()
-        self.assigned_readers = self.get_assigned_readers()
-        self.assigned_reporters = self.get_assigned_reporters()
-        return super(Takes, self).__call__()
-    def get_available_reporters():
-        pass 
-    def get_available_readers():
-        pass
-    def get_available_editors():
-        pass  
-    def get_assigned_reporters():
-        pass 
-    def get_assigned_readers():
-        pass
-    def get_assigned_editors():
-        pass
+def verticalMultiCheckBoxWidget(field, request):
+    vocabulary = field.value_type.vocabulary
+    widget = _MultiCheckBoxWidget(field, vocabulary, request)
+    widget.cssClass = u"verticalMultiCheckBoxWidget"
+    widget.orientation = 'vertical'
+    return widget
+
+class Assignment(PageForm):
+    def __init__(self, context, request):
+        super(Assignment, self).__init__(context, request)
+        
+    class IAssignmentForm(interface.Interface):
+        editors = schema.List(title=u'Editors',
+                       required=False,
+                       value_type=schema.Choice(
+                        vocabulary="ActiveEditors"),
+                         )
+        readers = schema.List(title=u'Readers',
+                       required=False,
+                       value_type=schema.Choice(
+                       vocabulary="ActiveReaders"),
+                         )
+        reporters = schema.List(title=u'Reporters',
+                       required=False,
+                       value_type=schema.Choice(
+                       vocabulary="ActiveReporters"),
+                         )
+    form_fields = form.Fields(IAssignmentForm)
+    template = namedtemplate.NamedTemplate('alchemist.form')
+    form_fields['editors'].custom_widget = verticalMultiCheckBoxWidget
+    form_fields['readers'].custom_widget = verticalMultiCheckBoxWidget
+    form_fields['reporters'].custom_widget = verticalMultiCheckBoxWidget
+    
+    def setUpWidgets(self, ignore_request=False):
+        class context:
+            editors = get_assigned_staff(self.context, "Editor")
+            readers = get_assigned_staff(self.context, "Reader")
+            reporters = get_assigned_staff(self.context, "Reporter")
+        self.adapters = {
+            self.IAssignmentForm: context
+            }
+        self.widgets = form.setUpEditWidgets(
+            self.form_fields, self.prefix, self.context, self.request,
+                    adapters=self.adapters, ignore_request=ignore_request)
+        
+    #def update(self):
+        #super(Assignment, self).update()
+        #set_widget_errors(self.widgets, self.errors)   
+        
+    @form.action(_(u"Assign Staff"))
+    def handle_assignment(self, action, data):
+        session = Session()
+        session.query(domain.Assignment).filter(domain.Assignment.sitting_id == self.context.sitting_id).delete()
+        for editor_id in data["editors"]:
+            assignment = domain.Assignment()
+            assignment.sitting_id = self.context.sitting_id
+            assignment.staff_id = editor_id
+            session.add(assignment)
+        for reader_id in data["readers"]:
+            assignment = domain.Assignment()
+            assignment.sitting_id = self.context.sitting_id
+            assignment.staff_id = reader_id
+            session.add(assignment)
+        for reporter_id in data["reporters"]:
+            assignment = domain.Assignment()
+            assignment.sitting_id = self.context.sitting_id
+            assignment.staff_id = reporter_id
+            session.add(assignment)
+        session.commit()
+        self.request.response.redirect('./transcripts')    
            
+            

@@ -9,12 +9,12 @@
     <div><fieldset>Generate Takes. Please specify duration of takes in minutes
     <form>
     <input type="text"></input>
-    <input type="submit"></input>
+    <input type="submit">Generate Takes</input>
     </form>
     </fieldset></div> 
     <div id="takes_main">
     <fieldset>
-        <table>
+        <table tal:condition="view/generated">
             <tr>
                 <th>
                     Time
@@ -39,6 +39,7 @@
                 </tr>
             </tal:loop>
         </table>
+        <span tal:condition="python:(view.generated == False)">No Takes Generated</span>
        </fieldset>
     </div>
     </metal:main>
@@ -47,3 +48,4 @@
   </div>
   
 </html>  
+
