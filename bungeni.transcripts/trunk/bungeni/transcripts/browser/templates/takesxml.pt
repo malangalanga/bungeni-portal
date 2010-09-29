@@ -1,0 +1,11 @@
+<assignment>
+    <tal:loop tal:repeat="s python:view.sittings">
+        <sitting tal:attributes="name s/name; id s/sitting_id; file s/file;">
+            <tal:loop tal:repeat="take s/takes">
+                <take tal:attributes="
+                    startTime take/start_time;
+                    endTime take/end_time;"/>
+            </tal:loop>
+        </sitting>
+    </tal:loop>
+</assignment>
