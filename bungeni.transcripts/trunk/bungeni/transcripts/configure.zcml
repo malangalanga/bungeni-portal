@@ -40,7 +40,7 @@
         for=".interfaces.ITranscribable"
         title="manage transcripts"
         action="edit_media_path"
-        permission="zope.ManageContent"
+        permission="bungeni.sitting.Edit"
         submenu="context_edit_transcript"
     />
     <browser:menuItem
@@ -48,22 +48,28 @@
      for=".interfaces.ITranscribable"
      title="media paths"
      action="edit_media_path"
-     permission="zope.ManageContent"
+     permission="bungeni.sitting.Edit"
      />
     <browser:menuItem
      menu="context_edit_transcript"
      for=".interfaces.ITranscribable"
      title="generate takes"
-     action="takes"
-     permission="zope.ManageContent"
+     action="generatetakes"
+     permission="bungeni.sitting.Edit"
      />
-     
+     <browser:menuItem
+     menu="context_edit_transcript"
+     for=".interfaces.ITranscribable"
+     title="view takes"
+     action="takes"
+     permission="bungeni.sitting.Edit"
+     />
      <browser:menuItem
      menu="context_edit_transcript"
      for=".interfaces.ITranscribable"
      title="assign staff"
      action="staff"
-     permission="zope.ManageContent"
+     permission="bungeni.sitting.Edit"
      />
      
      <utility

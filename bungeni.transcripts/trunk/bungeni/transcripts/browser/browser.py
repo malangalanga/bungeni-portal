@@ -8,7 +8,7 @@ from bungeni.ui.i18n import _
 from bungeni.ui.forms.common import set_widget_errors
 from ore.alchemist import Session
 from bungeni.transcripts import domain
-from bungeni.models import domain as main_domain
+from bungeni.models import domain as bungeni_domain
 from bungeni.transcripts import orm
 from alchemist.catalyst import ui
 from zope.traversing.browser import absoluteURL
@@ -24,6 +24,8 @@ from zope.component import createObject, getMultiAdapter
 from bungeni.transcripts.browser import vocabulary
 from zope.app.form.browser import MultiCheckBoxWidget as _MultiCheckBoxWidget
 from bungeni.transcripts.utils.misc import get_assigned_staff
+import datetime
+timedelta = datetime.timedelta
 class MainView(BrowserView):
     def __call__(self):
         self.group = self.get_group()
@@ -207,26 +209,98 @@ class EditTranscript(EditForm, TranscriptBaseForm):
 class GenerateTakes(PageForm):
     class IGenerateTakes(interface.Interface):
         duration = schema.Int(
-            title = "Duration of takes",
-            required = True,
-                    )
+            title = _(u"Duration of takes"),
+            required = True)
     form_fields = form.Fields(IGenerateTakes)
     template = namedtemplate.NamedTemplate('alchemist.form')
     
     def setUpWidgets(self, ignore_request=False):
         class context:
-            duration = 15
+            duration = None
         self.adapters = {
-            self.IAssignmentForm: context
+            self.IGenerateTakes: context
             }
         self.widgets = form.setUpEditWidgets(
             self.form_fields, self.prefix, self.context, self.request,
                     adapters=self.adapters, ignore_request=ignore_request)
-    
-    @form.action(_(u"Generate Takes"))
-    def handle_assignment(self, action, data):
-        self.request.response.redirect('./takes') 
+                    
+    def validate(self, action, data):
+        errors = super(GenerateTakes, self).validate(action, data)
+        if ((len(get_assigned_staff(self.context, "Reporter")) == 0)
+            or (len(get_assigned_staff(self.context, "Reader")) == 0)
+            or (len(get_assigned_staff(self.context, "Editor")) == 0)):
+            print "reporters", get_assigned_staff(self.context, "Reporter")
+            print "reader", get_assigned_staff(self.context, "Reader")
+            print "editors", get_assigned_staff(self.context, "Editor")
+            errors.append(interface.Invalid(
+                _(u"Staff have not been assigned to work on this sitting yet"),
+                "duration"))
+        return errors
         
+    @form.action(_(u"Generate Takes"))
+    def handle_generate_takes(self, action, data):
+        session = Session()
+        trusted = removeSecurityProxy(self.context)
+        takes = session.query(domain.Take).filter(
+            domain.Take.sitting_id == trusted.sitting_id)
+        for t in takes:
+            session.delete(t)
+        
+        #import pdb; pdb.set_trace()
+        sitting = trusted
+        current_start_time = sitting.start_date
+        sitting_duration = sitting.end_date - sitting.start_date
+        take_duration = timedelta(minutes=int(data["duration"]))
+        assigned_reporters = get_assigned_staff(self.context, "Reporter")
+        assigned_readers = get_assigned_staff(self.context, "Reader")
+        assigned_editors = get_assigned_staff(self.context, "Editor")
+        c_reporter = 0 
+        c_reader = 0
+        c_editor = 0
+        
+        while sitting_duration > timedelta(minutes=0):
+            take = domain.Take()
+            take.sitting_id = sitting.sitting_id
+            if (sitting_duration - take_duration) > timedelta(minutes=0):
+                sitting_duration = sitting_duration - take_duration
+                take.start_date = current_start_time
+                take.end_date = take.start_date + take_duration
+                current_start_time = take.end_date
+            else:
+                take.start_date = current_start_time
+                take.end_date = take.start_date + sitting_duration
+                sitting_duration = timedelta(minutes=0)
+            if c_reporter > len(assigned_reporters)-1:
+                c_reporter = 0
+                take.reporter_id = assigned_reporters[c_reporter]
+            else:
+                take.reporter_id = assigned_reporters[c_reporter]
+            c_reporter = c_reporter + 1
+            
+            if c_reader > len(assigned_readers)-1:
+                c_reader = 0
+                take.reader_id = assigned_readers[c_reader]
+            else:
+                take.reader_id = assigned_readers[c_reader]
+            c_reader = c_reporter + 1
+            
+            if c_editor > len(assigned_editors)-1:
+                c_editor = 0
+                take.editor_id = assigned_editors[c_editor]
+            else:
+                take.editor_id = assigned_editors[c_editor]
+            c_editor = c_editor + 1
+            session.add(take)
+        session.commit()
+        self.request.response.redirect('./takes')
+#!+HACK(miano,28-09-2010) quick function to get the user from a user id
+#should be in orm
+def get_user(user_id):
+    session = Session()
+    user = session.query(bungeni_domain.User).filter(
+            bungeni_domain.User.user_id == user_id).all()
+    return user[0]
+            
 class Takes(BrowserView):  
     template = ViewPageTemplateFile("templates/takes.pt")
     generated = False
@@ -242,9 +316,16 @@ class Takes(BrowserView):
     def get_takes(self):
         session = Session()
         takes = session.query(domain.Take).filter(
-            domain.Take.sitting_id == self.context.sitting_id).order_by(domain.Take.start_time)
-        #import pdb; pdb.set_trace()
+            domain.Take.sitting_id == self.context.sitting_id) \
+            .order_by(domain.Take.start_date).all()
+        if len(takes) > 0:
+            self.generated = True
+        for take in takes:
+            take.editor = get_user(take.editor_id)
+            take.reader = get_user(take.reader_id)
+            take.reporter = get_user(take.reporter_id)
         return takes
+        
 
 def verticalMultiCheckBoxWidget(field, request):
     vocabulary = field.value_type.vocabulary

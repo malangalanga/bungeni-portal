@@ -16,8 +16,8 @@ transcript = rdb.Table(
     rdb.Column('transcript_id', rdb.Integer, primary_key=True),  
     rdb.Column("person", rdb.UnicodeText),
     rdb.Column("text", rdb.UnicodeText),
-    rdb.Column("start_time", rdb.Integer, nullable=False),
-    rdb.Column("end_time", rdb.Integer, nullable=False),
+    rdb.Column("start_date", rdb.DateTime(timezone=False), nullable=False),
+    rdb.Column("end_date", rdb.DateTime(timezone=False), nullable=False),
     rdb.Column("sitting_id", rdb.Integer, nullable=False ),
    )
 
@@ -35,9 +35,11 @@ takes = rdb.Table(
     "take",
     metadata,
     rdb.Column('take_id', rdb.Integer, primary_key=True),
-    rdb.Column('start_time', rdb.Integer, nullable=False ),
-    rdb.Column('end_time', rdb.Integer, nullable=False),
-    rdb.Column('staff_id', rdb.Integer,nullable=False),
+    rdb.Column('start_date', rdb.DateTime(timezone=False), nullable=False ),
+    rdb.Column('end_date', rdb.DateTime(timezone=False), nullable=False),
+    rdb.Column('editor_id', rdb.Integer,nullable=False),
+    rdb.Column('reader_id', rdb.Integer,nullable=False),
+    rdb.Column('reporter_id', rdb.Integer,nullable=False),
     rdb.Column("sitting_id", rdb.Integer, nullable=False ),
     )
     
@@ -57,6 +59,7 @@ assignment = rdb.Table(
 
 db = rdb.create_engine('postgres://localhost/bungeni', echo=False)
 metadata.bind = db
+#metadata.drop_all()
 metadata.create_all()
 
 

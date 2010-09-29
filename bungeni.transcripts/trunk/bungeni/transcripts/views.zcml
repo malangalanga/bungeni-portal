@@ -43,14 +43,14 @@
       for=".interfaces.ITranscribable"
       name="edit_media_path"
       class=".browser.browser.EditMediaPath"
-      permission="zope.ManageContent"
+      permission="bungeni.sitting.Edit"
       />
       
       <browser:page
       for=".interfaces.ITranscribable"
       name="staff"
       class=".browser.browser.Assignment"
-      permission="zope.ManageContent"
+      permission="bungeni.sitting.Edit"
       template="browser/templates/assignment.pt"
       />
       
@@ -58,6 +58,20 @@
       for=".interfaces.ITranscribable"
       name="takes"
       class=".browser.browser.Takes"
-      permission="zope.ManageContent"
+      permission="bungeni.sitting.Edit"
       />    
+      
+      <browser:page
+      for=".interfaces.ITranscribable"
+      name="generatetakes"
+      class=".browser.browser.GenerateTakes"
+      permission="bungeni.sitting.Edit"
+      />
+      
+      <browser:page
+      for="*"
+      name="takesxml"
+      class=".browser.takes.TakesXML"
+      permission="zope.View"
+      />
 </configure>
