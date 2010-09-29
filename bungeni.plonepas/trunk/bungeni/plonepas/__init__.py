@@ -1,5 +1,3 @@
-#
-
 def initialize( context ):
     
     from AccessControl.Permissions import add_user_folders

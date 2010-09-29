@@ -1,5 +1,9 @@
-
-import random, md5, string
+import urllib
+import httplib2
+import simplejson
+import random
+import md5
+import string
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.SecurityManagement import getSecurityManager
@@ -25,12 +29,7 @@ from Products.PluggableAuthService.permissions import SetOwnPassword
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
-import sqlalchemy as rdb
-import schema
-from alchemist.security import schema as security_schema
-from ore.alchemist import Session
-
-from bungeni.models import domain
+from utils import connection_url
 
 manage_addBungeniUserManagerForm = PageTemplateFile('zmi/user-plugin-add.pt', globals())
 
@@ -48,7 +47,7 @@ def manage_addBungeniUserManager(self, id, title='', REQUEST=None):
 def generate_salt( ):
     return ''.join( random.sample( string.letters, 12 ) )
 
-def encrypt( word, salt ):
+def encrypt(word, salt):
     return md5.md5( word + salt).hexdigest()
 
 def safeencode(v):
@@ -56,7 +55,7 @@ def safeencode(v):
         return v.encode('utf-8')
     return v
 
-class UserManager( BasePlugin ):
+class UserManager(BasePlugin):
     meta_type = 'Bungeni User Manager'
     security = ClassSecurityInfo()
 
@@ -124,7 +123,7 @@ class UserManager( BasePlugin ):
     # IUserEnumerationPlugin implementation
     #
     security.declarePrivate('enumerateUsers')
-    def enumerateUsers( self
+    def enumerateUsers(self
                       , id=None
                       , login=None
                       , exact_match=False
@@ -137,75 +136,19 @@ class UserManager( BasePlugin ):
         if id is None:
             id = login
 
-        # try to normalize the list of ids/logins into single sequence
-        if isinstance( login, (list, tuple ) ):
-            if isinstance( id, (list, tuple ) ):
-                ids = []
-                ids.extend( id )
-                ids.extend( login )
-            else:
-                ids = list( login )
-                ids.append( id )
-            id = ids
-        elif isinstance( id, (list, tuple ) ) and login:
-            id = list(id)
-            id.append( login )
-        elif id and login:
-            id = [ id, login]
-            
-        if id is None and exact_match:
-            return []
-        elif id is None:
-            clause = None
-            for key, value in kw.items():
-                column = getattr(schema.users.c, key, None)
-                if column:
-                    clause = rdb.and_(clause, column.contains(value))
-                else:
-                    like_val ='%' + str(value) +'%'
-                    clause = rdb.and_(clause, 
-                        rdb.or_(schema.users.c.login.like(like_val),
-                                schema.users.c.first_name.like(like_val),
-                                schema.users.c.last_name.like(like_val)
-                            )
-                        )
-        elif isinstance( id, (list, tuple)) and exact_match:
-            statements = []
-            for i in id:
-                statements.append( schema.users.c.login == i )
-            clause = rdb.or_( *statements )
-        elif isinstance( id, (list, tuple)) and not exact_match:
-            like_val ='%' + str(id) +'%'
-            clause = rdb.or_(*(map( schema.users.c.login.like, like_val)))
-        elif not exact_match:
-            like_val ='%' + str(id) +'%'
-            clause = rdb.or_(schema.users.c.login.like(like_val),
-                             schema.users.c.first_name.like(like_val),
-                             schema.users.c.last_name.like(like_val)
-                            )
-        else:
-            clause = schema.users.c.login == id
-        session = Session()
-        query = session.query(domain.User).filter(
-                        rdb.and_( clause,
-                            schema.users.c.active_p == 'A',
-                            schema.users.c.login != None
-                                ) )
-        if sort_by:
-            assert sort_by in ('login', 'last_name')
-            query = query.order_by( getattr( schema.users.c, sort_by ) )
-        else:
-            query = query.order_by(schema.users.c.last_name, schema.users.c.first_name)
-                    
-        if max_results is not None and isinstance( max_results, int ):
-            query =query.limit( max_results )
+        http_obj=httplib2.Http()
+        query = '/++rest++brs/enumerateusers?'
+        params = urllib.urlencode({'user_manager_id': self.id,
+                                   'id': id,
+                                   'login': login,
+                                   'exact_match': exact_match,
+                                   'sort_by': sort_by,
+                                   'max_results': max_results,
+                                   'kw': kw})
 
-        return [ dict( id=safeencode(r.login), 
-                title= u"%s %s" %(r.first_name, r.last_name),
-                fullname= u"%s %s" %(r.first_name, r.last_name),
-                email = (r.email),
-                login=safeencode(r.login), pluginid=self.id ) 
-                for r in query.all()]
+        resp,content = http_obj.request(connection_url() + query + params, "GET")
+        return simplejson.loads(content)          
+
 
     #
     # IUserAdderPlugin implementation
@@ -223,14 +166,21 @@ class UserManager( BasePlugin ):
     #
     security.declareProtected(ManageUsers, 'listUserIds')
     def listUserIds(self):
-        users = schema.users.select( [schema.users.c.login ], schema.users.c.active_p == 'A').execute()
-        return tuple([safeencode(r['login']) for r in users] )
-    
+        http_obj=httplib2.Http()
+        query = '/++rest++brs/users'
+        resp,content = http_obj.request(connection_url() + query, "GET")
+        users = simplejson.loads(content)
+        return users
+
     security.declareProtected(ManageUsers, 'listUserInfo')
     def listUserInfo(self):
-        users = schema.users.select( [schema.users.c.login ], schema.users.c.active_p == 'A').execute()
-        return [ dict( id=safeencode(r['login']),
-                       login=safeencode(r['login']), pluginid=self.id ) for r in users]
+        http_obj=httplib2.Http()
+        query = '/++rest++brs/users?'
+        params = urllib.urlencode({'user_manager_id': self.id})        
+        resp,content = http_obj.request(connection_url() + query + params, "GET")
+        users = simplejson.loads(content)
+        return users
+    
 
     security.declareProtected(ManageUsers, 'getUserInfo')
     def getUserInfo(self, user_id ):
@@ -249,11 +199,18 @@ class UserManager( BasePlugin ):
         e_pass = encrypt( password, salt )
         if self._uid( login_name ):
             raise KeyError("Duplicate User Id: %s"%user_id)
-        insert = schema.users.insert()
-        insert.values( login = user_id, salt = salt, password = e_pass, type="user",
-                       # dummy values for non null fields
-                       first_name=u"unknown", last_name=u"unknown", email=u"unknown",
-                       ).execute()
+        h=httplib2.Http()
+        query = '/++rest++brs/users'
+        data = {"login": user_id,
+                "salt": salt,
+                "password": e_pass,
+                "type": "user",
+                "first_name": u"unknown",
+                "last_name": u"unknown",
+                "email": u"unknown"}
+        params = urllib.urlencode(data)
+        resp,content = h.request(connection_url()+ query, params, "POST")
+        
     
     security.declarePrivate('removeUser')
     def removeUser(self, user_id): # raises keyerror
@@ -261,7 +218,12 @@ class UserManager( BasePlugin ):
         if not uid:
             raise KeyError("Invalid User"%uid)
         # update user to show as inactive
-        schema.users.update().where( schema.users.c.user_id == uid ).values( active_p = 'I').execute()
+        http_obj=httplib2.Http()
+        query = '/++rest++brs/users'
+        data = {"uid": uid}
+        params = urllib.urlencode(data)
+        resp,content = http_obj.request(connection_url()+ query, params, "DELETE")
+        
 
     security.declarePrivate('updateUserPassword')
     def updateUserPassword(self, user_id, login_name, password): # raise keyerror, lookup error
@@ -270,12 +232,16 @@ class UserManager( BasePlugin ):
             raise KeyError("Invalid User %s"%user_id )
         salt = generate_salt()
         e_pass = encrypt( password, salt )
-        schema.users.update().where( schema.users.c.user_id == uid ).values(
-            salt = salt,
-            password = e_pass
-            ).execute()
 
-   #
+        http_obj=httplib2.Http()
+        query = '/++rest++brs/users'
+        data = {"uid": uid,
+                "salt": salt,
+                "password": e_pass}
+        params = urllib.urlencode(data)
+        resp,content = http_obj.request(connection_url()+ query, params, "PUT") 
+
+
     # Allow users to change their own login name and password.
     #
     security.declareProtected(SetOwnPassword, 'getOwnUserInfo')
@@ -284,29 +250,22 @@ class UserManager( BasePlugin ):
         user_id = getSecurityManager().getUser().getId()
         return self.getUserInfo(user_id)
     
-    def _uid( self, login, auth=False ):
-        cols = [ schema.users.c.user_id ]
-        if auth:
-            cols.extend( [schema.users.c.password, schema.users.c.salt ] )
+    def _uid(self, login, auth=False):
 
-        session = Session()
-        connection = session.connection(domain.Group)
+        http_obj=httplib2.Http()
+        query = '/++rest++brs/users?'
+        data = {"auth": auth,
+                "login": login}
+        params = urllib.urlencode(data)
+        resp,content = http_obj.request(connection_url()+ query + params, "GET")
+        
 
-        res = connection.execute(rdb.select( cols,
-                          rdb.and_( schema.users.c.login == login,
-                                    schema.users.c.active_p == 'A' )))
-                       
-        uid_tuple = res.fetchone()
-        if not uid_tuple:
-            return None
-        if auth:
-            return uid_tuple
-        return uid_tuple[0]
-
-    def _gid( self, name ):
-        session = Session()
-        groups = session.query(domain.Group).filter(
-            domain.Group.group_principal_id == name).all()
+    def _gid(self, name):
+        http_obj=httplib2.Http()
+        query = '/++rest++brs/groups?'
+        params = urllib.urlencode({'name': name})
+        resp,content = http_obj.request(connection_url() + query + params, "GET")
+        groups = simplejson.loads(content)        
         if not groups:
             return
         return groups[0].group_principal_id
@@ -322,40 +281,33 @@ class UserManager( BasePlugin ):
         if self._uid(principal_id) is None and self._gid(principal_id) is None:
             return
 
-        session = Session()
-        connection = session.connection(domain.Group)
         if setting is True:
             # delete global mappings
-            connection.execute(security_schema.principal_role_map.delete().where(
-                rdb.and_(
-                    security_schema.principal_role_map.c.principal_id == principal_id,
-                    security_schema.principal_role_map.c.object_id == None,
-                    security_schema.principal_role_map.c.object_type == None)))
-
-        
+            
+            http_obj=httplib2.Http()
+            query = '/++rest++brs/roles'
+            data = {'principal_id': principal_id}
+            params = urllib.urlencode(data)
+            resp,content = http_obj.request(connection_url()+ query, params, "DELETE")               
+            
             # update existing
-            connection.execute(
-                security_schema.principal_role_map.update().where(
-                    rdb.and_(
-                        security_schema.principal_role_map.c.principal_id==principal_id,
-                        security_schema.principal_role_map.c.object_type==None,
-                        security_schema.principal_role_map.c.object_id==None)).values(
-                    setting=False))
 
+            http_obj=httplib2.Http()
+            query = '/++rest++brs/roles'
+            data = {'principal_id': principal_id}
+            params = urllib.urlencode(data)
+            resp,content = http_obj.request(connection_url()+ query, params, "PUT")
+            
         # insert new global mappings
-        for role_id in tuple(roles):
-            connection.execute(
-                security_schema.principal_role_map.insert().values(
-                    principal_id=principal_id,
-                    role_id=role_id,
-                    setting=setting,
-                    object_type=None,
-                    object_id=None))
 
-            # remove from roles so other plugins won't attempt to
-            # assign as well
-            roles.remove(role_id)
-
+            http_obj=httplib2.Http()
+            query = '/++rest++brs/roles'
+            data = {'roles': roles,
+                    'principal_id': principal_id,
+                    'setting': setting}            
+            params = urllib.urlencode(data)
+            resp,content = http_obj.request(connection_url()+ query, params, "POST")
+            
         return True
     
     def doAssignRoleToPrincipal(self, principal_id, role ):
@@ -364,7 +316,6 @@ class UserManager( BasePlugin ):
 
         o Return a Boolean indicating whether the role was assigned or not
         """
-
         return self.assignRolesToPrincipal((role,), principal_id)
 
     def doRemoveRoleFromPrincipal(self, principal_id, role ):
@@ -385,25 +336,19 @@ class UserManager( BasePlugin ):
         o May assign roles based on values in the REQUEST object, if present.
         """
 
-        principal_id = principal.getId()
-        session = Session()
-        connection = session.connection(domain.Group)
-        mappings = connection.execute(rdb.select(
-            [security_schema.principal_role_map.c.role_id],
-            rdb.and_(
-                security_schema.principal_role_map.c.principal_id==principal_id,
-                security_schema.principal_role_map.c.setting==True,
-                security_schema.principal_role_map.c.object_type==None,
-                security_schema.principal_role_map.c.object_id==None)))
-        role_names = []
-        for (role_name,) in mappings:
-            role_names.append(role_name)
-        return role_names
+        http_obj=httplib2.Http()
+        query = '/++rest++brs/roles?'
+        params = urllib.urlencode({'principal_id': principal.getId()})
+        resp,content = http_obj.request(connection_url()+ query + params, "GET")
+        return simplejson.loads(content)        
+
+
+
 
 
     """ Allow querying roles by ID, and searching for roles.
     """
-    def enumerateRoles( self,
+    def enumerateRoles(self,
                         id=None
                       , exact_match=False
                       , sort_by=None
@@ -452,20 +397,13 @@ class UserManager( BasePlugin ):
         """
 
         pluginid = self.getId()
-        session = Session()
-        connection = session.connection(domain.Group)
-        
-        mappings = connection.execute(rdb.select(
-            [security_schema.principal_role_map.c.role_id]))
-        
-        role_ids = []
-        for (role_id,) in mappings:
-            role_ids.append(role_id)
-        
-        return [{
-            'id': role_id,
-            'pluginid': pluginid,
-            } for role_id in role_ids]
+
+        http_obj=httplib2.Http()
+        query = '/++rest++brs/enumerateroles?'
+        params = urllib.urlencode({'plugin_id': self.getId()})
+        resp,content = http_obj.request(connection_url()+ query + params, "GET")
+
+        return simplejson.loads(content)
             
 classImplements( UserManager,
                  IAuthenticationPlugin,

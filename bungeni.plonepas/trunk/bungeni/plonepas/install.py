@@ -1,4 +1,3 @@
-
 from StringIO import StringIO
 
 import group, user, property
@@ -18,7 +17,7 @@ def install_property_plugin(self):
             )
     
 
-def install_pas_plugins( self ):
+def install_pas_plugins(self):
     pas = self.acl_users
     if not group_id in pas.objectIds():
         manager = group.GroupManager(group_id, "Bungeni Group Provider")
@@ -43,21 +42,21 @@ def install_pas_plugins( self ):
              'IRoleEnumerationPlugin']
             )
 
-def uninstall_pas_plugins( self ):
+def uninstall_pas_plugins(self):
     pas = self.acl_users
     if group_id in pas.objectIds():
         pas[ group_id ].manage_activateInterfaces( [] )
         pas.manage_delObjects( [ group_id ] )
 
-def uninstall( self ):
+def uninstall(self):
     out = StringIO()
     print >> out, "Removing PAS Plugin"
-    uninstall_pas_plugins( self )
+    uninstall_pas_plugins(self)
     return out.getvalue()
 
-def install( self ):
+def install(self):
     out = StringIO()
     print >> out, "Installing and Activating PAS Property Plugin"
-    install_pas_plugins( self )
-    install_property_plugin( self)
+    install_pas_plugins(self)
+    install_property_plugin(self)
     return out.getvalue()

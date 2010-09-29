@@ -18,8 +18,5 @@ setup(name='bungeni.plonepas',
       zip_safe=False,
       install_requires=[
         'setuptools',
-        'ore.alchemist',
-        'pysqlite',
-        'bungeni.models',
       ],
       )
