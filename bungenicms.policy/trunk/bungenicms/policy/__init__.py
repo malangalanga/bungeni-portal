@@ -10,7 +10,6 @@ def __init__(self, transaction, optimistic, *resources):
             savepoint = datamanager.savepoint
         except AttributeError:
             if not optimistic:
-                import pdb; pdb.set_trace()
                 pass
             savepoint = NoRollbackSavepoint(datamanager)
         else:
@@ -20,6 +19,5 @@ def __init__(self, transaction, optimistic, *resources):
 Savepoint.__init__ = __init__
                 
 def rollback(self):
-    import pdb; pdb.set_trace()
     pass    
 NoRollbackSavepoint.rollback = rollback

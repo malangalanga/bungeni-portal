@@ -61,11 +61,9 @@ def update_authenticated_users_group(context):
     
 def setup_group_workspaces(context):
     """Turn on workspace creation.
-       Set Workspace container id to 'committees'
-       Set group workspaces container type to folder
-       Set group workspaces
+       Set Workspace container id to 'groups'
+       Set group workspaces container type to 'ContentSpace'
        Create the group folder
-       Turn off portal navigation for the groups folder.
     """
 
     if context.readDataFile('marker.txt') is None:
@@ -76,14 +74,14 @@ def setup_group_workspaces(context):
         gtool = getToolByName(portal, 'portal_groups')
         gtool.groupWorkspacesCreationFlag = 1
         gtool.setGroupWorkspacesFolder('groups', 'Groups')
-        gtool.setGroupWorkspaceContainerType('Folder')
-        gtool.setGroupWorkspaceType('Folder')
+        gtool.setGroupWorkspaceContainerType('Large Plone Folder')
+        gtool.setGroupWorkspaceType('Large Plone Folder')
             
         # create groups folder (Folder)
 
         groups = portal[
             portal.invokeFactory(
-                "Folder",
+                "Large Plone Folder",
                 id="groups")]
 
         # set default properties

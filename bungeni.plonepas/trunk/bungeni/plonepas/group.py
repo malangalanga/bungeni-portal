@@ -226,9 +226,7 @@ class GroupManager( BasePlugin, Cacheable ):
         http_obj=httplib2.Http()
         query = '/++rest++brs/groups'
         resp,content = http_obj.request(connection_url() + query, "GET")
-        import pdb; pdb.set_trace()
         groups = simplejson.loads(content)
-        import pdb; pdb.set_trace()
         return [PloneGroup(r).__of__(self) for r in groups]
         
     def getGroupIds(self):
