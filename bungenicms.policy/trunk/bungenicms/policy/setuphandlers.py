@@ -63,13 +63,18 @@ def setup_group_workspaces(context):
     """Turn on workspace creation.
        Set Workspace container id to 'groups'
        Set group workspaces container type to 'ContentSpace'
-       Create the group folder
+       Create the group folder as a 'Large Plone Folder'
     """
 
     if context.readDataFile('marker.txt') is None:
         return
 
     portal = context.getSite()
+
+    portal_types = getToolByName(portal, 'portal_types')
+    lpf_fti = getattr(portal_types, 'Large Plone Folder')
+    lpf_fti.global_allow = True
+    
     if 'groups' not in portal.objectIds():
         gtool = getToolByName(portal, 'portal_groups')
         gtool.groupWorkspacesCreationFlag = 1
