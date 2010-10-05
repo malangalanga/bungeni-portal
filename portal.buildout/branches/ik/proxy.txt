@@ -1,0 +1,37 @@
+Running Deliverance Middleware Behind a Proxy
+----------------------------------------------
+
+use a named virtual host with the below configuration -- 
+
+NameVirtualHost demo.bungeni.info:80
+<VirtualHost demo.bungeni.info:80>
+	ServerAdmin webmaster@bungeni.org
+        ServerName  demo.bungeni.info
+	
+  
+ <Proxy http://demo.bungeni.info:8080>
+	Allow from all
+ </Proxy>
+  ProxyRequests Off 
+  ProxyPreserveHost on
+  ProxyPass / http://demo.bungeni.info:8080/
+  ProxyPassReverse / http://demo.bungeni.info:8080/
+	ErrorLog /var/log/apache2/demo.bungeni.error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog /var/log/apache2/demo.bungeni.access.log combined
+	ServerSignature On
+
+
+</VirtualHost>
+
+
+You could restrict access to the deliverance server to just the localhost -- 
+
+ <Proxy http://demo.bungeni.info:8080>
+	Allow from IP.OF.THE.SERVER
+ </Proxy>
+
