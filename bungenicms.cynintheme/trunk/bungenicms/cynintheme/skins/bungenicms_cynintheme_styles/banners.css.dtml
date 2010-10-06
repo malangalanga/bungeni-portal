@@ -1,0 +1,83 @@
+/* <dtml-with base_properties> (do not remove this :) */
+/* <dtml-call "REQUEST.set('portal_url', portal_url())"> (not this either :) */
+/* Site home banner begin*/
+.homebannercontainer {
+	background: #cdefa6 url(banner-tile.png) repeat-x center top;
+	overflow: hidden;
+	display: none;
+}
+.homebannertexttitle {
+	color: #387600;
+	font: bold 28px/40px "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+.homebannerimgholder {
+	height: 250px;
+	width: 330px;
+	padding-left: 12px;
+	background: #cdefa6 url(banner-tile2.png) repeat-x left top;
+	float: left;
+}
+.homebannertextholder {
+	margin-left: 350px;
+	margin-top: 113px;
+	padding-right: 10px;
+}
+.homebannertextwelcome {
+	color: #57ac0b;
+	font: bold 14px/20px "Trebuchet MS", Arial, Helvetica, sans-serif;
+	margin-left: 5px;
+}
+.homebannertextmessage {
+	text-transform: none;
+	color: #295e07;
+	font: bold normal 13px/20px Arial, Helvetica, sans-serif;
+	margin-left: 5px;
+}
+.homebannercontainer
+,.homebannerimgholder
+{
+ -moz-border-radius:5px;
+ -webkit-border-radius:5px;
+ display: none;
+}
+
+#portal-footer #colophoncyninlogo {
+    text-align: center;
+}
+
+#sidenavigationlogoholder {
+    border:1px solid #4D4D4D;
+    margin:0 0.8333em 0.8333em 1em;
+    min-height:60px;
+    padding:0.8333em 0;
+    text-align:center;
+    width:700px;
+}
+
+#sidenavigationlogoholder a {
+    display:block;
+    height:79px;
+    overflow:hidden;
+    width:300px;
+}
+
+#col1_content #sidenavigationlogoholder {
+    background:#FFFFFF url(http://192.168.0.5:5002/testcynin/g-white-s.gif) repeat-x scroll left bottom;
+    border:1px solid #4D4D4D;
+    margin:0 0.8333em 0.8333em 0em;
+    min-height:60px;
+    padding:0.8333em 0;
+    text-align:center;
+    width:200px;
+}
+
+#portal-footer #colophoncyninlogo {
+    display: none;
+}
+
+#cynincolophoninfo {
+    display: none;
+}    
+/* Site home banner end */
+/* </dtml-with> */
+

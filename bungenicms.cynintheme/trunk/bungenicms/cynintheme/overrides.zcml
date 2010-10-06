@@ -1,0 +1,60 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone">
+
+    <adapter
+        factory="ubify.cyninv2theme.browser.portletmanager.ColumnPortletManagerRenderer"
+        for="ubify.cyninv2theme.browser.interfaces.IThemeSpecific"
+        provides="plone.portlets.interfaces.IPortletManagerRenderer"
+    />
+
+    <adapter
+        factory="ubify.cyninv2theme.browser.navigation.QueryBuilder"
+        for="ubify.cyninv2theme.browser.interfaces.IThemeSpecific"       
+        provides="plone.app.portlets.portlets.navigation.INavigationQueryBuilder"
+    />    
+
+    <adapter
+        factory="ubify.cyninv2theme.browser.navigation.NavtreeStrategy"       
+        for="ubify.cyninv2theme.browser.interfaces.IThemeSpecific"
+        provides="plone.app.layout.navigation.interfaces.INavtreeStrategy"
+    />
+
+    <adapter
+        factory="ubify.cyninv2theme.browser.cynincalendar.ATEventProvider"       
+        for="ubify.cyninv2theme.browser.interfaces.IThemeSpecific"
+        provides="p4a.calendar.interfaces.IEventProvider"
+    />
+
+    <adapter
+        factory="ubify.cyninv2theme.browser.portletmanager.HomeFolderLocator"       
+        for="ubify.cyninv2theme.browser.interfaces.IThemeSpecific"       
+        provides="plone.app.iterate.interfaces.IWCContainerLocator"
+        />
+
+    <adapter name="plone.app.iterate.home"
+        factory="ubify.cyninv2theme.browser.portletmanager.HomeFolderLocator"       
+        for="ubify.cyninv2theme.browser.interfaces.IThemeSpecific"              
+        />
+
+    <adapter
+        factory="ubify.cyninv2theme.browser.portletmanager.CheckinCheckoutReferenceAdapter"       
+        for="ubify.cyninv2theme.browser.interfaces.IThemeSpecific"                     
+        provides="plone.app.iterate.interfaces.ICheckinCheckoutReference"
+        />
+
+    <adapter name="plone.contentmenu"
+        factory="ubify.cyninv2theme.browser.portletmanager.ContentMenuProvider"       
+        for="ubify.cyninv2theme.browser.interfaces.IThemeSpecific"
+        provides="zope.contentprovider.interfaces.IContentProvider"
+        />
+
+    <browser:page name="export_form"
+        for="ubify.cyninv2theme.browser.interfaces.IThemeSpecific"       
+        class="ubify.cyninv2theme.browser.portletmanager.ExportForm"
+        permission="zope2.View"
+        />
+
+
+</configure>
