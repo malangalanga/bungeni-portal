@@ -273,7 +273,7 @@ class BungeniConfigs:
                 'local_index')
         self.plone_general_buildout_config = 'buildout.cfg'
         self.plone_local_buildout_config = 'plone_local.cfg'
-        self.plone_deploy_ini = self.user_plone + '/etc/plone.ini'
+        self.plone_deploy_ini = self.user_plone + '/plone.ini'
         self.plone_buildout_config = \
             (self.plone_general_buildout_config if self.local_cache
              == False else self.plone_local_buildout_config)
@@ -781,7 +781,7 @@ class PloneTasks:
                             self.cfg.plone_buildout_config)
 
     def deploy_ini(self):
-        run('cp %(plone)s/etc/deploy.ini %(deploy_ini)s' % {'plone'
+        run('cp %(plone)s/deploy.ini %(deploy_ini)s' % {'plone'
             : self.cfg.user_plone, 'deploy_ini'
             : self.cfg.plone_deploy_ini})
 
@@ -820,6 +820,15 @@ class PloneTasks:
     def update_deployini(self):
         self.tasks.update_ini(self.cfg.plone_deploy_ini, 'server:main',
                               'port', self.cfg.plone_http_port)
+
+
+    def update(self):
+       """
+       Update plone
+       """
+
+       self.tasks.src_update()
+
 
 
 class PortalTasks:

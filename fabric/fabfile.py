@@ -186,6 +186,15 @@ def plone_build():
     tasks.build()
 
 
+def plone_update():
+    """
+    Update the plone installation 
+    """
+    
+    tasks = bungeni.PloneTasks()
+    tasks.update()
+
+
 def plone_conf():
     """
     Updates the zope.conf file for the plone installation
