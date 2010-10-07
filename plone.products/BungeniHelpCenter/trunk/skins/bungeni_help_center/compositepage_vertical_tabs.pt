@@ -71,7 +71,7 @@
                                             width="16"
                                             title="Edit subpage"/>
                         </a>
-                        <br/>
+                        
                         <h2 class="tabberHeading" tal:content="subpage/Title">Tab</h2>
                         <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template_id};
                                                  here python: subpage;
@@ -88,7 +88,7 @@
     <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
       see also - shows the references if this feature is switched on
     </div>
-    <br/>
+    
 
 
     <div metal:use-macro="here/document_byline/macros/byline">

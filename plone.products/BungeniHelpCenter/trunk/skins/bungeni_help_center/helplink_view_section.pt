@@ -46,7 +46,6 @@
       </span>
    </ul>
    </tal:define>
-   <br/><br/>
 
     <div class="listingBar" tal:condition="python: next or prev"
               tal:define="next python:pos &lt; num_sibl-1;
@@ -79,7 +78,6 @@
                </span>
 </td></tr></table>
 </div> 
-<br/>
     
         <h1 class="documentFirstHeading">
             <img tal:replace="structure here/helplink_icon.gif" />
@@ -160,7 +158,6 @@
                </span>
 </td></tr></table>
 </div> 
-<br/>
     </div>
 
 

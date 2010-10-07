@@ -21,29 +21,19 @@
                       current    python:tocList[currentIdx];
                       numbering  current/numbering;
                       subpages python:here.objectValues(['TabbedSubpages',]);">
-    <br/>              
  
+    <div metal:use-macro="here/referencemanual_macros/macros/parent_node_title"/>
     <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'top']">
     <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
     </span>
-    <br/>  
         
     <h1 class="documentFirstHeading">
         <img tal:replace="structure here/referencemanual_icon.gif" />
         <span tal:replace="numbering" tal:condition="python:here.getNavType() == 'yes'">1.2.</span>
         <span tal:replace="here/Title">Title</span>
     </h1>
-    <br/>  
+      
     
-    <a href=""
-           class="link-parent"
-           tal:define="parent_url python:here.navigationParent(here, template.getId())"
-           tal:condition="parent_url"
-           tal:attributes="href parent_url"
-           i18n:domain="plone"
-           i18n:translate="go_to_parent_url">
-        Up one level
-        </a>
     <div class="portalMessage"
          tal:condition="python:here.portal_workflow.getInfoFor(here, 'review_state') != 'published'"
          i18n:translate="must_publish_before_visible_to_public">
@@ -77,7 +67,7 @@
         <span tal:content="string:${parent/Title}" tal:attributes="class
         python:'state-'+here.portal_workflow.getInfoFor(parent, 'review_state')" />
       </a>
-      <p class="pmargin">
+      <p class="pmargin" tal:condition="parent/Description">
            <span tal:replace="parent/Description">Description</span>
       </p>        
         <metal:recursion use-macro="here/referencemanual_macros/macros/float_toc"/>

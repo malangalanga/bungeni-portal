@@ -14,8 +14,6 @@
     <div metal:use-macro="here/document_actions/macros/document_actions">
       Document actions (print, sendto etc)
     </div>
-    
-       <br/><br/>
 
     <div class="listingBar" tal:condition="python: next or prev"
               tal:define="next python:pos < num_sibl-1;
@@ -49,7 +47,7 @@
                </span>
 </td></tr></table>
 </div> 
-<br/>    
+    
     
     <h1 tal:content="here/Title" class="documentFirstHeading">
       Folder Title
@@ -94,7 +92,7 @@
       Get the byline - contains details about author and modification date.
     </div>
     
-<br/>    
+    
     <div class="listingBar" tal:condition="python: next or prev"
               tal:define="next python:pos < num_sibl-1;
                    prev python:pos != 0;">
@@ -127,7 +125,7 @@
                </span>
 </td></tr></table>
 </div> 
-<br/>    
+    
   </div>
 </body>
 </html>

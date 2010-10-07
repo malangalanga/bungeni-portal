@@ -24,8 +24,6 @@
       Document actions (print, sendto etc)
     </div>
     
-       <br/><br/>
-
     <div class="listingBar" tal:condition="python: next or prev"
               tal:define="next python:pos < num_sibl-1;
                    prev python:pos != 0;">
@@ -58,7 +56,7 @@
                </span>
 </td></tr></table>
 </div> 
-<br/>
+
 
     <h1 class="documentFirstHeading">
         <span tal:replace="here/Title">Title</span>
@@ -80,7 +78,7 @@
     </span>
  </span>
     <span tal:condition="here/getAudiencesVocab" tal:define="audiences here/Audiences">
-          <br/>
+          
          <span i18n:translate="phc_tutorial_audiences">This Tutorial is intended for:</span>         
           <span tal:condition="audiences" tal:replace="audiences">1.0, 2.0</span>
           <span tal:condition="not: audiences">
@@ -186,7 +184,7 @@
                </span>
 </td></tr></table>
 </div> 
-<br/>
+
     
    </div>
   </div>

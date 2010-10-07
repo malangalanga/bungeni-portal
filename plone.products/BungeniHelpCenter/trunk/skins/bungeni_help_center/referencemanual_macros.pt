@@ -10,7 +10,7 @@
 
          </li>
     </ul>
-    <br/>
+    
     <div id="pagecontents"></div>
 </div>
 </metal:block>
@@ -344,11 +344,17 @@
     Call this with tocInfo (as returned by getTOCInfo()) defined
   -->
 
+<div metal:define-macro="parent_node_title">
+    <span tal:content="here/getParentTitleStructure"
+        class="refManualPathHeader">
+    </span>
+</div>
+
 <div metal:define-macro="navigation_bar"
     class="listingBar" 
     tal:define="nextIdx tocInfo/nextIdx;
                 prevIdx tocInfo/prevIdx;
-                tocList tocInfo/tocList"
+                tocList tocInfo/tocList;"
     tal:condition="python: nextIdx!=None or prevIdx!=None"
     i18n:domain="plonehelpcenter">
    <table class="navtable"><tr>

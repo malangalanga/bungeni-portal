@@ -17,7 +17,7 @@
       Folder Title
     </h1>
     
-    <a href="" tal:attributes="href python:here.absolute_url()">Alphabetical View</a><br/><br/>
+    <a href="" tal:attributes="href python:here.absolute_url()">Alphabetical View</a>
 
     <div metal:use-macro="here/phc_macros/macros/identityimage">
       Identity Image 
@@ -67,7 +67,7 @@
 
                 <a href="" tal:content="item/Title"
                    tal:attributes="href python:str(item.getId) + '/helplink_view_section';">Item</a>
-                <br/>
+                
                 <span tal:content="item/Description">Description</span>                
                 <img src="error_icon.gif" alt="!" class="outdatedMarker"
                      tal:condition="item/isOutdated"

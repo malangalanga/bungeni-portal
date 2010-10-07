@@ -32,7 +32,7 @@
           </span>
          </span>
           <span tal:condition="here/getAudiencesVocab" tal:define="audiences here/Audiences">
-          <br/>
+          
          <span i18n:translate="phc_error_audiences">This Error Reference is intended for:</span>         
           <span tal:condition="audiences" tal:replace="audiences">1.0, 2.0</span>
           <span tal:condition="not: audiences">

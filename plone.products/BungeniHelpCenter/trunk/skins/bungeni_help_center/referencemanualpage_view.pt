@@ -14,17 +14,14 @@
                       current    python:currentIdx and tocList[currentIdx] or here;
                       numbering  current/numbering|nothing;
                       subpages python:here.objectValues(['TabbedSubpages',]);">
-    <br/>               
 
+
+    <div metal:use-macro="here/referencemanual_macros/macros/parent_node_title"/>
+    
     <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'top']">
     <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
-
-    </span><br/>
-
-
- 
+    </span>
     <h1 class="documentFirstHeading">
-
         <span tal:replace="numbering" tal:condition="python:here.getNavType() == 'yes'">1.2.</span>
         <span tal:replace="here/Title">Title</span>
     </h1>
@@ -117,7 +114,6 @@
       see also - shows the references if this feature is switched on
     </div>
 
-    <br/><br/>
     <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'bottom']">
     <div class="visualClear">&nbsp;</div>
     <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>

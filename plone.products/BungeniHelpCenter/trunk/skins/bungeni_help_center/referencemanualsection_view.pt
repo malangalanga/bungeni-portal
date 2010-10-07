@@ -61,7 +61,7 @@
     </div>
      
    <metal:recursion use-macro="here/referencemanual_macros/macros/section_toc"/>    
-<br/>
+
     <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'bottom']">
     <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
     </span>

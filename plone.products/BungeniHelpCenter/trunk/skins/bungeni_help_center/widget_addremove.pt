@@ -100,7 +100,7 @@
                        style="width: 100%;" onClick=""
                        i18n:attributes="value button_add_item;"
                        tal:attributes="tabindex tabindex/next;
-                                    onClick  string:addremove_addItem('${fieldName}')"/><br/>
+                                    onClick  string:addremove_addItem('${fieldName}')"/>
                 <input type="button" value="Remove" class="context"
                        style="width: 100%; margin: 0"
                        i18n:attributes="value button_remove_item;"

@@ -27,7 +27,7 @@
     </span>
  </span>
     <span tal:condition="here/getAudiencesVocab | nothing" tal:define="audiences here/Audiences">
-          <br/>
+          
          <span i18n:translate="phc_referencemanual_audiences">This Reference Manual is intended for:</span>         
           <span tal:condition="audiences" tal:replace="audiences">1.0, 2.0</span>
           <span tal:condition="not: audiences">

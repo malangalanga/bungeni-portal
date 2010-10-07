@@ -14,12 +14,10 @@
                       current    python:tocList[currentIdx];
                       numbering  current/numbering;
                       subpages python:here.objectValues(['TabbedSubpages',]);">
-    <br/>               
 
     <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'top']">
     <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
-
-    </span><br/>
+    </span>
 
         <p class="visualNoPrint">
           <a href="referencemanual-all-pages"
@@ -122,7 +120,6 @@
       see also - shows the references if this feature is switched on
     </div>
 
-    <br/><br/>
     <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'bottom']">
     <div class="visualClear">&nbsp;</div>
     <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>

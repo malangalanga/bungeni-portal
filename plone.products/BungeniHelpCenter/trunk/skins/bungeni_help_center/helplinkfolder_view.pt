@@ -30,7 +30,7 @@
       Folder Title
     </h1>
 
-    <a href="" tal:attributes="href python:here.absolute_url()+'/helplinkfolder_sections'">Category Based View</a><br/><br/>
+    <a href="" tal:attributes="href python:here.absolute_url()+'/helplinkfolder_sections'">Category Based View</a>
 
     <div metal:use-macro="here/phc_macros/macros/identityimage">
       Identity Image 
@@ -64,11 +64,6 @@
       </span>
    </ul>
 
-
-
-   <br/>
-   <br/>
-
    <span tal:omit-tag="" tal:repeat="item results">
      <span tal:omit-tag="" tal:condition="python:item['items']">  
       
@@ -82,8 +77,6 @@
         <div class="floatright">
          [<a href="#portal-top">Back</a>]
         </div>
-        
-        
      </div>
      </span>
    </span>

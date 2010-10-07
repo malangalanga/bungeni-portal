@@ -28,7 +28,7 @@
     <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'top']">
     <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
     </span>
-    <br/>
+    
 
     <div metal:use-macro="here/phc_macros/macros/identityimage">
       Identity Image 
@@ -87,7 +87,7 @@
                                             width="16"
                                             title="Edit subpage"/>
                         </a>
-                        <br/>
+                        
                         <h2 class="tabberHeading" tal:content="subpage/Title">Tab</h2>
                         <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template_id};
                                                  here python: subpage;
@@ -104,7 +104,7 @@
     <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
       see also - shows the references if this feature is switched on
     </div>
-    <br/>
+    
     <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'bottom']">
     <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
     </span>

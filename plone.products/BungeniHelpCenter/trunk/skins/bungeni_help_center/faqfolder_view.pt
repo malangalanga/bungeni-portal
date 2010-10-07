@@ -78,14 +78,13 @@
             Section Heading
           </a></b>
         </h2>
-       <br/>
         <tal:section condition="not:full">
           <a class="link-expand-section"
             tal:attributes="href python:'%s/faqsection_view?section=%s' % (here.absolute_url(), pss.url_quote(section['section']) )">
             <span i18n:translate="phc_view_entire_section">
             View category in full
             </span>
-          </a> <br/>
+          </a>
 
           <ol>
             <li tal:repeat="faq python:section['items']">
