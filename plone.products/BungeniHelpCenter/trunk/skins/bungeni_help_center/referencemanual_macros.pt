@@ -346,6 +346,7 @@
 
 <div metal:define-macro="parent_node_title">
     <span tal:content="here/getParentTitleStructure"
+    tal:on-error="nothing"
         class="refManualPathHeader">
     </span>
 </div>
