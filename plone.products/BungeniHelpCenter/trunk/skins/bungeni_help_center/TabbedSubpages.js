@@ -32,29 +32,30 @@
 
 function tabberObj(argsObj)
 {
-  var arg; /* name of an argument to override */
+	var arg; /* name of an argument to override */
 
-  /* Element for the main tabber div. If you supply this in argsObj,
-     then the init() method will be called.
-  */
-  this.div = null;
+  	/*
+  	 * Element for the main tabber div. If you supply this in argsObj,
+     * then the init() method will be called.
+  	 */
+	this.div = null;
 
-  /* Class of the main tabber div */
-  this.classMain = "tabber";
+	/* Class of the main tabber div */
+	this.classMain = "tabber";
 
-  /* Rename classMain to classMainLive after tabifying
+	/* Rename classMain to classMainLive after tabifying
      (so a different style can be applied)
-  */
-  this.classMainLive = "tabberlive";
+  	 */
+  	this.classMainLive = "tabberlive";
 
-  /* Class of each DIV that contains a tab */
-  this.classTab = "tabbertab";
+  	/* Class of each DIV that contains a tab */
+	this.classTab = "tabbertab";
 
-  /* Class to indicate which tab should be active on startup */
-  this.classTabDefault = "tabbertabdefault";
+	/* Class to indicate which tab should be active on startup */
+	this.classTabDefault = "tabbertabdefault";
 
-  /* Class for the navigation UL */
-  this.classNav = "tabbernav";
+	/* Class for the navigation UL */
+	this.classNav = "tabbernav";
 
   /* When a tab is to be hidden, instead of setting display='none', we
      set the class of the div to classTabHide. In your screen
@@ -223,18 +224,18 @@ tabberObj.prototype.init = function(e)
 	 Go through the list of elements in this.titleElements
 	 (typically heading elements ['h2','h3','h4'])
       */
-      for (i2=0; i2<this.titleElements.length; i2++) {
-	headingElement = t.div.getElementsByTagName(this.titleElements[i2])[0];
-	if (headingElement) {
-	  t.headingText = headingElement.innerHTML;
-	  if (this.titleElementsStripHTML) {
-	    t.headingText.replace(/<br>/gi," ");
-	    t.headingText = t.headingText.replace(/<[^>]+>/g,"");
-	  }
-	  break;
+	for (i2=0; i2<this.titleElements.length; i2++) {
+		headingElement = t.div.getElementsByTagName(this.titleElements[i2])[0];
+		if (headingElement) {
+			t.headingText = headingElement.innerHTML;
+		if (this.titleElementsStripHTML) {
+			t.headingText.replace(/<br>/gi," ");
+			t.headingText = t.headingText.replace(/<[^>]+>/g,"");
+		}
+		break;
 	}
-      }
-    }
+		}
+	}
 
     if (!t.headingText) {
       /* Title was not found (or is blank) so automatically generate a
@@ -242,6 +243,15 @@ tabberObj.prototype.init = function(e)
       */
       t.headingText = i + 1;
     }
+	
+	// *******************************************
+	// new
+	var titleText = t.headingText;
+	 
+	if(t.headingText.length > 12){
+		t.headingText = t.headingText.substr(0,12) + '...';
+	}
+	// *******************************************
 
     /* Create a list element for the tab */
     DOM_li = document.createElement("li");
@@ -258,7 +268,8 @@ tabberObj.prototype.init = function(e)
     DOM_a.appendChild(DOM_span);
     
     DOM_a.href = "javascript:void(null);";
-    DOM_a.title = t.headingText;
+    //DOM_a.title = t.headingText;
+	DOM_a.title = titleText;
     DOM_a.onclick = this.navClick;
 
     /* Add some properties to the link so we can identify which tab
