@@ -19,7 +19,6 @@ setup(
     package_data = { '': ['*.txt', '*.zcml'] },
     namespace_packages=['bungenicms'],
     install_requires = [
-        'bungeni',
         ],
     zip_safe = False,
     )

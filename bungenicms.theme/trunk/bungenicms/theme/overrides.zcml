@@ -2,14 +2,6 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser">
 
-  <!-- The global sections -->
-    <browser:viewlet
-        name="plone.personal_bar"
-        manager="plone.app.layout.viewlets.interfaces.IPortalTop"
-        class=".navigation.PersonalBarViewlet"
-        permission="zope2.View" 
-        />
-    
   <!-- Override next/previous links for folders -->
   <adapter
       factory=".nextprevious.ATFolderNextPrevious" />  
