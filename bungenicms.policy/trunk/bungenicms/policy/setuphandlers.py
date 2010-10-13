@@ -6,10 +6,12 @@ from Products.PluggableAuthService.interfaces.plugins import *
 from bungeni.plonepas.install import install as install_plonepas
 from Products.CMFCore.utils import getToolByName
 
+
 member_indexhtml="""\
 member_search=context.restrictedTraverse('membership_view')
 return member_search()
 """
+logger = logging.getLogger("Plone")
 
 def setup_who_authentication(context):
     if context.readDataFile('marker.txt') is None:
@@ -95,3 +97,10 @@ def setup_group_workspaces(context):
         groups._getWorkflowTool().doActionFor(groups, 'publish' '')
         groups.setExcludeFromNav(True)
         groups.update()
+
+def setup_folders(context):
+    portal = context.getSite()
+    for name in ("news", "events", "Members"):
+        if name in portal.objectIds():
+            portal.manage_delObjects(name)
+            logger.info("Deleted %s folder" % name)
