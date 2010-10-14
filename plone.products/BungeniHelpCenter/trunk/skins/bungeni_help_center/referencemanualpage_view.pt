@@ -16,7 +16,6 @@
                       subpages python:here.objectValues(['TabbedSubpages',]);">
 
 
-    <div metal:use-macro="here/referencemanual_macros/macros/parent_node_title"/>
     
     <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'top']">
     <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>

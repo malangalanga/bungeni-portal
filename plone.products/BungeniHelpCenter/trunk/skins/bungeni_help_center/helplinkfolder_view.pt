@@ -54,7 +54,7 @@
       <li tal:condition="python:not item['items']"
       tal:content="item/letter" />
       <li tal:condition="python:item['items']" class="bubblemenu">
-      <a href="#" tal:attributes="href python:parent_url + '#alpha' + item['letter']" tal:content="item/letter" />
+      <a href="#" tal:attributes="href python:parent_url + '#alpha' + item['letter']; id string:glossaryAZitem" tal:content="item/letter" />
         <div class="tooltip">
           <ul id="alphabetizedInnerList">
               <li tal:repeat="definition python:item['items']"><div><a href="" tal:attributes="href definition/getURL" tal:content="definition/Title"></a></div></li>

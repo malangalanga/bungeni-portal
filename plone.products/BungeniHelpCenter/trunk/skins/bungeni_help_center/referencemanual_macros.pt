@@ -344,13 +344,6 @@
     Call this with tocInfo (as returned by getTOCInfo()) defined
   -->
 
-<div metal:define-macro="parent_node_title">
-    <span tal:content="here/getParentTitleStructure"
-    tal:on-error="nothing"
-        class="refManualPathHeader">
-    </span>
-</div>
-
 <div metal:define-macro="navigation_bar"
     class="listingBar" 
     tal:define="nextIdx tocInfo/nextIdx;
