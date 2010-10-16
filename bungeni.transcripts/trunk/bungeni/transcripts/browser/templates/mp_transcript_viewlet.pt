@@ -1,0 +1,14 @@
+<dt id="fieldsetlegend-mp-items" i18n:translate="">
+  Transcripts
+</dt>
+
+<dd id="fieldset-mp-transcripts">
+      <span tal:repeat="result view/results"> 
+          <fieldset id="transcript_fieldset" >
+                <legend>
+                    <span tal:replace="python:result.start_date.strftime('%H:%M:%S') | nothing"/> to <span tal:replace="python:result.end_date.strftime('%H:%M:%S') | nothing"/>
+                </legend>
+                <span tal:content="result/text"></span>
+        </fieldset>
+      </span>
+</dd>
