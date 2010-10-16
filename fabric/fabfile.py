@@ -164,8 +164,8 @@ def plone_install():
     tasks.setup()
     tasks.local_config()
     tasks.build()
-    tasks.update_conf()
-    tasks.add_admin()
+    #tasks.update_conf()
+    #tasks.add_admin()
 
 
 def plone_setup():
