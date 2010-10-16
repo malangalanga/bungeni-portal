@@ -14,9 +14,8 @@
     <metal:main> 
     <div id="transcripts_main">
         <div id="transcript_video">
-            <div id="testslider"></div>
             <span tal:condition="view/sitting_media_path | nothing">
-                <video style="width:400px;height:300px" durationHint="7:52">
+                <video style="width:400px;height:300px" id="embed_vid">
                     <source src="myOgg.ogg" tal:attributes="src view/sitting_media_path; duration view/duration"/>
                 </video>
             </span>

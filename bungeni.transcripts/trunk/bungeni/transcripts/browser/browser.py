@@ -26,6 +26,15 @@ from zope.app.form.browser import MultiCheckBoxWidget as _MultiCheckBoxWidget
 from bungeni.transcripts.utils.misc import get_assigned_staff
 import datetime
 timedelta = datetime.timedelta
+
+#!+HACK(miano,28-09-2010) quick function to get the user from a user id
+#should be in orm
+def get_user(user_id):
+    session = Session()
+    user = session.query(bungeni_domain.User).filter(
+            bungeni_domain.User.user_id == user_id).all()
+    return user[0]
+
 class MainView(BrowserView):
     def __call__(self):
         self.group = self.get_group()
@@ -60,12 +69,17 @@ class DisplayTranscripts(BrowserView):
     
     def get_transcripts(self):
         session = Session()
-        transcripts = session.query(domain.Transcript).filter(domain.Transcript.sitting_id==self.context.sitting_id).order_by(domain.Transcript.start_time)
+        transcripts = session.query(domain.Transcript).filter(domain.Transcript.sitting_id==self.context.sitting_id).order_by(domain.Transcript.start_date)
         #import pdb; pdb.set_trace()
         ts = []
         for transcript in transcripts:
             t = removeSecurityProxy(transcript)
-            t.edit_url =""
+            t.edit_url = ""
+            if t.person_id is not None:
+                t.user = get_user(t.person_id)
+            hours, remainder = divmod((t.start_date - self.context.start_date).seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            t.start_play = "%s:%s:%s" % (hours, minutes, seconds)
             ts.append(t)
         return ts
         
@@ -173,8 +187,8 @@ class AddTranscript(AddForm, TranscriptBaseForm):
     def handle_save(self, action, data):
         session = Session()
         transcript = domain.Transcript()
-        transcript.start_time =  data['start_time']                    
-        transcript.end_time =  data['end_time']                      
+        transcript.start_date =  data['start_time']                    
+        transcript.end_date =  data['end_time']                      
         transcript.text = data['speech']
         transcript.person = data['person'] 
         transcript.sitting_id = self.context.sitting_id
@@ -282,7 +296,7 @@ class GenerateTakes(PageForm):
                 take.reader_id = assigned_readers[c_reader]
             else:
                 take.reader_id = assigned_readers[c_reader]
-            c_reader = c_reporter + 1
+            c_reader = c_reader + 1
             
             if c_editor > len(assigned_editors)-1:
                 c_editor = 0
@@ -293,13 +307,7 @@ class GenerateTakes(PageForm):
             session.add(take)
         session.commit()
         self.request.response.redirect('./takes')
-#!+HACK(miano,28-09-2010) quick function to get the user from a user id
-#should be in orm
-def get_user(user_id):
-    session = Session()
-    user = session.query(bungeni_domain.User).filter(
-            bungeni_domain.User.user_id == user_id).all()
-    return user[0]
+
             
 class Takes(BrowserView):  
     template = ViewPageTemplateFile("templates/takes.pt")

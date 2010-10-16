@@ -2,7 +2,7 @@
 <metal:main>
             <fieldset id="video_side_bar_fieldset"  >
                 <legend >
-                    <a href="javascript:add_transcript()">New transcript</a>
+                    <!-- <a href="javascript:add_transcript()">New transcript</a> --> Transcripts
                 </legend>
                 <div id="new_transcript">
                 </div>
@@ -10,20 +10,26 @@
                     <div tal:attribute="id view/transcript/transcript_id">
                     <fieldset id="transcript_fieldset" >
                         <legend>
-                            <a href="javascript:play();" style="font-weight: bold; color: rgb(0, 0, 0);">
+                            <a tal:attributes="start_play transcript/start_play" style="font-weight: bold; color: rgb(0, 0, 0);">
                                 <img tal:attributes="src context/++resource++control_play_blue.png"/>
-                                <span tal:replace="transcript/start_time | nothing"/> to <span tal:replace="transcript/end_time | nothing"/>
+                                <span tal:replace="python:transcript.start_date.strftime('%H:%M:%S') | nothing"/> to <span tal:replace="python:transcript.end_date.strftime('%H:%M:%S') | nothing"/>
                             </a> | 
                             <a href="javascript:edit_transcript()">Edit</a> |
                             <a href="javascript:delete_transcript()">Delete</a> | 
                             <a href="javascript:edit_transcript()">Versions</a> |
                             <a href="javascript:edit_transcript()">Audit Log</a>
                         </legend>
-                        <div class="transcript_person" >
-                            person : <span tal:content="transcript/person"></span>
+                        <div style="width : 15%; float:left; top: 0px;">
+                            <div class="transcript_person_picture" tal:condition="transcript/user | nothing" style="margin-left: auto; margin-right: auto; width:50;">
+                                <img 
+                            tal:attributes="src context/++resource++afro.jpg" height="50" width="50" />
+                            </div>
+                            <div class="transcript_person" tal:condition="transcript/user | nothing" style="text-align:center" >
+                                <span tal:content="transcript/user/first_name"/> <span tal:content="transcript/user/last_name"/>
+                            </div>
                         </div>
-                        <div class="transcript_speech">
-                            text : <span tal:content="transcript/text"></span>
+                        <div class="transcript_speech" style="width : 85%; float:right; top: 0px;">
+                            <span tal:content="transcript/text"></span>
                         </div>
                         
                     </fieldset>
