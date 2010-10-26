@@ -246,7 +246,8 @@ mapper(domain.GroupSitting, schema.sittings,
         "item_schedule": relation(domain.ItemSchedule,
             order_by=schema.items_schedule.c.planned_order
         ),
-        "venue": relation(domain.Venue)
+        "venue": relation(domain.Venue),
+        "hansard": relation(domain.Hansard),
     }
 )
 
@@ -601,3 +602,31 @@ mapper(domain.Report4Sitting, schema.sitting_reports,
 
 mapper(domain.ObjectTranslation, schema.translations)
 
+
+#Hansard
+mapper( domain.Speech, 
+        schema.speeches, 
+        properties = { 
+                'changes':relation( 
+                        domain.TranscriptChange, 
+                        backref='origin', 
+                        cascade="all,delete-orphan", 
+                        passive_deletes=False
+                        ) 
+                } 
+        ) 
+        
+mapper( domain.SpeechChange, schema.speech_changes ) 
+mapper( domain.SpeechVersion, 
+        schema.speech_versions, 
+        properties= { 
+                'change':relation( domain.SpeechChange, uselist=False), 
+                'head': relation( domain.Speech, uselist=False) }
+       )
+
+mapper( domain.Take, schema.takes, )
+mapper( domain.Assignment, schema.assignment, )
+mapper( domain.Hansard, schema.hansard,
+            "speeches": relation(domain.Speech,
+                order_by=schema.speeches.c.start_date), 
+       )

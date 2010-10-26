@@ -728,4 +728,41 @@ class ObjectTranslation(object):
     """Get the translations for an Object.
     """
 
+#Hansard
+
+class Hansard(ParliamentaryItem):
+    """
+    The hansard report of a sitting
+    It is made up of all the speechs of a sitting proceeding
+    """   
+    speeches = one2many("speech", 
+        "bungeni.models.domain.SpeechContainer", "item_id")
+        
+class Speech(ParliamentaryItem):
+    """
+    A single speech made in a plenary or committee sitting
+    """
+    
+    versions = one2many(
+        "versions",
+        "bungeni.models.domain.SpeechVersionContainer",
+        "content_id")    
+        
+SpeechChange = ItemLog.makeLogFactory( "SpeechChange")
+SpeechVersion = ItemVersions.makeVersionFactory("SpeechVersion")
+
+
+class Take( Entity ):    
+    """
+    A Take - A unit of the parliamentary proceeding that is assigned to 
+    a staff member for transcription or review
+    """
+    interface.implements( interfaces.IBungeniTake  ) 
+
+class Assignment( Entity ):    
+    """
+    Contains the IDs of staff members assigned to work on a sitting
+    """
+    interface.implements( interfaces.IBungeniAssignment ) 
+
 

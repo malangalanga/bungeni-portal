@@ -954,30 +954,65 @@ holidays = rdb.Table("holidays", metadata,
 # Hansard
 #######################
 
-rotas = rdb.Table("rotas", metadata,
-    rdb.Column("rota_id", rdb.Integer, primary_key=True),
-    rdb.Column("reporter_id", rdb.Integer, rdb.ForeignKey("users.user_id")),
-    rdb.Column("identifier", rdb.Unicode(60)),
-    rdb.Column("start_date", rdb.Date),
-    rdb.Column("end_date", rdb.Date)
-)
+#!+ TODO(miano, 26-Oct-2010) : Rethink this....
+# Stores the name of the person speaking if they are not currently a bungeni 
+# user otherwise stores their user_id
 
-takes = rdb.Table("takes", metadata,
-    rdb.Column("take_id", rdb.Integer, primary_key=True),
-    rdb.Column("rota_id", rdb.Integer, rdb.ForeignKey("rotas.rota_id")),
-    rdb.Column("identifier", rdb.Unicode(1)),
-)
+speeches = rdb.Table(
+    "speeches",
+    metadata, 
+    rdb.Column("speech_id", rdb.Integer,
+        rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
+        primary_key=True
+    ),
+    rdb.Column("person_id", rdb.Integer, rdb.ForeignKey("users.user_id")),
+    rdb.Column("person_name", rdb.UnicodeText, nullable=True),
+    rdb.Column("text", rdb.UnicodeText),
+    rdb.Column("start_date", rdb.DateTime(timezone=False), nullable=False),
+    rdb.Column("end_date", rdb.DateTime(timezone=False), nullable=False),
+    rdb.Column("sitting_id", rdb.Integer, 
+                rdb.ForeignKey("sittings.sitting_id")),
+   )
 
-take_media = rdb.Table("take_media", metadata,
-    rdb.Column("media_id", rdb.Integer, primary_key=True),
-    rdb.Column("take_id", rdb.Integer, rdb.ForeignKey("takes.take_id")),
-)
+speech_changes = make_changes_table( speeches, metadata )
+speech_versions = make_versions_table( speeches, metadata)
 
-transcripts = rdb.Table("transcripts", metadata,
-    rdb.Column("transcript_id", rdb.Integer, primary_key=True),
-    rdb.Column("take_id", rdb.Integer, rdb.ForeignKey("takes.take_id")),
-    rdb.Column("reporter_id", rdb.Integer, rdb.ForeignKey("users.user_id")),
-)
+sitting_media_paths = rdb.Table(
+    "sitting_media_paths",
+    metadata,
+    rdb.Column("sitting_id", rdb.Integer, primary_key=True
+                rdb.ForeignKey("sittings.sitting_id")), 
+    rdb.Column("web_optimised_video_path", rdb.UnicodeText, nullable=False),
+    rdb.Column("audio_only_path", rdb.UnicodeText, nullable=True),
+    rdb.Column("high_quality_video_path", rdb.UnicodeText, nullable=True), 
+    )
+    
+#!+ TODO(miano, 26-Oct-2010) : Hypothetical case where the editors and readers 
+# get equal time allocations as reporters
+takes = rdb.Table(
+    "takes",
+    metadata,
+    rdb.Column('take_id', rdb.Integer, primary_key=True),
+    rdb.Column('start_date', rdb.DateTime(timezone=False), nullable=False ),
+    rdb.Column('end_date', rdb.DateTime(timezone=False), nullable=False),
+    rdb.Column('editor_id', rdb.Integer,nullable=False,
+                rdb.ForeignKey("users.user_id")),
+    rdb.Column('reader_id', rdb.Integer,nullable=False,
+                rdb.ForeignKey("users.user_id")),
+    rdb.Column('reporter_id', rdb.Integer,nullable=False
+                rdb.ForeignKey("users.user_id")),
+    rdb.Column("sitting_id", rdb.Integer, nullable=False,
+                rdb.ForeignKey("sittings.sitting_id")),
+    )
+    
+assignments = rdb.Table(
+    "assignments",
+    metadata,
+    rdb.Column('sitting_id', rdb.Integer, primary_key=True
+                rdb.ForeignKey("sittings.sitting_id")),
+    rdb.Column('staff_id', rdb.Integer, primary_key=True,
+                rdb.ForeignKey("users.user_id")),
+    )
 
 translations = rdb.Table("translations", metadata,
     rdb.Column("object_id", rdb.Integer, primary_key=True, nullable=False),
