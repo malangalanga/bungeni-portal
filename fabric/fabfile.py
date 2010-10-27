@@ -270,10 +270,7 @@ def portal_setup():
 
 
 def __check(tasks):
-    missing = tasks.check_versions()
-    print len(missing), ' packages'
-    if len(missing) > 0:
-        print '\n'.join(missing)
+    tasks.check_versions()
 
 
 def portal_update():

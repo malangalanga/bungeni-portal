@@ -691,16 +691,20 @@ class Tasks:
                              : boconfig})
         return buildout_config.get('buildout', 'index')
 
-    def check_versions(self, boconfig, py_ver):
+    def check_versions(self, boprefix, boparam, boconfig):
         """
-            
+        Check the buildout version    
         """
+        with cd(self.scm.working_copy):
+            run("%s ./bin/buildout -t 3600  %s -c %s | sed -ne 's/^Picked: //p' | sort | uniq" % (boprefix, boparam, boconfig))
 
+        """
         versions_file = self.scm.working_copy + '/versions.cfg'
         print 'boconfig = ', boconfig
         checkVer = checkversions.CheckVersions(versions_file,
                 self.get_buildout_index(boconfig), py_ver)
         return checkVer.checkVersion()
+        """
 
     def bootstrap(self, pythonexec):
         """
@@ -789,9 +793,11 @@ class PloneTasks:
        """
        Verifies packages in the plone version index
        """
+       self.local_config()
+       self.tasks.check_versions('PATH=%s:$PATH PYTHON=%s'
+                           % (self.cfg.postgresql_bin,
+                           self.cfg.python24), '-Novvvvv', self.cfg.plone_buildout_config)
 
-       return self.tasks.check_versions(self.cfg.plone_buildout_config,
-                '2.5')
 
     def local_config(self):
         template_map = {'plone_local_index': self.cfg.plone_local_index}
@@ -822,15 +828,6 @@ class PloneTasks:
                               'port', self.cfg.plone_http_port)
 
 
-    def update(self):
-       """
-       Update plone
-       """
-
-       self.tasks.src_update()
-
-
-
 class PortalTasks:
 
     def __init__(self):
@@ -858,8 +855,12 @@ class PortalTasks:
                             self.cfg.portal_buildout_config)
 
     def check_versions(self):
-        return self.tasks.check_versions(self.cfg.portal_buildout_config,
-                '2.5')
+       """
+       Verifies packages in the plone version index
+       """
+       self.local_config()
+       self.tasks.check_versions('PYTHON=%s'
+                           % self.cfg.python25, '-Novvvvv', self.cfg.portal_buildout_config)
 
     def deploy_ini(self):
         run('cp %(portal)s/deploy.ini %(deploy_ini)s' % {'portal'
@@ -960,8 +961,10 @@ class BungeniTasks:
                             self.cfg.bungeni_buildout_config)
 
     def check_versions(self):
-        return self.tasks.check_versions(self.cfg.portal_buildout_config,
-                '2.5')
+        self.local_config()
+        self.tasks.check_versions('PATH=%s:$PATH PYTHON=%s'
+                            % (self.cfg.postgresql_bin,
+                            self.cfg.python25), '-Novvvvv', self.cfg.bungeni_buildout_config)
 
     def reset_db(self):
         with cd(self.cfg.user_bungeni):
