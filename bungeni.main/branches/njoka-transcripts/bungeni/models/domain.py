@@ -523,22 +523,6 @@ class ParliamentSession(Entity):
     sort_dir = "desc"
     interface.implements(interfaces.ITranslatable)
 
-class Rota(object):
-    """
-    """
-
-class Take(object):
-    """
-    """
-
-class TakeMedia(object):
-    """
-    """
-
-class Transcript(object):
-    """
-    """
-
 
 class ObjectSubscriptions(object):
     """

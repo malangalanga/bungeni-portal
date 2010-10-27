@@ -15,11 +15,10 @@ ItemSequence = rdb.Sequence("item_sequence")
 PrincipalSequence = rdb.Sequence("principal_sequence")
 
 
-def make_changes_table(table, metadata):
+def make_changes_table(table, entity_name, metadata):
     """Create an object log table for an object.
     """
     table_name = table.name
-    entity_name = table_name.endswith("s") and table_name[:-1] or table_name
     changes_name = "%s_changes" % (entity_name)
     fk_id = "%s_id" % (entity_name)
     changes_table = rdb.Table(changes_name, metadata,
@@ -47,7 +46,7 @@ def make_changes_table(table, metadata):
     return changes_table
 
 
-def make_versions_table(table, metadata, secondarytable=None):
+def make_versions_table(table, entity_name, metadata, secondarytable=None):
     """Create a versions table, requires change log table for which
     some version metadata information will be stored.
     
@@ -55,7 +54,6 @@ def make_versions_table(table, metadata, secondarytable=None):
     table consists of a join between two tables
     """
     table_name = table.name
-    entity_name = table_name.endswith("s") and table_name[:-1] or table_name
     versions_name = "%s_versions" % (entity_name)
     fk_id = "%s_id" % (entity_name)
     columns = [
@@ -686,8 +684,8 @@ attached_files = rdb.Table("attached_files", metadata,
     rdb.Column("language", rdb.String(5), nullable=False),
 )
 
-attached_file_changes = make_changes_table(attached_files, metadata)
-attached_file_versions = make_versions_table(attached_files, metadata)
+attached_file_changes = make_changes_table(attached_files, "attached_file", metadata)
+attached_file_versions = make_versions_table(attached_files, "attached_file", metadata)
 
 registrySequence = rdb.Sequence("registry_number_sequence", metadata)
 
@@ -744,8 +742,8 @@ agenda_items = rdb.Table("agenda_items", metadata,
     rdb.Column("approval_date", rdb.Date,),
 )
 
-agenda_item_changes = make_changes_table(agenda_items, metadata)
-agenda_item_versions = make_versions_table(agenda_items, metadata,
+agenda_item_changes = make_changes_table(agenda_items, "agenda_item", metadata)
+agenda_item_versions = make_versions_table(agenda_items, "agenda_item", metadata,
     parliamentary_items
 )
 
@@ -781,8 +779,8 @@ questions = rdb.Table("questions", metadata,
     rdb.Column("response_text", rdb.UnicodeText),
 )
 
-question_changes = make_changes_table(questions, metadata)
-question_versions = make_versions_table(questions, metadata,
+question_changes = make_changes_table(questions, "question", metadata)
+question_versions = make_versions_table(questions, "question", metadata,
     parliamentary_items
 )
 
@@ -814,8 +812,8 @@ motions = rdb.Table("motions", metadata,
     rdb.Column("receive_notification", rdb.Boolean, default=True),
 )
 
-motion_changes = make_changes_table(motions, metadata)
-motion_versions = make_versions_table(motions, metadata,
+motion_changes = make_changes_table(motions, "motion", metadata)
+motion_versions = make_versions_table(motions, "motion", metadata,
     parliamentary_items
 )
 
@@ -842,8 +840,8 @@ bills = rdb.Table("bills", metadata,
     rdb.Column("publication_date", rdb.Date),
 )
 
-bill_changes = make_changes_table(bills, metadata)
-bill_versions = make_versions_table(bills, metadata, parliamentary_items)
+bill_changes = make_changes_table(bills, "bill", metadata)
+bill_versions = make_versions_table(bills, "bill", metadata, parliamentary_items)
 
 committee_reports = ()
 
@@ -894,8 +892,8 @@ tabled_documents = rdb.Table("tabled_documents", metadata,
     rdb.Column("tabled_document_number", rdb.Integer),
 )
 
-tabled_document_changes = make_changes_table(tabled_documents, metadata)
-tabled_document_versions = make_versions_table(tabled_documents, metadata,
+tabled_document_changes = make_changes_table(tabled_documents, "tabled_document", metadata)
+tabled_document_versions = make_versions_table(tabled_documents, "tabled_document", metadata,
     parliamentary_items
 )
 
@@ -954,6 +952,14 @@ holidays = rdb.Table("holidays", metadata,
 # Hansard
 #######################
 
+hansards = rdb.Table("hansards", metadata,
+    rdb.Column("hansard_id", rdb.Integer,
+        rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
+        primary_key=True
+    ),
+    rdb.Column("sitting_id", rdb.Integer, rdb.ForeignKey("group_sittings.sitting_id")),
+)
+
 #!+ TODO(miano, 26-Oct-2010) : Rethink this....
 # Stores the name of the person speaking if they are not currently a bungeni 
 # user otherwise stores their user_id
@@ -964,24 +970,26 @@ speeches = rdb.Table(
     rdb.Column("speech_id", rdb.Integer,
         rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
         primary_key=True
-    ),
+        ),
     rdb.Column("person_id", rdb.Integer, rdb.ForeignKey("users.user_id")),
     rdb.Column("person_name", rdb.UnicodeText, nullable=True),
     rdb.Column("text", rdb.UnicodeText),
     rdb.Column("start_date", rdb.DateTime(timezone=False), nullable=False),
     rdb.Column("end_date", rdb.DateTime(timezone=False), nullable=False),
     rdb.Column("sitting_id", rdb.Integer, 
-                rdb.ForeignKey("sittings.sitting_id")),
+                rdb.ForeignKey("group_sittings.sitting_id")),
    )
 
-speech_changes = make_changes_table( speeches, metadata )
-speech_versions = make_versions_table( speeches, metadata)
+speech_changes = make_changes_table( speeches, "speech", metadata )
+speech_versions = make_versions_table( speeches, "speech", metadata)
 
 sitting_media_paths = rdb.Table(
     "sitting_media_paths",
     metadata,
-    rdb.Column("sitting_id", rdb.Integer, primary_key=True
-                rdb.ForeignKey("sittings.sitting_id")), 
+    rdb.Column("sitting_id", rdb.Integer, 
+                rdb.ForeignKey("group_sittings.sitting_id"),
+                primary_key=True
+                ), 
     rdb.Column("web_optimised_video_path", rdb.UnicodeText, nullable=False),
     rdb.Column("audio_only_path", rdb.UnicodeText, nullable=True),
     rdb.Column("high_quality_video_path", rdb.UnicodeText, nullable=True), 
@@ -995,23 +1003,35 @@ takes = rdb.Table(
     rdb.Column('take_id', rdb.Integer, primary_key=True),
     rdb.Column('start_date', rdb.DateTime(timezone=False), nullable=False ),
     rdb.Column('end_date', rdb.DateTime(timezone=False), nullable=False),
-    rdb.Column('editor_id', rdb.Integer,nullable=False,
-                rdb.ForeignKey("users.user_id")),
-    rdb.Column('reader_id', rdb.Integer,nullable=False,
-                rdb.ForeignKey("users.user_id")),
-    rdb.Column('reporter_id', rdb.Integer,nullable=False
-                rdb.ForeignKey("users.user_id")),
-    rdb.Column("sitting_id", rdb.Integer, nullable=False,
-                rdb.ForeignKey("sittings.sitting_id")),
+    rdb.Column('editor_id', rdb.Integer,
+                rdb.ForeignKey("users.user_id"),
+                nullable=False
+                ),
+    rdb.Column('reader_id', rdb.Integer,
+                rdb.ForeignKey("users.user_id"),
+                nullable=False,
+                ),
+    rdb.Column('reporter_id', rdb.Integer,
+                rdb.ForeignKey("users.user_id"),
+                nullable=False,
+                ),
+    rdb.Column("sitting_id", rdb.Integer,
+                rdb.ForeignKey("group_sittings.sitting_id"),
+                nullable=False,
+                ),
     )
     
 assignments = rdb.Table(
     "assignments",
     metadata,
-    rdb.Column('sitting_id', rdb.Integer, primary_key=True
-                rdb.ForeignKey("sittings.sitting_id")),
-    rdb.Column('staff_id', rdb.Integer, primary_key=True,
-                rdb.ForeignKey("users.user_id")),
+    rdb.Column('sitting_id', rdb.Integer,
+                rdb.ForeignKey("group_sittings.sitting_id"),
+                primary_key=True,
+                ),
+    rdb.Column('staff_id', rdb.Integer,
+                rdb.ForeignKey("users.user_id"),
+                primary_key=True,
+                ),
     )
 
 translations = rdb.Table("translations", metadata,

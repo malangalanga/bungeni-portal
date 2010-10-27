@@ -608,7 +608,7 @@ mapper( domain.Speech,
         schema.speeches, 
         properties = { 
                 'changes':relation( 
-                        domain.TranscriptChange, 
+                        domain.SpeechChange, 
                         backref='origin', 
                         cascade="all,delete-orphan", 
                         passive_deletes=False
@@ -625,8 +625,9 @@ mapper( domain.SpeechVersion,
        )
 
 mapper( domain.Take, schema.takes, )
-mapper( domain.Assignment, schema.assignment, )
-mapper( domain.Hansard, schema.hansard,
+mapper( domain.Assignment, schema.assignments, )
+mapper( domain.Hansard, schema.hansards,
+        properties = {
             "speeches": relation(domain.Speech,
-                order_by=schema.speeches.c.start_date), 
+                order_by=schema.speeches.c.start_date) }
        )
