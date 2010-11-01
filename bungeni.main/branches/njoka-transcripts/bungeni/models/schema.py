@@ -976,18 +976,18 @@ speeches = rdb.Table(
     rdb.Column("text", rdb.UnicodeText),
     rdb.Column("start_date", rdb.DateTime(timezone=False), nullable=False),
     rdb.Column("end_date", rdb.DateTime(timezone=False), nullable=False),
-    rdb.Column("sitting_id", rdb.Integer, 
-                rdb.ForeignKey("group_sittings.sitting_id")),
+    rdb.Column("hansard_id", rdb.Integer, 
+                rdb.ForeignKey("hansards.hansard_id")),
    )
 
 speech_changes = make_changes_table( speeches, "speech", metadata )
 speech_versions = make_versions_table( speeches, "speech", metadata)
 
-sitting_media_paths = rdb.Table(
-    "sitting_media_paths",
+hansard_media_paths = rdb.Table(
+    "hansard_media_paths",
     metadata,
-    rdb.Column("sitting_id", rdb.Integer, 
-                rdb.ForeignKey("group_sittings.sitting_id"),
+    rdb.Column("hansard_id", rdb.Integer, 
+                rdb.ForeignKey("hansards.hansard_id"),
                 primary_key=True
                 ), 
     rdb.Column("web_optimised_video_path", rdb.UnicodeText, nullable=False),
@@ -1065,25 +1065,8 @@ def reset_database():
 
 
 if __name__ == "__main__":
-    import sys
-
-    if len(sys.argv) == 1:
-        db_uri = "sqlite://"
-    elif len(sys.argv) != 2:
-        print "schema.py DATABASE_URL"
-        sys.exit(1)
-    else:
-        db_uri = sys.argv[1]
-
-        db_uri = "sqlite://"
-    db = rdb.create_engine(db_uri, echo=True)
+    db = rdb.create_engine('postgres://localhost/bungeni', echo=False)
     metadata.bind = db
-
-    try:
-        metadata.drop_all()
-        metadata.create_all()
-    except:
-        import pdb, traceback, sys
-        traceback.print_exc()
-        pdb.post_mortem(sys.exc_info()[-1])
+    #metadata.drop_all()
+    metadata.create_all()
 

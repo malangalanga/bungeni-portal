@@ -247,7 +247,11 @@ mapper(domain.GroupSitting, schema.sittings,
             order_by=schema.items_schedule.c.planned_order
         ),
         "venue": relation(domain.Venue),
-        "hansard": relation(domain.Hansard),
+        "hansard": relation(domain.Hansard,
+                            backref="sittings",
+                            lazy=False,
+                            uselist=False 
+        ), 
     }
 )
 
@@ -624,10 +628,35 @@ mapper( domain.SpeechVersion,
                 'head': relation( domain.Speech, uselist=False) }
        )
 
-mapper( domain.Take, schema.takes, )
+mapper( domain.Take, schema.takes,
+        properties = {
+            "editor": relation(domain.User,
+                                primaryjoin=(schema.takes.c.editor_id ==
+                                                schema.users.c.user_id),
+                                    lazy=False,
+                                    uselist=False ), 
+            "reader": relation(domain.User,
+                                primaryjoin=(schema.takes.c.reader_id ==
+                                                schema.users.c.user_id),
+                                    lazy=False,
+                                    uselist=False ), 
+            "reporter": relation(domain.User,
+                                primaryjoin=(schema.takes.c.reporter_id ==
+                                                schema.users.c.user_id),
+                                    lazy=False,
+                                    uselist=False ), 
+        } )
 mapper( domain.Assignment, schema.assignments, )
+
 mapper( domain.Hansard, schema.hansards,
         properties = {
             "speeches": relation(domain.Speech,
-                order_by=schema.speeches.c.start_date) }
+                                    order_by=schema.speeches.c.start_date),
+             "media_paths": relation(domain.HansardMediaPaths,
+                                    backref="hansards",
+                                    lazy=False,
+                                    uselist=False ), 
+            "sitting": relation(domain.GroupSitting, uselist=False),    
+            }
        )
+mapper( domain.HansardMediaPaths, schema.hansard_media_paths,)

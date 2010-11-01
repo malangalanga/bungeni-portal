@@ -398,8 +398,3 @@ class ITranslatable(interface.Interface):
     language = interface.Attribute("The language of the values of the "
         "translatable attributes of the instance")
         
-class IBungeniTake(interface.Interface):
-    '''Take Marker Interface'''
-
-class IBungeniAssignment(interface.Interface):
-    '''Assignment Marker Interface'''

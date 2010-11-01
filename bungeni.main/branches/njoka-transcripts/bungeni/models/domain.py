@@ -720,7 +720,7 @@ class Hansard(ParliamentaryItem):
     It is made up of all the speechs of a sitting proceeding
     """   
     speeches = one2many("speech", 
-        "bungeni.models.domain.SpeechContainer", "item_id")
+        "bungeni.models.domain.SpeechContainer", "speech_id")
         
 class Speech(ParliamentaryItem):
     """
@@ -741,12 +741,13 @@ class Take( Entity ):
     A Take - A unit of the parliamentary proceeding that is assigned to 
     a staff member for transcription or review
     """
-    interface.implements( interfaces.IBungeniTake  ) 
 
 class Assignment( Entity ):    
     """
     Contains the IDs of staff members assigned to work on a sitting
     """
-    interface.implements( interfaces.IBungeniAssignment ) 
-
+class HansardMediaPaths( Entity ):
+    """
+    Media files of a sitting
+    """
 
