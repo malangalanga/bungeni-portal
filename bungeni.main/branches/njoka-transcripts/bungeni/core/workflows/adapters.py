@@ -18,6 +18,7 @@ import event
 import heading
 import user
 import report
+import hansard
 from bungeni.models import domain
 from bungeni.models.interfaces import IVersion
 
