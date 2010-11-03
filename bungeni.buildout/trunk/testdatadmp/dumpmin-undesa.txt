@@ -60,7 +60,7 @@ COPY address_types (address_type_id, address_type_name, language) FROM stdin;
 -- Data for Name: sitting_type; Type: TABLE DATA; Schema: public; Owner: undesa
 --
 
-COPY sitting_type (sitting_type_id, sitting_type, start_time, end_time, language) FROM stdin;
+COPY sitting_types (sitting_type_id, sitting_type, start_time, end_time, language) FROM stdin;
 1	morning	09:00:00	12:00:00	en
 2	afternoon	13:00:00	18:00:00	en
 3	extraordinary	07:00:00	19:00:00	en
@@ -73,7 +73,7 @@ COPY sitting_type (sitting_type_id, sitting_type, start_time, end_time, language
 -- Data for Name: attendance_type; Type: TABLE DATA; Schema: public; Owner: undesa
 --
 
-COPY attendance_type (attendance_id, attendance_type, language) FROM stdin;
+COPY attendance_types (attendance_id, attendance_type, language) FROM stdin;
 1	present	en
 2	absence justified	en
 3	absent	en
