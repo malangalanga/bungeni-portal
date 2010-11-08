@@ -426,17 +426,17 @@ SELECT pg_catalog.setval('attached_files_attached_file_id_seq', 32, true);
 
 
 --
--- Name: attendance_type; Type: TABLE; Schema: public; Owner: undesa; Tablespace: 
+-- Name: attendance_types; Type: TABLE; Schema: public; Owner: undesa; Tablespace: 
 --
 
-CREATE TABLE attendance_type (
+CREATE TABLE attendance_types (
     attendance_id integer NOT NULL,
     attendance_type character varying(40) NOT NULL,
     language character varying(5) NOT NULL
 );
 
 
-ALTER TABLE public.attendance_type OWNER TO undesa;
+ALTER TABLE public.attendance_types OWNER TO undesa;
 
 --
 -- Name: attendance_type_attendance_id_seq; Type: SEQUENCE; Schema: public; Owner: undesa
@@ -456,7 +456,7 @@ ALTER TABLE public.attendance_type_attendance_id_seq OWNER TO undesa;
 -- Name: attendance_type_attendance_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: undesa
 --
 
-ALTER SEQUENCE attendance_type_attendance_id_seq OWNED BY attendance_type.attendance_id;
+ALTER SEQUENCE attendance_type_attendance_id_seq OWNED BY attendance_types.attendance_id;
 
 
 --
@@ -676,11 +676,11 @@ SELECT pg_catalog.setval('committee_types_committee_type_id_seq', 1, false);
 CREATE TABLE committees (
     committee_id integer NOT NULL,
     committee_type_id integer,
-    no_members integer,
-    min_no_members integer,
+    num_members integer,
+    min_num_members integer,
     quorum integer,
-    no_clerks integer,
-    no_researchers integer,
+    num_clerks integer,
+    num_researchers integer,
     proportional_representation boolean,
     default_chairperson boolean,
     reinstatement_date date
@@ -688,18 +688,6 @@ CREATE TABLE committees (
 
 
 ALTER TABLE public.committees OWNER TO undesa;
-
---
--- Name: consignatories; Type: TABLE; Schema: public; Owner: undesa; Tablespace: 
---
-
-CREATE TABLE consignatories (
-    item_id integer NOT NULL,
-    user_id integer NOT NULL
-);
-
-
-ALTER TABLE public.consignatories OWNER TO undesa;
 
 --
 -- Name: constituencies; Type: TABLE; Schema: public; Owner: undesa; Tablespace: 
@@ -785,6 +773,18 @@ ALTER SEQUENCE constituency_details_constituency_detail_id_seq OWNED BY constitu
 
 SELECT pg_catalog.setval('constituency_details_constituency_detail_id_seq', 1, false);
 
+
+--
+-- Name: cosignatories; Type: TABLE; Schema: public; Owner: undesa; Tablespace: 
+--
+
+CREATE TABLE cosignatories (
+    item_id integer NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE public.cosignatories OWNER TO undesa;
 
 --
 -- Name: countries; Type: TABLE; Schema: public; Owner: undesa; Tablespace: 
@@ -974,20 +974,6 @@ SELECT pg_catalog.setval('holidays_holiday_id_seq', 1, false);
 
 
 --
--- Name: item_discussion; Type: TABLE; Schema: public; Owner: undesa; Tablespace: 
---
-
-CREATE TABLE item_discussion (
-    schedule_id integer NOT NULL,
-    body_text text,
-    sitting_time time without time zone,
-    language character varying(5) NOT NULL
-);
-
-
-ALTER TABLE public.item_discussion OWNER TO undesa;
-
---
 -- Name: item_member_votes; Type: TABLE; Schema: public; Owner: undesa; Tablespace: 
 --
 
@@ -999,6 +985,37 @@ CREATE TABLE item_member_votes (
 
 
 ALTER TABLE public.item_member_votes OWNER TO undesa;
+
+--
+-- Name: item_schedule_discussions; Type: TABLE; Schema: public; Owner: undesa; Tablespace: 
+--
+
+CREATE TABLE item_schedule_discussions (
+    schedule_id integer NOT NULL,
+    body_text text,
+    sitting_time time without time zone,
+    language character varying(5) NOT NULL
+);
+
+
+ALTER TABLE public.item_schedule_discussions OWNER TO undesa;
+
+--
+-- Name: item_schedules; Type: TABLE; Schema: public; Owner: undesa; Tablespace: 
+--
+
+CREATE TABLE item_schedules (
+    schedule_id integer NOT NULL,
+    item_id integer NOT NULL,
+    sitting_id integer NOT NULL,
+    planned_order integer,
+    real_order integer,
+    active boolean,
+    item_status character varying(64)
+);
+
+
+ALTER TABLE public.item_schedules OWNER TO undesa;
 
 --
 -- Name: item_sequence; Type: SEQUENCE; Schema: public; Owner: undesa
@@ -1066,23 +1083,6 @@ SELECT pg_catalog.setval('item_votes_vote_id_seq', 1, false);
 
 
 --
--- Name: items_schedule; Type: TABLE; Schema: public; Owner: undesa; Tablespace: 
---
-
-CREATE TABLE items_schedule (
-    schedule_id integer NOT NULL,
-    item_id integer NOT NULL,
-    sitting_id integer NOT NULL,
-    planned_order integer,
-    real_order integer,
-    active boolean,
-    item_status character varying(64)
-);
-
-
-ALTER TABLE public.items_schedule OWNER TO undesa;
-
---
 -- Name: items_schedule_schedule_id_seq; Type: SEQUENCE; Schema: public; Owner: undesa
 --
 
@@ -1100,7 +1100,7 @@ ALTER TABLE public.items_schedule_schedule_id_seq OWNER TO undesa;
 -- Name: items_schedule_schedule_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: undesa
 --
 
-ALTER SEQUENCE items_schedule_schedule_id_seq OWNED BY items_schedule.schedule_id;
+ALTER SEQUENCE items_schedule_schedule_id_seq OWNED BY item_schedules.schedule_id;
 
 
 --
@@ -1987,10 +1987,10 @@ CREATE TABLE sitting_reports (
 ALTER TABLE public.sitting_reports OWNER TO undesa;
 
 --
--- Name: sitting_type; Type: TABLE; Schema: public; Owner: undesa; Tablespace: 
+-- Name: sitting_types; Type: TABLE; Schema: public; Owner: undesa; Tablespace: 
 --
 
-CREATE TABLE sitting_type (
+CREATE TABLE sitting_types (
     sitting_type_id integer NOT NULL,
     sitting_type character varying(40),
     start_time time without time zone NOT NULL,
@@ -1999,7 +1999,7 @@ CREATE TABLE sitting_type (
 );
 
 
-ALTER TABLE public.sitting_type OWNER TO undesa;
+ALTER TABLE public.sitting_types OWNER TO undesa;
 
 --
 -- Name: sitting_type_sitting_type_id_seq; Type: SEQUENCE; Schema: public; Owner: undesa
@@ -2019,7 +2019,7 @@ ALTER TABLE public.sitting_type_sitting_type_id_seq OWNER TO undesa;
 -- Name: sitting_type_sitting_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: undesa
 --
 
-ALTER SEQUENCE sitting_type_sitting_type_id_seq OWNED BY sitting_type.sitting_type_id;
+ALTER SEQUENCE sitting_type_sitting_type_id_seq OWNED BY sitting_types.sitting_type_id;
 
 
 --
@@ -2601,7 +2601,7 @@ ALTER TABLE attached_files ALTER COLUMN attached_file_id SET DEFAULT nextval('at
 -- Name: attendance_id; Type: DEFAULT; Schema: public; Owner: undesa
 --
 
-ALTER TABLE attendance_type ALTER COLUMN attendance_id SET DEFAULT nextval('attendance_type_attendance_id_seq'::regclass);
+ALTER TABLE attendance_types ALTER COLUMN attendance_id SET DEFAULT nextval('attendance_type_attendance_id_seq'::regclass);
 
 
 --
@@ -2668,17 +2668,17 @@ ALTER TABLE holidays ALTER COLUMN holiday_id SET DEFAULT nextval('holidays_holid
 
 
 --
+-- Name: schedule_id; Type: DEFAULT; Schema: public; Owner: undesa
+--
+
+ALTER TABLE item_schedules ALTER COLUMN schedule_id SET DEFAULT nextval('items_schedule_schedule_id_seq'::regclass);
+
+
+--
 -- Name: vote_id; Type: DEFAULT; Schema: public; Owner: undesa
 --
 
 ALTER TABLE item_votes ALTER COLUMN vote_id SET DEFAULT nextval('item_votes_vote_id_seq'::regclass);
-
-
---
--- Name: schedule_id; Type: DEFAULT; Schema: public; Owner: undesa
---
-
-ALTER TABLE items_schedule ALTER COLUMN schedule_id SET DEFAULT nextval('items_schedule_schedule_id_seq'::regclass);
 
 
 --
@@ -2776,7 +2776,7 @@ ALTER TABLE settings ALTER COLUMN setting_id SET DEFAULT nextval('settings_setti
 -- Name: sitting_type_id; Type: DEFAULT; Schema: public; Owner: undesa
 --
 
-ALTER TABLE sitting_type ALTER COLUMN sitting_type_id SET DEFAULT nextval('sitting_type_sitting_type_id_seq'::regclass);
+ALTER TABLE sitting_types ALTER COLUMN sitting_type_id SET DEFAULT nextval('sitting_type_sitting_type_id_seq'::regclass);
 
 
 --
@@ -3347,10 +3347,10 @@ COPY attached_files (attached_file_id, item_id, file_version_id, file_title, fil
 
 
 --
--- Data for Name: attendance_type; Type: TABLE DATA; Schema: public; Owner: undesa
+-- Data for Name: attendance_types; Type: TABLE DATA; Schema: public; Owner: undesa
 --
 
-COPY attendance_type (attendance_id, attendance_type, language) FROM stdin;
+COPY attendance_types (attendance_id, attendance_type, language) FROM stdin;
 1	present	en
 2	absence justified	en
 3	absent	en
@@ -3422,19 +3422,8 @@ COPY committee_types (committee_type_id, committee_type, description, life_span,
 -- Data for Name: committees; Type: TABLE DATA; Schema: public; Owner: undesa
 --
 
-COPY committees (committee_id, committee_type_id, no_members, min_no_members, quorum, no_clerks, no_researchers, proportional_representation, default_chairperson, reinstatement_date) FROM stdin;
+COPY committees (committee_id, committee_type_id, num_members, min_num_members, quorum, num_clerks, num_researchers, proportional_representation, default_chairperson, reinstatement_date) FROM stdin;
 15	2	12	6	5	2	4	t	\N	\N
-\.
-
-
---
--- Data for Name: consignatories; Type: TABLE DATA; Schema: public; Owner: undesa
---
-
-COPY consignatories (item_id, user_id) FROM stdin;
-30	4
-36	4
-37	4
 \.
 
 
@@ -3452,6 +3441,17 @@ COPY constituencies (constituency_id, name, start_date, end_date, language) FROM
 --
 
 COPY constituency_details (constituency_detail_id, constituency_id, date, population, voters) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cosignatories; Type: TABLE DATA; Schema: public; Owner: undesa
+--
+
+COPY cosignatories (item_id, user_id) FROM stdin;
+30	4
+36	4
+37	4
 \.
 
 
@@ -3768,14 +3768,6 @@ COPY holidays (holiday_id, holiday_date, holiday_name, language) FROM stdin;
 
 
 --
--- Data for Name: item_discussion; Type: TABLE DATA; Schema: public; Owner: undesa
---
-
-COPY item_discussion (schedule_id, body_text, sitting_time, language) FROM stdin;
-\.
-
-
---
 -- Data for Name: item_member_votes; Type: TABLE DATA; Schema: public; Owner: undesa
 --
 
@@ -3784,18 +3776,26 @@ COPY item_member_votes (vote_id, member_id, vote) FROM stdin;
 
 
 --
--- Data for Name: item_votes; Type: TABLE DATA; Schema: public; Owner: undesa
+-- Data for Name: item_schedule_discussions; Type: TABLE DATA; Schema: public; Owner: undesa
 --
 
-COPY item_votes (vote_id, item_id, date, affirmative_votes, negative_votes, remarks, language) FROM stdin;
+COPY item_schedule_discussions (schedule_id, body_text, sitting_time, language) FROM stdin;
 \.
 
 
 --
--- Data for Name: items_schedule; Type: TABLE DATA; Schema: public; Owner: undesa
+-- Data for Name: item_schedules; Type: TABLE DATA; Schema: public; Owner: undesa
 --
 
-COPY items_schedule (schedule_id, item_id, sitting_id, planned_order, real_order, active, item_status) FROM stdin;
+COPY item_schedules (schedule_id, item_id, sitting_id, planned_order, real_order, active, item_status) FROM stdin;
+\.
+
+
+--
+-- Data for Name: item_votes; Type: TABLE DATA; Schema: public; Owner: undesa
+--
+
+COPY item_votes (vote_id, item_id, date, affirmative_votes, negative_votes, remarks, language) FROM stdin;
 \.
 
 
@@ -4401,10 +4401,10 @@ COPY sitting_reports (report_id, sitting_id) FROM stdin;
 
 
 --
--- Data for Name: sitting_type; Type: TABLE DATA; Schema: public; Owner: undesa
+-- Data for Name: sitting_types; Type: TABLE DATA; Schema: public; Owner: undesa
 --
 
-COPY sitting_type (sitting_type_id, sitting_type, start_time, end_time, language) FROM stdin;
+COPY sitting_types (sitting_type_id, sitting_type, start_time, end_time, language) FROM stdin;
 1	morning	09:00:00	12:00:00	en
 2	afternoon	13:00:00	18:00:00	en
 3	extraordinary	07:00:00	19:00:00	en
@@ -6407,7 +6407,7 @@ ALTER TABLE ONLY attached_files
 -- Name: attendance_type_pkey; Type: CONSTRAINT; Schema: public; Owner: undesa; Tablespace: 
 --
 
-ALTER TABLE ONLY attendance_type
+ALTER TABLE ONLY attendance_types
     ADD CONSTRAINT attendance_type_pkey PRIMARY KEY (attendance_id);
 
 
@@ -6471,7 +6471,7 @@ ALTER TABLE ONLY committees
 -- Name: consignatories_pkey; Type: CONSTRAINT; Schema: public; Owner: undesa; Tablespace: 
 --
 
-ALTER TABLE ONLY consignatories
+ALTER TABLE ONLY cosignatories
     ADD CONSTRAINT consignatories_pkey PRIMARY KEY (item_id, user_id);
 
 
@@ -6543,7 +6543,7 @@ ALTER TABLE ONLY holidays
 -- Name: item_discussion_pkey; Type: CONSTRAINT; Schema: public; Owner: undesa; Tablespace: 
 --
 
-ALTER TABLE ONLY item_discussion
+ALTER TABLE ONLY item_schedule_discussions
     ADD CONSTRAINT item_discussion_pkey PRIMARY KEY (schedule_id);
 
 
@@ -6567,7 +6567,7 @@ ALTER TABLE ONLY item_votes
 -- Name: items_schedule_pkey; Type: CONSTRAINT; Schema: public; Owner: undesa; Tablespace: 
 --
 
-ALTER TABLE ONLY items_schedule
+ALTER TABLE ONLY item_schedules
     ADD CONSTRAINT items_schedule_pkey PRIMARY KEY (schedule_id);
 
 
@@ -6767,7 +6767,7 @@ ALTER TABLE ONLY sitting_reports
 -- Name: sitting_type_pkey; Type: CONSTRAINT; Schema: public; Owner: undesa; Tablespace: 
 --
 
-ALTER TABLE ONLY sitting_type
+ALTER TABLE ONLY sitting_types
     ADD CONSTRAINT sitting_type_pkey PRIMARY KEY (sitting_type_id);
 
 
@@ -7091,7 +7091,7 @@ ALTER TABLE ONLY committees
 -- Name: consignatories_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: undesa
 --
 
-ALTER TABLE ONLY consignatories
+ALTER TABLE ONLY cosignatories
     ADD CONSTRAINT consignatories_item_id_fkey FOREIGN KEY (item_id) REFERENCES parliamentary_items(parliamentary_item_id);
 
 
@@ -7099,7 +7099,7 @@ ALTER TABLE ONLY consignatories
 -- Name: consignatories_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: undesa
 --
 
-ALTER TABLE ONLY consignatories
+ALTER TABLE ONLY cosignatories
     ADD CONSTRAINT consignatories_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(user_id);
 
 
@@ -7156,7 +7156,7 @@ ALTER TABLE ONLY group_sittings
 --
 
 ALTER TABLE ONLY group_sittings
-    ADD CONSTRAINT group_sittings_sitting_type_id_fkey FOREIGN KEY (sitting_type_id) REFERENCES sitting_type(sitting_type_id);
+    ADD CONSTRAINT group_sittings_sitting_type_id_fkey FOREIGN KEY (sitting_type_id) REFERENCES sitting_types(sitting_type_id);
 
 
 --
@@ -7179,8 +7179,8 @@ ALTER TABLE ONLY groups
 -- Name: item_discussion_schedule_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: undesa
 --
 
-ALTER TABLE ONLY item_discussion
-    ADD CONSTRAINT item_discussion_schedule_id_fkey FOREIGN KEY (schedule_id) REFERENCES items_schedule(schedule_id);
+ALTER TABLE ONLY item_schedule_discussions
+    ADD CONSTRAINT item_discussion_schedule_id_fkey FOREIGN KEY (schedule_id) REFERENCES item_schedules(schedule_id);
 
 
 --
@@ -7211,7 +7211,7 @@ ALTER TABLE ONLY item_votes
 -- Name: items_schedule_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: undesa
 --
 
-ALTER TABLE ONLY items_schedule
+ALTER TABLE ONLY item_schedules
     ADD CONSTRAINT items_schedule_item_id_fkey FOREIGN KEY (item_id) REFERENCES parliamentary_items(parliamentary_item_id);
 
 
@@ -7219,7 +7219,7 @@ ALTER TABLE ONLY items_schedule
 -- Name: items_schedule_sitting_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: undesa
 --
 
-ALTER TABLE ONLY items_schedule
+ALTER TABLE ONLY item_schedules
     ADD CONSTRAINT items_schedule_sitting_id_fkey FOREIGN KEY (sitting_id) REFERENCES group_sittings(sitting_id);
 
 
@@ -7484,7 +7484,7 @@ ALTER TABLE ONLY sessions
 --
 
 ALTER TABLE ONLY sitting_attendance
-    ADD CONSTRAINT sitting_attendance_attendance_id_fkey FOREIGN KEY (attendance_id) REFERENCES attendance_type(attendance_id);
+    ADD CONSTRAINT sitting_attendance_attendance_id_fkey FOREIGN KEY (attendance_id) REFERENCES attendance_types(attendance_id);
 
 
 --
