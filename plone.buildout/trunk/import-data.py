@@ -3,7 +3,7 @@ import urllib
 
 username = 'admin'
 password = 'admin'
-url = 'localhost:8082/site'
+url = 'localhost:8082/plone'
 
 ids_to_transfer = ['front-page', 'have-your-say', 'how-we-work', 'reference-material', 'images']
 
