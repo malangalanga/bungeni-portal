@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+  
+  <body>
+
+       
+    <div metal:fill-slot="main">
+
+   <head>
+
+    <tal:js metal:fill-slot="javascript_head_slot">
+      <script type="text/javascript"
+              tal:attributes="src string:${context/portal_url}/memberlink_az_listing.js"
+              src="">
+      </script>      
+    </tal:js>
+
+    <metal:css fill-slot="css_slot">
+      <style type="text/css" media="all"
+             tal:content="string: @import url($portal_url/memberlink_az_listing.css);"></style>
+
+    </metal:css>    
+  </head>     
+
+   <tal:define define="results
+         python:view.alphabetise();">
+   <ul id="nav">
+     <span tal:omit-tag="" tal:repeat="item results">
+      <li tal:condition="python:not item['items']"
+      tal:content="item/letter" />
+      <li tal:condition="python:item['items']"><a href="#" tal:attributes="href python:'#alpha' + item['letter']" tal:content="item/letter" />
+      <ul>
+          <li tal:repeat="definition python:item['items']"><div><a href="" tal:attributes="href python:definition.getURL()+'/web_pages'" tal:content="definition/Title"></a></div></li>
+      </ul>
+      </li>
+      </span>
+   </ul>
+   <br/>
+   <br/>
+   
+   </tal:define>         
+
+ 
+   
+
+
+      <table class="listing">
+        <thead>
+          <tr>
+            <th i18n:translate="member">Member</th>
+            <th>Web Page Link</th>
+          </tr>
+        </thead>
+            <tbody>
+              <tr tal:repeat="member view/member_folders">
+                <tal:block>
+                  <td>
+                    <div tal:content="member/title"/>
+                  </td>
+                  <td>
+                    <a tal:attributes="href python:member.url +'/web_pages'">
+                    Web Pages</a>
+                  </td>
+                </tal:block>
+              </tr>
+            </tbody>        
+      </table>
+      
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xml:lang="en" lang="en"
+      i18n:domain="plone"
+      metal:use-macro="here/main_template/macros/master">
+
+  <head>
+      <metal:block fill-slot="top_slot">
+        <tal:insert tal:replace="nothing"
+              tal:define="dummy python:request.set('enable_border', 1)" />
+      </metal:block>
+  </head>
+
+  <body>
+
+    <div metal:fill-slot="main">
+      <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+      <h1 class="documentFirstHeading"> 
+          <tal:block condition="exists:here/aq_explicit/widget">
+              <metal:field use-macro="python:here.widget('title', mode='view')">
+              Title
+              </metal:field>
+          </tal:block>
+          <tal:block condition="not:exists:here/aq_explicit/widget">
+              <tal:block replace="structure view/icon" /> 
+              <span tal:content="view/title" tal:omit-tag="">Directory Id</span>
+          </tal:block>
+      </h1>
+
+      <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+      <p class="documentDescription" tal:condition="exists:here/aq_explicit/widget">
+          <metal:field use-macro="python:here.widget('description', mode='view')">
+              Description
+          </metal:field>
+      </p>
+
+      <tal:block condition="not:exists:here/aq_explicit/widget">
+          <p class="documentDescription" 
+                     tal:content="context/Description" 
+                     tal:condition="context/Description"> 
+              Description
+          </p>
+      </tal:block>
+
+    
+<div class="listing"
+           tal:define="groups view/group_workspace_listing">    
+   <span tal:omit-tag="" tal:repeat="item groups">
+     <span tal:omit-tag="" tal:condition="python:item['items']">  
+      
+     <div><b tal:attributes="id python:item['category']"
+           tal:content="item/category"></b>
+        <ul>
+          <span tal:omit-tag="" tal:repeat="definition python:item['items']">
+            <li><a href="" tal:attributes="href python:definition.getURL() + '/selectViewTemplate?templateId=folder_listing'" tal:content="definition/Title"></a></li>
+
+          </span>
+        </ul>
+        <div class="floatright">
+         [<a href="#portal-top">Back</a>]
+        </div>
+        
+        
+     </div>
+     </span>
+   </span>    
+</div>      
+          
+    </div>
+
+
+  </body>
+</html>
