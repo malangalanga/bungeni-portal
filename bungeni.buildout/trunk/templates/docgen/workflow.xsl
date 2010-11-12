@@ -8,16 +8,16 @@
             <xd:p></xd:p>
         </xd:desc>
     </xd:doc>
-    
+    <xsl:output media-type="text/html" method="xhtml"></xsl:output>
     <xsl:template match="workflow">
         <html>
             <head>
                 <title><xsl:value-of select="@title"></xsl:value-of></title>
-                <style>
+                <style type="text/css">
             table {
 	font: 11px/24px Verdana, Arial, Helvetica, sans-serif;
 	border-collapse: collapse;
-	width: 360px;
+	width: 94%;
 	}
 
 th {
@@ -53,8 +53,23 @@ tr.s1 { background-color: #fff; }
 span.ident { font-style:normal; color:gray; }
 span.trig {color:dark-gray;}	
  
+ /** for table of content **/
+ #menu li
+{
+display: inline;
+list-style-type: none;
+padding-right: 20px;
+}
+
+ 
             </style>
             </head>
+            <body>
+            <div id="toc">
+                <a name="table-of-contents"></a>
+                <h1>Table of Contents</h1>
+                TABLE_OF_CONTENT
+            </div>
             <h1><xsl:value-of select="@title"></xsl:value-of> States</h1>
             <xsl:variable name="diagImage">
                 <xsl:value-of select="tokenize(@id,'-')[1]"></xsl:value-of>
@@ -62,21 +77,24 @@ span.trig {color:dark-gray;}
             <p>
             <a href="./{$diagImage}.dot.png" target="_blank">Click here to view the workflow diagram</a>
             </p>
+	     <a href="#table-of-contents">Go to Table of contents</a>   
             <table  border="1">
                 <tr class="yellow"><td>State Name</td><td>Allow</td><td>Deny</td></tr>
                 <xsl:for-each select="./state">
                     <xsl:call-template name="match-state"></xsl:call-template>
                 </xsl:for-each>
             </table>
+
             <h1><xsl:value-of select="@title"></xsl:value-of> Transitions</h1>           
-            
+            <a href="#table-of-contents">Go to Table of contents</a>            
             <table  border="1">
                 <tr class="yellow"><td>Transition Name</td><td>Source</td><td>Destination</td><td>Permission</td><td>Action/Condition</td></tr>
                 <xsl:for-each select="./transition">
                     <xsl:call-template name="match-transition"></xsl:call-template>
                 </xsl:for-each>
             </table>
-            
+	     <a href="#table-of-contents">Go to Table of contents</a>   
+            </body>
         </html>
     </xsl:template>
     
@@ -178,3 +196,4 @@ span.trig {color:dark-gray;}
     </xsl:template>
     
 </xsl:stylesheet>
+
