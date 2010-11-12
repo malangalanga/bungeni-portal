@@ -1,19 +1,16 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '1.0'
-
-setup(name='Products.groupworkspaces',
-      version=version,
-      description="Customization for the Group Workspaces",
+setup(name='Products.workspaces',
+      version="0.1",
+      description="Customization for group and member workspaces",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
-      # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         "Programming Language :: Python",
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
-      keywords='zope2 zope3 bungeni groupworkspaces',
+      keywords='zope2 zope3 bungeni workspaces',
       author='Bungeni Developers',
       author_email='bungeni-dev@goolgegroups.com',
       url='',
