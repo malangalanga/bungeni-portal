@@ -1,40 +1,5 @@
 /*
-cyn.in is an open source Collaborative Knowledge Management Appliance that
-enables teams to seamlessly work together on files, documents and content in
-a secure central environment.
-
-cyn.in v2 an open source appliance is distributed under the GPL v3 license
-along with commercial support options.
-
-cyn.in is a Cynapse Invention.
-
-Copyright (C) 2008 Cynapse India Pvt. Ltd.
-
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free Software
-Foundation, either version 3 of the License, or any later version and observe
-the Additional Terms applicable to this program and must display appropriate
-legal notices. In accordance with Section 7(b) of the GNU General Public
-License version 3, these Appropriate Legal Notices must retain the display of
-the "Powered by cyn.in" AND "A Cynapse Invention" logos. You should have
-received a copy of the detailed Additional Terms License with this program.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
-Public License for more details.
-
-You should have received a copy of the GNU General Public License along with
-this program.  If not, see <http://www.gnu.org/licenses/>.
-
-You can contact Cynapse at support@cynapse.com with any problems with cyn.in.
-For any queries regarding the licensing, please send your mails to
- legal@cynapse.com
-
-You can also contact Cynapse at:
-802, Building No. 1,
-Dheeraj Sagar, Malad(W)
-Mumbai-400064, India
+This overrrides the PloneCustom css defined in ubify.cyninv2theme
 */
 
 /* <dtml-with base_properties> (do not remove this :) */
@@ -94,8 +59,8 @@ body
 }
   /**
    * Fonts
-   * (en) font-family and font-size selection for headings and standard text elements
-   *
+   * (en) font-family and font-size selection for headings
+   * and standard text elements
    * @section content-fonts
    */
 
@@ -276,7 +241,7 @@ acronym, abbr
     border:0;
     border-bottom: 1px #eee solid;
   }
-/************************************************ Fonts Styles Begin **************************************/
+/********************** Fonts Styles Begin **************************/
 .discreet
 ,.listitemvoteholder .ratinglabel
 {
@@ -441,7 +406,6 @@ line-height: 1.6667em; /* 40px */
 ,.recentupdateitemauthorrow
 ,.footersmall
 ,.loginlabel
-,.loginbottomlink
 ,.listitemvoteholder .ratinglabel
 ,.portletNavigationTree div.navaddnewbody
 ,.arrowDownAlternative
@@ -449,8 +413,8 @@ line-height: 1.6667em; /* 40px */
     font-size: 0.8333em; /* 10px */
     line-height: 2em; /* 20px */
 }
-/************************************************ Fonts Styles End **************************************/
-/************************************************ Kupu related begin **************************************/
+/**************************** Fonts Styles End **********************/
+/**************************** Kupu related begin ********************/
 html.kupu-html
 {
     font-size:100.01%;
@@ -543,128 +507,175 @@ span.kupu-tb-buttons button:hover
     background-color:&dtml-ci1co1; !important;
     border-color:&dtml-ci1co4; !important;
 }
-#kupu-editor-text button.kupu-save, #kupu-editor-text button.kupu-save-pressed, button.kupu-save, button.kupu-save-pressed
+#kupu-editor-text button.kupu-save,
+#kupu-editor-text button.kupu-save-pressed,
+button.kupu-save, button.kupu-save-pressed
 {
 background-image: url("&dtml-portal_url;/icon-disk.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-bold, #kupu-editor-text button.kupu-bold-pressed, button.kupu-bold, button.kupu-bold-pressed
+#kupu-editor-text button.kupu-bold,
+#kupu-editor-text button.kupu-bold-pressed,
+button.kupu-bold, button.kupu-bold-pressed
 {
 background-image: url("&dtml-portal_url;/icon-text_bold.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-italic, #kupu-editor-text button.kupu-italic-pressed, button.kupu-italic-pressed, button.kupu-italic
+#kupu-editor-text button.kupu-italic,
+#kupu-editor-text button.kupu-italic-pressed,
+button.kupu-italic-pressed, button.kupu-italic
 {
 background-image: url("&dtml-portal_url;/icon-text_italic.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-outdent, #kupu-editor-text button.kupu-outdent-pressed, button.kupu-outdent, button.kupu-outdent-pressed
+#kupu-editor-text button.kupu-outdent,
+#kupu-editor-text button.kupu-outdent-pressed,
+button.kupu-outdent, button.kupu-outdent-pressed
 {
 background-image: url("&dtml-portal_url;/icon-text_indent_remove.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-indent, #kupu-editor-text button.kupu-indent-pressed, button.kupu-indent-pressed, button.kupu-indent
+#kupu-editor-text button.kupu-indent,
+#kupu-editor-text button.kupu-indent-pressed,
+button.kupu-indent-pressed, button.kupu-indent
 {
 background-image: url("&dtml-portal_url;/icon-text_indent.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-insertorderedlist, #kupu-editor-text button.kupu-insertorderedlist-pressed, button.kupu-insertorderedlist-pressed, button.kupu-insertorderedlist
+#kupu-editor-text button.kupu-insertorderedlist,
+#kupu-editor-text button.kupu-insertorderedlist-pressed,
+button.kupu-insertorderedlist-pressed, button.kupu-insertorderedlist
 {
 background-image: url("&dtml-portal_url;/icon-text_list_numbers.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-insertunorderedlist, #kupu-editor-text button.kupu-insertunorderedlist-pressed, button.kupu-insertunorderedlist-pressed, button.kupu-insertunorderedlist
+#kupu-editor-text button.kupu-insertunorderedlist,
+#kupu-editor-text button.kupu-insertunorderedlist-pressed,
+button.kupu-insertunorderedlist-pressed, button.kupu-insertunorderedlist
 {
 background-image: url("&dtml-portal_url;/icon-text_list_bullets.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-subscript, #kupu-editor-text button.kupu-subscript-pressed, button.kupu-subscript-pressed, button.kupu-subscript
+#kupu-editor-text button.kupu-subscript,
+#kupu-editor-text button.kupu-subscript-pressed,
+button.kupu-subscript-pressed, button.kupu-subscript
 {
 background-image: url("&dtml-portal_url;/icon-text_subscript.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-superscript, #kupu-editor-text button.kupu-superscript-pressed, button.kupu-superscript-pressed, button.kupu-superscript
+#kupu-editor-text button.kupu-superscript,
+#kupu-editor-text button.kupu-superscript-pressed,
+button.kupu-superscript-pressed, button.kupu-superscript
 {
 background-image: url("&dtml-portal_url;/icon-text_superscript.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-justifyleft, #kupu-editor-text button.kupu-justifyleft-pressed, button.kupu-justifyleft-pressed, button.kupu-justifyleft
+#kupu-editor-text button.kupu-justifyleft,
+#kupu-editor-text button.kupu-justifyleft-pressed,
+button.kupu-justifyleft-pressed, button.kupu-justifyleft
 {
 background-image: url("&dtml-portal_url;/icon-text_align_left.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-justifycenter, #kupu-editor-text button.kupu-justifycenter-pressed, button.kupu-justifycenter-pressed, button.kupu-justifycenter
+#kupu-editor-text button.kupu-justifycenter,
+#kupu-editor-text button.kupu-justifycenter-pressed,
+button.kupu-justifycenter-pressed, button.kupu-justifycenter
 {
 background-image: url("&dtml-portal_url;/icon-text_align_center.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-justifyright, #kupu-editor-text button.kupu-justifyright-pressed, button.kupu-justifyright-pressed, button.kupu-justifyright
+#kupu-editor-text button.kupu-justifyright,
+#kupu-editor-text button.kupu-justifyright-pressed,
+button.kupu-justifyright-pressed, button.kupu-justifyright
 {
 background-image: url("&dtml-portal_url;/icon-text_align_right.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-image, #kupu-editor-text button.kupu-image-pressed, button.kupu-image-pressed, button.kupu-image
+#kupu-editor-text button.kupu-image,
+#kupu-editor-text button.kupu-image-pressed,
+button.kupu-image-pressed, button.kupu-image
 {
 background-image: url("&dtml-portal_url;/icon-picture.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-inthyperlink, #kupu-editor-text button.kupu-inthyperlink-pressed, button.kupu-inthyperlink-pressed, button.kupu-inthyperlink
+#kupu-editor-text button.kupu-inthyperlink,
+#kupu-editor-text button.kupu-inthyperlink-pressed,
+button.kupu-inthyperlink-pressed, button.kupu-inthyperlink
 {
 background-image: url("&dtml-portal_url;/icon-link.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-exthyperlink, #kupu-editor-text button.kupu-exthyperlink-pressed, button.kupu-exthyperlink-pressed, button.kupu-exthyperlink
+#kupu-editor-text button.kupu-exthyperlink,
+#kupu-editor-text button.kupu-exthyperlink-pressed,
+button.kupu-exthyperlink-pressed, button.kupu-exthyperlink
 {
 background-image: url("&dtml-portal_url;/icon-world.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-anchors, #kupu-editor-text button.kupu-anchors-pressed, button.kupu-anchors-pressed, button.kupu-anchors
+#kupu-editor-text button.kupu-anchors,
+#kupu-editor-text button.kupu-anchors-pressed,
+button.kupu-anchors-pressed, button.kupu-anchors
 {
 background-image: url("&dtml-portal_url;/icon-anchor.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-table, #kupu-editor-text button.kupu-table-pressed,  button.kupu-table-pressed, button.kupu-table
+#kupu-editor-text button.kupu-table,
+#kupu-editor-text button.kupu-table-pressed,
+button.kupu-table-pressed, button.kupu-table
 {
 background-image: url("&dtml-portal_url;/icon-table.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-undo, #kupu-editor-text button.kupu-undo-pressed, button.kupu-undo-pressed, button.kupu-undo
+#kupu-editor-text button.kupu-undo,
+#kupu-editor-text button.kupu-undo-pressed,
+button.kupu-undo-pressed, button.kupu-undo
 {
 background-image: url("&dtml-portal_url;/icon-arrow_undo.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-redo, #kupu-editor-text button.kupu-redo-pressed, button.kupu-redo-pressed, button.kupu-redo
+#kupu-editor-text button.kupu-redo,
+#kupu-editor-text button.kupu-redo-pressed,
+button.kupu-redo-pressed, button.kupu-redo
 {
 background-image: url("&dtml-portal_url;/icon-arrow_redo.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-source, #kupu-editor-text button.kupu-source-pressed, button.kupu-source-pressed, button.kupu-source
+#kupu-editor-text button.kupu-source,
+#kupu-editor-text button.kupu-source-pressed,
+button.kupu-source-pressed, button.kupu-source
 {
 background-image: url("&dtml-portal_url;/icon-html.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-zoom, #kupu-editor-text button.kupu-zoom-pressed, button.kupu-zoom, button.kupu-zoom-pressed
+#kupu-editor-text button.kupu-zoom,
+#kupu-editor-text button.kupu-zoom-pressed,
+button.kupu-zoom, button.kupu-zoom-pressed
 {
 background-image: url("&dtml-portal_url;/icon-arrow_out.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-zoom-pressed, button.kupu-zoom-pressed
+#kupu-editor-text button.kupu-zoom-pressed,
+button.kupu-zoom-pressed
 {
 background-image: url("&dtml-portal_url;/icon-arrow_in.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-removelink,#kupu-editor-text button.kupu-removelink-pressed, button.kupu-removelink-pressed, button.kupu-removelink
+#kupu-editor-text button.kupu-removelink,
+#kupu-editor-text button.kupu-removelink-pressed,
+button.kupu-removelink-pressed, button.kupu-removelink
 {
 background-image: url("&dtml-portal_url;/icon-link_delete.png") !important;
 background-position:center center !important;
 }
-#kupu-editor-text button.kupu-removeimage,#kupu-editor-text button.kupu-removeimage-pressed, button.kupu-removeimage-pressed, button.kupu-removeimage
+#kupu-editor-text button.kupu-removeimage,
+#kupu-editor-text button.kupu-removeimage-pressed,
+button.kupu-removeimage-pressed, button.kupu-removeimage
 {
 background-image: url("&dtml-portal_url;/icon-picture_delete.png") !important;
 background-position:center center !important;
 }
-/************************************************ Kupu related end **************************************/
-/************************************************ Forms begin ******************************************/
+/**************************** Kupu related end **********************/
+/**************************** Forms begin ***************************/
 .formHelp
 {
         text-align:left;
@@ -781,8 +792,8 @@ background-position:center center !important;
         float:left;
         margin: 0 .8333em 0 0;
 }
-/************************************************ Forms end ******************************************/
-/************************************************ Admin screens begin ******************************************/
+/****************************** Forms end ***************************/
+/****************************** Admin screens begin *****************/
 .configletsgroupcontainer
 {
         overflow:hidden;
@@ -801,9 +812,9 @@ ul.configlets
     width:100%;
     overflow:hidden;
 }
-/************************************************ Admin screens end ******************************************/
+/**************************** Admin screens end *********************/
 
-/************************************************ Popups begin ******************************************/
+/**************************** Popups begin **************************/
 body.popup
 {
     text-align:left;
@@ -832,8 +843,8 @@ tr.even:hover
 {
     background-color:&dtml-ci1co2;;
 }
-/************************************************ Popups end ******************************************/
-/***************************************************************Top Bar Starts*************************/
+/***************************** Popups end ***************************/
+/*****************************Top Bar Starts*************************/
 #discussiontextarea
 {
     min-height:52px;
@@ -989,8 +1000,8 @@ padding:0 1em 0 0;
   margin-right: 10px;
 }
 
-/***************************************************************Top Bar Ends*************************/
-/***************************************************************Add new box begin*************************/
+/*********************************Top Bar Ends***********************/
+/*********************************Add new box begin******************/
 #addnewmenuholder
 ,#addnewcollectionholder
 ,#addnewspaceholder
@@ -1034,8 +1045,8 @@ padding:0 1em 0 0;
 .addnewtypedescription
 {
 }
-/***************************************************************Add new box end*************************/
-/*********************************************** Images view begin *******************************************/
+/********************************Add new box end*********************/
+/******************************* Images view begin ******************/
 .gallerymainholder
 {
     padding:0 1em;
@@ -1237,8 +1248,8 @@ padding:0 1em 0 0;
 	clear:both;
 	visibility:hidden;
 }
-/*********************************************** Images view end *******************************************/
-/*********************************************** Calendars view begin ***************************************/
+/********************* Images view end ******************************/
+/**************** **** Calendars view begin *************************/
 .p4acalendar
 {
     padding:0 1em 2.5em;
@@ -1512,8 +1523,8 @@ padding:0 1em 0 0;
 }
 /* end eventlist */
 
-/*********************************************** Calendar view end ***************************************/
-/*********************************************** Wikis View begin ***************************************/
+/******************* Calendar view end *******************************/
+/******************* Wikis View begin ********************************/
 #setnewdefaultwikipageholder
 {
     background:&dtml-ci4co1;;
@@ -1572,8 +1583,8 @@ dl#comcynapsecyninlisting
 {
     max-height:none;
 }
-/*********************************************** Wikis View end ***************************************/
-/*********************************************** Files View begin ***************************************/
+/*********************** Wikis View end *****************************/
+/*********************** Files View begin ***************************/
 .listingfiledescrow a img
 {
     vertical-align:text-bottom;
@@ -1582,8 +1593,8 @@ dl#comcynapsecyninlisting
 {
         white-space:nowrap;
 }
-/*********************************************** Files View end ***************************************/
-/*********************************************** Blog View begin ***************************************/
+/************************ Files View end ****************************/
+/************************ Blog View begin ***************************/
 .tileItem.contenttype-blog-entry
 {
         overflow:hidden;
@@ -1653,8 +1664,8 @@ dl#comcynapsecyninlisting
 {
     text-align:right;
 }
-/*********************************************** Blog View end ***************************************/
-/*********************************************** Statuslog View begin ***************************************/
+/********************** Blog View end *******************************/
+/********************** Statuslog View begin ************************/
 .statusavatarblock
 {
     float:right;
@@ -1701,8 +1712,8 @@ dl#comcynapsecyninlisting
 {
     margin-top:1em;
 }
-/*********************************************** Statuslog View end ***************************************/
-/*********************************************** Folder Contents View begin ***************************************/
+/************************* Statuslog View end ***********************/
+/************************* Folder Contents View begin ***************/
 .hiddenStructure
 {
 	-moz-background-clip:border;
@@ -1737,8 +1748,8 @@ th
     text-align:left;
     margin-bottom:1.6667em;
 }
-/*********************************************** Folder Contents View end ***************************************/
-/************************************************ Float Related Begin **************************************/
+/********************** Folder Contents View end ********************/
+/********************** Float Related Begin *************************/
 .cfloatleft
 ,._tag_suggestion
 ,#topmenuholder
@@ -1838,8 +1849,8 @@ th
 {
  overflow:hidden;
 }
-/************************************************ Float Related END **************************************/
-/************************************************ BUTTONS Begin **************************************/
+/********************** Float Related END ****************************/
+/********************** BUTTONS Begin ********************************/
 .smallgraybutton
 {
     background: &dtml-cigray8; url("&dtml-portal_url;/g-gray5-8-s.gif") repeat-x left top;
@@ -2471,8 +2482,8 @@ ul.help_menu.clickMenu li.main
         overflow:visible;
         height:1.6667em;
 }
-/************************************************ PORTLETS END **************************************/
-/************************************************ CONTENT AREA BEGIN **************************************/
+/************************* PORTLETS END *****************************/
+/************************* CONTENT AREA BEGIN ***********************/
 #portal-titlebar
 {
  background: &dtml-cigray9; url("&dtml-portal_url;/g-gray7-9-l.gif") repeat-x left top;
@@ -2542,8 +2553,8 @@ h1#maintitle
  padding:4px 5px;
  color:&dtml-ciwhite;;
 }
-/************************************************ CONTENT AREA END **************************************/
-/************************************************ FILTER PANEL BEGIN **************************************/
+/******************** CONTENT AREA END ******************************/
+/******************** FILTER PANEL BEGIN ****************************/
 #filterpanelholder
 {
         margin:0 .8333em .8333em .8333em ;
@@ -2706,7 +2717,7 @@ padding-left:2px;
 {
     width:25em;
 }
-/************************************************ FILTER PANEL END **************************************/
+/*********************** FILTER PANEL END ***************************/
 .maincontentarea
 {
     overflow:hidden;
@@ -2717,7 +2728,7 @@ padding-left:2px;
 {
     background:&dtml-ci1co1;;
 }
-/************************************************ ALL UPDATES BEGIN **************************************/
+/******************* ALL UPDATES BEGIN ******************************/
 .listitemspecificdetail
 {
     text-align:center;
@@ -3032,7 +3043,6 @@ label
 ,.viewnavigation-button
 ,.defaultwikipagelinksrow a
 ,.usersearchlink
-,.cyninsmallcolophon
 ,.descriptiontoggle
 ,.integrationbutton
 ,a.context
@@ -3094,7 +3104,6 @@ input.smallwhitebutton
 ,.paging_bar span a
 ,.viewnavigation-button
 ,.defaultwikipagelinksrow a
-,.cyninsmallcolophon a
 ,.integrationbutton
 {
     padding-bottom:0.1818em;
@@ -3127,8 +3136,8 @@ input.smallwhitebutton
     text-align:center;
     margin-top:1em;
 }
-/************************************************ ALL UPDATES END **************************************/
-/************************************************ SINGLE ITEM VIEW BEGIN **************************************/
+/************************ ALL UPDATES END ***************************/
+/************************ SINGLE ITEM VIEW BEGIN ********************/
 .linkblocklist
 {
     margin:0;
@@ -3355,8 +3364,8 @@ input.smallwhitebutton
 {
 }
 /*edit user profile end*/
-/************************************************ SINGLE ITEM SCREENS END **************************************/
-/************************************************ LOGIN SCREENS BEGIN **************************************/
+/******************** SINGLE ITEM SCREENS END ***********************/
+/******************** LOGIN SCREENS BEGIN ***************************/
 .whitebutton.loginbutton
 {
         float:right;
@@ -3412,19 +3421,17 @@ body.template-login_form
 .loginbannerarea
 {
     overflow:hidden;
-    height:100px;
+    height:10px;
     margin: 1em;
 }
 .loginbottompart
 {
-        margin:0 1em;
+    margin:0 1em;
+    height: 30px
 }
 .loginboxlogo
 {
-        margin-right:1em;
-        float:left;
-        width:200px;
-        height:100px;
+        display: none;
 }
 .loginboxsitetitle
 {
@@ -3442,21 +3449,21 @@ body.template-login_form
 .logininputtext
 ,.passwordinputtext
 {
-        background: &dtml-ci2co2;;
+        background: #fdce8c;
         padding:4px;
         font-size:16px;
-        border-color:&dtml-ci2co5; !important;
+        border-color:#444444; !important;
         width:135px;
 
 }
 .logininputtext:focus
 ,.passwordinputtext:focus
 {
-        background: &dtml-ci2co1;;
+        background: #fbf0ca;
 }
 .loginboxmainforminner
 {
-        background: &dtml-ci2co4; url("&dtml-portal_url;/g-color2-3-4-m.gif") repeat-x left top;
+        background: #F9AC32;
         color:&dtml-ciwhite;;
         border-color:&dtml-ci2co5;;
         border-width:1px;
@@ -3467,7 +3474,7 @@ body.template-login_form
 }
 .loginlabel
 {
-        color:&dtml-cigray1;;
+        color:#444444;
 }
 .loginlabel
 {
@@ -3482,19 +3489,12 @@ body.template-login_form
 }
 .cyninsmallcolophon
 {
-        border-style:solid solid none solid;
-        width:60%;
-        margin:0 auto;
-        border-color:&dtml-cigray7;;
+        display: none;
 }
-.cyninsmallcolophon a
-{
-        color:&dtml-cigray7;;
-}
+
 .loginbottomlinks
 {
-        padding:.4167em 0;
-        color:&dtml-cigray6;;
+    display: none;
 }
 .loginbottomlink
 {
@@ -3524,8 +3524,8 @@ body.template-login_form
 {
         text-align:left;
 }
-/************************************************ LOGIN SCREENS END **************************************/
-/*********************************************** Popups begin ********************************************/
+/*********************** LOGIN SCREENS END **************************/
+/*********************** Popups begin *******************************/
 /*syndication begin*/
 .syndicationfeedsmaincontainer
 {
@@ -3640,9 +3640,8 @@ div.paragraph
         margin:0.4167em 0;
 }
 /*bookmarklet end*/
-/*********************************************** Popups end ********************************************/
-
-/****************************************************** CLICK MENU BEGIN **********************************/
+/*************************** Popups end *****************************/
+/*************************** CLICK MENU BEGIN ***********************/
 div.cmDiv
 {
 }
@@ -3938,8 +3937,8 @@ ul#contentActionMenus .actionMenuContent li {
     min-height:2.5em;
     padding-left:.5em;
 }
-/****************************************************** CLICK MENU END **********************************/
-/****************************************************** LIVE SEARCH BEGIN ******************************************/
+/************************** CLICK MENU END **************************/
+/************************** LIV**************************************/
 .LSResult
 {
  position:relative;
@@ -4024,8 +4023,8 @@ div.LSIEFix
 {
  clear:both;
 }
-/****************************************************** LIVE SEARCH END ******************************************/
-/****************************************************** BREADCRUMBS BEGIN ******************************************/
+/*********************** LIVE SEARCH END ****************************/
+/*********************** BREADCRUMBS BEGIN **************************/
 .appviewbreadcrumb
 {
 }
@@ -4079,7 +4078,7 @@ div.LSIEFix
     color:&dtml-cigray5;;
     float:left;
 }
-/****************************************************** BREADCRUMBS END ******************************************/
+/*********************** BREADCRUMBS END ****************************/
 /*footer begin*/
 .newversionavailable
 {
@@ -4622,7 +4621,7 @@ dl.searchResults
         color:&dtml-cigray8;;
 }
 /*search results end*/
-/****************************************************** FOOTER ACTIONS BLOCK BEGIN **************************************/
+/****************** FOOTER ACTIONS BLOCK BEGIN **********************/
 .footeractions
 {
     margin:.8333em 0em;
@@ -4633,8 +4632,8 @@ dl.searchResults
         margin-bottom:.25em;
         float:left;
 }
-/****************************************************** FOOTER ACTIONS BLOCK END **************************************/
-/****************************************************** ROUNDED CORNERS BEGIN ******************************************/
+/******************* FOOTER ACTIONS BLOCK END ***********************/
+/******************* ROUNDED CORNERS BEGIN **************************/
 .roundnone
 ,.homepagefullcontainer .portletWrapper
 {
@@ -4758,7 +4757,6 @@ dl.searchResults
 ,.avatartips .infotiptitle
 ,.editformheaderlegend.opened
 ,.ui-tabs-nav li.horizontaltab a
-,.cyninsmallcolophon
 ,.menu-gray-img
 {
  -moz-border-radius-topleft:5px;
@@ -4906,9 +4904,9 @@ dl.searchResults
  -moz-border-radius:2px;
  -webkit-border-radius:2px;
 }
-/****************************************************** ROUNDED CORNERS END ******************************************/
+/********************* ROUNDED CORNERS END **************************/
 
-/****************************************************** HOVERS BEGIN******************************************/
+/********************* HOVERS BEGIN**********************************/
 .cursorpointer
 ,.biggerlink.hot
 ,.forcelink.hot
@@ -4983,7 +4981,6 @@ input.inputLabelActive
 ,.defaultwikipagelinksrow a:hover
 ,.ui-tabs-nav li a:hover
 ,a.whitebutton:hover
-,.cyninsmallcolophon.hover
 ,.descriptiontoggle:hover
 ,.integrationbutton.hover
 ,.LSRow a:hover
@@ -5024,7 +5021,6 @@ input.inputLabelActive
 }
 .portletNavigationTree div.hover a
 ,.navTreeHome.hover a
-,.cyninsmallcolophon.hover a
 ,.integrationbutton.hover a
 {
 	color:&dtml-ci1co4;;
@@ -5034,7 +5030,7 @@ input.inputLabelActive
 {
         color:&dtml-ci1co3;;
 }
-/****************************************************** HOVERS END******************************************/
+/*********************** HOVERS END**********************************/
 /*kss begin*/
 .hidden
 {
@@ -5077,7 +5073,7 @@ input.inputLabelActive
 }
 
 /*kss end*/
-/***************************************************************autocomplete *************************/
+/*******************autocomplete ************************************/
 .ac_results {
     padding: 0px;
     border: 1px solid black;
@@ -5127,13 +5123,13 @@ input.inputLabelActive
     background-color: #0A246A;
     color: white;
 }
-/***************************************************************autocomplete *************************/
-/***************************************************************Customize Page ***********************/
+/*********************************autocomplete **********************/
+/*********************************Customize Page ********************/
 .customcolumn3
 {
     width:33%;
 }
-/***************************************************************Customize Page ***********************/
+/*********************************Customize Page ********************/
 .clearboth
 {
     clear:both;
@@ -5152,6 +5148,6 @@ margin-left:0;
 {
 padding-bottom:1.8333em;
 }
-/*-------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------*/
 /* </dtml-with> */
 
