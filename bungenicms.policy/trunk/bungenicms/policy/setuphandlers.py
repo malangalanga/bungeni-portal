@@ -102,5 +102,6 @@ def setup_folders(context):
     portal = context.getSite()
     for name in ("news", "events", "Members"):
         if name in portal.objectIds():
-            portal.manage_delObjects(name)
-            logger.info("Deleted %s folder" % name)
+            portal[name].setExcludeFromNav(True)
+            portal[name].update()
+            logger.info("Hiding %s folder from the main navbar" % name)
