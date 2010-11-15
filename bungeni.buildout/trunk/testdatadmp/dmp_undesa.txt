@@ -1198,15 +1198,15 @@ CREATE TABLE users (
 ALTER TABLE public.users OWNER TO undesa;
 
 --
--- Name: users_parliementary_items; Type: TABLE; Schema: public; Owner: domash; Tablespace: 
+-- Name: users_parliamentary_items; Type: TABLE; Schema: public; Owner: domash; Tablespace: 
 --
 
-CREATE TABLE users_parliementary_items (
+CREATE TABLE users_parliamentary_items (
     users_id integer,
     parliamentary_items_id integer
 );
 
-ALTER TABLE public.users_parliementary_items OWNER TO undesa;
+ALTER TABLE public.users_parliamentary_items OWNER TO undesa;
 
 --
 -- Name: venues; Type: TABLE; Schema: public; Owner: undesa; Tablespace: 
@@ -7573,19 +7573,19 @@ ALTER TABLE ONLY users
     ADD CONSTRAINT users_current_nationality_fkey FOREIGN KEY (current_nationality) REFERENCES countries(country_id);
 
 --
--- Name: users_parliementary_items_parliamentary_items_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: undesa
+-- Name: users_parliamentary_items_parliamentary_items_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: undesa
 --
 
-ALTER TABLE ONLY users_parliementary_items
-    ADD CONSTRAINT users_parliementary_items_parliamentary_items_id_fkey FOREIGN KEY (parliamentary_items_id) REFERENCES parliamentary_items(parliamentary_item_id);
+ALTER TABLE ONLY users_parliamentary_items
+    ADD CONSTRAINT users_parliamentary_items_parliamentary_items_id_fkey FOREIGN KEY (parliamentary_items_id) REFERENCES parliamentary_items(parliamentary_item_id);
 
 
 --
--- Name: users_parliementary_items_users_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: undesa
+-- Name: users_parliamentary_items_users_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: undesa
 --
 
-ALTER TABLE ONLY users_parliementary_items
-    ADD CONSTRAINT users_parliementary_items_users_id_fkey FOREIGN KEY (users_id) REFERENCES users(user_id);
+ALTER TABLE ONLY users_parliamentary_items
+    ADD CONSTRAINT users_parliamentary_items_users_id_fkey FOREIGN KEY (users_id) REFERENCES users(user_id);
 
 --
 -- Name: public; Type: ACL; Schema: -; Owner: undesa
