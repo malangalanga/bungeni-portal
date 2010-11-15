@@ -10,8 +10,11 @@
 ##
 
 from Products.CMFPlone import PloneMessageFactory as _
+from Products.CMFCore.utils import getToolByName
 from DateTime import DateTime
+from Products.workspaces.utilities import createUserWorkspace
 import ZTUtils
+
 
 REQUEST = context.REQUEST
 
@@ -22,8 +25,7 @@ if membership_tool.isAnonymousUser():
     util.addPortalMessage(_(u'Login failed'), 'error')
     return state.set(status='failure')
 
-# always redirect to the home page.
-came_from = context.portal_url()
+came_from = REQUEST.URL2
 return REQUEST.RESPONSE.redirect(came_from)
 
 state.set(came_from=came_from)
