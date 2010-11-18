@@ -312,7 +312,7 @@ class BungeniConfigs:
         if strURL.startswith('http') or strURL.startswith('ftp'):
             return 'wget %(download_url)s' % {'download_url': strURL}
         else:
-            return 'cp %(file_path)s ' % {'file_path': strURL}
+            return 'cp %(file_path)s .' % {'file_path': strURL}
 
 
 class Presetup:
