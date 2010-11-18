@@ -393,7 +393,7 @@ class Presetup:
         run('mkdir -p ' + self.cfg.python_imaging_build_path)
         with cd(self.cfg.python_imaging_build_path):
             run('rm -rf ' + self.cfg.python_imaging_download_file)
-            run('wget ' + self.cfg.python_imaging_download_url)
+            run(self.cfg.python_imaging_download_command)
             run('rm -rf ' + self.cfg.python_imaging_src_dir)
             run('tar xvzf ' + self.cfg.python_imaging_download_file)
             with cd(self.cfg.python_imaging_src_dir):
