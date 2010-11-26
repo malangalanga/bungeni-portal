@@ -12,7 +12,7 @@ import sys
 from dateutil import relativedelta
 import datetime, calendar
 from zope import interface
-from zope.viewlet import manager
+from zope.viewlet import manager, viewlet
 from zope.app.pagetemplate import ViewPageTemplateFile
 
 from zope.formlib import form
@@ -35,10 +35,10 @@ from bungeni.ui.tagged import get_states
 from bungeni.ui import browser
 from bungeni.ui import z3evoque
 from bungeni.ui import table
-from bungeni.ui.utils import queries, statements, url, misc, debug
+from bungeni.ui.utils import queries, statements, url, misc, debug, date
 
 from fields import BungeniAttributeDisplay
-from interfaces import ISubFormViewletManager
+from interfaces import ISubFormViewletManager, ISubformRssSubscriptionViewletManager
 
 
 ''' XXX-INFO-FOR-PLONE - MR - 2010-05-03
@@ -93,17 +93,18 @@ class UserIdViewlet(browser.BungeniViewlet):
 '''
 
 
-# SubformViewlets
-# !+BungeniViewlet(mr) make these inherit from BungeniViewlet
+# !+SubformViewlet(mr, oct-2010) in this usage case this this should really
+# be made to inherit from browser.BungeniViewlet (but, note that
+# table.AjaxContainerListing already inherits from BungeniBrowserView). 
 
 class SubFormViewletManager(manager.WeightOrderedViewletManager):
     """Display subforms.
     """
     interface.implements(ISubFormViewletManager)
-    
+
     def filter(self, viewlets):
-         viewlets = super(SubFormViewletManager, self).filter(viewlets)
-         return [ (name, viewlet)
+        viewlets = super(SubFormViewletManager, self).filter(viewlets)
+        return [ (name, viewlet)
                   for name, viewlet in viewlets
                   if viewlet.for_display == True ]
 
@@ -113,10 +114,10 @@ class SubformViewlet(table.AjaxContainerListing):
     """
     # evoque
     render = z3evoque.ViewTemplateFile("container.html#generic_sub")
-    
+
     # zpt
     #render = ViewPageTemplateFile("templates/generic-sub-container.pt")
-    
+
     def __init__(self, context, request, view, manager):
         # The parent for SubformViewlets is the context (not the view)
         self.__parent__ = context
@@ -127,27 +128,53 @@ class SubformViewlet(table.AjaxContainerListing):
         # return getattr(self, '_parent', self.context)
         self.request = request
         self.manager = manager
-    
+
     sub_attr_name = None
     @property
     def context(self):
         return getattr(self._context, self.sub_attr_name)
-    
+
     @property
     def view_name(self):
         return self.sub_attr_name # self.context.__name__
-    
+
     @property
     def for_display(self):
         return len(self.context) > 0
 
 
+class SubformRssSubscriptionViewletManager(manager.WeightOrderedViewletManager):
+    """ Displays rss subscription data 
+    """
+    interface.implements(ISubformRssSubscriptionViewletManager)
+
+
+class RssLinkViewlet(viewlet.ViewletBase):
+    """ Simply renders link for users to subscribe
+        to the current paliamentary item
+    """
+    render = ViewPageTemplateFile("templates/rss_link.pt")
+
+    @property
+    def already_subscribed(self):
+        """ Checks if user has already
+            subscribed to the current
+            item
+        """
+        session = Session()
+        user = session.query(domain.User).filter(domain.User.login == self.request.principal.id).first()
+        # If we've hot found the user we should not allow to subscribe
+        if user is None:
+            return True
+        return removeSecurityProxy(self.context) in user.subscriptions
+
+
 class SessionViewlet(SubformViewlet):
     sub_attr_name = "sessions"
 
-class ConsignatoryViewlet(SubformViewlet):
-    sub_attr_name = "consignatory"
-    
+class CosignatoryViewlet(SubformViewlet):
+    sub_attr_name = "cosignatory"
+
 class GovernmentViewlet(SubformViewlet):
     sub_attr_name = "governments"
 
@@ -179,9 +206,6 @@ class AssignedItemsViewlet(SubformViewlet):
 class AssignedGroupsViewlet(SubformViewlet):
     sub_attr_name = "assignedgroups"
 
-class SittingsViewlet(SubformViewlet):
-    sub_attr_name = "sittings"
-
 class MinistriesViewlet(SubformViewlet):
     sub_attr_name = "ministries"
 
@@ -212,9 +236,9 @@ class PersonInfo(BungeniAttributeDisplay):
     """
     for_display = True
     mode = "view"
-    
+
     form_name = _(u"Personal Info")
-    
+
     def __init__(self, context, request, view, manager):
         self.context = context
         self.request = request
@@ -223,7 +247,7 @@ class PersonInfo(BungeniAttributeDisplay):
         self.query = None
         md = queryModelDescriptor(domain.User)
         self.form_fields = md.fields #.select("user_id", "start_date", "end_date")
-    
+
     def update(self):
         user_id = self.context.user_id
         parent = self.context.__parent__
@@ -275,12 +299,12 @@ class ParliamentMembershipInfo(BungeniAttributeDisplay):
 '''
 
 class ParliamentaryItemMinutesViewlet(BungeniAttributeDisplay):
-    
+
     mode = "view"
     for_display = True
-    
+
     form_name = _(u"Minutes")
-    
+
     def __init__(self, context, request, view, manager):
         self.request = request
         self.context = context
@@ -291,16 +315,16 @@ class ParliamentaryItemMinutesViewlet(BungeniAttributeDisplay):
         except AttributeError:
             self.for_display = False
             return
-        self.query = Session().query(domain.ScheduledItemDiscussion).filter(
+        self.query = Session().query(domain.ItemScheduleDiscussion).filter(
             sql.and_(
-                domain.ScheduledItemDiscussion.schedule_id == \
+                domain.ItemScheduleDiscussion.schedule_id == \
                     domain.ItemSchedule.schedule_id,
                 domain.ItemSchedule.item_id == item_id
             )
         )
         #self.context = self.query.all()[0]
         self.for_display = self.query.count() > 0
-    
+
     def update(self):
         parent = self.context.__parent__
         try:
@@ -308,18 +332,18 @@ class ParliamentaryItemMinutesViewlet(BungeniAttributeDisplay):
         except IndexError:
             self.context = None
             return
-        
+
         self.context.__parent__ = parent
         super(ParliamentaryItemMinutesViewlet, self).update()
 
 
 class InitialQuestionsViewlet(BungeniAttributeDisplay):
     form_name = (u"Initial Questions")
-    
+
     @property
     def for_display(self):
         return self.context.supplement_parent_id is not None
-    
+
     def update(self):
         if self.context.supplement_parent_id is None:
             self.context = self.__parent__
@@ -387,18 +411,18 @@ class ResponseViewlet(BungeniAttributeDisplay):
 
 
 class GroupMembersViewlet(browser.BungeniItemsViewlet):
-    
+
     # evoque
     render = z3evoque.ViewTemplateFile("workspace_viewlets.html#group_members")
-    
+
     view_title = "Members"
     view_id = "group-members"
-    
+
     def _get_members(self):
         """Get the list of members of the context group.
         """
         raise NotImplemented
-    
+
     def update(self):
         session = Session()
         members = self._get_members()
@@ -411,7 +435,7 @@ class GroupMembersViewlet(browser.BungeniItemsViewlet):
         formatter = self.get_date_formatter("date", "long")
         self.items = [{
                 "fullname": m.user.fullname,
-                "url": 
+                "url":
                     "/members/current/obj-%s/" % (user_mp_id_map[m.user_id]),
                 "start_date":
                     m.start_date and formatter.format(m.start_date) or None,
@@ -422,39 +446,96 @@ class GroupMembersViewlet(browser.BungeniItemsViewlet):
         ]
 
 class CommitteeMembersViewlet(GroupMembersViewlet):
-    
+
     def _get_members(self):
         session = Session()
-        return [ m for m in 
+        return [ m for m in
             session.query(domain.CommitteeMember).filter(
                 domain.CommitteeMember.group_id == self.context.committee_id
             ).all()
         ]
-    
+
 class PoliticalGroupMembersViewlet(GroupMembersViewlet):
-    
+
     def _get_members(self):
         pg = removeSecurityProxy(self.context)
         session = Session()
         dkls = domain.PartyMember # !+domain.PoliticalGroupMember
-        return [ m for m in 
+        return [ m for m in
             session.query(dkls).filter(dkls.group_id == pg.group_id).all()
         ]
     # !+domain.PoliticalGroupMember(mr, oct-2010) is not defined
-    # !+IPoliticalGroup(mr, oct-2010) is not explicitly defined
+
+
+class GroupSittingsViewlet(browser.BungeniItemsViewlet):
+    """Display the sittings of a group. 
+    
+    Note 1: to be able to customize the URL for each sitting, this custom 
+    viewlet replaces the previous model-introspected container listing:
+        class GroupSittingsViewlet(SubformViewlet):
+            sub_attr_name = "sittings"
+    so replacing a url of the form: 
+            .../committees/obj-59/sittings/obj-17/
+    with:   /business/sittings/obj-17
+    
+    Note 2: this viewlet should probably be merged or better share the 
+    implementation at: ui.workspace.DraftSittingsViewlet
+    
+    !+CustomListingURL(mr, oct-2010) an alternative way to do this is to 
+    essentially stuff all the logic below into a custom column_listing to be 
+    used when listing the column -- for an example of this see how the 
+    listing of the column "owner_id" (moved by) is configured in:
+    descriptor.ParliamentaryItemDescriptor
+    
+    !+ManagedContainer(mr, oct-2010) this would have been a lot simpler if
+    the Group.sittings attribute was simply returning the list of sitting
+    objects.
+    """
+
+    # evoque
+    render = z3evoque.ViewTemplateFile("workspace_viewlets.html#group_sittings")
+
+    view_title = "Sittings"
+    view_id = "sittings"
+
+    def _get_items(self):
+        def _format_from_to(item):
+            start = item.start_date
+            if start:
+                start = dt_formatter.format(start)
+            end = item.end_date
+            if end:
+                end = t_formatter.format(end)
+            return u"%s - %s" % (start, end)
+        dt_formatter = self.get_date_formatter("dateTime", "medium")
+        t_formatter = self.get_date_formatter("time", "medium")
+        def _format_venue(item):
+            return item.venue and _(item.venue.short_name) or ""
+        #
+        trusted_context = removeSecurityProxy(self.context)
+        sittings = Session().query(domain.GroupSitting
+            ).filter(domain.GroupSitting.group == trusted_context
+            ).order_by(domain.GroupSitting.start_date.desc())
+        return [{"url": "/business/sittings/obj-%s" % (item.sitting_id),
+                 "date_from_to": _format_from_to(item),
+                 "venue": _format_venue(item)
+                } for item in sittings ]
+
+    def update(self):
+        self.items = self._get_items()
 
 
 class OfficesHeldViewlet(browser.BungeniItemsViewlet):
 
     # evoque
     render = z3evoque.ViewTemplateFile("workspace_viewlets.html#offices_held")
-    
+
     # zpt
     #render = ViewPageTemplateFile("templates/offices_held_viewlet.pt")
-    
+
     view_title = "Offices held"
     view_id = "offices-held"
-    
+
     def _get_items(self):
         formatter = self.get_date_formatter("date", "long")
         trusted = removeSecurityProxy(self.context)
@@ -490,10 +571,10 @@ class OfficesHeldViewlet(browser.BungeniItemsViewlet):
                 title["end_date"] = formatter.format(oh[7])
             office_list.append(title)
         return office_list
-    
+
     def update(self):
         self.items = self._get_items()
-    
+
 
 
 class TimeLineViewlet(browser.BungeniItemsViewlet):
@@ -505,10 +586,10 @@ class TimeLineViewlet(browser.BungeniItemsViewlet):
     """
     # evoque
     render = z3evoque.ViewTemplateFile("workspace_viewlets.html#timeline")
-    
+
     # zpt
     #render = ViewPageTemplateFile("templates/timeline_viewlet.pt")
-    
+
     # sqlalchemy give me a rough time sorting a union, 
     # with hand coded sql it is much easier.
     # !+ get rid of the hard-coded sql
@@ -518,14 +599,14 @@ class TimeLineViewlet(browser.BungeniItemsViewlet):
     )
     view_title = "Timeline"
     view_id = "unknown-timeline"
-    
+
     def __init__(self, context, request, view, manager):
         super(TimeLineViewlet, self).__init__(context, request, view, manager)
         self.formatter = self.get_date_formatter("dateTime", "medium")
-    
+
     def handle_event_add_action(self, action, data):
         self.request.response.redirect(self.addurl)
-    
+
     def update(self):
         """Refresh the query.
         """
@@ -538,7 +619,7 @@ class TimeLineViewlet(browser.BungeniItemsViewlet):
             except (SyntaxError, TypeError, AssertionError):
                 #debug.log_exc(sys.exc_info(), log_handler=log.info)
                 return {}
-        
+
         # NOTE: only *Change records have a "notes" dict attribute and the 
         # content of this depends on the value of "atype" (see core/audit.py)
         item_id = self.context.parliamentary_item_id
@@ -546,7 +627,7 @@ class TimeLineViewlet(browser.BungeniItemsViewlet):
                               adate=date, notes=_eval_as_dict(notes))
                 for action, piid, desc, date, notes in
                 queries.execute_sql(self.sql_timeline, item_id=item_id) ]
-        
+
         # Filter out workflow draft items for anonymous users
         if get_principal_id() in ("zope.anybody",):
             _draft_states = ("draft", "working_draft")
@@ -557,7 +638,7 @@ class TimeLineViewlet(browser.BungeniItemsViewlet):
                 return True
             self.items = [ item for item in self.items
                              if show_timeline_item(item) ]
-        
+
         #change_cls = getattr(domain, "%sChange" % (self.context.__class__.__name__))
         for r in self.items:
             # workflow
@@ -630,16 +711,16 @@ class MemberItemsViewlet(browser.BungeniItemsViewlet):
         get_states("motion", tagged=["public"]) + \
         get_states("question", tagged=["public"]) + \
         get_states("tableddocument", tagged=["public"])
-    
+
     view_title = "Parliamentary activities"
     view_id = "mp-items"
-    
+
     # evoque
     render = z3evoque.ViewTemplateFile("workspace_viewlets.html#mp_items")
-    
+
     # zpt
     #render = ViewPageTemplateFile("templates/mp_item_viewlet.pt")
-    
+
     def __init__(self, context, request, view, manager):
         super(MemberItemsViewlet, self).__init__(
             context, request, view, manager)
@@ -653,7 +734,7 @@ class MemberItemsViewlet(browser.BungeniItemsViewlet):
             )).order_by(domain.ParliamentaryItem.parliamentary_item_id.desc())
         #self.for_display = (self.query.count() > 0)
         self.formatter = self.get_date_formatter("date", "medium")
-    
+
     @property
     def items(self):
         for item in self.query.all():
@@ -670,14 +751,14 @@ class DisplayViewlet(BungeniAttributeDisplay):
     """Display a target object; if the object is `None`, the user is
     prompted to add it.
     """
-    render = ViewPageTemplateFile("templates/display_form.pt")
+
     mode = "view"
     for_display = True
     query = None
     factory = None
     has_data = False
     form_fields = form.Fields()
-    
+
     add_action = form.Actions(
         form.Action(_(u"Add"), success="handle_add"),
     )
@@ -685,10 +766,10 @@ class DisplayViewlet(BungeniAttributeDisplay):
     def __init__(self, context, request, view, manager):
         super(DisplayViewlet, self).__init__(
             context, request, view, manager)
-        
+
         # set add url before we change context
         self.add_url = self.get_add_url()
-        
+
         target = self.get_target()
         if target is None:
             self.status = _(u"No item has been set")
@@ -698,7 +779,7 @@ class DisplayViewlet(BungeniAttributeDisplay):
             assert self.factory is not None
             descriptor = queryModelDescriptor(self.factory)
             self.form_fields = descriptor.fields
-    
+
     def update(self):
         # only if there's data to display do we update using our
         # immediate superclass
@@ -707,25 +788,25 @@ class DisplayViewlet(BungeniAttributeDisplay):
         else:
             self.setupActions()
             super(form.SubPageDisplayForm, self).update()
-    
+
     def handle_add(self, action, data):
         self.request.response.redirect(self.add_url)
-    
+
     def get_add_url(self):
         raise NotImplementedError("Must be implemented by subclass.")
-    
+
     def get_target(self):
         raise NotImplementedError("Must be implemented by subclass.")
-    
+
     def set_target(self, target):
         raise NotImplementedError("Must be implemented by subclass.")
-    
+
     def setupActions(self):
         if self.has_data:
             super(DisplayViewlet, self).setupActions()
         else:
             self.actions = self.add_action.actions
-    
+
     @property
     def form_name(self):
         descriptor = queryModelDescriptor(self.factory)
@@ -733,14 +814,14 @@ class DisplayViewlet(BungeniAttributeDisplay):
 
 
 class SchedulingMinutesViewlet(DisplayViewlet):
-    factory = domain.ScheduledItemDiscussion
-    
+    factory = domain.ItemScheduleDiscussion
+
     def get_target(self):
         return self.context.discussion
-    
+
     def set_target(self, target):
         self.context.discussion = target
-    
+
     def get_add_url(self):
         return "%s/discussions/add" % url.absoluteURL(
             self.context, self.request)
@@ -755,7 +836,7 @@ class SessionCalendarViewlet(browser.BungeniItemsViewlet):
         self.query = None
         self.Date = datetime.date.today() # !+ self.today
         self.type_query = Session().query(domain.SittingType)
-    
+
     def _getDisplayDate(self, request):
         display_date = date.getDisplayDate(self.request)
         session = self.context
@@ -791,7 +872,7 @@ class SessionCalendarViewlet(browser.BungeniItemsViewlet):
         )
         return Session().query(domain.GroupSitting).filter(s_filter).order_by(
                 domain.GroupSitting.start_date)
-    
+
     def previous(self):
         """Return link to the previous month, 
         if the session start date is prior to the current month
@@ -814,7 +895,7 @@ class SessionCalendarViewlet(browser.BungeniItemsViewlet):
                 datetime.date.strftime(prevdate, "%Y-%m-%d"))
         else:
             return ""
-    
+
     def next(self):
         """Return link to the next month if the end date,
         if the session is after the 1st of the next month
@@ -837,7 +918,7 @@ class SessionCalendarViewlet(browser.BungeniItemsViewlet):
                     return ""
         return """<a href="?date=%s"> &gt;&gt; </a>""" % (
             datetime.date.strftime(nextdate, "%Y-%m-%d"))
-    
+
     def _get_items(self):
         """
         return the data of the query
@@ -866,13 +947,13 @@ class SessionCalendarViewlet(browser.BungeniItemsViewlet):
             data["end_time"] = result.end_date.time()
             data["day"] = result.start_date.date()
             data["url"] = (path + "obj-" + str(result.sitting_id))
-            data["did"] = ("dlid_" + 
+            data["did"] = ("dlid_" +
                 datetime.datetime.strftime(result.start_date, "%Y-%m-%d")
                 # +"_stid_" + str(result.sitting_type)
             )
             data_list.append(data)
         return data_list
-    
+
     def getTdId(self, date):
         """
         return an Id for that td element:
@@ -880,7 +961,7 @@ class SessionCalendarViewlet(browser.BungeniItemsViewlet):
         like tdid-2008-01-17
         """
         return "tdid-" + datetime.date.strftime(date, "%Y-%m-%d")
-    
+
     def getDayClass(self, Date):
         """Return the class settings for that calendar day.
         """
@@ -899,23 +980,23 @@ class SessionCalendarViewlet(browser.BungeniItemsViewlet):
         if results:
             css_class = css_class + "holyday-date "
         return css_class.strip()
-    
+
     def getWeekNo(self, Date):
         """
         return the weeknumber for a given date
         """
         return Date.isocalendar()[1]
-    
+
     def getSittings4Day(self, Date):
         """
         return the sittings for that day
         """
         day_data = []
-        for data in self.Data:
+        for data in self.items:
             if data["day"] == Date:
                 day_data.append(data)
         return day_data
-    
+
     def update(self):
         """
         refresh the query
@@ -928,6 +1009,32 @@ class SessionCalendarViewlet(browser.BungeniItemsViewlet):
             ).monthdatescalendar(self.Date.year, self.Date.month)
         self.monthname = datetime.date.strftime(self.Date, "%B %Y")
         self.items = self._get_items()
-    
+
     render = ViewPageTemplateFile("templates/session_calendar_viewlet.pt")
+
+#Hansard related viewlets
+class MemberSpeechesViewlet(SubFormViewletManager):
+    """A transcripts for an MP 
+    """
+    
+    view_name = "Speeches"
+    view_id = "speeches"
+    
+    render = ViewPageTemplateFile("templates/mp_transcript_viewlet.pt")
+    
+    def __init__(self, context, request, view, manager):
+        super(MemberSpeechesViewlet, self).__init__(
+            context, request, view, manager)
+        user_id = self.context.user_id
+        self.query = Session().query(domain.Speech).filter(
+            sql.and_(
+                domain.Speech.person_id == user_id
+            )).order_by(domain.Transcript.start_date.desc())
+    
+    def results(self):
+        for result in self.query.all():
+            yield {"start_date": result.start_date,
+                   "end_date": result.end_date,
+                   "text": result.text
+                  }
 

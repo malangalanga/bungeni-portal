@@ -29,37 +29,30 @@
 
   <!-- Generic forms -->
 
-  <browser:page
-     name="view"
+    <browser:page name="view"
         for="bungeni.alchemist.interfaces.IAlchemistContent"
-     class=".common.DisplayForm"
-     permission="zope.View"
-     layer="bungeni.ui.interfaces.IBungeniSkin"
-     />
-
-  <browser:page
-     name="add"
+        class=".common.DisplayForm"
+        permission="zope.View"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+    />
+    <browser:page name="add"
         for="bungeni.alchemist.interfaces.IAlchemistContainer"
-     class=".common.AddForm"
-     permission="zope.ManageContent"
-     layer="bungeni.ui.interfaces.IBungeniSkin"
-     />
-
-  <browser:page
-     name="edit"
+        class=".common.AddForm"
+        permission="zope.ManageContent"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+    />
+    <browser:page name="edit"
         for="bungeni.alchemist.interfaces.IAlchemistContent"
-     class=".common.EditForm"
-     permission="zope.ManageContent"
-     layer="bungeni.ui.interfaces.IBungeniSkin"
-     />
-
-  <browser:page
-     name="delete"
+        class=".common.EditForm"
+        permission="zope.ManageContent"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+    />
+    <browser:page name="delete"
         for="bungeni.alchemist.interfaces.IAlchemistContent"
-     class=".common.DeleteForm"
-     permission="zope.ManageContent"
-     layer="bungeni.ui.interfaces.IBungeniSkin"
-     />
+        class=".common.DeleteForm"
+        permission="zope.ManageContent"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+    />
 
     <browser:page name="reorder"
         for="bungeni.models.domain.ItemScheduleContainer"
@@ -109,7 +102,7 @@
      
   <browser:page
      name="edit"
-     for="bungeni.models.domain.ScheduledItemDiscussion"
+     for="bungeni.models.domain.ItemScheduleDiscussion"
      class=".common.EditForm"
      permission="bungeni.itemschedule.Edit"
      layer="bungeni.ui.interfaces.IBungeniSkin"
@@ -145,6 +138,15 @@
      class=".viewlets.SubFormViewletManager"
      permission="zope.View"
      />
+	 
+  <!-- Viewlet manager for rss subscription mark -->
+  
+  <browser:viewletManager
+     name="bungeni.content.rss"
+	 provides=".interfaces.ISubformRssSubscriptionViewletManager"
+	 class=".viewlets.SubformRssSubscriptionViewletManager"
+	 permission="zope.View"
+	 />
 
 
   <!--browser:viewlet
@@ -205,6 +207,17 @@
      weight="10"
      />
 -->
+
+  <!-- Rss subscription marks -->
+  
+  <browser:viewlet
+     name="bungeni.viewlet.rsslink"
+	 manager=".interfaces.ISubformRssSubscriptionViewletManager"
+	 class=".viewlets.RssLinkViewlet"
+	 for="bungeni.models.interfaces.IBungeniContent"
+	 permission="zope.View"
+     layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin"
+	 />
   
   <!-- GroupSitting -->
   
@@ -310,16 +323,14 @@
         weight="30"
     />
       
-   <browser:viewlet
-     name="bungeni.viewlet.committee-sittings"
-     manager=".interfaces.ISubFormViewletManager"
-     class=".viewlets.SittingsViewlet"
-     for="bungeni.models.interfaces.ICommittee"
-     permission="zope.View"
-     weight="50"
-     />
-
-
+    <browser:viewlet name="bungeni.viewlet.committee-sittings"
+        manager=".interfaces.ISubFormViewletManager"
+        class=".viewlets.GroupSittingsViewlet"
+        for="bungeni.models.interfaces.ICommittee"
+        permission="zope.View"
+        weight="50"
+    />
+    
     <browser:viewlet name="bungeni.viewlet.committee-member-titles"
         manager=".interfaces.ISubFormViewletManager"
         class=".viewlets.OfficesHeldViewlet"
@@ -540,9 +551,9 @@
     />
 
     <!-- bills -->
-    <browser:viewlet name="bungeni.viewlet.bill-consignatory"
+    <browser:viewlet name="bungeni.viewlet.bill-cosignatory"
         manager=".interfaces.ISubFormViewletManager"
-        class=".viewlets.ConsignatoryViewlet"
+        class=".viewlets.CosignatoryViewlet"
         for="bungeni.models.interfaces.IBill"
         permission="zope.View"
         weight="10"
@@ -563,9 +574,9 @@
     />
     
     <!-- Motion -->
-    <browser:viewlet name="bungeni.viewlet.motion-consignatory"
+    <browser:viewlet name="bungeni.viewlet.motion-cosignatory"
         manager=".interfaces.ISubFormViewletManager"
-        class=".viewlets.ConsignatoryViewlet"
+        class=".viewlets.CosignatoryViewlet"
         for="bungeni.models.interfaces.IMotion"
         permission="zope.View"
         weight="10"
@@ -596,4 +607,13 @@
      
   <!-- Partymembership -->
   
+  <!-- Hansard -->
+    
+    <browser:viewlet name="bungeni.viewlet.mp-speeches"
+        manager=".interfaces.ISubFormViewletManager"
+        class=".hansard.MemberSpeechesViewlet"
+        for="bungeni.models.interfaces.IMemberOfParliament"
+        permission="zope.View"
+        weight="40"
+    />  
 </configure>
