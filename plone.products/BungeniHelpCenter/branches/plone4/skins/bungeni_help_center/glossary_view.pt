@@ -8,10 +8,6 @@
       <metal:block metal:use-macro="here/phc_macros/macros/azcss">
       </metal:block>
     </metal:block>
-    <metal:block fill-slot="javascript_head_slot">
-      <metal:block metal:use-macro="here/phc_macros/macros/azjs">
-      </metal:block>
-    </metal:block>    
   </head>
 
   <body>
@@ -21,9 +17,7 @@
                      noSections python:len(sections) == 1">
 
 
-    <div metal:use-macro="here/document_actions/macros/document_actions">
-      Document actions (print, sendto etc)
-    </div>
+    <div tal:replace="structure provider:plone.documentactions"/>
 
     <h1 tal:content="here/Title" class="documentFirstHeading">
       Folder Title
@@ -105,9 +99,7 @@
       see also - shows the references if this feature is switched on
     </div>
 
-    <div metal:use-macro="here/document_byline/macros/byline">
-      Get the byline - contains details about author and modification date.
-    </div>
+    <div tal:replace="structure provider:plone.belowcontenttitle"/>
 
     </div>
     </div>
