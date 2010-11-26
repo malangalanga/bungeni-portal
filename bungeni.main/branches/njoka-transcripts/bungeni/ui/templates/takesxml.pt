@@ -1,0 +1,17 @@
+<assignment>
+    <tal:loop tal:repeat="s python:view.sittings">
+        <sitting tal:attributes="name s/name; id s/sitting_id; file s/file;">
+            <tal:loop tal:repeat="take s/takes">
+                <take tal:attributes="
+                    startTime take/start_time;
+                    endTime take/end_time;"/>
+            </tal:loop>
+            <agenda_items>
+                <tal:loop tal:repeat="scheduled s/item_schedule">
+                    <agenda_item tal:attributes="id=scheduled/item/parliamentary_item_id; 
+                                  title=scheduled/item/short_name; type=scheduled/item/type"></agenda_item>
+                </tal:loop>
+            </agenda_items>
+        </sitting>
+    </tal:loop>
+</assignment>
