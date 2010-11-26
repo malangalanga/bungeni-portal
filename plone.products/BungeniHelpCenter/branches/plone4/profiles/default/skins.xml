@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<object name="portal_skins">
+ <object name="BungeniHelpCenter" meta_type="Filesystem Directory View"
+    directory="Products.BungeniHelpCenter:skins/bungeni_help_center"/>
+ <skin-path name="*">
+  <layer name="BungeniHelpCenter" insert-after="custom"/>
+ </skin-path>
+</object>

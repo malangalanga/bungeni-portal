@@ -1,0 +1,321 @@
+/* 
+** Plone Help Center style sheet for CSS2-capable browsers.
+**
+** Copyright Alexander Limi - http://www.plonesolutions.com
+**
+** Feel free to use whole or parts of this for your own designs, but give credit
+** where credit is due.
+**
+*/
+
+/* <dtml-with base_properties> */
+
+.link-expand {
+  background: transparent url(&dtml-portal_url;/arrowDown.gif) 4px 5px no-repeat;
+  padding: 1px 0px 1px 16px;
+  display: block;
+  font-size: &dtml-fontSmallSize;;
+  float: right;
+}
+
+.link-expand-section {
+  background: transparent url(&dtml-portal_url;/arrowDown.gif) 4px 5px no-repeat;
+  padding: 1px 0px 1px 16px;
+  display: block;
+  font-size: &dtml-fontSmallSize;;
+  float: left;
+}
+
+.faqMarker {
+  list-style-type: square;
+  list-style-image: url(&dtml-portal_url;/faq_icon.gif);
+}
+
+.portletHalfWidth {
+  width: 45%; 
+  float: left; 
+  margin: 0 1em 1em 0 !important;
+}
+
+.portletThirdWidth {
+  width: 30%; 
+  float: left; 
+  margin: 0 1em 1em 0 !important;
+}
+
+/* Section index */
+table.sectionIndex {
+  float: right;
+  background: &dtml-backgroundColor;;
+  border-collapse: collapse;
+  border-left: &dtml-borderWidth; &dtml-borderStyle; &dtml-globalBorderColor;;
+  border-bottom: &dtml-borderWidth; &dtml-borderStyle; &dtml-globalBorderColor;;
+  font-size: &dtml-fontSmallSize;;
+  margin: 0.5em 0em 1em 1em;
+}
+
+.sectionIndex th {
+  background: &dtml-globalBackgroundColor;;
+  border-top: &dtml-borderWidth; &dtml-borderStyle; &dtml-globalBorderColor;;
+  border-bottom: &dtml-borderWidth; &dtml-borderStyle; &dtml-globalBorderColor;;
+  border-right: &dtml-borderWidth; &dtml-borderStyle; &dtml-globalBorderColor;;
+  font-weight: normal;
+  padding: 0.25em 1em;
+  text-transform: &dtml-textTransform;;
+}
+
+.sectionIndex td {
+  border-right: &dtml-borderWidth; &dtml-borderStyle; &dtml-globalBorderColor;;
+  padding: 0.25em 1em;
+}
+
+.sectionIndex a {
+  text-decoration: none;
+}
+
+.sectionIndex a:hover {
+  text-decoration: underline;
+}
+
+/* Box with info about a tutorial, displayed on a tutorial page */
+.tutorialAbout {
+  display: inline;
+  float: right;
+  background-color: &dtml-globalBackgroundColor;;
+  border-color: &dtml-globalBorderColor;;
+  border-width: &dtml-borderWidth;;
+  border-style: &dtml-borderStyle;;
+  font-size: &dtml-fontSmallSize;;
+  margin: 0.5em 0 0.5em 0.5em;
+  padding: 1em;
+  width: 10em;
+  clear: right;
+  text-align: center;
+}
+
+/* Jump box for reference manual indexes */
+.jumpBox {
+  float: right;
+  text-align: right;
+}
+
+/* Image flagging outdated items in listings */
+.outdatedMarker {
+  
+}
+
+/* States for things */
+.state-hidden {
+  color: red;
+}
+
+.state-in-progress {
+  color: #74AE0B;
+}
+
+.state-obsolete {
+  color: #cccccc;
+}
+
+ul.quickLinks {
+  margin: 0 0 1em 0;
+  background-color: #dee7ec;
+  border: solid 1px #8cacbb;
+  padding: 1em;
+  text-align: center;
+}
+
+ul.quickLinks li {
+  display: inline;
+  margin-right: 1em;
+}
+
+dl.topicList {
+  width: 32%;
+  display: block;
+  float: left;
+  margin: 0 0.5em 1em 0;
+/*    min-height: 7em; */
+}
+
+dl.topicList dt {
+  font-size: 120%;
+}
+
+dl.topicList dt a {
+  color: black;
+}
+
+dl.topicList dd {
+  margin: 0;
+  display: inline;
+}
+
+.flatlist li {
+  display: inline;
+  margin-right: 2em;
+}
+
+.flatlist ul {
+  margin-left: 0;
+  margin-bottom: 1em;
+}
+
+.doclist dd {
+  margin-left: 20px;
+}
+
+.template-helpcenter_topicview_main .readmore {
+  text-align: right;
+}
+
+.referenceManualCollation h1 {
+    font-size: 120%;
+}
+
+.referenceManualCollation .blockmargin h1 {
+    font-size: &dtml-fontSmallSize;;
+}
+
+.referenceManualCollation blockquote,
+.referenceManual blockquote {
+  border: 0px;
+  color: #000000;
+}
+
+h1.documentFirstHeading img {
+  display: none;
+}
+
+h2.section-subheading {
+  margin-top: 0.5em;
+}
+
+.notcurrent {
+}
+
+.current {
+  font-weight:normal;
+}
+
+#faq {
+  float:right; 
+  margin: 0 0 0em 0em;
+  border:1px solid #74AE0B;
+  padding:2px 4px 2px 4px;  
+}
+
+.textcenter {
+  text-align: center;
+}
+
+.rfloat {
+  text-align:right; 
+  float: right;
+}
+
+.floatright {
+  float:right; 
+  text-align: center; 
+  margin: 1em 0 1em 1em;
+}
+
+.identityright {
+  clear:none;
+  align:right;
+}
+
+.floatleft {
+  float:left; 
+  margin: 1em 0 1em 1em;
+}
+
+.bquote {
+  border:none;
+  padding:2px;
+  margin:0px;
+  padding-left: 25px;
+}
+
+.depth-2 {
+  padding-left: 15px
+}
+
+.depth-3 {
+  padding-left: 25px
+}
+
+
+.pmargin {
+  margin:2px 28px;
+}
+
+#sectabs {
+  background-color:transparent;
+  padding:0em 1em;
+}
+
+.stoc {
+  float: right;
+  width:300px;
+  border:1px solid #74AE0B;
+  margin: 0px -4px 2px 9px;
+}
+
+.portlet-toc-item a{
+  color:#463229;
+  text-decoration: none;
+}
+
+.portlet-toc-item a:hover {
+  background-color: #EEEEEE;
+  color:black;
+}
+
+.portlet-toc-item .current{
+  color:#6A0803;
+  background-color: transparent;
+}
+
+/* Navigation listing bar */
+.listingBar {
+  display: block;
+  border: 0px;
+  margin-top: 0 !important;
+  padding: 0px;
+  spacing: 0px;
+}
+
+.navtable {
+  width: 100%;
+  padding:0px;
+  spacing: 0px;
+  margin: 0px;
+  
+}
+
+.leftcell {
+  width: 50%;
+  vertical-align: top;
+}
+
+.rightcell {
+  width: 50%;
+  vertical-align: top;
+}
+
+a span.hovertooltip {
+  display: none;
+}
+
+a:hover span.hovertooltip {
+  position: absolute;
+  display: block;
+  background: &dtml-globalBackgroundColor;;
+  border: &dtml-borderWidth; &dtml-borderStyle; &dtml-globalBorderColor;;  
+  color: #000000;
+  margin-top: -10px;
+}
+
+/* </dtml-with> */
+

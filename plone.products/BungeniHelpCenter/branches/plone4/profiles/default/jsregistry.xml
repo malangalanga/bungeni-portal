@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts">
+  <javascript
+     cacheable="False"
+     compression="safe"
+     cookable="False"
+     enabled="True"
+     expression="python: getattr(here, 'portal_type', None) in ['HelpCenterLinkFolder', 'HelpCenterLink']"
+     id="helplink_az_listing.js"
+     inline="False"
+     />
+
+  <javascript
+     cacheable="False"
+     compression="safe"
+     cookable="False"
+     enabled="True"
+     expression="python: getattr(here, 'portal_type', None) in ['BungeniHelpCenterReferenceManualPage', 'BungeniHelpCenterTutorialPage', 'TabbedSubpages', 'CompositePage']"
+     id="TabbedSubpages.js"
+     inline="False"
+     />
+
+  <javascript
+     cacheable="False"
+     compression="safe"
+     cookable="False"
+     enabled="True"
+     expression=""
+     id="collapsor.js"
+     inline="False"
+     />
+  
+</object>

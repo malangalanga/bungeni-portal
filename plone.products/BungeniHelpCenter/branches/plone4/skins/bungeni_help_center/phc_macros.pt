@@ -1,0 +1,35 @@
+<metal:master define-macro="identityimage">
+   <span tal:omit-tag="" tal:condition="python:here.getIdentityPosition()=='right'">
+    <div class="floatright"
+         tal:condition="here/identity_thumb | nothing">
+         <!--<a class="discreet"
+         tal:attributes="href string:${here/absolute_url}/identity/image_view_fullscreen">-->
+            <table><tr><td>
+            <img tal:replace="structure here/identity_thumb"/>
+            <br />
+            </td></tr></table>
+            <!--<img tal:replace="structure here/search_icon.gif" />
+            <span i18n:translate="label_click_to_enlarge">
+                Click to enlarge
+            </span>
+         </a>-->
+    </div>
+  </span>
+   <span tal:omit-tag="" tal:condition="python:here.getIdentityPosition()=='left'">
+    <div class="floatleft"
+         tal:condition="here/identity_thumb | nothing">
+         <!--<a class="discreet"
+         tal:attributes="href string:${here/absolute_url}/identity/image_view_fullscreen">-->
+            <table><tr><td>
+            <img class="identityleft" tal:replace="structure here/identity_thumb" />-->
+            <br />
+            </td></tr></table>
+            <!--<img tal:replace="structure here/search_icon.gif" />
+            <span i18n:translate="label_click_to_enlarge">
+                Click to enlarge
+            </span>
+         </a>-->
+    </div>
+  </span>
+</metal:master>
+

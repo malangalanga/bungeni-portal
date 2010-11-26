@@ -1,0 +1,98 @@
+<metal:master define-macro="master">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+  lang="en"
+  metal:use-macro="here/main_template/macros/master"
+  i18n:domain="plonehelpcenter">
+
+  <head>
+  </head>
+
+  <body>
+    <div metal:fill-slot="main" class="links">
+    <div metal:define-macro="main"
+         tal:define="sections here/getItemsBySections;
+                     noSections python:len(sections) == 1">
+
+    <h1 tal:content="here/Title" class="documentFirstHeading">
+      Folder Title
+    </h1>
+    
+    <a href="" tal:attributes="href python:here.absolute_url()">Alphabetical View</a>
+
+    <div metal:use-macro="here/phc_macros/macros/identityimage">
+      Identity Image 
+    </div>
+    
+    <table class="sectionIndex">
+        <thead>
+            <tr><th i18n:translate="phc_index_sections">Categories</th></tr>
+        </thead>
+        <tbody>
+            <tr tal:repeat="section sections">
+                <td><a tal:attributes="href python:'%s/helplinkfolder_sections#%s'% (here.absolute_url(), section['title'],)">
+                        <span tal:content="python:here.trunc(section['title'])"/>
+                        <span tal:content="python:section['title']" class="hovertooltip"/></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="documentDescription"
+         tal:content="here/Description">
+      Description.
+    </div>
+
+    <div class="documentBody"
+      tal:condition="here/getBody"
+      tal:content="structure here/getBody">
+      Description
+    </div>
+
+    <div tal:repeat="section sections">
+
+        <h2>
+          <b><a class="link-anchor" 
+              tal:content="section/title"
+	      i18n:translate=""
+              tal:attributes="name section/title;
+                              href python:'%s/helplinkfolder_sections#%s'% (here.absolute_url(), section['id'],)">
+              Section Heading
+            </a></b>
+        </h2>
+
+        <ul>
+            <tal:item tal:repeat="item python:section['items']">
+            
+            <li>
+
+                <a href="" tal:content="item/Title"
+                   tal:attributes="href python:str(item.getId) + '/helplink_view_section';">Item</a>
+                
+                <span tal:content="item/Description">Description</span>                
+                <img src="error_icon.gif" alt="!" class="outdatedMarker"
+                     tal:condition="item/isOutdated"
+                     title="This item applies to a previous version" 
+                     i18n:attributes="title"/>
+                
+            </li>
+            
+            
+            
+          </tal:item>
+        </ul>
+        <dl>[<a href="helplinkfolder_sections#portal-top">Back</a>]</dl>
+
+
+    </div>
+    <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
+      see also - shows the references if this feature is switched on
+    </div>
+
+    </div>
+    <div tal:replace="structure provider:plone.belowcontentbody" />    
+    </div>
+    
+  </body>
+
+</html>
+</metal:master>

@@ -1,0 +1,25 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+  lang="en"
+  metal:use-macro="here/main_template/macros/master"
+  i18n:domain="plonehelpcenter">
+
+<body>
+
+  <div metal:fill-slot="main" class="tutorial">
+    <div metal:use-macro="here/tutorial_view/macros/main">
+	<div metal:fill-slot="sectiontoc">
+	  <ol style="list-style-type: lower-alpha;" tal:condition="here/getPages">
+            <li tal:repeat="page here/getPages">
+              <a tal:attributes="href page/getURL">
+		<span tal:attributes="class string:state-${page/review_state}" 
+                      tal:content="page/Title" /></a>
+            <p class="pmargin"><span tal:replace="page/Description">Description</span></p>
+
+            </li>
+	  </ol>
+	</div>
+    </div>
+  </div>
+</body>
+</html>
+

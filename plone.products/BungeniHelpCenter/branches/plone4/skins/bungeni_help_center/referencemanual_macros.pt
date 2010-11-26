@@ -1,0 +1,434 @@
+<metal:block define-macro="section_tabs">
+<div class="custom">
+    <ul class="contentViews"  tal:condition="toc | nothing">
+         <li  class="plain" tal:repeat="tocElement toc">
+            <tal:item define="item tocElement/item">
+
+            <a tal:attributes="href string:javascript:xmlhttpPost('${item/getURL}/referencemanualpage_simple')">
+               <span id="sectabs" tal:content="item/Title" /></a>
+            </tal:item>
+
+         </li>
+    </ul>
+    
+    <div id="pagecontents"></div>
+</div>
+</metal:block>
+
+<metal:block define-macro="section_toc">
+    <blockquote  class="bquote">
+    <table tal:condition="toc | nothing">
+        <tr tal:repeat="tocElement toc">
+            <tal:item define="item tocElement/item;
+                              itemObj item/getObject;">
+                <td valign="top">                   
+                <span tal:content="python:tocElement['numbering'][:-1]" tal:condition="python:here.getNavType() == 'yes'"></span>
+                </td>
+                <td valign="top" class="portlet-toc-item"> 
+                <div>                 
+                <a href="" tal:attributes="href item/getURL" class="sectionurl" >
+                <span tal:content="python:here.trunc(item.Title)"/>
+                <span tal:content="item/Title"
+                      class="hovertooltip"
+                      tal:condition="python:len(item.Title) > len(here.trunc(item.Title))"/>
+                </a>
+                </div>                
+                
+                 <p class="pmargin"><span tal:replace="item/Description">Description</span></p>
+                               
+                    <tal:block define="toc tocElement/children">
+                        <metal:recursion use-macro="here/referencemanual_macros/macros/section_toc"/>
+                    </tal:block>
+                </td>
+                  
+            </tal:item>
+        </tr>
+    </table>
+    </blockquote>
+
+</metal:block>
+
+<metal:block define-macro="float_toc">
+    <blockquote  class="bquote">
+    <table tal:condition="toc | nothing">
+        <tr tal:repeat="tocElement toc">
+            <tal:item define="item tocElement/item">
+                <td valign="top">                   
+                <span tal:content="python:tocElement['numbering'][:-1]" class="portletItem" tal:condition="python:here.getNavType() == 'yes'"></span>
+                </td>
+                <td valign="top" class="portlet-toc-item">                   
+                <a href="" class="notcurrent" tal:attributes="href item/getURL;
+                                                              class python:numbering==tocElement['numbering'] and 'current' or 'notcurrent'">
+                <span tal:content="python:here.trunc(item.Title)"/><span tal:content="item/Title" class="hovertooltip" tal:condition="python:len(item.Title) > len(here.trunc(item.Title))"/></a>
+                            <p class="pmargin"><span tal:replace="item/Description">Description</span></p>
+                            
+                    <tal:block define="toc tocElement/children">
+                        <metal:recursion use-macro="here/referencemanual_macros/macros/float_toc"/>
+                    </tal:block>
+                </td>
+            </tal:item>
+        </tr>
+    </table>
+    </blockquote>
+</metal:block>
+
+<metal:block define-macro="section_toc_roman">
+    <blockquote class="bquote">
+    <table tal:condition="toc | nothing">
+        <tr tal:repeat="tocElement toc">
+            <tal:item define="item tocElement/item">
+                <td valign="top">                   
+                <span tal:content="python:here.toRoman(tocElement['numbering'])" tal:condition="python:here.getNavType() == 'yes'"></span>
+                </td>
+                <td valign="top">                   
+                <a href="" tal:attributes="href item/getURL">
+                <span tal:content="string:${item/Title}"/></a>
+                    <tal:block define="toc tocElement/children">
+                        <metal:recursion use-macro="here/referencemanual_macros/macros/section_toc_roman"/>
+                    </tal:block>
+                </td>
+                  
+            </tal:item>
+        </tr>
+    </table>
+    </blockquote>
+</metal:block>
+
+<metal:block define-macro="section_toc_alpha">
+    <blockquote class="bquote">
+    <table tal:condition="toc | nothing">
+        <tr tal:repeat="tocElement toc">
+            <tal:item define="item tocElement/item">
+                <td valign="top">                   
+                <span tal:content="python:here.toAlpha(tocElement['numbering'])" tal:condition="python:here.getNavType() == 'yes'"></span>
+                </td>
+                <td valign="top">                   
+                <a href="" tal:attributes="href item/getURL">
+                <span tal:content="string:${item/Title}"/></a>
+                    <tal:block define="toc tocElement/children">
+                        <metal:recursion use-macro="here/referencemanual_macros/macros/section_toc_alpha"/>
+                    </tal:block>
+                </td>
+                  
+            </tal:item>
+        </tr>
+    </table>
+    </blockquote>
+</metal:block>
+
+<!-- Listing of all pages in a section
+
+    Call this with toc (top level list, as returned by getTOC()) defined
+  -->
+<metal:block define-macro="section_collation">
+    <tal:section repeat="section toc">
+        <div tal:define="item      section/item;
+                            itemObj   item/getObject;
+                            itemUrl   itemObj/absolute_url;
+                            body      itemObj/getBody | nothing;
+                            numbering section/numbering;
+                            itemDepth section/depth;
+                            children  section/children;
+                            addImagePaths nocall:context/addImagePaths | nothing;
+                            "
+            tal:attributes="class string:referenceManualCollation depth-${itemDepth}">
+
+            <h1>
+                <b><span tal:replace="numbering" tal:condition="python:here.getNavType() == 'yes'">1.</span></b>
+                <b><span tal:replace="item/Title">Section Title</span></b>
+            </h1>
+
+            <div class="documentDescription" tal:content="item/Description">
+                description
+            </div>
+
+            <div class="documentDescription" tal:content="item/getBody">
+                description
+            </div>
+
+    
+            <div id="bodyContent" tal:condition="nocall:body">
+                <tal:block condition="nocall:addImagePaths">
+                    <div tal:replace="structure python:addImagePaths(body, itemUrl)" />
+                </tal:block>
+                <tal:block condition="not: nocall:addImagePaths">
+                    <div tal:replace="structure body" />
+                </tal:block>
+           </div>
+     <hr/>
+    <tal:subpage define="subpages python:itemObj.objectValues(['TabbedSubpages',]);">
+
+    <div tal:repeat="subpage subpages">
+      <div tal:define="number repeat/subpage/number;
+                       layout python: itemObj.getTargetObjectLayout(subpage);
+                       template python: getattr(subpage, layout, None);
+                       macros template/macros | nothing;
+                       main_macro macros/main | nothing">
+        <a tal:condition="python: user.has_role(['Owner', 'Reviewer', 'Manager'], context)"
+           class="edit-icon"
+           href="#" tal:attributes="href string:${subpage/absolute_url}/base_edit;"
+           title="Rediger underside">
+          <img src="" tal:attributes="src string:$portal_url/edit_icon.gif"
+               width="16"
+               title="Edit subpage"/>
+        </a>
+        <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template_id};
+                                 here python: subpage;
+                                 here_url string:${here/absolute_url};
+                                 object_title here/Title">                    
+          <div metal:use-macro="main_macro" />
+        </tal:content>
+      </div>
+    </div>
+    </tal:subpage>
+
+
+
+            <tal:subsections define="toc children"
+                             condition="nocall:children">
+                <metal:recursion use-macro="here/referencemanual_macros/macros/section_collation"/>
+            </tal:subsections>
+
+        </div>        
+    </tal:section>
+</metal:block>
+
+
+<metal:block define-macro="collapsible_section_collation">
+    <tal:section repeat="section toc">
+        <div tal:define="item      section/item;
+                            itemObj   item/getObject;
+                            itemUrl   itemObj/absolute_url;
+                            body      itemObj/getBody | nothing;
+                            numbering section/numbering;
+                            itemDepth section/depth;
+                            children  section/children;
+                            addImagePaths nocall:context/addImagePaths | nothing;"
+                            class="collapsibleContent">
+
+            <h1 tal:condition="python:item.Type == 'Section'">
+                <b><span tal:replace="numbering" tal:condition="python:here.getNavType() == 'yes'">1.</span></b>
+                <b><a href="" tal:attributes="href item/getURL" tal:content="item/Title">Section Title</a></b>
+            </h1>
+            
+            <div class="blockmargin">  
+            <h1 tal:condition="python:item.Type == 'Page'">
+                <span tal:replace="numbering" tal:condition="python:here.getNavType() == 'yes'">1.</span>
+                <a href="" tal:attributes="href item/getURL" tal:content="item/Title">Section Title</a>
+            </h1>
+            </div>  
+
+            <div class="documentDescription" tal:content="item/Description">
+                description
+            </div>
+
+            <div class="documentDescription" tal:content="item/getBody">
+                description
+            </div>
+
+
+
+    <tal:subpage define="subpages python:itemObj.objectValues(['TabbedSubpages',]);">
+
+    <div tal:repeat="subpage subpages">
+      <div tal:define="number repeat/subpage/number;
+                       layout python: itemObj.getTargetObjectLayout(subpage);
+                       template python: getattr(subpage, layout, None);
+                       macros template/macros | nothing;
+                       main_macro macros/main | nothing">
+        <a tal:condition="python: user.has_role(['Owner', 'Reviewer', 'Manager'], context)"
+           class="edit-icon"
+           href="#" tal:attributes="href string:${subpage/absolute_url}/base_edit;"
+           title="Rediger underside">
+          <img src="" tal:attributes="src string:$portal_url/edit_icon.gif"
+               width="16"
+               title="Edit subpage"/>
+        </a>
+        <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template_id};
+                                 here python: subpage;
+                                 here_url string:${here/absolute_url};
+                                 object_title here/Title">                    
+          <div metal:use-macro="main_macro" />
+        </tal:content>
+      </div>
+    </div>
+    </tal:subpage>
+
+
+
+            <tal:subsections define="toc children"
+                             condition="nocall:children">
+                <metal:recursion use-macro="here/referencemanual_macros/macros/collapsible_section_collation"/>
+            </tal:subsections>
+
+        </div>        
+    </tal:section>
+</metal:block>
+
+
+
+<metal:block define-macro="section_title_collation">
+    <tal:section repeat="section toc">
+        <div tal:define="item      section/item;
+                            itemObj   item/getObject;
+                            itemUrl   itemObj/absolute_url;
+                            body      itemObj/getBody | nothing;
+                            numbering section/numbering;
+                            itemDepth section/depth;
+                            children  section/children;
+                            addImagePaths nocall:context/addImagePaths | nothing;
+                            "
+            tal:attributes="class string:referenceManualCollation depth-${itemDepth}" class="section-collation">
+
+            <h1 tal:condition="python:item.Type == 'Section'">
+                <b><span tal:replace="numbering" tal:condition="python:here.getNavType() == 'yes'">1.</span></b>
+                <b><a href="" tal:attributes="href item/getURL" tal:content="item/Title">Section Title</a></b>
+            </h1>
+            
+            <div class="blockmargin">  
+            <h1 tal:condition="python:item.Type == 'Page'">
+                <span tal:replace="numbering" tal:condition="python:here.getNavType() == 'yes'">1.</span>
+                <a href="" tal:attributes="href item/getURL" tal:content="item/Title">Section Title</a>
+            </h1>
+            </div>  
+
+            <div class="documentDescription" tal:content="item/Description">
+                description
+            </div>
+
+            <div class="documentDescription" tal:content="item/getBody">
+                description
+            </div>
+
+
+
+    <tal:subpage define="subpages python:itemObj.objectValues(['TabbedSubpages',]);">
+
+    <div tal:repeat="subpage subpages">
+      <div tal:define="number repeat/subpage/number;
+                       layout python: itemObj.getTargetObjectLayout(subpage);
+                       template python: getattr(subpage, layout, None);
+                       macros template/macros | nothing;
+                       main_macro macros/main | nothing">
+        <a tal:condition="python: user.has_role(['Owner', 'Reviewer', 'Manager'], context)"
+           class="edit-icon"
+           href="#" tal:attributes="href string:${subpage/absolute_url}/base_edit;"
+           title="Rediger underside">
+          <img src="" tal:attributes="src string:$portal_url/edit_icon.gif"
+               width="16"
+               title="Edit subpage"/>
+        </a>
+        <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template_id};
+                                 here python: subpage;
+                                 here_url string:${here/absolute_url};
+                                 object_title here/Title">                    
+          <div metal:use-macro="main_macro" />
+        </tal:content>
+      </div>
+    </div>
+    </tal:subpage>
+
+
+
+            <tal:subsections define="toc children"
+                             condition="nocall:children">
+                <metal:recursion use-macro="here/referencemanual_macros/macros/section_title_collation"/>
+            </tal:subsections>
+
+        </div>        
+    </tal:section>
+</metal:block>
+
+<!-- The navigation bar
+
+    Call this with tocInfo (as returned by getTOCInfo()) defined
+  -->
+
+<div metal:define-macro="navigation_bar"
+    class="listingBar" 
+    tal:define="nextIdx tocInfo/nextIdx;
+                prevIdx tocInfo/prevIdx;
+                tocList tocInfo/tocList;"
+    tal:condition="python: nextIdx!=None or prevIdx!=None"
+    i18n:domain="plonehelpcenter">
+   <table class="navtable"><tr>
+
+    
+    <td class="leftcell">   
+    <tal:prev condition="python:prevIdx!=None">
+    <tal:item define="prevCheck python:tocList[prevIdx]['item'];">
+
+        <a class="listingPrevious"
+           tal:define="prev python:tocList[prevIdx]['item']" 
+           tal:attributes="href prev/getURL;"
+           tabindex="1"
+           href="">
+            <img tal:replace="structure here/arrowLeft.gif" />
+            <span tal:replace="python:tocList[prevIdx]['numbering']" tal:condition="python:here.getNavType() == 'yes'"/>
+            <span tal:content="python:here.trunc(prev.Title)" /><span tal:content="prev/Title" class="hovertooltip" tal:condition="python:len(prev.Title) > len(here.trunc(prev.Title))"/>
+       </a>
+</tal:item>    
+    </tal:prev>
+</td>
+
+    <td class="rightcell">
+    <tal:next condition="python:nextIdx!=None">
+    <tal:item define="nextCheck python:tocList[nextIdx]['item'];">
+    
+        <a class="listingNext"
+           tal:define="next python:tocList[nextIdx]['item']" 
+           tal:attributes="href next/getURL"
+           tabindex="1"
+           href="">
+            <span tal:replace="python:tocList[nextIdx]['numbering']" tal:condition="python:here.getNavType() == 'yes'"/>
+            <span tal:content="python:here.trunc(next.Title)" /> <span tal:content="next/Title" class="hovertooltip" tal:condition="python:len(next.Title) > len(here.trunc(next.Title))"/> 
+           <img tal:replace="structure here/arrowRight.gif" />
+       </a>   
+
+    </tal:item>  
+    </tal:next>
+    </td>
+</tr>
+</table>	       
+</div>
+
+<!-- The "jump to" drop-down box
+    
+    Call this with tocList (as returned in tocInfo returned by getTOCInfo())
+    defined.
+  -->
+<div metal:define-macro="jump_box"
+    class="jumpBox"
+    i18n:domain="plonehelpcenter">
+    <tal:block define="fullToc python:here.getTOC(current = context.aq_parent);
+                       tocInfo python:here.getTOCInfo(fullToc);
+                       tocList python:tocInfo['localTOC'] or tocInfo['tocList'];
+                       ">
+    <form method="get" action="#"
+          tal:attributes="action context/absolute_url">
+        <label for="destination" class="hiddenStructure">Jump to: </label>
+        <select name=":action" tabindex="3"
+                onchange="window.location.href=this.options[this.selectedIndex].value"
+                tal:attributes="tabindex tabindex/next|nothing">
+	    <option value="referencemanual-all-pages"
+		    title="Useful for printing, presentation mode etc.">
+	      Select menu item
+	    </option>
+            <option tal:repeat="tocItem tocList"
+                    tal:attributes="value tocItem/item/getURL;
+                                    selected python:tocItem['currentItem'] and 'selected' or nothing">
+                <span tal:replace="python:tocItem['numbering'][:-1]" tal:condition="python:here.getNavType() == 'yes'"/>
+                <span tal:replace="tocItem/item/Title"/>
+            </option>
+        </select>
+        <noscript>
+            <input class="standalone"
+                   type="submit"
+                   value="Go"
+                   i18n:attributes="value"
+                   tabindex="4"
+                   tal:attributes="tabindex tabindex/next|nothing" />
+        </noscript>
+    </form>
+    </tal:block>
+</div>

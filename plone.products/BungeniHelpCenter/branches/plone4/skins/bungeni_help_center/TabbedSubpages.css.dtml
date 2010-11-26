@@ -1,0 +1,123 @@
+Q/* <dtml-var "enableHTTPCompression(request=REQUEST, debug=1, css=1)"> */
+/* <dtml-with base_properties> */
+#tabber-block .tabberlive .documentActions, .tabberlive .documentByLine { display: none; }
+#tabber-block .tabberlive h2.tabberHeading { display: none; }
+
+#tabber-block .tabberlive .edit-icon
+{
+	float: right;
+	margin-right: 1em;
+}
+
+h4.tabberHeading {
+  display: none;
+}
+
+/* Form tabs */
+#tabber-block .tabberlive .tabbertabhide { display: none; }
+
+/*--------------------------------------------------
+  .tabber = before the tabber interface is set up
+  .tabberlive = after the tabber interface is set up
+  --------------------------------------------------*/
+
+#tabber-block .tabber {text-align:center;}
+#tabber-block .tabberlive { margin-bottom: 1em; }
+
+/*--------------------------------------------------
+  ul.tabbernav = the tab navigation list
+  li.tabberactive = the active tab
+  --------------------------------------------------*/
+
+#tabber-block ul.tabbernav
+{
+  margin-top: 0;
+  padding: 1px 0;
+  /*border-bottom: 1px solid #b83d00;*/
+  text-align:center;
+
+}
+
+#tabber-block ul.tabbernav li
+{
+/*display:inline;*/
+  /*float:left;*/
+  display:inline;
+  line-height:21px;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  margin:0pt;
+  white-space: wrap;
+}
+
+
+#tabber-block ul.tabbernav li a
+{
+	padding: 3px 1px 2px 2px;
+	margin-left: 0;
+	border: 0.5px solid #5a5757;;
+	border-style: solid none solid solid;
+	text-decoration: none;
+	color: &dtml-globalFontColor;;
+	position: relative;
+	top: 1em;
+	background-color: &dtml-backgroundColor;;
+    /*margin-top:58px;*/
+    white-space: no-wrap;
+        
+}
+
+
+#tabber-block ul.tabbernav li.last a {
+    border-right: 1px dotted #b83d00;
+}
+
+#tabber-block ul.tabbernav li a:hover
+{
+	background-color: #ffffff;
+	border-color: #b83d00;
+        color: #b83d00;
+}
+
+#tabber-block ul.tabbernav li a:active { color: &dtml-globalFontColor;;; }
+
+#tabber-block ul.tabbernav li.tabberactive a
+{
+	background-color: #e8e6e6;
+	color: #b83d00;
+}
+
+#tabber-block ul.tabbernav li.tabberactive a:hover { 
+    cursor: default;
+}
+
+/*--------------------------------------------------
+  .tabbertab = the tab content
+  Add style only after the tabber interface is set up (.tabberlive)
+  --------------------------------------------------*/
+
+#tabber-block .tabberlive .tabbertab
+{
+	padding: 3em 0 0 1em;
+	border: 1px solid &dtml-globalBorderColor;;
+	border-top: 1.5px solid &dtml-globalBorderColor;;
+	/* If you don't want the tab size changing whenever a tab is changed
+    you can set a fixed height */
+	/* height:200px; */
+	/* If you set a fix height set overflow to auto and you will get a
+    scrollbar when necessary */
+	/* overflow:auto; */
+}
+
+/* End form tabs */
+#tabber-block .tabbertab { min-height: 24em; }
+* html #tabber-block .tabbertab { height: 1%; }
+
+/* IE fix */
+/* </dtml-with> */
+
+/* vim:ft=css
+ */
+
+

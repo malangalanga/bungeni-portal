@@ -1,0 +1,87 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonehelpcenter">
+
+<body>
+
+<div metal:fill-slot="main" class="tutorial">
+
+     <div metal:define-macro="main"
+         tal:define="sibl here/getPages;
+                     images python:here.objectValues('ATImage');">
+
+        <div metal:use-macro="here/document_actions/macros/document_actions">
+            Document actions (print, sendto etc)
+        </div>
+
+        <h1>
+        <img tal:replace="structure here/tutorial_icon.gif" />
+        <span tal:replace="here/Title" />
+        </h1>
+
+        <p class="discreet visualNoPrint"
+           i18n:translate="view_paginated_pages">
+	  Note: Return to <a href="" tal:attributes="href here/absolute_url">tutorial view</a>.
+        </p>
+
+        <div class="documentDescription" 
+             tal:content="here/getTutorialDescription">
+        Tutorial Description
+        </div>
+
+        <tal:pages repeat="page sibl">
+            <tal:page define="page page/getObject">
+                <h1>
+                    <img tal:replace="structure here/tutorial_icon.gif" />
+                    <span tal:replace="page/title_or_id">Title or id</span>
+                </h1>
+        
+                <div class="documentDescription"
+                     tal:content="page/Description">
+                    description
+                </div>
+            
+                <div id="bodyContent">
+                    <div tal:replace="structure page/getBody" />
+                </div>
+            </tal:page>
+        </tal:pages>
+
+        <tal:pages repeat="image images">
+          <h1>
+            <span tal:replace="image/title_or_id">Title or id</span>
+          </h1>
+          
+          <div class="documentDescription"
+               tal:content="image/Description">
+            description
+          </div>
+            
+         <a href=""
+           class="discreet"
+           tal:attributes="href string:${image/absolute_url}/image_view_fullscreen">
+            <tal:block replace="structure python: image.tag(scale='preview')" />
+            <br />
+            <span class="visualNoPrint">
+                <img src="" alt="" tal:replace="structure here/search_icon.gif" />
+                <span i18n:translate="label_click_to_view_full_image">Click to view full-size image&hellip;</span>
+            </span>
+	  </a>
+
+        </tal:pages>
+
+    </div>
+    <div class="visualClear">&nbsp;</div>
+        
+    <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
+      see also - shows the references if this feature is switched on
+    </div>
+    <div metal:use-macro="here/document_byline/macros/byline">
+      Get the byline - contains details about author and modification date.
+    </div>
+
+</div>
+
+</body>
+</html>

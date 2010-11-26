@@ -1,0 +1,123 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+  lang="en"
+  metal:use-macro="here/main_template/macros/master"
+  i18n:domain="plonehelpcenter">
+
+  <head>
+    <metal:block fill-slot="css_slot">
+      <metal:block metal:use-macro="here/phc_macros/macros/azcss">
+      </metal:block>
+    </metal:block>
+    <metal:block fill-slot="javascript_head_slot">
+      <metal:block metal:use-macro="here/phc_macros/macros/azjs">
+      </metal:block>
+    </metal:block>    xo
+  </head>
+
+  <body>
+    <div metal:fill-slot="main">
+    <div metal:define-macro="main"
+         tal:define="sections python:here.getItemsBySections(sort_on = 'sortable_title');
+                     noSections python:len(sections) == 1">
+
+
+    <div metal:use-macro="here/document_actions/macros/document_actions">
+      Document actions (print, sendto etc)
+    </div>
+
+    <h1 tal:content="here/Title" class="documentFirstHeading">
+      Folder Title
+    </h1>
+
+    <div metal:use-macro="here/phc_macros/macros/identityimage">
+      Identity Image 
+    </div>
+    
+    <table class="sectionIndex" tal:condition="not:noSections">
+        <thead>
+            <tr><th i18n:translate="phc_index_sections">Sections</th></tr>
+        </thead>
+        <tbody>
+            <tr tal:repeat="section sections">
+                <td><a tal:attributes="href python:'%s#%s'% (here.absolute_url(), section['id'],)"
+                       tal:content="section/section">Section</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="documentDescription"
+         tal:content="here/Description">
+      Description.
+    </div>
+
+    <div class="documentBody"
+      tal:condition="here/getBody"
+      tal:content="structure here/getBody">
+      Description
+    </div>
+
+        <p class="discreet visualNoPrint"
+           i18n:translate="view_paginated_glossary">
+	  Note: Return to <a href="" tal:attributes="href here/absolute_url">glossary view</a>.
+        </p>
+
+   <tal:define define="results python:here.alphabetise();
+                       parent_url python:here.navigationParent(here, template.getId())">
+   <ul id="nav">
+     <span tal:omit-tag="" tal:repeat="item results">
+      <li tal:condition="python:not item['items']"
+      tal:content="item/letter" />
+      <li tal:condition="python:item['items']"><a href="#" tal:attributes="href python:parent_url + '#alpha' + item['letter']" tal:content="item/letter" />
+      <ul>
+          <li tal:repeat="definition python:item['items']"><div><a href="" tal:attributes="href definition/getURL" tal:content="definition/Title"></a></div></li>
+      </ul>
+      </li>
+      </span>
+   </ul>
+   </tal:define>
+    <div tal:repeat="section sections">
+
+        <h2 tal:condition="not:noSections">
+          <a class="link-anchor" 
+              tal:content="section/section"
+              tal:attributes="name section/id">
+              Section heading
+          </a>
+        </h2>
+
+        <dl>
+            <tal:howto tal:repeat="item python:section['items']">
+            <dt>
+                <img tal:replace="structure here/glossary_icon.gif" />
+                <a href="" tal:content="item/Title"
+                   tal:attributes="href item/getURL;
+                                   class string:state-${item/review_state}">Item</a>
+                <a class="link-anchor" 
+                    tal:attributes="name item/getId;
+                                    href string:${here/absolute_url}#${item/getId};">#</a>
+                <img src="error_icon.gif" alt="!" class="outdatedMarker"
+                     tal:condition="item/isOutdated"
+                     title="This item applies to a previous version" 
+                     i18n:attributes="title"/>
+            </dt>
+            
+            <dd tal:content="structure item/Description">Description</dd>
+          </tal:howto>
+        </dl>
+
+    </div>
+
+    <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
+      see also - shows the references if this feature is switched on
+    </div>
+
+    <div metal:use-macro="here/document_byline/macros/byline">
+      Get the byline - contains details about author and modification date.
+    </div>
+
+    </div>
+    </div>
+  </body>
+
+</html>

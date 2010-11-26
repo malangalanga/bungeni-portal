@@ -1,0 +1,75 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonehelpcenter">
+
+<body>
+
+<div metal:fill-slot="main">
+    <div metal:define-macro="main"
+          tal:define="subpages python:here.objectValues(['TabbedSubpages',]);">
+                   
+    <div metal:use-macro="here/document_actions/macros/document_actions">
+      Document actions (print, sendto etc)
+    </div>
+
+
+        
+    <h1 class="documentFirstHeading">
+        <!--<span tal:replace="numbering" tal:condition="python:here.getNavType() == 'yes'">1.2.</span>-->
+        <span tal:replace="here/Title">Title</span>
+    </h1>
+
+    <div class="portalMessage"
+         tal:condition="python:here.portal_workflow.getInfoFor(here, 'review_state') != 'published'"
+         i18n:translate="must_publish_before_visible_to_public">
+      You must publish this page before it becomes visible to the public.
+    </div>
+   
+   <span>
+
+  
+
+    <div class="documentDescription"
+      tal:condition="here/Description"
+      tal:content="structure here/Description">
+      Description
+    </div>
+
+        
+    <div tal:replace="structure here/getBody"/>
+    <div class="clear"></div>
+    <div tal:repeat="subpage subpages">
+      <div tal:define="number repeat/subpage/number;
+                       layout python: here.getTargetObjectLayout(subpage);
+                       template python: getattr(subpage, layout, None);
+                       macros template/macros | nothing;
+                       main_macro macros/main | nothing">
+        <a tal:condition="python: user.has_role(['Owner', 'Reviewer', 'Manager'], context)"
+           class="edit-icon"
+           href="#" tal:attributes="href string:${subpage/absolute_url}/base_edit;"
+           title="Rediger underside">
+          <img src="" tal:attributes="src string:$portal_url/edit_icon.gif"
+               width="16"
+               title="Edit subpage"/>
+        </a>
+        <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template_id};
+                                 here python: subpage;
+                                 here_url string:${here/absolute_url};
+                                 object_title here/Title">                    
+          <div metal:use-macro="main_macro" />
+        </tal:content>
+      </div>
+    </div>
+    <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
+      see also - shows the references if this feature is switched on
+    </div>
+
+
+    <!--<div metal:use-macro="here/document_byline/macros/byline">Get the byline - contains details about author and modification date.</div>-->
+
+  </div>
+</div>
+
+</body>
+</html>

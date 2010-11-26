@@ -1,0 +1,122 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonehelpcenter">
+
+<head>
+ <metal:slot fill-slot="javascript_head_slot">
+   <script type="text/javascript" tal:attributes="src string:${context/portal_url}/TabbedSubpages.js" src=""></script>
+   <LINK tal:attributes="href string:${context/portal_url}/TabbedSubpages.css"
+         href="TabbedSubpages.css" rel="stylesheet" type="text/css">
+   <LINK tal:attributes="href string:${context/portal_url}/TabbedVertical.css"
+         href="TabbedSubpages.css" rel="stylesheet" type="text/css">
+ </metal:slot>
+</head>
+<body>
+
+<div metal:fill-slot="main" class="referencemanual">
+    <div metal:define-macro="main"
+          tal:define="fullToc    python:here.getTOC(current = here);
+                      tocInfo    python:here.getTOCInfo(fullToc);
+                      currentIdx tocInfo/currentIdx;
+                      tocList    tocInfo/tocList;
+                      current    python:tocList[currentIdx];
+                      numbering  current/numbering;
+                      subpages python:here.objectValues(['TabbedSubpages',]);">
+                   
+
+    <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'top']">
+    <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
+    </span>
+    
+
+    <div metal:use-macro="here/phc_macros/macros/identityimage">
+      Identity Image 
+    </div>
+    <h1 class="documentFirstHeading">
+        <span tal:replace="numbering" tal:condition="python:here.getNavType() == 'yes'">1.2.</span>
+        <span tal:replace="here/Title">Title</span>
+    </h1>
+
+    
+    <a href=""
+           class="link-parent"
+           tal:define="parent_url python:here.navigationParent(here, template.getId())"
+           tal:condition="parent_url"
+           tal:attributes="href parent_url"
+           i18n:domain="plone"
+           i18n:translate="go_to_parent_url">
+        Up one level
+        </a>
+    <div class="portalMessage"
+         tal:condition="python:here.portal_workflow.getInfoFor(here, 'review_state') != 'published'"
+         i18n:translate="must_publish_before_visible_to_public">
+      You must publish this page before it becomes visible to the public.
+    </div>
+
+    <span tal:omit-tag="" tal:condition="python:here.getDisType() == 'yes'">
+
+    <div class="documentDescription"
+      tal:condition="here/Description"
+      tal:content="structure here/Description">
+      Description
+    </div>
+    </span>
+    
+    
+    <div tal:replace="structure here/getBody"/>
+        <div class="visualClear">&nbsp;</div>
+
+    <div id="tabber-block">
+
+        <div class="tabbernav-center">
+            <div class="tabber" tal:attributes="id here/getId">
+                <tal:tabs define="default_page here/REQUEST/page|python: 1"
+                          repeat="subpage subpages">
+                    <div tal:define="number repeat/subpage/number;
+                                     layout python: here.getTargetObjectLayout(subpage);
+                                     template python: getattr(subpage, layout, None);
+                                     macros template/macros | nothing;
+                                     main_macro macros/main | nothing"
+                         tal:attributes="class python: test(number == int(default_page), 'tabbertab tabbertabdefault', 'tabbertab')">
+                        <a tal:condition="python: user.has_role(['Owner', 'Reviewer', 'Manager'], context)"
+                            class="edit-icon"
+                            href="#" tal:attributes="href string:${subpage/absolute_url}/base_edit;"
+                            title="Rediger underside">
+                                <img src="" tal:attributes="src string:$portal_url/edit_icon.gif"
+                                            width="16"
+                                            title="Edit subpage"/>
+                        </a>
+                        
+                        <h2 class="tabberHeading" tal:content="subpage/Title">Tab</h2>
+                        <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template_id};
+                                                 here python: subpage;
+                                                 here_url string:${here/absolute_url};
+                                                 object_title here/Title">                    
+                            <div metal:use-macro="main_macro" />
+                        </tal:content>
+                    </div>
+                </tal:tabs>
+            </div>
+        </div>
+
+    </div>
+    <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
+      see also - shows the references if this feature is switched on
+    </div>
+    
+    <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'bottom']">
+    <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
+    </span>
+
+    <div metal:use-macro="here/document_byline/macros/byline">
+      Get the byline - contains details about author and modification date.
+    </div>
+    
+    <div tal:replace="structure provider:plone.belowcontentbody" />    
+
+  </div>
+</div>
+
+</body>
+</html>

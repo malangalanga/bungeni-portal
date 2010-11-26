@@ -1,0 +1,76 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+  lang="en"
+  metal:use-macro="here/main_template/macros/master"
+  i18n:domain="plonehelpcenter">
+
+<body>
+  <div metal:fill-slot="main" class="referencemanual">
+    <div metal:define-macro="main"
+       tal:define="fullToc python:here.getTOC(current = here);
+                   tocInfo python:here.getTOCInfo(fullToc);
+                   currentIdx tocInfo/currentIdx|nothing;
+                   tocList    tocInfo/tocList;
+                   currentInfo    python:currentIdx and tocList[currentIdx] or here;
+                   toc     tocInfo/localTOC|nothing">
+
+    <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'top']">
+    <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
+    </span><br />
+
+        <p class="visualNoPrint" tal:condition="nocall:toc">
+          <a href="referencemanualallpages"
+             i18n:translate="all_content_on_one_page">
+            All content on one page (useful for printing, presentation mode etc.)
+          </a>
+        </p>
+
+    <div metal:use-macro="here/phc_macros/macros/identityimage">
+      Identity Image 
+    </div>
+
+    <h1 class="documentFirstHeading">
+        
+        <!--<span tal:content="currentInfo/numbering"></span>-->
+        <span tal:replace="here/Title">Title</span>
+    </h1>
+    
+
+
+    <div class="portalMessage"
+         tal:condition="python:here.portal_workflow.getInfoFor(here, 'review_state') != 'published'"
+         i18n:translate="must_publish_before_visible_to_public">
+        You must publish this page before it becomes visible to the public.
+    </div>
+    
+    
+    <div class="documentDescription"
+      tal:condition="here/Description"
+      tal:content="structure here/Description">
+      Description
+    </div>
+
+    <div class="documentBody"
+      tal:condition="here/getBody"
+      tal:content="structure here/getBody">
+      Description
+    </div>
+
+    
+    <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
+      see also - shows the references if this feature is switched on
+    </div>
+     
+   <metal:recursion use-macro="here/referencemanual_macros/macros/section_toc"/>    
+
+    <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'bottom']">
+    <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
+    </span>
+
+    <div metal:use-macro="here/document_byline/macros/byline">
+      Get the byline - contains details about author and modification date.
+    </div>
+  </div>
+  <div tal:replace="structure provider:plone.belowcontentbody" />
+  </div>
+</body>
+</html>

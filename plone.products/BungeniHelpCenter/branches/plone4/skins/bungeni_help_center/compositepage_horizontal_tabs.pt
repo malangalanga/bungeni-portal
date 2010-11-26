@@ -1,0 +1,79 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonehelpcenter">
+
+<head>
+
+  <div metal:fill-slot="javascript_head_slot" tal:omit-tag="">
+     <script type="text/javascript"
+             tal:attributes="src string:${context/portal_url}/TabbedSubpages.js">
+     </script>
+     <link type="text/css" rel="stylesheet"
+           tal:attributes="href string:${context/portal_url}/TabbedSubpages.css"/>
+</div>     
+   
+</head>
+<body>
+
+<div metal:fill-slot="main" class="tabs">
+    <div metal:define-macro="main"
+          tal:define="subpages python:here.objectValues(['TabbedSubpages',]);">                    
+    
+    <div class="portalMessage"
+         tal:condition="python:here.portal_workflow.getInfoFor(here, 'review_state') != 'published'"
+         i18n:translate="must_publish_before_visible_to_public">
+      You must publish this page before it becomes visible to the public.
+    </div>
+
+
+
+    
+    <div tal:replace="structure here/getBody"/>
+        <div class="visualClear">&nbsp;</div>
+
+    <div id="tabber-block">
+
+        <div class="tabbernav-center">
+            <div class="tabber" tal:attributes="id here/getId">
+                <tal:tabs define="default_page here/REQUEST/page|python: 1"
+                          repeat="subpage subpages">
+                    <div tal:define="number repeat/subpage/number;
+                                     layout python: here.getTargetObjectLayout(subpage);
+                                     template python: getattr(subpage, layout, None);
+                                     macros template/macros | nothing;
+                                     main_macro macros/main | nothing"
+                         tal:attributes="class python: test(number == int(default_page), 'tabbertab tabbertabdefault', 'tabbertab')">
+                        <a tal:condition="python: user.has_role(['Owner', 'Reviewer', 'Manager'], context)"
+                            class="edit-icon"
+                            href="#" tal:attributes="href string:${subpage/absolute_url}/base_edit;"
+                            title="Rediger underside">
+                                <img src="" tal:attributes="src string:$portal_url/edit_icon.gif"
+                                            width="16"
+                                            title="Edit subpage"/>
+                        </a>
+                        <h4 class="tabberHeading" tal:content="subpage/Title">Tab</h4>
+                        <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template_id};
+                                                 here python: subpage;
+                                                 here_url string:${here/absolute_url};
+                                                 object_title here/Title">                    
+                            <div metal:use-macro="main_macro" />
+                        </tal:content>
+                    </div>
+                </tal:tabs>
+            </div>
+        </div>
+
+    </div>
+    <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
+      see also - shows the references if this feature is switched on
+    </div>
+
+    
+    <div tal:replace="structure provider:plone.belowcontentbody" />
+
+  </div>
+</div>
+
+</body>
+</html>

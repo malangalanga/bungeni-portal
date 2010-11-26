@@ -1,0 +1,98 @@
+<metal:master define-macro="master">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+  lang="en"
+  metal:use-macro="here/main_template/macros/master"
+  i18n:domain="plonehelpcenter">
+
+  <head>
+
+  <div metal:fill-slot="javascript_head_slot" tal:omit-tag="">
+     <script type="text/javascript"
+             tal:attributes="src string:${context/portal_url}/helplink_az_listing.js"
+             src="">
+     </script>
+  </div>     
+     
+  <div metal:fill-slot="css_slot" tal:omit-tag="">     
+     <link type="text/css" rel="stylesheet"
+           tal:attributes="href string:${context/portal_url}/helplink_az_listing.css"/>
+  </div>         
+
+  </head>
+
+  <body>
+    <div metal:fill-slot="main">
+    <div metal:define-macro="main"
+         tal:define="sections here/getItemsBySections;
+                     noSections python:len(sections) == 1">
+
+    <h1 tal:content="here/Title" class="documentFirstHeading">
+      Folder Title
+    </h1>
+
+    <a href="" tal:attributes="href python:here.absolute_url()+'/helplinkfolder_sections'">Category Based View</a>
+
+    <div metal:use-macro="here/phc_macros/macros/identityimage">
+      Identity Image 
+    </div>
+    
+    <div class="documentDescription"
+         tal:content="here/Description">
+      Description.
+    </div>
+
+    <div class="documentBody"
+      tal:condition="here/getBody"
+      tal:content="structure here/getBody">
+      Description
+    </div>
+
+   <tal:define define="results python:here.alphabetiseContext();
+                       parent_url python:here.navigationParent(here, template.getId())">
+   <ul id="nav">
+     <span tal:omit-tag="" tal:repeat="item results">
+      <li tal:condition="python:not item['items']"
+      tal:content="item/letter" />
+      <li tal:condition="python:item['items']" class="bubblemenu">
+      <a href="#" tal:attributes="href python:parent_url + '#alpha' + item['letter']; id string:glossaryAZitem" tal:content="item/letter" />
+        <div class="tooltip">
+          <ul id="alphabetizedInnerList">
+              <li tal:repeat="definition python:item['items']"><div><a href="" tal:attributes="href definition/getURL" tal:content="definition/Title"></a></div></li>
+          </ul>
+        </div>
+      </li>
+      </span>
+   </ul>
+
+   <span tal:omit-tag="" tal:repeat="item results">
+     <span tal:omit-tag="" tal:condition="python:item['items']">  
+      
+     <div><b tal:attributes="id python:'alpha'+item['letter']"
+           tal:content="item/letter"></b>
+        <ul>
+          <span tal:omit-tag="" tal:repeat="definition python:item['items']">
+            <li><a href="" tal:attributes="href definition/getURL" tal:content="definition/Title"></a></li>
+          </span>
+        </ul>
+        <div class="floatright">
+         [<a href="#portal-top">Back</a>]
+        </div>
+     </div>
+     </span>
+   </span>
+   
+   </tal:define>
+
+    <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
+      see also - shows the references if this feature is switched on
+    </div>
+    <div metal:use-macro="here/document_byline/macros/byline">
+      Get the byline - contains details about author and modification date.
+    </div>
+    </div>
+    <div tal:replace="structure provider:plone.belowcontentbody" />
+    </div>
+  </body>
+
+</html>
+</metal:master>

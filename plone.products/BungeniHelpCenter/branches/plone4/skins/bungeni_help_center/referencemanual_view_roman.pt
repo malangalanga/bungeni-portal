@@ -1,0 +1,17 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+  lang="en"
+  metal:use-macro="here/main_template/macros/master"
+  i18n:domain="plonehelpcenter">
+
+<body>
+
+  <div metal:fill-slot="main" class="referencemanual">
+    <div metal:use-macro="here/referencemanual_view/macros/main">
+	<div metal:fill-slot="sectiontoc">
+        <metal:recursion use-macro="here/referencemanual_macros/macros/section_toc_roman"/>
+	</div>
+    </div>
+  </div>
+</body>
+</html>
+

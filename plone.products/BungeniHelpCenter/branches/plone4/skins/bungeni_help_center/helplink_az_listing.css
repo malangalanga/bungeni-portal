@@ -1,0 +1,77 @@
+/* 
+** Bungeni Help Center style sheet.
+** Alphabetical listing
+*/
+
+/* all lists */
+.documentContent #nav, #nav ul { 
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  line-height: 1;
+}
+
+.documentContent #nav li a {
+  display: block;
+  border-bottom: 1px solid;
+  border-bottom-width: 1px;
+  width:1em;
+}
+
+#nav a:hover {
+  font-weight:normal;
+}
+
+#nav li ul a:hover {
+  background-color:#fdf1ea;
+  font-weight:normal;
+  width:20em;
+  display: block;  
+}
+
+#nav a:active {
+  font-weight:normal;
+}
+
+#nav a:visited {
+  text-decoration:none;
+  font-weight:normal;
+}
+
+/* all list items */
+#nav li { 
+  float: left;
+  width: 2.2em; /* width needed or else Opera goes nuts */
+  margin:0em;
+}
+
+#nav li ul { /* second-level lists */
+  padding:0em;
+  position: absolute;
+  width: 2.5em;
+  left: -999em;
+  background-color:#e3dede;
+}
+
+#nav li ul li div {
+  background-color:#e3dede;
+  width:25em;
+  padding:5px;
+}
+
+.documentContent #nav li ul li div a {
+  display: block;
+  border: 0px;
+  width:25em;  
+}
+
+/* lists nested under hovered
+   list items */
+
+#nav li:hover ul, #nav li.sfhover ul { 
+  left: auto;
+}
+
+a.linkSection {
+  text-decoration: underline;
+}

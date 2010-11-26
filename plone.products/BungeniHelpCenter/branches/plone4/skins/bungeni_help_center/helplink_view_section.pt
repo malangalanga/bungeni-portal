@@ -1,0 +1,168 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonehelpcenter">
+<body>
+  <head>
+    <div metal:fill-slot="javascript_head_slot" tal:omit-tag="">
+      <script type="text/javascript"
+              tal:attributes="src string:${context/portal_url}/helplink_az_listing.js"
+              src="">
+      </script>
+    </div>     
+    
+    <div metal:fill-slot="css_slot" tal:omit-tag="">     
+      <link type="text/css" rel="stylesheet"
+            tal:attributes="href string:${context/portal_url}/helplink_az_listing.css"/>
+    </div>         
+  </head>
+
+<div metal:fill-slot="main"
+     tal:define="chapters python:here.aq_parent.getFolderContents(contentFilter = {'portal_type' : ['HelpCenterLink'], 'sort_on':'getSections'});
+                 sibl     python:[p for p in chapters];
+                 num_sibl python:len(sibl);
+                 pos      python: [i for i in range(num_sibl)  if sibl[i].getId == here.getId()][0];"
+     class="links">
+
+  <div metal:define-macro="main">
+ <div metal:use-macro="here/document_actions/macros/document_actions">
+            Document actions (print, sendto etc)
+ </div>
+
+   <tal:define define="parentnode context/@@plone_context_state/parent; results python:parentnode.alphabetiseContext();
+   parent_url python:here.navigationParent(here, template.getId())">
+   <ul id="nav">
+     <span tal:omit-tag="" tal:repeat="item results">
+      <li tal:condition="python:not item['items']"
+      tal:content="item/letter" />
+      <li tal:condition="python:item['items']" class="bubblemenu">
+      <a href="#" tal:attributes="href python:parent_url + '#alpha' + item['letter']" tal:content="item/letter" />
+        <div class="tooltip">
+          <ul id="alphabetizedInnerList">
+              <li tal:repeat="definition python:item['items']"><div><a href="" tal:attributes="href definition/getURL" tal:content="definition/Title"></a></div></li>
+          </ul>
+        </div>
+      </li>
+      </span>
+   </ul>
+   </tal:define>
+
+    <div class="listingBar" tal:condition="python: next or prev"
+              tal:define="next python:pos &lt; num_sibl-1;
+                   prev python:pos != 0;">
+   <table class="navtable"><tr> 
+    <td class="leftcell">  
+               <span tal:condition="prev">
+                  <a class="listingPrevious"
+                     tal:define="prevsib python:sibl[pos-1]"
+                     tal:attributes="href python:str(prevsib.getId) + '/helplink_view_section'"
+                     tabindex="2"
+                     href="">
+                    <img tal:replace="structure here/arrowLeft.gif" />
+                    <span tal:content="python:here.trunc(prevsib.Title)" /><span tal:content="prevsib/Title" class="hovertooltip" tal:condition="python:len(prevsib.Title) > len(here.trunc(prevsib.Title))"/>                     
+                  </a>
+               </span>
+    </td>
+    <td class="rightcell">
+ 
+               <span tal:condition="next">
+                  <a class="listingNext"
+                   tal:define="nextsib python:sibl[pos+1]"
+                   tal:attributes="href python:str(nextsib.getId) + '/helplink_view_section'"
+                   tabindex="1"
+                   href="">
+
+                  <span tal:content="python:here.trunc(nextsib.Title)" /><span tal:content="nextsib/Title" class="hovertooltip" tal:condition="python:len(nextsib.Title) > len(here.trunc(nextsib.Title))"/>                   
+                  <img tal:replace="structure here/arrowRight.gif" /> 
+                   </a>
+               </span>
+</td></tr></table>
+</div> 
+    
+        <h1 class="documentFirstHeading">
+            <img tal:replace="structure here/helplink_icon.gif" />
+            <span tal:replace="here/title_or_id">Title or id</span>
+        </h1>
+    
+        <div tal:condition="here/isOutdated" i18n:translate="phc_warning_outdated" class="portalMessage">
+           Warning: This item is marked as outdated.
+        </div>
+        <p class="discreet">
+           <span tal:condition="here/getVersionsVocab" tal:define="versions here/Versions">
+           <span i18n:translate="phc_link_applies_to">This Link applies to:</span>         
+           <span tal:condition="versions" tal:replace="versions">1.0, 2.0</span>
+           <span tal:condition="not: versions" i18n:translate="phc_any_version">Any version.</span>
+        </span>
+        </p>   
+
+    <div metal:use-macro="here/phc_macros/macros/identityimage">
+      Identity Image 
+    </div>
+    
+        <div class="documentDescription"
+             tal:content="here/Description">
+            description
+        </div>
+
+    <div class="documentBody"
+      tal:condition="here/getBody"
+      tal:content="structure here/getBody">
+      Body
+    </div>
+  
+        <p>
+	<b>
+	<span i18n:translate="phc_link">
+	Link:
+	</span>
+	</b>
+        <a href="" tal:attributes="href here/url" tal:content="here/url">url</a>
+        </p>
+    
+    
+    
+    <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
+      see also - shows the references if this feature is switched on
+    </div>
+    <div metal:use-macro="here/document_byline/macros/byline">
+      Get the byline - contains details about author and modification date.
+    </div>    
+
+    <div class="listingBar" tal:condition="python: next or prev"
+              tal:define="next python:pos &lt; num_sibl-1;
+                   prev python:pos != 0;">
+   <table class="navtable"><tr> 
+    <td class="leftcell">  
+               <span tal:condition="prev">
+                  <a class="listingPrevious"
+                     tal:define="prevsib python:sibl[pos-1]"
+                     tal:attributes="href python:str(prevsib.getId) + '/helplink_view_section'"
+                     tabindex="2"
+                     href="">
+                    <img tal:replace="structure here/arrowLeft.gif" />
+                    <span tal:content="python:here.trunc(prevsib.Title)" /><span tal:content="prevsib/Title" class="hovertooltip" tal:condition="python:len(prevsib.Title) > len(here.trunc(prevsib.Title))"/> 
+                  </a>
+               </span>
+    </td>
+    <td class="rightcell">
+ 
+               <span tal:condition="next">
+                  <a class="listingNext"
+                   tal:define="nextsib python:sibl[pos+1]"
+                   tal:attributes="href python:str(nextsib.getId) + '/helplink_view_section'"
+                   tabindex="1"
+                   href="">
+                  <span tal:content="python:here.trunc(nextsib.Title)" /><span tal:content="nextsib/Title" class="hovertooltip" tal:condition="python:len(nextsib.Title) > len(here.trunc(nextsib.Title))"/>                   
+                  <img tal:replace="structure here/arrowRight.gif" /> 
+                   </a>
+               </span>
+</td></tr></table>
+</div> 
+    </div>
+
+
+
+</div>
+
+</body>
+</html>
