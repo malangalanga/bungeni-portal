@@ -7,12 +7,11 @@
   <body>
     <div metal:fill-slot="main" class="tutorial">
     <div metal:define-macro="main"
-         tal:define="audiences here/getItemsByAudiencesAndSections;
+         tal:define="view here/@@hcf_view;
+					 audiences view/getItemsByAudiencesAndSections;
                      noAudiences python:len(audiences) == 1">
 
-    <div metal:use-macro="here/document_actions/macros/document_actions">
-      Document actions (print, sendto etc)
-    </div>
+    <div tal:replace="structure provider:plone.documentactions"/>
     
     <h1 tal:content="here/Title" class="documentFirstHeading">
       Folder Title
@@ -93,9 +92,7 @@
     <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
       see also - shows the references if this feature is switched on
     </div>
-    <div metal:use-macro="here/document_byline/macros/byline">
-      Get the byline - contains details about author and modification date.
-    </div>
+    <div tal:replace="structure provider:plone.belowcontenttitle"/>
     </div>
     </div>
   </body>

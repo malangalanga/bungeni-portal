@@ -6,12 +6,11 @@
 
   <body>
     <div metal:fill-slot="main"
-         tal:define="audiences here/getItemsByAudiencesAndSections;
+         tal:define="view here/@@hcf_view;
+					 audiences view/getItemsByAudiencesAndSections;
                      noAudiences python:len(audiences) == 1">
 
-    <div metal:use-macro="here/document_actions/macros/document_actions">
-      Document actions (print, sendto etc)
-    </div>
+    <div tal:replace="structure provider:plone.documentactions"/>
     
     <h1 tal:content="here/Title" class="documentFirstHeading">
       Folder Title
