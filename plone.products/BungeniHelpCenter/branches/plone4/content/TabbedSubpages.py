@@ -2,7 +2,7 @@ from AccessControl import ClassSecurityInfo
 from Products.ATContentTypes.content.document import ATDocument
 from Products.ATContentTypes.content.document import ATDocumentSchema
 from Products.CMFCore.permissions import View
-from Products.PloneHelpCenter.config import DEFAULT_CONTENT_TYPES, REFERENCEABLE_TYPES, IMAGE_SIZES
+from Products.PloneHelpCenter.config import DEFAULT_CONTENT_TYPES, REFERENCEABLE_TYPES, IMAGE_SIZES, PROJECTNAME
 
 from Products.BungeniHelpCenter.config import TYPE_PARAMS
 from Products.BungeniHelpCenter.config import BUNGENI_REFERENCEABLE_TYPES
@@ -89,4 +89,4 @@ try:
 except ImportError:
   from Products.Archetypes.public import registerType
   
-registerType(TabbedSubpages)
+registerType(TabbedSubpages, PROJECTNAME)

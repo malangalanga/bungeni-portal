@@ -2,7 +2,7 @@ from AccessControl import ClassSecurityInfo
 from Products.ATContentTypes.content.document import ATDocument
 from Products.ATContentTypes.content.document import ATDocumentSchema
 from Products.CMFCore.permissions import View
-from Products.PloneHelpCenter.config import DEFAULT_CONTENT_TYPES, REFERENCEABLE_TYPES, IMAGE_SIZES
+from Products.PloneHelpCenter.config import DEFAULT_CONTENT_TYPES, REFERENCEABLE_TYPES, IMAGE_SIZES, PROJECTNAME
 
 from Products.BungeniHelpCenter.config import TYPE_PARAMS
 from Products.BungeniHelpCenter.config import BUNGENI_REFERENCEABLE_TYPES
@@ -72,8 +72,7 @@ CompositePageSchema =  HelpCenterReferenceManualPage.schema + Schema((RelatedIte
 
 class CompositePage(BrowserDefaultMixin, OrderedBaseFolder, HelpCenterReferenceManualPage):
     """Represents a page that can contain Tabbed Pages. """
-    __implements__ = (PHCContent.__implements__,
-                      OrderedBaseFolder.__implements__,)
+    __implements__ = (PHCContent.__implements__)
 
     
     security = ClassSecurityInfo()
@@ -174,4 +173,4 @@ class CompositePage(BrowserDefaultMixin, OrderedBaseFolder, HelpCenterReferenceM
             return view
             
   
-registerType(CompositePage)
+registerType(CompositePage, PROJECTNAME)

@@ -18,7 +18,12 @@ from Products.PloneHelpCenter.content import ReferenceManual,\
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin, fti_meta_type
 from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
-from Products.CMFPlone.browser.navtree import NavtreeStrategyBase, buildFolderTree
+
+try:
+	from Products.CMFPlone.browser.navtree import NavtreeStrategyBase, buildFolderTree
+except ImportError:
+	from plone.app.layout.navigation.navtree import buildFolderTree
+	
 from Products.PloneHelpCenter.config import DEFAULT_CONTENT_TYPES, REFERENCEABLE_TYPES, IMAGE_SIZES
 from Products.BungeniHelpCenter.config import BUNGENI_REFERENCEABLE_TYPES
 
@@ -243,11 +248,12 @@ HelpCenterReferenceManualSchema.moveField('subject', pos='bottom')
 HelpCenterReferenceManualSchema.moveField('relatedItems', pos='bottom')
 HelpCenterReferenceManualSchema.moveField('rights', pos='bottom')
 
-class BungeniHelpCenterReferenceManual(BrowserDefaultMixin,  HelpCenterReferenceManual):
+class BungeniHelpCenterReferenceManual(BrowserDefaultMixin,  
+									   HelpCenterReferenceManual,
+									   OrderedBaseFolder):
     """A document that is subdivided in chapters, sections and pages. It can also contain images and files"""
 
-    __implements__ =(PHCContent.__implements__,
-                      OrderedBaseFolder.__implements__,)
+    __implements__ =(PHCContent.__implements__)
 
     archetype_name = 'Hierarchical Document'
     meta_type='HelpCenterReferenceManual'
@@ -426,11 +432,12 @@ HelpCenterTutorialSchema.moveField('body', pos='top')
 HelpCenterTutorialSchema.moveField('description', pos='top')
 HelpCenterTutorialSchema.moveField('title', pos='top')
 
-class BungeniHelpCenterTutorial(BrowserDefaultMixin, HelpCenterTutorial):
+class BungeniHelpCenterTutorial(BrowserDefaultMixin, 
+								HelpCenterTutorial,
+								OrderedBaseFolder):
     """A tutorial containing TutorialPages, Files and Images."""
 
-    __implements__ = (PHCContent.__implements__,
-                      OrderedBaseFolder.__implements__,)
+    __implements__ = (PHCContent.__implements__)
 
     archetype_name = 'Categorized Document'
     meta_type = 'HelpCenterTutorial'
@@ -529,8 +536,7 @@ HelpCenterTutorialPage.schema.moveField('contributors', pos='bottom')
 class BungeniHelpCenterTutorialPage(BrowserDefaultMixin, OrderedBaseFolder, HelpCenterTutorialPage):
     """A tutorial containing TutorialPages, Files and Images."""
 
-    __implements__ = (PHCContent.__implements__,
-                      OrderedBaseFolder.__implements__,)
+    __implements__ = (PHCContent.__implements__)
 
     archetype_name = 'Page'
     meta_type='BungeniHelpCenterTutorialPage'
@@ -627,8 +633,7 @@ BungeniHelpCenterReferenceManualPageSchema = \
 class BungeniHelpCenterReferenceManualPage(BrowserDefaultMixin, OrderedBaseFolder, HelpCenterReferenceManualPage):
     """A tutorial containing TutorialPages, Files and Images."""
 
-    __implements__ = (PHCContent.__implements__,
-                      OrderedBaseFolder.__implements__,)
+    __implements__ = (PHCContent.__implements__)
 
     archetype_name = 'Page'
     meta_type='BungeniHelpCenterReferenceManualPage'
@@ -731,8 +736,7 @@ class BungeniHelpCenterReferenceManualSection(BrowserDefaultMixin, OrderedBaseFo
     """A section of a hierarchical document. It can contain sections and pages.
     """
 
-    __implements__ = (PHCContent.__implements__,
-                      OrderedBaseFolder.__implements__,)
+    __implements__ = (PHCContent.__implements__)
 
     archetype_name = 'Section'
     meta_type='BungeniHelpCenterReferenceManualSection'
@@ -835,8 +839,7 @@ BungeniHelpCenterGlossarySchema = \
 class BungeniHelpCenterGlossary(BrowserDefaultMixin, OrderedBaseFolder, HelpCenterGlossary):
     """A Glossary containing definitions."""
 
-    __implements__ = (PHCContent.__implements__,
-                      OrderedBaseFolder.__implements__,)
+    __implements__ = (PHCContent.__implements__)
 
     archetype_name = 'Glossary'
     meta_type='BungeniHelpCenterGlossary'
