@@ -65,8 +65,11 @@ class ICommittee(IBungeniGroup):
     """Marker interface for group ministry.
     """
 
+class IPoliticalGroup(IBungeniGroup):
+    """Marker interface for political group (inside parliament).
+    """
 class IPoliticalParty(IBungeniGroup):
-    """Marker interface for political party.
+    """Marker interface for political party (outside parliament).
     """
 
 class IOffice(IBungeniGroup):
@@ -182,7 +185,7 @@ class ISittingType(interface.Interface):
     pass
 
 
-class IScheduledItemDiscussion(interface.Interface):
+class IItemScheduleDiscussion(interface.Interface):
     pass
 
 class ITabledDocument(IBungeniContent):
@@ -314,8 +317,8 @@ class IAttachedFile(interface.Interface):
 class IAttachedFileVersionContainer(IVersionContainer):
     pass
 
-class IConsignatory(interface.Interface):
-    """Consignatories for bills, motions, ...
+class ICosignatory(interface.Interface):
+    """Cosignatories for bills, motions, ...
     """
 
 class IConstituency(interface.Interface):
@@ -367,9 +370,16 @@ class IMemberRoleTitle(interface.Interface):
     pass
 
 
-class IUserAddress(interface.Interface):
+class _IAddress(interface.Interface):
+    """Base marker interface for an Address
+    """
+class IGroupAddress(_IAddress):
+    """Marker interface addresses of a group.
+    """
+class IUserAddress(_IAddress):
     """Marker interface addresses of a user.
     """
+
 
 class IGroupItemAssignment(interface.Interface):
     pass

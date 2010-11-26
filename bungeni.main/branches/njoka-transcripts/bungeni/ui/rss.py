@@ -1,5 +1,7 @@
+from bungeni.alchemist import Session
 from bungeni.core.interfaces import IRSSValues
 from bungeni.core.translation import translate_obj
+from bungeni.models.domain import User
 from datetime import datetime
 from i18n import _
 from zope.app.component.hooks import getSite
@@ -8,6 +10,7 @@ from zope.i18n import translate
 from zope.publisher.browser import BrowserView
 from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser import absoluteURL
+import re
 import xml.dom.minidom as xmllib
 
 
@@ -43,6 +46,7 @@ class RSSView(BrowserView):
                                                                 item_url,
                                                                 self.get_date(i18n_item),
                                                                 item_url))
+
         return self.response.toxml("utf-8")
 
     def get_item_url(self, item):
@@ -60,7 +64,7 @@ class RSSView(BrowserView):
         item_element.appendChild(link_element)
 
         description_element = self.response.createElement("description")
-        description_element.appendChild(self.response.createTextNode(description))
+        description_element.appendChild(self.response.createCDATASection(description))
         item_element.appendChild(description_element)
 
         guid_element = self.response.createElement("guid")
@@ -72,6 +76,25 @@ class RSSView(BrowserView):
         item_element.appendChild(date_element)
 
         return item_element
+
+    def replace_html_entities(self, text):
+        """ replaces HTML entities from the text """
+        global glEntities
+        # replace numeric entities
+        _numentities = set(re.findall("(&#\d+;)", text))
+        for entity in _numentities:
+            code = entity[2:-1]
+            text = text.replace(entity, unichr(int(code)))
+        # replace character     entities
+        _entities = set(re.findall("(&[a-zA-Z0-9]+;)", text))
+        for entity in _entities:
+            literal = entity[1:-1]
+            if literal in glEntities:
+                try:
+                    text = text.replace(entity, unichr(int("0x%s" % glEntities[literal], 16)))
+                except Exception:
+                    pass
+        return text
 
     def generate_channel(self):
         channel_element = self.response.createElement("channel")
@@ -439,12 +462,47 @@ class AkomantosoRSSView(object):
 
     view_name = u"/akomantoso.xml"
 
+    def __call__(self):
+        self.request.response.setHeader('Content-Type', 'application/rss+xml')
+
+        for item in self.values:
+            #Trying to translate item to the current language
+            i18n_item = translate_obj(item, self.request.locale.id.language)
+            item_url = self.get_item_url(item)
+            self.channel_element.appendChild(self.generate_item(self.get_title(i18n_item),
+                                                                item_url,
+                                                                self.get_date(i18n_item),
+                                                                item_url))
+        return self.response.toxml("utf-8")
+
+    def generate_item(self, title, guid, pubDate, link):
+        item_element = self.response.createElement("item")
+
+        title_element = self.response.createElement("title")
+        title_element.appendChild(self.response.createTextNode(title))
+        item_element.appendChild(title_element)
+
+        link_element = self.response.createElement("link")
+        link_element.appendChild(self.response.createTextNode(link))
+        item_element.appendChild(link_element)
+
+        guid_element = self.response.createElement("guid")
+        guid_element.appendChild(self.response.createTextNode(guid))
+        item_element.appendChild(guid_element)
+
+        date_element = self.response.createElement("pubDate")
+        date_element.appendChild(self.response.createTextNode(self._format_date(pubDate)))
+        item_element.appendChild(date_element)
+
+        return item_element
+
 
 class AkomantosoBillRSSView(AkomantosoRSSView, BillRSSView):
     """ View to generate RSS that links
         to akomantoso XML representation
         of bill.
     """
+
 
 class AkomantosoQuestionRSSView(AkomantosoRSSView, QuestionRSSView):
     """ View to generate RSS that links
@@ -1045,3 +1103,38 @@ class AkomantosoAgendaItemXMLView(AkomantosoXMLView):
                                                   showAs="",
                                                   date=ob.submission_date.strftime("%Y-%m-%d"))
         return publication_element
+
+
+class SubscriptionView(BrowserView):
+    """ View to manipulate with user's
+        subscriptions (add or remove)
+    """
+
+    def subscribe(self):
+        session = Session()
+        redirect_url = absoluteURL(self.context, self.request)
+        user = session.query(User).filter(User.login == self.request.principal.id).first()
+        # In case we somewhy couldn't find the user
+        if user is None:
+            return self.request.response.redirect(redirect_url)
+        # Adding context item to user's subscriptions
+        trusted = removeSecurityProxy(self.context)
+        user.subscriptions.append(trusted)
+        # Redirecting back to the item's page
+        return self.request.response.redirect(redirect_url)
+
+    def unsubscribe(self):
+        session = Session()
+        redirect_url = absoluteURL(self.context, self.request)
+        user = session.query(User).filter(User.login == self.request.principal.id).first()
+        # In case we somewhy couldn't find the user
+        if user is None:
+            return self.request.response.redirect(redirect_url)
+        # Removing context item from user's subscriptions
+        trusted = removeSecurityProxy(self.context)
+        try:
+            user.subscriptions.remove(trusted)
+        except ValueError:
+            pass
+        # Redirecting back to the item's page
+        return self.request.response.redirect(redirect_url)

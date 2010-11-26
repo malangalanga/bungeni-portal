@@ -263,8 +263,8 @@ class GroupSittingAttendanceDescriptiveProperties(DescriptiveProperties):
         return context.attendance_type.attendance_type
 
 
-class ConsignatoryDescriptiveProperties(DescriptiveProperties):
-    component.adapts(interfaces.IConsignatory)
+class CosignatoryDescriptiveProperties(DescriptiveProperties):
+    component.adapts(interfaces.ICosignatory)
     
     @property
     def title(self):
@@ -324,8 +324,8 @@ class RegionDescriptiveProperties(DescriptiveProperties):
         return context.region
 
 
-class ScheduledItemDiscussionDescriptiveProperties(DescriptiveProperties):
-    component.adapts(interfaces.IScheduledItemDiscussion)
+class ItemScheduleDiscussionDescriptiveProperties(DescriptiveProperties):
+    component.adapts(interfaces.IItemScheduleDiscussion)
     
     @property
     def title(self):

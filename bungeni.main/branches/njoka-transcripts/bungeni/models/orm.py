@@ -9,7 +9,12 @@ import domain
 # Users
 # general representation of a person
 mapper(domain.User, schema.users,
-    properties={"user_addresses": relation(domain.UserAddress)}
+    properties={
+        "user_addresses": relation(domain.UserAddress),
+        "subscriptions": relation(domain.ParliamentaryItem,
+            secondary=schema.users_parliamentary_items
+        )
+    }
 )
 
 # Groups
@@ -37,6 +42,7 @@ mapper(domain.Group, schema.groups,
             backref=backref("parent_group",
                 remote_side=schema.groups.c.group_id)
         ),
+        "group_addresses": relation(domain.GroupAddress),
         # "keywords": relation(domain.Keyword, secondary=schema.groups_keywords)
     },
     polymorphic_on=schema.groups.c.type,
@@ -64,7 +70,7 @@ mapper(domain.UserDelegation, schema.user_delegations,
         ),
         "delegation": relation(domain.User,
             primaryjoin=rdb.and_(
-                (schema.user_delegations.c.delegation_id == 
+                (schema.user_delegations.c.delegation_id ==
                     schema.users.c.user_id),
                 schema.users.c.active_p == "A"
             ),
@@ -244,7 +250,7 @@ mapper(domain.GroupSitting, schema.sittings,
             schema.sittings.c.end_date.label("end_date")
         ),
         "item_schedule": relation(domain.ItemSchedule,
-            order_by=schema.items_schedule.c.planned_order
+            order_by=schema.item_schedules.c.planned_order
         ),
         "venue": relation(domain.Venue),
         "hansard": relation(domain.Hansard,
@@ -273,8 +279,8 @@ mapper(domain.ParliamentaryItem, schema.parliamentary_items,
                 schema.users.c.user_id),
             uselist=False,
             lazy=False),
-        "consignatories": relation(domain.User,
-            secondary=schema.consignatories),
+        "cosignatories": relation(domain.User,
+            secondary=schema.cosignatories),
         "attached_files": relation(domain.AttachedFile)
     }
 )
@@ -290,9 +296,9 @@ mapper(domain.Question, schema.questions,
     polymorphic_on=schema.parliamentary_items.c.type,
     polymorphic_identity="question",
     properties={
-        "changes":relation(domain.QuestionChange, 
+        "changes":relation(domain.QuestionChange,
             backref="origin",
-            cascade="all, delete-orphan", 
+            cascade="all, delete-orphan",
             passive_deletes=False
         ),
         "ministry": relation(domain.Ministry, lazy=False, join_depth=2),
@@ -323,11 +329,11 @@ mapper(domain.Motion, schema.motions,
     polymorphic_on=schema.parliamentary_items.c.type,
     polymorphic_identity="motion",
     properties={
-        "changes": relation(domain.MotionChange, 
+        "changes": relation(domain.MotionChange,
             backref="origin",
-            cascade="all, delete-orphan", 
+            cascade="all, delete-orphan",
             passive_deletes=False
-        ), 
+        ),
     }
 )
 
@@ -347,7 +353,7 @@ mapper(domain.MotionVersion, schema.motion_versions,
                 schema.attached_file_versions.c.item_id,
                 schema.attached_file_versions.c.file_version_id
             ]
-        ), 
+        ),
     }
 )
 
@@ -356,9 +362,9 @@ mapper(domain.Bill, schema.bills,
     polymorphic_on=schema.parliamentary_items.c.type,
     polymorphic_identity="bill",
     properties={
-        "changes": relation(domain.BillChange, 
+        "changes": relation(domain.BillChange,
             backref="origin",
-            cascade="all, delete-orphan", 
+            cascade="all, delete-orphan",
             passive_deletes=False
         )
     }
@@ -379,7 +385,7 @@ mapper(domain.BillVersion, schema.bill_versions,
                 schema.attached_file_versions.c.item_id,
                 schema.attached_file_versions.c.file_version_id
             ]
-        ), 
+        ),
     }
 )
 
@@ -428,7 +434,7 @@ mapper(domain.AgendaItemVersion, schema.agenda_item_versions,
                 schema.attached_file_versions.c.item_id,
                 schema.attached_file_versions.c.file_version_id
             ]
-        ), 
+        ),
     }
 )
 
@@ -437,9 +443,9 @@ mapper(domain.TabledDocument, schema.tabled_documents,
     polymorphic_on=schema.parliamentary_items.c.type,
     polymorphic_identity="tableddocument",
     properties={
-        "changes": relation(domain.TabledDocumentChange, 
+        "changes": relation(domain.TabledDocumentChange,
             backref="origin",
-            cascade="all, delete-orphan", 
+            cascade="all, delete-orphan",
             passive_deletes=False
         ),
     }
@@ -461,15 +467,15 @@ mapper(domain.TabledDocumentVersion, schema.tabled_document_versions,
                 schema.attached_file_versions.c.item_id,
                 schema.attached_file_versions.c.file_version_id
             ]
-        ), 
+        ),
     }
 )
 
 mapper(domain.AttachedFile, schema.attached_files,
     properties={
-        "changes": relation(domain.AttachedFileChange, 
+        "changes": relation(domain.AttachedFileChange,
             backref="origin",
-            cascade="all, delete-orphan", 
+            cascade="all, delete-orphan",
             passive_deletes=False
         ),
     }
@@ -485,14 +491,14 @@ mapper(domain.AttachedFileVersion, schema.attached_file_versions,
 #Items scheduled for a sitting expressed as a relation
 # to their item schedule
 
-mapper(domain.ItemSchedule, schema.items_schedule,
+mapper(domain.ItemSchedule, schema.item_schedules,
     properties={
         "item": relation(
             domain.ParliamentaryItem,
             uselist=False
         ),
         "discussion": relation(
-            domain.ScheduledItemDiscussion,
+            domain.ItemScheduleDiscussion,
             uselist=False,
             cascade="all, delete-orphan"
         ),
@@ -500,12 +506,12 @@ mapper(domain.ItemSchedule, schema.items_schedule,
     }
 )
 
-mapper(domain.ScheduledItemDiscussion, schema.item_discussion)
+mapper(domain.ItemScheduleDiscussion, schema.item_schedule_discussions)
 
 # items scheduled for a sitting
 # expressed as a join between item and schedule
 
-mapper(domain.Consignatory, schema.consignatories,
+mapper(domain.Cosignatory, schema.cosignatories,
     properties={
         "item": relation(domain.ParliamentaryItem, uselist=False),
         "user": relation(domain.User, uselist=False)
@@ -534,28 +540,37 @@ mapper(domain.ConstituencyDetail, schema.constituency_details,
     }
 )
 mapper(domain.CommitteeType, schema.committee_type)
-mapper(domain.SittingType, schema.sitting_type)
+mapper(domain.SittingType, schema.sitting_types)
 
 mapper(domain.GroupSittingAttendance, schema.sitting_attendance,
     properties={
         "user": relation(domain.User, uselist=False, lazy=False),
-        "attendance_type": relation(domain.AttendanceType, 
+        "attendance_type": relation(domain.AttendanceType,
             uselist=False,
             lazy=False
         ),
         "sitting": relation(domain.GroupSitting, uselist=False, lazy=False),
     }
 )
-mapper(domain.AttendanceType, schema.attendance_type)
+mapper(domain.AttendanceType, schema.attendance_types)
 mapper(domain.MemberTitle, schema.user_role_types)
-mapper(domain.MemberRoleTitle, schema.role_titles.join(schema.addresses),
+mapper(domain.MemberRoleTitle, schema.role_titles,
     properties={
         "title_name": relation(domain.MemberTitle, uselist=False, lazy=False),
     }
 )
 
 mapper(domain.AddressType, schema.address_types)
-mapper(domain.UserAddress, schema.addresses)
+mapper(domain.UserAddress, schema.user_addresses,
+    properties={
+        "address_type": relation(domain.AddressType, uselist=False, lazy=False),
+    },
+)
+mapper(domain.GroupAddress, schema.group_addresses,
+    properties={
+        "address_type": relation(domain.AddressType, uselist=False, lazy=False),
+    },
+)
 
 mapper(domain.GroupItemAssignment, schema.group_item_assignments,
     properties={
@@ -566,7 +581,7 @@ mapper(domain.GroupItemAssignment, schema.group_item_assignments,
             lazy=True,
             uselist=False
         ),
-        "item": relation(domain.ParliamentaryItem, 
+        "item": relation(domain.ParliamentaryItem,
             backref="item_assignments",
             uselist=False
         ),
@@ -608,24 +623,78 @@ mapper(domain.ObjectTranslation, schema.translations)
 
 
 #Hansard
+mapper( domain.Hansard, schema.hansards,
+        properties = {
+            "items": relation(domain.HansardItem,
+                                    order_by=schema.hansard_items.c.start_date),
+            "media_paths": relation(domain.HansardMediaPaths,
+                                    backref="hansards",
+                                    lazy=False,
+                                    uselist=False ), 
+            "sitting": relation(domain.GroupSitting, uselist=False),    
+            }
+       )
+
+mapper( domain.HansardMediaPaths, schema.hansard_media_paths,)
+
+mapper(domain.HansardItem, schema.hansard_items,   
+        polymorphic_on=schema.hansard_items.c.item_type,
+        polymorphic_identity="item",  
+        )
+
 mapper( domain.Speech, 
         schema.speeches, 
+        inherits=domain.HansardItem,
+        polymorphic_on=schema.hansard_items.c.item_type,
+        polymorphic_identity="speech",
         properties = { 
                 'changes':relation( 
                         domain.SpeechChange, 
                         backref='origin', 
                         cascade="all,delete-orphan", 
                         passive_deletes=False
-                        ) 
+                        ), 
+                'person': relation(domain.User,
+                            primaryjoin=(schema.speeches.c.person_id ==
+                                    schema.users.c.user_id),
+                                    lazy=False,
+                                    uselist=False ),
                 } 
         ) 
-        
 mapper( domain.SpeechChange, schema.speech_changes ) 
 mapper( domain.SpeechVersion, 
         schema.speech_versions, 
         properties= { 
                 'change':relation( domain.SpeechChange, uselist=False), 
                 'head': relation( domain.Speech, uselist=False) }
+       )
+
+mapper( domain.HansardParliamentaryItem, 
+        schema.hansard_parliamentary_items, 
+        inherits=domain.HansardItem,
+        polymorphic_on=schema.hansard_items.c.item_type,
+        polymorphic_identity="hansard_parliamentary_item",
+        properties = { 
+                
+                'changes':relation( 
+                        domain.HansardParliamentaryItemChange, 
+                        backref='origin', 
+                        cascade="all,delete-orphan", 
+                        passive_deletes=False
+                        ), 
+                'item':relation(domain.ParliamentaryItem,
+                        primaryjoin=(schema.hansard_parliamentary_items. \
+                            c.parliamentary_item_id == schema.parliamentary_items.c.parliamentary_item_id),
+                            lazy=False,
+                            uselist=False ),
+                } 
+        )         
+mapper( domain.HansardParliamentaryItemChange, schema.hansard_parliamentary_item_changes ) 
+mapper( domain.HansardParliamentaryItemVersion, 
+        schema.hansard_parliamentary_item_versions, 
+        properties= { 
+                'change':relation( domain.HansardParliamentaryItemChange, uselist=False), 
+                'head': relation( domain.HansardParliamentaryItem, uselist=False) }
        )
 
 mapper( domain.Take, schema.takes,
@@ -648,15 +717,4 @@ mapper( domain.Take, schema.takes,
         } )
 mapper( domain.Assignment, schema.assignments, )
 
-mapper( domain.Hansard, schema.hansards,
-        properties = {
-            "speeches": relation(domain.Speech,
-                                    order_by=schema.speeches.c.start_date),
-             "media_paths": relation(domain.HansardMediaPaths,
-                                    backref="hansards",
-                                    lazy=False,
-                                    uselist=False ), 
-            "sitting": relation(domain.GroupSitting, uselist=False),    
-            }
-       )
-mapper( domain.HansardMediaPaths, schema.hansard_media_paths,)
+

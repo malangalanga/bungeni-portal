@@ -26,18 +26,17 @@ from bungeni.ui.calendar.utils import first_nth_weekday_of_month
 from bungeni.ui.calendar.utils import nth_day_of_month
 from bungeni.ui.calendar.utils import nth_day_of_week
 
-days = [_('day_%d' % index, default=default)
-        for (index, default) in enumerate(
-            (u"Mon", u"Tue", u"Wed", u"Thu", u"Fri", u"Sat", u"Sun"))]
+days = [ _('day_%d' % index, default=default) for (index, default) in 
+         enumerate((u"Mon", u"Tue", u"Wed", u"Thu", u"Fri", u"Sat", u"Sun")) ]
 
 class WeekdaysVocabulary(object):
     interface.implements(IVocabularyFactory)
-        
+    
     def __call__(self, context):
-        return vocabulary.SimpleVocabulary(
-            [vocabulary.SimpleTerm(
-                nth_day_of_week(index), str(index), msg)
-             for (index, msg) in enumerate(days)])
+        return vocabulary.SimpleVocabulary([
+            vocabulary.SimpleTerm(nth_day_of_week(index), str(index), msg)
+            for (index, msg) in enumerate(days)
+        ])
 
 WeekdaysVocabularyFactory = WeekdaysVocabulary()
 
@@ -66,64 +65,84 @@ class MonthlyRecurrenceVocabulary(object):
                  "first_%s_of_every_month" % today.strftime("%a"),
                  _(u"First $day of every month", mapping={'day': translate(
                      today.strftime("%A"))})),
-                 ))
+        ))
                 
 MonthlyRecurrenceVocabularyFactory = MonthlyRecurrenceVocabulary()
 
 # you have to add title_field to the vocabulary as only this gets 
 # translated, the token_field will NOT get translated
-QuestionType = vocabulary.SimpleVocabulary( [
+QuestionType = vocabulary.SimpleVocabulary([
     vocabulary.SimpleTerm('O', _(u"Ordinary"), _(u"Ordinary")), 
-    vocabulary.SimpleTerm('P', _(u"Private Notice"), _(u"Private Notice"))] )
-ResponseType = vocabulary.SimpleVocabulary( [
+    vocabulary.SimpleTerm('P', _(u"Private Notice"), _(u"Private Notice"))
+])
+ResponseType = vocabulary.SimpleVocabulary([
     vocabulary.SimpleTerm('O', _("Oral"), _("Oral")), 
-    vocabulary.SimpleTerm('W', _(u"Written"), _(u"Written"))] )
-Gender = vocabulary.SimpleVocabulary( [
+    vocabulary.SimpleTerm('W', _(u"Written"), _(u"Written"))
+])
+Gender = vocabulary.SimpleVocabulary([
     vocabulary.SimpleTerm('M', _(u"Male"), _(u"Male")), 
-    vocabulary.SimpleTerm('F', _(u"Female"), _(u"Female") )] )
-ElectedNominated = vocabulary.SimpleVocabulary( [
+    vocabulary.SimpleTerm('F', _(u"Female"), _(u"Female"))
+])
+ElectedNominated = vocabulary.SimpleVocabulary([
     vocabulary.SimpleTerm('E', _(u"elected"), _(u"elected")),
-    vocabulary.SimpleTerm('N', _(u"nominated"), _(u"nominated") ), 
-    vocabulary.SimpleTerm('O', _(u"ex officio"), _(u"ex officio"))])
+    vocabulary.SimpleTerm('N', _(u"nominated"), _(u"nominated")), 
+    vocabulary.SimpleTerm('O', _(u"ex officio"), _(u"ex officio"))
+])
 InActiveDead = vocabulary.SimpleVocabulary([
     vocabulary.SimpleTerm('A', _(u"active"), _(u"active")),
     vocabulary.SimpleTerm('I', _(u"inactive"), _(u"inactive")),
-    vocabulary.SimpleTerm('D', _(u"deceased"),  _(u"deceased"))])
+    vocabulary.SimpleTerm('D', _(u"deceased"),  _(u"deceased"))
+])
 ISResponse = vocabulary.SimpleVocabulary([
     vocabulary.SimpleTerm('I', _(u"initial"), _(u"initial")),
-    vocabulary.SimpleTerm('S', _(u"subsequent"), _(u"subsequent")),])
-OfficeType = vocabulary.SimpleVocabulary( [
-    vocabulary.SimpleTerm('S', _(u"House Business Office"), _(u"House Business Office")), 
+    vocabulary.SimpleTerm('S', _(u"subsequent"), _(u"subsequent"))
+])
+OfficeType = vocabulary.SimpleVocabulary([
+    vocabulary.SimpleTerm('S', _(u"House Business Office"), 
+        _(u"House Business Office")), 
     vocabulary.SimpleTerm('C', _(u"Clerks Office"), _(u"Clerks Office")), 
-    vocabulary.SimpleTerm('T', _(u"Translators Office"), _(u"Translators Office")), 
+    vocabulary.SimpleTerm('T', _(u"Translators Office"), 
+        _(u"Translators Office")), 
     vocabulary.SimpleTerm('L', _(u"Library Office"), _(u"Library Office")),
+<<<<<<< .working
     vocabulary.SimpleTerm('R', _(u"Researcher Office"), _(u"Researcher Office")),
+    vocabulary.SimpleTerm('H', _(u"Hansard Office"), _(u"Hansard Office")),
     ] )
 YesNoSource = vocabulary.SimpleVocabulary( [
+=======
+    vocabulary.SimpleTerm('R', _(u"Researcher Office"), 
+        _(u"Researcher Office")),
+])
+YesNoSource = vocabulary.SimpleVocabulary([
+>>>>>>> .merge-right.r7542
     vocabulary.SimpleTerm(True, _(u"Yes"), _(u"Yes")), 
-    vocabulary.SimpleTerm(False, _(u"No"), _(u"No"))] )
-
+    vocabulary.SimpleTerm(False, _(u"No"), _(u"No"))])
+AddressPostalType = vocabulary.SimpleVocabulary([
+    vocabulary.SimpleTerm("P", _(u"P.O. Box"), _(u"P.O. Box")),
+    vocabulary.SimpleTerm("S", _(u"Street / Physical"), 
+        _(u"Street / Physical")),
+    vocabulary.SimpleTerm("M", _(u"Military"), _(u"Military")),
+    vocabulary.SimpleTerm("U", _(u"Undefined / Unknown"), 
+        _(u"Undefined / Unknown")),
+])
 
 class DatabaseSource(bungeni.alchemist.vocabulary.DatabaseSource):
-
-    def __call__( self, context=None ):
-        query = self.constructQuery( context )
+    
+    def __call__(self, context=None):
+        query = self.constructQuery(context)
         results = query.all()
-        
         terms = []
         title_field = self.title_field or self.token_field
         title_getter = self.title_getter or (lambda ob: getattr(ob, title_field))
         for ob in results:
             if ITranslatable.providedBy(ob):
                 ob = translate_obj(ob)
-            terms.append( 
-                vocabulary.SimpleTerm( 
-                    value = getattr( ob, self.value_field), 
-                    token = getattr( ob, self.token_field),
+            terms.append(vocabulary.SimpleTerm(
+                    value = getattr(ob, self.value_field), 
+                    token = getattr(ob, self.token_field),
                     title = title_getter(ob),
-                    ))
-                    
-        return vocabulary.SimpleVocabulary( terms )
+            ))
+        return vocabulary.SimpleVocabulary(terms)
 
 ParliamentSource = DatabaseSource(
     domain.Parliament, 'short_name', 'parliament_id',
@@ -131,15 +150,16 @@ ParliamentSource = DatabaseSource(
         ob.full_name,
         ob.start_date and ob.start_date.strftime("%Y/%m/%d") or "?",
         ob.end_date and ob.end_date.strftime("%Y/%m/%d") or "?"))
-                
 
-class SpecializedSource( object ):
-    interface.implements( IContextSourceBinder )
-    def __init__( self, token_field, title_field, value_field ):
+
+class SpecializedSource(object):
+    interface.implements(IContextSourceBinder)
+    
+    def __init__(self, token_field, title_field, value_field):
         self.token_field = token_field
         self.value_field = value_field
         self.title_field = title_field
-
+    
     def _get_parliament_id(self, context):
         trusted = removeSecurityProxy(context)
         parliament_id = getattr(trusted, 'parliament_id', None)
@@ -150,27 +170,22 @@ class SpecializedSource( object ):
                 parliament_id = self._get_parliament_id(trusted.__parent__)
         return parliament_id
             
-    def constructQuery( self, context ):
+    def constructQuery(self, context):
         raise NotImplementedError("Must be implemented by subclass.")
         
-    def __call__( self, context=None ):
-        query = self.constructQuery( context )
+    def __call__(self, context=None):
+        query = self.constructQuery(context)
         results = query.all()
-        
         terms = []
         title_field = self.title_field or self.token_field
         for ob in results:
             obj = translate_obj(ob)
-            terms.append( 
-                vocabulary.SimpleTerm( 
-                    value = getattr( obj, self.value_field), 
-                    token = getattr( obj, self.token_field),
-                    title = getattr( obj, title_field) ,
-                    ))
-                    
-        return vocabulary.SimpleVocabulary( terms )
-
-
+            terms.append(vocabulary.SimpleTerm(
+                    value = getattr(obj, self.value_field), 
+                    token = getattr(obj, self.token_field),
+                    title = getattr(obj, title_field) ,
+            ))
+        return vocabulary.SimpleVocabulary(terms)
 
 
 class SittingTypes(SpecializedSource):
@@ -182,26 +197,23 @@ class SittingTypes(SpecializedSource):
         session= Session()
         return session.query(domain.SittingType)
 
-    def __call__( self, context=None ):
-        query = self.constructQuery( context )
+    def __call__(self, context=None):
+        query = self.constructQuery(context)
         results = query.all()
-        
         terms = []
         title_field = self.title_field or self.token_field
         for ob in results:
             obj = translate_obj(ob)
-            terms.append( 
-                vocabulary.SimpleTerm( 
+            terms.append(vocabulary.SimpleTerm(
                     value = obj.sitting_type_id, 
                     token = obj.sitting_type,
                     title = "%s (%s-%s)" % (
                         obj.sitting_type, 
                         obj.start_time, 
                         obj.end_time),
-                    ))
-                    
-        return vocabulary.SimpleVocabulary( terms )
-                
+                ))
+        return vocabulary.SimpleVocabulary(terms)
+
         
 #XXX
 #SittingTypeOnly = DatabaseSource(
@@ -212,15 +224,15 @@ class SittingTypes(SpecializedSource):
 
 
 
-class MemberOfParliament( object ):
+class MemberOfParliament(object):
     """ Member of Parliament = user join group membership join parliament"""
     
-member_of_parliament = rdb.join( schema.user_group_memberships, 
-                    schema.users,
-                    schema.user_group_memberships.c.user_id == 
-                    schema.users.c.user_id).join( schema.parliaments,
-                       schema.user_group_memberships.c.group_id ==
-                       schema.parliaments.c.parliament_id) 
+member_of_parliament = rdb.join(schema.user_group_memberships, 
+    schema.users,
+    schema.user_group_memberships.c.user_id == schema.users.c.user_id
+).join(schema.parliaments, 
+    schema.user_group_memberships.c.group_id == 
+        schema.parliaments.c.parliament_id) 
 
 mapper(MemberOfParliament, member_of_parliament)
         
@@ -231,17 +243,19 @@ class MemberOfParliamentImmutableSource(SpecializedSource):
     """
     def __init__(self, value_field):
         self.value_field = value_field
-                          
+    
     def constructQuery(self, context):
         session= Session()
         trusted=removeSecurityProxy(context)
         user_id = getattr(trusted, self.value_field, None)
         if user_id:
-            query = session.query( domain.User 
-                    ).filter(domain.User.user_id == 
-                        user_id).order_by(domain.User.last_name,
-                            domain.User.first_name,
-                            domain.User.middle_name)
+            query = session.query(domain.User
+                ).filter(domain.User.user_id == user_id
+                ).order_by(
+                    domain.User.last_name,
+                    domain.User.first_name,
+                    domain.User.middle_name
+                )
             return query
         else:
             parliament_id = self._get_parliament_id(trusted)
@@ -250,7 +264,7 @@ class MemberOfParliamentImmutableSource(SpecializedSource):
                     sql.and_(MemberOfParliament.group_id ==
                             parliament_id,
                             MemberOfParliament.active_p == True)
-                    ).order_by(MemberOfParliament.last_name,
+                   ).order_by(MemberOfParliament.last_name,
                             MemberOfParliament.first_name,
                             MemberOfParliament.middle_name) 
             else:
@@ -260,18 +274,18 @@ class MemberOfParliamentImmutableSource(SpecializedSource):
                             domain.User.middle_name)
         return query
 
-    def __call__( self, context=None ):
-        query = self.constructQuery( context )
+    def __call__(self, context=None):
+        query = self.constructQuery(context)
         results = query.all()
         terms = []
         for ob in results:
-            terms.append( 
-                vocabulary.SimpleTerm( 
-                    value = getattr( ob, 'user_id'), 
-                    token = getattr( ob, 'user_id'),
-                    title = "%s %s" % (getattr( ob, 'first_name') ,
-                            getattr( ob, 'last_name'))
-                    ))
+            terms.append(
+                vocabulary.SimpleTerm(
+                    value = getattr(ob, 'user_id'), 
+                    token = getattr(ob, 'user_id'),
+                    title = "%s %s" % (getattr(ob, 'first_name') ,
+                            getattr(ob, 'last_name'))
+                ))
         user_id = getattr(context, self.value_field, None) 
         if user_id:
             if len(query.filter(schema.users.c.user_id == user_id).all()) == 0:
@@ -281,14 +295,13 @@ class MemberOfParliamentImmutableSource(SpecializedSource):
                 # throw an exception 
                 session = Session()
                 ob = session.query(domain.User).get(user_id)
-                terms.append( 
-                vocabulary.SimpleTerm( 
-                    value = getattr( ob, 'user_id'), 
-                    token = getattr( ob, 'user_id'),
-                    title = "(%s %s)" % (getattr( ob, 'first_name') ,
-                            getattr( ob, 'last_name'))
-                    ))
-        return vocabulary.SimpleVocabulary( terms )
+                terms.append(vocabulary.SimpleTerm(
+                    value = getattr(ob, 'user_id'), 
+                    token = getattr(ob, 'user_id'),
+                    title = "(%s %s)" % (getattr(ob, 'first_name') ,
+                            getattr(ob, 'last_name'))
+                ))
+        return vocabulary.SimpleVocabulary(terms)
 
 class MemberOfParliamentSource(MemberOfParliamentImmutableSource):
     """ you may change the user in this context """
@@ -299,8 +312,8 @@ class MemberOfParliamentSource(MemberOfParliamentImmutableSource):
         parliament_id = self._get_parliament_id(trusted)
         if user_id:
             if parliament_id:
-                query = session.query( MemberOfParliament
-                        ).filter(
+                query = session.query(MemberOfParliament
+                       ).filter(
                         sql.or_(
                         sql.and_(MemberOfParliament.user_id == user_id,
                                 MemberOfParliament.group_id ==
@@ -363,7 +376,7 @@ class MinistrySource(SpecializedSource):
     def __init__(self, value_field):
         self.value_field = value_field
     
-    def constructQuery( self, context):
+    def constructQuery(self, context):
         session= Session()
         trusted=removeSecurityProxy(context)
         ministry_id = getattr(trusted, self.value_field, None)
@@ -374,7 +387,7 @@ class MinistrySource(SpecializedSource):
                 sql.and_(
                     domain.Government.parent_group_id == parliament_id,
                     domain.Government.status == u'active'
-                    ))
+                ))
             government = governments.all()
             if len(government) > 0:
                 gov_ids = [gov.group_id for gov in government]
@@ -385,14 +398,14 @@ class MinistrySource(SpecializedSource):
                             sql.and_(
                                 domain.Ministry.parent_group_id.in_(gov_ids),
                                 domain.Ministry.status == u'active'
-                                ))
+                            ))
                     )
                 else:
                     query = session.query(domain.Ministry).filter(
                             sql.and_(
                                 domain.Ministry.parent_group_id.in_(gov_ids),
                                 domain.Ministry.status == u'active'
-                                ))
+                            ))
             else:
                 if ministry_id:
                     query = session.query(domain.Ministry).filter(
@@ -403,35 +416,34 @@ class MinistrySource(SpecializedSource):
             query = session.query(domain.Ministry)
         return query
                
-    def __call__( self, context=None ):
-        query = self.constructQuery( context )
+    def __call__(self, context=None):
+        query = self.constructQuery(context)
         results = query.all()
         terms = []
         trusted=removeSecurityProxy(context)
         ministry_id = getattr(trusted, self.value_field, None)
         for ob in results:
             obj = translate_obj(ob)
-            terms.append( 
-                vocabulary.SimpleTerm( 
-                    value = getattr( obj, 'group_id'), 
-                    token = getattr( obj, 'group_id'),
-                    title = "%s - %s" % (getattr( obj, 'short_name') ,
-                            getattr( obj, 'full_name'))
-                    ))
+            terms.append(
+                vocabulary.SimpleTerm(
+                    value = getattr(obj, 'group_id'), 
+                    token = getattr(obj, 'group_id'),
+                    title = "%s - %s" % (getattr(obj, 'short_name') ,
+                            getattr(obj, 'full_name'))
+                ))
         if ministry_id:
             if query.filter(domain.Group.group_id == ministry_id).count() == 0:
                 session = Session()
                 ob = session.query(domain.Group).get(ministry_id)
                 obj = translate_obj(ob)
-                terms.append( 
-                    vocabulary.SimpleTerm( 
-                        value = getattr( obj, 'group_id'), 
-                        token = getattr( obj, 'group_id'),
-                        title = "%s - %s" % (getattr( obj, 'short_name') ,
-                                getattr( obj, 'full_name'))
-                        ))
-                            
-        return vocabulary.SimpleVocabulary( terms )
+                terms.append(
+                    vocabulary.SimpleTerm(
+                        value = getattr(obj, 'group_id'), 
+                        token = getattr(obj, 'group_id'),
+                        title = "%s - %s" % (getattr(obj, 'short_name') ,
+                                getattr(obj, 'full_name'))
+                ))            
+        return vocabulary.SimpleVocabulary(terms)
 
 class MemberTitleSource(SpecializedSource):
     """ get titles (i.e. roles/functions) in the current context """
@@ -444,34 +456,48 @@ class MemberTitleSource(SpecializedSource):
         if not user_type:
             user_type = self._get_user_type(context.__parent__)
         return user_type
-    
-    def constructQuery( self, context):
+    def _get_user_office(self, context):
+        user_office = getattr(context, 'office_type', None)
+        
+        if not user_office:
+            user_office = self._get_user_office(context.__parent__)
+        return user_office
+    def constructQuery(self, context):
         session= Session()
         trusted=removeSecurityProxy(context)
         user_type = self._get_user_type(trusted)
-        titles = session.query(domain.MemberTitle).filter(
-            domain.MemberTitle.user_type == user_type).order_by(
-                domain.MemberTitle.sort_order)
+        #!+(Miano, 17/09/2010) Hack to separate transcription office member types
+        #from others. Temporary!
+        #This whole thing of titles has to be reworked
+        office_type = self._get_user_office(trusted)
+        if office_type == 'H':
+            titles = session.query(domain.MemberTitle).filter(
+                domain.MemberTitle.user_type == 'hansardstaff').order_by(
+                    domain.MemberTitle.sort_order)
+        else:
+            titles = session.query(domain.MemberTitle).filter(
+                domain.MemberTitle.user_type == user_type).order_by(
+                    domain.MemberTitle.sort_order)
         return titles
-
-    def __call__( self, context=None ):
-        query = self.constructQuery( context )
+    
+    def __call__(self, context=None):
+        query = self.constructQuery(context)
         results = query.all()
         terms = []
         for ob in results:
             obj = translate_obj(ob)
-            terms.append( 
-                vocabulary.SimpleTerm( 
-                    value = getattr( obj, 'user_role_type_id'), 
-                    token = getattr( obj, 'user_role_type_id'),
-                    title = getattr( obj, 'user_role_name'),
-                    ))
-        return vocabulary.SimpleVocabulary( terms )
+            terms.append(
+                vocabulary.SimpleTerm(
+                    value = getattr(obj, 'user_role_type_id'), 
+                    token = getattr(obj, 'user_role_type_id'),
+                    title = getattr(obj, 'user_role_name'),
+                   ))
+        return vocabulary.SimpleVocabulary(terms)
 
                     
 class UserSource(SpecializedSource):
     """ All active users """
-    def constructQuery( self, context):
+    def constructQuery(self, context):
         session= Session()
         
         users = session.query(domain.User).order_by(
@@ -482,30 +508,30 @@ class UserSource(SpecializedSource):
 class UserNotMPSource(SpecializedSource):
     """ All users that are NOT a MP """
         
-    def constructQuery( self, context):
+    def constructQuery(self, context):
         session= Session()
         trusted=removeSecurityProxy(context)
         parliament_id = self._get_parliament_id(trusted)
         mp_user_ids = sql.select([schema.user_group_memberships.c.user_id], 
             schema.user_group_memberships.c.group_id == parliament_id)
-        query = session.query(domain.User).filter( sql.and_(
-            sql.not_(domain.User.user_id.in_( mp_user_ids)),
+        query = session.query(domain.User).filter(sql.and_(
+            sql.not_(domain.User.user_id.in_(mp_user_ids)),
             domain.User.active_p == 'A')).order_by(
                 domain.User.last_name, domain.User.first_name)
         return query
 
-    def __call__( self, context=None ):
-        query = self.constructQuery( context )
+    def __call__(self, context=None):
+        query = self.constructQuery(context)
         results = query.all()
         terms = []
         for ob in results:
-            terms.append( 
-                vocabulary.SimpleTerm( 
-                    value = getattr( ob, 'user_id'), 
-                    token = getattr( ob, 'user_id'),
-                    title = "%s %s" % (getattr( ob, 'first_name') ,
-                            getattr( ob, 'last_name'))
-                    ))
+            terms.append(
+                vocabulary.SimpleTerm(
+                    value = getattr(ob, 'user_id'), 
+                    token = getattr(ob, 'user_id'),
+                    title = "%s %s" % (getattr(ob, 'first_name') ,
+                            getattr(ob, 'last_name'))
+                   ))
         user_id = getattr(context, self.value_field, None) 
         if user_id:
             if query.filter(domain.GroupMembership.user_id == user_id).count() == 0:
@@ -515,14 +541,14 @@ class UserNotMPSource(SpecializedSource):
                 # throw an exception 
                 session = Session()
                 ob = session.query(domain.User).get(user_id)
-                terms.append( 
-                vocabulary.SimpleTerm( 
-                    value = getattr( ob, 'user_id'), 
-                    token = getattr( ob, 'user_id'),
-                    title = "(%s %s)" % (getattr( ob, 'first_name') ,
-                            getattr( ob, 'last_name'))
-                    ))
-        return vocabulary.SimpleVocabulary( terms )
+                terms.append(
+                vocabulary.SimpleTerm(
+                    value = getattr(ob, 'user_id'), 
+                    token = getattr(ob, 'user_id'),
+                    title = "(%s %s)" % (getattr(ob, 'first_name') ,
+                            getattr(ob, 'last_name'))
+                   ))
+        return vocabulary.SimpleVocabulary(terms)
 
 
 
@@ -536,8 +562,8 @@ class SittingAttendanceSource(SpecializedSource):
         trusted=removeSecurityProxy(context)
         user_id = getattr(trusted, self.value_field, None)
         if user_id:
-            query = session.query( domain.User 
-                    ).filter(domain.User.user_id == 
+            query = session.query(domain.User 
+                   ).filter(domain.User.user_id == 
                         user_id).order_by(domain.User.last_name,
                             domain.User.first_name,
                             domain.User.middle_name)
@@ -552,39 +578,39 @@ class SittingAttendanceSource(SpecializedSource):
                         schema.user_group_memberships.c.active_p == True))
             attended_ids = sql.select([schema.sitting_attendance.c.member_id],
                      schema.sitting_attendance.c.sitting_id == sitting_id)
-            query = session.query( domain.User).filter(
-                sql.and_(domain.User.user_id.in_( all_member_ids),
-                    ~ domain.User.user_id.in_(attended_ids) )).order_by(
+            query = session.query(domain.User).filter(
+                sql.and_(domain.User.user_id.in_(all_member_ids),
+                    ~ domain.User.user_id.in_(attended_ids))).order_by(
                             domain.User.last_name,
                             domain.User.first_name,
                             domain.User.middle_name)
             return query
                  
-    def __call__( self, context=None ):
-        query = self.constructQuery( context )
+    def __call__(self, context=None):
+        query = self.constructQuery(context)
         results = query.all()
         terms = []
         for ob in results:
-            terms.append( 
-                vocabulary.SimpleTerm( 
-                    value = getattr( ob, 'user_id'), 
-                    token = getattr( ob, 'user_id'),
-                    title = "%s %s" % (getattr( ob, 'first_name') ,
-                            getattr( ob, 'last_name'))
-                    ))
+            terms.append(
+                vocabulary.SimpleTerm(
+                    value = getattr(ob, 'user_id'), 
+                    token = getattr(ob, 'user_id'),
+                    title = "%s %s" % (getattr(ob, 'first_name') ,
+                            getattr(ob, 'last_name'))
+                   ))
         user_id = getattr(context, self.value_field, None) 
         if user_id:
             if len(query.filter(schema.users.c.user_id == user_id).all()) == 0:
                 session = Session()
                 ob = session.query(domain.User).get(user_id)
-                terms.append( 
-                vocabulary.SimpleTerm( 
-                    value = getattr( ob, 'user_id'), 
-                    token = getattr( ob, 'user_id'),
-                    title = "(%s %s)" % (getattr( ob, 'first_name') ,
-                            getattr( ob, 'last_name'))
-                    ))
-        return vocabulary.SimpleVocabulary( terms )
+                terms.append(
+                vocabulary.SimpleTerm(
+                    value = getattr(ob, 'user_id'), 
+                    token = getattr(ob, 'user_id'),
+                    title = "(%s %s)" % (getattr(ob, 'first_name') ,
+                            getattr(ob, 'last_name'))
+                   ))
+        return vocabulary.SimpleVocabulary(terms)
 
 
         
@@ -605,7 +631,7 @@ class SubstitutionSource(SpecializedSource):
         return user_id
 
                      
-    def constructQuery( self, context):
+    def constructQuery(self, context):
         session= Session()
         query = session.query(domain.GroupMembership).order_by(
             'last_name', 'first_name').filter(
@@ -622,31 +648,31 @@ class SubstitutionSource(SpecializedSource):
                     
         
         
-    def __call__( self, context=None ):
-        query = self.constructQuery( context )
+    def __call__(self, context=None):
+        query = self.constructQuery(context)
         results = query.all()
         tdict = {}
         for ob in results:
-            tdict[getattr( ob.user, 'user_id')] = "%s %s" % (
-                    getattr( ob.user, 'first_name') ,
-                    getattr( ob.user, 'last_name'))
+            tdict[getattr(ob.user, 'user_id')] = "%s %s" % (
+                    getattr(ob.user, 'first_name') ,
+                    getattr(ob.user, 'last_name'))
         user_id = getattr(context, 'replaced_id', None) 
         if user_id:
             if len(query.filter(domain.GroupMembership.replaced_id == user_id).all()) == 0:
                 session = Session()
                 ob = session.query(domain.User).get(user_id)
-                tdict[getattr( ob, 'user_id')] = "%s %s" % (
-                            getattr( ob, 'first_name') ,
-                            getattr( ob, 'last_name'))
+                tdict[getattr(ob, 'user_id')] = "%s %s" % (
+                            getattr(ob, 'first_name') ,
+                            getattr(ob, 'last_name'))
         terms = []
         for t in tdict.keys():
-            terms.append( 
-                vocabulary.SimpleTerm( 
+            terms.append(
+                vocabulary.SimpleTerm(
                     value = t, 
                     token = t,
                     title = tdict[t]
-                    ))
-        return vocabulary.SimpleVocabulary( terms )
+                   ))
+        return vocabulary.SimpleVocabulary(terms)
 
 class PartyMembership(object):
     pass
@@ -663,7 +689,7 @@ mapper(PartyMembership,party_membership)
 
 class BillSource(SpecializedSource):
     
-    def constructQuery( self, context):
+    def constructQuery(self, context):
         session= Session()
         trusted=removeSecurityProxy(context)
         parliament_id = self._get_parliament_id(context)
@@ -682,7 +708,7 @@ class BillSource(SpecializedSource):
                 
 class CommitteeSource(SpecializedSource):
 
-    def constructQuery( self, context):
+    def constructQuery(self, context):
         session= Session()
         trusted=removeSecurityProxy(context)
         parliament_id = self._get_parliament_id(context)
@@ -696,7 +722,7 @@ class CommitteeSource(SpecializedSource):
 
 class MotionPartySource(SpecializedSource):
 
-    def constructQuery( self, context):
+    def constructQuery(self, context):
         session= Session()
         trusted=removeSecurityProxy(context)
         user_id = getattr(trusted, 'owner_id', None)
@@ -706,23 +732,23 @@ class MotionPartySource(SpecializedSource):
         
         if user_id: 
             query = session.query(PartyMembership
-                ).filter(
+               ).filter(
                     sql.and_(PartyMembership.active_p ==True,
                         PartyMembership.user_id == user_id,
                         PartyMembership.parent_group_id == parliament_id)
-                        )
+                       )
         else:
             query = session.query(domain.PoliticalGroup).filter(
                         domain.PoliticalGroup.parent_group_id == parliament_id)
         return query
         
 
-class QuerySource( object ):
+class QuerySource(object):
     """ call a query with an additonal filter and ordering
     note that the domain_model *must* not have a where and order_by clause 
     (otherwise the parameters passed to this query will be ignored),
     the order_by and filter_field fields *must* be public attributes"""
-    interface.implements( IContextSourceBinder )
+    interface.implements(IContextSourceBinder)
     
     def getValueKey(self, context):
         """iterate through the parents until you get a valueKey """
@@ -730,20 +756,21 @@ class QuerySource( object ):
             return None
         else:
             try:
-                value_key = valueKey( context.__parent__.__name__ )[0]
+                value_key = valueKey(context.__parent__.__name__)[0]
             except:
-                value_key = self.getValueKey( context.__parent__)
+                value_key = self.getValueKey(context.__parent__)
         return value_key
         
         
-    def __init__( self, 
-                    domain_model, 
-                    token_field, 
-                    title_field, 
-                    value_field, 
-                    filter_field, 
-                    filter_value=None, 
-                    order_by_field=None,  ):
+    def __init__(self,
+        domain_model, 
+        token_field, 
+        title_field, 
+        value_field, 
+        filter_field, 
+        filter_value=None, 
+        order_by_field=None
+    ):
         self.domain_model = domain_model
         self.token_field = token_field
         self.value_field = value_field
@@ -752,17 +779,17 @@ class QuerySource( object ):
         self.order_by_field = order_by_field
         self.filter_value = filter_value
         
-    def constructQuery( self, context ):
+    def constructQuery(self, context):
         session = Session()
         trusted=removeSecurityProxy(context)
         if self.filter_value:
-            query = session.query( self.domain_model ).filter(
+            query = session.query(self.domain_model).filter(
                 self.domain_model.c[self.filter_field] == 
-                trusted.__dict__[self.filter_value] )
+                trusted.__dict__[self.filter_value])
         else:
             pfk = self.getValueKey(context)
-            query = session.query( self.domain_model )
-            query = query.filter(self.domain_model.c[self.filter_field] == pfk )
+            query = session.query(self.domain_model)
+            query = query.filter(self.domain_model.c[self.filter_field] == pfk)
             
         query = query.distinct()
         if self.order_by_field:
@@ -770,10 +797,9 @@ class QuerySource( object ):
             
         return query
         
-    def __call__( self, context=None ):
-        query = self.constructQuery( context )
+    def __call__(self, context=None):
+        query = self.constructQuery(context)
         results = query.all()
-        
         terms = []
         title_field = self.title_field or self.token_field
         for ob in results:
@@ -785,3 +811,41 @@ class QuerySource( object ):
                     ))
                     
         return vocabulary.SimpleVocabulary( terms )
+        
+#Hansard Vocabularies
+
+def ActiveUsers(context, role=None):
+    session= Session()
+    terms = []
+    hansard_office = session.query(domain.Office).filter(domain.Office.office_type == 'H').all()
+    if len(hansard_office) == 0:
+        return vocabulary.SimpleVocabulary( terms )
+    if role == None:
+        return vocabulary.SimpleVocabulary( terms )
+    query = session.query(domain.GroupMembership).filter(
+                sql.and_(domain.GroupMembership.membership_type == 'officemember',
+                domain.GroupMembership.active_p == True,
+                domain.GroupMembership.group_id == hansard_office[0].office_id)
+                )
+    results = query.all()
+    for ob in results:
+        titles = [t.title_name.user_role_name for t in ob.member_titles]
+        if role in titles:
+            obj = ob.user
+            terms.append( 
+                vocabulary.SimpleTerm( 
+                value = getattr( obj, 'user_id'), 
+                token = getattr( obj, 'user_id'),
+                title = getattr( obj, 'first_name') + getattr( obj, 'last_name'),
+                ))
+    return vocabulary.SimpleVocabulary( terms )
+
+
+def ActiveEditors(context):
+    return ActiveUsers(context, 'Editor')
+
+def ActiveReaders(context):
+    return ActiveUsers(context, 'Reader')
+
+def ActiveReporters(context):
+    return ActiveUsers(context, 'Reporter')        

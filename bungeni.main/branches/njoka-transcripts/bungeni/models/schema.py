@@ -110,13 +110,23 @@ users = rdb.Table("users", metadata,
     rdb.Column("image", rdb.Binary),
     rdb.Column("active_p", rdb.String(1),
         rdb.CheckConstraint("""active_p in ('A', 'I', 'D')"""),
-        default="A", # activ/inactiv/deceased
+        default="A", # active/inactive/deceased
     ),
     # comment out for now - will be used for user preferences
     rdb.Column("receive_notification", rdb.Boolean, default=True),
     rdb.Column("language", rdb.String(5), nullable=False),
 )
 
+# associations table for many-to-many relation between user and 
+# parliamentary item
+users_parliamentary_items = rdb.Table("users_parliamentary_items", metadata,
+    rdb.Column("users_id", rdb.Integer, 
+        rdb.ForeignKey("users.user_id")
+    ),
+    rdb.Column("parliamentary_items_id", rdb.Integer, 
+        rdb.ForeignKey("parliamentary_items.parliamentary_item_id")
+    )
+)
 
 # delegate rights to act on behalf of a user to another user
 user_delegations = rdb.Table("user_delegations", metadata,
@@ -130,6 +140,7 @@ user_delegations = rdb.Table("user_delegations", metadata,
     )
 )
 
+# user subscriptions table
 
 # specific user classes
 parliament_memberships = rdb.Table("parliament_memberships", metadata,
@@ -264,11 +275,11 @@ committees = rdb.Table("committees", metadata,
     rdb.Column("committee_type_id", rdb.Integer,
         rdb.ForeignKey("committee_types.committee_type_id")
     ),
-    rdb.Column("no_members", rdb.Integer),
-    rdb.Column("min_no_members", rdb.Integer),
+    rdb.Column("num_members", rdb.Integer),
+    rdb.Column("min_num_members", rdb.Integer),
     rdb.Column("quorum", rdb.Integer),
-    rdb.Column("no_clerks", rdb.Integer),
-    rdb.Column("no_researchers", rdb.Integer),
+    rdb.Column("num_clerks", rdb.Integer),
+    rdb.Column("num_researchers", rdb.Integer),
     rdb.Column("proportional_representation", rdb.Boolean),
     rdb.Column("default_chairperson", rdb.Boolean),
     rdb.Column("reinstatement_date", rdb.Date),
@@ -412,36 +423,47 @@ address_types = rdb.Table("address_types", metadata,
     rdb.Column("language", rdb.String(5), nullable=False),
 )
 
-addresses = rdb.Table("addresses", metadata,
-    rdb.Column("address_id", rdb.Integer, primary_key=True),
-    # official address - only one official address is allowed per title
-    rdb.Column("role_title_id", rdb.Integer,
-        rdb.ForeignKey("role_titles.role_title_id"),
-        unique=True
-    ),
-    # personal address, multiple addresses are allowed for a user
-    rdb.Column("user_id", rdb.Integer, rdb.ForeignKey("users.user_id")),
-    rdb.Column("address_type_id", rdb.Integer,
-        rdb.ForeignKey("address_types.address_type_id")
-    ),
-    rdb.Column("po_box", rdb.Unicode(40)),
-    rdb.Column("address", rdb.Unicode(256)),
-    rdb.Column("city", rdb.Unicode(256)),
-    rdb.Column("zipcode", rdb.Unicode(20)),
-    rdb.Column("country", rdb.String(2),
-        rdb.ForeignKey("countries.country_id")
-    ),
-    rdb.Column("phone", rdb.Unicode(256)),
-    rdb.Column("fax", rdb.Unicode(256)),
-    rdb.Column("email", rdb.String(512)),
-    rdb.Column("im_id", rdb.String(512)),
-    # Workflow State -> determins visibility
-    rdb.Column("status", rdb.Unicode(16)),
-    rdb.Column("status_date", rdb.DateTime(timezone=False),
-        server_default=(text("now()")),
-        nullable=False
-    ),
-)
+def _make_address_table(metadata, fk_key="user"):
+    assert fk_key in ("user", "group")
+    table_name = "%s_addresses" % (fk_key) # e.g. user_addresses
+    fk_col_name = "%s_id" % (fk_key) # e.g. user_id
+    fk_target = "%ss.%s_id" % (fk_key, fk_key) # e.g. users.user_id
+    return rdb.Table(table_name, metadata,
+        rdb.Column("address_id", rdb.Integer, primary_key=True),
+        # user|personal or group|official addresses
+        rdb.Column(fk_col_name, rdb.Integer,
+            rdb.ForeignKey(fk_target),
+            nullable=False
+        ),
+        rdb.Column("address_type_id", rdb.Integer,
+            rdb.ForeignKey("address_types.address_type_id"),
+            nullable=False
+        ),
+        rdb.Column("postal_type", rdb.String(1),
+            # po box | street, physical | military | undefined, unknown
+            rdb.CheckConstraint("""postal_type in ('P', 'S', 'M', 'U')"""),
+            default="S",
+            nullable=False
+        ),
+        rdb.Column("street", rdb.Unicode(256), nullable=False),
+        rdb.Column("city", rdb.Unicode(256), nullable=False),
+        rdb.Column("zipcode", rdb.Unicode(20)),
+        rdb.Column("country", rdb.String(2),
+            rdb.ForeignKey("countries.country_id"),
+            nullable=False
+        ),
+        rdb.Column("phone", rdb.Unicode(256)),
+        rdb.Column("fax", rdb.Unicode(256)),
+        rdb.Column("email", rdb.String(512)),
+        # Workflow State -> determins visibility
+        rdb.Column("status", rdb.Unicode(16)),
+        rdb.Column("status_date", rdb.DateTime(timezone=False),
+            server_default=(text("now()")),
+            nullable=False
+        ),
+    )
+group_addresses = _make_address_table(metadata, "group")
+user_addresses = _make_address_table(metadata, "user")
 
 
 ##################
@@ -472,7 +494,7 @@ sittings = rdb.Table("group_sittings", metadata,
     rdb.Column("start_date", rdb.DateTime(timezone=False), nullable=False),
     rdb.Column("end_date", rdb.DateTime(timezone=False), nullable=False),
     rdb.Column("sitting_type_id", rdb.Integer,
-        rdb.ForeignKey("sitting_type.sitting_type_id")
+        rdb.ForeignKey("sitting_types.sitting_type_id")
     ),
     # if a sitting is recurring this is the id of the original sitting
     # there is no foreign key to the original sitting
@@ -489,7 +511,7 @@ sittings = rdb.Table("group_sittings", metadata,
     rdb.Column("language", rdb.String(5), nullable=False),
 )
 
-sitting_type = rdb.Table("sitting_type", metadata,
+sitting_types = rdb.Table("sitting_types", metadata,
     rdb.Column("sitting_type_id", rdb.Integer, primary_key=True),
     rdb.Column("sitting_type", rdb.Unicode(40)),
     rdb.Column("start_time", rdb.Time, nullable=False),
@@ -507,12 +529,12 @@ sitting_attendance = rdb.Table("sitting_attendance", metadata,
         primary_key=True
     ),
     rdb.Column("attendance_id", rdb.Integer,
-        rdb.ForeignKey("attendance_type.attendance_id"),
+        rdb.ForeignKey("attendance_types.attendance_id"),
         nullable=False
     ),
 )
 
-attendance_type = rdb.Table("attendance_type", metadata,
+attendance_types = rdb.Table("attendance_types", metadata,
     rdb.Column("attendance_id", rdb.Integer, primary_key=True),
     rdb.Column("attendance_type", rdb.Unicode(40), nullable=False),
     rdb.Column("language", rdb.String(5), nullable=False),
@@ -591,7 +613,7 @@ item_member_votes = rdb.Table("item_member_votes", metadata,
     rdb.Column("vote", rdb.Boolean,),
 )
 
-items_schedule = rdb.Table("items_schedule", metadata,
+item_schedules = rdb.Table("item_schedules", metadata,
     rdb.Column("schedule_id", rdb.Integer, primary_key=True),
     rdb.Column("item_id", rdb.Integer,
         rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
@@ -615,9 +637,9 @@ items_schedule = rdb.Table("items_schedule", metadata,
 # to produce the proceedings:
 # capture the discussion on this item
 
-item_discussion = rdb.Table("item_discussion", metadata,
+item_schedule_discussions = rdb.Table("item_schedule_discussions", metadata,
     rdb.Column("schedule_id", rdb.Integer,
-        rdb.ForeignKey("items_schedule.schedule_id"),
+        rdb.ForeignKey("item_schedules.schedule_id"),
         primary_key=True),
     rdb.Column("body_text", rdb.UnicodeText),
     rdb.Column("sitting_time", rdb.Time(timezone=False)),
@@ -778,7 +800,6 @@ questions = rdb.Table("questions", metadata,
     rdb.Column("ministry_id", rdb.Integer, rdb.ForeignKey("groups.group_id")),
     rdb.Column("response_text", rdb.UnicodeText),
 )
-
 question_changes = make_changes_table(questions, "question", metadata)
 question_versions = make_versions_table(questions, "question", metadata,
     parliamentary_items
@@ -811,7 +832,6 @@ motions = rdb.Table("motions", metadata,
     # Receive Notifications -> triggers notification on workflow change
     rdb.Column("receive_notification", rdb.Boolean, default=True),
 )
-
 motion_changes = make_changes_table(motions, "motion", metadata)
 motion_versions = make_versions_table(motions, "motion", metadata,
     parliamentary_items
@@ -839,13 +859,12 @@ bills = rdb.Table("bills", metadata,
     rdb.Column("identifier", rdb.Integer),
     rdb.Column("publication_date", rdb.Date),
 )
-
 bill_changes = make_changes_table(bills, "bill", metadata)
 bill_versions = make_versions_table(bills, "bill", metadata, parliamentary_items)
 
 committee_reports = ()
 
-consignatories = rdb.Table("consignatories", metadata,
+cosignatories = rdb.Table("cosignatories", metadata,
     rdb.Column("item_id", rdb.Integer,
         rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
         nullable=False,
@@ -960,24 +979,45 @@ hansards = rdb.Table("hansards", metadata,
     rdb.Column("sitting_id", rdb.Integer, rdb.ForeignKey("group_sittings.sitting_id")),
 )
 
+hansard_items = rdb.Table("hansard_items", metadata,
+    rdb.Column("hansard_id", rdb.Integer,
+        rdb.ForeignKey("hansards.hansard_id"),
+    ),
+    rdb.Column("hansard_item_id", rdb.Integer, 
+        rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
+        primary_key=True),
+    rdb.Column("start_date", rdb.DateTime(timezone=False), nullable=False),
+    rdb.Column("end_date", rdb.DateTime(timezone=False), nullable=False),
+    # type for polymorphic_identity
+    rdb.Column("item_type", rdb.String(30), nullable=False),
+)
+
+hansard_parliamentary_items = rdb.Table(
+    "hansard_parliamentary_items",
+    metadata, 
+    rdb.Column("hansard_parliamentary_item_id", rdb.Integer,
+        rdb.ForeignKey("hansard_items.hansard_item_id"),
+        primary_key=True
+        ),
+    rdb.Column("parliamentary_item_id", rdb.Integer, rdb.ForeignKey("parliamentary_items.parliamentary_item_id")),
+   )
+
+hansard_parliamentary_item_changes = make_changes_table( hansard_parliamentary_items, "hansard_parliamentary_item", metadata )
+hansard_parliamentary_item_versions = make_versions_table( hansard_parliamentary_items, "hansard_parliamentary_item", metadata)
+
 #!+ TODO(miano, 26-Oct-2010) : Rethink this....
 # Stores the name of the person speaking if they are not currently a bungeni 
 # user otherwise stores their user_id
-
 speeches = rdb.Table(
     "speeches",
     metadata, 
     rdb.Column("speech_id", rdb.Integer,
-        rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
+        rdb.ForeignKey("hansard_items.hansard_item_id"),
         primary_key=True
         ),
     rdb.Column("person_id", rdb.Integer, rdb.ForeignKey("users.user_id")),
     rdb.Column("person_name", rdb.UnicodeText, nullable=True),
     rdb.Column("text", rdb.UnicodeText),
-    rdb.Column("start_date", rdb.DateTime(timezone=False), nullable=False),
-    rdb.Column("end_date", rdb.DateTime(timezone=False), nullable=False),
-    rdb.Column("hansard_id", rdb.Integer, 
-                rdb.ForeignKey("hansards.hansard_id")),
    )
 
 speech_changes = make_changes_table( speeches, "speech", metadata )
@@ -1051,14 +1091,14 @@ translation_lookup_index = rdb.Index("translation_lookup_index",
     translations.c.lang
 )
 
-
+''' !+WTF(mr, oct-2010) what is this? To start, there is no .util module !
 def reset_database():
     import util
     mdset = util.cli_setup()
     for m in mdset:
         m.drop_all(checkfirst=True)
         m.create_all(checkfirst=True)
-
+'''
 
 #for table_name in metadata.tables.keys():
 #    print metadata.tables[table_name].name

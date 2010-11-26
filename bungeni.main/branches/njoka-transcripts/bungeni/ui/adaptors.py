@@ -1,4 +1,6 @@
+from bungeni.alchemist import model
 from zope.component import getMultiAdapter
+from zope.security.proxy import removeSecurityProxy
 
 class BillAnnotationAdaptor(object):
     """Annotation Adaptor for Bills."""
@@ -31,10 +33,21 @@ class RSSValues(object):
 
     def __init__(self, context):
         self.context = context
+        self.domain_model = removeSecurityProxy(self.context).domain_model
+        self.domain_interface = model.queryModelInterface(self.domain_model)
+        self.domain_annotation = model.queryModelDescriptor(
+            self.domain_interface)
+
 
     @property
     def values(self):
-        return self.context.values()
+        public_wfstates = getattr(self.domain_annotation,
+                                  "public_wfstates",
+                                  None)
+        trusted = removeSecurityProxy(self.context)
+        if public_wfstates:
+            return filter(lambda x: x.status in public_wfstates, trusted.values())
+        return trusted.values()
 
 
 class TimelineRSSValues(RSSValues):
@@ -43,6 +56,10 @@ class TimelineRSSValues(RSSValues):
         changes
     """
 
+    def __init__(self, context):
+        self.context = context
+
     @property
     def values(self):
-        return self.context.changes
+        return filter(lambda x: x.action not in [u'modified', u'added'],
+                      self.context.changes)

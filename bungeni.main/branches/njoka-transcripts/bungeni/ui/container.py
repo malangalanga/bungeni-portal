@@ -289,7 +289,10 @@ class ContainerJSONListing(ContainerJSONBrowserView):
                 t_nodes.append(translation.translate_obj(node, lang))
             except (AssertionError,): # node is not ITranslatable
                 debug.log_exc_info(sys.exc_info(), log_handler=log.warn)
-                t_nodes.append(node)
+                # if a node is not translatable then we assume that NONE of 
+                # the nodes are translatable, so we simply break out, 
+                # returning the untranslated nodes as is
+                return nodes
         return t_nodes
     
     def _jsonValues(self, nodes, fields):
@@ -398,7 +401,8 @@ class PublicStatesContainerJSONListing(ContainerJSONListing):
             ).query_add_filters(query, *filter_strings)
     
     def get_cache_key(self, context, lang, start, limit, sort_direction):
-        r, jslc = self.request, JSLCaches[context.__name__]
+        r = self.request
+        jslc = JSLCaches[context.__name__] # raises KeyError
         filters = tuple(r.get(name) or None for name in jslc.filter_params)
         # as sort_dir param may have a (overridable) model default, we 
         # treat it differently than other params (note that sort_on may 
@@ -412,9 +416,16 @@ class PublicStatesContainerJSONListing(ContainerJSONListing):
         start, limit = self.getOffsets()
         lang = self.request.locale.getLocaleID() # get_request_language()
         context = proxy.removeSecurityProxy(self.context)
-        cache_key = self.get_cache_key(context, 
-            lang, start, limit, self.sort_dir)
-        cache = JSLCaches[context.__name__].cache
+        # there may not be a cache defined for this context type
+        try:
+            cache_key = self.get_cache_key(context, lang, start, limit, 
+                self.sort_dir)
+            cache = JSLCaches[context.__name__].cache
+        except KeyError:
+            log.warn(" ********* [%s] No such JSLCache !" % (context.__name__))
+            # no cache, proceed...
+            return self.json_batch(start, limit, lang)
+        # OK, we have a cache and a cache_key
         if not cache.has(cache_key):
             log.debug(" [%s] CACHE SETTING key: %s" % (
                 context.__name__, cache_key,))
@@ -459,6 +470,8 @@ class JSLCache(object):
 
 
 JSLCaches = {
+    #"addresses": +! needs invalidation testing
+    #    JSLCache(49, mfaces.IGroupAddress, ["GroupAddress"]),
     "committees": 
         JSLCache(49, mfaces.ICommittee, ["Committee"]),
     "bills": 
@@ -471,8 +484,8 @@ JSLCaches = {
         JSLCache(49, mfaces.IGroupGroupItemAssignment,
             ["GroupGroupItemAssignment"], 
         ),
-    "consignatory": 
-        JSLCache(49, mfaces.IConsignatory, ["Consignatory"]),
+    "cosignatory": 
+        JSLCache(49, mfaces.ICosignatory, ["Cosignatory"]),
     "questions": 
         JSLCache(199, mfaces.IQuestion, ["Question", "Ministry"]),
     "motions": 

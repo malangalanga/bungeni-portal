@@ -31,9 +31,6 @@
 
   <!-- Site Viewlets -->
   <include package=".viewlets" />
-
-  <!-- Calendar Widgets -->
-  <!--include file="calendar.zcml" /-->
   
   <!-- Include Auditing UI-->
   <include file="audit.zcml" />
@@ -101,11 +98,9 @@
        />
   </class--> 
     <!--End Experimental transcripts support -->
-    
    <browser:resourceDirectory
       name="ui-images"
       directory="images" />
-
    <!-- vocabularies -->
    
    <utility
@@ -150,8 +145,27 @@
             name="Tabled Document Options"
             provides="zope.schema.interfaces.IVocabularyFactory"
             />
-
-
+    <!-- Hansard vocabularies -->
+     <utility
+            component=".vocabulary.ActiveEditors"
+            name="ActiveEditors"
+            provides="zope.schema.interfaces.IVocabularyFactory"
+            />
+    <utility
+            component=".vocabulary.ActiveReaders"
+            name="ActiveReaders"
+            provides="zope.schema.interfaces.IVocabularyFactory"
+            />
+     <utility
+            component=".vocabulary.ActiveReporters"
+            name="ActiveReporters"
+            provides="zope.schema.interfaces.IVocabularyFactory"
+            />
+    <subscriber
+     for="bungeni.models.interfaces.IGroupSitting
+          zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+     handler=".hansard.group_sitting_created"
+     /> 
   <utility
      name="bungeni.vocabulary.ParliamentSource"
      provides="zope.schema.interfaces.IVocabularyFactory"

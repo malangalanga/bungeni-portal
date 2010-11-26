@@ -21,6 +21,8 @@ class IWorkspaceSectionContext(interface.Interface):
     """Marker for a section of a workspace."""
 class IWorkspacePIContext(IWorkspaceSectionContext):
     """Marker for the PI section of a workspace."""
+class IWorkspaceMIContext(IWorkspaceSectionContext):
+    """Marker for the MI section of a workspace."""
 class IWorkspaceArchiveContext(IWorkspaceSectionContext):
     """Marker for the Archive section of a workspace."""
 
@@ -85,3 +87,12 @@ class IOpenOfficePath(interface.Interface):
         description=u"This is the path name of the openoffice to be used to generate pdf reports",
         required=True
         )
+        
+class IBungeniTake(interface.Interface):
+    '''Take Marker Interface'''
+
+class IBungeniAssignment(interface.Interface):
+    '''Assignment Marker Interface'''
+
+class ITranscribable(interface.Interface):
+    '''Transcribable Marker Interface'''

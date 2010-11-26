@@ -75,5 +75,13 @@
       $('#workspace-table-clerks-items-action-required').columnFilters({alternateRowClassNames:['odd','even']});
       $('#workspace-table-questions-pending-response').columnFilters({alternateRowClassNames:['odd','even']});
       $('#workspace-table-items-pending-schedule').columnFilters({alternateRowClassNames:['odd','even']});      
+      /*
+      var tree;
+      function treeInit() {
+        tree = new YAHOO.widget.TreeView("mp_speeches_div");
+        tree.render();
+      }
+      treeInit();
+      */
     });
  })(jQuery);

@@ -7,8 +7,8 @@
 $Id$
 """
 
+import datetime
 from copy import deepcopy
-from datetime import date
 from zope import schema, interface
 
 from zope.security.management import getInteraction
@@ -24,7 +24,6 @@ from bungeni.alchemist.ui import widgets
 from bungeni.models import domain
 
 from bungeni.core.translation import get_default_language
-from bungeni.core.translation import get_all_languages
 from bungeni.core.workflows.groups import states as group_wf_state
 from bungeni.core.workflows.attachedfile import states as af_wf_state
 from bungeni.core.workflows.address import states as address_wf_state
@@ -39,7 +38,8 @@ from bungeni.core import translation
 from bungeni.ui.widgets import TextDateWidget as DateWidget
 from bungeni.ui.widgets import TextDateTimeWidget as DateTimeWidget
 
-from bungeni.ui.widgets import AutocompleteWidget
+from bungeni.ui.widgets import MemberURLDisplayWidget
+#from bungeni.ui.widgets import AutocompleteWidget
 from bungeni.ui.widgets import CustomRadioWidget
 from bungeni.ui.widgets import HTMLDisplay
 from bungeni.ui.widgets import RichTextEditor
@@ -90,17 +90,20 @@ def day_column(name, title, default=""):
 #def time_column(name, title, default=""):
 #    return localized_datetime_column(name, title, default, "time", "long")
 
+
+
 def date_from_to_column(name, title, default=""):
+    format_length = "medium"
     def getter(item, formatter):
         request = item.__parent__.request
         start = getattr(item, "start_date")
         if start:
             start = date.getLocaleFormatter(request, 
-                "dateTime", "short").format(start)
+                "dateTime", format_length).format(start)
         end = getattr(item, "end_date")
         if end:
             end = date.getLocaleFormatter(request, 
-                "time", "short").format(end)
+                "time", format_length).format(end)
         return u"%s - %s" % (start, end)
     return column.GetterColumn(title, getter)
 
@@ -113,21 +116,85 @@ def name_column(name, title, default=""):
     return _column(name, title, renderer, default)
 
 def combined_name_column(name, title, default=""):
-    """Combine full_name as the full_name and short_name columns.
+    """A extended name, combining full_name (localized) and short_name columns.
+    
+    For types that have both a full_name and a short_name attribute:
+    Group, ParliamentaryItem, ParliamentarySession
     """
     def getter(item, formatter):
-        return "%s &nbsp; [%s]" % (item.full_name, item.short_name)
+        return "%s [%s]" % (_(item.full_name), item.short_name)
     return column.GetterColumn(title, getter)
+
+
+def _get_related_user(item_user, attr):
+    """Get trhe user instance that is related to this item via <attr>, 
+    or if <attr> is None, return the item_user itself. 
+    """
+    if attr:
+        item_user = getattr(item_user, attr, None)
+        assert item_user is not None, \
+            "Item [%s] may not have None as [%s]" % (item_user, attr)
+    else:
+        assert item_user is not None, \
+            "Item User [%s] may not be None" % (item_user)        
+    return item_user
 
 def user_name_column(name, title, attr):
     def getter(item_user, formatter):
-        if attr:
-            item_user = getattr(item_user, attr, None)
-            assert item_user is not None, \
-                "Item [%s] may not have None as [%s]" % (item_user, attr)
+        item_user = _get_related_user(item_user, attr)
         return item_user.fullname # User.fullname property 
     return column.GetterColumn(title, getter)
 
+def linked_mp_name_column(name, title, attr):
+    """This may be used to customize the default URL generated as part of the 
+    container listing. 
+    
+    E.g. instead of the URL to the association view between a cosignatory (MP) 
+    and a bill:
+        /business/bills/obj-169/cosignatory/obj-169-61/
+    the direct URL for the MP's "home" view is used instead:
+        /members/current/obj-55/
+    """
+    def get_member_of_parliament(user_id):
+        """Get the MemberOfParliament instance for user_id."""
+        return Session().query(domain.MemberOfParliament).filter(
+            domain.MemberOfParliament.user_id == user_id).one()
+    def getter(item_user, formatter):
+        item_user = _get_related_user(item_user, attr)
+        mp = get_member_of_parliament(item_user.user_id)
+        return zope.app.form.browser.widget.renderElement("a", 
+            contents=item_user.fullname, # User.fullname derived property 
+            href="/members/current/obj-%s/" % (mp.membership_id)
+        )
+    return column.GetterColumn(title, getter)
+
+''' !+AssignedItemsListing(mr, nov-2010) this is meant to replace the 
+    "item_name_column" getter, to intercept and customize the default 
+    alchemist behaviour -- in this case the item would be default be
+    an ItemGroupItemAssignment instance, and the link would point to the 
+    association view of that assigned item and the group it is assigned to.
+    However, it is not activated as the behavior is probably incorrect in some
+    cases e.g. under /admin -- as that association also allows to modify the
+    "assignemnt" properties, a "feature" that would be lost if this was to be 
+    activated (do we need different behaviour for differeent layers?).
+
+def linked_item_name_column(name, title):
+    """To customize the default URL generated as part of the container listing. 
+    
+    E.g. instead of the URL to the association view between a committee and
+    an assigned bill:
+        /business/committees/obj-46/assigneditems/obj-1/
+    the direct URL for the MP's "home" view is used instead:
+        /business/bills/obj-37/
+    """
+    def getter(item, formatter):
+        bill = item.item
+        return zope.app.form.browser.widget.renderElement("a", 
+            contents="%s %s" % (bill.type, bill.short_name),
+            href="/business/bills/obj-%s/" % (bill.parliamentary_item_id)
+        )
+    return column.GetterColumn(title, getter)
+'''
 
 def member_title_column(name, title, default=u""):
     def getter(item, formatter):
@@ -137,7 +204,7 @@ def member_title_column(name, title, default=u""):
 def current_titles_in_group_column(name, title, default=u""):
     def getter(item, formatter):
         value = getattr(item, name)
-        today = date.today()
+        today = datetime.date.today()
         if not value:
             return default
         title_list = []
@@ -164,7 +231,6 @@ def item_name_column(name, title, default=u""):
     def getter(item, formatter):
         return u"%s %s" % (item.item.type, item.item.short_name)
     return column.GetterColumn(title, getter)
-
 def group_name_column(name, title, default=u""):
     def getter(item, formatter):
         obj = translation.translate_obj(item)
@@ -216,12 +282,6 @@ def party_column(name, title, default=u""):
         return u"-"
     return column.GetterColumn(title, getter)
 
-def committee_type_column(name, title, default=u""):
-    def getter(item, formatter):
-        obj = translation.translate_obj(item.committee_type)
-        return obj.committee_type
-    return column.GetterColumn(title, getter)
-
 def ministry_column(name, title, default=u""):
     def getter(item, formatter):
         # !+TRANSLATE_ATTR(mr, sep-2010)
@@ -231,16 +291,21 @@ def ministry_column(name, title, default=u""):
         return obj.short_name
     return column.GetterColumn(title, getter)
 
-def sitting_type_column(name, title, default=u""):
+def enumeration_column(name, title,
+    item_reference_attr=None, # parent item attribute, for enum 
+    enum_value_attr=None, # enum attribute, for desired value
+    ):
+    """Get getter for the enum-value of an enumerated column.
+    """
+    if enum_value_attr is None:
+        # then assume that value-attr on enum is same as enum-attr on parent
+        enum_value_attr = item_reference_attr
+    assert item_reference_attr is not None
+    assert enum_value_attr is not None
     def getter(item, formatter):
-        obj = translation.translate_obj(item.sitting_type)
-        return obj.sitting_type
-    return column.GetterColumn(title, getter)
-
-def attendance_column(name, title, default=u""):
-    def getter(item, formatter):
-        obj = translation.translate_obj(item.attendance_type)
-        return obj.attendance_type
+        enum_obj = getattr(item, item_reference_attr)
+        enum_obj = translation.translate_obj(enum_obj)
+        return getattr(enum_obj, enum_value_attr)
     return column.GetterColumn(title, getter)
 
 ####
@@ -323,16 +388,6 @@ def DeathBeforeLife(User):
             "date_of_birth"
         )
 
-def POBoxOrAddress(obj):
-    """
-    An Address must have either an entry for a physical address or a P.O. Box
-    """
-    if obj.po_box is None and obj.address is None:
-        raise interface.Invalid(_(u"You have to enter an Address"),
-            "po_box",
-            "address"
-        )
-
 ####
 # Fields
 
@@ -340,8 +395,12 @@ def POBoxOrAddress(obj):
 #
 # Field parameters, if specified, should be in the following order:
 #   name, label, description, modes, property, listing_column, 
-#   view_widget, edit_widget, add_widget, search_widget, 
-#   view_permission, edit_permission
+#   view_widget, edit_widget, add_widget, search_widget
+#   
+#   !+FIELD_PERMISSIONS(mr, nov-2010) view_permission/edit_permission params 
+#   are deprecated -- when applied to any field (that corresponds to an 
+#   attribute of the domain's class), the domain.zcml setting for that same 
+#   class attribute will anyway take precedence.
 #
 # modes:
 # - default: "view|edit|add"
@@ -461,8 +520,6 @@ class UserDescriptor(ModelDescriptor):
         ),
         Field(name="date_of_death",
             property=schema.Date(title=_(u"Date of Death"), required=False),
-            #view_permission="bungeni.user.AdminRecord",
-            edit_permission="bungeni.user.AdminRecord",
             edit_widget=DateWidget,
             add_widget=DateWidget
         ),
@@ -692,7 +749,8 @@ class PartyMemberDescriptor(GroupMembershipDescriptor):
             property=schema.Choice(title=_(u"Name"),
                 source=vocabulary.MemberOfParliamentSource("user_id",)
             ),
-            listing_column=user_name_column("user_id", _(u"Name"), "user"),
+            listing_column=linked_mp_name_column("user_id", _(u"Name"), "user"),
+            view_widget=MemberURLDisplayWidget
         ),
     ]
     fields.extend(deepcopy(GroupMembershipDescriptor.fields))
@@ -706,6 +764,7 @@ class PartyMemberDescriptor(GroupMembershipDescriptor):
     ])
 
 
+''' !+UNUSED(mr, oct-2010)
 class MemberOfPartyDescriptor(ModelDescriptor):
     """Partymemberships of a member of a user."""
     
@@ -752,10 +811,11 @@ class MemberOfPartyDescriptor(ModelDescriptor):
     ]
     #schema_invariants = [EndAfterStart]
     #custom_validators =[validations.validate_date_range_within_parent,]
-
+'''
 
 class GroupDescriptor(ModelDescriptor):
     
+    _combined_name_title = "%s [%s]" % (_(u"Name"), _(u"Acronym"))
     fields = [
         Field(name="group_id", modes=""),
         Field(name="type", modes=""),
@@ -771,9 +831,9 @@ class GroupDescriptor(ModelDescriptor):
         ),
         Field(name="combined_name",
             modes="listing",
-            property=schema.TextLine(title=_(u"Name [Acronym]")),
+            property=schema.TextLine(title=_combined_name_title), 
             listing_column=combined_name_column("full_name", 
-                "%s &nbsp; [%s]" % (_(u"Name"), _(u"Acronym")))
+                _combined_name_title)
         ),
         LanguageField("language"),
         Field(name="description",
@@ -880,28 +940,27 @@ class CommitteeDescriptor(GroupDescriptor):
     container_name = _(u"Committees")
     custom_validators = [validations.validate_date_range_within_parent, ]
     
-    typeSource = vocabulary.DatabaseSource(domain.CommitteeType,
-        token_field="committee_type_id",
-        title_field="committee_type",
-        value_field="committee_type_id"
-    )
-    
     fields = deepcopy(GroupDescriptor.fields)
     fields.extend([
         Field(name="committee_id", modes=""),
         Field(name="committee_type_id",
             modes="view|edit|add|listing",
             property=schema.Choice(title=_(u"Type of committee"), 
-                source=typeSource
+                source=vocabulary.DatabaseSource(domain.CommitteeType,
+                    token_field="committee_type_id",
+                    title_field="committee_type",
+                    value_field="committee_type_id"
+                )
             ),
-            listing_column=committee_type_column("committee_type_id", 
-                _(u"Type")
+            listing_column=enumeration_column("committee_type_id", 
+                _(u"Type"),
+                item_reference_attr="committee_type"
             ),
         ),
-        Field(name="no_members",
+        Field(name="num_members",
             property=schema.Int(title=_(u"Number of members"), required=False),
         ),
-        Field(name="min_no_members",
+        Field(name="min_num_members",
             property=schema.Int(title=_(u"Minimum Number of Members"), 
                 required=False
             )
@@ -909,10 +968,10 @@ class CommitteeDescriptor(GroupDescriptor):
         Field(name="quorum",
             property=schema.Int(title=_(u"Quorum"), required=False)
         ),
-        Field(name="no_clerks",
+        Field(name="num_clerks",
             property=schema.Int(title=_(u"Number of clerks"), required=False)
         ),
-        Field(name="no_researchers",
+        Field(name="num_researchers",
             property=schema.Int(title=_(u"Number of researchers"), 
                 required=False
             )
@@ -990,27 +1049,35 @@ class AddressDescriptor(ModelDescriptor):
     
     fields = [
         Field(name="address_id", modes=""),
-        Field(name="role_title_id", modes=""),
-        Field(name="user_id", modes=""),
         Field(name="address_type_id",
+            modes="view|edit|add|listing",
             property=schema.Choice(title=_(u"Address Type"),
                 source=vocabulary.DatabaseSource(domain.AddressType,
                     title_field="address_type_name",
                     token_field="address_type_id",
                     value_field="address_type_id"
                 ),
-            )
+            ),
+            listing_column=enumeration_column("address_type_id", 
+                _(u"Type"),
+                item_reference_attr="address_type",
+                enum_value_attr="address_type_name"
+            ),
         ),
-        Field(name="po_box", 
-            property=schema.TextLine(title=_(u"P.O. Box"), required=False)
+        Field(name="postal_type", 
+            property=schema.Choice(title=_(u"Postal Type"),
+                source=vocabulary.AddressPostalType,
+                required=True
+            ),
         ),
-        Field(name="address",
-            property=schema.Text(title=_(u"Address"), required=False),
+        Field(name="street",
+            property=schema.Text(title=_(u"Street"), required=True),
             edit_widget=zope.app.form.browser.TextAreaWidget,
             add_widget=zope.app.form.browser.TextAreaWidget,
         ),
         Field(name="city",
-            property=schema.TextLine(title=_(u"City"), required=False)
+            modes="view|edit|add|listing",
+            property=schema.TextLine(title=_(u"City"), required=True)
         ),
         Field(name="zipcode", label=_(u"Zip Code")),
         Field(name="country",
@@ -1020,7 +1087,7 @@ class AddressDescriptor(ModelDescriptor):
                     token_field="country_id",
                     value_field="country_id"
                 ),
-                required=False
+                required=True
             ),
         ),
         Field(name="phone",
@@ -1048,17 +1115,25 @@ class AddressDescriptor(ModelDescriptor):
                 required=False
             ),
         ),
-        Field(name="im_id",
-            property=schema.TextLine(title=_(u"Instant Messenger Id"),
-                description=_(u"ICQ, AOL IM, GoogleTalk..."), 
-                required=False
-            )
-        ),
+        #Field(name="im_id",
+        #    property=schema.TextLine(title=_(u"Instant Messenger Id"),
+        #        description=_(u"ICQ, AOL IM, GoogleTalk..."), 
+        #        required=False
+        #    )
+        #), !+IM(mr, oct-2010) morph to some "extra_info" on User
         Field(name="status", modes=""),
         Field(name="status_date", modes=""),
     ]
-    schema_invariants = [POBoxOrAddress]
     public_wfstates = [address_wf_state[u"public"].id]
+
+class GroupAddressDescriptor(AddressDescriptor):
+    fields = [
+        Field(name="group_id", modes="")
+    ] + deepcopy(AddressDescriptor.fields)
+class UserAddressDescriptor(AddressDescriptor):
+    fields = [
+        Field(name="user_id", modes=""),
+    ] + deepcopy(AddressDescriptor.fields)
 
 
 class MemberRoleTitleDescriptor(ModelDescriptor):
@@ -1090,12 +1165,12 @@ class MemberRoleTitleDescriptor(ModelDescriptor):
             add_widget=DateWidget
         ),
         LanguageField("language"),
-    ] + [ deepcopy(f) for f in AddressDescriptor.fields 
-          if f["name"] not in ("role_title_id") ]
+    ]
+    #] + [ deepcopy(f) for f in AddressDescriptor.fields 
+    #      if f["name"] not in ("role_title_id",) ]
     
     schema_invariants = [
-        EndAfterStart, 
-        POBoxOrAddress
+        EndAfterStart,
     ]
     custom_validators = [
         validations.validate_date_range_within_parent,
@@ -1330,7 +1405,9 @@ class ItemGroupItemAssignmentDescriptor(GroupItemAssignmentDescriptor):
                     value_field="parliamentary_item_id"
                 ),
             ),
-            listing_column=item_name_column("parliamentary_item_id", _(u"Item")),
+            # !+AssignedItemsListing(mr, nov-2010)
+            listing_column=item_name_column( #=linked_item_name_column(
+                "parliamentary_item_id", _(u"Item")),
         ),
         Field(name="group_id", modes=""),
     ]
@@ -1458,7 +1535,8 @@ class ParliamentaryItemDescriptor(ModelDescriptor):
                 description=_(u"Select the user who moved the document"),
                 source=vocabulary.MemberOfParliamentDelegationSource("owner_id"),
             ),
-            listing_column=user_name_column("owner_id", _(u"Name"), "owner"),
+            listing_column=linked_mp_name_column("owner_id", _(u"Name"), "owner"),
+            view_widget=MemberURLDisplayWidget
         ),
         #LanguageField("language"),
         Field(name="language",
@@ -1476,8 +1554,7 @@ class ParliamentaryItemDescriptor(ModelDescriptor):
         Field(name="submission_date",
             modes="edit|view|listing",
             property=schema.Date(title=_(u"Submission Date"), required=False),
-            view_permission="bungeni.edit.historical",
-            edit_permission="bungeni.edit.historical",
+            listing_column=day_column("submission_date", _(u"Submission Date")),
             edit_widget=DateWidget,
             add_widget=DateWidget,
         ),
@@ -1597,8 +1674,6 @@ class MotionDescriptor(ParliamentaryItemDescriptor):
         Field(name="approval_date",
             modes="edit|view",
             property=schema.Date(title=_(u"Approval Date"), required=False),
-            view_permission="bungeni.edit.historical",
-            edit_permission="bungeni.edit.historical",
             edit_widget=DateWidget,
             add_widget=DateWidget
         ),
@@ -1673,7 +1748,6 @@ class BillDescriptor(ParliamentaryItemDescriptor):
         ),
     ])
     public_wfstates = get_states("bill", not_tagged=["private"])
-
 
 class BillVersionDescriptor(VersionDescriptor):
     display_name = _(u"Bill version")
@@ -1805,11 +1879,12 @@ class SittingDescriptor(ModelDescriptor):
         #Sitting type is commented out below because it is not set during
         #creation of a sitting but is left here because it may be used in the
         #future related to r7243
-
+        
         #Field(name="sitting_type_id",
         #    modes="view|edit|add|listing",
-        #    listing_column=sitting_type_column("sitting_type_id",
-        #        _(u"Sitting Type")
+        #    listing_column=enumeration_column("sitting_type_id",
+        #        _(u"Sitting Type"),
+        #        item_reference_attr="sitting_type"
         #    ),
         #    property=schema.Choice(title=_(u"Sitting Type"),
         #        source=vocabulary.SittingTypes(
@@ -1820,9 +1895,22 @@ class SittingDescriptor(ModelDescriptor):
         #    ),
         #),
         Field(name="start_date",
-            modes="view|edit|add|listing",
+            modes="view|edit|add", #|listing",
             property=schema.Datetime(title=_(u"Date")),
-            listing_column=date_from_to_column("start_date", _(u"Start")),
+            #listing_column=date_from_to_column("start_date", _(u"Start")),
+            # !+CustomListingURL(mr, oct-2010) the listing of this type has 
+            # been replaced by the custom GroupSittingsViewlet -- but it 
+            # should still be possible use the generic container listing in
+            # combination with a further customized listing_column -- for an
+            # example of this see how the listing of the column "owner_id" 
+            # is configured in: descriptor.ParliamentaryItemDescriptor
+            
+            # !+CustomListingURL(miano, nov-2010) 
+            # Since the custom listing column function was missing
+            # the sitting listing was broken in archive.
+            # Reverted to fix the issue.
+            # This listing does not need to be customised because it is
+            # only used in the archive.
             edit_widget=DateTimeWidget,
             add_widget=DateTimeWidget,
         ),
@@ -1918,12 +2006,6 @@ class AttendanceDescriptor(ModelDescriptor):
     display_name = _(u"Sitting attendance")
     container_name = _(u"Sitting attendances")
     
-    attendanceVocab = vocabulary.DatabaseSource(
-        domain.AttendanceType,
-        token_field="attendance_id",
-        title_field="attendance_type",
-        value_field="attendance_id"
-    )
     fields = [
         Field(name="sitting_id", modes=""),
         Field(name="member_id",
@@ -1940,9 +2022,17 @@ class AttendanceDescriptor(ModelDescriptor):
         Field(name="attendance_id",
             modes="view|edit|add|listing",
             property=schema.Choice(title=_(u"Attendance"),
-                source=attendanceVocab,
+                source=vocabulary.DatabaseSource(
+                    domain.AttendanceType,
+                    token_field="attendance_id",
+                    title_field="attendance_type",
+                    value_field="attendance_id"
+                )
             ),
-            listing_column=attendance_column("attendance_id", _(u"Attendance")),
+            listing_column=enumeration_column("attendance_id", 
+                _(u"Attendance"),
+                item_reference_attr="attendance_type"
+            ),
         ),
     ]
 
@@ -1960,23 +2050,9 @@ class AttendanceTypeDescriptor(ModelDescriptor):
     ]
 
 
-class ConsignatoryDescriptor(ModelDescriptor):
+class CosignatoryDescriptor(ModelDescriptor):
     display_name = _(u"Cosignatory")
     container_name = _(u"Cosignatories")
-    
-    class MemberURLDisplayWidget(zope.app.form.browser.widget.BrowserWidget):
-        def get_member_of_parliament(self, user_id):
-            """Get the MemberOfParliament instance for user_id.
-            """
-            return Session().query(domain.MemberOfParliament).filter(
-                domain.MemberOfParliament.user_id == user_id).one()
-        def __call__(self):
-            # this (user_id) attribute's value IS self._data
-            mp = self.get_member_of_parliament(self._data)
-            return zope.app.form.browser.widget.renderElement("a", 
-                contents=mp.user.fullname,
-                href="/members/current/obj-%s/" % (mp.membership_id)
-            )
     
     fields = [
         Field(name="bill_id", modes=""),
@@ -1985,7 +2061,7 @@ class ConsignatoryDescriptor(ModelDescriptor):
             property=schema.Choice(title=_(u"Cosignatory"),
                 source=vocabulary.MemberOfParliamentDelegationSource("user_id"),
             ),
-            listing_column=user_name_column("user_id", 
+            listing_column=linked_mp_name_column("user_id", 
                 _(u"Cosignatory"),
                 "user"
             ),
@@ -2168,7 +2244,7 @@ class ItemScheduleDescriptor(ModelDescriptor):
     ]
 
 
-class ScheduledItemDiscussionDescriptor(ModelDescriptor):
+class ItemScheduleDiscussionDescriptor(ModelDescriptor):
     display_name = _(u"Discussion")
     container_name = _(u"Discussions")
     

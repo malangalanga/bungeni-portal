@@ -136,7 +136,7 @@
                     <input type="hidden" name="headless:boolean" value="True" />
                     <select name="transition" class="workflow-status"
                             tal:condition="item/workflow">
-                      <option disabled="disabled" selected="selected"
+                      <option value="default"
                               i18n:translate="">Change state...</option>
                       <tal:action repeat="action item/workflow">
                         <option tal:attributes="value action/transition_id"

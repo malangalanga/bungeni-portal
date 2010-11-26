@@ -25,6 +25,7 @@
         (assign-)bill=50
         partymember=60, groupmember=61, committeemember=62, officemember=63
         ministry=70
+        address=80
     -->
     
     
@@ -176,12 +177,21 @@
     />
     <browser:menuItem menu="party_additems"
         for="bungeni.models.interfaces.IPoliticalGroup"
-        title="add political group member..."
+        title="Add Political Group Member..."
         action="./partymembers/add"
         permission="bungeni.politicalgroupmember.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="61"
     />
+    <browser:menuItem menu="party_additems"
+        for="bungeni.models.interfaces.IPoliticalGroup"
+        title="Add Political Group Address..."
+        action="./addresses/add"
+        permission="bungeni.address.Add"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        order="80"
+    />
+    
     <browser:menu id="committee_additems"
         title="The 'Add...' menu - for committees"
         class="ploned.ui.menu.PloneBrowserMenu"
@@ -211,7 +221,6 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="63"
     />
-    
     <browser:menuItem menu="committee_additems"
         for="bungeni.models.interfaces.ICommittee"
         title="Add Agenda item..."
@@ -236,7 +245,64 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="40"
     />
+    <browser:menuItem menu="committee_additems"
+        for="bungeni.models.interfaces.ICommittee"
+        title="Add Committee Address..."
+        action="./addresses/add"
+        permission="bungeni.address.Add"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        order="80"
+    />
     
+    <browser:menu id="parliament_additems"
+        title="The 'Add...' menu - for a Parliament"
+        class="ploned.ui.menu.PloneBrowserMenu"
+    />
+    <browser:subMenuItem menu="plone_contentmenu"
+        for="bungeni.models.interfaces.IParliament"
+        title="Add..."
+        action="add_content"
+        order="10"
+        permission="zope.View"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        submenu="parliament_additems"
+    />
+    <browser:menuItem menu="parliament_additems"
+        for="bungeni.models.interfaces.IParliament"
+        title="Add Parliament Address..."
+        action="./addresses/add"
+        permission="bungeni.address.Add"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        order="80"
+    />
+    
+    
+    <!-- !+ADD_SITTING(mr, 5-nov-2010) this adds menu option to a parliament's 
+    sittings container under admin, that has mysteriously disappeared -!- 
+    is this related to an other newly appearing problem that the sittings 
+    container itself never shows any data?
+    -->
+    <browser:menu id="group_sitting_additems"
+        title="The 'Add...' menu - for a Parliament's GroupSittingContainer"
+        class="ploned.ui.menu.PloneBrowserMenu"
+    />
+    <browser:subMenuItem menu="plone_contentmenu"
+        for="bungeni.models.interfaces.IGroupSittingContainer"
+        title="Add..."
+        action="add_content"
+        order="10"
+        permission="zope.View"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        submenu="group_sitting_additems"
+    />
+    <browser:menuItem menu="group_sitting_additems"
+        for="bungeni.models.interfaces.IGroupSittingContainer"
+        title="Add Sitting..."
+        action="./add"
+        permission="bungeni.sitting.Add"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        order="40"
+    />
     
     <browser:menu id="government_additems"
         title="The 'Add..' menu - for government"
@@ -259,6 +325,15 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="70"
     />
+    <browser:menuItem menu="government_additems"
+        for="bungeni.models.interfaces.IGovernment"
+        title="Add Government Address..."
+        action="./addresses/add"
+        permission="bungeni.address.Add"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        order="80"
+    />
+    
     <browser:menu id="ministry_additems"
         title="The 'Add..' menu - for ministry"
         class="ploned.ui.menu.PloneBrowserMenu"
@@ -280,6 +355,15 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="70"
     />
+    <browser:menuItem menu="ministry_additems"
+        for="bungeni.models.interfaces.IMinistry"
+        title="Add Ministry Address..."
+        action="./addresses/add"
+        permission="bungeni.address.Add"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        order="80"
+    />
+    
     <browser:menu id="member_additems"
         title="The 'Add...' menu - for Group Memberships"
         class="ploned.ui.menu.PloneBrowserMenu"
@@ -349,8 +433,8 @@
     <browser:menuItem menu="motion_additems"
         for="bungeni.models.interfaces.IMotion"
         title="Add cosignatory..."
-        action="./consignatory/add"
-        permission="bungeni.consignatory.Add"
+        action="./cosignatory/add"
+        permission="bungeni.cosignatory.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="22"
     />
@@ -378,9 +462,9 @@
     />
     <browser:menuItem menu="bill_additems"
         for="bungeni.models.interfaces.IBill"
-        title="Add consignatory..."
-        action="./consignatory/add"
-        permission="bungeni.consignatory.Add"
+        title="Add cosignatory..."
+        action="./cosignatory/add"
+        permission="bungeni.cosignatory.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="22"
     />
@@ -459,8 +543,8 @@
     <browser:menuItem menu="question_additems"
         for="bungeni.models.interfaces.IQuestion"
         title="Add cosignatory..."
-        action="./consignatory/add"
-        permission="bungeni.consignatory.Add"
+        action="./cosignatory/add"
+        permission="bungeni.cosignatory.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="22"
     />
@@ -508,8 +592,8 @@
     <browser:menuItem menu="tableddocument_additems"
         for="bungeni.models.interfaces.ITabledDocument"
         title="Add cosignatory..."
-        action="./consignatory/add"
-        permission="bungeni.consignatory.Add"
+        action="./cosignatory/add"
+        permission="bungeni.cosignatory.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="22"
     />
@@ -543,6 +627,7 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         submenu="agendaitem_additems"
     />
+    
     <browser:menu id="office_additems"
         title="The 'Add...' menu - for offices"
         class="ploned.ui.menu.PloneBrowserMenu"
@@ -563,6 +648,14 @@
         permission="bungeni.officemember.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="63"
+    />
+    <browser:menuItem menu="office_additems"
+        for="bungeni.models.interfaces.IOffice"
+        title="Add Office Address..."
+        action="./addresses/add"
+        permission="bungeni.address.Add"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        order="80"
     />
     
     <!-- Navigation -->
@@ -627,7 +720,7 @@
         action="./add"
         permission="bungeni.committee.Add"
         layer=".interfaces.IAdminSectionLayer"
-     />
+    />
     <browser:menuItem menu="plone_contentmenu"
         for="bungeni.models.domain.ParliamentSessionContainer"
         title="Add Session..."
@@ -750,16 +843,35 @@
         permission="bungeni.office.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
     />
+    <!-- !+ZCML(mr, nov-2010) How to parametrize title for sub-group type?
+    -->
+    <browser:menuItem menu="plone_contentmenu"
+        for="bungeni.models.domain.GroupAddressContainer"
+        title="Add Group Address..."
+        action="./add"
+        permission="bungeni.address.Add"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+    />
+    <!-- !+ZCML(mr, nov-2010) Individual menu items are declared specific per 
+            view of an IBungeniGroup subtype
+    <browser:menuItem menu="plone_contentmenu"
+        for="bungeni.models.interfaces.IBungeniGroup"
+        title="Add Group Address..."
+        action="./addresses/add"
+        permission="bungeni.address.Add"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+    />
+    -->
     <browser:menuItem menu="plone_contentmenu"
         for="bungeni.models.domain.UserAddressContainer"
-        title="Add Address..."
+        title="Add User Address..."
         action="./add"
         permission="bungeni.address.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
     />
     <browser:menuItem menu="plone_contentmenu"
         for="bungeni.models.domain.User"
-        title="Add Address..."
+        title="Add User Address..."
         action="./addresses/add"
         permission="bungeni.address.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
@@ -779,18 +891,18 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
     />
     <browser:menuItem menu="plone_contentmenu"
-        for="bungeni.models.domain.ConsignatoryContainer"
-        title="Add Consignatory..."
+        for="bungeni.models.domain.CosignatoryContainer"
+        title="Add Cosignatory..."
         action="./add"
-        permission="bungeni.consignatory.Add"
+        permission="bungeni.cosignatory.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
     />
     <browser:menuItem menu="context_actions"
-        for="bungeni.models.interfaces.IConsignatory"
+        for="bungeni.models.interfaces.ICosignatory"
         title="Delete"
         action="./delete"
         order="99"
-        permission="bungeni.consignatory.Delete"
+        permission="bungeni.cosignatory.Delete"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
     />
     <browser:menuItem menu="plone_contentmenu"
@@ -937,7 +1049,7 @@
 
   <browser:menuItem
      menu="discussion_actions"
-     for="bungeni.models.domain.ScheduledItemDiscussion"
+     for="bungeni.models.domain.ItemScheduleDiscussion"
      title="Edit Discussion"
      action="./edit"
      permission="bungeni.itemschedulediscussion.Edit"
@@ -1447,6 +1559,58 @@
      viewName=""
      weight="30"
      /-->
-
+    <!-- Hansard -->
+    <browser:menuItem
+     menu="context_actions"
+     for="bungeni.models.domain.GroupSitting"
+     action="hansard"
+     title="hansard"
+     order="20"
+     /> 
+     
+     <browser:menu
+        id="context_edit_transcript"
+        title="Hansard Menu"
+        class="ploned.ui.menu.PloneBrowserMenu"
+     />
+     <browser:subMenuItem
+        menu="plone_contentmenu"
+        for="bungeni.models.domain.GroupSitting"
+        title="manage hansard"
+        action="edit_media_path"
+        permission="bungeni.sitting.Edit"
+        submenu="context_edit_transcript"
+    />
+    <browser:menuItem
+     menu="context_edit_transcript"
+     for="bungeni.models.domain.GroupSitting"
+     title="media paths"
+     action="edit_media_path"
+     permission="bungeni.sitting.Edit"
+     />
+    <browser:menuItem
+     menu="context_edit_transcript"
+     for="bungeni.models.domain.GroupSitting"
+     title="generate takes"
+     action="generatetakes"
+     permission="bungeni.sitting.Edit"
+     />
+     <browser:menuItem
+     menu="context_edit_transcript"
+     for="bungeni.models.domain.GroupSitting"
+     title="view takes"
+     action="takes"
+     permission="bungeni.sitting.Edit"
+     />
+     <browser:menuItem
+     menu="context_edit_transcript"
+     for="bungeni.models.domain.GroupSitting"
+     title="assign staff"
+     action="staff"
+     permission="bungeni.sitting.Edit"
+     />
+     
+     
+    
 </configure>
 

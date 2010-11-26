@@ -149,14 +149,18 @@ class Group(Entity):
     #sittings = one2many("sittings", 
     #   "bungeni.models.domain.GroupSittingContainer", "group_id")
 
+    addresses = one2many("addresses", 
+        "bungeni.models.domain.GroupAddressContainer", "group_id")
+    
     def active_membership(self, user_id):
         session = Session()
         query = session.query(GroupMembership).filter(
-            sql.and_(GroupMembership.group_id == self.group_id,
-                    GroupMembership.user_id == user_id,
-                    GroupMembership.active_p == True
-                )
+            sql.and_(
+                GroupMembership.group_id == self.group_id,
+                GroupMembership.user_id == user_id,
+                GroupMembership.active_p == True
             )
+        )
         if query.count() == 0:
             return False
         else:
@@ -330,6 +334,11 @@ class Minister(GroupMembership):
 class Committee(Group):
     """A parliamentary committee of MPs.
     """
+    # !+ManagedContainer(mr, oct-2010) why do all these Managed container 
+    # attributes return a list of processed-id-derived strings instead of the 
+    # list of actual objects in question? 
+    # e.g. committee.committeemembers returns: ['obj-41', 'obj-42']
+    #
     committeemembers = one2many("committeemembers",
         "bungeni.models.domain.CommitteeMemberContainer", "group_id")
     committeestaff = one2many("committeestaff",
@@ -380,10 +389,15 @@ class AddressType(object):
     """
     interface.implements(interfaces.ITranslatable)
 
-class UserAddress(Entity):
-    """Addresses of a user.
+class _Address(Entity):
+    """Address base class
     """
-
+class UserAddress(_Address):
+    """User address (personal)
+    """
+class GroupAddress(_Address):
+    """Group address (official)
+    """
 
 #############
 
@@ -422,7 +436,8 @@ class ParliamentaryItem(Entity):
     sort_dir = "desc"
     
     sort_replace = {"owner_id": ["last_name", "first_name"]}
-    files = one2many("files", "bungeni.models.domain.AttachedFileContainer", "item_id")
+    files = one2many("files", 
+        "bungeni.models.domain.AttachedFileContainer", "item_id")
     # votes
     # schedule
     # object log
@@ -460,8 +475,8 @@ class Question(ParliamentaryItem):
     #"bungeni.models.domain.QuestionContainer", "supplement_parent_id")
     event = one2many("event", 
         "bungeni.models.domain.EventItemContainer", "item_id")
-    consignatory = one2many("consignatory", 
-        "bungeni.models.domain.ConsignatoryContainer", "item_id")
+    cosignatory = one2many("cosignatory", 
+        "bungeni.models.domain.CosignatoryContainer", "item_id")
     versions = one2many("versions",
         "bungeni.models.domain.QuestionVersionContainer", "content_id")
     sort_on = ParliamentaryItem.sort_on + [
@@ -478,8 +493,8 @@ QuestionVersion = ItemVersions.makeVersionFactory("QuestionVersion")
 
 
 class Motion(ParliamentaryItem):
-    consignatory = one2many("consignatory", 
-        "bungeni.models.domain.ConsignatoryContainer", "item_id")
+    cosignatory = one2many("cosignatory", 
+        "bungeni.models.domain.CosignatoryContainer", "item_id")
     event = one2many("event", 
         "bungeni.models.domain.EventItemContainer", "item_id")
     versions = one2many("versions",
@@ -496,8 +511,8 @@ class BillType(object):
     """
 
 class Bill(ParliamentaryItem):
-    consignatory = one2many("consignatory", 
-        "bungeni.models.domain.ConsignatoryContainer", "item_id")
+    cosignatory = one2many("cosignatory", 
+        "bungeni.models.domain.CosignatoryContainer", "item_id")
     event = one2many("event", 
         "bungeni.models.domain.EventItemContainer", "item_id")
     assignedgroups = one2many("assignedgroups",
@@ -509,8 +524,8 @@ class Bill(ParliamentaryItem):
 BillChange = ItemLog.makeLogFactory("BillChange")
 BillVersion = ItemVersions.makeVersionFactory("BillVersion")
 
-class Consignatory(Entity):
-    """Consignatories for a Bill or Motion.
+class Cosignatory(Entity):
+    """Cosignatories for a Bill or Motion.
     """
 
 
@@ -593,7 +608,7 @@ class ItemSchedule(Entity):
     """For which sitting was a parliamentary item scheduled.
     """
     discussions = one2many("discussions",
-        "bungeni.models.domain.ScheduledItemDiscussionContainer", "schedule_id")
+        "bungeni.models.domain.ItemScheduleDiscussionContainer", "schedule_id")
     
     @property
     def getItem(self):
@@ -610,7 +625,7 @@ class ItemSchedule(Entity):
         return s_discussion
 
 
-class ScheduledItemDiscussion(Entity):
+class ItemScheduleDiscussion(Entity):
     """A discussion on a scheduled item.
     """
     interface.implements(interfaces.ITranslatable)
@@ -634,8 +649,8 @@ class TabledDocument(ParliamentaryItem):
 
     It must be possible to schedule a tabled document for a sitting.
     """
-    consignatory = one2many("consignatory", 
-        "bungeni.models.domain.ConsignatoryContainer", "item_id")
+    cosignatory = one2many("cosignatory", 
+        "bungeni.models.domain.CosignatoryContainer", "item_id")
     event = one2many("event", 
         "bungeni.models.domain.EventItemContainer", "item_id")
     versions = one2many("versions",
@@ -721,8 +736,26 @@ class Hansard(ParliamentaryItem):
     """   
     speeches = one2many("speech", 
         "bungeni.models.domain.SpeechContainer", "speech_id")
+
+class HansardItem(ParliamentaryItem):
+    """
+    An item in the hansard ie. Parliamentary Item or Speech
+    """
+
+class HansardParliamentaryItem(HansardItem):
+    """
+    Parliamentary item discussed in a sitting
+    """
+    
+    versions = one2many(
+        "versions",
+        "bungeni.models.domain.HansardParliamentaryItemVersionContainer",
+        "content_id")    
         
-class Speech(ParliamentaryItem):
+HansardParliamentaryItemChange = ItemLog.makeLogFactory( "HansardParliamentaryItemChange")
+HansardParliamentaryItemVersion = ItemVersions.makeVersionFactory("HansardParliamentaryItemVersion")
+        
+class Speech(HansardItem):
     """
     A single speech made in a plenary or committee sitting
     """

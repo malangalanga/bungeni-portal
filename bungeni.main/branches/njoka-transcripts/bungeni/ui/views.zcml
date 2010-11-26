@@ -71,6 +71,12 @@
         class=".workspace.WorkspacePIView"
         permission="zope.View"
     />
+	<browser:page name="workspace-mi"
+        for=".interfaces.IWorkspaceMIContext"
+        layer=".interfaces.IBungeniAuthenticatedSkin"
+        class=".workspace.WorkspaceMIView"
+        permission="zope.View"
+    />
     <browser:page name="workspace-archive"
         for=".interfaces.IWorkspaceArchiveContext"
         layer=".interfaces.IBungeniAuthenticatedSkin"
@@ -581,5 +587,92 @@
         permission="zope.View"
         layer=".interfaces.IRSSRepresentationLayer"
      />
+	 
+	 <!-- Hansard -->
+     <browser:page
+      for="bungeni.models.domain.GroupSitting"
+      name="hansard"
+      class=".hansard.HansardView"
+      permission="zope.View"
+      />
+      
+      
+      <!-- browser:page
+      for="bungeni.models.interfaces.IGroupSitting"
+      name="add_transcript"
+      class=".browser.browser.AddTranscript"
+      permission="zope.View"
+      / -->
+      
+      <browser:page
+      for="bungeni.models.domain.GroupSitting"
+      name="edit_media_path"
+      class=".hansard.EditMediaPath"
+      permission="bungeni.sitting.Edit"
+      />
+      
+      <browser:page
+      for="bungeni.models.domain.GroupSitting"
+      name="staff"
+      class=".hansard.Assignment"
+      permission="bungeni.sitting.Edit"
+      template="templates/assignment.pt"
+      />
+      
+      <browser:page
+      for="bungeni.models.domain.GroupSitting"
+      name="takes"
+      class=".hansard.Takes"
+      permission="bungeni.sitting.Edit"
+      />    
+      
+      <browser:page
+      for="bungeni.models.domain.GroupSitting"
+      name="generatetakes"
+      class=".hansard.GenerateTakes"
+      permission="bungeni.sitting.Edit"
+      />
+      
+      <!--browser:page
+      for="*"
+      name="hansard-api"
+      class=".hansard.API"
+      permission="zope.View"
+      /-->
+	 <browser:page
+      for="*"
+      name="takesxml"
+      class=".hansard.TakesXML"
+      permission="zope.View"
+      />
+      
+      <browser:page
+      for="*"
+      name="mpslistxml"
+      class=".hansard.MPSListXML"
+      permission="zope.View"
+      />
+      
+      <browser:page
+      for="*"
+      name="speechxml"
+      class=".hansard.SpeechXML"
+      permission="zope.View"
+      />
+	 
+	 <browser:pages
+	    for="bungeni.models.interfaces.IBungeniContent"
+        class=".rss.SubscriptionView"
+        permission="zope.View"
+        layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin">
+        	<browser:page
+			   name="subscribe"
+			   attribute="subscribe"
+			/>
+			<browser:page
+               name="unsubscribe"
+               attribute="unsubscribe"
+            />
+     </browser:pages>
 	 
 </configure>
