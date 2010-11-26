@@ -12,7 +12,9 @@
     <metal:main-macro define-macro="main"
                       tal:define="kssClassesView context/@@kss_field_decorator_view;
                                   getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
-                                  templateId template/getId">
+                                  templateId template/getId;
+                                  toLocalizedTime nocall:context/@@plone/toLocalizedTime;
+                                  mtool context/portal_membership">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
@@ -41,6 +43,7 @@
 
         <metal:listingmacro define-macro="listing">
         <tal:foldercontents define="contentFilter contentFilter|request/contentFilter|nothing;
+							isAnon context/@@plone_portal_state/anonymous;
                             limit_display limit_display|request/limit_display|nothing;
                             more_url more_url|request/more_url|string:folder_contents;
                             contentsMethod python:test(here.portal_type=='Topic', here.queryCatalog, here.getFolderContents);
@@ -53,7 +56,8 @@
 
             <dl>
                 <tal:entry tal:repeat="item folderContents">
-                <tal:block tal:define="item_url item/getURL|item/absolute_url;
+                <tal:block tal:define="normalizeString nocall:context/@@plone/normalizeString;
+									   item_url item/getURL|item/absolute_url;
                                        item_id item/getId|item/id;
                                        item_title_or_id item/pretty_title_or_id;
                                        item_description item/Description;
