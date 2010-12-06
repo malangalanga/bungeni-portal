@@ -8,9 +8,7 @@
     <div metal:define-macro="main"
          tal:define="global getInfoFor nocall:here/portal_workflow/getInfoFor">
 
-    <div metal:use-macro="here/document_actions/macros/document_actions">
-      Document actions (print, sendto etc)
-    </div>
+    <div tal:replace="structure provider:plone.documentactions"/>
 
     <h1 tal:content="here/Title" class="documentFirstHeading">
       Folder Title

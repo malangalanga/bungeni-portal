@@ -20,9 +20,7 @@
        class="tutorial">
     <div metal:define-macro="main">
 
-    <div metal:use-macro="here/document_actions/macros/document_actions">
-      Document actions (print, sendto etc)
-    </div>
+    <div tal:replace="structure provider:plone.documentactions"/>
     
     <div class="listingBar" tal:condition="python: next or prev"
               tal:define="next python:pos < num_sibl-1;

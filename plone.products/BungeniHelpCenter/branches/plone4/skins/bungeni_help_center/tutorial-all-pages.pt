@@ -11,9 +11,7 @@
          tal:define="sibl here/getPages;
                      images python:here.objectValues('ATImage');">
 
-        <div metal:use-macro="here/document_actions/macros/document_actions">
-            Document actions (print, sendto etc)
-        </div>
+        <div tal:replace="structure provider:plone.documentactions"/>
 
         <h1>
         <img tal:replace="structure here/tutorial_icon.gif" />

@@ -25,9 +25,7 @@
      class="links">
 
   <div metal:define-macro="main">
- <div metal:use-macro="here/document_actions/macros/document_actions">
-            Document actions (print, sendto etc)
- </div>
+  <div tal:replace="structure provider:plone.documentactions"/>
 
    <tal:define define="parentnode context/@@plone_context_state/parent; results python:parentnode.alphabetiseContext();
    parent_url python:here.navigationParent(here, template.getId())">

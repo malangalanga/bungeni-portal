@@ -14,9 +14,7 @@
                      pos      python:here.getPagePosition(here);
                      subpages python:here.objectValues(['TabbedSubpages',]);">
       
-        <div metal:use-macro="here/document_actions/macros/document_actions">
-            Document actions (print, sendto etc)
-        </div>
+        <div tal:replace="structure provider:plone.documentactions"/>
 
     <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'top']">
         <div class="listingBar" tal:condition="python: next or prev"
