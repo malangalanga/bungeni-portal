@@ -66,6 +66,7 @@
                                        item_created item/CreationDate;
                                        item_icon python:plone_view.getIcon(item);
                                        item_type_class python:'contenttype-' + normalizeString(item_type);
+                                       wtool context/portal_workflow;
                                        item_wf_state item/review_state|python: wtool.getInfoFor(item, 'review_state', '');
                                        item_wf_state_class python:'state-' + normalizeString(item_wf_state);
                                        item_creator item/Creator;
@@ -143,7 +144,8 @@
                                     <tal:mod i18n:translate="box_last_modified">
                                       last modified
                                     </tal:mod>
-                                    <span tal:replace="python:toLocalizedTime(item_modified,long_format=1)">
+                                    <span tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime"
+                                    tal:replace="python:toLocalizedTime(item_modified,long_format=1)">
                                       August 16, 2001 at 23:35:59
                                     </span>
                                 </tal:modified>
