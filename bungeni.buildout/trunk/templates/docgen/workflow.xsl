@@ -88,7 +88,7 @@ padding-right: 20px;
             <h1><xsl:value-of select="@title"></xsl:value-of> Transitions</h1>           
             <a href="#table-of-contents">Go to Table of contents</a>            
             <table  border="1">
-                <tr class="yellow"><td>Transition Name</td><td>Source</td><td>Destination</td><td>Permission</td><td>Action/Condition</td></tr>
+                <tr class="yellow"><td>Source</td><td>Transition Name</td><td>Destination</td><td>Permission</td><td>Action/Condition</td></tr>
                 <xsl:for-each select="./transition">
                     <xsl:call-template name="match-transition"></xsl:call-template>
                 </xsl:for-each>
@@ -121,6 +121,17 @@ padding-right: 20px;
     <xsl:template name="match-transition">
         <xsl:variable name="counter"><xsl:number /></xsl:variable>
         <tr class="m{$counter mod 2}">
+    
+            <td><xsl:variable name="tokSource" select="tokenize(@source, '\s+')">
+            </xsl:variable>
+                <xsl:for-each select="$tokSource">
+                    <a>
+                        <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="."></xsl:value-of>
+                        </xsl:attribute>
+                        <xsl:value-of select="."></xsl:value-of>
+                    </a><br />
+                </xsl:for-each>
+            </td>
             <td>
                 <xsl:value-of select="@title"></xsl:value-of><br />
                 <span class="ident"><xsl:value-of select="@id" /></span><br />
@@ -132,16 +143,6 @@ padding-right: 20px;
                         <span class="trig">(A)</span>
                     </xsl:otherwise>
                 </xsl:choose>
-            </td>
-            <td><xsl:variable name="tokSource" select="tokenize(@source, '\s+')">
-            </xsl:variable>
-                <xsl:for-each select="$tokSource">
-                    <a>
-                        <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="."></xsl:value-of>
-                        </xsl:attribute>
-                        <xsl:value-of select="."></xsl:value-of>
-                    </a><br />
-                </xsl:for-each>
             </td>
             <td><xsl:variable name="tokDest" select="tokenize(@destination, '\s+')">
             </xsl:variable>
