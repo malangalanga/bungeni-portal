@@ -13,8 +13,7 @@
                       tal:define="kssClassesView context/@@kss_field_decorator_view;
                                   getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
                                   templateId template/getId;
-                                  toLocalizedTime nocall:context/@@plone/toLocalizedTime;
-                                  mtool context/portal_membership">
+                                  toLocalizedTime nocall:context/@@plone/toLocalizedTime;">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
@@ -105,6 +104,7 @@
                         <span class="documentByLine">
 
                             <span tal:condition="python: item_type == 'Event'"
+                                  tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;"
                                   i18n:translate="label_event_byline">
                                 (<span tal:content="string:${item/location}"
                                        class="location"
@@ -123,7 +123,8 @@
                                 &mdash;
 
                                 <tal:name tal:condition="item_creator"
-                                    tal:define="author python:mtool.getMemberInfo(item_creator)">
+                                    tal:define="mtool context/portal_membership;
+                                    author python:mtool.getMemberInfo(item_creator)">
                                   <span i18n:translate="label_by_author">
                                     by
                                   <a href="#"
