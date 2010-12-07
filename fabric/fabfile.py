@@ -185,6 +185,14 @@ def plone_build():
     tasks = bungeni.PloneTasks()
     tasks.build()
 
+def plone_build_opt():
+    """
+    Run the plone build optimistically (-N) 
+    """
+
+    tasks = bungeni.PloneTasks()
+    tasks.build_opt()
+
 
 def plone_update():
     """
