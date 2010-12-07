@@ -808,6 +808,9 @@ class PloneTasks:
         print 'Local config ', self.cfg.plone_local_buildout_config, \
             ' generated from ', template_file
 
+    
+    """
+    #This is not required anymore -- commenting out ; leaving it in for syntax reference
     def update_conf(self):
         with cd(self.cfg.user_plone):
             run('mkdir -p ./var/filestorage')
@@ -818,14 +821,18 @@ class PloneTasks:
                     )
                 run("sed -i 's|#!/usr/bin/python|#!%(python24)s|g' ./import-data.py"
                      % {'python24': self.cfg.python24})
+    """
 
-    def add_admin(self):
-        with cd(self.cfg.user_plone):
-            run('./bin/addzope2user admin admin')
 
     def update_deployini(self):
         self.tasks.update_ini(self.cfg.plone_deploy_ini, 'server:main',
                               'port', self.cfg.plone_http_port)
+        
+    def update(self):
+       """
+       Update the plone source
+       """
+       self.tasks.src_update()
 
 
 class PortalTasks:
