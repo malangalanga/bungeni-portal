@@ -727,11 +727,9 @@ class Tasks:
         bo_localconfig,
         ):
         if self.cfg.local_cache == True:
-            if not os.path.exists(self.scm.working_copy + '/'
-                                  + bo_localconfig):
-                templates = Templates(self.cfg)
-                templates.new_file(template_file, template_map,
-                                   self.scm.working_copy)
+            templates = Templates(self.cfg)
+            templates.new_file(template_file, template_map,
+                               self.scm.working_copy)
 
     def update_ini(
         self,
