@@ -12,7 +12,6 @@
 from Products.CMFPlone import PloneMessageFactory as _
 from Products.CMFCore.utils import getToolByName
 from DateTime import DateTime
-from Products.workspaces.utilities import createUserWorkspace
 import ZTUtils
 
 
