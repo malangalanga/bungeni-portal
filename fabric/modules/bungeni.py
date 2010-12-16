@@ -283,15 +283,17 @@ class BungeniConfigs:
                 'local_index')
         self.portal_general_buildout_config = 'buildout.cfg'
         self.portal_local_buildout_config = 'portal_local.cfg'
-        self.portal_deploy_ini = self.user_portal + '/portal.ini'
+        self.portal_static_ini = self.user_portal + '/static.ini'
         self.portal_rules_xml_uri = 'file:' + self.user_bungeni \
             + '/src/bungeni.main/bungeni/portal/static/themes/rules.xml'
-        self.portal_theme_uri = "http://%(rule_host)s/static/themes/" + self.cfg.get_config('portal', 'theme')
+        self.portal_theme = self.cfg.get_config('portal', 'theme')
         self.portal_buildout_config = \
             (self.portal_general_buildout_config if self.local_cache
              == False else self.portal_local_buildout_config)
         self.portal_http_port = self.cfg.get_config('portal',
                 'http_port')
+        self.portal_static_port = self.cfg.get_config('portal',
+                'static_port')
         self.supervisord = self.user_python25_home + '/bin/supervisord'
         self.supervisorctl = self.user_python25_home \
             + '/bin/supervisorctl'
@@ -446,7 +448,7 @@ class Presetup:
             'user_pid':self.cfg.user_pid,
             'bungeni_ini': self.cfg.bungeni_deploy_ini,
             'plone_ini': self.cfg.plone_deploy_ini,
-            'portal_ini': self.cfg.portal_deploy_ini,
+            'static_ini': self.cfg.portal_static_ini,
             }
         run('mkdir -p %s' % self.cfg.user_config)
         run('mkdir -p %s' % self.cfg.user_logs)
@@ -870,7 +872,7 @@ class PortalTasks:
     def deploy_ini(self):
         run('cp %(portal)s/deploy.ini %(deploy_ini)s' % {'portal'
             : self.cfg.user_portal, 'deploy_ini'
-            : self.cfg.portal_deploy_ini})
+            : self.cfg.portal_static_ini})
 
     def local_config(self):
         template_map = \
@@ -880,26 +882,30 @@ class PortalTasks:
         self.tasks.local_config(template_file, template_map,
                                 self.cfg.portal_local_buildout_config)
         print 'Local config ', self.cfg.portal_local_buildout_config, \
-            ' generated from ', template_file
+            ' generated from ', template_file        
 
     def update_deployini(self):
-        print 'Updating portal portal.ini'
-        self.tasks.update_ini(self.cfg.portal_deploy_ini, 'DEFAULT',
-                              'deliverance_port',
-                              self.cfg.portal_http_port)
-        self.tasks.update_ini(self.cfg.portal_deploy_ini, 'DEFAULT',
-                              'bungeni_port',
-                              self.cfg.bungeni_http_port)
-        self.tasks.update_ini(self.cfg.portal_deploy_ini, 'DEFAULT',
-                              'plone_port', self.cfg.plone_http_port)
-        self.tasks.update_ini(self.cfg.portal_deploy_ini, 'DEFAULT',
-                              'host_name', self.cfg.app_host)
-        self.tasks.update_ini(self.cfg.portal_deploy_ini,
-                              'filter:deliverance', 'rule_uri',
-                              self.cfg.portal_rules_xml_uri)
-        self.tasks.update_ini(self.cfg.portal_deploy_ini,
-                              'filter:deliverance', 'theme_uri',
-                              self.cfg.portal_theme_uri)
+        print 'Updating portal static.ini'
+        self.tasks.update_ini(self.cfg.portal_static_ini, 'DEFAULT',
+                              'static_port',
+                              self.cfg.portal_static_port)
+        self.update_deliverance_proxy_config()
+        
+        
+    def update_deliverance_proxy_config(self):
+        print 'Updating portal deliverance-proxy.conf'
+        template_map = \
+            {'app_host': self.cfg.app_host,
+             'portal_http_port': self.cfg.portal_http_port,
+             'portal_theme': self.cfg.portal_theme,
+             'bungeni_http_port': self.cfg.bungeni_http_port,
+             'plone_http_port': self.cfg.plone_http_port,
+             'portal_static_port': self.cfg.portal_static_port}
+        config_file_path = os.path.join(self.cfg.user_portal, 'deliverance-proxy.conf')
+        with open(config_file_path, 'w') as config_file:
+            tmpl = Templates(self.cfg)
+            config_file.write(tmpl.template('deliverance-proxy.conf.tmpl', template_map))
+        
 
     def update(self):
        """

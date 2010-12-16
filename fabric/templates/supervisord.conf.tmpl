@@ -24,7 +24,6 @@ password = admin
 [rpcinterface:supervisor]
 supervisor.rpcinterface_factory=supervisor.rpcinterface:make_main_rpcinterface
 
-
 [program:bungeni]
 command = %(user_bungeni)s/bin/paster serve %(bungeni_ini)s --log-file=%(user_logs)s/bungeni.log --pid-file=%(user_pid)s/bungeni.pid
 process_name = bungeni
@@ -40,10 +39,17 @@ priority = 20
 redirect_stderr = true
 
 [program:portal]
-command = %(user_portal)s/bin/paster serve %(portal_ini)s --log-file=%(user_logs)s/portal.log --pid-file=%(user_pid)s/portal.pid
+command = %(user_portal)s/bin/deliverance-proxy %(user_bungeni)s/src/bungeni.main/bungeni/portal/static/themes/proxy.xml
 process_name = portal
 directory = %(user_portal)s/bin
 priority = 30
+redirect_stderr = true
+
+[program:static]
+command = %(user_portal)s/bin/paster serve %(static_ini)s --log-file=%(user_logs)s/static.log --pid-file=%(user_pid)s/static.pid
+process_name = static
+directory = %(user_portal)s/bin
+priority = 40
 redirect_stderr = true
 
 [program:postgres]
