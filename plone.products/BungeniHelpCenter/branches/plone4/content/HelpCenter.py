@@ -561,7 +561,7 @@ class BungeniHelpCenterTutorialPage(BrowserDefaultMixin, OrderedBaseFolder, Help
         Returns target object 'view' action page template
         """
         
-        if HAS_ISBD and ISelectableBrowserDefault.isImplementedBy(target):
+        if HAS_ISBD and ISelectableBrowserDefault.providedBy(target):
             return target.getLayout()
         else:
             view = target.getTypeInfo().getActionById('view') or 'base_view'
@@ -659,7 +659,7 @@ class BungeniHelpCenterReferenceManualPage(BrowserDefaultMixin, OrderedBaseFolde
         Returns target object 'view' action page template
         """
         
-        if HAS_ISBD and ISelectableBrowserDefault.isImplementedBy(target):
+        if HAS_ISBD and ISelectableBrowserDefault.providedBy(target):
             return target.getLayout()
         else:
             view = target.getTypeInfo().getActionById('view') or 'base_view'
@@ -763,7 +763,7 @@ class BungeniHelpCenterReferenceManualSection(BrowserDefaultMixin, OrderedBaseFo
         Returns target object 'view' action page template
         """
         
-        if HAS_ISBD and ISelectableBrowserDefault.isImplementedBy(target):
+        if HAS_ISBD and ISelectableBrowserDefault.providedBy(target):
             return target.getLayout()
         else:
             view = target.getTypeInfo().getActionById('view') or 'base_view'

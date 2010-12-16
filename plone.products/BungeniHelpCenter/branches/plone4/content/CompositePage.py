@@ -93,7 +93,7 @@ class CompositePage(BrowserDefaultMixin, OrderedBaseFolder, HelpCenterReferenceM
         Returns target object 'view' action page template
         """
         
-        if HAS_ISBD and ISelectableBrowserDefault.isImplementedBy(target):
+        if HAS_ISBD and ISelectableBrowserDefault.providedBy(target):
             return target.getLayout()
         else:
             view = target.getTypeInfo().getActionById('view') or 'base_view'
@@ -161,7 +161,7 @@ class CompositePage(BrowserDefaultMixin, OrderedBaseFolder, HelpCenterReferenceM
         Returns target object 'view' action page template
         """
         
-        if HAS_ISBD and ISelectableBrowserDefault.isImplementedBy(target):
+        if HAS_ISBD and ISelectableBrowserDefault.providedBy(target):
             return target.getLayout()
         else:
             view = target.getTypeInfo().getActionById('view') or 'base_view'

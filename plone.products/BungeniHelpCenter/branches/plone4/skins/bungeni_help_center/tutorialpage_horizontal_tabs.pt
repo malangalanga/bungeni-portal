@@ -194,7 +194,7 @@
                                             title="Edit subpage"/>
                         </a>
                         <h2 class="tabberHeading" tal:content="subpage/Title">Tab</h2>
-                        <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template_id};
+                        <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template/getId};
                                                  here python: subpage;
                                                  here_url string:${here/absolute_url};
                                                  object_title here/Title">                    

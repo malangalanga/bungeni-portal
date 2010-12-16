@@ -172,7 +172,7 @@
                width="16"
                title="Edit subpage"/>
         </a>
-        <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template_id};
+        <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template/getId};
                                  here python: subpage;
                                  here_url string:${here/absolute_url};
                                  object_title here/Title">                    
@@ -244,7 +244,7 @@
                width="16"
                title="Edit subpage"/>
         </a>
-        <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template_id};
+        <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template/getId};
                                  here python: subpage;
                                  here_url string:${here/absolute_url};
                                  object_title here/Title">                    
@@ -318,7 +318,7 @@
                width="16"
                title="Edit subpage"/>
         </a>
-        <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template_id};
+        <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template/getId};
                                  here python: subpage;
                                  here_url string:${here/absolute_url};
                                  object_title here/Title">                    
