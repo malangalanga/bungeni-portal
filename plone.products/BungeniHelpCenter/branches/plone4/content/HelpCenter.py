@@ -12,6 +12,7 @@ except ImportError:
 from Products.BungeniHelpCenter.config import *
 from Products.PloneHelpCenter.content.PHCContent import PHCContent
 from Products.ATContentTypes.content.document import ATDocument
+from Products.ATContentTypes.content.folder import ATFolder
 
 from Products.PloneHelpCenter.content import ReferenceManual,\
     Tutorial, TutorialPage, ReferenceManualPage, ReferenceManualSection, Glossary
@@ -572,18 +573,21 @@ class BungeniHelpCenterTutorialPage(BrowserDefaultMixin, OrderedBaseFolder, Help
                 
             return view
             
-    def SearchableText(self):
-        """Append references' searchable fields."""
-        
-        data = [HelpCenterTutorialPage.SearchableText(self),]
-        
-        subpages = self.objectValues(['TabbedSubpages',])
-        for subpage in subpages:
-            data.append(subpage.SearchableText())
-            
-        data = ' '.join(data)
-        
-        return data
+#    def SearchableText(self):
+#        """Append references' searchable fields."""
+#        
+#        data = [HelpCenterTutorialPage.SearchableText(self),]
+#        
+#        subpages = self.objectValues(['TabbedSubpages',])
+#        for subpage in subpages:
+#            data.append(subpage.SearchableText())
+#            
+#        data = ' '.join(data)
+#        
+#        return data
+
+
+
 
 
     actions = (
@@ -670,18 +674,18 @@ class BungeniHelpCenterReferenceManualPage(BrowserDefaultMixin, OrderedBaseFolde
                 
             return view
             
-    def SearchableText(self):
-        """Append references' searchable fields."""
-        
-        data = [HelpCenterReferenceManualPage.SearchableText(self),]
-        
-        subpages = self.objectValues(['TabbedSubpages',])
-        for subpage in subpages:
-            data.append(subpage.SearchableText())
-            
-        data = ' '.join(data)
-        
-        return data
+#    def SearchableText(self):
+#        """Append references' searchable fields."""
+#        
+#        data = [HelpCenterReferenceManualPage.SearchableText(self),]
+#        
+#        subpages = self.objectValues(['TabbedSubpages',])
+#        for subpage in subpages:
+#            data.append(subpage.SearchableText())
+#            
+#        data = ' '.join(data)
+#        
+#        return data
         
 
 
@@ -732,7 +736,7 @@ BungeniHelpCenterReferenceManualSectionSchema = \
     HelpCenterReferenceManualSection.schema + Schema((BodyField, RelatedItemsField),)
 
 
-class BungeniHelpCenterReferenceManualSection(BrowserDefaultMixin, OrderedBaseFolder, HelpCenterReferenceManualSection):
+class BungeniHelpCenterReferenceManualSection(BrowserDefaultMixin, ATFolder, HelpCenterReferenceManualSection):
     """A section of a hierarchical document. It can contain sections and pages.
     """
 
@@ -774,18 +778,17 @@ class BungeniHelpCenterReferenceManualSection(BrowserDefaultMixin, OrderedBaseFo
                 
             return view
 
-    def SearchableText(self):
-        """Append references' searchable fields."""
-        
-        data = [HelpCenterReferenceManualSection.SearchableText(self),]
-        
-        subpages = self.objectValues(['TabbedSubpages',])
-        for subpage in subpages:
-            data.append(subpage.SearchableText())
-            
-        data = ' '.join(data)
-        
-        return data
+#    def SearchableText(self):
+#        """Append references' searchable fields."""
+#        
+#        data = [HelpCenterReferenceManualSection.SearchableText(self),]
+#        subpages = self.objectValues(['TabbedSubpages',])
+#        for subpage in subpages:
+#            data.append(subpage.SearchableText())
+#            
+#        data = ' '.join(data)
+#        
+#        return data
          
             
 
