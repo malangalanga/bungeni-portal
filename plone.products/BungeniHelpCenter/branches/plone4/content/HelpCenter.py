@@ -3,7 +3,7 @@ try:
     from Products.LinguaPlone.public import *
 except ImportError:
     # No multilingual support
-    from Products.Archetypes.public import *
+    from Products.Archetypes.atapi import *
 try:
     import Products.CMFCore.permissions as CMFCorePermissions
 except ImportError:
@@ -12,7 +12,8 @@ except ImportError:
 from Products.BungeniHelpCenter.config import *
 from Products.PloneHelpCenter.content.PHCContent import PHCContent
 from Products.ATContentTypes.content.document import ATDocument
-from Products.ATContentTypes.content.folder import ATFolder
+from plone.app.folder.folder import ATFolder
+from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
 
 from Products.PloneHelpCenter.content import ReferenceManual,\
     Tutorial, TutorialPage, ReferenceManualPage, ReferenceManualSection, Glossary
@@ -251,7 +252,7 @@ HelpCenterReferenceManualSchema.moveField('rights', pos='bottom')
 
 class BungeniHelpCenterReferenceManual(BrowserDefaultMixin,  
 									   HelpCenterReferenceManual,
-									   OrderedBaseFolder):
+									   ATFolder):
     """A document that is subdivided in chapters, sections and pages. It can also contain images and files"""
 
     __implements__ =(PHCContent.__implements__)
@@ -435,7 +436,7 @@ HelpCenterTutorialSchema.moveField('title', pos='top')
 
 class BungeniHelpCenterTutorial(BrowserDefaultMixin, 
 								HelpCenterTutorial,
-								OrderedBaseFolder):
+								ATFolder):
     """A tutorial containing TutorialPages, Files and Images."""
 
     __implements__ = (PHCContent.__implements__)
@@ -534,7 +535,7 @@ HelpCenterTutorialPage.schema = HelpCenterTutorialPage.schema +\
 #    del HelpCenterTutorialPage.schema['relatedItems']
 HelpCenterTutorialPage.schema.moveField('contributors', pos='bottom')
 
-class BungeniHelpCenterTutorialPage(BrowserDefaultMixin, OrderedBaseFolder, HelpCenterTutorialPage):
+class BungeniHelpCenterTutorialPage(BrowserDefaultMixin, ATFolder, HelpCenterTutorialPage):
     """A tutorial containing TutorialPages, Files and Images."""
 
     __implements__ = (PHCContent.__implements__)
@@ -573,18 +574,18 @@ class BungeniHelpCenterTutorialPage(BrowserDefaultMixin, OrderedBaseFolder, Help
                 
             return view
             
-#    def SearchableText(self):
-#        """Append references' searchable fields."""
-#        
-#        data = [HelpCenterTutorialPage.SearchableText(self),]
-#        
-#        subpages = self.objectValues(['TabbedSubpages',])
-#        for subpage in subpages:
-#            data.append(subpage.SearchableText())
-#            
-#        data = ' '.join(data)
-#        
-#        return data
+    def SearchableText(self):
+        """Append references' searchable fields."""
+        
+        data = [HelpCenterTutorialPage.SearchableText(self),]
+        
+        subpages = self.objectValues(['TabbedSubpages',])
+        for subpage in subpages:
+            data.append(subpage.SearchableText())
+            
+        data = ' '.join(data)
+        
+        return data
 
 
 
@@ -632,9 +633,9 @@ HelpCenterReferenceManualPage = ReferenceManualPage.HelpCenterReferenceManualPag
 HelpCenterReferenceManualPage.schema['description'].required = 0
 
 BungeniHelpCenterReferenceManualPageSchema = \
-    HelpCenterReferenceManualPage.schema + Schema((RelatedItemsField),)
+    HelpCenterReferenceManualPage.schema + Schema((RelatedItemsField),) + ConstrainTypesMixinSchema
 
-class BungeniHelpCenterReferenceManualPage(BrowserDefaultMixin, OrderedBaseFolder, HelpCenterReferenceManualPage):
+class BungeniHelpCenterReferenceManualPage(BrowserDefaultMixin, ATFolder, HelpCenterReferenceManualPage):
     """A tutorial containing TutorialPages, Files and Images."""
 
     __implements__ = (PHCContent.__implements__)
@@ -674,18 +675,18 @@ class BungeniHelpCenterReferenceManualPage(BrowserDefaultMixin, OrderedBaseFolde
                 
             return view
             
-#    def SearchableText(self):
-#        """Append references' searchable fields."""
-#        
-#        data = [HelpCenterReferenceManualPage.SearchableText(self),]
-#        
-#        subpages = self.objectValues(['TabbedSubpages',])
-#        for subpage in subpages:
-#            data.append(subpage.SearchableText())
-#            
-#        data = ' '.join(data)
-#        
-#        return data
+    def SearchableText(self):
+        """Append references' searchable fields."""
+        
+        data = [HelpCenterReferenceManualPage.SearchableText(self),]
+        
+        subpages = self.objectValues(['TabbedSubpages',])
+        for subpage in subpages:
+            data.append(subpage.SearchableText())
+            
+        data = ' '.join(data)
+        
+        return data
         
 
 
@@ -778,17 +779,17 @@ class BungeniHelpCenterReferenceManualSection(BrowserDefaultMixin, ATFolder, Hel
                 
             return view
 
-#    def SearchableText(self):
-#        """Append references' searchable fields."""
-#        
-#        data = [HelpCenterReferenceManualSection.SearchableText(self),]
-#        subpages = self.objectValues(['TabbedSubpages',])
-#        for subpage in subpages:
-#            data.append(subpage.SearchableText())
-#            
-#        data = ' '.join(data)
-#        
-#        return data
+    def SearchableText(self):
+        """Append references' searchable fields."""
+        
+        data = [HelpCenterReferenceManualSection.SearchableText(self),]
+        subpages = self.objectValues(['TabbedSubpages',])
+        for subpage in subpages:
+            data.append(subpage.SearchableText())
+            
+        data = ' '.join(data)
+        
+        return data
          
             
 
@@ -839,7 +840,7 @@ BungeniHelpCenterGlossarySchema = \
     HelpCenterGlossary.schema + Schema((BodyField, IdentityField, IdentityPosition, ContributorsField, RelatedItemsField),)
 
 
-class BungeniHelpCenterGlossary(BrowserDefaultMixin, OrderedBaseFolder, HelpCenterGlossary):
+class BungeniHelpCenterGlossary(BrowserDefaultMixin, ATFolder, HelpCenterGlossary):
     """A Glossary containing definitions."""
 
     __implements__ = (PHCContent.__implements__)
