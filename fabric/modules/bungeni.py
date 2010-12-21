@@ -294,6 +294,10 @@ class BungeniConfigs:
                 'http_port')
         self.portal_static_port = self.cfg.get_config('portal',
                 'static_port')
+        self.portal_web_server_host = self.cfg.get_config('portal',
+                'web_server_host')
+        self.portal_web_server_port = self.cfg.get_config('portal',
+                'web_server_port')
         self.supervisord = self.user_python25_home + '/bin/supervisord'
         self.supervisorctl = self.user_python25_home \
             + '/bin/supervisorctl'
@@ -894,13 +898,19 @@ class PortalTasks:
         
     def update_deliverance_proxy_config(self):
         print 'Updating portal deliverance-proxy.conf'
+        theme_url = self.cfg.portal_web_server_port == '80' and\
+                    self.cfg.portal_web_server_host or\
+                    '%s:%s' % (self.cfg.portal_web_server_host, self.cfg.portal_web_server_port)
         template_map = \
             {'app_host': self.cfg.app_host,
              'portal_http_port': self.cfg.portal_http_port,
              'portal_theme': self.cfg.portal_theme,
              'bungeni_http_port': self.cfg.bungeni_http_port,
              'plone_http_port': self.cfg.plone_http_port,
-             'portal_static_port': self.cfg.portal_static_port}
+             'portal_static_port': self.cfg.portal_static_port,
+             'web_server_host': self.cfg.portal_web_server_host,
+             'web_server_port': self.cfg.portal_web_server_port,
+             'theme_url': theme_url}
         config_file_path = os.path.join(self.cfg.user_portal, 'deliverance-proxy.conf')
         with open(config_file_path, 'w') as config_file:
             tmpl = Templates(self.cfg)

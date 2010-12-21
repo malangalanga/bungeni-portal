@@ -1,19 +1,19 @@
-  <theme href="http://%(app_host)s:%(portal_http_port)s/themes/%(portal_theme)s" />
+  <theme href="http://%(theme_url)s/themes/%(portal_theme)s" />
 		
   <server-settings>
       <server>%(app_host)s:%(portal_http_port)s</server>
   </server-settings>
 
   <proxy path="/bungeni">
-      <dest href="http://%(app_host)s:%(bungeni_http_port)s/++vh++http:%(app_host)s:%(portal_http_port)s/++/" />
+      <dest href="http://%(app_host)s:%(bungeni_http_port)s/++vh++http:%(web_server_host)s:%(web_server_port)s/++/" />
   </proxy>
 
   <proxy path="/cynin">
-      <dest href="http://%(app_host)s:%(plone_http_port)s/VirtualHostBase/http/%(app_host)s:%(portal_http_port)s/cynin/VirtualHostRoot/_vh_cynin/" />
+      <dest href="http://%(app_host)s:%(plone_http_port)s/VirtualHostBase/http/%(web_server_host)s:%(web_server_port)s/cynin/VirtualHostRoot/_vh_cynin/" />
   </proxy>
 
   <proxy path="/plone">
-      <dest href="http://%(app_host)s:%(plone_http_port)s/VirtualHostBase/http/%(app_host)s:%(portal_http_port)s/plone/VirtualHostRoot/_vh_plone/" />
+      <dest href="http://%(app_host)s:%(plone_http_port)s/VirtualHostBase/http/%(web_server_host)s:%(web_server_port)s/plone/VirtualHostRoot/_vh_plone/" />
   </proxy>
 
   <proxy path="/themes">
@@ -25,7 +25,7 @@
   </proxy>
 
   <proxy path="/">
-      <dest href="http://%(app_host)s:%(bungeni_http_port)s/++vh++http:%(app_host)s:%(portal_http_port)s/++/" />
+      <dest href="http://%(app_host)s:%(bungeni_http_port)s/++vh++http:%(web_server_host)s:%(web_server_port)s/++/" />
   </proxy>
 
 
