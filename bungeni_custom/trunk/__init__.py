@@ -18,7 +18,7 @@ For example, create the file at:
 Containing the one line:
 /home/undesa/bungeni/cap_installs/bungeni_install/bungeni/releases/20100305100101/src
 
-$Id:$
+$Id$
 """
 
 zope_i18n_allowed_languages = "en fr pt sw en-ke it"
