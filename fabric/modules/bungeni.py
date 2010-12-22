@@ -946,6 +946,7 @@ class BungeniTasks:
     def setup(self):
         self.tasks.src_checkout()
         self.tasks.bootstrap(self.cfg.python25)
+        self.tasks.install_bungeni_custom()
         self.deploy_ini()
 
     def deploy_ini(self):
@@ -1058,3 +1059,21 @@ class BungeniTasks:
     def update_deployini(self):
         self.tasks.update_ini(self.cfg.bungeni_deploy_ini, 'server:main'
                               , 'port', self.cfg.bungeni_http_port)
+
+    def install_bungeni_custom(self):
+        bungeni_custom_map = {
+            'site_packages' : self.cfg.user_python25_home + '/lib/python2.5/site-packages',
+            'folder_bungeni_custom' : self.cfg.user_bungeni + '/src' ,
+            'bungeni_custom' : 'bungeni_custom.pth',
+            'user_bungeni': self.cfg.user_bungeni
+            }
+        ## delete an existing symlink
+        run('cd %(user_bungeni)s && if [ -f %(bungeni_custom)s ]; then rm %(bungeni_custom)s ; fi'\
+                % {'user_bungeni' : bungeni_custom_map['user_bungeni'], 'bungeni_custom' : \
+                    bungeni_custom_map['bungeni_custom'] })
+        ## create a new .pth file in bungeni python site-packages
+        run('cd %(site_packages)s && echo %(folder_bungeni_custom)s > %(bungeni_custom)s && '\
+                'ln -s %(site_packages)s/%(bungeni_custom)s %(user_bungeni)s/' % bungeni_custom_map)
+
+
+

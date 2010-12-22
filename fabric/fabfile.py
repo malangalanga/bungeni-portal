@@ -62,7 +62,7 @@ def presetup():
 
 def bungeni_setup():
     """
-    Checks out  & bootstrap bungeni source
+    checkout & bootstrap bungeni source;setup bungeni_custom;generate deploy ini
     """
 
     tasks = bungeni.BungeniTasks()
@@ -126,6 +126,13 @@ def bungeni_build_opt():
     tasks = bungeni.BungeniTasks()
     tasks.build_opt()
 
+def setup_bungeni_custom():
+    """
+    Installs the bungeni_custom library into the bungeni python site-packages folder
+    """
+
+    tasks = bungeni.BungeniTasks()
+    tasks.install_bungeni_custom()
 
 def config_supervisord():
     """
