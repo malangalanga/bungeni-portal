@@ -423,18 +423,34 @@ def stop_monitor():
     service.stop_monitor()
 
 
+def __db_load_services_start():
+    """
+    Stop services - called before loading/resetting db
+    """
+    stop_bungeni()
+    stop_portal()
+    stop_plone()
+
+
+def __db_load_services_stop():
+    """
+    Start services - called after loading/resetting db
+    """
+    start_bungeni()
+    start_portal()
+    start_plone()
+
+
 def db_load_demodata():
     """
     Load demo data from the testdatadmp folder
     """
 
-    stop_bungeni()
-    stop_portal()
+    __db_load_services_stop()
     tasks = bungeni.BungeniTasks()
     tasks.reset_db()
     tasks.load_demo_data()
-    start_bungeni()
-    start_portal()
+    __db_load_services_start()
 
 
 def db_load_mindata():
@@ -442,26 +458,22 @@ def db_load_mindata():
     Load minimal data from the testdatadmp folder
     """
 
-    stop_bungeni()
-    stop_portal()
+    __db_load_services_stop()
     tasks = bungeni.BungeniTasks()
     tasks.reset_schema()
     tasks.load_min_data()
-    start_bungeni()
-    start_portal()
+    __db_load_services_start()
 
 
 def db_load_largedata():
     """
     Load large metadata
     """
-    stop_bungeni()
-    stop_portal()
+    __db_load_services_stop()
     tasks = bungeni.BungeniTasks()
     tasks.reset_db()
     tasks.load_large_data()
-    start_bungeni()
-    start_portal()
+    __db_load_services_start()
 
 
 def db_make_empty():
@@ -469,5 +481,8 @@ def db_make_empty():
     Make the bungeni db blank
     """
 
+    __db_load_services_stop()
     tasks = bungeni.BungeniTasks()
     tasks.reset_db()
+    __db_load_services_start()
+
