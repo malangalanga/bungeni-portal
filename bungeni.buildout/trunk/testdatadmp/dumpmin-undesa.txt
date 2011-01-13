@@ -359,4 +359,16 @@ COPY venues (venue_id, short_name, description, language) FROM stdin;
 \.
 
 
+--
+-- Data for Name: attached_file_types; Type: TABLE DATA; Schema: public; Owner: undesa
+--
+
+COPY attached_file_types (attached_file_type_id, attached_file_type_name, language) FROM stdin;
+1	image	en
+2	annex	en
+3	document	en
+4	bill	en
+\.
+
+
 
