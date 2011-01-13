@@ -423,7 +423,7 @@ def stop_monitor():
     service.stop_monitor()
 
 
-def __db_load_services_start():
+def __db_load_services_stop():
     """
     Stop services - called before loading/resetting db
     """
@@ -432,7 +432,7 @@ def __db_load_services_start():
     stop_plone()
 
 
-def __db_load_services_stop():
+def __db_load_services_start():
     """
     Start services - called after loading/resetting db
     """
