@@ -450,6 +450,7 @@ def db_load_demodata():
     tasks = bungeni.BungeniTasks()
     tasks.reset_db()
     tasks.load_demo_data()
+    tasks.restore_attachments()
     __db_load_services_start()
 
 
@@ -473,6 +474,7 @@ def db_load_largedata():
     tasks = bungeni.BungeniTasks()
     tasks.reset_db()
     tasks.load_large_data()
+    tasks.restore_large_attachments()
     __db_load_services_start()
 
 

@@ -260,6 +260,10 @@ class BungeniConfigs:
                 'local_index')
         self.bungeni_dump_file = self.cfg.get_config('bungeni',
                 'dump_file')
+        self.bungeni_attachments_folder = self.cfg.get_config('bungeni',
+                'attachments_folder')
+        self.bungeni_attachments_archive = self.cfg.get_config('bungeni',
+                'attachments_archive')
         self.bungeni_general_buildout_config = 'buildout.cfg'
         self.bungeni_local_buildout_config = 'bungeni_local.cfg'
         self.bungeni_deploy_ini = self.user_bungeni + '/bungeni.ini'
@@ -1007,10 +1011,24 @@ class BungeniTasks:
            run('./bin/psql bungeni < %s'
                 % demo_dmp)
 
+    def restore_attachments(self):
+        """
+        Restores the attachments into the 'fs' folder for the small data set
+        """
+
+        with cd(self.cfg.user_bungeni):
+            run('mkdir -p %(attachments_folder)s' % \
+                    {'attachments_folder':self.cfg.bungeni_attachments_folder} )
+            with cd(self.cfg.bungeni_attachments_folder):
+                run('tar --strip-components=2 -zvxf ../testdatadmp/%(attachments_archive)s' % \
+                        {'attachments_archive':self.cfg.bungeni_attachments_archive})
+
+
     def load_min_data(self):
         with cd(self.cfg.user_bungeni):
             min_dump = self.__dump_update(self.min_dump_file)
             run('./bin/psql bungeni < %s' % min_dump)
+
 
     def load_large_data(self):
         with cd(self.cfg.user_bungeni + "/testdatadmp"):
@@ -1022,7 +1040,27 @@ class BungeniTasks:
              large_dump = self.__dump_update(self.large_dump_file)
              run('../bin/psql bungeni < %s' %  large_dump)
 
-        
+
+    def restore_large_attachments(self):
+        """
+        Restores large data dump attachments
+        """
+        large_att_gz = ''
+        with cd(self.cfg.user_bungeni + "/testdatadmp"):
+            large_att_url = run("tail -n 1 large.txt")
+            large_att_gz = run("basename $(tail -n 1 large.txt)")
+            run("if [ -f %(attachments_archive)s ]; then rm %(attachments_archive)s ; fi" % \
+                    {'attachments_archive':large_att_gz})
+            run("if [ -f  %(attachments_archive)s ]; then echo 'file exists'; else echo %(attachments_archive_url)s | xargs wget; fi" % \
+                    {'attachments_archive':large_att_gz , 'attachments_archive_url':large_att_url})
+        with cd(self.cfg.user_bungeni):
+            run('mkdir -p %(attachments_folder)s' % \
+                    {'attachments_folder':self.cfg.bungeni_attachments_folder} )
+            with cd(self.cfg.bungeni_attachments_folder):
+                run('tar --strip-components=2 -zvxf ../testdatadmp/%s' % large_att_gz)
+                run('rm ../testdatadmp/%s' % large_att_gz)
+
+
     def  __dump_update(self, dump_file):
         with cd(self.cfg.user_bungeni):
            dict_dump_update = {
