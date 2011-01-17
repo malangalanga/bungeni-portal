@@ -946,7 +946,7 @@ class BungeniTasks:
     def setup(self):
         self.tasks.src_checkout()
         self.tasks.bootstrap(self.cfg.python25)
-        self.tasks.install_bungeni_custom()
+        self.install_bungeni_custom()
         self.deploy_ini()
 
     def deploy_ini(self):
