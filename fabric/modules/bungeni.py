@@ -276,7 +276,7 @@ class BungeniConfigs:
         self.plone_local_index = self.cfg.get_config('plone',
                 'local_index')
         self.plone_site_content = self.cfg.get_config('plone',
-                'site_content)
+                'site_content')
         self.plone_general_buildout_config = 'buildout.cfg'
         self.plone_local_buildout_config = 'plone_local.cfg'
         self.plone_deploy_ini = self.user_plone + '/plone.ini'
