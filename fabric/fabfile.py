@@ -174,7 +174,15 @@ def plone_install():
     #tasks.update_conf()
     #tasks.add_admin()
 
+def plone_import_site():
+    """
+    Import site content for Plone;This will overwrite existing content
+    """
 
+    tasks = bungeni.PloneTasks()
+    tasks.import_site_content()
+
+            
 def plone_setup():
     """
     Checkout and bootstrap plone

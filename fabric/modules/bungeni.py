@@ -275,6 +275,8 @@ class BungeniConfigs:
         self.plone_repo = self.cfg.get_config('plone', 'repo')
         self.plone_local_index = self.cfg.get_config('plone',
                 'local_index')
+        self.plone_site_content = self.cfg.get_config('plone',
+                'site_content)
         self.plone_general_buildout_config = 'buildout.cfg'
         self.plone_local_buildout_config = 'plone_local.cfg'
         self.plone_deploy_ini = self.user_plone + '/plone.ini'
@@ -817,19 +819,15 @@ class PloneTasks:
             ' generated from ', template_file
 
     
-    """
-    #This is not required anymore -- commenting out ; leaving it in for syntax reference
-    def update_conf(self):
+    def import_site_content(self):
         with cd(self.cfg.user_plone):
-            run('mkdir -p ./var/filestorage')
-            with cd('etc'):
-                run("sed -i 's|%%define INSTANCE \.|%%define INSTANCE %(plone_home)s|g' ./zope.conf"
-                     % {'plone_home': self.cfg.user_plone})
-                run("sed -i 's|debug-mode on|debug-mode off|g' ./zope.conf"
-                    )
-                run("sed -i 's|#!/usr/bin/python|#!%(python24)s|g' ./import-data.py"
-                     % {'python24': self.cfg.python24})
-    """
+            with cd("./parts/instance/import"):
+                plone_site_content_file  = run("basename %s" % self.cfg.plone_site_content)
+                run("if [ -f %(file)s ]; then rm %(file)s ; fi" % {"file":plone_site_content_file})
+                run("if [ -f *.zexp ]; then rm *.zexp ; fi")
+                run("wget %s" % self.cfg.plone_site_content)
+                run("tar xvf %s" % plone_site_content_file)
+            run("%(python24)s import-data.py" % {'python24':self.cfg.python24})
 
 
     def update_deployini(self):
