@@ -22,8 +22,8 @@ from zope.app.publisher.browser.menu import BrowserMenu, getMenu
 from zope.app.publisher.interfaces.browser import IBrowserMenu
 from zope.app.component.hooks import getSite
 
-#from zope.app.pagetemplate import ViewPageTemplateFile
-from bungeni.ui import z3evoque
+from zope.app.pagetemplate import ViewPageTemplateFile
+#from bungeni.ui import z3evoque
 
 from bungeni.ui.utils import url, debug
 #from ploned.ui.interfaces import IViewView
