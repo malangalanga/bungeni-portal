@@ -68,8 +68,7 @@ class ISkinDirectory( interface.Interface ):
     layers = schema.List( value_type=schema.Object( interface.Interface ) )
 
 class IContentMenuView(IContentProvider):
-    """The view that powers the content menu (the green bar at the top of
-    the editable border).
+    """The view that powers the content menu
 
     This will construct a menu by finding an adapter to IContentMenu.
     """
