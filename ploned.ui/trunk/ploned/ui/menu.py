@@ -158,16 +158,7 @@ class ContentMenuProvider(object):
 
     def available(self):
         #if menu is empty, hide
-        print self.menu()
         if not self.menu():
-            return False
-        #if all submenus are empty, hide
-        check = False
-        for menu in self.menu():
-            if menu['submenu']:
-                check = True
-                break
-        if not check:
             return False
         return True
     
