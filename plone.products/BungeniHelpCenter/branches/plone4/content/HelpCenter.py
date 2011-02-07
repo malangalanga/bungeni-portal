@@ -12,7 +12,8 @@ except ImportError:
 from Products.BungeniHelpCenter.config import *
 from Products.PloneHelpCenter.content.PHCContent import PHCContent
 from Products.ATContentTypes.content.document import ATDocument
-from plone.app.folder.folder import ATFolder
+#from plone.app.folder.folder import ATFolder
+from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
 
 from Products.PloneHelpCenter.content import ReferenceManual,\

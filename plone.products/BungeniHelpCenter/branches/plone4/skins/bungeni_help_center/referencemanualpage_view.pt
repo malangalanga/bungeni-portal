@@ -38,39 +38,39 @@
     <tal:block define="fullToc python:here.getTOC(current = context.aq_parent);
                        tocInfo python:here.getTOCInfo(fullToc);
                    toc  python:tocInfo['localTOC'] or fullToc;">
-    
-	<div metal:define-slot="sectiontoc">
-    <div class="stoc"
-         tal:define="parent python:context.aq_parent">
+        
+        <div metal:define-slot="sectiontoc">
+        <div class="stoc"
+             tal:define="parent python:context.aq_parent">
 
-    <div class="portalMessage"
-         tal:condition="python:here.portal_workflow.getInfoFor(here, 'review_state') != 'published'"
-         i18n:translate="must_publish_before_visible_to_public">
-      You must publish this page before it becomes visible to the public.
-    </div>
+        <div class="portalMessage"
+             tal:condition="python:here.portal_workflow.getInfoFor(here, 'review_state') != 'published'"
+             i18n:translate="must_publish_before_visible_to_public">
+          You must publish this page before it becomes visible to the public.
+        </div>
 
-     
-    <table>
-        <tr>
-                <td valign="top" tal:condition="python:len(toc)">                   
-                <span tal:content="python:toc[0]['numbering'][:-3]" tal:condition="python:here.getNavType() == 'yes'" ></span>
-                <span tal:condition="python:here.getNavType() == 'yes'" >:</span>
-                </td>
-                <td valign="top">                                     
-      <!--<a href="" tal:attributes="href parent/absolute_url">-->
-        <span tal:content="string:${parent/Title}"/>
-      <!--</a>-->
-      <p class="pmargin">
-           <span tal:replace="parent/Description">Description</span>
-      </p>        
-        <metal:recursion use-macro="here/referencemanual_macros/macros/float_toc"/>
-      </td>
-        </tr>
-    </table>
+         
+        <table>
+            <tr>
+                    <td valign="top" tal:condition="python:len(toc)">                   
+                    <span tal:content="python:toc[0]['numbering'][:-3]" tal:condition="python:here.getNavType() == 'yes'" ></span>
+                    <span tal:condition="python:here.getNavType() == 'yes'" >:</span>
+                    </td>
+                    <td valign="top">                                     
+          <!--<a href="" tal:attributes="href parent/absolute_url">-->
+            <span tal:content="string:${parent/Title}"/>
+          <!--</a>-->
+          <p class="pmargin">
+               <span tal:replace="parent/Description">Description</span>
+          </p>        
+            <metal:recursion use-macro="here/referencemanual_macros/macros/float_toc"/>
+          </td>
+            </tr>
+        </table>
 
-    </div>
-	</div>
-            
+        </div>
+        </div>
+                
     </tal:block>
     </span>
 
@@ -83,7 +83,7 @@
     </div>
     </span>
         
-    <div tal:replace="structure here/getBody"/>
+    <div tal:replace="structure here/getText"/>
 
 
     <div tal:repeat="subpage subpages">

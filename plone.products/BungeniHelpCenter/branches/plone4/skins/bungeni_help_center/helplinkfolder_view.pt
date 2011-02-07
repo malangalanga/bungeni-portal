@@ -49,19 +49,18 @@
 
    <tal:define define="results python:here.alphabetiseContext();
                        parent_url python:here.navigationParent(here, template.getId())">
-   <ul id="nav">
-     <span tal:omit-tag="" tal:repeat="item results">
-      <li tal:condition="python:not item['items']"
-      tal:content="item/letter" />
-      <li tal:condition="python:item['items']" class="bubblemenu">
-      <a href="#" tal:attributes="href python:parent_url + '#alpha' + item['letter']; id string:glossaryAZitem" tal:content="item/letter" />
-        <div class="tooltip">
-          <ul id="alphabetizedInnerList">
-              <li tal:repeat="definition python:item['items']"><div><a href="" tal:attributes="href definition/getURL" tal:content="definition/Title"></a></div></li>
-          </ul>
-        </div>
-      </li>
-      </span>
+   <ul id="alphabet_drop">
+    <li tal:repeat="item results">
+        <span tal:content="item/letter" 
+        tal:condition="python:not item['items']"></span>
+        <a href="#" tal:condition="python:item['items']"
+        tal:content="item/letter"></a>
+        <ul tal:condition="python:item['items']">
+            <li tal:repeat="definition python:item['items']">
+                <a href="" tal:attributes="href definition/getURL" tal:content="definition/Title"></a>
+            </li>
+        </ul>
+    </li>
    </ul>
 
    <span tal:omit-tag="" tal:repeat="item results">
