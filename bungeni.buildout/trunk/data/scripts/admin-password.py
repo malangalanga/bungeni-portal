@@ -10,11 +10,7 @@ from bungeni.models import metadata
 def admin_exists():
     # Restricting this script to only adding the first admin user
     session = Session()
-    users = session.query(domain.User).filter(
-                rdb.and_(
-                    domain.User.is_admin==True,
-                    domain.User.active_p=='A')
-                ).all()
+    users = session.query(domain.AdminUser).all()
     if len(users) == 0:
         return False
     else:
@@ -38,18 +34,21 @@ def check_password(password, confirm_password):
 
 def add_admin(login, password, email_address):                
     session = Session()
-    admin_user = domain.User()
+    user = domain.User()
     # The names are hardcorded so that they unambigously refer
     # to the administrator ie. the logs will show "System Administrator" and not
     # 'John Doe'. 
-    admin_user.first_name = _(u"System")
-    admin_user.last_name = _(u"Administrator")
-    admin_user.login = login
-    admin_user._password = password
-    admin_user.gender = "M"
-    admin_user.language = "en"
-    admin_user.email=email_address
-    admin_user.is_admin = True
+    user.first_name = _(u"System")
+    user.last_name = _(u"Administrator")
+    user.login = login
+    user._password = password
+    user.gender = "M"
+    user.language = "en"
+    user.email=email_address
+    user.is_admin = True
+    session.add(user)
+    admin_user = domain.AdminUser()
+    admin_user.user = user
     session.add(admin_user)
     session.commit()
 
