@@ -13,7 +13,8 @@ from Products.BungeniHelpCenter.config import *
 from Products.PloneHelpCenter.content.PHCContent import PHCContent
 from Products.ATContentTypes.content.document import ATDocument
 #from plone.app.folder.folder import ATFolder
-from Products.ATContentTypes.content.folder import ATFolder
+from Products.ATContentTypes.content.folder import ATFolder, \
+                                                   ATFolderSchema
 from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
 
 from Products.PloneHelpCenter.content import ReferenceManual,\
@@ -634,7 +635,9 @@ HelpCenterReferenceManualPage = ReferenceManualPage.HelpCenterReferenceManualPag
 HelpCenterReferenceManualPage.schema['description'].required = 0
 
 BungeniHelpCenterReferenceManualPageSchema = \
-    HelpCenterReferenceManualPage.schema + Schema((RelatedItemsField),) + ConstrainTypesMixinSchema
+    HelpCenterReferenceManualPage.schema + Schema((RelatedItemsField),) \
+    + ConstrainTypesMixinSchema + ATFolder.schema.copy()
+    
 
 class BungeniHelpCenterReferenceManualPage(BrowserDefaultMixin, ATFolder, HelpCenterReferenceManualPage):
     """A tutorial containing TutorialPages, Files and Images."""
