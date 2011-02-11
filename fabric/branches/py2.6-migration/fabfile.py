@@ -13,6 +13,15 @@ def essentials():
     bungenipre.essentials()
 
 
+def build_python26():
+    """
+    Builds Python 2.6 from source
+    """
+
+    bungenipre = bungeni.Presetup()
+    bungenipre.build_py26()
+
+
 def build_python25():
     """
     Builds Python 2.5 from source
@@ -54,7 +63,7 @@ def presetup():
     """
     
     essentials()
-    build_python25()
+    build_python26()
     build_python24()
     build_imaging()
     setup_pylibs() 
@@ -134,6 +143,16 @@ def setup_bungeni_custom():
     tasks = bungeni.BungeniTasks()
     tasks.install_bungeni_custom()
 
+
+def setup_bungeni_admin():
+    """
+    Setups the bungeni admin user
+    """
+
+    tasks = bungeni.BungeniTasks()
+    tasks.add_admin_user()
+
+
 def config_supervisord():
     """
     Generates the supervisor configuration
@@ -141,6 +160,17 @@ def config_supervisord():
 
     pre = bungeni.Presetup()
     pre.supervisord_config()
+
+
+def install_bungeni_custom():
+    """
+    Installs bungeni_custom into the bungeni python
+    """
+
+    tasks = bungeni.BungeniTasks()
+    tasks.install_bungeni_custom()
+
+
 
 
 def config_ini(which_ini):
@@ -171,8 +201,7 @@ def plone_install():
     tasks.setup()
     tasks.local_config()
     tasks.build()
-    #tasks.update_conf()
-    #tasks.add_admin()
+
 
 def plone_import_site():
     """
@@ -225,16 +254,6 @@ def plone_conf():
 
     tasks = bungeni.PloneTasks()
     tasks.update_conf()
-
-
-def plone_admin_user():
-    """
-    Adds the plone admin user
-    """
-
-    tasks = bungeni.PloneTasks()
-    tasks.add_admin()
-
 
 def plone_check():
     """
