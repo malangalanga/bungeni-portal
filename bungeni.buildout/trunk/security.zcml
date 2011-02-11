@@ -56,19 +56,12 @@ items created by other users, so this hack has been removed -->
 
   <grant permission="bungeni.session.Add" role="bungeni.Clerk" />
   <grant permission="bungeni.sitting.Add" role="bungeni.Clerk" />  
-  <grant permission="bungeni.sitting.Edit" role="bungeni.Clerk" />
-  <grant permission="bungeni.sitting.Delete" role="bungeni.Clerk" />
-  <grant permission="bungeni.itemschedulecategory.Add" role="bungeni.Clerk" />
-    
+  <grant permission="bungeni.sitting.Edit" role="bungeni.Clerk" />   
     <grant permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
 
   <grant permission="bungeni.session.Add" role="bungeni.Speaker" />
   <grant permission="bungeni.sitting.Add" role="bungeni.Speaker" />  
-  <grant permission="bungeni.sitting.Edit" role="bungeni.Speaker" />
-  <grant permission="bungeni.sitting.Delete" role="bungeni.Speaker" />
-  <grant permission="bungeni.itemschedulecategory.Add" role="bungeni.Speaker" />
-
-
+  <grant permission="bungeni.sitting.Edit" role="bungeni.Speaker" /> 
   <grant permission="bungeni.sittingattendance.Add" role="bungeni.Clerk" />
   <grant permission="bungeni.sittingattendance.Edit" role="bungeni.Clerk" />
   <grant permission="bungeni.sittingattendance.Delete" role="bungeni.Clerk" />
@@ -162,10 +155,6 @@ be defined by workflow not static here !
   <grant permission="bungeni.comment.View" role="bungeni.Everybody" />  
 -->  
 
-  <grant permission="bungeni.minutes.View" role="bungeni.Clerk" />
-  <grant permission="bungeni.minutes.View" role="bungeni.Speaker" />
-  <grant permission="bungeni.agenda.View" role="bungeni.Clerk" />
-  <grant permission="bungeni.agenda.View" role="bungeni.Speaker" />
   
   <grant permission="bungeni.event.Add" role="bungeni.Speaker" />
   <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
