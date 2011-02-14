@@ -209,16 +209,35 @@ class BungeniConfigs:
         self.distro_override = self.cfg.get_config('global',
                 'distro_override')
         self.linux_headers = 'linux-headers-`uname -r`'
+        # python 2.6
+        self.user_python26_home = self.user_install_root + '/python26'
+        self.python26 = self.user_python26_home + '/bin/python'
+        # python 2.5
         self.user_python25_home = self.user_install_root + '/python25'
         self.user_python25 = self.user_python25_home + '/bin/python'
+        # python 2.4
         self.user_python24_home = self.user_install_root + '/python24'
         self.user_python24 = self.user_python24_home + '/bin/python'
+        # bungeni, plone, portal
         self.user_bungeni = self.user_install_root + '/bungeni'
         self.user_plone = self.user_bungeni + '/plone'
         self.user_portal = self.user_bungeni + '/portal'
         self.user_config = self.user_install_root + '/config'
         self.user_logs = self.user_install_root + '/logs'
         self.user_pid = self.user_install_root + '/pid'
+        # python setup 
+        # 2.6    
+        self.python26_install_url = self.cfg.get_config('python26',
+                'download_url')
+        self.user_python26_build_path = self.user_build_root \
+            + '/python26'           
+        self.python26_src_dir = \
+            self.utils.get_basename_prefix(self.python26_install_url)
+        self.python26_download_file = \
+            self.utils.get_basename(self.python26_install_url)
+        self.python26_download_command = \
+            self.get_download_command(self.python26_install_url)
+        # 2.5
         self.python25_install_url = self.cfg.get_config('python25',
                 'download_url')
         self.user_python25_build_path = self.user_build_root \
@@ -255,6 +274,7 @@ class BungeniConfigs:
             self.utils.get_basename(self.python_imaging_download_url)
         self.python_imaging_src_dir = \
             self.utils.get_basename_prefix(self.python_imaging_download_file)
+        # bungeni configuration parameters
         self.bungeni_repo = self.cfg.get_config('bungeni', 'repo')
         self.bungeni_local_index = self.cfg.get_config('bungeni',
                 'local_index')
@@ -272,6 +292,11 @@ class BungeniConfigs:
              == False else self.bungeni_local_buildout_config)
         self.bungeni_http_port = self.cfg.get_config('bungeni',
                 'http_port')
+        self.bungeni_admin_user = self.cfg.get_config('bungeni',
+                'admin_user')
+        self.bungeni_admin_password = self.cfg.get_config('bungeni',
+                'admin_password')
+        # plone configuration parameters
         self.plone_repo = self.cfg.get_config('plone', 'repo')
         self.plone_local_index = self.cfg.get_config('plone',
                 'local_index')
@@ -284,6 +309,7 @@ class BungeniConfigs:
             (self.plone_general_buildout_config if self.local_cache
              == False else self.plone_local_buildout_config)
         self.plone_http_port = self.cfg.get_config('plone', 'http_port')
+        # portal configuration parameters
         self.portal_repo = self.cfg.get_config('portal', 'repo')
         self.portal_local_index = self.cfg.get_config('portal',
                 'local_index')
@@ -304,8 +330,9 @@ class BungeniConfigs:
                 'web_server_host')
         self.portal_web_server_port = self.cfg.get_config('portal',
                 'web_server_port')
-        self.supervisord = self.user_python25_home + '/bin/supervisord'
-        self.supervisorctl = self.user_python25_home \
+        # others : supervisor, postgresql, xapian
+        self.supervisord = self.user_python26_home + '/bin/supervisord'
+        self.supervisorctl = self.user_python26_home \
             + '/bin/supervisorctl'
         self.supervisorconf = self.user_config + '/supervisord.conf'
 
@@ -365,6 +392,22 @@ class Presetup:
         else:
             print 'This server was identified as a Gandi virtual server'
 
+
+    def build_py26(self):
+        run('mkdir -p ' + self.cfg.user_python26_build_path)
+        run('rm -rf ' + self.cfg.user_python26_build_path + '/*.*')
+        run('mkdir -p ' + self.cfg.user_python26_home)
+        with cd(self.cfg.user_python26_build_path):
+            run(self.cfg.python26_download_command)
+            run('tar xvf ' + self.cfg.python26_download_file)
+            with cd(self.cfg.python26_src_dir):
+                run('CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl \
+                     ./configure --prefix=%(python_home)s USE=sqlite'\
+                     % {'python_home':self.cfg.user_python26_home})
+                run('CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make')
+                run('make install')
+
+
     def build_py25(self):
         run('mkdir -p ' + self.cfg.user_python25_build_path)
         run('rm -rf ' + self.cfg.user_python25_build_path + '/*.*')
@@ -378,6 +421,7 @@ class Presetup:
                      % {'python_runtime':self.cfg.user_python25_runtime})
                 run('CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make')
                 run('make install')
+
 
     def build_py24(self):
         """
@@ -409,8 +453,12 @@ class Presetup:
             run('rm -rf ' + self.cfg.python_imaging_src_dir)
             run('tar xvzf ' + self.cfg.python_imaging_download_file)
             with cd(self.cfg.python_imaging_src_dir):
+                if os.path.isfile(self.cfg.python26):
+                    print self.cfg.python26 + ' setup.py build_ext -i'
+                    run(self.cfg.python26 + ' setup.py build_ext -i')
+                    run(self.cfg.python26 + ' setup.py install')
                 if os.path.isfile(self.cfg.python25):
-                    print self.cfg.python24 + ' setup.py build_ext -i'
+                    print self.cfg.python25 + ' setup.py build_ext -i'
                     run(self.cfg.python25 + ' setup.py build_ext -i')
                     run(self.cfg.python25 + ' setup.py install')
                 if os.path.isfile(self.cfg.python24):
@@ -427,7 +475,8 @@ class Presetup:
         """
         Install setuptools for python
         """
-
+        self.__setuptools(self.cfg.python26,
+                          self.cfg.user_python26_home)
         self.__setuptools(self.cfg.python25,
                           self.cfg.user_python25_home)
         self.__setuptools(self.cfg.python24,
@@ -438,7 +487,7 @@ class Presetup:
         Install Supervisord
         """
 
-        run(self.cfg.user_python25_home + '/bin/easy_install supervisor'
+        run(self.cfg.user_python26_home + '/bin/easy_install supervisor'
             )
 
     def supervisord_config(self):
@@ -760,6 +809,7 @@ class PloneTasks:
 
     def __init__(self):
         self.cfg = BungeniConfigs()
+        self.python = self.cfg.python24
         self.tasks = Tasks(self.cfg, self.cfg.plone_repo,
                            self.cfg.user_plone)
         self.exists_check = [self.cfg.user_bungeni,
@@ -771,7 +821,7 @@ class PloneTasks:
 
     def setup(self):
         self.tasks.src_checkout()
-        self.tasks.bootstrap(self.cfg.python24)
+        self.tasks.bootstrap(self.python)
         self.deploy_ini()
 
     def build(self):
@@ -781,7 +831,7 @@ class PloneTasks:
 
        self.tasks.buildout('PATH=%s:$PATH PYTHON=%s'
                             % (self.cfg.postgresql_bin,
-                            self.cfg.python24), '',
+                            self.python), '',
                             self.cfg.plone_buildout_config)
 
     def build_opt(self):
@@ -791,7 +841,7 @@ class PloneTasks:
 
        self.tasks.buildout('PATH=%s:$PATH PYTHON=%s'
                             % (self.cfg.postgresql_bin,
-                            self.cfg.python24), '-N',
+                            self.python), '-N',
                             self.cfg.plone_buildout_config)
 
     def deploy_ini(self):
@@ -806,7 +856,7 @@ class PloneTasks:
        self.local_config()
        self.tasks.check_versions('PATH=%s:$PATH PYTHON=%s'
                            % (self.cfg.postgresql_bin,
-                           self.cfg.python24), '-Novvvvv', self.cfg.plone_buildout_config)
+                           self.python), '-Novvvvv', self.cfg.plone_buildout_config)
 
 
     def local_config(self):
@@ -827,7 +877,7 @@ class PloneTasks:
                 run("if [ -f *.zexp ]; then rm *.zexp ; fi")
                 run("wget %s" % self.cfg.plone_site_content)
                 run("tar xvf %s" % plone_site_content_file)
-            run("%(python24)s import-data.py" % {'python24':self.cfg.python24})
+            run("%(python)s import-data.py" % {'python':self.python})
 
 
     def update_deployini(self):
@@ -847,6 +897,7 @@ class PortalTasks:
         self.cfg = BungeniConfigs()
         self.tasks = Tasks(self.cfg, self.cfg.portal_repo,
                            self.cfg.user_portal)
+        self.python = self.cfg.python26
         self.exists_check = [self.cfg.user_bungeni,
                              self.cfg.user_bungeni + '/bin/paster']
         if not self.tasks.build_exists(self.exists_check):
@@ -854,17 +905,17 @@ class PortalTasks:
 
     def setup(self):
         self.tasks.src_checkout()
-        self.tasks.bootstrap(self.cfg.python25)
+        self.tasks.bootstrap(self.python)
         self.deploy_ini()
 
     def build(self):
         self.local_config()
-        self.tasks.buildout('PYTHON=%s' % self.cfg.python25, '',
+        self.tasks.buildout('PYTHON=%s' % self.python, '',
                             self.cfg.portal_buildout_config)
 
     def build_opt(self):
         self.local_config()
-        self.tasks.buildout('PYTHON=%s' % self.cfg.python25, '-N',
+        self.tasks.buildout('PYTHON=%s' % self.python, '-N',
                             self.cfg.portal_buildout_config)
 
     def check_versions(self):
@@ -873,7 +924,7 @@ class PortalTasks:
        """
        self.local_config()
        self.tasks.check_versions('PYTHON=%s'
-                           % self.cfg.python25, '-Novvvvv', self.cfg.portal_buildout_config)
+                           % self.python, '-Novvvvv', self.cfg.portal_buildout_config)
 
     def deploy_ini(self):
         run('cp %(portal)s/deploy.ini %(deploy_ini)s' % {'portal'
@@ -932,6 +983,8 @@ class BungeniTasks:
 
     def __init__(self):
         self.cfg = BungeniConfigs()
+        self.python = self.cfg.python26
+        self.python_packages = self.cfg.user_python26_home + '/lib/python2.6/site-packages'
         self.data_dump_folder = self.cfg.user_bungeni + '/testdatadmp'
         self.data_dump_file = self.data_dump_folder + '/' \
             + self.cfg.bungeni_dump_file
@@ -941,13 +994,13 @@ class BungeniTasks:
             + '/dmp_undesa_large.txt'
         self.tasks = Tasks(self.cfg, self.cfg.bungeni_repo,
                            self.cfg.user_bungeni)
-        self.exists_check = [self.cfg.python25]
+        self.exists_check = [self.python]
         if not self.tasks.build_exists(self.exists_check):
             abort('Bungeni build requires a working python 2.5')
 
     def setup(self):
         self.tasks.src_checkout()
-        self.tasks.bootstrap(self.cfg.python25)
+        self.tasks.bootstrap(self.python)
         self.install_bungeni_custom()
         self.deploy_ini()
 
@@ -974,21 +1027,21 @@ class BungeniTasks:
        self.local_config()
        self.tasks.buildout('PATH=%s:$PATH PYTHON=%s'
                            % (self.cfg.postgresql_bin,
-                           self.cfg.python25), '',
+                           self.python), '',
                            self.cfg.bungeni_buildout_config)
 
     def build_opt(self):
         self.local_config()
         self.tasks.buildout('PATH=%s:$PATH PYTHON=%s'
                             % (self.cfg.postgresql_bin,
-                            self.cfg.python25), '-N',
+                            self.python), '-N',
                             self.cfg.bungeni_buildout_config)
 
     def check_versions(self):
         self.local_config()
         self.tasks.check_versions('PATH=%s:$PATH PYTHON=%s'
                             % (self.cfg.postgresql_bin,
-                            self.cfg.python25), '-Novvvvv', self.cfg.bungeni_buildout_config)
+                            self.python), '-Novvvvv', self.cfg.bungeni_buildout_config)
 
     def reset_db(self):
         with cd(self.cfg.user_bungeni):
@@ -1098,7 +1151,7 @@ class BungeniTasks:
 
     def install_bungeni_custom(self):
         bungeni_custom_map = {
-            'site_packages' : self.cfg.user_python25_home + '/lib/python2.5/site-packages',
+            'site_packages' : self.python_packages ,
             'folder_bungeni_custom' : self.cfg.user_bungeni + '/src' ,
             'bungeni_custom' : 'bungeni_custom.pth',
             'user_bungeni': self.cfg.user_bungeni
@@ -1110,6 +1163,23 @@ class BungeniTasks:
         ## create a new .pth file in bungeni python site-packages
         run('cd %(site_packages)s && echo %(folder_bungeni_custom)s > %(bungeni_custom)s && '\
                 'ln -s %(site_packages)s/%(bungeni_custom)s %(user_bungeni)s/' % bungeni_custom_map)
+
+      
+    def add_admin_user(self):
+        """
+        Adds the bungeni admin user based on the admin_user and admin_password entries 
+        in setup.ini:bungeni
+        """
+
+        pass_map = {
+            'user' : self.cfg.bungeni_admin_user,
+            'pass' : self.cfg.bungeni_admin_password
+           }
+        with cd(self.cfg.user_bungeni):
+            run("echo -e '%(user)s\n%(pass)s\n%(pass)s\n' > .pass.txt" % pass_map)
+            run("./bin/admin-passwd < .pass.txt")
+            run("rm .pass.txt")
+
 
 
 
