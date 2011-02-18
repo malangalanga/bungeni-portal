@@ -515,3 +515,16 @@ def db_make_empty():
     tasks.reset_db()
     __db_load_services_start()
 
+
+
+def remap_custom():
+    """
+    Remap custom
+    """
+
+    tasks = bungeni.CustomTasks()
+    tasks.remap_custom()
+
+
+
+

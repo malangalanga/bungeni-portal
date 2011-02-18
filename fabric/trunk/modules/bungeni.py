@@ -346,6 +346,10 @@ class BungeniConfigs:
             + '/parts/postgresql/bin'
         self.db_dump_update_script = self.utils.get_fab_path() \
             + '/scripts/upd-dbdump.sh'
+        #custom 
+        self.bungeni_custom_pth = 'bungeni_custom.pth'
+        self.custom_folder = self.cfg.get_config('custom',
+                'folder')
 
     def get_download_command(self, strURL):
         if strURL.startswith('http') or strURL.startswith('ftp'):
@@ -1153,7 +1157,7 @@ class BungeniTasks:
         bungeni_custom_map = {
             'site_packages' : self.python_packages ,
             'folder_bungeni_custom' : self.cfg.user_bungeni + '/src' ,
-            'bungeni_custom' : 'bungeni_custom.pth',
+            'bungeni_custom' : self.cfg.bungeni_custom_pth,
             'user_bungeni': self.cfg.user_bungeni
             }
         ## delete an existing symlink
@@ -1181,5 +1185,22 @@ class BungeniTasks:
             run("rm .pass.txt")
 
 
+
+class CustomTasks:
+    
+    def __init__(self):
+        # do something here
+        self.cfg = BungeniConfigs()
+
+
+    def remap_custom(self):
+        with cd(self.cfg.user_bungeni):
+            run("mkdir -p %s" % self.cfg.custom_folder)
+            run("cp -R ./src/bungeni_custom/* %s" % self.cfg.custom_folder)
+            with cd(self.cfg.custom_folder):
+                run("find . -name '*.svn' -print0 | xargs -0 rm -rf ")
+            run("echo `pwd` > %s " % self.cfg.bungeni_custom_pth)
+
+   
 
 
