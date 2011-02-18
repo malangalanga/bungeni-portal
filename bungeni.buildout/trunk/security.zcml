@@ -30,9 +30,9 @@
 
 
   <!-- Anonymous grants -->
-  <grant role="bungeni.Anybody" principal="zope.anybody" />
+  <grant role="bungeni.Anonymous" principal="zope.anybody" />
   
-  <grant role="bungeni.Everybody" principal="zope.Authenticated" />
+  <grant role="bungeni.Authenticated" principal="zope.Authenticated" />
     
   <!-- generic view permission grants -->
 
@@ -40,7 +40,7 @@
   <grant permission="zope.View" role="bungeni.Clerk" />
   <grant permission="zope.View" role="bungeni.Speaker" />
   <grant permission="zope.View" role="bungeni.Owner" />
-  <grant permission="zope.View" role="bungeni.Everybody" />
+  <grant permission="zope.View" role="bungeni.Authenticated" />
 
   <!-- admin section -->
   <!-- managesite permission had been given to clerk and speaker users to enable such 
@@ -143,16 +143,16 @@ items created by other users, so this hack has been removed -->
   <grant permission="bungeni.heading.Add" role="bungeni.Speaker" />
   <grant permission="bungeni.heading.Edit" role="bungeni.Speaker" /> 
       
-  <grant permission="bungeni.auditlog.View" role="bungeni.Everybody" />
+  <grant permission="bungeni.auditlog.View" role="bungeni.Authenticated" />
   
 <!-- XXX the permissions to add/edit/view amendments and annotatios should 
 be defined by workflow not static here !
 
-  <grant permission="bungeni.amendment.Edit" role="bungeni.Everybody" />
-  <grant permission="bungeni.amendment.View" role="bungeni.Everybody" />
+  <grant permission="bungeni.amendment.Edit" role="bungeni.Authenticated" />
+  <grant permission="bungeni.amendment.View" role="bungeni.Authenticated" />
   
-  <grant permission="bungeni.comment.Edit" role="bungeni.Everybody" />
-  <grant permission="bungeni.comment.View" role="bungeni.Everybody" />  
+  <grant permission="bungeni.comment.Edit" role="bungeni.Authenticated" />
+  <grant permission="bungeni.comment.View" role="bungeni.Authenticated" />  
 -->  
 
   
