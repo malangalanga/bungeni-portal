@@ -61,7 +61,9 @@ list-style-type: none;
 padding-right: 20px;
 }
 
- 
+#linkbar a {
+	font: 11px/24px Verdana, Arial, Helvetica, sans-serif;
+}
             </style>
             </head>
             <body>
@@ -70,25 +72,38 @@ padding-right: 20px;
                 <h1>Table of Contents</h1>
                 TABLE_OF_CONTENT
             </div>
-            <h1><xsl:value-of select="@title"></xsl:value-of> States</h1>
-            <xsl:variable name="diagImage">
-                <xsl:value-of select="tokenize(@id,'-')[1]"></xsl:value-of>
-            </xsl:variable>
-            <p>
-            <a href="./{$diagImage}.dot.png" target="_blank">Click here to view the workflow diagram</a>
-            </p>
-	     <a href="#table-of-contents">Go to Table of contents</a>   
+			
+			<!-- STATES -->
+            
+    
+			<a name="states"></a>
+            <h2><xsl:value-of select="@title"></xsl:value-of> States</h2>
+             <div class="linkbar">
+      	    	 <a href="#table-of-contents">Go to Table of contents</a>
+	             <xsl:text>,</xsl:text>
+	   			 <a href="#transitions">Click here for Transitions</a>           
+	             <xsl:text>,</xsl:text>
+	            <xsl:call-template name="diagram" />
+             </div>
             <table  border="1">
                 <tr class="yellow"><td>State Name</td><td>Allow</td><td>Deny</td></tr>
                 <xsl:for-each select="./state">
                     <xsl:call-template name="match-state"></xsl:call-template>
                 </xsl:for-each>
             </table>
-
-            <h1><xsl:value-of select="@title"></xsl:value-of> Transitions</h1>           
-            <a href="#table-of-contents">Go to Table of contents</a>            
+			
+			<!-- TRANSITIONS -->
+			<a name="transitions"></a>
+            <h2><xsl:value-of select="@title"></xsl:value-of> Transitions</h2>           
+             <div class="linkbar">
+      	    	 <a href="#table-of-contents">Go to Table of contents</a>
+	             <xsl:text>,</xsl:text>
+	   			 <a href="#states">Click here for States</a>           
+	             <xsl:text>,</xsl:text>
+	            <xsl:call-template name="diagram" />
+             </div>
             <table  border="1">
-                <tr class="yellow"><td>Source</td><td>Transition Name</td><td>Destination</td><td>Permission</td><td>Action/Condition</td></tr>
+                <tr class="yellow"><td>Source</td><td>Transition Name</td><td>Destination</td><td>Roles</td><td>Confirm?</td><td>Action/Condition</td></tr>
                 <xsl:for-each select="./transition">
                     <xsl:call-template name="match-transition"></xsl:call-template>
                 </xsl:for-each>
@@ -121,7 +136,7 @@ padding-right: 20px;
     <xsl:template name="match-transition">
         <xsl:variable name="counter"><xsl:number /></xsl:variable>
         <tr class="m{$counter mod 2}">
-    
+    		<!-- Source -->
             <td><xsl:variable name="tokSource" select="tokenize(@source, '\s+')">
             </xsl:variable>
                 <xsl:for-each select="$tokSource">
@@ -132,18 +147,20 @@ padding-right: 20px;
                     </a><br />
                 </xsl:for-each>
             </td>
+			<!-- Transition Name -->
             <td>
                 <xsl:value-of select="@title"></xsl:value-of><br />
                 <span class="ident"><xsl:value-of select="@id" /></span><br />
                 <xsl:choose>
                     <xsl:when test="@trigger='manual'">
-                        <span class="trig">(M)</span>  
+                        <span class="trig">(Manual)</span>  
                     </xsl:when>
                     <xsl:otherwise>
-                        <span class="trig">(A)</span>
+                        <span class="trig">(Auto)</span>
                     </xsl:otherwise>
                 </xsl:choose>
             </td>
+			<!-- Destination -->
             <td><xsl:variable name="tokDest" select="tokenize(@destination, '\s+')">
             </xsl:variable>
                 <xsl:for-each select="$tokDest">
@@ -154,10 +171,27 @@ padding-right: 20px;
                     </a><br />
                 </xsl:for-each>
             </td>
+			<!-- Roles -->
             <td>
-                <!-- permission -->
-                <xsl:value-of select="@permission"></xsl:value-of>
+			    <xsl:variable name="tokRoles" select="tokenize(@roles, '\s+')" />
+                <xsl:for-each select="$tokRoles">
+                    <xsl:value-of select="." /><br />
+                </xsl:for-each>
             </td>
+
+			<!-- Confirmation yes/no -->
+            <td>
+			   <xsl:choose>
+                 <xsl:when test="@require_confirmation">
+                    <xsl:value-of select="@require_confirmation" />
+                 </xsl:when>
+                 <xsl:otherwise>
+                    <xsl:text>false</xsl:text><br /><xsl:text>[not declared]</xsl:text>
+                 </xsl:otherwise>
+               </xsl:choose>
+            </td>
+
+            <!-- Action and Condition -->
             <td>
                 <!-- action -->
                 <p style="text-align:left">
@@ -193,8 +227,14 @@ padding-right: 20px;
                 <td><xsl:value-of select="@permission"></xsl:value-of></td><td> <xsl:value-of select="@role"></xsl:value-of></td>
             </tr>
         </xsl:for-each>
-        
     </xsl:template>
+
+	<xsl:template name="diagram">
+            <xsl:variable name="diagImage">
+                <xsl:value-of select="tokenize(@id,'_')[1]"></xsl:value-of>
+            </xsl:variable>
+            <a href="./{$diagImage}.dot.png" target="_blank">Click here to view the workflow diagram</a>
+	</xsl:template>
     
 </xsl:stylesheet>
 
