@@ -526,5 +526,12 @@ def remap_custom():
     tasks.remap_custom()
 
 
-
+def install_translations(switch='default'):
+    """
+    Links translations to custom source directory
+    Call with 'default' to use shipped translations or 'custom'
+    to use custom translations
+    """
+    tasks = bungeni.CustomTasks()
+    tasks.map_translations(switch)
 

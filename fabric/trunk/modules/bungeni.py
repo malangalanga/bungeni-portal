@@ -3,6 +3,8 @@
 from __future__ import with_statement
 import os
 from fabric.api import *
+from fabric.colors import red, green
+from fabric.contrib.files import exists
 from ConfigParser import SafeConfigParser
 import checkversions
 
@@ -350,6 +352,10 @@ class BungeniConfigs:
         self.bungeni_custom_pth = 'bungeni_custom.pth'
         self.custom_folder = self.cfg.get_config('custom',
                 'folder')
+        self.enabled_translations = self.cfg.get_config('custom',
+                'enabled_translations').split(':')
+        self.translatable_packages = self.cfg.get_config('custom',
+                'translatable_packages').split(':')
 
     def get_download_command(self, strURL):
         if strURL.startswith('http') or strURL.startswith('ftp'):
@@ -1201,6 +1207,44 @@ class CustomTasks:
                 run("find . -name '*.svn' -print0 | xargs -0 rm -rf ")
             run("echo `pwd` > %s " % self.cfg.bungeni_custom_pth)
 
-   
-
-
+    def map_translations(self, switch):
+        translations_path = ''
+        if switch == 'custom':
+            translations_path = '/'.join((self.cfg.user_bungeni,
+                                         self.cfg.custom_folder,
+                                         'translations'
+                                        ))
+        elif switch == 'default':
+            translations_path = '/'.join((self.cfg.user_bungeni,
+                                         'src',
+                                         'bungeni_custom',
+                                         'translations'
+                                        ))
+        else:
+            print red("You need to specify translations target")
+            return
+        packages_home = '/'.join((self.cfg.user_bungeni,
+                                     'src',
+                                     'bungeni.main'
+                                    ))
+        if not exists(translations_path):
+            print red("Translations folder %s not found. Skipping installation."
+            % translations_path)
+            return
+        else:
+            for package in self.cfg.translatable_packages:
+                for language in self.cfg.enabled_translations:
+                    source_path = "%s/bungeni/%s/locales/%s"\
+                    %(packages_home, package, language)
+                    target_path = "%s/bungeni.%s/locales/%s"\
+                    %(translations_path, package, language)
+                    if exists(target_path):
+                        if exists(source_path):
+                            print red("Source path %s already exists" % source_path)
+                        else:
+                            run("ln -s %s %s" %(target_path, source_path))
+                            print green("Linked %s translations for module %s"
+                            % (language, package))
+                    else:
+                        print red("Translation target %s does not exist" % target_path)
+                        
