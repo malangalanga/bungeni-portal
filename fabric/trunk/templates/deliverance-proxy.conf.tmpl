@@ -2,6 +2,12 @@
 		
   <server-settings>
       <server>%(app_host)s:%(portal_http_port)s</server>
+      <dev-allow>
+        127.0.0.1
+        localhost
+      </dev-allow>
+      <dev-user username="dev" password="maendeleo" />
+      <dev-expiration>60</dev-expiration>
   </server-settings>
 
   <proxy path="/bungeni">

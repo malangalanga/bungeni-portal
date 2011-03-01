@@ -57,15 +57,37 @@ def setup_pylibs():
     bungenipre = bungeni.Presetup()
     bungenipre.required_pylibs()
 
+
+def build_python():
+    """
+    Builds required pythons
+    """
+    
+    cfg = bungeni.BungeniConfigs()
+    pys = []
+    pys.append(cfg.cfg.get_config("bungeni","python"))
+    pys.append(cfg.cfg.get_config("portal","python"))
+    pys.append(cfg.cfg.get_config("plone","python"))
+    pys.append(cfg.cfg.get_config("supervisor","python"))
+    used_pys = set(pys)
+    if "2.4" in used_pys:
+        print "building python 2.4"
+        build_python24()
+    if "2.5" in used_pys:
+        print "building python 2.5"
+        build_python25()
+    if "2.6" in used_pys:
+        print "building python 2.6"
+        build_python26()
+
+
 def presetup():
     """
     Runs essentials, python installation (2.4,2.5) and reqd libs
     """
     
     essentials()
-    build_python26()
-    build_python24()
-    build_imaging()
+    build_python()
     setup_pylibs() 
     
 
@@ -179,14 +201,14 @@ def config_ini(which_ini):
     """
 
     tasks = None
-    if which_ini == 'bungeni':
+    if which_ini == "bungeni":
         tasks = bungeni.BungeniTasks()
-    elif which_ini == 'plone':
+    elif which_ini == "plone":
         tasks = bungeni.PloneTasks()
-    elif which_ini == 'portal':
+    elif which_ini == "portal":
         tasks = bungeni.PortalTasks()
     else:
-        abort('Nothing to do!option must be one of: bungeni, plone or portal')
+        abort("Nothing to do!option must be one of: bungeni, plone or portal")
         return
     tasks.deploy_ini()
     tasks.update_deployini()
@@ -375,7 +397,7 @@ def start_bungeni():
     """
 
     service = bungeni.Services()
-    service.start_service('bungeni')
+    service.start_service("bungeni")
 
 
 def stop_bungeni():
@@ -384,7 +406,7 @@ def stop_bungeni():
     """
 
     service = bungeni.Services()
-    service.stop_service('bungeni')
+    service.stop_service("bungeni")
 
 
 def start_portal():
@@ -393,7 +415,7 @@ def start_portal():
     """
 
     service = bungeni.Services()
-    service.start_service('portal')
+    service.start_service("portal")
 
 
 def stop_portal():
@@ -402,7 +424,7 @@ def stop_portal():
     """
 
     service = bungeni.Services()
-    service.stop_service('portal')
+    service.stop_service("portal")
 
 
 def start_plone():
@@ -411,7 +433,7 @@ def start_plone():
     """
 
     service = bungeni.Services()
-    service.start_service('plone')
+    service.start_service("plone")
 
 
 def stop_plone():
@@ -420,7 +442,7 @@ def stop_plone():
     """
 
     service = bungeni.Services()
-    service.stop_service('plone')
+    service.stop_service("plone")
 
 
 def start_postgres():
@@ -429,7 +451,7 @@ def start_postgres():
     """
 
     service = bungeni.Services()
-    service.start_service('postgres')
+    service.start_service("postgres")
 
 
 def start_monitor():
@@ -526,10 +548,10 @@ def remap_custom():
     tasks.remap_custom()
 
 
-def install_translations(switch='default'):
+def install_translations(switch="default"):
     """
     Links translations to custom source directory
-    Call with 'default' to use shipped translations or 'custom'
+    Call with "default" to use shipped translations or "custom"
     to use custom translations
     """
     tasks = bungeni.CustomTasks()
