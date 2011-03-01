@@ -56,8 +56,8 @@ def update_authenticated_users_group(context):
     portal = context.getSite()
     groups_tool = portal.portal_groups
     group = groups_tool.getGroupById('AuthenticatedUsers')
-    if 'Member' and 'bungeni.Anybody' and 'bungeni.Everybody' not in group.getRoles():
-        roles = group.getRoles() + ['Member', 'bungeni.Anybody', 'bungeni.Everybody']
+    if 'Member' and 'bungeni.Anonymous' and 'bungeni.Authenticated' not in group.getRoles():
+        roles = group.getRoles() + ['Member', 'bungeni.Anonymous', 'bungeni.Authenticated']
         groups_tool.editGroup(group.id, roles=roles, groups=())
         
     
