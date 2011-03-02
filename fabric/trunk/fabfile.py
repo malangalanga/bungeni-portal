@@ -106,10 +106,16 @@ def bungeni_install():
     """
 
     tasks = bungeni.BungeniTasks()
+    # bootstrap
     tasks.setup()
+    # do any local configuations
     tasks.local_config()
+    # buildout 
     tasks.build()
+    # setup-database
     tasks.setupdb()
+    # install default po files
+    install_translations("default")
 
 
 def bungeni_local_config():
