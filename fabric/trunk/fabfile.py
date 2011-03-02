@@ -310,6 +310,7 @@ def portal_install():
     tasks.setup()
     tasks.local_config()
     tasks.build()
+    enable_country_theme()
 
 
 def portal_build():
@@ -563,3 +564,11 @@ def install_translations(switch="default"):
     tasks = bungeni.CustomTasks()
     tasks.map_translations(switch)
 
+
+def enable_country_theme():
+    """
+    Set country theme, based on setup.ini parameter
+    Parameter should map to a theme folder in bungeni_custom
+    """
+    tasks = bungeni.CustomTasks()
+    tasks.map_country_theme()
