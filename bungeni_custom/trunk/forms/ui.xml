@@ -1,0 +1,620 @@
+<ui roles="bungeni.Clerk bungeni.Speaker bungeni.MP bungeni.Minister bungeni.Anonymous">
+
+    <descriptor name="AddressType">
+        <field name="address_type_name" modes="view edit add" />
+    </descriptor>
+
+    <descriptor name="AgendaItem">
+        <field name="parliament_id" modes="view edit" localizable="view">
+            <hide modes="view" />
+        </field>
+        <field name="short_name" modes="view edit add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="full_name" modes="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="registry_number" modes="view edit" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="owner_id" modes="view edit add listing" localizable="view listing">
+            <hide modes="view listing" roles="bungeni.Anonymous" />
+        </field>
+        <field name="language" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="body_text" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="submission_date" modes="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status" modes="view edit listing" />
+        <field name="status_date" modes="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="note" modes="edit add" />
+        <field name="receive_notification" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="admissible_date" modes="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="AgendaItemVersion">
+        <field name="short_name" modes="view edit add listing" />
+        <field name="full_name" modes="view edit add" />
+        <field name="language" modes="view add listing" />
+        <field name="body_text" modes="view edit add" />
+        <field name="note" modes="edit add" />
+    </descriptor>
+
+    <descriptor name="AttachedFile">
+        <field name="language" modes="edit add" />
+        <field name="file_title" modes="view edit add listing" />
+        <field name="file_description" modes="view edit add" />
+        <field name="file_data" modes="view edit add" />
+        <field name="attached_file_type_id" modes="view edit add" />
+        <field name="file_name" modes="edit add" />
+        <field name="file_mimetype" modes="edit add" />
+        <field name="status" modes="view edit listing" />
+        <field name="status_date" modes="view listing" />
+    </descriptor>
+
+    <descriptor name="AttachedFileVersion">
+        <field name="language" modes="edit add" />
+        <field name="file_title" modes="view edit add listing" />
+        <field name="file_description" modes="view edit add" />
+        <field name="file_data" modes="view edit add" />
+        <field name="attached_file_type_id" modes="view edit add" />
+        <field name="file_name" modes="edit add" />
+        <field name="file_mimetype" modes="edit add" />
+        <field name="status" modes="view edit listing" />
+        <field name="status_date" modes="view listing" />
+    </descriptor>
+
+    <descriptor name="Attendance">
+        <field name="member_id" modes="view edit add listing" />
+        <field name="attendance_id" modes="view edit add listing" />
+    </descriptor>
+
+    <descriptor name="AttendanceType">
+        <field name="attendance_type" modes="view edit add" />
+        <field name="language" modes="edit add" />
+    </descriptor>
+
+    <descriptor name="Bill">
+        <field name="parliament_id" modes="view edit" localizable="view">
+            <hide modes="view" />
+        </field>
+        <field name="short_name" modes="view edit add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="full_name" modes="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="registry_number" modes="view edit" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="owner_id" modes="view edit add listing" localizable="view listing">
+            <hide modes="view listing" roles="bungeni.Anonymous" />
+        </field>
+        <field name="language" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="body_text" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="submission_date" modes="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status" modes="view edit listing" />
+        <field name="status_date" modes="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="note" modes="edit add" />
+        <field name="receive_notification" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="bill_type_id" modes="view edit add" />
+        <field name="ministry_id" modes="view edit add" />
+        <field name="identifier" modes="view edit" />
+        <field name="publication_date" modes="view edit add listing" />
+    </descriptor>
+
+    <descriptor name="BillVersion">
+        <field name="short_name" modes="view edit add listing" />
+        <field name="full_name" modes="view edit add" />
+        <field name="language" modes="view add listing" />
+        <field name="body_text" modes="view edit add" />
+        <field name="note" modes="edit add" />
+    </descriptor>
+
+    <descriptor name="Committee">
+        <field name="full_name" modes="view edit add" />
+        <field name="short_name" modes="view edit add" />
+        <field name="combined_name" modes="listing" />
+        <field name="language" modes="edit add" />
+        <field name="description" modes="view edit add" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+        <field name="committee_type_id" modes="view edit add listing" />
+        <field name="num_members" modes="view edit add" />
+        <field name="min_num_members" modes="view edit add" />
+        <field name="quorum" modes="view edit add" />
+        <field name="num_clerks" modes="view edit add" />
+        <field name="num_researchers" modes="view edit add" />
+        <field name="proportional_representation" modes="view edit add" />
+        <field name="reinstatement_date" modes="view edit add" />
+    </descriptor>
+
+    <descriptor name="CommitteeMember">
+        <field name="user_id" modes="view edit add listing" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+        <field name="active_p" modes="edit add" />
+        <field name="language" modes="edit add" />
+        <field name="substitution_type" modes="view edit" />
+        <field name="replaced_id" modes="view edit" />
+        <field name="notes" modes="view edit add" />
+    </descriptor>
+
+    <descriptor name="CommitteeStaff">
+        <field name="user_id" modes="view edit add listing" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+        <field name="active_p" modes="edit add" />
+        <field name="language" modes="edit add" />
+        <field name="substitution_type" modes="view edit" />
+        <field name="replaced_id" modes="view edit" />
+        <field name="notes" modes="view edit add" />
+    </descriptor>
+
+    <descriptor name="Constituency">
+        <field name="language" modes="edit add" />
+        <field name="name" modes="view edit add listing" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+    </descriptor>
+
+    <descriptor name="ConstituencyDetail">
+        <field name="date" modes="view edit add listing" />
+        <field name="population" modes="view edit add listing" />
+        <field name="voters" modes="view edit add listing" />
+    </descriptor>
+
+    <descriptor name="Cosignatory">
+        <field name="user_id" modes="view edit add listing" />
+    </descriptor>
+
+    <descriptor name="Country">
+        <field name="language" modes="edit add" />
+        <field name="country_id" modes="view edit add" />
+        <field name="country_name" modes="view edit add listing" />
+    </descriptor>
+
+    <descriptor name="EventItem">
+        <field name="short_name" modes="view edit add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="owner_id" modes="view edit add" localizable="view">
+            <hide modes="view" roles="bungeni.Anonymous" />
+        </field>
+        <field name="language" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="body_text" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="event_date" modes="view edit add listing" />
+    </descriptor>
+
+    <descriptor name="Government">
+        <field name="short_name" modes="view edit add listing" />
+        <field name="full_name" modes="view edit add" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+        <field name="language" modes="edit add" />
+        <field name="description" modes="view edit add" />
+    </descriptor>
+
+    <descriptor name="GroupAddress">
+        <field name="address_type_id" modes="view edit add listing" />
+        <field name="postal_type" modes="view edit add" />
+        <field name="street" modes="view edit add" />
+        <field name="city" modes="view edit add listing" />
+        <field name="zipcode" modes="view edit add" />
+        <field name="country" modes="view edit add" />
+        <field name="phone" modes="view edit add" />
+        <field name="fax" modes="view edit add" />
+        <field name="email" modes="view edit add listing" />
+    </descriptor>
+
+    <descriptor name="Group">
+        <field name="full_name" modes="view edit add" />
+        <field name="short_name" modes="view edit add" />
+        <field name="combined_name" modes="listing" />
+        <field name="language" modes="edit add" />
+        <field name="description" modes="view edit add" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+    </descriptor>
+
+    <descriptor name="GroupGroupItemAssignment">
+        <field name="group_id" modes="view edit add listing" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+        <field name="due_date" modes="view edit add listing" />
+        <field name="notes" modes="view edit add" />
+        <field name="language" modes="edit add" />
+    </descriptor>
+
+    <descriptor name="Heading">
+        <field name="short_name" modes="view edit add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="owner_id" modes="view edit add" localizable="view">
+            <hide modes="view" roles="bungeni.Anonymous" />
+        </field>
+        <field name="language" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="body_text" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+    </descriptor>
+
+    <descriptor name="ItemGroupItemAssignment">
+        <field name="item_id" modes="view edit add listing" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+        <field name="due_date" modes="view edit add listing" />
+        <field name="notes" modes="view edit add" />
+        <field name="language" modes="edit add" />
+    </descriptor>
+
+    <descriptor name="ItemSchedule">
+        <field name="item_id" modes="view edit add" />
+    </descriptor>
+
+    <descriptor name="ItemScheduleDiscussion">
+        <field name="language" modes="edit add" />
+        <field name="body_text" modes="view edit add" />
+    </descriptor>
+
+    <descriptor name="MemberRoleTitle">
+        <field name="title_name_id" modes="view edit add listing" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+        <field name="language" modes="edit add" />
+    </descriptor>
+
+    <descriptor name="Minister">
+        <field name="user_id" modes="view edit add listing" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+        <field name="active_p" modes="edit add" />
+        <field name="language" modes="edit add" />
+        <field name="substitution_type" modes="view edit" />
+        <field name="replaced_id" modes="view edit" />
+        <field name="notes" modes="view edit add" />
+    </descriptor>
+
+    <descriptor name="Ministry">
+        <field name="full_name" modes="view edit add" />
+        <field name="short_name" modes="view edit add" />
+        <field name="combined_name" modes="listing" />
+        <field name="language" modes="edit add" />
+        <field name="description" modes="view edit add" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+    </descriptor>
+
+    <descriptor name="Motion">
+        <field name="parliament_id" modes="view edit" localizable="view">
+            <hide modes="view" />
+        </field>
+        <field name="short_name" modes="view edit add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="full_name" modes="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="registry_number" modes="view edit" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="owner_id" modes="view edit add listing" localizable="view listing">
+            <hide modes="view listing" roles="bungeni.Anonymous" />
+        </field>
+        <field name="language" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="body_text" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="submission_date" modes="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status" modes="view edit listing" />
+        <field name="status_date" modes="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="note" modes="edit add" />
+        <field name="receive_notification" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="admissible_date" modes="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="notice_date" modes="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="motion_number" modes="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="MotionVersion">
+        <field name="short_name" modes="view edit add listing" />
+        <field name="full_name" modes="view edit add" />
+        <field name="language" modes="view add listing" />
+        <field name="body_text" modes="view edit add" />
+        <field name="note" modes="edit add" />
+    </descriptor>
+
+    <descriptor name="Mp">
+        <field name="user_id" modes="view edit add listing" />
+        <field name="elected_nominated" modes="view edit add listing" />
+        <field name="election_nomination_date" modes="view edit add" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+        <field name="active_p" modes="edit add" />
+        <field name="language" modes="edit add" />
+        <field name="substitution_type" modes="view edit" />
+        <field name="replaced_id" modes="view edit" />
+        <field name="constituency_id" modes="view edit add listing" />
+        <field name="province_id" modes="view edit add listing" />
+        <field name="region_id" modes="view edit add listing" />
+        <field name="party_id" modes="view edit add listing" />
+        <field name="leave_reason" modes="view edit add" />
+        <field name="notes" modes="view edit add" />
+    </descriptor>
+
+    <descriptor name="Office">
+        <field name="office_role" modes="view edit add" />
+        <field name="full_name" modes="view edit add" />
+        <field name="short_name" modes="view edit add" />
+        <field name="combined_name" modes="listing" />
+        <field name="language" modes="edit add" />
+        <field name="description" modes="view edit add" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+    </descriptor>
+
+    <descriptor name="OfficeMember">
+        <field name="user_id" modes="view edit add listing" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+        <field name="active_p" modes="edit add" />
+        <field name="language" modes="edit add" />
+        <field name="substitution_type" modes="view edit" />
+        <field name="replaced_id" modes="view edit" />
+        <field name="notes" modes="view edit add" />
+    </descriptor>
+
+    <descriptor name="Parliament">
+        <field name="full_name" modes="view edit add listing" />
+        <field name="short_name" modes="view edit add listing" />
+        <field name="language" modes="edit add" />
+        <field name="description" modes="view edit add" />
+        <field name="election_date" modes="view edit add" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+    </descriptor>
+
+    <descriptor name="PartyMember">
+        <field name="user_id" modes="view edit add listing" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+        <field name="active_p" modes="edit add" />
+        <field name="language" modes="edit add" />
+        <field name="substitution_type" modes="view edit" />
+        <field name="replaced_id" modes="view edit" />
+        <field name="notes" modes="view edit add" />
+    </descriptor>
+
+    <descriptor name="PoliticalGroup">
+        <field name="full_name" modes="view edit add" />
+        <field name="short_name" modes="view edit add" />
+        <field name="combined_name" modes="listing" />
+        <field name="language" modes="edit add" />
+        <field name="description" modes="view edit add" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+        <field name="logo_data" modes="view edit add" />
+    </descriptor>
+
+    <descriptor name="Province">
+        <field name="language" modes="edit add" />
+        <field name="province" modes="view edit add listing" />
+    </descriptor>
+
+    <descriptor name="Question">
+        <field name="parliament_id" modes="view edit" localizable="view">
+            <hide modes="view" />
+        </field>
+        <field name="short_name" modes="view edit add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="full_name" modes="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="registry_number" modes="view edit" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="owner_id" modes="view edit add listing" localizable="view listing">
+            <hide modes="view listing" roles="bungeni.Anonymous" />
+        </field>
+        <field name="language" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="body_text" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="submission_date" modes="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status" modes="view edit listing" />
+        <field name="status_date" modes="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="note" modes="edit add" />
+        <field name="receive_notification" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="question_number" modes="view listing" />
+        <field name="ministry_id" modes="view edit add listing" />
+        <field name="admissible_date" modes="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="ministry_submit_date" modes="view edit" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="question_type" modes="view edit add" />
+        <field name="response_type" modes="view edit add" />
+        <field name="response_text" modes="edit" />
+    </descriptor>
+
+    <descriptor name="QuestionVersion">
+        <field name="short_name" modes="view edit add listing" />
+        <field name="full_name" modes="view edit add" />
+        <field name="language" modes="view add listing" />
+        <field name="body_text" modes="view edit add" />
+        <field name="note" modes="edit add" />
+    </descriptor>
+
+    <descriptor name="Region">
+        <field name="language" modes="edit add" />
+        <field name="region" modes="view edit add listing" />
+    </descriptor>
+
+    <descriptor name="Report4Sitting">
+        <field name="language" modes="edit add" />
+        <field name="short_name" modes="edit add listing" />
+        <field name="start_date" modes="edit add listing" />
+        <field name="status_date" modes="edit add listing" />
+        <field name="note" modes="edit add listing" />
+        <field name="body_text" modes="view edit add" />
+    </descriptor>
+
+    <descriptor name="Report">
+        <field name="language" modes="edit add" />
+        <field name="short_name" modes="edit add listing" />
+        <field name="start_date" modes="edit add listing" />
+        <field name="status_date" modes="edit add listing" />
+        <field name="note" modes="edit add listing" />
+        <field name="body_text" modes="view edit add" />
+    </descriptor>
+
+    <descriptor name="Session">
+        <field name="short_name" modes="view edit add listing" />
+        <field name="full_name" modes="view edit add" />
+        <field name="start_date" modes="view edit add listing" />
+        <field name="end_date" modes="view edit add listing" />
+        <field name="language" modes="edit add" />
+        <field name="notes" modes="view edit add" />
+    </descriptor>
+
+    <descriptor name="Sitting">
+        <field name="language" modes="edit add" />
+        <field name="start_date" modes="view add listing" />
+        <field name="end_date" modes="view add listing" />
+        <field name="venue_id" modes="view edit add" />
+    </descriptor>
+
+    <descriptor name="TabledDocument">
+        <field name="parliament_id" modes="view edit" localizable="view">
+            <hide modes="view" />
+        </field>
+        <field name="short_name" modes="view edit add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="full_name" modes="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="registry_number" modes="view edit" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="owner_id" modes="view edit add listing" localizable="view listing">
+            <hide modes="view listing" roles="bungeni.Anonymous" />
+        </field>
+        <field name="language" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="body_text" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="submission_date" modes="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status" modes="view edit listing" />
+        <field name="status_date" modes="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="note" modes="edit add" />
+        <field name="receive_notification" modes="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="tabled_document_number" modes="view listing" />
+        <field name="admissible_date" modes="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="TabledDocumentVersion">
+        <field name="short_name" modes="view edit add listing" />
+        <field name="full_name" modes="view edit add" />
+        <field name="language" modes="view add listing" />
+        <field name="body_text" modes="view edit add" />
+        <field name="note" modes="edit add" />
+    </descriptor>
+
+    <descriptor name="UserAddress">
+        <field name="address_type_id" modes="view edit add listing" />
+        <field name="postal_type" modes="view edit add" />
+        <field name="street" modes="view edit add" />
+        <field name="city" modes="view edit add listing" />
+        <field name="zipcode" modes="view edit add" />
+        <field name="country" modes="view edit add" />
+        <field name="phone" modes="view edit add" />
+        <field name="fax" modes="view edit add" />
+        <field name="email" modes="view edit add listing" />
+    </descriptor>
+
+    <descriptor name="UserDelegation">
+        <field name="delegation_id" modes="view edit add listing" />
+    </descriptor>
+
+    <descriptor name="User">
+        <field name="user_id" modes="listing" />
+        <field name="titles" modes="view edit add" />
+        <field name="first_name" modes="view edit add" />
+        <field name="middle_name" modes="view edit add" />
+        <field name="last_name" modes="view edit add" />
+        <field name="email" modes="view edit add" />
+        <field name="login" modes="view add" />
+        <field name="_password" modes="add" />
+        <field name="national_id" modes="view edit add" />
+        <field name="gender" modes="view edit add" />
+        <field name="date_of_birth" modes="view edit add" />
+        <field name="birth_country" modes="view edit add" />
+        <field name="birth_nationality" modes="view edit add" />
+        <field name="current_nationality" modes="view edit add" />
+        <field name="date_of_death" modes="view edit add" />
+        <field name="language" modes="edit add" />
+        <field name="description" modes="view edit add" />
+        <field name="image" modes="view edit add" />
+    </descriptor>
+
+</ui>
