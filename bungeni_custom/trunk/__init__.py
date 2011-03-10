@@ -24,4 +24,4 @@ $Id$
 
 zope_i18n_allowed_languages = "en fr pt sw en-ke it"
 zope_i18n_compile_mo_files = "1" # True
-
+default_language = "en"
