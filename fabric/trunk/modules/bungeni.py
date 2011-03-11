@@ -696,27 +696,36 @@ class Services:
     def start_service(self, service):
         service_map = self.service_map.copy()
         service_map["service"] = service
-        run("%(supervisorctl)s -c %(supervisorconf)s start %(service)s"
+        output = run("%(supervisorctl)s -c %(supervisorconf)s start %(service)s"
             % service_map)
+        if "ERROR" in output:
+            abort("Unable to start service " + service)
+
 
     def stop_service(self, service):
         service_map = self.service_map.copy()
         service_map["service"] = service
-        run("%(supervisorctl)s -c %(supervisorconf)s stop %(service)s"
+        output = run("%(supervisorctl)s -c %(supervisorconf)s stop %(service)s"
             % service_map)
+        if "ERROR" in output:
+            abort("Unable to stop service: " + service ) 
+
 
     def start_monitor(self):
         service_map = self.service_map.copy()
         service_map.pop("supervisorctl")
         service_map["supervisord"] = self.supervisord
-        run("%(supervisord)s -c %(supervisorconf)s" % service_map)
+        output = run("%(supervisord)s -c %(supervisorconf)s" % service_map)
+        if "ERROR" in output:
+            abort("Unable to start monitor")
+            
 
     def stop_monitor(self):
-        run("%(supervisorctl)s -c %(supervisorconf)s shutdown"
+        output = run("%(supervisorctl)s -c %(supervisorconf)s shutdown"
             % self.service_map)
+        if "ERROR" in output:
+            print("Unable to stop monitor")
 
-
-                    
 
 
 
