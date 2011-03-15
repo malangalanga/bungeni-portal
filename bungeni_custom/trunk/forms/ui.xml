@@ -76,7 +76,7 @@
 
     <descriptor name="Attendance">
         <field name="member_id" modes="view edit add listing" />
-        <field name="attendance_id" modes="view edit add listing" />
+        <field name="attendance_type_id" modes="view edit add listing" />
     </descriptor>
 
     <descriptor name="AttendanceType">
@@ -616,6 +616,4 @@
         <field name="description" modes="view edit add" />
         <field name="image" modes="view edit add" />
     </descriptor>
-
 </ui>
-
