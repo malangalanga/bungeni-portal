@@ -1068,8 +1068,12 @@ class BungeniTasks:
         if not self.tasks.build_exists(self.exists_check):
             abort("Bungeni build requires a working python " + self.pycfg.python_ver )
 
-    def setup(self):
+    def setup(self, version = "default"):
         self.tasks.src_checkout()
+        if version == "HEAD":
+            with cd(self.cfg.user_bungeni):
+                with cd("src"):
+                    run("svn up -rHEAD ./bungeni.main ./bungeni_custom")
         self.tasks.bootstrap(self.pycfg.python)
         self.install_bungeni_custom()
         self.deploy_ini()
@@ -1079,15 +1083,16 @@ class BungeniTasks:
             : self.cfg.user_bungeni, "deploy_ini"
             : self.cfg.bungeni_deploy_ini})
 
-    def update(self):
+    def update(self, version = "default"):
        """
        Update the bungeni source folder
        """
 
        self.tasks.src_update()
-       with cd(self.cfg.user_bungeni):
-           with cd("src"):
-               run("svn up")
+       if version == "HEAD":
+           with cd(self.cfg.user_bungeni):
+               with cd("src"):
+                   run("svn up -rHEAD ./bungeni.main ./bungeni_custom")
 
     def build(self):
        """

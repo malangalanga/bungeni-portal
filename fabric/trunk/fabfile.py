@@ -100,14 +100,17 @@ def bungeni_setup():
     tasks.setup()
 
 
-def bungeni_install():
+def bungeni_install(version = "default"):
     """
     Checkout,bootstrap and build bungeni
+    version can be 'default' to use the pinned version
+    or can be 'HEAD' which updates the bungeni.main and bungeni_custom packages
+    to HEAD
     """
 
     tasks = bungeni.BungeniTasks()
     # bootstrap
-    tasks.setup()
+    tasks.setup(version)
     # do any local configuations
     tasks.local_config()
     # buildout 
@@ -146,13 +149,13 @@ def bungeni_setupdb():
     tasks.setupdb()
 
 
-def bungeni_update():
+def bungeni_update(version = "default"):
     """
         Update the bungeni source
      """
 
     tasks = bungeni.BungeniTasks()
-    tasks.update()
+    tasks.update(version)
 
 
 def bungeni_build_opt():
