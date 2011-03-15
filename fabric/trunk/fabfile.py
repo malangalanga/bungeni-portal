@@ -507,7 +507,7 @@ def db_load_demodata():
 
     __db_load_services_stop()
     tasks = bungeni.BungeniTasks()
-    tasks.reset_db()
+    tasks.reset_schema()
     tasks.load_demo_data()
     tasks.restore_attachments()
     __db_load_services_start()

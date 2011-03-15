@@ -1059,7 +1059,7 @@ class BungeniTasks:
         self.data_dump_file = self.data_dump_folder + "/" \
             + self.cfg.bungeni_dump_file
         self.min_dump_file = self.data_dump_folder \
-            + "/dumpmin-undesa.txt"
+            + "/min-dump.txt"
         self.large_dump_file = self.data_dump_folder \
             + "/dmp_undesa_large.txt"
         self.tasks = Tasks(self.cfg, self.cfg.bungeni_repo,
