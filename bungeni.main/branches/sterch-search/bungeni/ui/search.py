@@ -43,7 +43,7 @@ from bungeni.ui import forms
 from ore.xapian import interfaces
 
 from zope import interface, schema, component
-from zope.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView, BrowserPage
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.security.proxy import removeSecurityProxy
 from zope.formlib import form
@@ -54,6 +54,26 @@ from bungeni.core.i18n import _
 class ISearch(interface.Interface):
 
     full_text = schema.TextLine(title=_("Query"), required=False)
+
+
+class ISearchResult(interface.Interface):
+
+    title = schema.TextLine(title=_("Title"), required=False)
+    annotation = schema.Text(title=_("Annotation"), required=False)
+
+class UserToSearchResult(object):
+
+    def __init__(self, context):
+        self.context = context
+
+    @property
+    def title(self):
+        return "%s - %s" % (self.context.language,
+            self.context.fullname.strip())
+
+    @property
+    def annotation(self):
+        return self.context.description
 
 
 class ResultListing(object):
@@ -291,5 +311,12 @@ class Similar(BrowserView, ResultListing):
 
 class SearchResultItem(object):
 
+    template = ViewPageTemplateFile('templates/searchresult.pt')
+
+    @property
+    def item(self):
+       return ISearchResult(self.context)
+
     def __call__(self):
-        return u"item"
+        return self.template()
+
