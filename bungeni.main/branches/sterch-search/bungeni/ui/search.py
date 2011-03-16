@@ -289,3 +289,7 @@ class Similar(BrowserView, ResultListing):
         self.update()
         return self.render()
 
+class SearchResultItem(object):
+
+    def __call__(self):
+        return u"item"

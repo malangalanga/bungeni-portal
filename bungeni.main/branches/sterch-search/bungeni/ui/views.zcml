@@ -151,6 +151,13 @@
         class=".search.PagedSearch"
     />
 
+    <!-- View for item in search results -->
+    <browser:page name="searchresult"
+        for="ore.xapian.interfaces.IIndexable"
+        permission="zope.View"
+        class=".search.SearchResultItem"
+    />
+
   <!-- Reporting -->
 
   <browser:page
