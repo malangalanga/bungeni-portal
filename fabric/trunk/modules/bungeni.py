@@ -693,22 +693,28 @@ class Services:
                                                 + "/bin/supervisorctl",
                             "supervisorconf": self.cfg.supervisorconf}
 
-    def start_service(self, service):
+    def start_service(self, service, mode = "ABORT_ON_ERROR"):
         service_map = self.service_map.copy()
         service_map["service"] = service
         output = run("%(supervisorctl)s -c %(supervisorconf)s start %(service)s"
             % service_map)
         if "ERROR" in output:
-            abort("Unable to start service " + service)
+            if mode == "ABORT_ON_ERROR":
+                abort("Unable to start service " + service)
+            else:
+                print("Unable to start service " + service)
 
 
-    def stop_service(self, service):
+    def stop_service(self, service, mode = "ABORT_ON_ERROR"):
         service_map = self.service_map.copy()
         service_map["service"] = service
         output = run("%(supervisorctl)s -c %(supervisorconf)s stop %(service)s"
             % service_map)
         if "ERROR" in output:
-            abort("Unable to stop service: " + service ) 
+            if mode == "ABORT_ON_ERROR":
+                abort("Unable to stop service: " + service ) 
+            else:
+                print("Unable to stop service: " + service )
 
 
     def start_monitor(self):

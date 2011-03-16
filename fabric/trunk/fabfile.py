@@ -401,58 +401,58 @@ def stop_service(service_name):
     service.stop_service(service_name)
 
 
-def start_bungeni():
+def start_bungeni(mode = "ABORT_ON_ERROR"):
     """
     Start bungeni
     """
 
     service = bungeni.Services()
-    service.start_service("bungeni")
+    service.start_service("bungeni", mode)
 
 
-def stop_bungeni():
+def stop_bungeni(mode = "ABORT_ON_ERROR"):
     """
     Stop bungeni
     """
 
     service = bungeni.Services()
-    service.stop_service("bungeni")
+    service.stop_service("bungeni", mode)
 
 
-def start_portal():
+def start_portal(mode = "ABORT_ON_ERROR"):
     """
     Start the portal
     """
 
     service = bungeni.Services()
-    service.start_service("portal")
+    service.start_service("portal", mode)
 
 
-def stop_portal():
+def stop_portal(mode = "ABORT_ON_ERROR"):
     """
     Stop the portal
     """
 
     service = bungeni.Services()
-    service.stop_service("portal")
+    service.stop_service("portal", mode)
 
 
-def start_plone():
+def start_plone(mode = "ABORT_ON_ERROR"):
     """
     Start the plone service
     """
 
     service = bungeni.Services()
-    service.start_service("plone")
+    service.start_service("plone", mode)
 
 
-def stop_plone():
+def stop_plone(mode = "ABORT_ON_ERROR"):
     """
     Stop the plone service
     """
 
     service = bungeni.Services()
-    service.stop_service("plone")
+    service.stop_service("plone", mode)
 
 
 def start_postgres():
@@ -486,18 +486,18 @@ def __db_load_services_stop():
     """
     Stop services - called before loading/resetting db
     """
-    stop_bungeni()
-    stop_portal()
-    stop_plone()
+    stop_bungeni("IGNORE_ERROR")
+    stop_portal("IGNORE_ERROR")
+    stop_plone("IGNORE_ERROR")
 
 
 def __db_load_services_start():
     """
     Start services - called after loading/resetting db
     """
-    start_bungeni()
-    start_portal()
-    start_plone()
+    start_bungeni("IGNORE_ERROR")
+    start_portal("IGNORE_ERROR")
+    start_plone("IGNORE_ERROR")
 
 
 def db_load_demodata():
