@@ -1128,9 +1128,7 @@ div#portal-globalnav ul.level0 li a:hover,
  *   <ul class="level0">...</ul>
  *   <ul class="level1">...</ul>
  */
-/*div#portal-globalnav ul.level0 ul.level1*/
-div#portal-globalnav ul.level0 #secondary {
-    /*
+div#portal-globalnav ul.level0 ul.level1 {
     position: absolute;
     top: 1.95em;
     left: 0;
@@ -1140,9 +1138,11 @@ div#portal-globalnav ul.level0 #secondary {
     border-top: 0 none;
     width: 99.9%;
     background: #f9ac32 url(/static/images/globalnav-level1-bg.png) bottom left repeat-x;
-     new */
+}
+/* new */
+div#portal-globalnav ul.level0 #secondary {
 	position: absolute;
-	top: 25px;
+	top: 22px;
 	z-index: 10;
 	width: 150px;
 	height: auto !important;
@@ -1183,13 +1183,14 @@ div#portal-globalnav ul.level0 li #secondary li a:hover {
     background:#d8d8d9 url(/static/images/w-globalnav-level1-bg.png) bottom left repeat-x !important;
 }
 div#portal-globalnav ul.level0 ul.level1 li {
-	width: 150px;
-	float: none !important;
+	width: auto;
+	float: left !important;
 	margin: 0;
 	padding: 0;
 	height: auto;
 	display: block;
 	background: #F9AC32 url(http://test.bungeni.org/static/images/globalnav-level0-a.png) repeat-x scroll left top;
+	background: transparent;
 }
 div#portal-globalnav ul.level0 ul.level1 a {
     background: transparent;
@@ -1230,6 +1231,11 @@ div#portal-globalnav ul.level0 ul.level1 li.selected a {
  */
 div#portal-globalnav-bottom {
     display: none;
+}
+.section-bungeni-workspace.template-workspace div#portal-globalnav-bottom {
+    display: block;
+    height: 15px;
+    padding: 0;
 }
 
 
