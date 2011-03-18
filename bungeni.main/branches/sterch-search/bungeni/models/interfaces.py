@@ -9,7 +9,7 @@ from i18n import _
 
 
 DEBUG = True
-ENABLE_LOGGING = False
+ENABLE_LOGGING = True
 ENABLE_EVENT_LOGGING = False
 
 if ENABLE_EVENT_LOGGING:

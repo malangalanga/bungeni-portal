@@ -38,7 +38,7 @@ from bungeni.models.schema import metadata
 from bungeni.models import interfaces
 from bungeni.models import domain
 
-log = logging.getLogger('bungeni.index')
+log = logging.getLogger('ore.xapian')
 
 def date_value(s):
     " date encode a value 20071131"
@@ -215,8 +215,10 @@ class ContentIndexer(object):
             doc.id = doc_id
             doc.fields.append(xappy.Field('resolver', resolver.scheme))
             connection.replace(doc)
+
             if count % flush_threshold == 0:
                 log.warning("Flushing %s %s Records"%(flush_threshold, klass))
+
         # flush the remainder
         connection.flush()
 
@@ -275,7 +277,7 @@ class MotionIndexer(ContentIndexer):
     domain_model = domain.Motion
 
 class QuestionIndexer(ContentIndexer):
-    domain_model = domain.Motion
+    domain_model = domain.Question
 
 class GroupIndexer(ContentIndexer):
     domain_model = domain.Group
@@ -386,18 +388,18 @@ if interfaces.DEBUG:
 else:
     searcher.hub.auto_refresh_delta = 10
 
-''' !+WTF(mr, oct-2010) what is this? To start, there is no bungeni.core.util module !
+''' !+WTF(mr, oct-2010) what is this? To start, there is no bungeni.core.util module !'''
 def main():
     import logging
     logging.basicConfig()
 
     # setup database connection
-    from bungeni.core import util
-    util.cli_setup()
-    util.zcml_setup()
+    #from bungeni.core import util
+    #util.cli_setup()
+    #util.zcml_setup()
     
     # field definitions
-    setupFieldDefinitions(indexer)
+    #setupFieldDefinitions(indexer)
 
     # reindex content directly
     for content_indexer in [
@@ -407,7 +409,7 @@ def main():
         QuestionIndexer,
         GroupIndexer,
         CommitteeIndexer,
-        ParliamentMemberIndexer,
+        #ParliamentMemberIndexer,
         ParliamentIndexer,
         #HansardReporterIndexer,
         ]:
@@ -420,5 +422,5 @@ def reset_index():
        import pdb, traceback, sys
        traceback.print_exc()
        pdb.post_mortem(sys.exc_info()[-1]) 
-'''
+''' '''
 
