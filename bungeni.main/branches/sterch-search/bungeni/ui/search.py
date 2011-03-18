@@ -61,6 +61,7 @@ class ISearchResult(interface.Interface):
     title = schema.TextLine(title=_("Title"), required=False)
     annotation = schema.Text(title=_("Annotation"), required=False)
 
+
 class UserToSearchResult(object):
 
     def __init__(self, context):
@@ -75,6 +76,7 @@ class UserToSearchResult(object):
     def annotation(self):
         return self.context.description
 
+
 class QuestionToSearchResult(object):
 
     def __init__(self, context):
@@ -88,6 +90,7 @@ class QuestionToSearchResult(object):
     @property
     def annotation(self):
         return self.context.body_text
+
 
 class ResultListing(object):
 
@@ -198,8 +201,10 @@ class Pager(object):
     return searcher.search(query, self.items_count * (page - 1),
         self.items_count * page)
 
+
 class PagedSearch(Pager, Search):
   template = ViewPageTemplateFile('templates/pagedsearch.pt')
+
 
 class ConstraintQueryJSON(BrowserView):
     """ Full Text Search w/ Constraint """
@@ -321,6 +326,7 @@ class Similar(BrowserView, ResultListing):
     def __call__(self):
         self.update()
         return self.render()
+
 
 class SearchResultItem(object):
 
