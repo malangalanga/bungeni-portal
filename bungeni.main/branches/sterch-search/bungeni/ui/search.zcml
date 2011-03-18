@@ -10,5 +10,11 @@
      permission="zope.Public"
      provides=".search.ISearchResult" />
 
+  <adapter
+     for="bungeni.models.interfaces.IQuestion"
+     factory=".search.QuestionToSearchResult"
+     trusted="True"
+     permission="zope.Public"
+     provides=".search.ISearchResult" />
 
 </configure>

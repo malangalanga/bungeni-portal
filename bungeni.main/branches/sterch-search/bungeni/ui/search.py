@@ -75,6 +75,19 @@ class UserToSearchResult(object):
     def annotation(self):
         return self.context.description
 
+class QuestionToSearchResult(object):
+
+    def __init__(self, context):
+        self.context = context
+
+    @property
+    def title(self):
+        return "%s - %s" % (self.context.language,
+            self.context.short_name)
+
+    @property
+    def annotation(self):
+        return self.context.body_text
 
 class ResultListing(object):
 
