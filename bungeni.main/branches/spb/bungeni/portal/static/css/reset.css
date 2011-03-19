@@ -28,7 +28,7 @@ b, strong {
     background: transparent;
 }
 .template-portal #top-layer div {
-    width: 1034px;
+    width: 1040px;
     height: 20px;
     border-bottom: 1px solid #fb9c14;
 }
@@ -299,8 +299,7 @@ div.main-column h3 {
 .section-bungeni-admin #portal-column-content {
     padding: 0;
     overflow: visible;
-    float:right;
-    width:79%;
+    margin-left: 17em;
 }
 .section-bungeni-archive #portal-column-content {
     float: none;
@@ -317,6 +316,7 @@ div.main-column h3 {
     line-height: 30px;
 	width: 95%;
 	margin: 5px auto;
+	clear: none;
 }
 
 .section-bungeni-\@\@index .newsImage {
@@ -361,9 +361,6 @@ div.main-column h3 {
     margin: 0 auto;
     border-color: #FB9C14;
 }
-.section-bungeni-admin #portal-column-one{
-    width: 19%;
-}
 
 /* footer  */
 #portal-footer {
@@ -404,6 +401,9 @@ div.main-column h3 {
     border-top: 1px solid #ccc;
     background: #fff;
 }
+.template-workspace #portal-footer div {
+    border: 0 none;
+}
 .template-workspace div {
     border: 0 none;
 }
@@ -434,8 +434,8 @@ div.main-column h3 {
 }
 
 .section-bungeni-admin #portal-column-content .documentContent {
-    float: left;
-    width: 98%;
+    float: none;
+    width: 100%;
     padding: 0 !important;
    
 }
@@ -894,7 +894,7 @@ input.inputLabelActive {
 .contentActions a {
     color: #000;
     text-decoration: none;
-    padding: 0;
+    padding: 0 .5em;
 }
 .contentActions li {
     border-left:1px solid #000;
@@ -909,9 +909,12 @@ input.inputLabelActive {
     margin: 0;
     padding: 0;
     border: 0 none;
+    position: relative;
 }
 .contentActions ul li.context_actions {
-    border: 0 none;
+    float:left !important;
+    left: 0;
+    position: absolute;
 }
 
 .actionMenu .actionMenuContent {
@@ -940,6 +943,9 @@ input.inputLabelActive {
     border: 0 none;
     display: block;
     border-bottom: 1px solid #aaf;
+}
+dl#context_actions.actionMenu .actionMenuContent ul li {
+    padding: 0;
 }
 .actionMenu .actionMenuContent ul li a {
     background: none;
@@ -996,7 +1002,7 @@ div#portal-globalnav {
     background: #fff;
     padding:0; 
     /* new */
-	height: 30px;
+	height: 28px;
 }
 .template-workspace div#portal-globalnav {
     background: #4d4d4d;
@@ -1014,14 +1020,19 @@ div#portal-globalnav ul.level0 {
     border-bottom: 1px solid #fb9c14;
     background: #fff;
     /* new */
-	border-bottom: 3px solid #F9AC32;
+	border-bottom: 3px solid #F9AC32 !important;
 	height: 24px;
     line-height: 24px;
 }
+.template-workspace div#portal-globalnav ul.level0 {
+	border-bottom: 3px solid #d8d8d9 !important;
+}
 
+/*
 .section-bungeni-\@\@index div#portal-globalnav ul.level0 {
     height: 1.85em;  
 }
+*/
 
 #portal-languageselector li {
     display: inline;
@@ -1056,6 +1067,12 @@ div#portal-globalnav ul.level0 li a {
     font-size: 12px;
     height: 22px;
 }
+div#portal-globalnav ul.level0 #secondary li a {
+    -webkit-border-top-left-radius: 0;
+    -webkit-border-top-right-radius: 0;
+    -moz-border-radius-topleft: 0;
+    -moz-border-radius-topright: 0;
+}
 
 .template-portal div#portal-globalnav ul.level0 li#portaltab-business-whats-on a  {
     -moz-border-radius-topleft:5px;
@@ -1067,7 +1084,7 @@ div#portal-globalnav ul.level0 li a {
     color:#222222;
     font-family:tahoma,verdana,sans-serif;
     font-size:12px;
-    margin:0 0.25em 0 0;
+    margin:0 .25em 0 0;
     padding:0 1.25em;
     text-shadow:0 1px 1px #FFFFFF;
 }
@@ -1094,6 +1111,7 @@ div#portal-globalnav ul.level0 li.selected a {
 }
 .template-workspace div#portal-globalnav ul.level0 li.selected a {
     border-bottom-color: #d8d8d9;
+    border-bottom-color: #222;
     background:#d8d8d9  url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
 }
 div#portal-globalnav ul.level0 li.selected a,
@@ -1138,6 +1156,16 @@ div#portal-globalnav ul.level0 ul.level1 {
     border-top: 0 none;
     width: 99.9%;
     background: #f9ac32 url(/static/images/globalnav-level1-bg.png) bottom left repeat-x;
+    display: none;
+}
+.section-bungeni-workspace.template-workspace div#portal-globalnav ul.level0 ul.level1 {
+    width: 100%;
+    border: 1px solid #aaf;
+    border-right: 0 none;
+    border-top: 0 none !important;
+    border-bottom:1px solid #d8d8d9;
+    background:#d8d8d9 url(/static/images/w-globalnav-level1-bg.png) bottom left repeat-x !important;
+    display: block;
 }
 /* new */
 div#portal-globalnav ul.level0 #secondary {
@@ -1173,14 +1201,6 @@ div#portal-globalnav ul.level0 li #secondary li a {
 }
 div#portal-globalnav ul.level0 li #secondary li a:hover {
     text-decoration: underline;
-}
-.template-workspace div#portal-globalnav ul.level0 ul.level1 {
-    width: 100%;
-    border: 1px solid #aaf;
-    border-right: 0 none;
-    border-top: 0 none !important;
-    border-bottom:1px solid #d8d8d9;
-    background:#d8d8d9 url(/static/images/w-globalnav-level1-bg.png) bottom left repeat-x !important;
 }
 div#portal-globalnav ul.level0 ul.level1 li {
 	width: auto;
@@ -1630,7 +1650,8 @@ dd#items-to-be-scheduled-dl .formPanel {
     margin: 0;
     top: -1px;
     text-align: center;
-    border: 1px solid transparent;
+    border: 1px solid #aaa;
+    border: 0 none;
 }
 .template-workspace.section-bungeni-workspace .formPanel {
     margin-left: 0;
@@ -1656,11 +1677,14 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
 .formPanel form { 
     margin: 0 auto;
     padding: 0 !important;
-    border: 0 none;
     text-align: center;
     clear: none;
     float: left;
     width: 100%;
+}
+.section-bungeni-admin .formPanel form {
+    float: none;
+    position: relative;
 }
 .formPanel .field,
 #version-history .diff {
