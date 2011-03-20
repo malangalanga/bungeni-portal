@@ -77,7 +77,7 @@ class UserToSearchResult(object):
         return self.context.description
 
 
-class QuestionToSearchResult(object):
+class ParliamentaryItemToSearchResult(object):
 
     def __init__(self, context):
         self.context = context

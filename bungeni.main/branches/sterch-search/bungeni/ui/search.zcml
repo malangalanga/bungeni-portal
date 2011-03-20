@@ -14,7 +14,15 @@
 
   <adapter
       for="bungeni.models.interfaces.IQuestion"
-      factory=".search.QuestionToSearchResult"
+      factory=".search.ParliamentaryItemToSearchResult"
+      trusted="True"
+      permission="zope.Public"
+      provides=".search.ISearchResult"
+  />
+
+  <adapter
+      for="bungeni.models.interfaces.IMotion"
+      factory=".search.ParliamentaryItemToSearchResult"
       trusted="True"
       permission="zope.Public"
       provides=".search.ISearchResult"
