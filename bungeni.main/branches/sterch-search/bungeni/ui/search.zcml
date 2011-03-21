@@ -28,4 +28,12 @@
       provides=".search.ISearchResult"
   />
 
+  <adapter
+      for="bungeni.models.interfaces.IBill"
+      factory=".search.ParliamentaryItemToSearchResult"
+      trusted="True"
+      permission="zope.Public"
+      provides=".search.ISearchResult"
+  />
+
 </configure>
