@@ -92,6 +92,21 @@ class ParliamentaryItemToSearchResult(object):
         return self.context.body_text
 
 
+class AttachedFileToSearchResult(object):
+
+    def __init__(self, context):
+        self.context = context
+
+    @property
+    def title(self):
+        return "%s - %s" % (self.context.language,
+            self.context.file_title)
+
+    @property
+    def annotation(self):
+        return self.context.file_description
+
+
 class ResultListing(object):
 
     formatter_factory = table.StandaloneFullFormatter

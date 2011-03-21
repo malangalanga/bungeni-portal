@@ -36,4 +36,28 @@
       provides=".search.ISearchResult"
   />
 
+  <adapter
+      for="bungeni.models.interfaces.IAgendaItem"
+      factory=".search.ParliamentaryItemToSearchResult"
+      trusted="True"
+      permission="zope.Public"
+      provides=".search.ISearchResult"
+  />
+
+  <adapter
+      for="bungeni.models.interfaces.ITabledDocument"
+      factory=".search.ParliamentaryItemToSearchResult"
+      trusted="True"
+      permission="zope.Public"
+      provides=".search.ISearchResult"
+  />
+
+  <adapter
+      for="bungeni.models.interfaces.IAttachedFile"
+      factory=".search.AttachedFileToSearchResult"
+      trusted="True"
+      permission="zope.Public"
+      provides=".search.ISearchResult"
+  />
+
 </configure>
