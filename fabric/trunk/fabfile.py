@@ -500,6 +500,15 @@ def __db_load_services_start():
     start_plone("IGNORE_ERROR")
 
 
+def db_dump_data(to_path):
+    """
+    Dumps the bungeni db data
+    """
+
+    tasks = bungeni.BungeniTasks()
+    tasks.dump_data(to_path)
+
+
 def db_load_demodata():
     """
     Load demo data from the testdatadmp folder

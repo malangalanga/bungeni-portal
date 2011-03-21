@@ -1143,6 +1143,15 @@ class BungeniTasks:
            run("./bin/psql bungeni < %s"
                 % demo_dmp)
 
+    def dump_data(self, output_path):
+        """
+        Dumps the bungeni database data into a text file 
+        """
+
+        with cd(self.cfg.user_bungeni):
+            run("./parts/postgresql/bin/pg_dump -a -O --disable-triggers > " + output_path)
+
+
     def restore_attachments(self):
         """
         Restores the attachments into the "fs" folder for the small data set
