@@ -1149,7 +1149,7 @@ class BungeniTasks:
         """
 
         with cd(self.cfg.user_bungeni):
-            run("./parts/postgresql/bin/pg_dump -a -O --disable-triggers > " + output_path)
+            run("./parts/postgresql/bin/pg_dump bungeni -a -O --disable-triggers > " + output_path)
 
 
     def restore_attachments(self):
