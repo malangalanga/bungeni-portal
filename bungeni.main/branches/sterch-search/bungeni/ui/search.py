@@ -47,6 +47,7 @@ from zope.publisher.browser import BrowserView, BrowserPage
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.security.proxy import removeSecurityProxy
 from zope.formlib import form
+from zope.cachedescriptors.property import CachedProperty
 from zc.table import table, column
 from bungeni.core.i18n import _
 
@@ -162,13 +163,26 @@ class Search(forms.common.BaseForm, ResultListing):
         self.widgets = form.setUpDataWidgets(self.form_fields, self.prefix,
              self.context, self.request, ignore_request=ignore_request)
 
+    @property
+    def doc_count(self):
+        return len(self._results)
 
-    def do_search(self, searcher, query):
-      return searcher.search(query, 0, self.doc_count)
+    @CachedProperty
+    def _results(self):
+        try:
+            results = self.searcher.search(self.query, 0,
+                self.searcher.get_doccount())
+        except:
+            results = []
+        return list(results)
+
+    @property
+    def results(self):
+        return self._results
 
     @form.action(label=_(u"Search"))
     def handle_search(self, action, data):
-        searcher = component.getUtility(interfaces.IIndexSearch)()
+        self.searcher = component.getUtility(interfaces.IIndexSearch)()
         search_term = data[ 'full_text' ]
 
         if not search_term:
@@ -177,13 +191,11 @@ class Search(forms.common.BaseForm, ResultListing):
 
         # compose query
         t = time.time()
-        query = searcher.query_parse(search_term)
-        self.doc_count = searcher.get_doccount()
-        self.results = self.do_search(searcher, query)
+        self.query = self.searcher.query_parse(search_term)
         self.search_time = time.time() - t
 
         # spelling suggestions
-        suggestion = searcher.spell_correct(search_term)
+        suggestion = self.searcher.spell_correct(search_term)
         self.spelling_suggestion = (
             search_term != suggestion and suggestion or None)
 
@@ -191,30 +203,33 @@ class Search(forms.common.BaseForm, ResultListing):
 class Pager(object):
   '''pager for search result page'''
   action_method = 'get'
-  items_count = 1
+  items_count = 5
 
-  def do_search(self, searcher, query):
-    try:
-        page = int(self.request.form.get('page', 1))
-    except ValueError:
-        page = 1
+  @property
+  def results(self):
+      try:
+          page = int(self.request.form.get('page', 1))
+      except ValueError:
+          page = 1
+      return self._results[self.items_count * (page - 1):self.items_count * page]
 
-    if self.doc_count > self.items_count:
-        page_count = self.doc_count / self.items_count + \
-          int(bool(self.doc_count % self.items_count))
 
-        def generate_url(x):
-            args = dict(self.request.form)
-            args.pop('page', None)
+  @property
+  def pages(self):
+      if self.doc_count > self.items_count:
+          page_count = self.doc_count / self.items_count + \
+              int(bool(self.doc_count % self.items_count))
 
-            return str(self.request.URL) + '?' + \
-                urllib.urlencode(args) + '&page=%d' % x
+          def generate_url(x):
+              args = dict(self.request.form)
+              args.pop('page', None)
 
-        self.pages = map(lambda x: {'number':x,
-            'url': generate_url(x)}, range(1, page_count + 1))
+              return str(self.request.URL) + '?' + \
+                  urllib.urlencode(args) + '&page=%d' % x
 
-    return searcher.search(query, self.items_count * (page - 1),
-        self.items_count * page)
+          return map(lambda x: {'number':x,
+              'url': generate_url(x)}, range(1, page_count + 1))
+
 
 
 class PagedSearch(Pager, Search):
