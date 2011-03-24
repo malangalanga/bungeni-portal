@@ -57,7 +57,13 @@ def setup_pylibs():
     bungenipre = bungeni.Presetup()
     bungenipre.required_pylibs()
 
-
+def install_appy():
+    """
+    Install appy to bungeni python site-packages
+    """
+    bungenipre = bungeni.Presetup()
+    bungenipre.install_appy()
+    
 def build_python():
     """
     Builds required pythons
@@ -89,7 +95,7 @@ def presetup():
     essentials()
     build_python()
     setup_pylibs() 
-    
+    install_appy()
 
 def bungeni_setup():
     """

@@ -279,6 +279,12 @@ class BungeniConfigs:
             self.utils.get_basename(self.python_imaging_download_url)
         self.python_imaging_src_dir = \
             self.utils.get_basename_prefix(self.python_imaging_download_file)
+        self.python_appy_download_url = self.cfg.get_config("appy",
+            "download_url")
+        self.python_appy_download_command = \
+            self.get_download_command(self.python_appy_download_url)
+        self.python_appy_download_file = \
+            self.utils.get_basename(self.python_appy_download_url)
         # bungeni configuration parameters
         self.bungeni_repo = self.cfg.get_config("bungeni", "repo")
         self.bungeni_local_index = self.cfg.get_config("bungeni",
@@ -527,7 +533,17 @@ class Presetup:
         sup_pycfg = PythonConfigs(self.cfg,"supervisor")
         run(sup_pycfg.python_home + "/bin/easy_install supervisor"
             )
-
+            
+    def install_appy(self):
+        """
+        Install appy
+        """
+        bungeni_pycfg = PythonConfigs(self.cfg,"bungeni")
+        with cd(bungeni_pycfg.python_packages):
+            run(self.cfg.python_appy_download_command)
+            run("unzip -o " + self.cfg.python_appy_download_file)
+            run("rm -rf " + self.cfg.python_appy_download_file)
+            
     def supervisord_config(self):
         """
         Generate a supervisord config file  using the installation template
@@ -561,7 +577,6 @@ class Presetup:
 
         self.setuptools()
         self.supervisor()
-
 
 class SCM:
 
