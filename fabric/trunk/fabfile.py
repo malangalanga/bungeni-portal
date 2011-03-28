@@ -51,11 +51,13 @@ def build_imaging():
 
 def setup_pylibs():
     """
-    Install setuptools & supervisor  Pythons(2.5,2.4)
+    Install setuptools, supervisor and appy  Pythons(2.5,2.4)
     """
 
     bungenipre = bungeni.Presetup()
     bungenipre.required_pylibs()
+    bungenipre.install_appy()
+
 
 def install_appy():
     """
@@ -95,7 +97,7 @@ def presetup():
     essentials()
     build_python()
     setup_pylibs() 
-    install_appy()
+
 
 def bungeni_setup():
     """
