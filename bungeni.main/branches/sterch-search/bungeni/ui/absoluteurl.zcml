@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="bungeni.ui">
+    
+    <!-- Business section -->
+    
+    <browser:view
+        for="bungeni.models.interfaces.ICommittee"
+        name="get_url"
+        class=".absoluteurl.CommitteeBusinessAbsoluteURLView"
+        layer="bungeni.ui.interfaces.IBusinessSectionLayer"
+        permission="zope.Public"
+        allowed_interface="zope.traversing.browser.interfaces.IAbsoluteURL"
+        />
+
+    <browser:view
+        for="bungeni.models.interfaces.IBill"
+        name="get_url"
+        class=".absoluteurl.BillBusinessAbsoluteURLView"
+        layer="bungeni.ui.interfaces.IBusinessSectionLayer"
+        permission="zope.Public"
+        allowed_interface="zope.traversing.browser.interfaces.IAbsoluteURL"
+        />
+    
+    <browser:view
+        for="bungeni.models.interfaces.IQuestion"
+        name="get_url"
+        class=".absoluteurl.QuestionBusinessAbsoluteURLView"
+        layer=".interfaces.IBusinessSectionLayer"
+        permission="zope.Public"
+        allowed_interface="zope.traversing.browser.interfaces.IAbsoluteURL"
+        />
+    
+    <browser:view
+        for="bungeni.models.interfaces.IMotion"
+        name="get_url"
+        class=".absoluteurl.MotionBusinessAbsoluteURLView"
+        layer="bungeni.ui.interfaces.IBusinessSectionLayer"
+        permission="zope.Public"
+        allowed_interface="zope.traversing.browser.interfaces.IAbsoluteURL"
+        />
+    
+    <browser:view
+        for="bungeni.models.interfaces.ITabledDocument"
+        name="get_url"
+        class=".absoluteurl.TabledDocumentBusinessAbsoluteURLView"
+        layer="bungeni.ui.interfaces.IBusinessSectionLayer"
+        permission="zope.Public"
+        allowed_interface="zope.traversing.browser.interfaces.IAbsoluteURL"
+        />
+        
+    <browser:view
+        for="bungeni.models.interfaces.IAgendaItem"
+        name="get_url"
+        class=".absoluteurl.AgendaItemBusinessAbsoluteURLView"
+        layer="bungeni.ui.interfaces.IBusinessSectionLayer"
+        permission="zope.Public"
+        allowed_interface="zope.traversing.browser.interfaces.IAbsoluteURL"
+        />
+
+
+    <!-- Members section -->
+    
+    <browser:view
+        for="bungeni.models.interfaces.IMemberOfParliament"
+        name="get_url"
+        class=".absoluteurl.MembersAbsoluteURLView"
+        layer=".interfaces.IMembersSectionLayer"
+        permission="zope.Public"
+        />
+ 
+ 
+     <!-- Archive section -->
+    
+    <browser:view
+        for="bungeni.models.interfaces.IParliament"
+        name="get_url"
+        class=".absoluteurl.ParliamentsArchiveAbsoluteURLView"
+        layer=".interfaces.IArchiveSectionLayer"
+        permission="zope.Public"
+        />
+
+    <browser:view
+        for="bungeni.models.interfaces.IPoliticalGroup"
+        name="get_url"
+        class=".absoluteurl.PoliticalGroupsArchiveAbsoluteURLView"
+        layer=".interfaces.IArchiveSectionLayer"
+        permission="zope.Public"
+        />
+
+    <browser:view
+        for="bungeni.models.interfaces.IConstituency"
+        name="get_url"
+        class=".absoluteurl.ConstituenciesArchiveAbsoluteURLView"
+        layer=".interfaces.IArchiveSectionLayer"
+        permission="zope.Public"
+        />
+
+    <browser:view
+        for="bungeni.models.interfaces.ICommittee"
+        name="get_url"
+        class=".absoluteurl.CommitteesArchiveAbsoluteURLView"
+        layer=".interfaces.IArchiveSectionLayer"
+        permission="zope.Public"
+        />
+        
+</configure>
+

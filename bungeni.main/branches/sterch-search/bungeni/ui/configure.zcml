@@ -59,6 +59,9 @@
 
   <!-- Admin UI -->
   <include file="admin.zcml"/>
+  
+  <!-- Custom absolute_url -->
+  <include file="absoluteurl.zcml" />
 
   <!-- Custom forms -->
   <include package=".forms"/>
