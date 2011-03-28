@@ -1,0 +1,344 @@
+<?xml version="1.0"?>
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   xmlns:zcml="http://namespaces.zope.org/zcml"
+   >
+
+  <include package="zc.resourcelibrary" file="meta.zcml"/>
+  <include package="zc.resourcelibrary" />
+  
+  <resourceLibrary name="dhtmlxscheduler">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="codebase/dhtmlxscheduler.js
+                codebase/dhtmlxscheduler.css"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/dhtmlxscheduler_debug.js
+                codebase/dhtmlxscheduler.css"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-ext-css">
+    <directory zcml:condition="not-have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_ext.css"
+       /> 
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="sources/ext.css"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-active-links"
+                   require="dhtmlxscheduler dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_active_links.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_active_links.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-agenda-view"
+                   require="dhtmlxscheduler dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_agenda_view.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_agenda_view.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-collision" require="dhtmlxscheduler">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_collision.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_collision.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-cookie" require="dhtmlxscheduler">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_cookie.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_cookie.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-editors"
+                   require="dhtmlxscheduler dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_editors.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_editors.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-expand"
+                   require="dhtmlxscheduler dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_expand.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_expand.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-html-templates"
+                   require="dhtmlxscheduler">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_html_templates.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_html_templates.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-key-nav"
+                   require="dhtmlxscheduler">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_key_nav.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_key_nav.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-limit"
+                   require="dhtmlxscheduler">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_limit.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_limit.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-map-view"
+                   require="dhtmlxscheduler dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_map_view.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_map_view.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-matrix"
+                   require="dhtmlxscheduler dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_matrix.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_matrix.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-minical"
+                   require="dhtmlxscheduler dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_minical.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_minical.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-monthheight"
+                   require="dhtmlxscheduler dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_monthheight.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_monthheight.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-multiselect"
+                   require="dhtmlxscheduler dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_multiselect.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_multiselect.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-multisource"
+                   require="dhtmlxscheduler dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_multisource.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_multisource.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-outerdrag"
+                   require="dhtmlxscheduler dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_outerdrag.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_outerdrag.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-readonly"
+                   require="dhtmlxscheduler dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_readonly.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_readonly.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-serialize"
+                   require="dhtmlxscheduler dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_serialize.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_serialize.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-tooltip"
+                   require="dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_tooltip.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_tooltip.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-touch"
+                   require="dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_touch.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_touch.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-treetimeline"
+                   require="dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_treetimeline.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_treetimeline.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-url">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_url.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_url.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-wp">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_multisource.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_multisource.js"
+       />       
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-year-view"
+                   require="dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="sources/ext/ext_year_view.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_year_view.js"
+       />       
+  </resourceLibrary>
+</configure>
