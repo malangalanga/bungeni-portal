@@ -22,6 +22,22 @@
                 codebase/dhtmlxscheduler.css"
        />       
   </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-recurring"
+                   require="dhtmlxscheduler dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_recurring.js
+                codebase/ext/dhtmlxscheduler_recurring.css"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="sources/recurring.js
+                sources/locale_recurring.js
+                sources/recurring.css"
+       />       
+  </resourceLibrary>
   <resourceLibrary name="dhtmlxscheduler-ext-css">
     <directory zcml:condition="not-have devmode"
        source="resources"

@@ -1578,8 +1578,11 @@ dataProcessor.wrap("sendData",function(rowId){
         	if (!this.obj._idpull[rowId])
 	    		this._log("&nbsp;Error! item with such ID not exists <b>"+rowId+"</b>");
 		} else {
-			if (!this.obj.rowsAr[rowId])
-	        	this._log("&nbsp;Error! row with such ID not exists <b>"+rowId+"</b>");
+		    if (typeof(this.obj.rowsAr) != "undefined") //added
+		    {
+			    if (!this.obj.rowsAr[rowId])
+	        	    this._log("&nbsp;Error! row with such ID not exists <b>"+rowId+"</b>");
+            }
         }
 	}
 },function(){
@@ -1642,7 +1645,10 @@ dataProcessor.wrap("afterUpdateCallback",function(sid,tid,action){
 	if (this.obj.mytype=="tree"){
 		if (!this.obj._idpull[sid]) this._log("Incorrect SID, item with such ID not exists in grid");
 	} else {
-		if (!this.obj.rowsAr[sid]) this._log("Incorrect SID, row with such ID not exists in grid");
+	    if(typeof(this.obj.rowsAr) != "undefined")
+	    {
+		    if (!this.obj.rowsAr[sid]) this._log("Incorrect SID, row with such ID not exists in grid");
+		}
 	}
 	this._log("&nbsp;Action: "+action+" SID:"+sid+" TID:"+tid);
 },function(){
