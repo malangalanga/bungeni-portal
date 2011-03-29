@@ -147,7 +147,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Owner"
-        event=".interfaces.ITabledDocumentSubmittedEvent"
     />
     
     <transition id="receive"
@@ -157,7 +156,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"
-        event=".interfaces.ITabledDocumentReceivedEvent"
     />
     
     <transition id="require_clarification"
@@ -167,7 +165,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"
-        event=".interfaces.ITabledDocumentClarifyEvent"
         require_confirmation="true"
     />
     
@@ -195,7 +192,6 @@
         destination="schedule_pending"
         trigger="manual"
         roles="bungeni.Clerk"
-        event=".interfaces.ITabledDocumentPendingEvent"
     />
     
     <transition id="disapprove"
@@ -205,7 +201,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Speaker"
-        event=".interfaces.ITabledDocumentRejectedEvent"
         require_confirmation="true"
     />
     
@@ -252,7 +247,6 @@
         condition="is_scheduled"
         trigger="system"
         roles="bungeni.Clerk"
-        event=".interfaces.ITabledDocumentScheduledEvent"
     />
     
     <transition id="reschedule"
@@ -270,7 +264,6 @@
         trigger="manual"
         roles="bungeni.Clerk"
         condition=""
-        event=".interfaces.ITabledDocumentAdjournedEvent"
     />
     
     <transition id="table"
@@ -280,7 +273,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Clerk bungeni.Speaker bungeni.MP bungeni.Minister"
-        event=".interfaces.ITabledDocumentTabledEvent"
     />
     
     <transition id="withdraw"

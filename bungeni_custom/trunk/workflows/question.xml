@@ -186,7 +186,6 @@
         trigger="manual"
         roles="bungeni.Owner"
         order="1"
-        event=".interfaces.IQuestionSubmittedEvent"
     />
     
     <transition id="receive"
@@ -197,7 +196,6 @@
         condition=""
         roles="bungeni.Clerk"
         order="2"
-        event=".interfaces.IQuestionReceivedEvent"
     />
     
     <!--
@@ -214,7 +212,6 @@
         trigger="manual"
         roles="bungeni.Clerk"
         order="3"
-        event=".interfaces.IQuestionClarifyEvent"
         require_confirmation="true"
     />
     <!--
@@ -235,7 +232,6 @@
         trigger="manual"
         roles="bungeni.Clerk"
         order="4"
-        event=".interfaces.IQuestionCompletedEvent"
     />
     <!--
     the Speaker's office may decide that a proposed Question is “admissible”, 
@@ -254,7 +250,6 @@
         trigger="manual"
         roles="bungeni.Speaker"
         order="6"
-        event=""
     />
     
     <transition id="disapprove"
@@ -265,7 +260,6 @@
         trigger="manual"
         roles="bungeni.Speaker"
         order="7"
-        event=".interfaces.IQuestionRejectedEvent"
         require_confirmation="true"
     />
     
@@ -277,7 +271,6 @@
         trigger="manual"
         roles="bungeni.Speaker"
         order="8"
-        event=""
         require_confirmation="true"
     />
     
@@ -293,7 +286,6 @@
         trigger="manual"
         roles="bungeni.Clerk"
         order="9"
-        event=""
     />
     
     <!--
@@ -307,7 +299,6 @@
         trigger="manual"
         roles="bungeni.Owner"
         order="10"
-        event=""
     />
     
     <!--
@@ -328,7 +319,6 @@
         trigger="manual"
         roles="bungeni.Clerk"
         order="11"
-        event=".interfaces.IQuestionSchedulePendingEvent"
     />
     
     <transition id="reschedule"
@@ -347,7 +337,6 @@
         trigger="system"
         roles="bungeni.Clerk"
         order="12"
-        event=".interfaces.IQuestionScheduledEvent"
     />
     
     <!--
@@ -362,7 +351,6 @@
         trigger="manual"
         roles="bungeni.Clerk"
         order="13"
-        event=".interfaces.IQuestionSentToMinistryEvent"
     />
     
     <transition id="submit_response"
@@ -373,7 +361,6 @@
         trigger="manual"
         roles="bungeni.Minister"
         order="15"
-        event=".interfaces.IResponseSubmittedEvent"
     />
     
     <transition id="redraft_response"
@@ -384,7 +371,6 @@
         trigger="manual"
         roles="bungeni.Clerk"
         order="16"
-        event=""
     />
     
     <transition id="complete_response"
@@ -394,7 +380,6 @@
         trigger="manual"
         roles="bungeni.Clerk"
         order="17"
-        event=".interfaces.IResponseCompletedEvent"
     />
     
     <transition id="elapse"
@@ -405,7 +390,6 @@
         trigger="manual"
         roles="bungeni.Clerk"
         order="18"
-        event=""
         require_confirmation="true"
     />
     
@@ -417,10 +401,9 @@
         title="Defer"
         source="admissible schedule_pending adjourned"
         destination="deferred"
-        trigger="manual"
         condition=""
+        trigger="manual"
         roles="bungeni.Clerk"
-        event=".interfaces.IQuestionDeferredEvent"
         order="19"
     />
     
@@ -430,12 +413,11 @@
     <transition id="deferred_allow_response"
         title="Send to Ministry"
         source="deferred"
-        condition="is_ministry_set"
         destination="response_pending"
+        condition="is_ministry_set"
         trigger="manual"
         roles="bungeni.Clerk"
         order="20"
-        event=".interfaces.IQuestionSentToMinistryEvent"
     />
     
     <!--
@@ -450,7 +432,6 @@
         trigger="manual"
         roles="bungeni.Clerk"
         order="22"
-        event=".interfaces.IQuestionDroppedEvent"
     />
     
     <transition id="adjourn"
@@ -461,7 +442,6 @@
         trigger="manual"
         roles="bungeni.Clerk"
         order="23"
-        event=""
     />
     
     <!--
@@ -474,7 +454,6 @@
         trigger="manual"
         roles="bungeni.Clerk"
         order="25"
-        event=".interfaces.IQuestionDebatedEvent"
     />
     
     <!--
@@ -489,7 +468,6 @@
         trigger="manual"
         roles="bungeni.Clerk bungeni.Owner"
         order="26"
-        event=""
         require_confirmation="true"
     />
     
@@ -501,7 +479,6 @@
         condition=""
         roles="bungeni.Clerk bungeni.Owner"
         order="27"
-        event=""
         require_confirmation="true"
     />
 

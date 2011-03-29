@@ -259,7 +259,6 @@
         roles=bungeni.Clerk
         permission=CheckerPublic !+ bungeni.{module}.wf.{transition_id}
         order=0
-        event=None
         require_confirmation=False
     
     -->
@@ -287,7 +286,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Owner"
-        event=".interfaces.IMotionSubmittedEvent"
     />
     
     <transition id="receive" 
@@ -297,7 +295,6 @@
         condition=""
         trigger="manual" 
         roles="bungeni.Clerk"
-        event=".interfaces.IMotionReceivedEvent"
     />
     
     <transition id="require_clarification"
@@ -307,7 +304,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"
-        event=".interfaces.IMotionClarifyEvent" 
         require_confirmation="true"
     />
     
@@ -336,7 +332,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Speaker"
-        event=".interfaces.IMotionRejectedEvent"
         require_confirmation="true"
     />
     
@@ -346,7 +341,6 @@
         destination="schedule_pending"
         trigger="manual"
         roles="bungeni.Clerk"
-        event=".interfaces.IMotionPendingEvent"
     />
     
     <transition id="require_recomplete"
@@ -384,7 +378,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"
-        event=".interfaces.IMotionDeferredEvent"
     />
     
     <transition id="elapse"
@@ -404,7 +397,6 @@
         condition="is_scheduled"
         trigger="system" 
         roles="bungeni.Clerk"
-        event=".interfaces.IMotionScheduledEvent"
     />
     
     <transition id="reschedule" 
@@ -432,7 +424,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"
-        event=".interfaces.IMotionDroppedEvent"
     />
     
     <transition id="adjourn"
@@ -442,7 +433,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"
-        event=""
     />
     
     <transition id="adopt"
@@ -452,7 +442,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"
-        event=".interfaces.IMotionAdoptedEvent"
         require_confirmation="true"
     />
     
@@ -463,7 +452,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"
-        event=".interfaces.IMotionAdoptedEvent"
         require_confirmation="true"
     />
     
@@ -474,7 +462,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Speaker"
-        event=".interfaces.IMotionRejectedEvent"
         require_confirmation="true"
     />
     

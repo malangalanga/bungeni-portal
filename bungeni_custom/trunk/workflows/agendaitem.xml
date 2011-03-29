@@ -152,7 +152,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Owner"
-        event=".interfaces.IAgendaItemSubmittedEvent"
     />
     
     <transition id="receive"
@@ -162,7 +161,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"
-        event=".interfaces.IAgendaItemReceivedEvent"
     />
     
     <transition id="require_clarification"
@@ -172,7 +170,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"
-        event=".interfaces.IAgendaItemClarifyEvent"
         require_confirmation="true"
     />
     
@@ -201,7 +198,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Speaker"
-        event=".interfaces.IAgendaItemRejectedEvent"
         require_confirmation="true"
     />
     
@@ -211,7 +207,6 @@
         destination="schedule_pending"
         trigger="manual"
         roles="bungeni.Clerk"
-        event=".interfaces.IAgendaItemPendingEvent"
     />
     
     <transition id="require_recomplete"
@@ -257,7 +252,6 @@
         condition="is_scheduled"
         trigger="system"
         roles="bungeni.Clerk"
-        event=".interfaces.IAgendaItemScheduledEvent"
     />
     
     <transition id="revert_to_admissible"
@@ -279,7 +273,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"
-        event=".interfaces.IAgendaItemDroppedEvent"
     />
     
     <transition id="debate"
@@ -289,7 +282,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"
-        event=".interfaces.IAgendaItemDebatedEvent"
     />
     
     <transition id="adjourn"
@@ -299,7 +291,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"
-        event=""
     />
     
     <transition id="defer"
@@ -309,7 +300,6 @@
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"
-        event=".interfaces.IAgendaItemDeferredEvent"
     />
     
     <transition id="elapse"
