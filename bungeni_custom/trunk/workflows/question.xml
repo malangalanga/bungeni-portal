@@ -69,6 +69,12 @@
         <!-- fileattachment -->
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <notification condition="clerk_receive_notification"
+            subject="Question submitted: ${item.short_name}"
+            from="${item.owner_email}"
+            to="${site.clerk_email}"
+            body="notification_email_to_clerk_upon_submit_of_question"
+        />
     </state>
     
     <state id="received" title="Received by clerk"
