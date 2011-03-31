@@ -80,6 +80,12 @@
       for="bungeni.models.interfaces.IBungeniGroup"
       factory=".index.ContentIndexer"/>
       
+  <adapter
+     for="bungeni.models.interfaces.IBungeniContent"
+     provides="ore.xapian.interfaces.IOperationFactory"
+     factory=".operation.OperationFactory"
+     />
+      
   <utility factory=".index.ContentResolver" />
 
   <xapian:queue

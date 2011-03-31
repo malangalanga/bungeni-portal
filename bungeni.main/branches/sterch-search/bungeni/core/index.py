@@ -24,6 +24,8 @@ $Id$
 from zope import interface, schema
 from zope.dottedname import resolve
 from zope.security.proxy import removeSecurityProxy
+from zope.component import getUtility
+from zope.app.schema.vocabulary import IVocabularyFactory
 
 import xappy, os, os.path as path
 import logging
@@ -37,8 +39,14 @@ from ore.xapian import search, queue, interfaces as iindex
 from bungeni.models.schema import metadata
 from bungeni.models import interfaces
 from bungeni.models import domain
+from bungeni.models.interfaces import ITranslatable
+from bungeni.core import translation
+
 
 log = logging.getLogger('ore.xapian')
+
+def languages():
+    return getUtility(IVocabularyFactory, "language_vocabulary")(None)
 
 def date_value(s):
     " date encode a value 20071131"
@@ -69,15 +77,17 @@ class ContentResolver(object):
     interface.implements(iindex.IResolver)
     scheme = '' # u'pft'
     
-    def id(self, object): 
+    def id(self, object, language="en"): 
         """ defines the xapian 'primary key' """
         #TODO Add the language to the index!
-        return "%s.%s-%s"%(object.__class__.__module__,
+        return "%s.%s-%s:%s"%(object.__class__.__module__,
                             object.__class__.__name__,
-                            container.stringKey(object))
+                            container.stringKey(object),
+                            language)
 
     def resolve(self, id): 
         class_path, oid = id.split('-', 1)
+        oid, lang = oid.split(":", 1)
         domain_class = resolve.resolve(class_path)
         session = Session()
         value_key = container.valueKey(oid)
@@ -123,6 +133,10 @@ class ContentIndexer(object):
         # object kind
         doc.fields.append(
             xappy.Field("object_kind", domain.object_hierarchy_type(self.context)))
+        
+        # object language
+        doc.fields.append(
+            xappy.Field("language", self.context.language))
         
         try:
             #TODO: loop thru all available languages and index the translations
@@ -207,17 +221,25 @@ class ContentIndexer(object):
         log.warning("Bulk Indexing %r"%klass)
         count = 0
         for i in instances:
-            count += 1
-            doc_id = resolver.id(i)
-            indexer = klass(i)
-            create = False
-            doc = indexer.document(connection)
-            doc.id = doc_id
-            doc.fields.append(xappy.Field('resolver', resolver.scheme))
-            connection.replace(doc)
-
-            if count % flush_threshold == 0:
-                log.warning("Flushing %s %s Records"%(flush_threshold, klass))
+            for lang in languages():
+                count += 1
+                doc_id = resolver.id(i, language=lang.value)
+                translated = translation.translate_obj(i, lang.value)
+                translated.language = lang.value
+                indexer = klass(translated)
+                create = False
+                doc = indexer.document(connection)
+                doc.id = doc_id
+                doc.fields.append(xappy.Field('resolver', resolver.scheme))
+                #print "*****************"
+                #print doc.id
+                #print translated.__class__.__name__
+                #for field in doc.fields:
+                #    print field.name, "=", field.value
+                connection.replace(doc)
+    
+                if count % flush_threshold == 0:
+                    log.warning("Flushing %s %s Records"%(flush_threshold, klass))
 
         # flush the remainder
         connection.flush()
@@ -287,6 +309,31 @@ class CommitteeIndexer(ContentIndexer):
 
 class ParliamentIndexer(ContentIndexer):
     domain_model = domain.Parliament
+    
+class AttachedFileIndexer(ContentIndexer):
+    domain_model = domain.AttachedFile
+    
+    @classmethod
+    def reindexAll(klass, connection, flush_threshold=500):
+        instances = Session().query(klass.domain_model).all()
+        resolver = ContentResolver()
+        log.warning("Bulk Indexing %r"%klass)
+        count = 0
+        for i in instances:
+            count += 1
+            doc_id = resolver.id(i)
+            indexer = klass(i)
+            create = False
+            doc = indexer.document(connection)
+            doc.id = doc_id
+            doc.fields.append(xappy.Field('resolver', resolver.scheme))
+            connection.replace(doc)
+
+            if count % flush_threshold == 0:
+                log.warning("Flushing %s %s Records"%(flush_threshold, klass))
+
+        # flush the remainder
+        connection.flush()
 
 
     
@@ -330,6 +377,8 @@ def setupFieldDefinitions(indexer):
     indexer.add_field_action('title', xappy.FieldActions.STORE_CONTENT)
     indexer.add_field_action('title', xappy.FieldActions.SORTABLE)
     
+    indexer.add_field_action('language', xappy.FieldActions.INDEX_FREETEXT)
+    
     UserIndexer.defineIndexes(indexer)
     BillIndexer.defineIndexes(indexer)
     MotionIndexer.defineIndexes(indexer)
@@ -337,6 +386,7 @@ def setupFieldDefinitions(indexer):
     GroupIndexer.defineIndexes(indexer)
     CommitteeIndexer.defineIndexes(indexer)
     ParliamentIndexer.defineIndexes(indexer)
+    AttachedFileIndexer.defineIndexes(indexer)
 
     if interfaces.ENABLE_LOGGING:
         log.debug("Indexer Fields Defined")
@@ -411,6 +461,7 @@ def main():
         CommitteeIndexer,
         #ParliamentMemberIndexer,
         ParliamentIndexer,
+        AttachedFileIndexer,
         #HansardReporterIndexer,
         ]:
         content_indexer.reindexAll(indexer)
@@ -423,4 +474,3 @@ def reset_index():
        traceback.print_exc()
        pdb.post_mortem(sys.exc_info()[-1]) 
 ''' '''
-
