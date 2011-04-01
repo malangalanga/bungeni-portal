@@ -148,6 +148,12 @@
         <!-- fileattachment -->
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <notification condition="clerk_receive_notification"
+            subject="Motion submitted: ${item.short_name}"
+            from="${item.owner_email}"
+            to="${site.clerk_email}"
+            body="notification_email_to_clerk_upon_submit_of_motion"
+        />
     </state>
     
     <state id="received" title="Received by Clerks Office" 
@@ -161,6 +167,12 @@
         <!-- fileattachment -->
         <grant permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />        
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
+        <notification condition="owner_receive_notification"
+            subject="Motion received: ${item.short_name}"
+            from="${site.clerk_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_receipt_of_motion"
+        />
     </state>
     
     <state id="clarification_required" title="Needs Clarification by MP"
@@ -174,6 +186,12 @@
         <!-- fileattachment -->
         <grant permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <notification condition="owner_receive_notification"
+            subject="Motion needs clarification: ${item.short_name}"
+            from="${site.clerk_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_need_clarification_of_motion"
+        />
     </state>
     
     <!-- Here the "concept" is that the PI is *formally admissible* and so 
@@ -200,7 +218,14 @@
     
     <state id="withdrawn" title="Withdrawn" like_state="submitted" />
     
-    <state id="inadmissible" title="Inadmissible" like_state="submitted" />
+    <state id="inadmissible" title="Inadmissible" like_state="submitted">
+        <notification condition="owner_receive_notification"
+            subject="Motion rejected: ${item.short_name}"
+            from="${site.speaker_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_rejection_of_motion"
+        />
+    </state>
     
     <state id="admissible" title="Admissible" 
         version="true"
@@ -216,7 +241,14 @@
         like_state="admissible"
     />
     
-    <state id="scheduled" title="Scheduled" like_state="admissible" />
+    <state id="scheduled" title="Scheduled" like_state="admissible">
+        <notification condition="owner_receive_notification"
+            subject="Motion scheduled: ${item.short_name}"
+            from="${site.clerk_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_schedule_of_motion"
+        />
+    </state>
     
     <state id="adopted" title="Adopted"
         version="true"
@@ -232,7 +264,14 @@
     <state id="adjourned" title="Debate adjourned" like_state="admissible" />
     
     <!-- admissable motion that cannot be debated -->
-    <state id="deferred" title="Deferred" like_state="admissible" />
+    <state id="deferred" title="Deferred" like_state="admissible">
+        <notification condition="owner_receive_notification"
+            subject="Motion deferred: ${item.short_name}"
+            from="${site.speaker_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_defer_of_motion"
+        />
+    </state>
     
     <!-- defered motion that was not debated -->
     <state id="elapsed" title="Elapsed" like_state="admissible" />
@@ -240,7 +279,14 @@
     <!-- motion was scheduled for but droped, becuase no show of MP etc -->
     <state id="dropped" title="Dropped" like_state="admissible" />
     
-    <state id="rejected" title="Rejected" like_state="admissible" />
+    <state id="rejected" title="Rejected" like_state="admissible">
+        <notification condition="owner_receive_notification"
+            subject="Motion rejected: ${item.short_name}"
+            from="${site.speaker_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_rejection_of_motion"
+        />
+    </state>
     
     <state id="withdrawn_public" title="Withdrawn" like_state="admissible" />
     

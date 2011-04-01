@@ -58,6 +58,12 @@
         <!-- fileattachment -->        
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <notification condition="clerk_receive_notification"
+            subject="Agenda Item submitted: ${item.short_name}"
+            from="${site.clerk_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_clerk_upon_submit_of_agenda_item"
+        />
     </state>
     
     <state id="received" title="Received by Clerks Office"
@@ -68,6 +74,12 @@
         <!-- fileattachment -->        
         <grant permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
+        <notification condition="owner_receive_notification"
+            subject="Agenda Item received: ${item.short_name}"
+            from="${site.clerk_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_receipt_of_agenda_item"
+        />
     </state>
     
     <state id="clarification_required" title="Needs Clarification by MP"
@@ -78,6 +90,12 @@
         <!-- fileattachment -->
         <grant permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <notification condition="owner_receive_notification"
+            subject="Agenda Item needs clarification: ${item.short_name}"
+            from="${site.clerk_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_need_clarification_of_agenda_item"
+        />
     </state>
     
     <state id="completed" title="Submitted to the Speaker"
@@ -98,7 +116,14 @@
         like_state="received" 
     />
     
-    <state id="inadmissible" title="Inadmissible" like_state="submitted" />
+    <state id="inadmissible" title="Inadmissible" like_state="submitted">
+        <notification condition="owner_receive_notification"
+            subject="Agenda Item rejected: ${item.short_name}"
+            from="${site.speaker_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_rejection_of_agenda_item"
+        />
+    </state>
     
     <state id="withdrawn" title="Withdrawn" like_state="submitted" />
     
@@ -114,13 +139,34 @@
         like_state="admissible" 
     />
     
-    <state id="debated" title="Debated" like_state="admissible" />
+    <state id="debated" title="Debated" like_state="admissible">
+        <notification condition="owner_receive_notification"
+            subject="Agenda Item was debated: ${item.short_name}"
+            from="${site.clerk_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_debate_of_agenda_item"
+        />
+    </state>
     
-    <state id="scheduled" title="Scheduled" like_state="admissible" />
+    <state id="scheduled" title="Scheduled" like_state="admissible">
+        <notification condition="owner_receive_notification"
+            subject="Agenda Item scheduled: ${item.short_name}"
+            from="${site.clerk_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_schedule_of_agenda_item"
+        />
+    </state>
     
     <state id="adjourned" title="Debate adjourned" like_state="admissible" />
     
-    <state id="deferred" title="Deferred" like_state="admissible" />
+    <state id="deferred" title="Deferred" like_state="admissible">
+        <notification condition="owner_receive_notification"
+            subject="Agenda Item deferred: ${item.short_name}"
+            from="${site.speaker_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_defer_of_agenda_item"
+        />
+    </state>
     
     <state id="elapsed" title="Elapsed" like_state="admissible" />
     
