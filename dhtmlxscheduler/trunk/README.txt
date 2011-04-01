@@ -8,3 +8,4 @@ PATCHES
 Applied patch described here http://forum.dhtmlx.com/viewtopic.php?f=6&t=13809&start=50 
 so that dataprocessor works properly in debug mode.
 Added locale_recurring.js file so that initialises the scheduler.__recurring_template
+Added Kiswahili translations
