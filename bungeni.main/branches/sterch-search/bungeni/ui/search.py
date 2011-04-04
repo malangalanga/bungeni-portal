@@ -50,11 +50,28 @@ from zope.formlib import form
 from zope.cachedescriptors.property import CachedProperty
 from zc.table import table, column
 from bungeni.core.i18n import _
+from bungeni.core.translation import language_vocabulary_factory as languages
+from bungeni.ui.widgets import SelectDateWidget
+from bungeni.core import index
+from zope.dottedname import resolve
+from bungeni.alchemist import Session
+from bungeni.ui.workflow import workflow_vocabulary_factory
 
 
 class ISearch(interface.Interface):
 
     full_text = schema.TextLine(title=_("Query"), required=False)
+    
+    
+class IAdvancedSearch(ISearch):
+    
+    language = schema.Choice(title=_("Language"), values=("en", "fr", "pt", "sw", "it", "en-ke"), required=False)
+    
+    content_type = schema.Choice(title=_("Content type"), values=("Question", "Motion"), required=False)
+    
+    status = schema.Choice(title=_("Status"), values=(), required=False)
+    
+    status_date = schema.Date(title=_("Status date"), required=False)
 
 
 class ISearchResult(interface.Interface):
@@ -135,7 +152,7 @@ class ResultListing(object):
     @property
     def search_status(self):
         return "Found %s Results in %s Documents in %0.5f Seconds" % (
-            len(self.results), self.doc_count, self.search_time)
+            len(self.results), self.doc_count, float(self.search_time))
 
     def listing(self):
         columns = self.columns
@@ -234,6 +251,178 @@ class Pager(object):
 
 class PagedSearch(Pager, Search):
   template = ViewPageTemplateFile('templates/pagedsearch.pt')
+
+
+class AdvancedPagedSearch(PagedSearch):
+    template = ViewPageTemplateFile('templates/advanced-pagedsearch.pt')
+    form_fields = form.Fields(IAdvancedSearch)
+    form_fields["status_date"].custom_widget = SelectDateWidget
+    
+    @form.action(label=_(u"Search"))
+    def handle_search(self, action, data):
+        self.searcher = component.getUtility(interfaces.IIndexSearch)()
+        search_term = data[ 'full_text' ]
+        content_type = data['content_type']
+        lang = data['language']
+        if not lang:
+            lang = 'en'
+        status = data.get('status', '')
+        status_date = data['status_date']
+
+        if not search_term:
+            self.status = _(u"Invalid Query")
+            return
+
+        # compose query
+        t = time.time()
+        
+        text_query = self.searcher.query_parse(search_term)
+        lang_query = self.searcher.query_field('language', lang)
+        self.query = self.searcher.query_composite(self.searcher.OP_AND, (text_query, lang_query,))
+        
+        if content_type:
+            content_type_query = self.searcher.query_field('object_type', content_type)
+            self.query = self.searcher.query_composite(self.searcher.OP_AND, (self.query, content_type_query,))
+            
+        if status:
+            print "***STATUS***", status
+            status_query = self.searcher.query_field('status', status)
+            self.query = self.searcher.query_composite(self.searcher.OP_AND, (self.query, status_query,))
+            
+        if status_date:
+            print "***STATUS DATE***", status_date
+            status_date_query = self.searcher.query_field('status_date', index.date_value(status_date))
+            self.query = self.searcher.query_composite(self.searcher.OP_AND, (self.query, status_date_query,))
+            
+        self.search_time = time.time() - t
+
+        # spelling suggestions
+        suggestion = self.searcher.spell_correct(search_term)
+        self.spelling_suggestion = (
+            search_term != suggestion and suggestion or None)
+        
+        print self.query
+
+
+class AjaxGetClassStatuses(BrowserView):
+    
+    def __call__(self):
+        dotted_name = "bungeni.models.domain.%s" % self.request.form.get('dotted_name').split(".")[-1]
+        tmp = '<option value="%s">%s</option>'
+        try:
+            domain_class = resolve.resolve(dotted_name)
+            session = Session()
+            obj = session.query(domain_class).first()
+            states = workflow_vocabulary_factory(obj)
+            response = [tmp % (state.value, state.title) for state in states]
+            return '\n'.join(response)
+        except Exception:
+            return "ERROR"
+                    
+"""
+class AddVoteView(BrowserView):
+
+    def __init__(self, context, request):
+        super(AddVoteView, self).__init__(context, request)
+        self.session = Session()
+
+    @property
+    def ip_address(self):
+        try:
+            x_forwarded_for = self.request['HTTP_X_FORWARDED_FOR']
+        except:
+            x_forwarded_for = None
+        if x_forwarded_for is not None:
+            addresses = x_forwarded_for.split(',')
+            return addresses[len(addresses) - 1]
+        return self.request.get('REMOTE_ADDR')
+
+    def _validate_vote(self, confession_id, user=None):
+        # identifying user by ip address
+        if user is None:
+            vote = self.session.query(Vote)\
+                       .filter(Vote.ip == self.ip_address)\
+                       .filter(Vote.confession_id == confession_id)\
+                       .first()
+            return vote is None
+        # identifying user by it's id
+        vote = self.session.query(Vote)\
+                   .filter(Vote.user_id == int(self.request.principal.id.split('.')[-1]))\
+                   .filter(Vote.confession_id == confession_id)\
+                   .first()
+        return vote is None
+
+
+    def vote_as_authenticated_user(self, confession_id):
+        # getting user_id
+        try:
+            user_id = int(self.request.principal.id.split('.')[-1])
+        except ValueError:
+            return 'error'
+        # checking if there is such user in database
+        user = self.session.query(User).filter(User.id == user_id).first()
+        if user is None:
+            return 'error'
+        # validating vote
+        if not self._validate_vote(confession_id, user):
+            return 'error'
+        # creating new vote
+        vote_type = self.request.get('type')
+        vote = Vote()
+        vote.confession_id = confession_id
+        vote.ip = self.ip_address
+        vote.user_id = user_id
+        rates = getUtility(interface=IRatesContainer, context=self.context)
+        if vote_type != 'comment':
+            vote.points_amount = rates.points_for_vote
+        else:
+            vote.points_amount = rates.points_for_comment
+        vote.vote_type = self.request.get('type')
+        self.session.add(vote)
+        vote = self.session.merge(vote)
+        notify(ObjectCreatedEvent(vote))
+
+        return str(self.session.query(Vote)\
+                   .filter(Vote.confession_id == confession_id)\
+                   .filter(Vote.vote_type == vote_type)\
+                   .count())
+
+    def vote_as_unauthenticated_user(self, confession_id):
+        if not self._validate_vote(confession_id):
+            return 'error'
+
+        # creating new vote
+        vote = Vote()
+        vote.confession_id = confession_id
+        vote.ip = self.ip_address
+        vote.points_amount = 0.0
+        vote_type = self.request.get('type')
+        vote.vote_type = vote_type
+        self.session.add(vote)
+        vote = self.session.merge(vote)
+        notify(ObjectCreatedEvent(vote))
+
+        return str(self.session.query(Vote)\
+                   .filter(Vote.confession_id == confession_id)\
+                   .filter(Vote.vote_type == vote_type)\
+                   .count())
+
+    def __call__(self):
+        vote_type = self.request.get('type')
+        confession_id = self.request.get('id')
+        if not vote_type:
+            return 'error'
+        try:
+            confession_id = int(confession_id)
+        except ValueError:
+            return 'error'
+        if self.session.query(Confession).filter(Confession.id == confession_id).first() is None:
+            return 'error'
+        if not IUnauthenticatedPrincipal(self.request.principal, False):
+            return self.vote_as_authenticated_user(confession_id)
+        else:
+            return self.vote_as_unauthenticated_user(confession_id)
+"""
 
 
 class ConstraintQueryJSON(BrowserView):

@@ -41,6 +41,7 @@ from bungeni.models import interfaces
 from bungeni.models import domain
 from bungeni.models.interfaces import ITranslatable
 from bungeni.core import translation
+import bungeni
 
 
 log = logging.getLogger('ore.xapian')
@@ -138,9 +139,29 @@ class ContentIndexer(object):
         doc.fields.append(
             xappy.Field("language", self.context.language))
         
+        doc.fields.append(xappy.Field("status", getattr(self.context, "status", "")))
+        
+        try:
+            status_date = getattr(self.context, "status_date")
+            if status_date:
+                status_date = date_value(status_date)
+                
+            doc.fields.append(xappy.Field("status_date", status_date))
+        except Exception:
+            pass    
+        
+        title = ""
+        try:
+            title = bungeni.ui.search.ISearchResult(self.context).title
+        except Exception:
+            pass
+        
+        doc.fields.append(xappy.Field("title", title))
+            
         try:
             #TODO: loop thru all available languages and index the translations
             self.index(doc)
+            
         except exceptions.OperationalError, exceptions.InvalidRequestError:
             # detatch the dbapi connection from the pool, and close it
             # and retry the index operation (once)
@@ -365,6 +386,9 @@ def setupFieldDefinitions(indexer):
     indexer.add_field_action('status', xappy.FieldActions.INDEX_EXACT)
     indexer.add_field_action('status', xappy.FieldActions.STORE_CONTENT)
     #indexer.add_field_action('status', xappy.FieldActions.FACET, type='string')
+    
+    indexer.add_field_action('status_date', xappy.FieldActions.INDEX_EXACT)
+    indexer.add_field_action('status_date', xappy.FieldActions.STORE_CONTENT)
 
     # deleted 
     indexer.add_field_action('deleted', xappy.FieldActions.INDEX_EXACT)
@@ -377,7 +401,9 @@ def setupFieldDefinitions(indexer):
     indexer.add_field_action('title', xappy.FieldActions.STORE_CONTENT)
     indexer.add_field_action('title', xappy.FieldActions.SORTABLE)
     
-    indexer.add_field_action('language', xappy.FieldActions.INDEX_FREETEXT)
+    #indexer.add_field_action('language', xappy.FieldActions.INDEX_FREETEXT)
+    indexer.add_field_action('language', xappy.FieldActions.INDEX_EXACT)
+    indexer.add_field_action('language', xappy.FieldActions.STORE_CONTENT)
     
     UserIndexer.defineIndexes(indexer)
     BillIndexer.defineIndexes(indexer)
@@ -449,7 +475,7 @@ def main():
     #util.zcml_setup()
     
     # field definitions
-    #setupFieldDefinitions(indexer)
+    setupFieldDefinitions(indexer)
 
     # reindex content directly
     for content_indexer in [

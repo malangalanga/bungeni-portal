@@ -150,6 +150,21 @@
         permission="zope.View"
         class=".search.PagedSearch"
     />
+    
+    
+    <!-- Advanced search form -->
+    <browser:page name="advanced-search"
+        for="bungeni.models.interfaces.IBungeniApplication"
+        permission="zope.View"
+        class=".search.AdvancedPagedSearch"
+    />
+    
+    <browser:page
+	   for="*"
+	   name="ajax_get_class_statuses"
+	   permission="zope.View"
+	   class=".search.AjaxGetClassStatuses"
+	/>
 
     <!-- View for item in search results -->
     <browser:page name="searchresult"
