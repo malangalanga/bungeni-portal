@@ -22,6 +22,12 @@ Containing the one line:
 $Id$
 """
 
-zope_i18n_allowed_languages = "en fr pt sw en-ke it"
-zope_i18n_compile_mo_files = "1" # True
+# language ids, either as a space-separated string or as a list of strings
+zope_i18n_allowed_languages = "en fr pt sw en-ke it" 
+
+# boolean: True, False
+zope_i18n_compile_mo_files = True 
+
+# string, language identifier, must be one of zope_i18n_allowed_languages
 default_language = "en"
+
