@@ -61,16 +61,16 @@ from bungeni.ui.workflow import workflow_vocabulary_factory
 class ISearch(interface.Interface):
 
     full_text = schema.TextLine(title=_("Query"), required=False)
-    
-    
+
+
 class IAdvancedSearch(ISearch):
-    
+
     language = schema.Choice(title=_("Language"), values=("en", "fr", "pt", "sw", "it", "en-ke"), required=False)
-    
+
     content_type = schema.Choice(title=_("Content type"), values=("Question", "Motion"), required=False)
-    
+
     status = schema.Choice(title=_("Status"), values=(), required=False)
-    
+
     status_date = schema.Date(title=_("Status date"), required=False)
 
 
@@ -195,7 +195,7 @@ class Search(forms.common.BaseForm, ResultListing):
 
     @property
     def results(self):
-        return self._results
+        return map(lambda x: x.object(), self._results)
 
     @form.action(label=_(u"Search"))
     def handle_search(self, action, data):
@@ -228,7 +228,8 @@ class Pager(object):
           page = int(self.request.form.get('page', 1))
       except ValueError:
           page = 1
-      return self._results[self.items_count * (page - 1):self.items_count * page]
+      return map(lambda x: x.object(),
+        self._results[self.items_count * (page - 1):self.items_count * page])
 
 
   @property
@@ -257,7 +258,7 @@ class AdvancedPagedSearch(PagedSearch):
     template = ViewPageTemplateFile('templates/advanced-pagedsearch.pt')
     form_fields = form.Fields(IAdvancedSearch)
     form_fields["status_date"].custom_widget = SelectDateWidget
-    
+
     @form.action(label=_(u"Search"))
     def handle_search(self, action, data):
         self.searcher = component.getUtility(interfaces.IIndexSearch)()
@@ -275,37 +276,37 @@ class AdvancedPagedSearch(PagedSearch):
 
         # compose query
         t = time.time()
-        
+
         text_query = self.searcher.query_parse(search_term)
         lang_query = self.searcher.query_field('language', lang)
         self.query = self.searcher.query_composite(self.searcher.OP_AND, (text_query, lang_query,))
-        
+
         if content_type:
             content_type_query = self.searcher.query_field('object_type', content_type)
             self.query = self.searcher.query_composite(self.searcher.OP_AND, (self.query, content_type_query,))
-            
+
         if status:
             print "***STATUS***", status
             status_query = self.searcher.query_field('status', status)
             self.query = self.searcher.query_composite(self.searcher.OP_AND, (self.query, status_query,))
-            
+
         if status_date:
             print "***STATUS DATE***", status_date
             status_date_query = self.searcher.query_field('status_date', index.date_value(status_date))
             self.query = self.searcher.query_composite(self.searcher.OP_AND, (self.query, status_date_query,))
-            
+
         self.search_time = time.time() - t
 
         # spelling suggestions
         suggestion = self.searcher.spell_correct(search_term)
         self.spelling_suggestion = (
             search_term != suggestion and suggestion or None)
-        
+
         print self.query
 
 
 class AjaxGetClassStatuses(BrowserView):
-    
+
     def __call__(self):
         dotted_name = "bungeni.models.domain.%s" % self.request.form.get('dotted_name').split(".")[-1]
         tmp = '<option value="%s">%s</option>'
@@ -318,7 +319,7 @@ class AjaxGetClassStatuses(BrowserView):
             return '\n'.join(response)
         except Exception:
             return "ERROR"
-                    
+
 """
 class AddVoteView(BrowserView):
 
