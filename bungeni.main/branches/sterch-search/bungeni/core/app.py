@@ -59,6 +59,8 @@ class AppSetup(object):
         import index
         # ensure indexing facilities are setup(lazy)
         index.setupFieldDefinitions(index.indexer)
+        
+        #Uncomment to reset index
         #index.reset_index()
         
         sm = site.LocalSiteManager(self.context)

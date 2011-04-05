@@ -12,6 +12,7 @@
       </div>
 
       <div metal:use-macro="context/@@standard_macros/form">
+      
       </div>
 
       <tal:block condition="python: request.form.get('form.full_text')">
@@ -20,8 +21,8 @@
 
         <div tal:content="view/search_status"></div>
         <tal:block tal:condition="view/results">
-          <div tal:replace="structure view/listing">
-          </div>
+          <div tal:repeat="item view/results"
+            tal:content="structure item/@@searchresult"/>
         </tal:block>
 
         <tal:block tal:condition="view/pages">
@@ -50,7 +51,8 @@
 				else {
 					$("#form\\.status").html("");
 					$(data).appendTo("#form\\.status");
-					$("#field\\.form\\.status").show();			
+					$("#field\\.form\\.status").show();
+					$("#field\\.form\\.status_date").show();			
 				}
 			},
 			data: {'dotted_name': object_type}
@@ -58,8 +60,13 @@
 	}
 	
   	$(document).ready(function(){
-  		$("#field\\.form\\.status").hide();
-  		$("#field\\.form\\.status_date").hide();
+  		if($("#field\\.form\\.content_type").val()){
+  			$("#field\\.form\\.status").show();
+  			$("#field\\.form\\.status_date").show();
+  		}else{
+  			$("#field\\.form\\.status").hide();
+  			$("#field\\.form\\.status_date").hide();
+  		}
   		
   		$("#form\\.content_type").change(function() { 
   			if($(this).val()){

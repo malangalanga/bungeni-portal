@@ -101,7 +101,19 @@
   <class class="bungeni.models.domain.Group">
     <implements interface="ore.xapian.interfaces.IIndexable" />
   </class>
+  
+  <class class="bungeni.models.domain.PoliticalGroup">
+    <implements interface="ore.xapian.interfaces.IIndexable" />
+  </class>
+  
+  <class class="bungeni.models.domain.Parliament">
+    <implements interface="ore.xapian.interfaces.IIndexable" />
+  </class>
 
+  <class class="bungeni.models.domain.Government">
+    <implements interface="ore.xapian.interfaces.IIndexable" />
+  </class>
+    
   <class class=".content.Section">
     <allow interface="zope.publisher.interfaces.browser.IBrowserPublisher" />
   </class>

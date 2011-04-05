@@ -67,5 +67,21 @@
       permission="zope.Public"
       provides=".search.ISearchResult"
   />
+  
+  <adapter
+      for="bungeni.models.interfaces.IParliament"
+      factory=".search.GroupToSearchResult"
+      trusted="True"
+      permission="zope.Public"
+      provides=".search.ISearchResult"
+  />
+  
+  <adapter
+      for="bungeni.models.interfaces.IBungeniGroup"
+      factory=".search.GroupToSearchResult"
+      trusted="True"
+      permission="zope.Public"
+      provides=".search.ISearchResult"
+  />
 
 </configure>

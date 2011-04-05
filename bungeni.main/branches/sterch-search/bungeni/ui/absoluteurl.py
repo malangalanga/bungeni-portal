@@ -47,19 +47,19 @@ class QuestionBusinessAbsoluteURLView(BusinessAbsoluteURLView):
     subsection = "questions"
 
 
-class MotionBusinessAbsoluteURLView(AbsoluteURL):
+class MotionBusinessAbsoluteURLView(BusinessAbsoluteURLView):
     """ Custom absolute url for motions in business section
     """
     subsection = "motions"
    
     
-class TabledDocumentBusinessAbsoluteURLView(AbsoluteURL):
+class TabledDocumentBusinessAbsoluteURLView(BusinessAbsoluteURLView):
     """ Custom absolute url for tabled documents in business section
     """
     subsection = "tableddocuments"
     
     
-class AgendaItemBusinessAbsoluteURLView(AbsoluteURL):
+class AgendaItemBusinessAbsoluteURLView(BusinessAbsoluteURLView):
     """ Custom absolute url for agenda items in business section
     """
     subsection = "agendaitems"

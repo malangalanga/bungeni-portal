@@ -18,7 +18,7 @@
         
     <browser:view
         for="bungeni.models.interfaces.ICommittee"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.CommitteeBusinessAbsoluteURLView"
         layer="bungeni.ui.interfaces.IBusinessSectionLayer"
         permission="zope.Public"
@@ -35,7 +35,7 @@
                 
     <browser:view
         for="bungeni.models.interfaces.IBill"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.BillBusinessAbsoluteURLView"
         layer="bungeni.ui.interfaces.IBusinessSectionLayer"
         permission="zope.Public"
@@ -52,7 +52,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.IQuestion"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.QuestionBusinessAbsoluteURLView"
         layer=".interfaces.IBusinessSectionLayer"
         permission="zope.Public"
@@ -69,7 +69,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.IMotion"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.MotionBusinessAbsoluteURLView"
         layer="bungeni.ui.interfaces.IBusinessSectionLayer"
         permission="zope.Public"
@@ -86,7 +86,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.ITabledDocument"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.TabledDocumentBusinessAbsoluteURLView"
         layer="bungeni.ui.interfaces.IBusinessSectionLayer"
         permission="zope.Public"
@@ -103,7 +103,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.IAgendaItem"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.AgendaItemBusinessAbsoluteURLView"
         layer="bungeni.ui.interfaces.IBusinessSectionLayer"
         permission="zope.Public"
@@ -122,7 +122,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.IMemberOfParliament"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.MembersAbsoluteURLView"
         layer=".interfaces.IMembersSectionLayer"
         permission="zope.Public"
@@ -141,7 +141,7 @@
     
     <browser:view
         for="bungeni.models.interfaces.IParliament"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.ParliamentsArchiveAbsoluteURLView"
         layer=".interfaces.IArchiveSectionLayer"
         permission="zope.Public"
@@ -158,7 +158,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.IPoliticalGroup"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.PoliticalGroupsArchiveAbsoluteURLView"
         layer=".interfaces.IArchiveSectionLayer"
         permission="zope.Public"
@@ -175,7 +175,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.IConstituency"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.ConstituenciesArchiveAbsoluteURLView"
         layer=".interfaces.IArchiveSectionLayer"
         permission="zope.Public"
@@ -192,7 +192,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.ICommittee"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.CommitteesArchiveAbsoluteURLView"
         layer=".interfaces.IArchiveSectionLayer"
         permission="zope.Public"
@@ -211,7 +211,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.IParliament"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.ParliamentAdminAbsoluteURLView"
         layer=".interfaces.IAdminSectionLayer"
         permission="zope.Public"
@@ -228,7 +228,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.IQuestion"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.QuestionAdminAbsoluteURLView"
         layer=".interfaces.IAdminSectionLayer"
         permission="zope.Public"
@@ -245,7 +245,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.IReport"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.ReportAdminAbsoluteURLView"
         layer=".interfaces.IAdminSectionLayer"
         permission="zope.Public"
@@ -262,7 +262,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.ITabledDocument"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.TabledDocumentAdminAbsoluteURLView"
         layer=".interfaces.IAdminSectionLayer"
         permission="zope.Public"
@@ -279,7 +279,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.IMotion"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.MotionAdminAbsoluteURLView"
         layer=".interfaces.IAdminSectionLayer"
         permission="zope.Public"
@@ -296,7 +296,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.IBill"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.BillAdminAbsoluteURLView"
         layer=".interfaces.IAdminSectionLayer"
         permission="zope.Public"
@@ -313,7 +313,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.ICommittee"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.CommitteeAdminAbsoluteURLView"
         layer=".interfaces.IAdminSectionLayer"
         permission="zope.Public"
@@ -330,7 +330,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.IMemberOfParliament"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.MemberOfParliamentAdminAbsoluteURLView"
         layer=".interfaces.IAdminSectionLayer"
         permission="zope.Public"
@@ -347,7 +347,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.IOffice"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.OfficeAdminAbsoluteURLView"
         layer=".interfaces.IAdminSectionLayer"
         permission="zope.Public"
@@ -364,7 +364,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.IAgendaItem"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.AgendaItemAdminAbsoluteURLView"
         layer=".interfaces.IAdminSectionLayer"
         permission="zope.Public"
@@ -381,7 +381,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.IBungeniUser"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.UserAdminAbsoluteURLView"
         layer=".interfaces.IAdminSectionLayer"
         permission="zope.Public"
@@ -398,7 +398,7 @@
 
     <browser:view
         for="bungeni.models.interfaces.IPoliticalParty"
-        name="absolute_url"
+        name="get_url"
         class=".absoluteurl.PoliticalPartyAbsoluteURLView"
         layer=".interfaces.IAdminSectionLayer"
         permission="zope.Public"
