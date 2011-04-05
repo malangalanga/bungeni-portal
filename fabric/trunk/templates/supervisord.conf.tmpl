@@ -66,7 +66,7 @@ stopsignal = INT
 autostart = false
 
 [program:openoffice]
-command = soffice -env:UserInstallation=file:/%(user_config)s/.openoffice -accept='socket,port=2002;urp;' -nologo -nofirststartwizard -headless
+command = soffice -headless -nologo -env:UserInstallation=file://%(user_config)s/.openoffice -accept="socket,port=2002;urp;"
 stdout_logfile= %(user_logs)s/openoffice.log
 priority = 70
 redirect_stderr = true
