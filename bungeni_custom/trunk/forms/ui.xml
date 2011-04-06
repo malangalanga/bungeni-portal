@@ -599,23 +599,65 @@
 
     <descriptor name="User">
         <field name="user_id" modes="listing" />
-        <field name="titles" modes="view edit add" />
-        <field name="first_name" modes="view edit add" />
-        <field name="middle_name" modes="view edit add" />
-        <field name="last_name" modes="view edit add" />
-        <field name="email" modes="view edit add" />
-        <field name="login" modes="view add" />
+        <field name="titles" modes="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <show modes="listing" />
+        </field>
+        <field name="first_name" modes="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="middle_name" modes="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="last_name" modes="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="email" modes="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <show modes="listing" />
+        </field>
+        <field name="login" modes="view add" localizable="view">
+            <show modes="view" />
+        </field>
         <field name="_password" modes="add" />
-        <field name="national_id" modes="view edit add" />
-        <field name="gender" modes="view edit add" />
-        <field name="date_of_birth" modes="view edit add" />
-        <field name="birth_country" modes="view edit add" />
-        <field name="birth_nationality" modes="view edit add" />
-        <field name="current_nationality" modes="view edit add" />
-        <field name="date_of_death" modes="view edit add" />
+        <field name="national_id" modes="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="gender" modes="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <show modes="listing" />
+        </field>
+        <field name="date_of_birth" modes="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <show modes="listing" />
+        </field>
+        <field name="birth_country" modes="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="birth_nationality" modes="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="current_nationality" modes="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="date_of_death" modes="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
         <field name="language" modes="edit add" />
-        <field name="description" modes="view edit add" />
-        <field name="image" modes="view edit add" />
+        <field name="description" modes="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="image" modes="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
     </descriptor>
 
 </ui>
