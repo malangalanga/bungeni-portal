@@ -164,7 +164,14 @@
      name="ajax_get_class_statuses"
      permission="zope.View"
      class=".search.AjaxGetClassStatuses"
-  />
+    />
+    
+    <browser:page
+     for="*"
+     name="ajax_get_class_fields"
+     permission="zope.View"
+     class=".search.AjaxGetClassFields"
+    />
 
     <!-- View for item in search results -->
     <browser:page name="searchresult"

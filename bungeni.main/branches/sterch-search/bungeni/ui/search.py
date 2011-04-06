@@ -62,6 +62,7 @@ from bungeni.alchemist import ui
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 from zope import formlib
+from ore.xapian.interfaces import IIndexer
 
 
 def get_statuses_vocabulary(klass):
@@ -296,13 +297,19 @@ class AdvancedPagedSearch(PagedSearch):
     def __init__(self, *args):
         super(AdvancedPagedSearch, self).__init__(*args)
         statuses = SimpleVocabulary([])
+        indexed_fields = ['all',]
         content_type = self.request.get('form.content_type', '')
         if content_type:
             dotted_name = "bungeni.models.domain.%s" % content_type
             domain_class = resolve.resolve(dotted_name)
             statuses = get_statuses_vocabulary(domain_class)
+            f =  IIndexer(domain_class()).fields()
+            indexed_fields = indexed_fields + [i for i, fld in f]
             
-        self.form_fields += form.Fields(schema.Choice(__name__='status', title=_("Status"), vocabulary=statuses, required=False))
+        self.form_fields += form.Fields(schema.Choice(__name__='status', title=_("Status"),\
+                                                       vocabulary=statuses, required=False),\
+                                        schema.Choice(__name__='field', title=_('Field'),\
+                                                       values = indexed_fields, required=False))
 
     @form.action(label=_(u"Search"))
     def handle_search(self, action, data):
@@ -310,10 +317,12 @@ class AdvancedPagedSearch(PagedSearch):
         search_term = data[ 'full_text' ]
         content_type = data['content_type']
         lang = data['language']
-        if not lang:
-            lang = 'en'
+        indexed_field = data.get('field', '')
         status = data.get('status', '')
         status_date = data['status_date']
+        
+        if not lang:
+            lang = 'en'
 
         if not search_term:
             self.status = _(u"Invalid Query")
@@ -321,10 +330,15 @@ class AdvancedPagedSearch(PagedSearch):
 
         # compose query
         t = time.time()
-
-        text_query = self.searcher.query_parse(search_term)
-        lang_query = self.searcher.query_field('language', lang)
-        self.query = self.searcher.query_composite(self.searcher.OP_AND, (text_query, lang_query,))
+        
+        if content_type and indexed_field and indexed_field != 'all':
+            text_query = self.searcher.query_field(indexed_field, search_term)
+            lang_query = self.searcher.query_field('language', lang)
+            self.query = self.searcher.query_composite(self.searcher.OP_AND, (text_query, lang_query,))
+        else:
+            text_query = self.searcher.query_parse(search_term)
+            lang_query = self.searcher.query_field('language', lang)
+            self.query = self.searcher.query_composite(self.searcher.OP_AND, (text_query, lang_query,))
 
         if content_type:
             content_type_query = self.searcher.query_field('object_type', content_type)
@@ -357,6 +371,21 @@ class AjaxGetClassStatuses(BrowserView):
             domain_class = resolve.resolve(dotted_name)
             states = get_statuses_vocabulary(domain_class)
             response = [tmp % (state.value, state.title) for state in states]
+            return '\n'.join(response)
+        except Exception:
+            return "ERROR"
+        
+
+class AjaxGetClassFields(BrowserView):
+
+    def __call__(self):
+        dotted_name = "bungeni.models.domain.%s" % self.request.form.get('dotted_name').split(".")[-1]
+        tmp = '<option value="%s">%s</option>'
+        try:
+            domain_class = resolve.resolve(dotted_name)
+            f =  IIndexer(domain_class()).fields()
+            response = [tmp % (i, i) for i, fld in f]
+            response = [tmp % ('all', 'all'),] + response
             return '\n'.join(response)
         except Exception:
             return "ERROR"

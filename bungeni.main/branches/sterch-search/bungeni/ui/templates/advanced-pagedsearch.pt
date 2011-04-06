@@ -50,9 +50,24 @@
 				}
 				else {
 					$("#form\\.status").html("");
-					$(data).appendTo("#form\\.status");
-					$("#field\\.form\\.status").show();
-					$("#field\\.form\\.status_date").show();			
+					$(data).appendTo("#form\\.status");			
+				}
+			},
+			data: {'dotted_name': object_type}
+		});	
+	}
+	
+  	function get_fields(object_type){
+		$.ajax({
+			url: 'ajax_get_class_fields',
+			cache: false,
+			success: function(data){
+				if (data == 'ERROR'){
+					window.alert("Error getting fields for " + object_type);
+				}
+				else {
+					$("#form\\.field").html("");
+					$(data).appendTo("#form\\.field");			
 				}
 			},
 			data: {'dotted_name': object_type}
@@ -60,19 +75,14 @@
 	}
 	
   	$(document).ready(function(){
-  		if($("#field\\.form\\.content_type").val()){
-  			$("#field\\.form\\.status").show();
-  			$("#field\\.form\\.status_date").show();
-  		}else{
-  			$("#field\\.form\\.status").hide();
-  			$("#field\\.form\\.status_date").hide();
-  		}
   		
   		$("#form\\.content_type").change(function() { 
   			if($(this).val()){
   				get_statuses($(this).val());
+  				get_fields($(this).val());
   			}else{
-  				$("#field\\.form\\.status").hide();
+  				$("#form\\.status").html("");
+  				$("#form\\.field").html("");
   			}
   		});
   	});
