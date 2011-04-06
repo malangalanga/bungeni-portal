@@ -127,6 +127,22 @@
         layer=".interfaces.IMembersSectionLayer"
         permission="zope.Public"
         />
+        
+    <view
+        for="bungeni.models.interfaces.IUser"
+        factory=".absoluteurl.MembersAbsoluteURLView"
+        type=".interfaces.IMembersSectionLayer"
+        permission="zope.Public"
+        provides="zope.traversing.browser.interfaces.IAbsoluteURL"
+        />
+
+    <browser:view
+        for="bungeni.models.interfaces.IUser"
+        name="get_url"
+        class=".absoluteurl.MembersAbsoluteURLView"
+        layer=".interfaces.IMembersSectionLayer"
+        permission="zope.Public"
+        />
  
  
      <!-- Archive section -->

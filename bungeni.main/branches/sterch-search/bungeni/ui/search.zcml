@@ -83,5 +83,13 @@
       permission="zope.Public"
       provides=".search.ISearchResult"
   />
+  
+  <adapter
+      for="bungeni.models.interfaces.ICommittee"
+      factory=".search.GroupToSearchResult"
+      trusted="True"
+      permission="zope.Public"
+      provides=".search.ISearchResult"
+  />
 
 </configure>

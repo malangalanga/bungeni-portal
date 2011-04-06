@@ -63,7 +63,24 @@ from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 from zope import formlib
 from ore.xapian.interfaces import IIndexer
+from bungeni.ui.utils.common import get_application
+from zope.app.component import site
+from zope.component import queryMultiAdapter
+from zope.security.checker import ProxyFactory
+from zope.app.publisher.browser import getDefaultViewName
+from bungeni.core.interfaces import ISection
+from bungeni.ui.viewlets.navigation import _get_context_chain
 
+ALLOWED_TYPES = {'business': ('Question', 'Motion', 'Committee', 'Bill',\
+                              'TabledDocument', 'AgendaItem'),
+                 'archive': ('Question', 'Motion', 'Committee',\
+                             'Bill', 'TabledDocument', 'AgendaItem',\
+                             'Parliament', 'PoliticalGroup'),
+                 'members': ('MemberOfParliament',),
+                 'admin': ('Question', 'Motion', 'Committee', 'Bill',\
+                           'TabledDocument', 'AgendaItem', 'Parliament',\
+                           'PoliticalGroup', 'User'),
+                 'test': ('Motion', 'Question'),}
 
 def get_statuses_vocabulary(klass):
     try:
@@ -80,9 +97,24 @@ class ISearch(interface.Interface):
 
 class IAdvancedSearch(ISearch):
 
-    language = schema.Choice(title=_("Language"), values=("en", "fr", "pt", "sw", "it", "en-ke"), required=False)
+    language = schema.Choice(title=_("Language"), values=("en", "fr", "pt", "sw", "it", "en-ke"),
+                             required=False)
 
-    content_type = schema.Choice(title=_("Content type"), values=("Question", "Motion"), required=False)
+    content_type = schema.Choice(title=_("Content type"), values=("Question", 
+                                                                  "Motion", 
+                                                                  "Committee",
+                                                                  "User",
+                                                                  "Parliament",
+                                                                  "AgendaItem",
+                                                                  "TabledDocument",
+                                                                  "PoliticalParty",
+                                                                  "Goverment",
+                                                                  "Ministry",
+                                                                  "Report",
+                                                                  "AttachedFile",
+                                                                  "Bill",
+                                                                  "GroupSitting",
+                                                                  "PoliticalGroup"), required=False)
 
     #status = schema.Choice(title=_("Status"), vocabulary=SimpleVocabulary([]), required=False)
 
@@ -204,6 +236,18 @@ class Search(forms.common.BaseForm, ResultListing):
     form_fields = form.Fields(ISearch)
     #selection_column = columns[0]
 
+    def get_current_section(self):
+        chain = _get_context_chain(self.context)
+        i = len(chain) - 1
+        ob = chain[i]
+        while not ISection.providedBy(ob):
+            i -= 1
+            if i < 0:
+                ob = None
+                break
+            ob = chain[i]
+        return ob
+    
     def setUpWidgets(self, ignore_request=False):
         # setup widgets in data entry mode not bound to context
         self.adapters = {}
@@ -213,15 +257,40 @@ class Search(forms.common.BaseForm, ResultListing):
     @property
     def doc_count(self):
         return len(self._results)
-
+    
+    def authorized(self, result):
+        obj = result.object()
+        
+        defaultview=getDefaultViewName(obj,self.request)
+        try:
+            view=queryMultiAdapter((ProxyFactory(obj),self.request),name=defaultview)        
+            return True     
+        except Unauthorized:
+            print False
+        
     @CachedProperty
     def _results(self):
+        
+        #Filter items allowed in current section
+        section = self.get_current_section()
+
+        subqueries = []
+        
+        for tq in ALLOWED_TYPES[section.__name__]:
+            subqueries.append(self.searcher.query_field('object_type', tq))
+            
+        type_query = self.searcher.query_composite(self.searcher.OP_OR, subqueries)
+
+        self.query = self.searcher.query_composite(self.searcher.OP_AND,\
+                                                       (self.query, type_query,))
+        
         try:
             results = self.searcher.search(self.query, 0,
                 self.searcher.get_doccount())
         except:
             results = []
-        return list(results)
+
+        return filter(self.authorized, results)
 
     @property
     def results(self):
@@ -334,23 +403,28 @@ class AdvancedPagedSearch(PagedSearch):
         if content_type and indexed_field and indexed_field != 'all':
             text_query = self.searcher.query_field(indexed_field, search_term)
             lang_query = self.searcher.query_field('language', lang)
-            self.query = self.searcher.query_composite(self.searcher.OP_AND, (text_query, lang_query,))
+            self.query = self.searcher.query_composite(self.searcher.OP_AND,\
+                                                       (text_query, lang_query,))
         else:
             text_query = self.searcher.query_parse(search_term)
             lang_query = self.searcher.query_field('language', lang)
-            self.query = self.searcher.query_composite(self.searcher.OP_AND, (text_query, lang_query,))
-
+            self.query = self.searcher.query_composite(self.searcher.OP_AND,\
+                                                       (text_query, lang_query,))
+        
         if content_type:
             content_type_query = self.searcher.query_field('object_type', content_type)
-            self.query = self.searcher.query_composite(self.searcher.OP_AND, (self.query, content_type_query,))
+            self.query = self.searcher.query_composite(self.searcher.OP_AND,\
+                                                       (self.query, content_type_query,))
 
         if content_type and status:
             status_query = self.searcher.query_field('status', status)
-            self.query = self.searcher.query_composite(self.searcher.OP_AND, (self.query, status_query,))
+            self.query = self.searcher.query_composite(self.searcher.OP_AND,\
+                                                       (self.query, status_query,))
 
         if status_date:
             status_date_query = self.searcher.query_field('status_date', index.date_value(status_date))
-            self.query = self.searcher.query_composite(self.searcher.OP_AND, (self.query, status_date_query,))
+            self.query = self.searcher.query_composite(self.searcher.OP_AND,\
+                                                       (self.query, status_date_query,))
 
         self.search_time = time.time() - t
 

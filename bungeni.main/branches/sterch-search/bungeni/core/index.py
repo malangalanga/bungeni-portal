@@ -314,6 +314,9 @@ class UserIndexer(ContentIndexer):
         super(UserIndexer, klass).defineIndexes(indexer)
         
 class BillIndexer(ContentIndexer):
+    domain_model = domain.MemberOfParliament
+
+class BillIndexer(ContentIndexer):
     domain_model = domain.Bill
     
 class MotionIndexer(ContentIndexer):
