@@ -134,8 +134,7 @@ class UserToSearchResult(object):
 
     @property
     def title(self):
-        return "%s - %s" % (self.context.language,
-            self.context.fullname.strip())
+        return self.context.fullname.strip()
 
     @property
     def annotation(self):
@@ -149,8 +148,7 @@ class ParliamentaryItemToSearchResult(object):
 
     @property
     def title(self):
-        return "%s - %s" % (self.context.language,
-            self.context.short_name)
+        return self.context.short_name
 
     @property
     def annotation(self):
@@ -164,8 +162,7 @@ class AttachedFileToSearchResult(object):
 
     @property
     def title(self):
-        return "%s - %s" % (self.context.language,
-            self.context.file_title)
+        return self.context.file_title
 
     @property
     def annotation(self):
@@ -179,8 +176,7 @@ class GroupToSearchResult(object):
 
     @property
     def title(self):
-        return "%s - %s" % (self.context.language,
-            self.context.short_name)
+        return self.context.short_name
 
     @property
     def annotation(self):
@@ -590,6 +586,13 @@ class Similar(BrowserView, ResultListing):
 class SearchResultItem(object):
 
     template = ViewPageTemplateFile('templates/searchresult.pt')
+    
+    @property
+    def language(self):
+        lang = self.request.get('form.language', '')
+        if not lang:
+            lang = self.request.locale.getLocaleID()
+        return lang
 
     @property
     def item(self):
