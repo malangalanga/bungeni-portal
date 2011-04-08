@@ -61,7 +61,7 @@ class AppSetup(object):
         index.setupFieldDefinitions(index.indexer)
         
         #Uncomment to reset index
-        #index.reset_index()
+        index.reset_index()
         
         sm = site.LocalSiteManager(self.context)
         self.context.setSiteManager(sm)
