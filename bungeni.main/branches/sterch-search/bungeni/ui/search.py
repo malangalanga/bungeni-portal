@@ -288,7 +288,7 @@ class Search(forms.common.BaseForm, ResultListing, HighlightMixin):
 
     @property
     def doc_count(self):
-        return len(self._results)
+        return len(self._searchresults)
 
     def authorized(self, result):
         obj = result.object()
@@ -301,8 +301,7 @@ class Search(forms.common.BaseForm, ResultListing, HighlightMixin):
             print False
 
     @CachedProperty
-    def _results(self):
-
+    def _searchresults(self):
         #Filter items allowed in current section
         section = self.get_current_section()
 
@@ -324,8 +323,8 @@ class Search(forms.common.BaseForm, ResultListing, HighlightMixin):
         return filter(self.authorized, results)
 
     @property
-    def results(self):
-        return map(lambda x: x.object(), self._results)
+    def _results(self):
+        return map(lambda x: x.object(), self._searchresults)
 
     @form.action(label=_(u"Search"))
     def handle_search(self, action, data):
@@ -343,7 +342,9 @@ class Search(forms.common.BaseForm, ResultListing, HighlightMixin):
         if lang == "en_KE": lang = "en-ke"
         text_query = self.searcher.query_parse(search_term)
         lang_query = self.searcher.query_field('language', lang)
-        self.query = self.searcher.query_composite(self.searcher.OP_AND, (text_query, lang_query,))
+        self.query = self.searcher.query_composite(self.searcher.OP_AND,
+            (text_query, lang_query,))
+        self.results = self._results
         self.search_time = time.time() - t
 
         # spelling suggestions
@@ -358,13 +359,15 @@ class Pager(object):
   items_count = 5
 
   @property
-  def results(self):
+  def _results(self):
       try:
           page = int(self.request.form.get('page', 1))
       except ValueError:
           page = 1
+      start = self.items_count * (page - 1)
+      end = self.items_count * page
       return map(lambda x: x.object(),
-        self._results[self.items_count * (page - 1):self.items_count * page])
+          self._searchresults[start:end])
 
 
   @property
@@ -460,6 +463,7 @@ class AdvancedPagedSearch(PagedSearch):
             self.query = self.searcher.query_composite(self.searcher.OP_AND, \
                                                        (self.query, status_date_query,))
 
+        self.results = self._results
         self.search_time = time.time() - t
 
         # spelling suggestions
