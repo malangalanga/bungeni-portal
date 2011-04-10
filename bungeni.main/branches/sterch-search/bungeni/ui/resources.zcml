@@ -6,7 +6,7 @@
 
 
   <!-- Application JS -->
-  
+
   <browser:resourceDirectory
      name="bungeni-js"
      directory="js"
@@ -117,7 +117,7 @@
      layer="ploned.ui.interfaces.IPlonedSkin"
      weight="25"
      />
-     
+
   <browser:viewlet
      name="jquery-timepicker"
      for="*"
@@ -127,7 +127,7 @@
      layer="ploned.ui.interfaces.IPlonedSkin"
      weight="25"
      /-->
-          
+
 
 
   <browser:viewlet
@@ -138,7 +138,7 @@
      permission="zope.Public"
      layer="ploned.ui.interfaces.IPlonedSkin"
      weight="25"
-     /> 
+     />
 
   <browser:viewlet
      name="jquery-sortable"
@@ -187,7 +187,7 @@
      layer="ploned.ui.interfaces.IPlonedSkin"
      weight="24"
      />
-     
+
   <browser:viewlet
      name="jquery-form-tabbing"
      for="*"
@@ -197,7 +197,7 @@
      layer="ploned.ui.interfaces.IPlonedSkin"
      weight="25"
      />
-     
+
   <browser:viewlet
      name="jquery-recurring-events"
      for="*"
@@ -207,7 +207,7 @@
      layer="ploned.ui.interfaces.IPlonedSkin"
      weight="25"
      />
-          
+
 
   <browser:viewlet
      name="jquery-column-filters"
@@ -245,7 +245,7 @@
      permission="zope.Public"
      layer="ploned.ui.interfaces.IPlonedSkin"
      weight="30"
-     /--> 
+     /-->
      <browser:viewlet
      name="dhtmlx-calendarrecurring"
      for="*"
@@ -379,40 +379,50 @@
      weight="5"
      layer=".interfaces.IRSSRepresentationLayer"
      />
-    <!--browser:resource 
-        name="dhtmlxscheduler.css" 
+    <!--browser:resource
+        name="dhtmlxscheduler.css"
         file="js/dhtmlxScheduler/codebase/dhtmlxscheduler.css" /-->
-    <browser:resource 
-        name="locale_fr.js" 
+    <browser:resource
+        name="locale_fr.js"
         file="js/dhtmlxScheduler/sources/locale_fr.js" />
-    <browser:resource 
-        name="locale_it.js" 
+    <browser:resource
+        name="locale_it.js"
         file="js/dhtmlxScheduler/sources/locale_it.js" />
-    <browser:resource 
-        name="locale_pt.js" 
+    <browser:resource
+        name="locale_pt.js"
         file="js/dhtmlxScheduler/sources/locale_pt.js" />
-     <browser:resource 
-        name="locale_es.js" 
+     <browser:resource
+        name="locale_es.js"
         file="js/dhtmlxScheduler/sources/locale_es.js" />
-     <browser:resource 
-        name="locale_sw.js" 
+     <browser:resource
+        name="locale_sw.js"
         file="js/dhtmlxScheduler/sources/locale_sw.js" />
-     <browser:resource 
-        name="locale_recurring_fr.js" 
+     <browser:resource
+        name="locale_recurring_fr.js"
         file="js/dhtmlxScheduler/sources/locale_recurring_fr.js" />
-    <browser:resource 
-        name="locale_recurring_it.js" 
+    <browser:resource
+        name="locale_recurring_it.js"
         file="js/dhtmlxScheduler/sources/locale_recurring_it.js" />
-    <browser:resource 
-        name="locale_recurring_pt.js" 
+    <browser:resource
+        name="locale_recurring_pt.js"
         file="js/dhtmlxScheduler/sources/locale_recurring_pt.js" />
-     <browser:resource 
-        name="locale_recurring_es.js" 
+     <browser:resource
+        name="locale_recurring_es.js"
         file="js/dhtmlxScheduler/sources/locale_recurring_es.js" />
-   <!-- <browser:resource 
-        name="dhtmlxscheduler.js" 
+   <!-- <browser:resource
+        name="dhtmlxscheduler.js"
         file="js/dhtmlxScheduler/codebase/dhtmlxscheduler_debug.js" />
-    <browser:resource 
-        name="dhtmlxcalendarinit.js" 
+    <browser:resource
+        name="dhtmlxcalendarinit.js"
         file="js/dhtmlxcalendarinit.js" /> -->
+
+    <!-- Hihglight resources -->
+
+    <resourceLibrary name="highlight">
+        <directory
+            source="js/highlight"
+            include="jquery-highlight-min.js highlight.css"
+        />
+    </resourceLibrary>
+
 </configure>

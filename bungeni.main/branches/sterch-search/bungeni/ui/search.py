@@ -49,6 +49,7 @@ from zope.security.proxy import removeSecurityProxy
 from zope.formlib import form
 from zope.cachedescriptors.property import CachedProperty
 from zc.table import table, column
+from zc.resourcelibrary import need
 from bungeni.core.i18n import _
 from bungeni.core.translation import language_vocabulary_factory as languages
 from bungeni.ui.widgets import SelectDateWidget
@@ -71,16 +72,16 @@ from zope.app.publisher.browser import getDefaultViewName
 from bungeni.core.interfaces import ISection
 from bungeni.ui.viewlets.navigation import _get_context_chain
 
-ALLOWED_TYPES = {'business': ('Question', 'Motion', 'Committee', 'Bill',\
+ALLOWED_TYPES = {'business': ('Question', 'Motion', 'Committee', 'Bill', \
                               'TabledDocument', 'AgendaItem'),
-                 'archive': ('Question', 'Motion', 'Committee',\
-                             'Bill', 'TabledDocument', 'AgendaItem',\
+                 'archive': ('Question', 'Motion', 'Committee', \
+                             'Bill', 'TabledDocument', 'AgendaItem', \
                              'Parliament', 'PoliticalGroup'),
                  'members': ('MemberOfParliament',),
-                 'admin': ('Question', 'Motion', 'Committee', 'Bill',\
-                           'TabledDocument', 'AgendaItem', 'Parliament',\
+                 'admin': ('Question', 'Motion', 'Committee', 'Bill', \
+                           'TabledDocument', 'AgendaItem', 'Parliament', \
                            'PoliticalGroup', 'User'),
-                 'test': ('Motion', 'Question'),}
+                 'test': ('Motion', 'Question'), }
 
 def get_statuses_vocabulary(klass):
     try:
@@ -100,8 +101,8 @@ class IAdvancedSearch(ISearch):
     language = schema.Choice(title=_("Language"), values=("en", "fr", "pt", "sw", "it", "en-ke"),
                              required=False)
 
-    content_type = schema.Choice(title=_("Content type"), values=("Question", 
-                                                                  "Motion", 
+    content_type = schema.Choice(title=_("Content type"), values=("Question",
+                                                                  "Motion",
                                                                   "Committee",
                                                                   "User",
                                                                   "Parliament",
@@ -119,6 +120,11 @@ class IAdvancedSearch(ISearch):
     #status = schema.Choice(title=_("Status"), vocabulary=SimpleVocabulary([]), required=False)
 
     status_date = schema.Date(title=_("Status date"), required=False)
+
+class IHighLight(interface.Interface):
+
+    highlight = schema.Bool(title=_("Highlight words"), required=False,
+        default=True)
 
 
 class ISearchResult(interface.Interface):
@@ -167,7 +173,7 @@ class AttachedFileToSearchResult(object):
     @property
     def annotation(self):
         return self.context.file_description
-    
+
 
 class GroupToSearchResult(object):
 
@@ -225,11 +231,41 @@ class ResultListing(object):
         return formatter()
 
 
-class Search(forms.common.BaseForm, ResultListing):
+class HighlightMixin(object):
+
+    @property
+    def highlightscript(self):
+        need("highlight")
+        words = filter(lambda x: x,
+            self.request.form.get("%s.full_text" % self.prefix, "").split(" "))
+        def highliightword(x):
+            return """$("#search-results").highlight("%s", true);""" % x
+        words = "\n".join(map(highliightword, words))
+        return """
+               <script language="JavaScript" type="text/javascript">
+                 var ch = document.getElementById("%s");
+                 function highlightwords(){
+                   $("#search-results").removeHighlight();
+                   if (ch.checked) {
+                     %s
+                   }
+                 }
+                 function radioHighlightChangeonclick(){
+                   ch.onclick=function(){
+                     highlightwords();
+                   }
+                   highlightwords();
+                 }
+                 window.onload = radioHighlightChangeonclick;
+               </script>
+            """ % ("%s.highlight" % self.prefix, words)
+
+
+class Search(forms.common.BaseForm, ResultListing, HighlightMixin):
     """  basic content search form and results
     """
     template = ViewPageTemplateFile('templates/search.pt')
-    form_fields = form.Fields(ISearch)
+    form_fields = form.Fields(ISearch, IHighLight)
     #selection_column = columns[0]
 
     def get_current_section(self):
@@ -243,7 +279,7 @@ class Search(forms.common.BaseForm, ResultListing):
                 break
             ob = chain[i]
         return ob
-    
+
     def setUpWidgets(self, ignore_request=False):
         # setup widgets in data entry mode not bound to context
         self.adapters = {}
@@ -253,39 +289,38 @@ class Search(forms.common.BaseForm, ResultListing):
     @property
     def doc_count(self):
         return len(self._results)
-    
+
     def authorized(self, result):
         obj = result.object()
-        
-        defaultview=getDefaultViewName(obj,self.request)
+
+        defaultview = getDefaultViewName(obj, self.request)
         try:
-            view=queryMultiAdapter((ProxyFactory(obj),self.request),name=defaultview)        
-            return True     
+            view = queryMultiAdapter((ProxyFactory(obj), self.request), name=defaultview)
+            return True
         except Unauthorized:
             print False
-        
+
     @CachedProperty
     def _results(self):
-        
+
         #Filter items allowed in current section
         section = self.get_current_section()
 
         subqueries = []
-        
+
         for tq in ALLOWED_TYPES[section.__name__]:
             subqueries.append(self.searcher.query_field('object_type', tq))
-            
+
         type_query = self.searcher.query_composite(self.searcher.OP_OR, subqueries)
 
-        self.query = self.searcher.query_composite(self.searcher.OP_AND,\
+        self.query = self.searcher.query_composite(self.searcher.OP_AND, \
                                                        (self.query, type_query,))
-        
+
         try:
             results = self.searcher.search(self.query, 0,
                 self.searcher.get_doccount())
         except:
             results = []
-
         return filter(self.authorized, results)
 
     @property
@@ -349,7 +384,6 @@ class Pager(object):
               'url': generate_url(x)}, range(1, page_count + 1))
 
 
-
 class PagedSearch(Pager, Search):
   template = ViewPageTemplateFile('templates/pagedsearch.pt')
 
@@ -358,23 +392,27 @@ class AdvancedPagedSearch(PagedSearch):
     template = ViewPageTemplateFile('templates/advanced-pagedsearch.pt')
     form_fields = form.Fields(IAdvancedSearch)
     form_fields["status_date"].custom_widget = SelectDateWidget
-    
+
     def __init__(self, *args):
         super(AdvancedPagedSearch, self).__init__(*args)
         statuses = SimpleVocabulary([])
-        indexed_fields = ['all',]
+        indexed_fields = ['all', ]
         content_type = self.request.get('form.content_type', '')
         if content_type:
             dotted_name = "bungeni.models.domain.%s" % content_type
             domain_class = resolve.resolve(dotted_name)
             statuses = get_statuses_vocabulary(domain_class)
-            f =  IIndexer(domain_class()).fields()
+            f = IIndexer(domain_class()).fields()
             indexed_fields = indexed_fields + [i for i, fld in f]
-            
-        self.form_fields += form.Fields(schema.Choice(__name__='status', title=_("Status"),\
-                                                       vocabulary=statuses, required=False),\
-                                        schema.Choice(__name__='field', title=_('Field'),\
-                                                       values = indexed_fields, required=False))
+
+        self.form_fields += \
+            form.Fields(
+                schema.Choice(__name__='status', title=_("Status"),
+                    vocabulary=statuses, required=False),
+                schema.Choice(__name__='field', title=_('Field'),
+                    values=indexed_fields, required=False),
+                IHighLight
+            )
 
     @form.action(label=_(u"Search"))
     def handle_search(self, action, data):
@@ -385,7 +423,7 @@ class AdvancedPagedSearch(PagedSearch):
         indexed_field = data.get('field', '')
         status = data.get('status', '')
         status_date = data['status_date']
-        
+
         if not lang:
             lang = 'en'
 
@@ -395,31 +433,31 @@ class AdvancedPagedSearch(PagedSearch):
 
         # compose query
         t = time.time()
-        
+
         if content_type and indexed_field and indexed_field != 'all':
             text_query = self.searcher.query_field(indexed_field, search_term)
             lang_query = self.searcher.query_field('language', lang)
-            self.query = self.searcher.query_composite(self.searcher.OP_AND,\
+            self.query = self.searcher.query_composite(self.searcher.OP_AND, \
                                                        (text_query, lang_query,))
         else:
             text_query = self.searcher.query_parse(search_term)
             lang_query = self.searcher.query_field('language', lang)
-            self.query = self.searcher.query_composite(self.searcher.OP_AND,\
+            self.query = self.searcher.query_composite(self.searcher.OP_AND, \
                                                        (text_query, lang_query,))
-        
+
         if content_type:
             content_type_query = self.searcher.query_field('object_type', content_type)
-            self.query = self.searcher.query_composite(self.searcher.OP_AND,\
+            self.query = self.searcher.query_composite(self.searcher.OP_AND, \
                                                        (self.query, content_type_query,))
 
         if content_type and status:
             status_query = self.searcher.query_field('status', status)
-            self.query = self.searcher.query_composite(self.searcher.OP_AND,\
+            self.query = self.searcher.query_composite(self.searcher.OP_AND, \
                                                        (self.query, status_query,))
 
         if status_date:
             status_date_query = self.searcher.query_field('status_date', index.date_value(status_date))
-            self.query = self.searcher.query_composite(self.searcher.OP_AND,\
+            self.query = self.searcher.query_composite(self.searcher.OP_AND, \
                                                        (self.query, status_date_query,))
 
         self.search_time = time.time() - t
@@ -430,7 +468,7 @@ class AdvancedPagedSearch(PagedSearch):
             search_term != suggestion and suggestion or None)
 
         print self.query
-    
+
 
 class AjaxGetClassStatuses(BrowserView):
 
@@ -444,7 +482,7 @@ class AjaxGetClassStatuses(BrowserView):
             return '\n'.join(response)
         except Exception:
             return "ERROR"
-        
+
 
 class AjaxGetClassFields(BrowserView):
 
@@ -453,9 +491,9 @@ class AjaxGetClassFields(BrowserView):
         tmp = '<option value="%s">%s</option>'
         try:
             domain_class = resolve.resolve(dotted_name)
-            f =  IIndexer(domain_class()).fields()
+            f = IIndexer(domain_class()).fields()
             response = [tmp % (i, i) for i, fld in f]
-            response = [tmp % ('all', 'all'),] + response
+            response = [tmp % ('all', 'all'), ] + response
             return '\n'.join(response)
         except Exception:
             return "ERROR"
@@ -586,7 +624,7 @@ class Similar(BrowserView, ResultListing):
 class SearchResultItem(object):
 
     template = ViewPageTemplateFile('templates/searchresult.pt')
-    
+
     @property
     def language(self):
         lang = self.request.get('form.language', '')
