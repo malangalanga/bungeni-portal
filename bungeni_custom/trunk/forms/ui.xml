@@ -1,9 +1,5 @@
 <ui roles="bungeni.Clerk bungeni.Speaker bungeni.MP bungeni.Minister bungeni.Anonymous">
 
-    <descriptor name="AddressType">
-        <field name="address_type_name" modes="view edit add" />
-    </descriptor>
-
     <descriptor name="AgendaItem">
         <field name="parliament_id" modes="view edit" localizable="view">
             <hide modes="view" />
@@ -77,11 +73,6 @@
     <descriptor name="Attendance">
         <field name="member_id" modes="view edit add listing" />
         <field name="attendance_type_id" modes="view edit add listing" />
-    </descriptor>
-
-    <descriptor name="AttendanceType">
-        <field name="attendance_type" modes="view edit add" />
-        <field name="language" modes="edit add" />
     </descriptor>
 
     <descriptor name="Bill">
