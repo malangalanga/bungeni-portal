@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: Thu Mar 17 17:14:49 2011\n"
+"POT-Creation-Date: Mon Apr 11 17:29:20 2011\n"
 "PO-Revision-Date: 2010-06-10 16:20+0200\n"
 "Last-Translator: undesa <admin@apkn.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Language-Name: English\n"
 "X-Generator: Pootle 2.0.4\n"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:220
+#: src/bungeni.main/bungeni/models/interfaces.py:222
 msgid "Speaker's Office Email"
 msgstr "casa de e-mail escritório"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:224
+#: src/bungeni.main/bungeni/models/interfaces.py:226
 msgid "Speaker's Office Notification"
 msgstr "notificação de negócios do escritório casa"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:225
+#: src/bungeni.main/bungeni/models/interfaces.py:227
 #, fuzzy
 msgid ""
 "true if the Speakers office wants to be alerted by mail whenever a bill, "
@@ -34,11 +34,11 @@ msgstr ""
 "true se o escritório do negócio casa quer ser avisado por e-mail quando um "
 "projeto de lei, o movimento questão, é apresentado"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:230
+#: src/bungeni.main/bungeni/models/interfaces.py:232
 msgid "Clerk's Office Notification"
 msgstr "notificação funcionário do escritório"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:231
+#: src/bungeni.main/bungeni/models/interfaces.py:233
 msgid ""
 "true if the clerks office wants to be alerted by mailwhenever a bill, "
 "motion, question is submitted"
@@ -46,31 +46,44 @@ msgstr ""
 "true se o escritório de funcionários quer ser avisado por e-mail quando um "
 "projeto de lei, o movimento questão, é apresentado"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:236
+#: src/bungeni.main/bungeni/models/interfaces.py:238
 msgid "Clerks's Office Email"
 msgstr "caixeiro-mail do escritório"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:239
+#: src/bungeni.main/bungeni/models/interfaces.py:242
+#, fuzzy
+msgid "Ministries Notification"
+msgstr "notificação funcionário do escritório"
+
+#: src/bungeni.main/bungeni/models/interfaces.py:243
+#, fuzzy
+msgid ""
+"true if the Ministries want to be notified by email of submitted questions"
+msgstr ""
+"true se o escritório de funcionários quer ser avisado por e-mail quando um "
+"projeto de lei, o movimento questão, é apresentado"
+
+#: src/bungeni.main/bungeni/models/interfaces.py:248
 msgid "Administrator's Email"
 msgstr "e-mail administrador"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:241
+#: src/bungeni.main/bungeni/models/interfaces.py:252
 msgid "Allow Question Submission"
 msgstr "permitir o envio questão"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:245
+#: src/bungeni.main/bungeni/models/interfaces.py:256
 msgid "Days to Defer Question"
 msgstr "dias para adiar a questão"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:246
+#: src/bungeni.main/bungeni/models/interfaces.py:257
 msgid "Time after which admissible questions are automatically deferred"
 msgstr "tempo após o qual as questões são admissíveis automaticamente adiada"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:251
+#: src/bungeni.main/bungeni/models/interfaces.py:262
 msgid "Days to Notify Ministry of Pending Response"
 msgstr "dias para notificar ministério de processos pendentes de resposta"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:252
+#: src/bungeni.main/bungeni/models/interfaces.py:263
 #, fuzzy
 msgid ""
 "Timeframe after which the clerksoffice and the ministry is alerted that "
@@ -80,47 +93,72 @@ msgstr ""
 "alertado de que as questões que estão pendentes de resposta ainda não "
 "respondeu"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:257
+#: src/bungeni.main/bungeni/models/interfaces.py:269
 msgid "Days before question scheduled"
 msgstr "dias antes da questão agendada"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:261
+#: src/bungeni.main/bungeni/models/interfaces.py:273
 msgid "Days before bill scheduled"
 msgstr "dias antes da lei prevista"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:265
+#: src/bungeni.main/bungeni/models/interfaces.py:277
 msgid "Max Questions Per Sitting"
 msgstr "max perguntas por sessão"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:269
+#: src/bungeni.main/bungeni/models/interfaces.py:281
 msgid "Max Questions Per Sitting Per MP"
 msgstr "max perguntas por sessão por mp"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:277
+#: src/bungeni.main/bungeni/models/interfaces.py:290
 msgid "Email Notifications Enabled?"
 msgstr "notificações de e-mail ativado?"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:286
+#: src/bungeni.main/bungeni/models/interfaces.py:296
+msgid "Email server hostname or IP address"
+msgstr ""
+
+#: src/bungeni.main/bungeni/models/interfaces.py:300
+msgid "Email server port"
+msgstr ""
+
+#: src/bungeni.main/bungeni/models/interfaces.py:304
+msgid "Email server login name"
+msgstr ""
+
+#: src/bungeni.main/bungeni/models/interfaces.py:308
+msgid "Email server password"
+msgstr ""
+
+#: src/bungeni.main/bungeni/models/interfaces.py:312
+#, fuzzy
+msgid "Default sender address"
+msgstr "endereço apagar"
+
+#: src/bungeni.main/bungeni/models/interfaces.py:316
+msgid "Use TLS to connect"
+msgstr ""
+
+#: src/bungeni.main/bungeni/models/interfaces.py:325
 msgid "Name of the Assignment"
 msgstr "nome da tarefa"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:287
+#: src/bungeni.main/bungeni/models/interfaces.py:326
 msgid "Start Date of the Assignment"
 msgstr "data de início do trabalho"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:288
+#: src/bungeni.main/bungeni/models/interfaces.py:327
 msgid "End Date of the Assignment"
 msgstr "data de término do trabalho"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:289
+#: src/bungeni.main/bungeni/models/interfaces.py:328
 msgid "Assignment Type"
 msgstr "tipo de tarefa"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:290
+#: src/bungeni.main/bungeni/models/interfaces.py:329
 msgid "Status"
 msgstr "estado"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:291
+#: src/bungeni.main/bungeni/models/interfaces.py:330
 msgid "Notes"
 msgstr "notas"
 
