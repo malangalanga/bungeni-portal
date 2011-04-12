@@ -46,7 +46,6 @@ from bungeni.core.workflows._conditions import (
     response_allow_submit, # The "submit_response" workflow transition should 
     # NOT be displayed when the UI is displaying the question in "edit" mode 
     # (this transition will deny bungeni.Question.Edit to the Minister).
-    is_ministry_set,
     
     # user
     has_date_of_death,

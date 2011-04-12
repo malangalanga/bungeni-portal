@@ -152,7 +152,7 @@
     
     <state id="rejected" title="Rejected Bill" like_state="approved" />
     
-    <state id="withdrawn_public" title="Bill Withdrawn" like_state="approved" />
+    <state id="withdrawn" title="Bill Withdrawn" like_state="approved" />
     
     
     <transition id="create"
@@ -163,6 +163,7 @@
         trigger="automatic"
     />
     
+    <!-- !+ why "submit" and not "receive" given that this is for the clerk? -->
     <transition id="submit"
         title="Publish in Gazette"
         source="working_draft"
@@ -416,7 +417,7 @@
                 whole_house
                 second_committee
                 third_reading"
-        destination="withdrawn_public"
+        destination="withdrawn"
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"

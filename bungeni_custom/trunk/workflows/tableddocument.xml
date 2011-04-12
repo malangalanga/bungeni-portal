@@ -114,12 +114,12 @@
         />
     </state>
     
-    <state id="incomplete" title="Needs Clarification by Clerks Office"
+    <state id="incomplete" title="Requires Clarification to Approve"
         version="true"
         like_state="received" 
     />
     
-    <state id="clarification_required" title="Needs Clarification by MP"
+    <state id="clarification_required" title="Requires Clarification to Receive"
         version="true"
         like_state="submitted">
         <!-- question -->
@@ -180,7 +180,7 @@
     />
     
     <transition id="submit"
-        title="Submit to Clerk"
+        title="Submit"
         source="working_draft draft"
         destination="submitted"
         condition=""
@@ -198,7 +198,7 @@
     />
     
     <transition id="require_clarification"
-        title="Needs Clarification to Receive"
+        title="Require Clarification to Receive"
         source="received incomplete"
         destination="clarification_required"
         condition=""
@@ -208,7 +208,7 @@
     />
     
     <transition id="complete"
-        title="Submit to the Speaker Office"
+        title="Complete"
         source="received"
         destination="completed"
         condition=""
@@ -244,7 +244,7 @@
     />
     
     <transition id="require_recomplete"
-        title="Needs Clarification to Approve"
+        title="Needs Recomplete to Approve"
         source="completed"
         destination="incomplete"
         condition=""
@@ -254,7 +254,7 @@
     />
     
     <transition id="recomplete"
-        title="Complete"
+        title="Recomplete"
         source="incomplete"
         destination="completed"
         condition=""
@@ -263,7 +263,7 @@
     />
     
     <transition id="resubmit"
-        title="Resubmit to Clerk"
+        title="Resubmit"
         source="clarification_required"
         destination="submitted"
         condition=""

@@ -82,7 +82,7 @@
         />
     </state>
     
-    <state id="clarification_required" title="Needs Clarification by MP"
+    <state id="clarification_required" title="Requires Clarification to Receive"
         version="true"
         like_state="submitted">
         <!-- agendaitem -->        
@@ -111,7 +111,7 @@
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Speaker" /> 
     </state>
     
-    <state id="incomplete" title="Needs Clarification by Clerks Office" 
+    <state id="incomplete" title="Requires Clarification to Approve" 
         version="true"
         like_state="received" 
     />
@@ -125,7 +125,7 @@
         />
     </state>
     
-    <state id="withdrawn" title="Withdrawn" like_state="submitted" />
+    <state id="withdrawn_internal" title="Withdrawn" like_state="submitted" />
     
     <state id="admissible" title="Admissible"
         version="true"
@@ -172,7 +172,7 @@
     
     <state id="dropped" title="Dropped" like_state="admissible"  />
     
-    <state id="withdrawn_public" title="Withdrawn" like_state="admissible" />
+    <state id="withdrawn" title="Withdrawn" like_state="admissible" />
     
     
     <transition id="create"
@@ -192,7 +192,7 @@
     />
     
     <transition id="submit"
-        title="Submit to Clerk"
+        title="Submit"
         source="working_draft draft"
         destination="submitted"
         condition=""
@@ -210,7 +210,7 @@
     />
     
     <transition id="require_clarification"
-        title="Needs Clarification to Receive"
+        title="Require Clarification to Receive"
         source="received incomplete"
         destination="clarification_required"
         condition=""
@@ -220,7 +220,7 @@
     />
     
     <transition id="complete"
-        title="Submit to the Speaker Office"
+        title="Complete"
         source="received"
         destination="completed"
         condition=""
@@ -248,7 +248,7 @@
     />
     
     <transition id="allow_schedule"
-        title="Make available for scheduling"
+        title="Allow scheduling"
         source="admissible deferred"
         destination="schedule_pending"
         trigger="manual"
@@ -256,7 +256,7 @@
     />
     
     <transition id="require_recomplete"
-        title="Needs Clarification to Approve"
+        title="Require Recomplete to Approve"
         source="completed"
         destination="incomplete"
         condition=""
@@ -266,7 +266,7 @@
     />
     
     <transition id="recomplete"
-        title="Re-complete"
+        title="Recomplete"
         source="incomplete"
         destination="completed"
         condition=""
@@ -275,7 +275,7 @@
     />
     
     <transition id="resubmit"
-        title="Resubmit to Clerk"
+        title="Resubmit"
         source="clarification_required"
         destination="submitted"
         condition=""
@@ -284,7 +284,7 @@
     />
     
     <transition id="reschedule"
-        title="Re-schedule"
+        title="Reschedule"
         source="scheduled"
         destination="schedule_pending"
         trigger="system"
@@ -308,10 +308,6 @@
         roles="bungeni.Clerk"
     />
     
-    <!--
-    In a sitting the item is to be debated, but for reasons such as absence
-    of the MP, cannot be, so it is dropped. 
-    -->
     <transition id="drop"
         title="Drop"
         source="scheduled"
@@ -319,6 +315,8 @@
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"
+        note="For reasons such as absence of the MP, the item cannot be be 
+            debated in a sitting, so it is dropped."
     />
     
     <transition id="debate"
@@ -360,7 +358,7 @@
     <transition id="withdraw"
         title="Withdraw"
         source="submitted received completed clarification_required"
-        destination="withdrawn"
+        destination="withdrawn_internal"
         condition=""
         trigger="manual"
         roles="bungeni.Clerk bungeni.Owner"
@@ -370,7 +368,7 @@
     <transition id="withdraw_public"
         title="Withdraw"
         source="admissible scheduled deferred adjourned schedule_pending"
-        destination="withdrawn_public"
+        destination="withdrawn"
         condition=""
         trigger="manual"
         roles="bungeni.Clerk bungeni.Owner"

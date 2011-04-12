@@ -134,7 +134,7 @@
         />
     </state>
     
-    <state id="clarification_required" title="Needs MPs clarification"
+    <state id="clarification_required" title="Requires Clarification to Receive"
         version="true"
         like_state="submitted">
         <!-- question -->
@@ -150,7 +150,7 @@
         />
     </state>
     
-    <state id="incomplete" title="Needs clerks clarification"
+    <state id="incomplete" title="Require Clarification to Approve"
         version="true"
         like_state="received" 
     />
@@ -225,9 +225,9 @@
     
     <state id="dropped" title="Dropped" like_state="admissible" />
     
-    <state id="withdrawn" title="Withdrawn" like_state="submitted" />
+    <state id="withdrawn_internal" title="Withdrawn" like_state="submitted" />
     
-    <state id="withdrawn_public" title="Withdrawn" like_state="admissible" />
+    <state id="withdrawn" title="Withdrawn" like_state="admissible" />
     
     
     <transition id="create"
@@ -249,7 +249,7 @@
     />
     
     <transition id="submit"
-        title="Submit to Clerk"
+        title="Submit"
         source="working_draft draft"
         destination="submitted"
         condition=""
@@ -268,14 +268,8 @@
         order="2"
     />
     
-    <!--
-    If a question is flagged by the Clerk's office as 
-    "requiring editing by the MP" (e.g. missing data etc.) the system sends 
-    a notification [!+?] to the MP to access the question and review it 
-    according to Speaker/Clerk's office remarks. 
-    -->
     <transition id="require_clarification"
-        title="Needs Clarification to Receive"
+        title="Require Clarification to Receive"
         source="received incomplete"
         destination="clarification_required"
         condition=""
@@ -284,34 +278,20 @@
         order="3"
         require_confirmation="true"
     />
-    <!--
-    After the Clerk's Office is through with the Notices reviews and there 
-    are satisfied that the Questions have all the formal requirements – the 
-    question is marked as “completed” and is made available / forwarded to the 
-    Speaker's Office for reviewing and to make it “admissible”. At the same 
-    time the question is also forwarded to the ministry. While the ministry 
-    can preview the question the ministry cannot respond until the state of the
-    question has been set to “admissible” by the Speaker's office (for details 
-    about questions being set to “admissible” see Approval of Questions)
-    -->
+
     <transition id="complete"
-        title="Submit to the Speaker Office"
+        title="Complete"
         source="received"
         destination="completed"
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"
         order="4"
+        note="The Question has all the formal requirements; forwarded to the
+            Speaker's Office as well as to the Ministry for pre-viewing (but
+            will only be able to respond when question is approved)."
     />
-    <!--
-    the Speaker's office may decide that a proposed Question is “admissible”, 
-    “inadmissible” or “requires recomplete”.
     
-    An inadmissible Question is rejected and the Member who proposed the 
-    Question will be notified accordingly via their workspace and optionally by 
-    email. Question that require recompleting may be modified and re-submitted, 
-    Questions marked as “admissible” are then made available for Scheduling.
-    -->
     <transition id="approve"
         title="Approve"
         source="completed"
@@ -334,7 +314,7 @@
     />
     
     <transition id="require_recomplete"
-        title="Needs Clarification to Approve"
+        title="Require Recomplete to Approve"
         source="completed"
         destination="incomplete"
         condition=""
@@ -344,12 +324,8 @@
         require_confirmation="true"
     />
     
-    <!--
-    A question that requires clarification/recompleting can be resubmitted by 
-    the clerks office.
-    -->
     <transition id="recomplete"
-        title="Complete"
+        title="Recomplete"
         source="incomplete"
         destination="completed"
         condition=""
@@ -358,11 +334,8 @@
         order="9"
     />
     
-    <!--
-    After a question is amended it can be resubmitted to the clerks office.
-    -->
     <transition id="resubmit"
-        title="Resubmit to Clerk"
+        title="Resubmit"
         source="clarification_required"
         destination="submitted"
         condition=""
@@ -371,16 +344,6 @@
         order="10"
     />
     
-    <!--
-    Among the “admissible” questions the Speaker or the Clerk's office will 
-    select questions for scheduling for a specific sitting
-    Questions when “admissible” are made available for “scheduling”
-    Questions with the “require a Written response” flag do not appear as 
-    questions available for scheduling.
-    -->
-    <!--
-    An admissible (or deferred) question may be made available for scheduling.
-    -->
     <transition id="allow_schedule"
         title="Make available for scheduling"
         source="admissible deferred adjourned"
@@ -409,18 +372,16 @@
         order="12"
     />
     
-    <!--
-    Questions which are flagged as “requiring written response” are never 
-    scheduled, but are answered directly by the ministry.
-    -->
     <transition id="allow_response"
         title="Send to Ministry"
-        source="admissible"
+        source="admissible deferred"
         destination="response_pending"
         condition="is_written_response"
         trigger="manual"
         roles="bungeni.Clerk"
         order="13"
+        note="Written-response questions are never scheduled but must be 
+            answered directly by the Ministry."
     />
     
     <transition id="submit_response"
@@ -463,10 +424,6 @@
         require_confirmation="true"
     />
     
-    <!--
-    All admissible questions awaiting an oral response etc. and flag them for 
-    “scheduling” for a later day or otherwise drop them from the pending ones. 
-    -->
     <transition id="defer"
         title="Defer"
         source="admissible schedule_pending adjourned"
@@ -475,25 +432,9 @@
         trigger="manual"
         roles="bungeni.Clerk"
         order="19"
+        note="Oral question, postpone scheduling."
     />
     
-    <!--
-    A deferred question may be send to a ministry for a written response
-    -->
-    <transition id="deferred_allow_response"
-        title="Send to Ministry"
-        source="deferred"
-        destination="response_pending"
-        condition="is_ministry_set"
-        trigger="manual"
-        roles="bungeni.Clerk"
-        order="20"
-    />
-    
-    <!--
-    In a sitting the question is to be debated, but for reasons such as absence
-    of the MP, cannot be, so it is dropped. 
-    -->
     <transition id="drop"
         title="Drop"
         source="scheduled"
@@ -514,9 +455,6 @@
         order="23"
     />
     
-    <!--
-    Question was debated in the plenary
-    -->
     <transition id="debate"
         title="Debated"
         source="scheduled"
@@ -526,25 +464,23 @@
         order="25"
     />
     
-    <!--
-    The MP can withdraw his question at (almost) any stage i.e the stages where 
-    it can still be presented to the ministry/house.
-    -->
     <transition id="withdraw"
         title="Withdraw"
         source="submitted received completed clarification_required"
-        destination="withdrawn"
+        destination="withdrawn_internal"
         condition=""
         trigger="manual"
         roles="bungeni.Clerk bungeni.Owner"
         order="26"
         require_confirmation="true"
+        note="The MP can withdraw his question at any stage where it can 
+            still be presented to the ministry/house."
     />
     
     <transition id="withdraw_public"
         title="Withdraw"
         source="admissible schedule_pending scheduled deferred adjourned"
-        destination="withdrawn_public"
+        destination="withdrawn"
         trigger="manual"
         condition=""
         roles="bungeni.Clerk bungeni.Owner"

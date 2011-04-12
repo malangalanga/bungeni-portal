@@ -18,6 +18,7 @@
         title
         version=False
         like_state
+        note
     
     - within each target-section, the order of appearance of permission actions 
       (for appropriate actions) is:
@@ -175,7 +176,7 @@
         />
     </state>
     
-    <state id="clarification_required" title="Needs Clarification by MP"
+    <state id="clarification_required" title="Requires Clarification to Receive"
         version="true"
         like_state="submitted">
         <!-- motion -->
@@ -194,10 +195,6 @@
         />
     </state>
     
-    <!-- Here the "concept" is that the PI is *formally admissible* and so 
-    ready to be considered by the "speaker's office" for the rules/political 
-    admissibility. 
-    -->
     <state id="completed" title="Submitted to the Speaker"
         version="true"
         like_state="submitted">
@@ -211,12 +208,12 @@
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Speaker" />
     </state>
     
-    <state id="incomplete" title="Needs Clarification by Clerks Office"
+    <state id="incomplete" title="Requires Clarification to Approve"
         version="true"
         like_state="received"
     />
     
-    <state id="withdrawn" title="Withdrawn" like_state="submitted" />
+    <state id="withdrawn_internal" title="Withdrawn" like_state="submitted" />
     
     <state id="inadmissible" title="Inadmissible" like_state="submitted">
         <notification condition="owner_receive_notification"
@@ -260,11 +257,12 @@
         like_state="admissible"
     />
     
-    <!-- a motion was debated and the debate adjourned  -->
-    <state id="adjourned" title="Debate adjourned" like_state="admissible" />
+    <state id="adjourned" title="Debate adjourned" like_state="admissible" 
+        note="a motion was debated and the debate adjourned"
+    />
     
-    <!-- admissable motion that cannot be debated -->
-    <state id="deferred" title="Deferred" like_state="admissible">
+    <state id="deferred" title="Deferred" like_state="admissible"
+        note="An admissable motion that cannot be debated.">
         <notification condition="owner_receive_notification"
             subject="Motion deferred: ${item.short_name}"
             from="${site.speaker_email}"
@@ -273,11 +271,13 @@
         />
     </state>
     
-    <!-- defered motion that was not debated -->
-    <state id="elapsed" title="Elapsed" like_state="admissible" />
+    <state id="elapsed" title="Elapsed" like_state="admissible" 
+        note="A defered motion that was not debated"
+    />
     
-    <!-- motion was scheduled for but droped, becuase no show of MP etc -->
-    <state id="dropped" title="Dropped" like_state="admissible" />
+    <state id="dropped" title="Dropped" like_state="admissible" 
+        note="A motion was scheduled, but dropped e.g. becuase no show of MP."
+    />
     
     <state id="rejected" title="Rejected" like_state="admissible">
         <notification condition="owner_receive_notification"
@@ -288,7 +288,7 @@
         />
     </state>
     
-    <state id="withdrawn_public" title="Withdrawn" like_state="admissible" />
+    <state id="withdrawn" title="Withdrawn" like_state="admissible" />
     
     
     <!--
@@ -306,6 +306,7 @@
         permission=CheckerPublic !+ bungeni.{module}.wf.{transition_id}
         order=0
         require_confirmation=False
+        note
     
     -->
     
@@ -326,7 +327,7 @@
     />
     
     <transition id="submit"
-        title="Submit to Clerk"
+        title="Submit"
         source="working_draft draft"
         destination="submitted"
         condition=""
@@ -344,7 +345,7 @@
     />
     
     <transition id="require_clarification"
-        title="Needs Clarification to Receive"
+        title="Require Clarification to Receive"
         source="received incomplete" 
         destination="clarification_required"
         condition=""
@@ -354,7 +355,7 @@
     />
     
     <transition id="complete" 
-        title="Submit to the Speaker Office"
+        title="Complete"
         source="received" 
         destination="completed" 
         condition=""
@@ -390,7 +391,7 @@
     />
     
     <transition id="require_recomplete"
-        title="Needs Clarification to Approve"
+        title="Require Recomplete to Approve"
         source="completed" 
         destination="incomplete" 
         condition=""
@@ -400,7 +401,7 @@
     />
     
     <transition id="recomplete"
-        title="Re-complete"
+        title="Recomplete"
         source="incomplete"
         destination="completed"
         condition=""
@@ -409,7 +410,7 @@
     />
     
     <transition id="resubmit"
-        title="Resubmit to Clerk"
+        title="Resubmit"
         source="clarification_required"
         destination="submitted"
         condition=""
@@ -514,7 +515,7 @@
     <transition id="withdraw" 
         title="Withdraw" 
         source="submitted received completed clarification_required"
-        destination="withdrawn" 
+        destination="withdrawn_internal" 
         condition=""
         trigger="manual"
         roles="bungeni.Clerk bungeni.Owner"
@@ -524,7 +525,7 @@
     <transition id="withdraw_public" 
         title="Withdraw"
         source="admissible scheduled deferred adjourned schedule_pending"
-        destination="withdrawn_public"
+        destination="withdrawn"
         condition=""
         trigger="manual"
         roles="bungeni.Clerk bungeni.Owner"
