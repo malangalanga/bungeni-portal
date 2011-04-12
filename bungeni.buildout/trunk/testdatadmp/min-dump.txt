@@ -105,9 +105,9 @@ COPY attendance_types (attendance_type_id, attendance_type, language) FROM stdin
 -- Data for Name: bill_types; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY bill_types (bill_type_id, bill_type_name) FROM stdin;
-1	 Public Bill
-2	 Private Bill
+COPY bill_types (bill_type_id, bill_type_name, language) FROM stdin;
+1	Public Bill	en
+2	Private Bill	en
 \.
 
 
