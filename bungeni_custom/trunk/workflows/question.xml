@@ -229,8 +229,7 @@
     <state id="withdrawn" title="Withdrawn" like_state="admissible" />
     
     
-    <transition id="create"
-        title="Create Question"
+    <transition title="Create Question"
         source=""
         destination="draft"
         condition="user_is_context_owner"
@@ -238,8 +237,7 @@
         order="0"
     />
     
-    <transition id="create_on_behalf_of"
-        title="Create Question (On behalf of)"
+    <transition title="Create Question (On behalf of)"
         source=""
         destination="working_draft"
         condition="user_is_not_context_owner"
@@ -247,8 +245,7 @@
         order="0"
     />
     
-    <transition id="submit"
-        title="Submit"
+    <transition title="Submit"
         source="working_draft draft"
         destination="submitted"
         condition=""
@@ -257,8 +254,7 @@
         order="1"
     />
     
-    <transition id="receive"
-        title="Receive"
+    <transition title="Receive"
         source="submitted"
         destination="received"
         trigger="manual"
@@ -267,8 +263,7 @@
         order="2"
     />
     
-    <transition id="require_clarification"
-        title="Require Clarification to Receive"
+    <transition title="Require Clarification to Receive"
         source="received incomplete"
         destination="clarification_required"
         condition=""
@@ -278,8 +273,7 @@
         require_confirmation="true"
     />
 
-    <transition id="complete"
-        title="Complete"
+    <transition title="Complete"
         source="received"
         destination="completed"
         condition=""
@@ -291,8 +285,7 @@
             will only be able to respond when question is approved)."
     />
     
-    <transition id="approve"
-        title="Approve"
+    <transition title="Approve"
         source="completed"
         destination="admissible"
         condition=""
@@ -301,8 +294,7 @@
         order="6"
     />
     
-    <transition id="disapprove"
-        title="Disapprove"
+    <transition title="Disapprove"
         source="completed"
         destination="inadmissible"
         condition=""
@@ -312,8 +304,7 @@
         require_confirmation="true"
     />
     
-    <transition id="require_recomplete"
-        title="Require Recomplete to Approve"
+    <transition title="Require Recomplete to Approve"
         source="completed"
         destination="incomplete"
         condition=""
@@ -323,8 +314,7 @@
         require_confirmation="true"
     />
     
-    <transition id="recomplete"
-        title="Recomplete"
+    <transition title="Recomplete"
         source="incomplete"
         destination="completed"
         condition=""
@@ -333,8 +323,7 @@
         order="9"
     />
     
-    <transition id="resubmit"
-        title="Resubmit"
+    <transition title="Resubmit"
         source="clarification_required"
         destination="submitted"
         condition=""
@@ -343,8 +332,7 @@
         order="10"
     />
     
-    <transition id="allow_schedule"
-        title="Make available for scheduling"
+    <transition title="Make available for scheduling"
         source="admissible deferred adjourned"
         destination="schedule_pending"
         condition="is_oral_response"
@@ -353,16 +341,14 @@
         order="11"
     />
     
-    <transition id="reschedule"
-        title="Reschedule"
+    <transition title="Reschedule"
         source="scheduled"
         destination="schedule_pending"
         trigger="system"
         roles="bungeni.Clerk"
     />
     
-    <transition id="schedule"
-        title="Schedule"
+    <transition title="Schedule"
         source="schedule_pending"
         destination="scheduled"
         condition="is_scheduled"
@@ -371,8 +357,7 @@
         order="12"
     />
     
-    <transition id="allow_response"
-        title="Send to Ministry"
+    <transition title="Send to Ministry"
         source="admissible deferred"
         destination="response_pending"
         condition="is_written_response"
@@ -383,8 +368,7 @@
             answered directly by the Ministry."
     />
     
-    <transition id="submit_response"
-        title="Submit Response"
+    <transition title="Submit Response"
         source="response_pending"
         destination="response_submitted"
         condition="response_allow_submit"
@@ -393,8 +377,7 @@
         order="15"
     />
     
-    <transition id="redraft_response"
-        title="Redraft Response"
+    <transition title="Redraft Response"
         source="response_submitted"
         destination="response_pending"
         condition=""
@@ -403,8 +386,7 @@
         order="16"
     />
     
-    <transition id="complete_response"
-        title="Complete Response"
+    <transition title="Complete Response"
         source="response_submitted"
         destination="response_completed"
         trigger="manual"
@@ -412,8 +394,7 @@
         order="17"
     />
     
-    <transition id="elapse"
-        title="Elapse"
+    <transition title="Elapse"
         source="response_pending deferred"
         destination="elapsed"
         condition=""
@@ -423,8 +404,7 @@
         require_confirmation="true"
     />
     
-    <transition id="defer"
-        title="Defer"
+    <transition title="Defer"
         source="admissible schedule_pending adjourned"
         destination="deferred"
         condition=""
@@ -434,8 +414,7 @@
         note="Oral question, postpone scheduling."
     />
     
-    <transition id="drop"
-        title="Drop"
+    <transition title="Drop"
         source="scheduled"
         destination="dropped"
         condition=""
@@ -444,8 +423,7 @@
         order="22"
     />
     
-    <transition id="adjourn"
-        title="Debate adjourned"
+    <transition title="Debate adjourned"
         source="scheduled"
         destination="adjourned"
         condition=""
@@ -454,8 +432,7 @@
         order="23"
     />
     
-    <transition id="debate"
-        title="Debated"
+    <transition title="Debated"
         source="scheduled"
         destination="debated"
         trigger="manual"
@@ -463,8 +440,7 @@
         order="25"
     />
     
-    <transition id="withdraw"
-        title="Withdraw"
+    <transition title="Withdraw"
         source="submitted received completed clarification_required"
         destination="withdrawn_internal"
         condition=""
@@ -476,8 +452,7 @@
             still be presented to the ministry/house."
     />
     
-    <transition id="withdraw_public"
-        title="Withdraw"
+    <transition title="Withdraw"
         source="admissible schedule_pending scheduled deferred adjourned"
         destination="withdrawn"
         trigger="manual"

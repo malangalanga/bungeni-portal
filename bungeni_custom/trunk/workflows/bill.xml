@@ -154,8 +154,7 @@
     <state id="withdrawn" title="Bill Withdrawn" like_state="approved" />
     
     
-    <transition id="create"
-        title="Create Bill"
+    <transition title="Create Bill"
         source=""
         destination="working_draft"
         condition=""
@@ -163,8 +162,7 @@
     />
     
     <!-- !+ why "submit" and not "receive" given that this is for the clerk? -->
-    <transition id="submit"
-        title="Publish in Gazette"
+    <transition title="Publish in Gazette"
         source="working_draft"
         destination="gazetted"
         condition=""
@@ -172,8 +170,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="allow_schedule_first"
-        title="Allow scheduling of First Reading"
+    <transition title="Allow scheduling of First Reading"
         source="gazetted first_reading_adjourned"
         destination="first_reading_pending"
         condition=""
@@ -181,8 +178,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="schedule_first"
-        title="Schedule First Reading"
+    <transition title="Schedule First Reading"
         source="first_reading_pending"
         destination="first_reading"
         condition="is_scheduled"
@@ -190,8 +186,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="reschedule_first"
-        title="Reschedule First Reading"
+    <transition title="Reschedule First Reading"
         source="first_reading"
         destination="first_reading_pending"
         condition=""
@@ -199,8 +194,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="adjourn_first"
-        title="Adjourn First Reading"
+    <transition title="Adjourn First Reading"
         source="first_reading"
         destination="first_reading_adjourned"
         condition=""
@@ -208,8 +202,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="select_first_committee"
-        title="Send to Select Committee (I)"
+    <transition title="Send to Select Committee (I)"
         source="first_reading"
         destination="first_committee"
         condition=""
@@ -217,8 +210,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="schedule_first_report_reading"
-        title="Schedule First Report Reading"
+    <transition title="Schedule First Report Reading"
         source="first_report_reading_pending"
         destination="first_report_reading"
         condition="is_scheduled"
@@ -226,8 +218,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="reschedule_first_report_reading"
-        title="Reschedule First Report Reading"
+    <transition title="Reschedule First Report Reading"
         source="first_report_reading"
         destination="first_report_reading_pending"
         condition=""
@@ -235,8 +226,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="allow_schedule_second_reading"
-        title="Allow scheduling of Second Reading"
+    <transition title="Allow scheduling of Second Reading"
         source="first_reading first_report_reading second_reading_adjourned"
         destination="second_reading_pending"
         condition=""
@@ -244,8 +234,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="schedule_second_reading"
-        title="Schedule Second Reading"
+    <transition title="Schedule Second Reading"
         source="second_reading_pending"
         destination="second_reading"
         condition="is_scheduled"
@@ -253,8 +242,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="reschedule_second_reading"
-        title="Reschedule Second Reading"
+    <transition title="Reschedule Second Reading"
         source="second_reading"
         destination="second_reading_pending"
         condition=""
@@ -262,8 +250,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="adjourn_first_report_reading"
-        title="Adjourn First Report Reading"
+    <transition title="Adjourn First Report Reading"
         source="first_report_reading"
         destination="first_report_reading_adjourned"
         condition=""
@@ -271,8 +258,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="allow_schedule_first_report_reading"
-        title="Allow scheduling of First Report Reading"
+    <transition title="Allow scheduling of First Report Reading"
         source="first_committee first_report_reading_adjourned"
         destination="first_report_reading_pending"
         condition=""
@@ -280,8 +266,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="adjourn_second"
-        title="Adjourn Second Reading"
+    <transition title="Adjourn Second Reading"
         source="second_reading"
         destination="second_reading_adjourned"
         condition=""
@@ -289,8 +274,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="allow_schedule_whole_house"
-        title="Allow scheduling of Whole House Committee"
+    <transition title="Allow scheduling of Whole House Committee"
         source="second_reading whole_house_adjourned"
         destination="whole_house_pending"
         condition=""
@@ -298,8 +282,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="allow_reschedule_whole_house"
-        title="Allow scheduling/rescheduling of Whole House Committee"
+    <transition title="Allow scheduling/rescheduling of Whole House Committee"
         source="second_committee"
         destination="whole_house_pending"
         condition=""
@@ -307,8 +290,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="schedule_whole_house"
-        title="Schedule Whole House Committee"
+    <transition title="Schedule Whole House Committee"
         source="whole_house_pending"
         destination="whole_house"
         condition="is_scheduled"
@@ -316,8 +298,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="reschedule_whole_house"
-        title="Reschedule Whole House Committee"
+    <transition title="Reschedule Whole House Committee"
         source="whole_house"
         destination="whole_house_pending"
         condition=""
@@ -325,8 +306,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="adjourn_whole_house"
-        title="Adjourn Whole House Committee"
+    <transition title="Adjourn Whole House Committee"
         source="whole_house"
         destination="whole_house_adjourned"
         condition=""
@@ -334,8 +314,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="select_second_committee"
-        title="Send to Select Committee (II)"
+    <transition title="Send to Select Committee (II)"
         source="second_reading"
         destination="second_committee"
         condition=""
@@ -343,8 +322,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="select_second_committee_via_whole_house"
-        title="Send/Resend to Select Committee (II)"
+    <transition title="Send/Resend to Select Committee (II)"
         source="whole_house"
         destination="second_committee"
         condition=""
@@ -352,8 +330,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="allow_schedule_third_reading"
-        title="Allow scheduling of Third Reading"
+    <transition title="Allow scheduling of Third Reading"
         source="whole_house third_reading_adjourned"
         destination="third_reading_pending"
         condition=""
@@ -361,8 +338,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="schedule_third_reading"
-        title="Schedule Third Reading"
+    <transition title="Schedule Third Reading"
         source="third_reading_pending"
         destination="third_reading"
         condition="is_scheduled"
@@ -370,8 +346,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="reschedule_third_reading"
-        title="Reschedule Third Reading"
+    <transition title="Reschedule Third Reading"
         source="third_reading"
         destination="third_reading_pending"
         condition=""
@@ -379,8 +354,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="adjourn_third_reading"
-        title="Adjourn Third Reading"
+    <transition title="Adjourn Third Reading"
         source="third_reading"
         destination="third_reading_adjourned"
         condition=""
@@ -388,8 +362,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="reject"
-        title="Rejected"
+    <transition title="Reject"
         source="second_reading third_reading"
         destination="rejected"
         condition=""
@@ -397,8 +370,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="approve"
-        title="Approved"
+    <transition title="Approve"
         source="third_reading"
         destination="approved"
         condition=""
@@ -406,8 +378,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="withdraw"
-        title="Withdraw"
+    <transition title="Withdraw"
         source="gazetted
                 first_reading
                 first_committee

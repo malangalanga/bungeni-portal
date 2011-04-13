@@ -44,15 +44,13 @@
     </state>
     
     
-    <transition id="create"
-        title="Create"
+    <transition title="Create"
         source=""
         destination="draft"
         trigger="automatic"
     />
     
-    <transition id="activate"
-        title="Activate"
+    <transition title="Activate"
         source="draft dissolved"
         destination="active"
         trigger="manual"
@@ -60,8 +58,7 @@
         require_confirmation="true"
     />
     
-    <transition id="dissolve"
-        title="Dissolve"
+    <transition title="Dissolve"
         source="active"
         destination="dissolved"
         condition="has_end_date"
@@ -71,8 +68,7 @@
     />
     
     <!-- !+ why back to "draft"? -->
-    <transition id="deactivate"
-        title="Deactivate"
+    <transition title="Deactivate"
         source="active"
         destination="draft"
         trigger="manual"

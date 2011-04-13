@@ -18,15 +18,13 @@
         <deny permission="zope.View" role="bungeni.Anonymous" /> 
     </state>
     
-    <transition id="create"
-        title="Create"
+    <transition title="Create"
         source=""
         destination="public"
         trigger="automatic"
     />
     
-    <transition id="deactivate"
-        title="Deactivate"
+    <transition title="Deactivate"
         source="public"
         destination="inactive"
         trigger="manual"

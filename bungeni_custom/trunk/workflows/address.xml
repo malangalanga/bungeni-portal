@@ -29,15 +29,13 @@
     </state>
     
     
-    <transition id="create"
-        title="Create"
+    <transition title="Create"
         source=""
         destination="private"
         trigger="automatic"
     />
     
-    <transition id="publish_internal"
-        title="Publish internal"
+    <transition title="Publish internal"
         source="private public"
         destination="internal"
         trigger="manual"
@@ -45,8 +43,7 @@
         require_confirmation="false"
     />
     
-    <transition id="publish"
-        title="Publish"
+    <transition title="Publish"
         source="private internal"
         destination="public"
         trigger="manual"
@@ -54,8 +51,7 @@
         require_confirmation="true"
     />
     
-    <transition id="make_private"
-        title="Make private"
+    <transition title="Make private"
         trigger="manual"
         source="public internal"
         destination="private"

@@ -17,15 +17,13 @@
     <state id="D" like_state="I" title="Deceased User" />
     
     
-    <transition id="create"
-        title="Create"
+    <transition title="Create"
         source=""
         destination="A"
         trigger="automatic"
     />
     
-    <transition id="deactivate"
-        title="Deactivate"
+    <transition title="Deactivate"
         source="A"
         destination="I"
         condition="not_has_date_of_death"
@@ -34,8 +32,7 @@
         require_confirmation="true"
     />
     
-    <transition id="activate"
-        title="activate"
+    <transition title="Activate"
         source="I"
         destination="A"
         trigger="manual"
@@ -43,8 +40,7 @@
         require_confirmation="true"
     />
     
-    <transition id="inhume"
-        title="Inhume"
+    <transition title="Inhume"
         source="A I"
         destination="D"
         condition="has_date_of_death"
@@ -52,18 +48,8 @@
         roles="bungeni.Speaker"
         require_confirmation="true"
     />
-
-    <transition id="auto_inhume"
-        title="called when date of death is set"
-        source="A I"
-        destination="D"
-        condition="has_date_of_death"
-        trigger="automatic"
-        roles="bungeni.Speaker"
-    />
     
-    <transition id="resurrect"
-        title="Resurrect"
+    <transition title="Resurrect"
         source="D"
         destination="A"
         trigger="manual"

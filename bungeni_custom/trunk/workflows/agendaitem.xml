@@ -174,24 +174,21 @@
     <state id="withdrawn" title="Withdrawn" like_state="admissible" />
     
     
-    <transition id="create"
-        title="Create Agenda Item"
+    <transition title="Create Agenda Item"
         source=""
         destination="draft"
         condition="user_is_context_owner"
         trigger="automatic"
     />
     
-    <transition id="create_on_behalf_of"
-        title="Create Agenda Item (On behalf of)"
+    <transition title="Create Agenda Item (On behalf of)"
         source=""
         destination="working_draft"
         condition="user_is_not_context_owner"
         trigger="automatic"
     />
     
-    <transition id="submit"
-        title="Submit"
+    <transition title="Submit"
         source="working_draft draft"
         destination="submitted"
         condition=""
@@ -199,8 +196,7 @@
         roles="bungeni.Owner"
     />
     
-    <transition id="receive"
-        title="Receive"
+    <transition title="Receive"
         source="submitted"
         destination="received"
         condition=""
@@ -208,8 +204,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="require_clarification"
-        title="Require Clarification to Receive"
+    <transition title="Require Clarification to Receive"
         source="received incomplete"
         destination="clarification_required"
         condition=""
@@ -218,8 +213,7 @@
         require_confirmation="true"
     />
     
-    <transition id="complete"
-        title="Complete"
+    <transition title="Complete"
         source="received"
         destination="completed"
         condition=""
@@ -227,8 +221,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="approve"
-        title="Approve"
+    <transition title="Approve"
         source="completed"
         destination="admissible"
         condition=""
@@ -236,8 +229,7 @@
         roles="bungeni.Speaker"
     />
     
-    <transition id="disapprove" 
-        title="Disapprove"
+    <transition title="Disapprove"
         source="completed"
         destination="inadmissible"
         condition=""
@@ -246,16 +238,14 @@
         require_confirmation="true"
     />
     
-    <transition id="allow_schedule"
-        title="Allow scheduling"
+    <transition title="Allow scheduling"
         source="admissible deferred"
         destination="schedule_pending"
         trigger="manual"
         roles="bungeni.Clerk"
     />
     
-    <transition id="require_recomplete"
-        title="Require Recomplete to Approve"
+    <transition title="Require Recomplete to Approve"
         source="completed"
         destination="incomplete"
         condition=""
@@ -264,8 +254,7 @@
         require_confirmation="true"
     />
     
-    <transition id="recomplete"
-        title="Recomplete"
+    <transition title="Recomplete"
         source="incomplete"
         destination="completed"
         condition=""
@@ -273,8 +262,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="resubmit"
-        title="Resubmit"
+    <transition title="Resubmit"
         source="clarification_required"
         destination="submitted"
         condition=""
@@ -282,16 +270,14 @@
         roles="bungeni.Owner"
     />
     
-    <transition id="reschedule"
-        title="Reschedule"
+    <transition title="Reschedule"
         source="scheduled"
         destination="schedule_pending"
         trigger="system"
         roles="bungeni.Clerk"
     />
     
-    <transition id="schedule"
-        title="Schedule"
+    <transition title="Schedule"
         source="schedule_pending adjourned"
         destination="scheduled"
         condition="is_scheduled"
@@ -299,16 +285,14 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="revert_to_admissible"
-        title="Revert to admissible"
+    <transition title="Revert to admissible"
         source="schedule_pending"
         destination="admissible"
         trigger="manual"
         roles="bungeni.Clerk"
     />
     
-    <transition id="drop"
-        title="Drop"
+    <transition title="Drop"
         source="scheduled"
         destination="dropped"
         condition=""
@@ -318,8 +302,7 @@
             debated in a sitting, so it is dropped."
     />
     
-    <transition id="debate"
-        title="Debate"
+    <transition title="Debate"
         source="scheduled"
         destination="debated"
         condition=""
@@ -327,8 +310,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="adjourn"
-        title="Adjourn debate"
+    <transition title="Adjourn debate"
         source="scheduled"
         destination="adjourned"
         condition=""
@@ -336,8 +318,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="defer"
-        title="Defer"
+    <transition title="Defer"
         source="admissible schedule_pending adjourned"
         destination="deferred"
         condition=""
@@ -345,8 +326,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="elapse"
-        title="Elapse"
+    <transition title="Elapse"
         source="deferred"
         destination="elapsed"
         condition=""
@@ -354,8 +334,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition id="withdraw"
-        title="Withdraw"
+    <transition title="Withdraw"
         source="submitted received completed clarification_required"
         destination="withdrawn_internal"
         condition=""
@@ -364,8 +343,7 @@
         require_confirmation="true"
     />
     
-    <transition id="withdraw_public"
-        title="Withdraw"
+    <transition title="Withdraw"
         source="admissible scheduled deferred adjourned schedule_pending"
         destination="withdrawn"
         condition=""
