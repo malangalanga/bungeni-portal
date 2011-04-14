@@ -4,6 +4,15 @@
     domain="bungeni.ui"
     initial_state="">
     
+    <!-- global grants -->
+    <grant permission="bungeni.tableddocument.View" role="bungeni.Owner" />
+    <grant permission="bungeni.tableddocument.Edit" role="bungeni.Owner" />
+    <grant permission="bungeni.tableddocument.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.tableddocument.Add" role="bungeni.Speaker" />
+    <grant permission="bungeni.tableddocument.Add" role="bungeni.MP" />
+    <grant permission="bungeni.tableddocument.Delete" role="bungeni.Owner" />
+
+    
     <state id="working_draft" title="Working Draft">
         <!-- tableddocument -->
         <grant permission="zope.View" role="bungeni.Clerk" />

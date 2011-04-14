@@ -4,6 +4,19 @@
     domain="bungeni.ui"
     initial_state="">
     
+    <!-- global grants -->
+    <grant permission="bungeni.sitting.Edit" role="bungeni.Clerk" /> 
+    <grant permission="bungeni.sitting.Edit" role="bungeni.Speaker" />
+    <grant permission="bungeni.sitting.Add" role="bungeni.Clerk" /> 
+    <grant permission="bungeni.sitting.Add" role="bungeni.Speaker" /> 
+    <grant permission="bungeni.sittingattendance.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.sittingattendance.Edit" role="bungeni.Speaker" />
+    <grant permission="bungeni.sittingattendance.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.sittingattendance.Add" role="bungeni.Speaker" />
+    <grant permission="bungeni.sittingattendance.Delete" role="bungeni.Clerk" />
+    <grant permission="bungeni.sittingattendance.Delete" role="bungeni.Speaker" />
+    
+    
     <state id="sitting" title="Sitting">
         <!-- sitting -->
         <grant permission="bungeni.sitting.View" role="bungeni.Clerk" />

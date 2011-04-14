@@ -4,6 +4,10 @@
     domain="bungeni.ui"
     initial_state="">
     
+    <!-- global grants -->
+    <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+    
+    
     <state id="public" title="Public">
         <!-- attachedfile -->
         <grant permission="zope.View" role="bungeni.Clerk" />
@@ -17,6 +21,7 @@
         <deny permission="zope.View" role="bungeni.Authenticated" /> 
         <deny permission="zope.View" role="bungeni.Anonymous" /> 
     </state>
+    
     
     <transition title="Create"
         source=""

@@ -4,6 +4,12 @@
     domain="bungeni.ui"
     initial_state="">
     
+    <!-- global grants -->
+    <grant permission="bungeni.parliament.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.parliament.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.parliament.Delete" role="bungeni.Clerk" />
+    
+    
     <state id="draft" title="Draft - Parliament not yet Active">
         <!-- parliament -->
         <grant permission="zope.View" role="bungeni.Clerk" />

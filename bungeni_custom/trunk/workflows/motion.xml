@@ -4,6 +4,15 @@
     domain="bungeni.ui"
     initial_state="">
     
+    <!-- global grants -->
+    <grant permission="bungeni.motion.View" role="bungeni.Owner" />
+    <grant permission="bungeni.motion.Edit" role="bungeni.Owner" />
+    <grant permission="bungeni.motion.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.motion.Add" role="bungeni.Speaker" /> 
+    <grant permission="bungeni.motion.Add" role="bungeni.MP" />
+    <grant permission="bungeni.motion.Delete" role="bungeni.Owner" />
+    
+    
     <!-- Workflow XML Source Style Guide
     
     States

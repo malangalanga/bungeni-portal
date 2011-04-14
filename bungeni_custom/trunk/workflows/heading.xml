@@ -4,6 +4,13 @@
     domain="bungeni.ui"
     initial_state="">
     
+    <!-- global grants -->
+    <grant permission="bungeni.heading.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.heading.Edit" role="bungeni.Speaker" />
+    <grant permission="bungeni.heading.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.heading.Add" role="bungeni.Speaker" />
+    
+    
     <state id="inactive" title="Inactive heading obsolete">
         <!-- heading -->
         <grant permission="zope.View" role="bungeni.Clerk" />

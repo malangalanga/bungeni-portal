@@ -4,6 +4,15 @@
     domain="bungeni.ui"
     initial_state="">
     
+    <!-- global grants -->
+    <grant permission="bungeni.agendaitem.View" role="bungeni.Owner" />
+    <grant permission="bungeni.agendaitem.Edit" role="bungeni.Owner" />
+    <grant permission="bungeni.agendaitem.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.agendaitem.Add" role="bungeni.Speaker" />
+    <!--grant permission="bungeni.agendaitem.Add" role="bungeni.MP" /-->
+    <grant permission="bungeni.agendaitem.Delete" role="bungeni.Owner" />
+    
+    
     <state id="working_draft" title="Working Draft">
         <!-- agendaitem -->
         <grant permission="zope.View" role="bungeni.Clerk" />

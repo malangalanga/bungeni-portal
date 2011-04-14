@@ -4,11 +4,17 @@
     domain="bungeni.ui"
     initial_state="">
     
+    <!-- global grants -->
+    <grant permission="bungeni.reports.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.reports.Edit" role="bungeni.Speaker" /> 
+    
+    
     <state id="published" title="Published">
         <grant permission="zope.View" role="bungeni.Authenticated" /> 
         <grant permission="zope.View" role="bungeni.Anonymous" />
         <deny permission="bungeni.report.Edit" role="bungeni.Authenticated" />
     </state>
+    
     
     <transition title="Create Report"
         source=""

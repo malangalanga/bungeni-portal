@@ -4,6 +4,15 @@
     domain="bungeni.ui"
     initial_state="">
     
+    <!-- global grants -->
+    <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
+    <grant permission="bungeni.event.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.event.Add" role="bungeni.Speaker" />
+    <grant permission="bungeni.event.Delete" role="bungeni.Clerk" />
+    <grant permission="bungeni.event.Delete" role="bungeni.Speaker" />
+    
+    
     <state id="public" title="Public">
         <!-- event -->
         <grant permission="zope.View" role="bungeni.Clerk" />

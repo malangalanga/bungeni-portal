@@ -3,7 +3,13 @@
     description="Workflow for Committees"
     domain="bungeni.ui"
     initial_state="">
-
+    
+    <!-- global grants -->
+    <grant permission="bungeni.committee.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.committee.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.committee.Delete" role="bungeni.Clerk" />
+    
+    
     <state id="draft" title="Draft - Committee not yet Active">
         <!-- committee -->
         <grant permission="zope.View" role="bungeni.Clerk" />

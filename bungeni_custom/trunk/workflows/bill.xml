@@ -4,6 +4,18 @@
     domain="bungeni.ui"
     initial_state="">
     
+    <!-- global grants -->
+    <grant permission="bungeni.bill.View" role="bungeni.Clerk" />  
+    <grant permission="bungeni.bill.View" role="bungeni.Speaker" /> 
+    <grant permission="bungeni.bill.View" role="bungeni.Owner" />
+    <grant permission="bungeni.bill.Edit" role="bungeni.Clerk" />    
+    <grant permission="bungeni.bill.Edit" role="bungeni.Speaker" /> 
+    <grant permission="bungeni.bill.Edit" role="bungeni.Owner" />
+    <grant permission="bungeni.bill.Add" role="bungeni.Clerk" />
+    <!--grant permission="bungeni.bill.Add" role="bungeni.MP" /-->
+    <grant permission="bungeni.bill.Delete" role="bungeni.Owner" />
+    
+    
     <state id="working_draft" title="Draft Bill">
         <!-- bill -->
         <grant permission="zope.View" role="bungeni.Clerk" />
