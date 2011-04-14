@@ -27,7 +27,7 @@ supervisor.rpcinterface_factory=supervisor.rpcinterface:make_main_rpcinterface
 [program:bungeni]
 command = %(user_bungeni)s/bin/paster serve %(bungeni_ini)s  --pid-file=%(user_pid)s/bungeni.pid
 process_name = bungeni
-stdout_logfile = %(user_log)s/bungeni.log
+stdout_logfile = %(user_logs)s/bungeni.log
 directory = %(user_bungeni)s/bin
 priority = 10
 redirect_stderr = true
@@ -36,7 +36,7 @@ autostart = false
 [program:plone]
 command = %(user_plone)s/bin/paster serve %(plone_ini)s --pid-file=%(user_pid)s/plone.pid
 process_name = plone
-stdout_logfile= %(user_log)s/plone.log
+stdout_logfile= %(user_logs)s/plone.log
 directory = %(user_plone)s/bin
 priority = 20
 redirect_stderr = true
@@ -45,7 +45,7 @@ autostart = false
 [program:portal]
 command = %(user_portal)s/bin/deliverance-proxy %(user_bungeni)s/src/bungeni.main/bungeni/portal/static/themes/proxy.xml
 process_name = portal
-stdout_logfile = %(user_log)s/portal.log
+stdout_logfile = %(user_logs)s/portal.log
 directory = %(user_portal)s/bin
 priority = 30
 redirect_stderr = true
@@ -53,7 +53,7 @@ autostart = false
 
 [program:static]
 command = %(user_portal)s/bin/paster serve %(static_ini)s  --pid-file=%(user_pid)s/static.pid
-stdout_logfile = %(user_log)s/static.log
+stdout_logfile = %(user_logs)s/static.log
 process_name = static
 directory = %(user_portal)s/bin
 priority = 40
