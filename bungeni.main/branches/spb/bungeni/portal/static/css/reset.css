@@ -28,7 +28,7 @@ b, strong {
     background: transparent;
 }
 .template-portal #top-layer div {
-    width: 1040px;
+    width: 960px;
     height: 20px;
     border-bottom: 1px solid #fb9c14;
 }
@@ -384,7 +384,7 @@ div.main-column h3 {
 .template-portal #portal-footer {
     border: 0 none;
     clear: both;
-    width: 1044px;
+    width: 960px;
     background: url(/static/images/footer-bg.png) repeat-x bottom center;
     /* 
      * Sticky Footer
@@ -429,10 +429,13 @@ div.main-column h3 {
 #portal-column-content .documentContent {
     float: left;
     width: 99%;
-    padding: 0 !important;
-   
+    padding: 0 !important;  
 }
-
+.template-workspace.section-bungeni-business #portal-column-content .documentContent {
+    float: none;
+    width: 95%;
+    margin: 0 auto;
+}
 .section-bungeni-admin #portal-column-content .documentContent {
     float: none;
     width: 100%;
@@ -624,6 +627,7 @@ input.inputLabelActive {
 }
 #portal-column-content #whats-on-overview .whats-on-viewlet dd ul li ul li dl {
     border-bottom: 1px dotted #ccc;
+    width: 98%;
 }
 #portal-column-content #whats-on-overview .whats-on-viewlet dd ul li ul li dl h3 {
     font-weight: bold !important;
@@ -1132,6 +1136,11 @@ div#portal-globalnav ul.level0 li a:hover,
     border-bottom: 1px solid #d8d8d9;
     background: #d8d8d9 url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
 }
+.template-workspace.section-bungeni-business div#portal-globalnav ul.level0 li#portaltab-business-whats-on a {
+    border-top: 2px solid #1763aa;
+    border-bottom: 1px solid #d8d8d9;
+    background: #d8d8d9 url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
+}
 /*
  * Notes:
  * - this has been positioned absolutely because of it's location in the
@@ -1399,6 +1408,10 @@ table.listingdescription,
     margin: 0 auto;
     width: 95%;
     font-size: 100%;
+}
+table.listing[name="attendance"] th,
+table.listing[name="attendance"] td {
+    text-align: center;
 }
 .template-workspace table.listing,
 .template-workspace table.listingdescription,
@@ -1914,10 +1927,11 @@ span.yui-button.yui-link-button span a {
 }
 .template-portal #visual-table-wrapper {
     background: url(/static/images/shadow_3.png) repeat-y top center;
-    width: 1054px;
+    width: 960px;
     text-align: left;
     margin: 0 auto !important;    
     padding: 0;
+    border: 0 none;
     /* 
     * Sticky Footer.
     * more information: http://www.cssstickyfooter.com/
@@ -2364,3 +2378,7 @@ div.main-column #collage h2 {
     width: 94% !important;
 }
 
+.section-bungeni-business .dhx_scale_holder .dhx_cal_event .dhx_body[style],
+.section-bungeni-business .dhx_scale_holder_now .dhx_cal_event .dhx_body[style] {
+    cursor: pointer !important;
+}
