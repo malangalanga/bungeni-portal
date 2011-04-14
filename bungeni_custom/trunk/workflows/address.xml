@@ -2,7 +2,8 @@
 <workflow title="Address Workflow"
     description="Workflow for user addresss"
     domain="bungeni.ui"
-    initial_state="">
+    initial_state=""
+    note="Used for both bungeni.models types: IUserAddress, IGroupAddress">
     
     <state id="private" title="Private">
         <grant permission="zope.View" role="bungeni.Clerk" />
