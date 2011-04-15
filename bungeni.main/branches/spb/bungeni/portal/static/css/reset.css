@@ -1165,9 +1165,12 @@ div#portal-globalnav ul.level0 ul.level1 {
     border-top: 0 none;
     width: 99.9%;
     background: #f9ac32 url(/static/images/globalnav-level1-bg.png) bottom left repeat-x;
+    display: block;
+}
+.section-bungeni-business div#portal-globalnav ul.level0 ul.level1 {
     display: none;
 }
-.section-bungeni-workspace.template-workspace div#portal-globalnav ul.level0 ul.level1 {
+.template-workspace div#portal-globalnav ul.level0 ul.level1 {
     width: 100%;
     border: 1px solid #aaf;
     border-right: 0 none;
@@ -1257,11 +1260,18 @@ div#portal-globalnav ul.level0 ul.level1 li.selected a {
  * it is used to assist in the page layout. The element(and css) 
  * could be removed from this use by fixing the <ul> element
  * as mentioned in the previous Note.
+ *
+ *
+ * To remove the bar completely - remove the ".section-bungeni-business"
+ * part from below
+ *
+ * To restore it to every page, remove this next style and leave the last one.
+ *
  */
-div#portal-globalnav-bottom {
+.section-bungeni-business div#portal-globalnav-bottom {
     display: none;
 }
-.section-bungeni-workspace.template-workspace div#portal-globalnav-bottom {
+div#portal-globalnav-bottom {
     display: block;
     height: 15px;
     padding: 0;
