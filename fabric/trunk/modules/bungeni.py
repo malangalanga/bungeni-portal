@@ -1342,6 +1342,23 @@ class CustomTasks:
                             % (language, package))
                     else:
                         print red("Translation target %s does not exist" % target_path)
+            #unified translations
+            for language in self.cfg.enabled_translations:
+                print green("Setting up bungeni translations")
+                source_path = "%s/bungeni/locales/%s"\
+                    %(packages_home, language)
+                target_path = "%s/bungeni/%s"\
+                    %(translations_path, language)
+                if exists(target_path):
+                    if exists(source_path):
+                        print red("Source path %s already exists" % source_path)
+                    else:
+                        run("ln -s %s %s" %(target_path, source_path))
+                        print green("Linked %s translations"
+                            % language)
+                else:
+                    print red("Translation target %s not found" % target_path)
+            
 
 
     def map_country_theme(self):
