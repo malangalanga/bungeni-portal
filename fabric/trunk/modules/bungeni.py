@@ -1303,6 +1303,10 @@ class CustomTasks:
             run("echo `pwd` > %s " % self.cfg.bungeni_custom_pth)
 
     def map_translations(self, switch):
+        # !+install_translations(mr, apr-2011) this is now obsoltete? 
+        # cleanout, from fabric list of commands, from docs, etc.
+        abort('fabric task "install_translations" is OBSOLETE -> cleanout... '
+            "from fabric, docs, etc.")
         translations_path = ""
         if switch == "custom":
             translations_path = "/".join((self.cfg.user_bungeni,
@@ -1326,41 +1330,7 @@ class CustomTasks:
             print red("Translations folder %s not found. Skipping installation."
             % translations_path)
             return
-        else:
-            for package in self.cfg.translatable_packages:
-                for language in self.cfg.enabled_translations:
-                    source_path = "%s/bungeni/%s/locales/%s"\
-                    %(packages_home, package, language)
-                    target_path = "%s/bungeni.%s/locales/%s"\
-                    %(translations_path, package, language)
-                    if exists(target_path):
-                        if exists(source_path):
-                            print red("Source path %s already exists" % source_path)
-                        else:
-                            run("ln -s %s %s" %(target_path, source_path))
-                            print green("Linked %s translations for module %s"
-                            % (language, package))
-                    else:
-                        print red("Translation target %s does not exist" % target_path)
-            #unified translations
-            for language in self.cfg.enabled_translations:
-                print green("Setting up bungeni translations")
-                source_path = "%s/bungeni/locales/%s"\
-                    %(packages_home, language)
-                target_path = "%s/bungeni/%s"\
-                    %(translations_path, language)
-                if exists(target_path):
-                    if exists(source_path):
-                        print red("Source path %s already exists" % source_path)
-                    else:
-                        run("ln -s %s %s" %(target_path, source_path))
-                        print green("Linked %s translations"
-                            % language)
-                else:
-                    print red("Translation target %s not found" % target_path)
-            
-
-
+    
     def map_country_theme(self):
         country_theme = self.cfg.country_theme 
         if country_theme != "default" and country_theme != "":
