@@ -70,10 +70,10 @@ SELECT pg_catalog.setval('venues_venue_id_seq', 1, false);
 -- Data for Name: address_types; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY address_types (address_type_id, address_type_name, language) FROM stdin;
-1	Office	en
-2	Home	en
-3	Other	en
+COPY address_types (address_type_name, language) FROM stdin;
+Office	en
+Home	en
+Other	en
 \.
 
 
@@ -81,12 +81,12 @@ COPY address_types (address_type_id, address_type_name, language) FROM stdin;
 -- Data for Name: attached_file_types; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY attached_file_types (attached_file_type_id, attached_file_type_name, language) FROM stdin;
-1	image	en
-2	annex	en
-3	document	en
-4	bill	en
-5	system	en
+COPY attached_file_types ( attached_file_type_name, language) FROM stdin;
+image	en
+annex	en
+document	en
+bill	en
+system	en
 \.
 
 
@@ -94,10 +94,10 @@ COPY attached_file_types (attached_file_type_id, attached_file_type_name, langua
 -- Data for Name: attendance_types; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY attendance_types (attendance_type_id, attendance_type, language) FROM stdin;
-1	present	en
-2	absence justified	en
-3	absent	en
+COPY attendance_types ( attendance_type, language) FROM stdin;
+present	en
+absence justified	en
+absent	en
 \.
 
 
@@ -105,9 +105,9 @@ COPY attendance_types (attendance_type_id, attendance_type, language) FROM stdin
 -- Data for Name: bill_types; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY bill_types (bill_type_id, bill_type_name, language) FROM stdin;
-1	Public Bill	en
-2	Private Bill	en
+COPY bill_types ( bill_type_name, language) FROM stdin;
+Public Bill	en
+Private Bill	en
 \.
 
 
@@ -115,12 +115,12 @@ COPY bill_types (bill_type_id, bill_type_name, language) FROM stdin;
 -- Data for Name: committee_types; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY committee_types (committee_type_id, committee_type, description, life_span, status, language) FROM stdin;
-1	House Keeping	\N	parliament	P	en
-2	Departmental	\N	parliament	P	en
-3	Ad Hoc	\N	parliament	T	en
-4	Watch Dog	\N	annual	P	en
-5	Liaison	co-ordinate all departmental committees	annual	P	en
+COPY committee_types ( committee_type, description, life_span, status, language) FROM stdin;
+House Keeping	\N	parliament	P	en
+Departmental	\N	parliament	P	en
+Ad Hoc	\N	parliament	T	en
+Watch Dog	\N	annual	P	en
+Liaison	co-ordinate all departmental committees	annual	P	en
 \.
 
 
@@ -375,10 +375,10 @@ ZW	ZIMBABWE	Zimbabwe	ZWE	716	en
 -- Data for Name: group_sitting_types; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY group_sitting_types (group_sitting_type_id, group_sitting_type, start_time, end_time, language) FROM stdin;
-1	morning	09:00:00	12:00:00	en
-2	afternoon	13:00:00	18:00:00	en
-3	extraordinary	07:00:00	19:00:00	en
+COPY group_sitting_types ( group_sitting_type, start_time, end_time, language) FROM stdin;
+morning	09:00:00	12:00:00	en
+afternoon	13:00:00	18:00:00	en
+extraordinary	07:00:00	19:00:00	en
 \.
 
 
@@ -386,32 +386,32 @@ COPY group_sitting_types (group_sitting_type_id, group_sitting_type, start_time,
 -- Data for Name: user_role_types; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY user_role_types (user_role_type_id, user_type, user_role_name, user_unique, sort_order, language) FROM stdin;
-1	parliamentmember	Speaker	t	20	en
-2	parliamentmember	President	t	40	en
-3	parliamentmember	Attorney General	t	30	en
-4	parliamentmember	Member	f	10	en
-5	minister	Minister	t	10	en
-6	minister	Deputy Minister	f	20	en
-7	minister	Secretary	t	30	en
-8	minister	Under Secretary	f	40	en
-9	minister	Assistant Minister	f	50	en
-10	partymember	Speaker	t	20	en
-11	partymember	Deputy Speaker	f	30	en
-12	partymember	Chief Whip, Floor Leader	t	40	en
-13	partymember	Deputy Leader	f	50	en
-14	partymember	Spokesperson	t	60	en
-15	partymember	Secretary	f	70	en
-16	partymember	Member	f	10	en
-17	committeemember	Chairperson	t	20	en
-18	committeestaff	Committee Clerk	f	10	en
-19	committeemember	Deputy Chairperson	f	30	en
-20	committeestaff	Deputy Committee Clerk	f	20	en
-21	committeemember	Member	f	10	en
-22	committeemember	Secretary	f	40	en
-23	committeestaff	Researcher	f	50	en
-24	extensionmember	Additional Member	f	10	en
-25	officemember	Office Member	f	10	en
+COPY user_role_types ( user_type, user_role_name, user_unique, sort_order, language) FROM stdin;
+parliamentmember	Speaker	t	20	en
+parliamentmember	President	t	40	en
+parliamentmember	Attorney General	t	30	en
+parliamentmember	Member	f	10	en
+minister	Minister	t	10	en
+minister	Deputy Minister	f	20	en
+minister	Secretary	t	30	en
+minister	Under Secretary	f	40	en
+minister	Assistant Minister	f	50	en
+partymember	Speaker	t	20	en
+partymember	Deputy Speaker	f	30	en
+partymember	Chief Whip, Floor Leader	t	40	en
+partymember	Deputy Leader	f	50	en
+partymember	Spokesperson	t	60	en
+partymember	Secretary	f	70	en
+partymember	Member	f	10	en
+committeemember	Chairperson	t	20	en
+committeestaff	Committee Clerk	f	10	en
+committeemember	Deputy Chairperson	f	30	en
+committeestaff	Deputy Committee Clerk	f	20	en
+committeemember	Member	f	10	en
+committeemember	Secretary	f	40	en
+committeestaff	Researcher	f	50	en
+extensionmember	Additional Member	f	10	en
+officemember	Office Member	f	10	en
 \.
 
 
@@ -419,11 +419,11 @@ COPY user_role_types (user_role_type_id, user_type, user_role_name, user_unique,
 -- Data for Name: venues; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY venues (venue_id, short_name, description, language) FROM stdin;
-1	Plenary	\N	en
-2	Green Room	\N	en
-4	Blue Room	\N	en
-3	Red Room	\N	en
+COPY venues (short_name, description, language) FROM stdin;
+Plenary	\N	en
+Green Room	\N	en
+Blue Room	\N	en
+Red Room	\N	en
 \.
 
 
