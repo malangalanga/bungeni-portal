@@ -126,7 +126,7 @@ def bungeni_install(version = "default"):
     # setup-database
     tasks.setupdb()
     # install default po files
-    install_translations("default")
+    #install_translations("default")
 
 
 def bungeni_local_config():
