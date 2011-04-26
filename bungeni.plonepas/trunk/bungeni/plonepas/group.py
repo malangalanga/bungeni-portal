@@ -13,26 +13,23 @@ from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.interfaces.plugins import (IGroupsPlugin,
                                                               IGroupEnumerationPlugin)
-
-#from zope import component
-#from datetime import datetime
 from utils import connection_url
 
-manage_addBungeniGroupManagerForm = PageTemplateFile('zmi/group-plugin-add.pt', globals())
+manage_addBungeniGroupManagerForm = PageTemplateFile("zmi/group-plugin-add.pt",
+                                        globals())
 
-def manage_addBungeniGroupManager(self, id, db_utility, title='', REQUEST=None):
-    """Add a GroupManager to a Pluggable Auth Service.
-    """
+def manage_addBungeniGroupManager(self, id, db_utility, title="", REQUEST=None):
+    """Add a GroupManager to a Pluggable Auth Service."""
     rm = GroupManager(id, db_utility, title)
     self._setObject( id, rm)
     if REQUEST is not None:
         REQUEST['RESPONSE'].redirect(
-                                '%s/manage_workspace'
-                                '?manage_tabs_message='
-                                'BungeniGroupManager+added.'
+                                "%s/manage_workspace"
+                                "?manage_tabs_message="
+                                "BungeniGroupManager+added."
                             % self.absolute_url())
 
-class GroupManager( BasePlugin, Cacheable ):
+class GroupManager(BasePlugin, Cacheable):
 
     meta_type = "Bungeni Group Manager"
 
@@ -59,8 +56,8 @@ class GroupManager( BasePlugin, Cacheable ):
         # recursivly for this use case
 
         http_obj=httplib2.Http()
-        query = '/++rest++brs/memberships?'
-        params = urllib.urlencode({'principal_id': principal.getId()})
+        query = "/++rest++brs/memberships?"
+        params = urllib.urlencode({"principal_id": principal.getId()})
         resp,content = http_obj.request(connection_url() + query + params, "GET")
         return simplejson.loads(content)
     
@@ -76,12 +73,12 @@ class GroupManager( BasePlugin, Cacheable ):
                        ):
         """ see IGroupEnumeration """
         http_obj=httplib2.Http()
-        querys = '/++rest++brs/enumerategroups?'
-        params = urllib.urlencode({'group_manager_id': self.id,
-                                   'gid': id,
-                                   'exact_match': exact_match,
-                                   'sort_by': sort_by,
-                                   'max_results': max_results})
+        querys = "/++rest++brs/enumerategroups?"
+        params = urllib.urlencode({"group_manager_id": self.id,
+                                   "gid": id,
+                                   "exact_match": exact_match,
+                                   "sort_by": sort_by,
+                                   "max_results": max_results})
         resp,content = http_obj.request(connection_url() + querys + params, "GET")
         return simplejson.loads(content)            
         
@@ -119,13 +116,12 @@ class GroupManager( BasePlugin, Cacheable ):
         set roles for group
         return True on success
         """
-        # why the heck is this even in the group api ? silly enfold developers.. tricks are for kids
+        # why the heck is this even in the group api ? 
+        #silly enfold developers.. tricks are for kids
         raise NotImplemented
 
-
-    #
+    
     #   IDeleteCapability implementation
-    #
     def allowDeletePrincipal(self, principal_id):
         """True if this plugin can delete a certain group."""
         return False
@@ -134,9 +130,8 @@ class GroupManager( BasePlugin, Cacheable ):
             return True
         return False
 
-    #
+
     #   IGroupCapability implementation
-    #
     def allowGroupAdd(self, user_id, group_id):
         """True if this plugin will allow adding a certain user to a certain group."""
         return False
@@ -150,7 +145,10 @@ class GroupManager( BasePlugin, Cacheable ):
         return False
 
     def allowGroupRemove(self, user_id, group_id):
-        """True if this plugin will allow removing a certain user from a certain group."""
+        """
+        True if this plugin will allow removing a certain user
+        from a certain group.
+        """
         return False
         present = self._gid(group_id)
         
@@ -185,19 +183,19 @@ class GroupManager( BasePlugin, Cacheable ):
     ###########################
     def _gid(self, name):
         http_obj=httplib2.Http()
-        query = '/++rest++brs/groups?'
+        query = "/++rest++brs/groups?"
         params = urllib.urlencode({'name': name})
         resp,content = http_obj.request(connection_url() + query + params, "GET")
         groups = simplejson.loads(content)
         if not groups:
             return
-        return groups[0].group_principal_id        
+        return groups["group_principal_id"]
         
 
     def _uid(self, login):
         http_obj=httplib2.Http()
-        query = '/++rest++brs/users?'
-        params = urllib.urlencode({'login': login})
+        query = "/++rest++brs/users?"
+        params = urllib.urlencode({"login": login})
         resp,content = http_obj.request(connection_url() + query + params, "GET")
         user = simplejson.loads(content)
         if user is None:
@@ -214,6 +212,7 @@ class GroupManager( BasePlugin, Cacheable ):
         if not gid:
             return None
         return PloneGroup(gid).__of__( self )
+        
 
     #################################
     # these interface methods are suspect for scalability.
@@ -224,7 +223,7 @@ class GroupManager( BasePlugin, Cacheable ):
         Returns an iteration of the available groups
         """
         http_obj=httplib2.Http()
-        query = '/++rest++brs/groups'
+        query = "/++rest++brs/groups"
         resp,content = http_obj.request(connection_url() + query, "GET")
         groups = simplejson.loads(content)
         return [PloneGroup(r).__of__(self) for r in groups]
@@ -234,7 +233,7 @@ class GroupManager( BasePlugin, Cacheable ):
         Returns a list of the available groups
         """
         http_obj=httplib2.Http()
-        query = '/++rest++brs/groups'
+        query = "/++rest++brs/groups"
         resp,content = http_obj.request(connection_url() + query, "GET")
         groups = simplejson.loads(content)
         
@@ -245,8 +244,8 @@ class GroupManager( BasePlugin, Cacheable ):
         """
         
         http_obj=httplib2.Http()
-        query = '/++rest++brs/groupmembers?'
-        params = urllib.urlencode({'group_id': group_id})
+        query = "/++rest++brs/groupmembers?"
+        params = urllib.urlencode({"group_id": group_id})
         resp,content = http_obj.request(connection_url() + query + params, "GET")
         return simplejson.loads(content)
 
