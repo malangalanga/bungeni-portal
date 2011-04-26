@@ -1,5 +1,19 @@
 <?xml version="1.0"?>
 <import-steps>
+
+  <import-step
+     id="bungenicms.policy.setup_site_languages"
+     version="1"
+     handler="bungenicms.policy.setuphandlers.setup_site_languages"
+     title="Setup site langauge settings">
+  </import-step>
+
+  <import-step
+     id="bungenicms.policy.turn_on_member_workspaces"
+     version="1"
+     handler="bungenicms.policy.setuphandlers.turn_on_member_workspaces"
+     title="Turn on creation of member areas">
+  </import-step>
   
   <import-step
      id="bungenicms.policy.setup_who_authentication"
@@ -34,7 +48,7 @@
      id="bungenicms.policy.setup_group_workspaces"
      version="1"
      handler="bungenicms.policy.setuphandlers.setup_group_workspaces"
-     title="Set up group workspaces">
+     title="Set up group workspaces container.">
   </import-step>
 
   <import-step
@@ -43,6 +57,5 @@
      handler="bungenicms.policy.setuphandlers.setup_folders"
      title="Modify (Remove) existing folders.">
   </import-step>  
-  
-  
+
 </import-steps>
