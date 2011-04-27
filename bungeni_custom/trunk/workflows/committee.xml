@@ -13,7 +13,7 @@
     <state id="draft" title="Draft - Committee not yet Active">
         <!-- committee -->
         <grant permission="zope.View" role="bungeni.Clerk" />
-        <grant permission="zope.View" role="bungeni.Speaker" />
+        <deny permission="zope.View" role="bungeni.Speaker" />
         <deny permission="zope.View" role="bungeni.MP" />
         <deny permission="zope.View" role="bungeni.Minister" />
         <deny permission="zope.View" role="bungeni.Authenticated" /> 
@@ -27,6 +27,7 @@
 
     <state id="active" title="Active Committee" like_state="draft">
         <!-- committee -->
+        <grant permission="zope.View" role="bungeni.Speaker" />
         <grant permission="zope.View" role="bungeni.MP" />
         <grant permission="zope.View" role="bungeni.Minister" />
         <grant permission="zope.View" role="bungeni.Authenticated" /> 

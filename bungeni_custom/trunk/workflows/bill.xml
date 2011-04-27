@@ -28,21 +28,16 @@
         <grant permission="bungeni.bill.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.bill.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.bill.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.bill.Delete" role="bungeni.Speaker" />
         <grant permission="bungeni.bill.Delete" role="bungeni.Owner" />
         <!-- cosignatory -->
         <grant permission="bungeni.cosignatory.Add" role="bungeni.Clerk" />
-        <grant permission="bungeni.cosignatory.Add" role="bungeni.Speaker" />
         <grant permission="bungeni.cosignatory.Add" role="bungeni.Owner" />
         <grant permission="bungeni.cosignatory.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.cosignatory.Delete" role="bungeni.Speaker" />
         <grant permission="bungeni.cosignatory.Delete" role="bungeni.Owner" />
         <!-- attachedfile -->
         <grant permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Speaker" />
         <grant permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Speaker" />
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
         <!-- groupitemassignment -->
         <deny permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
@@ -60,7 +55,6 @@
         <grant permission="zope.View" role="bungeni.Anonymous" />
         <deny permission="bungeni.bill.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.bill.Delete" role="bungeni.Clerk" />
-        <deny permission="bungeni.bill.Delete" role="bungeni.Speaker" />
         <deny permission="bungeni.bill.Delete" role="bungeni.Owner" />
         <!-- attachedfile -->
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
@@ -84,10 +78,8 @@
         like_state="gazetted" >
         <!-- cosignatory -->
         <deny permission="bungeni.cosignatory.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.cosignatory.Add" role="bungeni.Speaker" />
         <deny permission="bungeni.cosignatory.Add" role="bungeni.Owner" />
         <deny permission="bungeni.cosignatory.Delete" role="bungeni.Clerk" />
-        <deny permission="bungeni.cosignatory.Delete" role="bungeni.Speaker" />
         <deny permission="bungeni.cosignatory.Delete" role="bungeni.Owner" />
     </state>
     
@@ -151,10 +143,8 @@
         <deny permission="bungeni.bill.Edit" role="bungeni.Clerk" />
         <!-- attachedfile -->
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Speaker" />
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Speaker" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
         <!-- groupitemassignment -->
         <deny permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />

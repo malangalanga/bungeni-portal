@@ -65,21 +65,21 @@
     <state id="working_draft" title="Working Draft">
         <!-- motion -->
         <grant permission="zope.View" role="bungeni.Clerk" />
-        <grant permission="zope.View" role="bungeni.Speaker" />
+        <deny permission="zope.View" role="bungeni.Speaker" />
         <deny permission="zope.View" role="bungeni.Owner" />
         <deny permission="zope.View" role="bungeni.MP" />
         <deny permission="zope.View" role="bungeni.Minister" />
         <deny permission="zope.View" role="bungeni.Authenticated" />
         <deny permission="zope.View" role="bungeni.Anonymous" />
         <grant permission="bungeni.motion.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.motion.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.motion.Edit" role="bungeni.Speaker" />
         <deny permission="bungeni.motion.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.motion.Edit" role="bungeni.MP" />
         <deny permission="bungeni.motion.Edit" role="bungeni.Minister" />
         <deny permission="bungeni.motion.Edit" role="bungeni.Authenticated" />
         <deny permission="bungeni.motion.Edit" role="bungeni.Anonymous" />
         <grant permission="bungeni.motion.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.motion.Delete" role="bungeni.Speaker" />
+        <deny permission="bungeni.motion.Delete" role="bungeni.Speaker" />
         <deny permission="bungeni.motion.Delete" role="bungeni.Owner" />
         <deny permission="bungeni.motion.Delete" role="bungeni.MP" />
         <deny permission="bungeni.motion.Delete" role="bungeni.Minister" />
@@ -87,14 +87,14 @@
         <deny permission="bungeni.motion.Delete" role="bungeni.Anonymous" />
         <!-- cosignatory -->
         <grant permission="bungeni.cosignatory.Add" role="bungeni.Clerk" />
-        <grant permission="bungeni.cosignatory.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.cosignatory.Add" role="bungeni.Speaker" />
         <deny permission="bungeni.cosignatory.Add" role="bungeni.Owner" />
         <deny permission="bungeni.cosignatory.Add" role="bungeni.MP" />
         <deny permission="bungeni.cosignatory.Add" role="bungeni.Minister" />
         <deny permission="bungeni.cosignatory.Add" role="bungeni.Authenticated" />
         <deny permission="bungeni.cosignatory.Add" role="bungeni.Anonymous" />
         <grant permission="bungeni.cosignatory.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.cosignatory.Delete" role="bungeni.Speaker" />
+        <deny permission="bungeni.cosignatory.Delete" role="bungeni.Speaker" />
         <deny permission="bungeni.cosignatory.Delete" role="bungeni.Owner" />
         <deny permission="bungeni.cosignatory.Delete" role="bungeni.MP" />
         <deny permission="bungeni.cosignatory.Delete" role="bungeni.Minister" />
@@ -102,14 +102,14 @@
         <deny permission="bungeni.cosignatory.Delete" role="bungeni.Anonymous" />
         <!-- fileattachment -->
         <grant permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Speaker" />
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.MP" />
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Minister" />
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Authenticated" />
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Anonymous" />
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.fileattachment.Add" role="bungeni.Speaker" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.MP" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Minister" />

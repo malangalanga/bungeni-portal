@@ -8,7 +8,6 @@
     <grant permission="bungeni.question.View" role="bungeni.Owner" />
     <grant permission="bungeni.question.Edit" role="bungeni.Owner" />
     <grant permission="bungeni.question.Add" role="bungeni.Clerk" />
-    <grant permission="bungeni.question.Add" role="bungeni.Speaker" />
     <grant permission="bungeni.question.Add" role="bungeni.MP" />
     <grant permission="bungeni.question.Delete" role="bungeni.Owner" />
     
@@ -16,24 +15,24 @@
     <state id="working_draft" title="Working Draft">
         <!-- question -->
         <grant permission="zope.View" role="bungeni.Clerk" />
-        <grant permission="zope.View" role="bungeni.Speaker" />
+        <deny permission="zope.View" role="bungeni.Speaker" />
         <deny permission="zope.View" role="bungeni.Owner" />
         <deny permission="zope.View" role="bungeni.MP" />
         <deny permission="zope.View" role="bungeni.Minister" />
         <deny permission="zope.View" role="bungeni.Authenticated" /> 
         <deny permission="zope.View" role="bungeni.Anonymous" />
         <grant permission="bungeni.question.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.question.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.question.Edit" role="bungeni.Speaker" />
         <deny permission="bungeni.question.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.question.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.question.Delete" role="bungeni.Speaker" />
+        <deny permission="bungeni.question.Delete" role="bungeni.Speaker" />
         <deny permission="bungeni.question.Delete" role="bungeni.Owner" />
         <!-- fileattachment -->
         <grant permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Speaker" />
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.fileattachment.Add" role="bungeni.Speaker" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
         <!-- response -->
         <deny permission="bungeni.response.View" role="bungeni.Clerk" />
@@ -48,20 +47,15 @@
         like_state="working_draft">
         <!-- question -->
         <deny permission="zope.View" role="bungeni.Clerk" />
-        <deny permission="zope.View" role="bungeni.Speaker" />
         <grant permission="zope.View" role="bungeni.Owner" />
         <deny permission="bungeni.question.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.question.Edit" role="bungeni.Speaker" />
         <grant permission="bungeni.question.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.question.Delete" role="bungeni.Clerk" />
-        <deny permission="bungeni.question.Delete" role="bungeni.Speaker" />
         <grant permission="bungeni.question.Delete" role="bungeni.Owner" />
         <!-- fileattachment -->
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Speaker" />
         <grant permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Speaker" />
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
     </state>
     

@@ -13,7 +13,7 @@
     <state id="draft" title="Draft - Parliament not yet Active">
         <!-- parliament -->
         <grant permission="zope.View" role="bungeni.Clerk" />
-        <grant permission="zope.View" role="bungeni.Speaker" />
+        <deny permission="zope.View" role="bungeni.Speaker" />
         <deny permission="zope.View" role="bungeni.MP" />
         <deny permission="zope.View" role="bungeni.Minister" />
         <deny permission="zope.View" role="bungeni.Authenticated" />
@@ -27,6 +27,7 @@
     
     <state id="active" title="Active Parliament" like_state="draft">
         <!-- parliament -->
+        <grant permission="zope.View" role="bungeni.Speaker" />
         <grant permission="zope.View" role="bungeni.MP" />
         <grant permission="zope.View" role="bungeni.Minister" />
         <grant permission="zope.View" role="bungeni.Authenticated" />
