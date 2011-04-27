@@ -958,19 +958,36 @@ class PloneTasks:
     
     def import_site_content(self):
         with cd(self.cfg.user_plone):
-            with cd("./parts/instance/import"):
+            with cd("./import"):
                 plone_site_content_file  = run("basename %s" % self.cfg.plone_site_content)
                 run("if [ -f %(file)s ]; then rm %(file)s ; fi" % {"file":plone_site_content_file})
                 run("if [ -f *.zexp ]; then rm *.zexp ; fi")
                 run("wget %s" % self.cfg.plone_site_content)
                 run("tar xvf %s" % plone_site_content_file)
             run("%(python)s import-data.py" % {"python":self.pycfg.python})
+            
+    def update_plone_zope_conf(self):
+        print "Updating plone - zope.conf"
+        if self.cfg.development_build:
+            debug_mode_value = "on"
+        else:
+            debug_mode_value = "off"
+        template_map = \
+            {"instance": "%define INSTANCE " + self.cfg.user_plone,
+             "instance_home": "%define INSTANCEHOME " + self.cfg.user_plone + "/parts/instance",
+             "debug_mode": debug_mode_value,
+             "message": "%(message)s"}
+        config_file_path = os.path.join(self.cfg.user_plone, "zope.conf")
+        with open(config_file_path, "w") as config_file:
+            tmpl = Templates(self.cfg)
+            config_file.write(tmpl.template("zope.conf.tmpl", template_map))              
 
 
     def update_deployini(self):
         self.tasks.update_ini(self.cfg.plone_deploy_ini, "server:main",
                               "port", self.cfg.plone_http_port)
-        
+        self.update_plone_zope_conf()                              
+
     def update(self):
        """
        Update the plone source
