@@ -125,8 +125,6 @@ def bungeni_install(version = "default"):
     tasks.build()
     # setup-database
     tasks.setupdb()
-    # install default po files
-    #install_translations("default")
 
 
 def bungeni_local_config():
@@ -566,23 +564,13 @@ def db_make_empty():
 
 
 
-def remap_custom():
+def switch_bungeni_custom():
     """
-    Remap custom
+    Makes a customized copy of bungeni_custom and makes it the active package
     """
 
     tasks = bungeni.CustomTasks()
-    tasks.remap_custom()
-
-
-def install_translations(switch="default"):
-    """
-    Links translations to custom source directory
-    Call with "default" to use shipped translations or "custom"
-    to use custom translations
-    """
-    tasks = bungeni.CustomTasks()
-    tasks.map_translations(switch)
+    tasks.switch_bungeni_custom()
 
 
 def enable_country_theme():
@@ -591,4 +579,4 @@ def enable_country_theme():
     Parameter should map to a theme folder in bungeni_custom
     """
     tasks = bungeni.CustomTasks()
-    tasks.map_country_theme()
+    tasks.enable_country_theme()

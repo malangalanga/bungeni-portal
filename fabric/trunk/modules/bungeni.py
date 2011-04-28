@@ -1311,7 +1311,7 @@ class CustomTasks:
         self.cfg = BungeniConfigs()
 
 
-    def remap_custom(self):
+    def switch_bungeni_custom(self):
         with cd(self.cfg.user_bungeni):
             run("mkdir -p %s" % self.cfg.custom_folder)
             run("cp -R ./src/bungeni_custom/* %s" % self.cfg.custom_folder)
@@ -1319,36 +1319,8 @@ class CustomTasks:
                 run("find . -name '*.svn' -print0 | xargs -0 rm -rf ")
             run("echo `pwd` > %s " % self.cfg.bungeni_custom_pth)
 
-    def map_translations(self, switch):
-        # !+install_translations(mr, apr-2011) this is now obsoltete? 
-        # cleanout, from fabric list of commands, from docs, etc.
-        abort('fabric task "install_translations" is OBSOLETE -> cleanout... '
-            "from fabric, docs, etc.")
-        translations_path = ""
-        if switch == "custom":
-            translations_path = "/".join((self.cfg.user_bungeni,
-                                         self.cfg.custom_folder,
-                                         "translations"
-                                        ))
-        elif switch == "default":
-            translations_path = "/".join((self.cfg.user_bungeni,
-                                         "src",
-                                         "bungeni_custom",
-                                         "translations"
-                                        ))
-        else:
-            print red("You need to specify translations target")
-            return
-        packages_home = "/".join((self.cfg.user_bungeni,
-                                     "src",
-                                     "bungeni.main"
-                                    ))
-        if not exists(translations_path):
-            print red("Translations folder %s not found. Skipping installation."
-            % translations_path)
-            return
     
-    def map_country_theme(self):
+    def enable_country_theme(self):
         country_theme = self.cfg.country_theme 
         if country_theme != "default" and country_theme != "":
             source_path = os.path.join(os.path.dirname(self.cfg.user_bungeni),
