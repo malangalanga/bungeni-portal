@@ -1,6 +1,6 @@
 #Generates the table of content
 echo "<ul id=\"menu\">"
-for f in /home/undesa/cinst/bungeni/src/bungeni.main/bungeni/core/workflows/*.xml
+for f in $1/workflows/*.xml
 do 
         xpref=`basename $f .xml`
             html=$xpref.html
