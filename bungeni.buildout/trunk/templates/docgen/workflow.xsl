@@ -58,12 +58,12 @@
                         background-color: #fff;
                          
                     }
-                    span.ident {
+                    div.ident {
                         font-style:normal;
                         color:gray;
                          
                     }
-                    span.trig {
+                    div.trig {
                         color:dark-gray;
                     }
                     /* * for table of content * */
@@ -203,21 +203,19 @@
         </xsl:variable>
         <tr class="m{$counter mod 2}">
             <td>
-
                 <a name="{@id}"/>
-                <xsl:value-of select="@title"/>
-                <br/>
-                <span class="ident">
+                <span class="state-title"><xsl:value-of select="@title"/></span>
+                <div class="ident">
                     <xsl:value-of select="@id"/>
-                </span>
+                </div>
                 <xsl:if test="@like_state">
-                    <br/> Like:<a href="#{@like_state}"><xsl:value-of select="@like_state"/></a>
+                    <div> Like:<a href="#{@like_state}"><xsl:value-of select="@like_state"/></a> </div>
                 </xsl:if>
                 <xsl:if test="@version">
-                    <br/> Version: <span class="ident"><xsl:value-of select="@version"/></span>
+                    <div> Version: <span class="ident"><xsl:value-of select="@version"/></span> </div>
                 </xsl:if>
                 <xsl:if test="child::notification">
-                    <br/> Notify: <span class="ident">true</span>
+                    <div> Notify: <span class="ident">true</span> </div>
                 </xsl:if>
                 <xsl:if test="@note">
                     <div class="note">
@@ -246,15 +244,13 @@
             <!-- Transition Name -->
             <td>
                 <a name="{generate-id(.)}"/>
-                <xsl:value-of select="@title"/>
+                <span class="transition-title"><xsl:value-of select="@title"/></span>
                 <xsl:choose>
                     <xsl:when test="@trigger='manual'">
-                        <br/>
-                        <span class="trig">(Manual)</span>
+                        <div class="trig">(Manual)</div>
                     </xsl:when>
                     <xsl:otherwise>
-                        <br/>
-                        <span class="trig">(Auto)</span>
+                        <div class="trig">(Auto)</div>
                     </xsl:otherwise>
                 </xsl:choose>
                 <!-- Generate the note only if it exists -->
