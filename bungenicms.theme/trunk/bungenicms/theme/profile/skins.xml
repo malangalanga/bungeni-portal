@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
 <object name="portal_skins" meta_type="Plone Skins Tool" 
-    allow_any="False" cookie_persistence="False" >
+    allow_any="False" cookie_persistence="False"
+    default_skin="Bungeni CMS theme" request_varname="plone_skin">
+
  <object name="bungenicms_theme"
          meta_type="Filesystem Directory View"
          directory="bungenicms.theme:skins/bungenicms_theme"/>
- <skin-path name="*">
+ <skin-path name="Bungeni CMS theme" based-on="Plone Classic Theme">
   <layer name="bungenicms_theme"
          insert-after="custom"/>
  </skin-path>

@@ -4,14 +4,7 @@
    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
    xmlns:browser="http://namespaces.zope.org/browser"
    xmlns:plone="http://namespaces.plone.org/plone">
-  
-  <includeOverrides file="overrides.zcml" />
-  <include package="plone.app.layout.viewlets" />
-  <include package="plone.app.layout.presentation" />  
-  <include package="Products.ATContentTypes" />
-  <include package="Products.CMFPlone.browser" />
-  
-  
+
   <include file="skins.zcml" />
 
   <!-- The support page -->
@@ -27,7 +20,7 @@
   <genericsetup:registerProfile
      name="default"
      title="Bungeni CMS theme"
-     description="This profile sets up the default Bungeni CMS theme."
+     description="Extension profile for the default Bungeni CMS theme."
      directory="profile"
      provides="Products.GenericSetup.interfaces.EXTENSION"
      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
