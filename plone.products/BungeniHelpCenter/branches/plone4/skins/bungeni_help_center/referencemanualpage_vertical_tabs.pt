@@ -18,10 +18,10 @@
     <div metal:define-macro="main"
           tal:define="fullToc    python:here.getTOC(current = here);
                       tocInfo    python:here.getTOCInfo(fullToc);
-                      currentIdx tocInfo/currentIdx;
+                      currentIdx tocInfo/currentIdx|nothing;
                       tocList    tocInfo/tocList;
-                      current    python:tocList[currentIdx];
-                      numbering  current/numbering;
+                      current    python:currentIdx and tocList[currentIdx] or here;
+                      numbering  current/numbering|nothing;
                       subpages python:here.objectValues(['TabbedSubpages',]);">
                    
 
@@ -64,7 +64,7 @@
     </span>
     
     
-    <div tal:replace="structure here/getBody"/>
+    <div tal:replace="structure here/getText"/>
         <div class="visualClear">&nbsp;</div>
 
     <div id="tabber-block">

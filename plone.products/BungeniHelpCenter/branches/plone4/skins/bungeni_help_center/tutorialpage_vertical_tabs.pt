@@ -23,7 +23,8 @@
                      sibl     python:[p for p in here.getPages()];
                      num_sibl python:len(sibl);
                      pos      python:here.getPagePosition(here);
-                     subpages python:here.objectValues(['TabbedSubpages',]);">
+                     subpages python:here.objectValues(['TabbedSubpages',]);
+                     mtool context/portal_membership;">
       
         <div tal:replace="structure provider:plone.documentactions"/>
 
