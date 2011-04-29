@@ -156,9 +156,9 @@
                 <a name="transitions"/>
                 <h3><xsl:value-of select="$wf-content-type"/>:Transitions</h3>
                 <div class="linkbar">
-                    <a href="#table-of-contents">Go to Table of contents</a>
+                    <a href="#table-of-contents">[Document Index]</a>
                     <xsl:text>,</xsl:text>
-                    <a href="#states">Click here for States</a>
+                    <a href="#states">[States]</a>
                     <xsl:text>,</xsl:text>
                     <xsl:call-template name="diagram"/>
                 </div>
@@ -175,7 +175,7 @@
                         <xsl:call-template name="match-transition"/>
                     </xsl:for-each>
                 </table>
-                <a href="#table-of-contents">Go to Document Index</a>
+                <a href="#table-of-contents">[Document Index]</a>
                 
 
                 <!-- STATES -->
@@ -183,9 +183,9 @@
                 <a name="states"/>
                 <h3><xsl:value-of select="$wf-content-type"/>:States</h3>
                 <div class="linkbar">
-                    <a href="#table-of-contents">Go to Table of contents</a>
+                    <a href="#table-of-contents">[Document Index]</a>
                     <xsl:text>,</xsl:text>
-                    <a href="#transitions">Click here for Transitions</a>
+                    <a href="#transitions">[Transitions]</a>
                     <xsl:text>,</xsl:text>
                     <xsl:call-template name="diagram"/>
                 </div>
@@ -209,7 +209,7 @@
                         <xsl:call-template name="match-state"/>
                     </xsl:for-each>
                 </table>
-                <a href="#table-of-contents">Go to Document Index</a>
+                <a href="#table-of-contents">[Document Index]</a>
                 
               
             </body>
@@ -409,8 +409,7 @@
         <xsl:variable name="diagImage">
             <xsl:value-of select="tokenize(base-uri(),'/')[last()]"/>
         </xsl:variable>
-        <a href="./{substring-before($diagImage,'.xml')}.dot.png" target="_blank">Click here to view
-            the workflow diagram</a>
+        <a href="./{substring-before($diagImage,'.xml')}.dot.png" target="_blank">[Workflow Diagram]</a>
     </xsl:template>
 
     <!-- 
