@@ -10,7 +10,18 @@
         <xd:param name="tested-version">r8173</xd:param>
     </xd:doc>
     <xsl:output media-type="text/html" method="xhtml"/>
-
+    
+    <!-- Global variable containing content type extracted from Workflow title -->
+    <xsl:variable name="wf-content-type">
+        <xsl:variable name="tmp">
+            <xsl:value-of select="//workflow/@title" />
+        </xsl:variable>
+        <xsl:value-of select="tokenize($tmp, '\s+')[1]" />
+    </xsl:variable>
+    
+    <!-- Queryable key for state elements on state id -->
+    <xsl:key name="query_state" match="//state" use="@id"/>
+    
     <xsl:template match="workflow">
         <html>
             <head>
@@ -140,37 +151,10 @@
                         </xsl:for-each>
                     </div>
                 </div>
-
-                <!-- STATES -->
-
-                <h3>Default Grants</h3>
-                <table border="1">
-                    <xsl:call-template name="grants"/>
-                </table>
-
-                <a name="states"/>
-                <h3><xsl:value-of select="@title"/> States</h3>
-                <div class="linkbar">
-                    <a href="#table-of-contents">Go to Table of contents</a>
-                    <xsl:text>,</xsl:text>
-                    <a href="#transitions">Click here for Transitions</a>
-                    <xsl:text>,</xsl:text>
-                    <xsl:call-template name="diagram"/>
-                </div>
-                <table border="1">
-                    <tr class="yellow">
-                        <td>State Name</td>
-                        <td>Allow</td>
-                        <td>Deny</td>
-                    </tr>
-                    <xsl:for-each select="./state">
-                        <xsl:call-template name="match-state"/>
-                    </xsl:for-each>
-                </table>
-
+                
                 <!-- TRANSITIONS -->
                 <a name="transitions"/>
-                <h3><xsl:value-of select="@title"/> Transitions</h3>
+                <h3><xsl:value-of select="$wf-content-type"/>:Transitions</h3>
                 <div class="linkbar">
                     <a href="#table-of-contents">Go to Table of contents</a>
                     <xsl:text>,</xsl:text>
@@ -184,14 +168,50 @@
                         <td>Source</td>
                         <td>Destination</td>
                         <td>Roles</td>
+                        <td>Action/Condition</td>                        
                         <td>Confirm?</td>
-                        <td>Action/Condition</td>
                     </tr>
                     <xsl:for-each select="./transition">
                         <xsl:call-template name="match-transition"/>
                     </xsl:for-each>
                 </table>
-                <a href="#table-of-contents">Go to Table of contents</a>
+                <a href="#table-of-contents">Go to Document Index</a>
+                
+
+                <!-- STATES -->
+
+                <a name="states"/>
+                <h3><xsl:value-of select="$wf-content-type"/>:States</h3>
+                <div class="linkbar">
+                    <a href="#table-of-contents">Go to Table of contents</a>
+                    <xsl:text>,</xsl:text>
+                    <a href="#transitions">Click here for Transitions</a>
+                    <xsl:text>,</xsl:text>
+                    <xsl:call-template name="diagram"/>
+                </div>
+                
+                <h4>Global Grants</h4>
+                <table border="1">
+                    <xsl:call-template name="grant-denies">
+                       <xsl:with-param name="grant-or-denies" select="./grant" />
+                    </xsl:call-template>
+                </table>
+                
+                <h4>State Grants</h4>
+                
+                <table border="1">
+                    <tr class="yellow">
+                        <td>State Name</td>
+                        <td>Allow</td>
+                        <td>Deny</td>
+                    </tr>
+                    <xsl:for-each select="./state">
+                        <xsl:call-template name="match-state"/>
+                    </xsl:for-each>
+                </table>
+                <a href="#table-of-contents">Go to Document Index</a>
+                
+              
             </body>
         </html>
     </xsl:template>
@@ -205,11 +225,19 @@
             <td>
                 <a name="{@id}"/>
                 <span class="state-title"><xsl:value-of select="@title"/></span>
+                <!-- uncomment the below to show the id on the page -->
+                <!--
                 <div class="ident">
                     <xsl:value-of select="@id"/>
                 </div>
+                -->
                 <xsl:if test="@like_state">
-                    <div> Like:<a href="#{@like_state}"><xsl:value-of select="@like_state"/></a> </div>
+                    <div> Like:
+                        <a href="#{@like_state}">
+                            <!-- Query the state key using the id value in like_state and return the title -->
+                            <xsl:value-of select="key('query_state',@like_state)/@title" />
+                        </a>
+                    </div>
                 </xsl:if>
                 <xsl:if test="@version">
                     <div> Version: <span class="ident"><xsl:value-of select="@version"/></span> </div>
@@ -225,11 +253,17 @@
 
             </td>
             <td>&#160; <table border="0">
-                    <xsl:call-template name="grants"/>
-                </table>
+                    <xsl:call-template name="grant-denies">
+                        <xsl:with-param name="grant-or-denies" select="./grant">
+                        </xsl:with-param>
+                    </xsl:call-template>
+                </table>`
             </td>
             <td>&#160; <table border="0">
-                    <xsl:call-template name="denies"/>
+                    <xsl:call-template name="grant-denies">
+                        <xsl:with-param name="grant-or-denies" select="./deny">
+                        </xsl:with-param>
+                    </xsl:call-template>
                 </table>
             </td>
         </tr>
@@ -292,11 +326,27 @@
             <td>
                 <xsl:variable name="tokRoles" select="tokenize(@roles, '\s+')"/>
                 <xsl:for-each select="$tokRoles">
-                    <xsl:value-of select="."/>
+                    <xsl:call-template name="display-role">
+                        <xsl:with-param name="role">
+                            <xsl:value-of select="."/>
+                        </xsl:with-param>
+                    </xsl:call-template>
                     <br/>
                 </xsl:for-each>
             </td>
 
+            <!-- Action and Condition -->
+            <td>
+                <!-- action -->
+                <p style="text-align:left"> A: <span class="ident"><xsl:value-of select="@action"
+                /></span>
+                </p>
+                <!-- condition -->
+                <p style="text-align:left"> C: <span class="ident"><xsl:value-of select="@condition"
+                /></span>
+                </p>
+            </td>
+            
             <!-- Confirmation yes/no -->
             <td>
                 <xsl:choose>
@@ -311,64 +361,46 @@
                 </xsl:choose>
             </td>
 
-            <!-- Action and Condition -->
-            <td>
-                <!-- action -->
-                <p style="text-align:left"> A: <span class="ident"><xsl:value-of select="@action"
-                        /></span>
-                </p>
-                <!-- condition -->
-                <p style="text-align:left"> C: <span class="ident"><xsl:value-of select="@condition"
-                        /></span>
-                </p>
-            </td>
         </tr>
     </xsl:template>
 
-    <!-- this template is usef for matching <grant> elements which are 
-        children of the current element -->
-    <xsl:template name="grants">
+    <!-- This template matches grant or deny elements -->
+    <xsl:template name="grant-denies">
+        <xsl:param name="grant-or-denies" >
+            <!-- A grant or deny context element is required -->
+        </xsl:param>
         <tr>
-            <td>Permission</td>
-            <td>Role</td>
+            <td><em>Permission</em></td>
+            <td><em>Role</em></td>
         </tr>
-        <xsl:for-each select="./grant">
+        <xsl:for-each-group select="$grant-or-denies" group-by="@permission" >
             <xsl:variable name="counter">
                 <xsl:value-of select="position()"/>
             </xsl:variable>
             <tr class="s{$counter mod 2}">
                 <td>
-                    <xsl:value-of select="@permission"/>
+                    <xsl:call-template name="display-permission">
+                        <xsl:with-param name="perm">
+                            <xsl:value-of select="current-grouping-key()"/>
+                        </xsl:with-param>
+                    </xsl:call-template>
                 </td>
                 <td>
-                    <xsl:value-of select="@role"/>
+                    <xsl:for-each select="current-group()">
+                        <xsl:call-template name="display-role">
+                            <xsl:with-param name="role">
+                                <xsl:value-of select="@role"/>
+                            </xsl:with-param>
+                        </xsl:call-template>
+                        <xsl:if test="not(position() = last())">
+                            <xsl:text> - </xsl:text>
+                        </xsl:if>
+                    </xsl:for-each>
                 </td>
-            </tr>
-        </xsl:for-each>
+            </tr>    
+        </xsl:for-each-group>
+        
     </xsl:template>
-
-    <!-- this template is used for matching <deny> elements which are 
-           children of the current element -->
-    <xsl:template name="denies">
-        <tr>
-            <td>Permission</td>
-            <td>Role</td>
-        </tr>
-        <xsl:for-each select="./deny">
-            <xsl:variable name="counter">
-                <xsl:value-of select="position()"/>
-            </xsl:variable>
-            <tr class="s{$counter mod 2}">
-                <td>
-                    <xsl:value-of select="@permission"/>
-                </td>
-                <td>
-                    <xsl:value-of select="@role"/>
-                </td>
-            </tr>
-        </xsl:for-each>
-    </xsl:template>
-
     <!-- 
         The diagram is generated from a file called e.g. question.dot.png if the xml file is called question.xml 
         so we get the current xml file name, get the part before the .xml and append .dot.png at the end
@@ -380,5 +412,24 @@
         <a href="./{substring-before($diagImage,'.xml')}.dot.png" target="_blank">Click here to view
             the workflow diagram</a>
     </xsl:template>
+
+    <!-- 
+        Templates to display permissions and roles 
+     -->
+    <xsl:template name="display-permission">
+       <xsl:param name="perm" />
+        <!-- remove the zope. prefix -->
+       <xsl:variable name="remove-zope" select="replace($perm,'zope.','')" />
+        <!-- remove the bungeni. prefix -->
+       <xsl:variable name="remove-bungeni" select="replace($remove-zope,'bungeni.','')" />
+       <xsl:value-of select="$remove-bungeni" /> 
+    </xsl:template>
+    
+    <xsl:template name="display-role">
+        <xsl:param name="role" />
+        <xsl:variable name="remove-bungeni" select="replace($role,'bungeni.','')" />
+        <xsl:value-of select="$remove-bungeni" /> 
+    </xsl:template>
+    
 
 </xsl:stylesheet>
