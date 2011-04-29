@@ -1,7 +1,7 @@
 <ui roles="bungeni.Clerk bungeni.Speaker bungeni.MP bungeni.Minister bungeni.Anonymous">
 
     <descriptor name="AgendaItem">
-        <field name="parliament_id" modes="view edit" localizable="view">
+        <field name="parliament_id" modes="view" localizable="view">
             <hide modes="view" />
         </field>
         <field name="short_name" modes="view edit add listing" localizable="view listing">
@@ -76,7 +76,7 @@
     </descriptor>
 
     <descriptor name="Bill">
-        <field name="parliament_id" modes="view edit" localizable="view">
+        <field name="parliament_id" modes="view" localizable="view">
             <hide modes="view" />
         </field>
         <field name="short_name" modes="view edit add listing" localizable="view listing">
@@ -303,7 +303,7 @@
     </descriptor>
 
     <descriptor name="Motion">
-        <field name="parliament_id" modes="view edit" localizable="view">
+        <field name="parliament_id" modes="view" localizable="view">
             <hide modes="view" />
         </field>
         <field name="short_name" modes="view edit add listing" localizable="view listing">
@@ -432,7 +432,7 @@
     </descriptor>
 
     <descriptor name="Question">
-        <field name="parliament_id" modes="view edit" localizable="view">
+        <field name="parliament_id" modes="view" localizable="view">
             <hide modes="view" />
         </field>
         <field name="short_name" modes="view edit add listing" localizable="view listing">
@@ -526,7 +526,7 @@
     </descriptor>
 
     <descriptor name="TabledDocument">
-        <field name="parliament_id" modes="view edit" localizable="view">
+        <field name="parliament_id" modes="view" localizable="view">
             <hide modes="view" />
         </field>
         <field name="short_name" modes="view edit add listing" localizable="view listing">
@@ -589,7 +589,9 @@
     </descriptor>
 
     <descriptor name="User">
-        <field name="user_id" modes="listing" />
+        <field name="user_id" modes="listing" localizable="listing">
+            <show modes="listing" />
+        </field>
         <field name="titles" modes="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <show modes="listing" />
