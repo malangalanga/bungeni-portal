@@ -580,3 +580,15 @@ def enable_country_theme():
     """
     tasks = bungeni.CustomTasks()
     tasks.enable_country_theme()
+
+
+def translate_workflow_xml(default_lang="en"):
+    """
+    Generates a translated workflow XML file. WARNING: RUN THIS ONLY IF YOU 
+    KNOW WHAT THIS IS ABOUT
+    """
+
+    tasks = bungeni.CustomTasks()
+    tasks.translate_workflow_xml(default_lang)
+
+

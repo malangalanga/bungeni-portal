@@ -1343,4 +1343,73 @@ class CustomTasks:
                 print red("Country theme '%s' not found in custom folder." 
                           "Default theme used instead." % country_theme)
         else:
-            print green("No country theme specified. Default theme used.")                                                 
+            print green("No country theme specified. Default theme used.")
+
+
+    
+    def translate_workflow_xml(self, to_language):
+        """
+        WARNING : This is largely untested code, and must be run only 
+        under supervision. 
+        This action translates the titles in the Workflow xml files.
+        An input language is required a parameter. The po file for the 
+        input language is loaded. 
+        The workflow XML files are then parsed sequentially for the title 
+        attribute. The @title attribute is also the message id in the po files.
+        The message string for the message id in the input language is retreived
+         and is applied back to the title attribute. The workflow xml files 
+        are backed up and the new XML files generated.
+        Requires : polib , easy_install polib
+        """
+
+        import polib
+        path_to_xml = os.path.join(self.cfg.user_bungeni,
+                                    "src/bungeni_custom/translations/bungeni",
+                                    to_language)
+        path_to_po = os.path.join(path_to_xml,
+                                "LC_MESSAGES/bungeni.po")
+        path_to_wf_xml_dir = os.path.join(self.cfg.user_bungeni,
+                                    "src/bungeni_custom/workflows")
+        
+        if not os.path.exists(path_to_po):
+            print red(to_language + " po file not found !")
+            abort("aborting !!!!!!!!")
+        else:
+            print green(path_to_po)
+            po = polib.pofile(path_to_po)
+            import glob
+            wf_xml_files = glob.glob(path_to_wf_xml_dir + "/*.xml")
+            for wf_xml_file in wf_xml_files:
+                self._translate_worfklow_xml_file(wf_xml_file, po)
+
+    
+    def _translate_worfklow_xml_file(self, wf_xml_file, po):
+        
+        import re
+        pattern = 'title=\\"([a-zA-Z.].*?)\\"'
+        match_title = re.compile(pattern)
+        f_wf_xml = open(wf_xml_file)
+        str_f_xml = f_wf_xml.read()
+        list_title_msgids = re.findall(match_title, str_f_xml)
+        print green("Processing : " + wf_xml_file)
+        str_repl_xml = str_f_xml
+        for title in list_title_msgids:
+            poentry = po.find(title)
+            if poentry is not None:
+                str_to_find = 'title="'+title+'"'
+                str_to_replace = 'title="'+poentry.msgstr+'"'
+                if len(poentry.msgstr) <> 0 :
+                    str_repl_xml = str_repl_xml.replace(str_to_find, str_to_replace)
+        
+        import shutil
+        str_backup_dir = os.path.join(os.path.dirname(wf_xml_file), "orig")
+        if not os.path.exists(str_backup_dir):
+            os.mkdir(str_backup_dir)
+        str_backup_path = os.path.join(str_backup_dir,
+                                        os.path.basename(wf_xml_file))
+        print green("Backing up original xml file")
+        shutil.copy2(wf_xml_file, str_backup_path)
+        print green("Writing XML with text translations")
+        f_wf_xml.close()
+        f_wf_xml = open(wf_xml_file, "w")
+        f_wf_xml.write(str_repl_xml.encode('UTF-8'))                                             
