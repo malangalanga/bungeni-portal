@@ -16,6 +16,12 @@ SET search_path = public, pg_catalog;
 
 SELECT pg_catalog.setval('address_types_address_type_id_seq', 4, true);
 
+--
+-- Name: question_types_question_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('question_types_question_type_id_seq', 3, true);
+
 
 --
 -- Name: attached_file_types_attached_file_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
@@ -74,6 +80,15 @@ COPY address_types (address_type_name, language) FROM stdin;
 Office	en
 Home	en
 Other	en
+\.
+
+--
+-- Data for Name: question_types; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY question_types (question_type_name, language) FROM stdin;
+Ordinary	en
+Private Notice	en
 \.
 
 
