@@ -28,6 +28,12 @@ SELECT pg_catalog.setval('question_types_question_type_id_seq', 3, true);
 
 SELECT pg_catalog.setval('response_types_response_type_id_seq', 3, true);
 
+--
+-- Name:member_election_types_member_election_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('member_election_types_member_election_type_id_seq', 4, true);
+
 
 --
 -- Name: attached_file_types_attached_file_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
@@ -104,6 +110,16 @@ Private Notice	en
 COPY response_types (response_type_name, language) FROM stdin;
 Oral	en
 Written	en
+\.
+
+--
+-- Data for Name: member_election_types; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY response_types (member_election_type_name, language) FROM stdin;
+elected	en
+nominated	en
+ex officio	en
 \.
 
 

@@ -394,6 +394,13 @@ SELECT pg_catalog.setval('venues_venue_id_seq', 5, true);
 
 
 --
+-- Name: member_election_types_member_election_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('member_election_types_member_election_type_id_seq', 4, true);
+
+
+--
 -- Data for Name: address_types; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -1736,15 +1743,26 @@ COPY offices (office_id, office_role) FROM stdin;
 
 ALTER TABLE offices ENABLE TRIGGER ALL;
 
+
+ALTER TABLE member_election_types DISABLE TRIGGER ALL;
+
+COPY member_election_types (member_election_type_id, member_election_type_name, language) FROM stdin;
+1	elected	en
+2	nominated	en
+3	ex officio	en
+\.
+
+ALTER TABLE member_election_types ENABLE TRIGGER ALL;
+
 --
 -- Data for Name: parliament_memberships; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 ALTER TABLE parliament_memberships DISABLE TRIGGER ALL;
 
-COPY parliament_memberships (membership_id, constituency_id, province_id, region_id, party_id, elected_nominated, election_nomination_date, leave_reason) FROM stdin;
-2	1	1	1	13	E	2009-02-15	\N
-3	1	1	1	13	N	2009-02-15	\N
+COPY parliament_memberships (membership_id, constituency_id, province_id, region_id, party_id, member_election_type_id, election_nomination_date, leave_reason) FROM stdin;
+2	1	1	1	13	1	2009-02-15	\N
+3	1	1	1	13	2	2009-02-15	\N
 \.
 
 
