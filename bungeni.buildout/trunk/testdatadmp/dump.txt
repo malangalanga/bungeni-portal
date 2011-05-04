@@ -399,6 +399,12 @@ SELECT pg_catalog.setval('venues_venue_id_seq', 5, true);
 
 SELECT pg_catalog.setval('member_election_types_member_election_type_id_seq', 4, true);
 
+--
+-- Name:postal_address_types_postal_address_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('postal_address_types_postal_address_type_id_seq', 4, true);
+
 
 --
 -- Data for Name: address_types; Type: TABLE DATA; Schema: public; Owner: -
@@ -415,7 +421,6 @@ COPY address_types (address_type_id, address_type_name, language) FROM stdin;
 
 ALTER TABLE address_types ENABLE TRIGGER ALL;
 
-
 --
 -- Data for Name: question_types; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -426,6 +431,19 @@ COPY question_types (question_type_id, question_type_name, language) FROM stdin;
 1	Ordinary	en
 2	Private Notice	en
 \.
+
+
+--
+-- Data for Name: postal_address_types; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY postal_address_types (postal_address_type_id, postal_address_type_name, language) FROM stdin;
+1	P.O. Box	en
+2	Street/Physical	en
+3	Military	en
+4	Undefined / Unknown	en
+\.
+
 
 --
 -- Data for Name: response_types; Type: TABLE DATA; Schema: public; Owner: -
@@ -1358,13 +1376,13 @@ ALTER TABLE event_items ENABLE TRIGGER ALL;
 
 ALTER TABLE group_addresses DISABLE TRIGGER ALL;
 
-COPY group_addresses (address_id, group_id, address_type_id, postal_type, street, city, zipcode, country, phone, fax, email, status, status_date) FROM stdin;
-1	2	1	P	Parliament Road, 12	Africa City	100100	KE	+254-20-80808181	+254-20-80808182	parliament@parl.org	private	2011-04-20 18:02:23.070257
-2	3	1	P	Parliament Road, 12	Africa City	100100	KE	+254-20-80808181	+254-20-80808182	parliament@parl.org	private	2011-04-20 18:03:20.070934
-3	14	1	P	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:16:15.137949
-4	15	1	P	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:17:16.097294
-5	16	1	P	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:19:02.858627
-6	14	1	P	Parliament Road, 12	Africa City	100100	KE	+254-20-80808181	+254-20-80808182	parliament@parl.org	private	2011-04-20 18:23:03.046118
+COPY group_addresses (address_id, group_id, address_type_id, postal_address_type_id, street, city, zipcode, country_id, phone, fax, email, status, status_date) FROM stdin;
+1	2	1	1	Parliament Road, 12	Africa City	100100	KE	+254-20-80808181	+254-20-80808182	parliament@parl.org	private	2011-04-20 18:02:23.070257
+2	3	1	1	Parliament Road, 12	Africa City	100100	KE	+254-20-80808181	+254-20-80808182	parliament@parl.org	private	2011-04-20 18:03:20.070934
+3	14	1	1	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:16:15.137949
+4	15	1	1	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:17:16.097294
+5	16	1	1	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:19:02.858627
+6	14	1	1	Parliament Road, 12	Africa City	100100	KE	+254-20-80808181	+254-20-80808182	parliament@parl.org	private	2011-04-20 18:23:03.046118
 \.
 
 
@@ -2430,16 +2448,16 @@ ALTER TABLE translations ENABLE TRIGGER ALL;
 
 ALTER TABLE user_addresses DISABLE TRIGGER ALL;
 
-COPY user_addresses (address_id, user_id, address_type_id, postal_type, street, city, zipcode, country, phone, fax, email, status, status_date) FROM stdin;
-1	4	1	P	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:04:17.335375
-2	5	1	P	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:05:17.632357
-3	6	1	P	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:06:17.59599
-4	7	1	P	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:07:17.610357
-5	8	1	P	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:08:17.025522
-6	9	1	P	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:09:17.011258
-7	10	1	P	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:10:17.552848
-8	11	1	P	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:11:17.769719
-9	12	1	P	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:12:17.226251
+COPY user_addresses (address_id, user_id, address_type_id, postal_address_type_id, street, city, zipcode, country_id, phone, fax, email, status, status_date) FROM stdin;
+1	4	1	1	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:04:17.335375
+2	5	1	1	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:05:17.632357
+3	6	1	1	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:06:17.59599
+4	7	1	1	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:07:17.610357
+5	8	1	1	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:08:17.025522
+6	9	1	1	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:09:17.011258
+7	10	1	1	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:10:17.552848
+8	11	1	1	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:11:17.769719
+9	12	1	1	address	Africa City	100100	KE	11111 111\n22222 222\n33333 333	44444 444	mail@mail.com	public	2011-04-20 18:12:17.226251
 \.
 
 

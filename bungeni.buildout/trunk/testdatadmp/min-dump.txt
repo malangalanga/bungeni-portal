@@ -34,6 +34,12 @@ SELECT pg_catalog.setval('response_types_response_type_id_seq', 3, true);
 
 SELECT pg_catalog.setval('member_election_types_member_election_type_id_seq', 4, true);
 
+--
+-- Name:postal_address_types_postal_address_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('postal_address_types_postal_address_type_id_seq', 4, true);
+
 
 --
 -- Name: attached_file_types_attached_file_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
@@ -120,6 +126,17 @@ COPY response_types (member_election_type_name, language) FROM stdin;
 elected	en
 nominated	en
 ex officio	en
+\.
+
+--
+-- Data for Name: postal_address_types; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY postal_address_types (postal_address_type_name, language) FROM stdin;
+P.O. Box	en
+Street/Physical	en
+Military	en
+Undefined / Unknown	en
 \.
 
 
