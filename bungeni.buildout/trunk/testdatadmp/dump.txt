@@ -20,13 +20,13 @@ SELECT pg_catalog.setval('address_types_address_type_id_seq', 3, true);
 -- Name: question_types_question_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('question_types_question_type_id_seq', 3, true);
+SELECT pg_catalog.setval('question_types_question_type_id_seq', 2, true);
 
 --
 -- Name: response_types_response_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('response_types_response_type_id_seq', 3, true);
+SELECT pg_catalog.setval('response_types_response_type_id_seq', 2, true);
 
 
 --
@@ -112,6 +112,11 @@ SELECT pg_catalog.setval('bill_versions_version_id_seq', 1, true);
 
 SELECT pg_catalog.setval('committee_types_committee_type_id_seq', 5, true);
 
+--
+-- Name: committee_type_status_committee_type_status_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('committee_type_status_committee_type_status_id_seq', 2, true);
 
 --
 -- Name: constituencies_constituency_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
@@ -390,14 +395,14 @@ SELECT pg_catalog.setval('user_role_types_user_role_type_id_seq', 25, true);
 -- Name: venues_venue_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('venues_venue_id_seq', 5, true);
+SELECT pg_catalog.setval('venues_venue_id_seq', 4, true);
 
 
 --
 -- Name: member_election_types_member_election_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('member_election_types_member_election_type_id_seq', 4, true);
+SELECT pg_catalog.setval('member_election_types_member_election_type_id_seq', 3, true);
 
 --
 -- Name:postal_address_types_postal_address_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
@@ -1037,17 +1042,26 @@ COPY bills (bill_id, bill_type_id, ministry_id, identifier, publication_date) FR
 ALTER TABLE bills ENABLE TRIGGER ALL;
 
 --
+-- Data for Name: committee_type_status; Type: TABLE DATA; Schema: public; Owner: -
+--
+COPY committee_type_status (committee_type_status_id, committee_type_status_name, language) FROM stdin;
+1	Permanent	en
+2	Temporary	en
+\.
+
+
+--
 -- Data for Name: committee_types; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 ALTER TABLE committee_types DISABLE TRIGGER ALL;
 
-COPY committee_types (committee_type_id, committee_type, description, life_span, status, language) FROM stdin;
-1	House Keeping	\N	parliament	P	en
-2	Departmental	\N	parliament	P	en
-3	Ad Hoc	\N	parliament	T	en
-4	Watch Dog	\N	annual	P	en
-5	Liaison	co-ordinate all departmental committees	annual	P	en
+COPY committee_types (committee_type_id, committee_type, description, life_span, committee_type_status_id, language) FROM stdin;
+1	House Keeping	\N	parliament	1	en
+2	Departmental	\N	parliament	1	en
+3	Ad Hoc	\N	parliament	2	en
+4	Watch Dog	\N	annual	1	en
+5	Liaison	co-ordinate all departmental committees	annual	1	en
 \.
 
 

@@ -11,86 +11,6 @@ SET escape_string_warning = off;
 SET search_path = public, pg_catalog;
 
 --
--- Name: address_types_address_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('address_types_address_type_id_seq', 4, true);
-
---
--- Name: question_types_question_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('question_types_question_type_id_seq', 3, true);
-
---
--- Name: response_types_response_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('response_types_response_type_id_seq', 3, true);
-
---
--- Name:member_election_types_member_election_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('member_election_types_member_election_type_id_seq', 4, true);
-
---
--- Name:postal_address_types_postal_address_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('postal_address_types_postal_address_type_id_seq', 4, true);
-
-
---
--- Name: attached_file_types_attached_file_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('attached_file_types_attached_file_type_id_seq', 6, true);
-
-
---
--- Name: attendance_types_attendance_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('attendance_types_attendance_type_id_seq', 4, true);
-
-
---
--- Name: bill_types_bill_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('bill_types_bill_type_id_seq', 3, true);
-
-
---
--- Name: committee_types_committee_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('committee_types_committee_type_id_seq', 6, true);
-
-
---
--- Name: group_sitting_types_group_sitting_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('group_sitting_types_group_sitting_type_id_seq', 4, true);
-
-
---
--- Name: user_role_types_user_role_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('user_role_types_user_role_type_id_seq', 26, true);
-
-
---
--- Name: venues_venue_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('venues_venue_id_seq', 1, false);
-
-
---
 -- Data for Name: address_types; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -122,7 +42,7 @@ Written	en
 -- Data for Name: member_election_types; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY response_types (member_election_type_name, language) FROM stdin;
+COPY member_election_types (member_election_type_name, language) FROM stdin;
 elected	en
 nominated	en
 ex officio	en
@@ -174,16 +94,22 @@ Private Bill	en
 \.
 
 
+COPY committee_type_status (committee_type_status_name, language) FROM stdin;
+Permanent	en
+Temporary	en
+\.
+
+
 --
 -- Data for Name: committee_types; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY committee_types ( committee_type, description, life_span, status, language) FROM stdin;
-House Keeping	\N	parliament	P	en
-Departmental	\N	parliament	P	en
-Ad Hoc	\N	parliament	T	en
-Watch Dog	\N	annual	P	en
-Liaison	co-ordinate all departmental committees	annual	P	en
+COPY committee_types ( committee_type, description, life_span, committee_type_status_id, language) FROM stdin;
+House Keeping	\N	parliament	1	en
+Departmental	\N	parliament	1	en
+Ad Hoc	\N	parliament	2	en
+Watch Dog	\N	annual	1	en
+Liaison	co-ordinate all departmental committees	annual	1	en
 \.
 
 
