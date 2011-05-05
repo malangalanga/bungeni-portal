@@ -36,7 +36,7 @@ Additional tips useful when editing the localization file: forms/ui.xml
 then the value implied is the value of the `roles` attribute on the document's
 root elemenet i.e. `<ui>`.
 
-- Each `<field>` element specifies a `modes` attribute and a `localizable_modes`
+- Each `<field>` element specifies a `displayable` attribute and a `localizable`
 attribute--these reflect the settings in Bungeni and are provided for 
 information only to help make customization easier.
 
