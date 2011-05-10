@@ -7,6 +7,7 @@
     <!-- global grants -->
     <grant permission="bungeni.sitting.Edit" role="bungeni.Clerk" /> 
     <grant permission="bungeni.sitting.Add" role="bungeni.Clerk" /> 
+    <grant permission="bungeni.sittingschedule.View" role="bungeni.Clerk" />
     <grant permission="bungeni.sittingattendance.Edit" role="bungeni.Clerk" />
     <grant permission="bungeni.sittingattendance.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.sittingattendance.Delete" role="bungeni.Clerk" />
@@ -29,7 +30,6 @@
         <deny permission="bungeni.sitting.Delete" role="bungeni.Authenticated" />
         <deny permission="bungeni.sitting.Delete" role="bungeni.Anonymous" />
         <!-- sittingschedule -->
-        <grant permission="bungeni.sittingschedule.View" role="bungeni.Clerk" />
         <deny permission="bungeni.sittingschedule.View" role="bungeni.Speaker" />
         <deny permission="bungeni.sittingschedule.View" role="bungeni.Authenticated" />
         <deny permission="bungeni.sittingschedule.View" role="bungeni.Anonymous" />
