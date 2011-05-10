@@ -466,12 +466,18 @@ div.main-column h2 {
 .template-portal div.main-column h2 {	    
 	/*margin: -4em 0 0.5em;*/	
 }
-.template-workspace.section-bungeni-workspace div.main-column h2,
-.template-workspace.section-bungeni-admin div.main-column h2 {
+.template-workspace.section-bungeni-workspace div.main-column h2 {
     font-weight: bold !important;
     color: #222 !important;
     margin-top: 1em;
 }
+.template-workspace.section-bungeni-admin div.main-column h2,
+.template-workspace.section-bungeni-admin div.main-column h1 {
+    font-weight: bold !important;
+    color: #222 !important;
+    margin-top: 2.5em !important;
+}
+
 div.main-column h2 span {
     font-size: 75%;
     font-weight: normal;
@@ -653,6 +659,15 @@ div.main-column h3 {
 .section-bungeni-members .documentContent{
     padding: 0 !important;
 }
+
+.template-portal .contentActions { /*toughie*/
+	margin-top:0px !important;
+	padding-top:-20px !important;
+}
+.template-workspace.section-bungeni-workspace .contentActions, .template-portal .contentActions { /*toughie*/
+	padding-top:-20px !important;
+}
+
 #portal-column-content .documentContent {
     float: left;
     width: 99%;
@@ -2390,7 +2405,7 @@ h4.tabberHeading {
     font-weight: normal;
 	width:480px;
 	margin: 3em auto 1em auto;
-/*    text-align: center;*/
+    text-align: center !important;
 }
 .documentEditable {
     margin: 0;
