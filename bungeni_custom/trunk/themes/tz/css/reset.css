@@ -384,6 +384,30 @@ b, strong {
     z-index: 2;
 }
 
+.template-workspace.section-bungeni-business div#viewlet-above-content {
+	z-index:99 !important;
+	margin-top:35px;
+}
+.template-workspace #portal-search {
+    float: right;
+    padding: 2px 0.1em 0em 0;
+    text-align: right;
+    text-transform: none;
+    z-index:999999 !important;
+	clear:both;
+}
+.section-bungeni-workspace #portal-search {
+    float: right;
+    margin-top: 0px;
+	margin-right:10px;
+	margin-bottom:0px;
+    padding: 2px 0.1em 0em 0;
+    text-align: right;
+    text-transform: none;
+    z-index: 2;
+	clear:both;
+}
+
 /*
  * portal-siteactions
  */
@@ -701,6 +725,7 @@ input.inputLabelActive {
 .template-portal .dhx_cal_data{
     border-color: #0066cc;
 }
+
 .template-workspace.section-bungeni-archive .dhx_cal_tab,
 .template-workspace.section-bungeni-business .dhx_cal_tab,
 .template-workspace.section-bungeni-members .dhx_cal_tab,
@@ -1122,7 +1147,8 @@ input.inputLabelActive {
 .template-workspace.section-bungeni-members .contentActions {
     border: 1px solid #0066cc !important;
     background: #fff;
-    width: 95%;
+	margin-left:10px;
+    width: 100%;
     margin: 0 auto;
 }
 .contentActions a {
@@ -1954,9 +1980,6 @@ li.formTab a.selected {
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:hover,
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:active,
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a.selected,
-.template-workspace.section-bungeni-admin ul.formTabs li.formTab a:hover,
-.template-workspace.section-bungeni-admin ul.formTabs li.formTab a:active,
-.template-workspace.section-bungeni-admin ul.formTabs li.formTab a.selected,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:hover,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:active,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a.selected {
@@ -1986,6 +2009,24 @@ dd#items-to-be-scheduled-dl ul.formTabs li.formTab a.selected {
     top: 2px;
     margin: 0 .25em;
     line-height: 17px;
+}
+.template-workspace.section-bungeni-workspace ul.formTabs li.formTab a {
+	color:#000 !important
+}
+.template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:hover,
+.template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:active,
+.template-workspace.section-bungeni-workspace ul.formTabs li.formTab a.selected {
+    background: #21a1ba url(/static/images/w-globalnav-level0-a-first.png) top left repeat-x;
+    color: #000 !import;
+	text-shadow:0 0 0 #fff;
+}
+.template-workspace.section-bungeni-workspace table.listing th,
+.template-workspace.section-bungeni-workspace table.listingdescription th,
+.template-workspace.section-bungeni-workspace .stx table th,
+.template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th {
+    background:#21a1ba url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x !important;
+    text-shadow: 0 0 0  #fff;
+    color: #000;
 }
 
 /*
@@ -2084,9 +2125,12 @@ dl.portalMessage dd {
     margin: 0 auto;
     background: #d8d8d9 url(../images/globalnav-level1-bg.png) bottom left repeat-x;
 }
-.template-workspace.section-bungeni-admin .formPanel #display_form_spacer,
-.template-workspace.section-bungeni-workspace .formPanel #display_form_spacer {
+.template-workspace .formPanel #display_form_spacer {
     background: url(/static/images/w-globalnav-level1-bg.png) bottom left repeat-x;
+}
+
+.template-workspace.section-bungeni-workspace .formPanel #display_form_spacer {
+    background: url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x;
 }
 .template-workspace.section-bungeni-admin .formPanel #display_form_spacer {
     width: 100%;
@@ -2352,6 +2396,13 @@ h4.tabberHeading {
 }
 .section-bungeni-archive .documentContent {
     padding: 0 0 2em !important;
+}
+.template-portal .contentActions { /*toughie*/
+	margin-top:0px !important;
+	padding-top:-20px !important;
+}
+.template-workspace.section-bungeni-workspace .contentActions, .template-portal .contentActions { /*toughie*/
+	padding-top:-20px !important;
 }
 .template-portal .documentDescription {
     font-weight: normal;

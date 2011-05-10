@@ -1970,9 +1970,6 @@ li.formTab a.selected {
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:hover,
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:active,
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a.selected,
-.template-workspace.section-bungeni-admin ul.formTabs li.formTab a:hover,
-.template-workspace.section-bungeni-admin ul.formTabs li.formTab a:active,
-.template-workspace.section-bungeni-admin ul.formTabs li.formTab a.selected,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:hover,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:active,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a.selected {
@@ -2385,8 +2382,11 @@ h4.tabberHeading {
 .section-bungeni-archive .documentContent {
     padding: 0 0 2em !important;
 }
-.template-workspace .contentActions, .template-portal .contentActions { /*toughie*/
+.template-portal .contentActions { /*toughie*/
 	margin-top:0px !important;
+	padding-top:-20px !important;
+}
+.template-workspace.section-bungeni-workspace .contentActions, .template-portal .contentActions { /*toughie*/
 	padding-top:-20px !important;
 }
 .template-portal .documentDescription {

@@ -384,6 +384,30 @@ b, strong {
     z-index: 2;
 }
 
+.template-workspace.section-bungeni-business div#viewlet-above-content {
+	z-index:99 !important;
+	margin-top:35px;
+}
+.template-workspace #portal-search {
+    float: right;
+    padding: 2px 0.1em 0em 0;
+    text-align: right;
+    text-transform: none;
+    z-index:999999 !important;
+	clear:both;
+}
+.section-bungeni-workspace #portal-search {
+    float: right;
+    margin-top: 0px;
+	margin-right:10px;
+	margin-bottom:0px;
+    padding: 2px 0.1em 0em 0;
+    text-align: right;
+    text-transform: none;
+    z-index: 2;
+	clear:both;
+}
+
 /*
  * portal-siteactions
  */
@@ -406,7 +430,7 @@ div.main-column h1 {
     font-weight: bold;
     line-height: 20px;
     color: #C8631B !important;
-    text-shadow: 0 0 1px #fff;
+    text-shadow: 0 0 0 #fff;
     display: block;
     margin: 5px auto;
     padding: 0;
@@ -427,7 +451,7 @@ div.main-column h1.title {
     position: relative;
     font-weight: bold;
     line-height: 20px;
-    text-shadow: 0 0 1px #fff;
+    text-shadow: 0 0 0 #fff;
     text-align: center;
 }
 .template-workspace.section-bungeni-admin div.main-column h1.title,
@@ -440,7 +464,7 @@ div.main-column h1.reportdoctype {
 }
 div.main-column h2 {
     display: block;
-    text-shadow: 0px 0px 1px #fff;
+    text-shadow: 0 0 0 #fff;
     line-height: 20px;
     font-size: 120%;
     padding: 0;
@@ -465,7 +489,7 @@ div.main-column h2 span {
 }
 div.main-column h3 {
     display: block;
-    text-shadow: 0px 0px 1px #fff;
+    text-shadow: 0 0 0 #fff;
     line-height: 20px;
     font-size: 100%;
     padding: 0;
@@ -481,7 +505,7 @@ div.main-column h3 {
 }
 .template-workspace div.main-column p {
     text-align: center;
-    text-shadow: 0px 0px 1px #fff;
+    text-shadow: 0 0 0 #fff;
 }
 
 
@@ -769,7 +793,7 @@ input.inputLabelActive {
 }
 #whats-on-overview p {
     color: #222;
-    text-shadow: 0px 0px 1px #fff;
+    text-shadow: 0 0 0 #fff;
     text-align:center;
     margin: .25em 0;
     line-height: 20px;
@@ -825,7 +849,7 @@ input.inputLabelActive {
     color: #555 !important;
     background: #fff;
     text-align: left;
-    text-shadow: 0px 1px 1px #fff;
+    text-shadow: 0 0 0 #fff;
     line-height: 20px;
     height: 20px;
 }
@@ -878,7 +902,7 @@ input.inputLabelActive {
 #portal-column-content #whats-on-overview .whats-on-viewlet dd.formPanel ul li {
     background: #eee;
     color: #222;
-    text-shadow: 0 1px 1px #fff;
+    text-shadow: 0 0 0 #fff;
     padding: 0;
 }
 #portal-column-content #whats-on-overview .whats-on-viewlet dd.formPanel ul ul {
@@ -923,7 +947,7 @@ input.inputLabelActive {
     line-height: 20px;
     height: 20px;
     text-align: justify;
-    text-shadow: 0px 1px 1px #fff;
+    text-shadow: 0 0 0 #fff;
     position: relative;
     margin: 0;
     padding: 0 .25em;
@@ -1286,7 +1310,7 @@ div#portal-globalnav ul.level0 li {
     background: transparent;
 }
 div#portal-globalnav ul.level0 li a { 
-    text-shadow: 0px 1px 1px #fff;
+    text-shadow: 0 0 0 #fff;
     padding: 0 1em;
     margin: 0 .25em 0 0;
     color: #000;
@@ -1329,7 +1353,7 @@ div#portal-globalnav ul.level0 #secondary li a {
     font-size:12px;
     margin:0 .25em 0 0;
     padding:0 1.25em;
-    text-shadow:0 1px 1px #FFFFFF;
+    text-shadow:0 0 0 #FFFFFF;
 }
 .template-portal div#portal-globalnav ul.level0 li#portaltab-business-whats-on ul a {
     -moz-border-radius-topleft:0px;
@@ -1425,7 +1449,7 @@ div#portal-globalnav ul.level0 ul.level1 {
 	border-right:1px solid #6d7a8a;
     border-top: 0 !important;
     width: 99.9%;
-    background: #6d7a8a url(../images/globalnav-level1-bg.png) bottom left repeat-x;
+    background: #cdcc94 url(../images/globalnav-level1-bg.png) bottom left repeat-x;
     display: block;
 	border-top:0;
 }
@@ -1608,7 +1632,7 @@ div#portal-globalnav-bottom {
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
     border-radius: 2px;
-    text-shadow: 0px 1px 1px #fff;
+    text-shadow: 0 0 0 #fff;
     border-bottom: 1px solid #aaa;
 }
 #portletArchiveDates .portletItem form .field {
@@ -1757,7 +1781,7 @@ table.listingdescription th,
     border-right: 1px solid #88f;
     border-top: 0 none;
     line-height: 20px !important;
-    text-shadow: 0px 1px 1px #fff;
+    text-shadow: 0 0 0 #fff;
     color: #444;
 }
 .yui-skin-sam .yui-dt-first th {
@@ -1799,7 +1823,7 @@ table.listingdescription td,
     border-right: 1px solid #aaf;
     padding: .25em .5em;
     color: #222;
-    text-shadow: 0 1px 1px #fff;
+    text-shadow: 0 0 0 #fff;
 }
 .template-portal table.listing th,
 .template-portal table.listingdescription th,
@@ -1833,7 +1857,22 @@ table.listingdescription td,
     margin: auto;
 }
 
+.template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:hover,
+.template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:active,
+.template-workspace.section-bungeni-workspace ul.formTabs li.formTab a.selected {
+    background: #21a1ba url(/static/images/w-globalnav-level0-a-first.png) top left repeat-x;
+    color: #000;
+	text-shadow:0 0 0 #fff;
+}
 
+.template-workspace.section-bungeni-workspace table.listing th,
+.template-workspace.section-bungeni-workspace table.listingdescription th,
+.template-workspace.section-bungeni-workspace .stx table th,
+.template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th {
+    background:#21a1ba url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x !important;
+    text-shadow: 0 0 0  #fff;
+    color: #000;
+}
 /*
  * formTabs
  * Default styles.
@@ -1955,9 +1994,6 @@ li.formTab a.selected {
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:hover,
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:active,
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a.selected,
-.template-workspace.section-bungeni-admin ul.formTabs li.formTab a:hover,
-.template-workspace.section-bungeni-admin ul.formTabs li.formTab a:active,
-.template-workspace.section-bungeni-admin ul.formTabs li.formTab a.selected,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:hover,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:active,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a.selected {
@@ -2016,7 +2052,7 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
 }
 .formPanel table.listing {
     font-size: 100%;
-    text-shadow: 0 0 1px #fff;
+    text-shadow: 0 0 0 #fff;
     color: #444;
 }
 .formPanel table.listing tr {
@@ -2085,9 +2121,11 @@ dl.portalMessage dd {
     margin: 0 auto;
     background: #d8d8d9 url(../images/globalnav-level1-bg.png) bottom left repeat-x;
 }
-.template-workspace.section-bungeni-admin .formPanel #display_form_spacer,
-.template-workspace.section-bungeni-workspace .formPanel #display_form_spacer {
+.template-workspace.section-bungeni-admin .formPanel #display_form_spacer {
     background: url(/static/images/w-globalnav-level1-bg.png) bottom left repeat-x;
+}
+.template-workspace.section-bungeni-workspace .formPanel #display_form_spacer {
+    background: url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x;
 }
 .template-workspace.section-bungeni-admin .formPanel #display_form_spacer {
     width: 100%;
@@ -2106,7 +2144,7 @@ dl.portalMessage dd {
     width: 19%;
     text-align: right;
     color: #111;
-    text-shadow: 0 1px 1px #fff;
+    text-shadow: 0 0 0 #fff;
     font-weight: bold;
     margin: 0;
     padding: .15em .5em;
@@ -2126,7 +2164,7 @@ dl.portalMessage dd {
     width: 79%;
     float: right;
     display: block;
-    text-shadow: 0 0 1px #fff;
+    text-shadow: 0 0 0 #fff;
     color: #333;
     padding: .15em;
     border: 0 none;
@@ -2351,6 +2389,13 @@ h4.tabberHeading {
 .section-bungeni-archive .documentContent {
     padding: 0 0 2em !important;
 }
+.template-portal .contentActions { /*toughie*/
+	margin-top:0px !important;
+	padding-top:-20px !important;
+}
+.template-workspace.section-bungeni-workspace .contentActions, .template-portal .contentActions { /*toughie*/
+	padding-top:-20px !important;
+}
 .template-portal .documentDescription {
     font-weight: normal;
 	width:480px;
@@ -2491,7 +2536,7 @@ div.navTreeCurrentNode, .portletNavigationTree div.navTreeCurrentNode.hover, .na
 div.main-column #collage h2 {
     display: block;
     text-align: justify;
-    text-shadow: 0px 0px 1px #fff;
+    text-shadow: 0 0 0 #fff;
     line-height: 20px;
     font-size: 120%;
     padding: 0;
