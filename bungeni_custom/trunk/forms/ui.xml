@@ -488,8 +488,8 @@
         </field>
     </descriptor>
 
-    <descriptor name="MemberRoleTitle">
-        <field name="title_name_id" displayable="view edit add listing" localizable="view edit listing">
+    <descriptor name="MemberTitle">
+        <field name="title_type_id" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
         <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
@@ -1015,6 +1015,14 @@
             <show modes="view edit" />
         </field>
         <field name="note" displayable="edit add" />
+    </descriptor>
+
+    <descriptor name="TitleType">
+        <field name="role_id" displayable="view edit add listing" />
+        <field name="title_name" displayable="view edit add listing" />
+        <field name="user_unique" displayable="view edit add listing" />
+        <field name="sort_order" displayable="view edit add listing" />
+        <field name="language" displayable="edit add" />
     </descriptor>
 
     <descriptor name="UserAddress">
