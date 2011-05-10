@@ -3,8 +3,7 @@
     tal:condition="view/available"
     i18n:domain="plone">
 
-    <li tal:repeat="menuItem menu"
-        tal:attributes="class menuItem/extra/id" >
+    <li tal:repeat="menuItem menu">
 
         <dl class="actionMenu"
             tal:attributes="id menuItem/extra/id"

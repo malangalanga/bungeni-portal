@@ -34,12 +34,6 @@ def pos_action_in_url(action, request_url):
     normalized_action = action.lstrip('./@')
     return request_url.rfind(normalized_action)
 
-def action_to_id(action):
-    return action.strip('/'
-                ).replace('/', '-'
-                ).replace('.', ''
-                ).strip('-')
-
 def make_absolute(action, local_url, site_url):
     if action.startswith('http://') or action.startswith('https://'):
         return action
@@ -56,16 +50,10 @@ class PloneBrowserMenu(BrowserMenu):
     def getMenuItems(self, object, request):
         menu = tuple(zope.component.getAdapters(
             (object, request), self.getMenuItemType()))
-        result = [item for name, item in menu]
-        # filter out all items which you do not have 
-        # the permissions for 
-        security_checked_result = []
-        for item in result:
-            if checkPermission(item.permission, object):
-                security_checked_result.append(item)
-        result = security_checked_result
+        # filter out all items which you do not have the permissions for 
+        result = [ item for name, item in menu 
+                   if checkPermission(item.permission, object) ]
         # Now order the result. This is not as easy as it seems.
-        #
         # (1) Look at the interfaces and put the more specific menu entries
         #     to the front. 
         # (2) Sort unambigious entries by order and then by title.
@@ -86,7 +74,6 @@ class PloneBrowserMenu(BrowserMenu):
                   for item in result]
         result.sort()
         # !+ replace above with super getMenuItems()
-        
         local_url = url.absoluteURL(object, request)
         site_url = url.absoluteURL(getSite(), request)
         request_url = request.getURL()
@@ -96,14 +83,18 @@ class PloneBrowserMenu(BrowserMenu):
         current_pos = -1
         
         for index, (order, iface_index, title, item) in enumerate(result):
-            
             # !+ for some reason, for the generic container listing views, the 
             # context_actions menu comes out with a single item pointing to 
             # "@@index" i.e. itself... we ignore it:
             if item.action=="@@index":
                 continue
             
-            extra = item.extra or {'id': action_to_id(item.action)}
+            extra = item.extra or {}
+            # if no id has been explictly set, if the item defines an "id" 
+            # attribute e.g. BrowserMenu or bungeni.ui.menu.BrowserSubMenuItem, 
+            # then try using it
+            extra.setdefault("id", getattr(item, "id", None))
+            
             if IBrowserSubMenuItem.providedBy(item):
                 submenu = getMenu(item.submenuId, object, request)
             else:
