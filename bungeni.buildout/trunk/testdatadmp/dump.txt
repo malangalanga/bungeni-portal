@@ -193,6 +193,13 @@ SELECT pg_catalog.setval('member_election_types_member_election_type_id_seq', 3,
 
 
 --
+-- Name: member_titles_member_title_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('member_titles_member_title_id_seq', 1, false);
+
+
+--
 -- Name: motion_changes_change_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
@@ -312,20 +319,6 @@ SELECT pg_catalog.setval('response_types_response_type_id_seq', 2, true);
 
 
 --
--- Name: role_titles_role_title_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('role_titles_role_title_id_seq', 10, true);
-
-
---
--- Name: rotas_rota_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('rotas_rota_id_seq', 1, false);
-
-
---
 -- Name: sessions_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
@@ -361,24 +354,10 @@ SELECT pg_catalog.setval('tabled_document_versions_version_id_seq', 11, true);
 
 
 --
--- Name: take_media_media_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: title_types_title_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('take_media_media_id_seq', 1, false);
-
-
---
--- Name: takes_take_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('takes_take_id_seq', 1, false);
-
-
---
--- Name: transcripts_transcript_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('transcripts_transcript_id_seq', 1, false);
+SELECT pg_catalog.setval('title_types_title_type_id_seq', 1, false);
 
 
 --
@@ -400,13 +379,6 @@ SELECT pg_catalog.setval('user_addresses_address_id_seq', 9, true);
 --
 
 SELECT pg_catalog.setval('user_group_memberships_membership_id_seq', 11, true);
-
-
---
--- Name: user_role_types_user_role_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('user_role_types_user_role_type_id_seq', 25, true);
 
 
 --
@@ -1602,6 +1574,18 @@ COPY member_election_types (member_election_type_id, member_election_type_name, 
 ALTER TABLE member_election_types ENABLE TRIGGER ALL;
 
 --
+-- Data for Name: member_titles; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE member_titles DISABLE TRIGGER ALL;
+
+COPY member_titles (member_title_id, membership_id, title_type_id, start_date, end_date, language) FROM stdin;
+\.
+
+
+ALTER TABLE member_titles ENABLE TRIGGER ALL;
+
+--
 -- Data for Name: motion_changes; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -2262,40 +2246,6 @@ COPY response_types (response_type_id, response_type_name, language) FROM stdin;
 ALTER TABLE response_types ENABLE TRIGGER ALL;
 
 --
--- Data for Name: role_titles; Type: TABLE DATA; Schema: public; Owner: -
---
-
-ALTER TABLE role_titles DISABLE TRIGGER ALL;
-
-COPY role_titles (role_title_id, membership_id, title_name_id, start_date, end_date, language) FROM stdin;
-1	1	5	2009-02-18	\N	en
-2	2	4	2009-02-23	\N	en
-3	3	4	2009-02-23	\N	en
-4	5	17	2009-02-23	\N	en
-5	6	18	2009-02-23	\N	en
-6	7	15	2009-02-24	\N	en
-7	8	16	2009-02-24	\N	en
-8	9	25	2009-02-24	\N	en
-9	10	25	2009-02-24	\N	en
-10	11	25	2009-02-24	\N	en
-\.
-
-
-ALTER TABLE role_titles ENABLE TRIGGER ALL;
-
---
--- Data for Name: rotas; Type: TABLE DATA; Schema: public; Owner: -
---
-
-ALTER TABLE rotas DISABLE TRIGGER ALL;
-
-COPY rotas (rota_id, reporter_id, identifier, start_date, end_date) FROM stdin;
-\.
-
-
-ALTER TABLE rotas ENABLE TRIGGER ALL;
-
---
 -- Data for Name: sessions; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -2444,40 +2394,16 @@ COPY tabled_documents (tabled_document_id, link, tabled_document_number) FROM st
 ALTER TABLE tabled_documents ENABLE TRIGGER ALL;
 
 --
--- Data for Name: take_media; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: title_types; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-ALTER TABLE take_media DISABLE TRIGGER ALL;
+ALTER TABLE title_types DISABLE TRIGGER ALL;
 
-COPY take_media (media_id, take_id) FROM stdin;
+COPY title_types (title_type_id, group_id, role_id, title_name, user_unique, sort_order, language) FROM stdin;
 \.
 
 
-ALTER TABLE take_media ENABLE TRIGGER ALL;
-
---
--- Data for Name: takes; Type: TABLE DATA; Schema: public; Owner: -
---
-
-ALTER TABLE takes DISABLE TRIGGER ALL;
-
-COPY takes (take_id, rota_id, identifier) FROM stdin;
-\.
-
-
-ALTER TABLE takes ENABLE TRIGGER ALL;
-
---
--- Data for Name: transcripts; Type: TABLE DATA; Schema: public; Owner: -
---
-
-ALTER TABLE transcripts DISABLE TRIGGER ALL;
-
-COPY transcripts (transcript_id, take_id, reporter_id) FROM stdin;
-\.
-
-
-ALTER TABLE transcripts ENABLE TRIGGER ALL;
+ALTER TABLE title_types ENABLE TRIGGER ALL;
 
 --
 -- Data for Name: translations; Type: TABLE DATA; Schema: public; Owner: -
@@ -2546,43 +2472,6 @@ COPY user_group_memberships (membership_id, user_id, group_id, start_date, end_d
 
 
 ALTER TABLE user_group_memberships ENABLE TRIGGER ALL;
-
---
--- Data for Name: user_role_types; Type: TABLE DATA; Schema: public; Owner: -
---
-
-ALTER TABLE user_role_types DISABLE TRIGGER ALL;
-
-COPY user_role_types (user_role_type_id, user_type, user_role_name, user_unique, sort_order, language) FROM stdin;
-1	parliamentmember	Speaker	t	20	en
-2	parliamentmember	President	t	40	en
-3	parliamentmember	Attorney General	t	30	en
-4	parliamentmember	Member	f	10	en
-5	minister	Minister	t	10	en
-6	minister	Deputy Minister	f	20	en
-7	minister	Secretary	t	30	en
-8	minister	Under Secretary	f	40	en
-9	minister	Assistant Minister	f	50	en
-10	partymember	Speaker	t	20	en
-11	partymember	Deputy Speaker	f	30	en
-12	partymember	Chief Whip, Floor Leader	t	40	en
-13	partymember	Deputy Leader	f	50	en
-14	partymember	Spokesperson	t	60	en
-15	partymember	Secretary	f	70	en
-16	partymember	Member	f	10	en
-17	committeemember	Chairperson	t	20	en
-18	committeestaff	Committee Clerk	f	10	en
-19	committeemember	Deputy Chairperson	f	30	en
-20	committeestaff	Deputy Committee Clerk	f	20	en
-21	committeemember	Member	f	10	en
-22	committeemember	Secretary	f	40	en
-23	committeestaff	Researcher	f	50	en
-24	extensionmember	Additional Member	f	10	en
-25	officemember	Office Member	f	10	en
-\.
-
-
-ALTER TABLE user_role_types ENABLE TRIGGER ALL;
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
