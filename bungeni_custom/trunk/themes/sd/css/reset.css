@@ -485,7 +485,7 @@ div.main-column h2 span {
 }
 div.main-column h3 {
     display: block;
-    text-shadow: 0px 0px 1px #fff;
+    text-shadow: 0px 0px 0px #fff;
     line-height: 20px;
     font-size: 100%;
     padding: 0;
@@ -898,7 +898,7 @@ input.inputLabelActive {
 #portal-column-content #whats-on-overview .whats-on-viewlet dd.formPanel ul li {
     background: #eee;
     color: #222;
-    text-shadow: 0 1px 1px #fff;
+    text-shadow: 0 0 0 #fff;
     padding: 0;
 }
 #portal-column-content #whats-on-overview .whats-on-viewlet dd.formPanel ul ul {
@@ -1345,7 +1345,7 @@ div#portal-globalnav ul.level0 #secondary li a {
     border-style:solid;
     border-width:1px;
     color:#222222;
-	font-weight:bold;
+	font-weight:normal;
     font-family:tahoma,verdana,sans-serif;
     font-size:12px;
     margin:0 .25em 0 0;
@@ -2090,11 +2090,67 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
 .section-bungeni-admin .formPanel .field {
     width: 100%;
 }
-dl.portalMessage {
+.template-portal #portal-column-content div#region-content div#content div h2.title:first-child { 
+	margin-top:30px !important;
+}
+.template-workspace #portal-column-content div#region-content div#content div h2.title:first-child,
+.template-workspace #portal-column-content div#region-content div h2:first-child { 
+	margin-top:55px !important;
+}
+.template-portal #portal-column-content div#region-content div h2:first-child { 
+	margin-top:25px !important;
+}
+.template-portal dl.portalMessage {
+    margin: 0 auto;
+    padding: 0 .5em;
+    height: 18px;
+    line-height: 18px;
+    margin-bottom:20px;
+    border: 1px solid #800;
+    color: #333;
+	margin-top:-196px !important;
+	padding-right:10px !important;
+	position:absolute;
+    width: 97.3%;
+}
+.template-workspace #alchemist-form dl.portalMessage {
+	margin-top:-118px !important;
+}
+.template-portal #alchemist-form dl.portalMessage, 
+.template-portal #alchemist-form dl.portalMessage {
+	margin-top:-115px !important;
+}
+.template-portal #alchemist-form dl.portalMessage dt, 
+.template-workspace #alchemist-form dl.portalMessage dt, 
+.template-portal #alchemist-form dl.portalMessage dt {
+	height:15px !important;
+	line-height: 15px !important;
+	padding:0 1em .3em 1em !important;
+}
+.template-workspace dl.portalMessage {
+    margin: 0 auto;
+	margin-left:auto;
+	margin-right:auto;
+    padding: 0 .5em;
+    height: 18px;
+    line-height: 18px;
+    margin-bottom:5px;
+    border: 1px solid #800;
+    color: #333;
+	margin-top:-196px !important;
+	padding-right:10px !important;
+	position:absolute;
+    width: 94%;
+}
+.template-workspace.section-bungeni-admin dl.portalMessage {
+	margin-top:-160px !important;
+}
+.template-portal.section-bungeni-login .bungeniapp-form dl.portalMessage {
     margin: 0 auto;
     padding: 0 .5em;
     height: 25px;
     line-height: 25px;
+	font-size:0.7em;
     margin-bottom:5px;
     border: 1px solid #800;
     color: #333;
@@ -2389,6 +2445,7 @@ h4.tabberHeading {
 .section-bungeni-archive .documentContent {
     padding: 0 0 2em !important;
 }
+
 .template-portal .contentActions { /*toughie*/
 	margin-top:0px !important;
 	padding-top:-20px !important;
