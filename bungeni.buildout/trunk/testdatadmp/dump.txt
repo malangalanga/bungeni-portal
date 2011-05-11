@@ -928,11 +928,11 @@ COPY bill_changes (change_id, content_id, action, date_audit, date_active, descr
 1	37	added	2011-05-10 14:13:54.152764	2011-05-10 14:13:54.152764		\N	7
 2	37	workflow	2011-05-10 14:13:54.214667	2011-05-10 14:13:54.214667	Draft Bill	{'comment': '', 'source': None, 'destination': 'working_draft', 'transition': '-working_draft'}	7
 3	37	modified	2011-05-10 14:13:54.231942	2011-05-10 14:13:54.231942		\N	7
-4	37	Cosignatory	2011-05-10 14:14:00.35332	2011-05-10 14:14:00.35332	 Cosignatory: Mrs member P1-CS added	\N	7
+4	37	Signatory	2011-05-10 14:14:00.35332	2011-05-10 14:14:00.35332	 Cosignatory: Mrs member P1-CS added	\N	7
 5	38	added	2011-05-10 14:14:34.674801	2011-05-10 14:14:34.674801		\N	7
 6	38	workflow	2011-05-10 14:14:34.73865	2011-05-10 14:14:34.73865	Draft Bill	{'comment': '', 'source': None, 'destination': 'working_draft', 'transition': '-working_draft'}	7
 7	38	modified	2011-05-10 14:14:34.757991	2011-05-10 14:14:34.757991		\N	7
-8	38	Cosignatory	2011-05-10 14:14:40.786493	2011-05-10 14:14:40.786493	 Cosignatory: Mrs member P1-CS added	\N	7
+8	38	Signatory	2011-05-10 14:14:40.786493	2011-05-10 14:14:40.786493	 Cosignatory: Mrs member P1-CS added	\N	7
 9	38	new-version	2011-05-10 14:14:56.623582	2011-05-10 14:14:56.623582	New version on workflow transition to: gazetted	{'version_id': 1L}	7
 10	38	workflow	2011-05-10 14:14:56.681717	2011-05-10 14:14:56.681717	Bill Published in Gazette	{'comment': '', 'source': 'working_draft', 'destination': 'gazetted', 'transition': 'working_draft-gazetted'}	7
 11	38	modified	2011-05-10 14:14:56.690421	2011-05-10 14:14:56.690421		\N	7
@@ -1058,19 +1058,19 @@ COPY constituency_details (constituency_detail_id, constituency_id, date, popula
 ALTER TABLE constituency_details ENABLE TRIGGER ALL;
 
 --
--- Data for Name: cosignatories; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: signatories; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-ALTER TABLE cosignatories DISABLE TRIGGER ALL;
+ALTER TABLE signatories DISABLE TRIGGER ALL;
 
-COPY cosignatories (item_id, user_id) FROM stdin;
-31	5
-37	5
-38	5
+COPY signatories (item_id, user_id, status) FROM stdin;
+31	5	awaiting_consent
+37	5	awaiting_consent
+38	5	awaiting_consent
 \.
 
 
-ALTER TABLE cosignatories ENABLE TRIGGER ALL;
+ALTER TABLE signatories ENABLE TRIGGER ALL;
 
 --
 -- Data for Name: countries; Type: TABLE DATA; Schema: public; Owner: -
@@ -1665,7 +1665,7 @@ COPY motion_changes (change_id, content_id, action, date_audit, date_active, des
 76	31	workflow	2011-05-10 14:08:39.410203	2011-05-10 14:08:39.410203	Admissible	{'comment': '', 'source': 'completed', 'destination': 'admissible', 'transition': 'completed-admissible'}	8
 77	31	modified	2011-05-10 14:08:39.418959	2011-05-10 14:08:39.418959		\N	8
 69	31	modified	2011-05-10 14:08:07.4137	2011-05-10 14:08:07.4137		\N	7
-70	31	Cosignatory	2011-05-10 14:08:13.530763	2011-05-10 14:08:13.530763	 Cosignatory: Mrs member P1-CS added	\N	7
+70	31	Signatory	2011-05-10 14:08:13.530763	2011-05-10 14:08:13.530763	 Cosignatory: Mrs member P1-CS added	\N	7
 71	31	new-version	2011-05-10 14:08:18.600016	2011-05-10 14:08:18.600016	New version on workflow transition to: completed	{'version_id': 16L}	7
 72	31	workflow	2011-05-10 14:08:18.672567	2011-05-10 14:08:18.672567	Submitted to the Speaker	{'comment': '', 'source': 'received', 'destination': 'completed', 'transition': 'received-completed'}	7
 73	31	modified	2011-05-10 14:08:18.681149	2011-05-10 14:08:18.681149		\N	7
