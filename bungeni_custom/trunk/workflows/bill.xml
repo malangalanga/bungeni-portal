@@ -8,6 +8,7 @@
     <grant permission="bungeni.bill.View" role="bungeni.Clerk" />  
     <grant permission="bungeni.bill.View" role="bungeni.Speaker" /> 
     <grant permission="bungeni.bill.View" role="bungeni.Owner" />
+    <grant permission="bungeni.bill.View" role="bungeni.Signatory" />
     <grant permission="bungeni.bill.Edit" role="bungeni.Clerk" />    
     <grant permission="bungeni.bill.Edit" role="bungeni.Speaker" /> 
     <grant permission="bungeni.bill.Edit" role="bungeni.Owner" />
@@ -25,15 +26,16 @@
         <deny permission="zope.View" role="bungeni.Minister" />
         <deny permission="zope.View" role="bungeni.Authenticated" /> 
         <deny permission="zope.View" role="bungeni.Anonymous" />
+        <deny permission="zope.View" role="bungeni.Signatory" />
         <grant permission="bungeni.bill.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.bill.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.bill.Delete" role="bungeni.Clerk" />
         <grant permission="bungeni.bill.Delete" role="bungeni.Owner" />
-        <!-- cosignatory -->
-        <grant permission="bungeni.cosignatory.Add" role="bungeni.Clerk" />
-        <grant permission="bungeni.cosignatory.Add" role="bungeni.Owner" />
-        <grant permission="bungeni.cosignatory.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.cosignatory.Delete" role="bungeni.Owner" />
+        <!-- signatory -->
+        <grant permission="bungeni.signatory.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
         <!-- attachedfile -->
         <grant permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
@@ -43,7 +45,7 @@
         <deny permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
-    
+
     <state id="gazetted" title="Bill Published in Gazette"
         version="true"
         like_state="working_draft">
@@ -52,6 +54,7 @@
         <grant permission="zope.View" role="bungeni.MP" />
         <grant permission="zope.View" role="bungeni.Minister" />
         <grant permission="zope.View" role="bungeni.Authenticated" /> 
+        <grant permission="zope.View" role="bungeni.Signatory" /> 
         <grant permission="zope.View" role="bungeni.Anonymous" />
         <deny permission="bungeni.bill.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.bill.Delete" role="bungeni.Clerk" />
@@ -62,8 +65,19 @@
         <!-- groupitemassignment -->
         <grant permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
+        <!-- signatory -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
     </state>
-    
+
+    <state id="submitted_signatories" title="Submitted to Signatories"
+        version="True" like_state="gazetted">
+        <grant permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <grant permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
+    </state>
+
     <state id="first_reading_pending" title="First Reading Pending" 
         like_state="gazetted"
     />
@@ -76,11 +90,11 @@
     
     <state id="first_committee" title="Select Committee (after 1st reading)"
         like_state="gazetted" >
-        <!-- cosignatory -->
-        <deny permission="bungeni.cosignatory.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.cosignatory.Add" role="bungeni.Owner" />
-        <deny permission="bungeni.cosignatory.Delete" role="bungeni.Clerk" />
-        <deny permission="bungeni.cosignatory.Delete" role="bungeni.Owner" />
+        <!-- signatory -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
     </state>
     
     <state id="first_report_reading_pending" 
@@ -163,11 +177,19 @@
         trigger="automatic"
     />
     
+    <transition title="Submit to Signatories"
+        source="working_draft"
+        destination="submitted_signatories"
+        condition="pi_has_signatories"
+        trigger="manual"
+        roles="bungeni.Owner"
+    />
+    
     <!-- !+ why "submit" and not "receive" given that this is for the clerk? -->
     <transition title="Publish in Gazette"
-        source="working_draft"
+        source="working_draft submitted_signatories"
         destination="gazetted"
-        condition=""
+        condition="pi_signatories_check"
         trigger="manual"
         roles="bungeni.Clerk"
     />

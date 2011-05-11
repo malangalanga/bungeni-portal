@@ -50,5 +50,10 @@ from bungeni.core.workflows._conditions import (
     # user
     has_date_of_death,
     not_has_date_of_death,
+    
+    #signatories
+    pi_has_signatories,
+    pi_signatories_check,
+    pi_allow_signature,
 )
 

@@ -6,6 +6,7 @@
     
     <!-- global grants -->
     <grant permission="bungeni.question.View" role="bungeni.Owner" />
+    <grant permission="bungeni.question.View" role="bungeni.Signatory" />
     <grant permission="bungeni.question.Edit" role="bungeni.Owner" />
     <grant permission="bungeni.question.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.question.Add" role="bungeni.MP" />
@@ -21,6 +22,7 @@
         <deny permission="zope.View" role="bungeni.Minister" />
         <deny permission="zope.View" role="bungeni.Authenticated" /> 
         <deny permission="zope.View" role="bungeni.Anonymous" />
+        <deny permission="zope.View" role="bungeni.Signatory" />
         <grant permission="bungeni.question.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.question.Edit" role="bungeni.Speaker" />
         <deny permission="bungeni.question.Edit" role="bungeni.Owner" />
@@ -41,12 +43,17 @@
         <deny permission="bungeni.response.View" role="bungeni.Authenticated" />
         <deny permission="bungeni.response.View" role="bungeni.Anonymous" />
         <deny permission="bungeni.response.Edit" role="bungeni.Minister" />
+        <deny permission="bungeni.response.Edit" role="bungeni.Signatory" />
+        <!-- signatories -->
+        <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <grant permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
     </state>
     
     <state id="draft" title="Draft" 
         like_state="working_draft">
         <!-- question -->
         <deny permission="zope.View" role="bungeni.Clerk" />
+        <deny permission="zope.View" role="bungeni.Signatory" />
         <grant permission="zope.View" role="bungeni.Owner" />
         <deny permission="bungeni.question.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.question.Edit" role="bungeni.Owner" />
@@ -58,18 +65,23 @@
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
     </state>
-    
+
     <state id="submitted" title="Submitted to clerk" 
         version="true"
         like_state="draft">
         <!-- question -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Speaker" />
+        <grant permission="zope.View" role="bungeni.Signatory" />
         <deny permission="bungeni.question.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.question.Delete" role="bungeni.Owner" />
         <!-- fileattachment -->
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <!-- signatory -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+
         <notification condition="clerk_receive_notification"
             subject="Question submitted: ${item.short_name}"
             from="${item.owner_email}"
@@ -77,7 +89,13 @@
             body="notification_email_to_clerk_upon_submit_of_question"
         />
     </state>
-    
+
+    <state id="submitted_signatories" title="Submitted to Signatories"
+        like_state="submitted">
+        <grant permission="bungeni.signatory.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
+    </state>
+
     <state id="received" title="Received by clerk"
         version="true"
         like_state="submitted">
@@ -248,10 +266,19 @@
         order="0"
     />
     
-    <transition title="Submit"
+    <transition title="Submit to Signatories"
         source="working_draft draft"
+        destination="submitted_signatories"
+        condition="pi_has_signatories"
+        trigger="manual"
+        roles="bungeni.Owner"
+        order="1"
+    />
+    
+    <transition title="Submit"
+        source="working_draft draft submitted_signatories"
         destination="submitted"
-        condition=""
+        condition="pi_signatories_check"
         trigger="manual"
         roles="bungeni.Owner"
         order="1"
