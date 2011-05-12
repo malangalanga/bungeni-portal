@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<workflow title="Signatory Workflow"
+    description="Workflow for Signatory documents"
+    domain="bungeni"
+    initial_state="">
+    
+    <!--<grant permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+    <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
+    <grant permission="bungeni.signatory.Edit" role="bungeni.Clerk"/>-->
+
+    <state id="awaiting_consent" title="Awaiting Consent">
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.signatory.Edit" role="bungeni.Everybody"/>
+        <deny permission="zope.View" role="bungeni.Authenticated"/>
+    </state>
+
+    <state id="consented" title="Signature Consented" 
+        like_state="awaiting_consent">
+        <grant permission="zope.View" role="bungeni.Authenticated"/>
+    </state>
+
+    <state id="rejected" title="Signature Rejected" like_state="consented"/>
+
+    <transition title="Create"
+        source=""
+        destination="awaiting_consent"
+        trigger="automatic"
+    />
+    
+    <transition title="consent"
+        source="awaiting_consent"
+        destination="consented"
+        trigger="manual"
+        roles="bungeni.Owner"
+        require_confirmation="true"
+        condition="pi_allow_signature"
+    />
+    
+    <transition title="reject"
+        source="awaiting_consent"
+        destination="rejected"
+        trigger="manual"
+        roles="bungeni.Owner"
+        require_confirmation="true"
+        condition="user_is_context_owner"
+    />
+</workflow>
