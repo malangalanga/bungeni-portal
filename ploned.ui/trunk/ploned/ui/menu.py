@@ -90,10 +90,22 @@ class PloneBrowserMenu(BrowserMenu):
                 continue
             
             extra = item.extra or {}
-            # if no id has been explictly set, if the item defines an "id" 
-            # attribute e.g. BrowserMenu or bungeni.ui.menu.BrowserSubMenuItem, 
-            # then try using it
-            extra.setdefault("id", getattr(item, "id", None))
+            # if no id has been explictly set, get one in some way or another...
+            extra.setdefault("id", 
+                # try "id", BrowserMenu, bungeni.ui.menu.BrowserSubMenuItem
+                getattr(item, "id", None) or
+                # try "submenuId": zope.app.publisher.browser.menu.BrowserSubMenuItem
+                getattr(item, "submenuId", None) or 
+                # try "action": zope.app.publisher.browser.menu.BrowserMenuItem
+                getattr(item, "action", None)
+            )
+            # !+CSS_ID(mr, may-2011) the CSS menu styling should NOT be based 
+            # on element id, it is unnecessarily brittle and limited e.g. what
+            # happens if you wish to render a menu twice, on top and bottom of
+            # a page? Styling selectors should be connected only via classes
+            # (not even element tag names). The use of an element id should be 
+            # limited to only known-to-be-unique contrainers in the page e.g.
+            # "content", "top-menu-bar", "footer", etc. 
             
             if IBrowserSubMenuItem.providedBy(item):
                 submenu = getMenu(item.submenuId, object, request)
