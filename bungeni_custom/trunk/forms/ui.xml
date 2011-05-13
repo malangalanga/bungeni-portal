@@ -17,8 +17,9 @@
         <field name="owner_id" displayable="view edit add listing" localizable="view listing">
             <hide modes="view listing" roles="bungeni.Anonymous" />
         </field>
-        <field name="language" displayable="view edit add" localizable="view">
-            <show modes="view" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
         </field>
         <field name="body_text" displayable="view edit add" localizable="view">
             <show modes="view" />
@@ -52,7 +53,10 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="language" displayable="view add listing" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="body_text" displayable="view edit add" localizable="view edit">
             <show modes="view edit" />
         </field>
@@ -60,7 +64,10 @@
     </descriptor>
 
     <descriptor name="AttachedFile">
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="file_title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -84,7 +91,10 @@
     </descriptor>
 
     <descriptor name="AttachedFileVersion">
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="file_title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -133,8 +143,9 @@
         <field name="owner_id" displayable="view edit add listing" localizable="view listing">
             <hide modes="view listing" roles="bungeni.Anonymous" />
         </field>
-        <field name="language" displayable="view edit add" localizable="view">
-            <show modes="view" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
         </field>
         <field name="body_text" displayable="view edit add" localizable="view">
             <show modes="view" />
@@ -178,7 +189,10 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="language" displayable="view add listing" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="body_text" displayable="view edit add" localizable="view edit">
             <show modes="view edit" />
         </field>
@@ -197,7 +211,10 @@
         <field name="combined_name" displayable="listing" localizable="listing">
             <show modes="listing" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="description" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
@@ -247,7 +264,10 @@
             <show modes="edit" />
             <hide modes="view listing" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
             <hide modes="view edit listing" />
         </field>
@@ -273,7 +293,10 @@
             <show modes="edit" />
             <hide modes="view listing" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
             <hide modes="view edit listing" />
         </field>
@@ -286,7 +309,10 @@
     </descriptor>
 
     <descriptor name="Constituency">
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="name" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -311,7 +337,10 @@
     </descriptor>
 
     <descriptor name="Country">
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="country_id" displayable="view edit add" localizable="view edit">
             <show modes="view edit" />
         </field>
@@ -329,8 +358,9 @@
             <hide modes="listing" />
             <hide modes="view" roles="bungeni.Anonymous" />
         </field>
-        <field name="language" displayable="view edit add" localizable="view">
-            <show modes="view" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
         </field>
         <field name="body_text" displayable="view edit add" localizable="view edit">
             <show modes="view edit" />
@@ -353,7 +383,10 @@
         <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="description" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
@@ -402,7 +435,10 @@
         <field name="combined_name" displayable="listing" localizable="listing">
             <show modes="listing" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="description" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
@@ -430,7 +466,10 @@
         <field name="notes" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
     </descriptor>
 
     <descriptor name="Heading">
@@ -442,8 +481,9 @@
             <hide modes="listing" />
             <hide modes="view" roles="bungeni.Anonymous" />
         </field>
-        <field name="language" displayable="view edit add" localizable="view">
-            <show modes="view" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
         </field>
         <field name="body_text" displayable="view edit add" localizable="view edit">
             <show modes="view edit" />
@@ -466,7 +506,10 @@
         <field name="notes" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
     </descriptor>
 
     <descriptor name="ItemSchedule">
@@ -476,7 +519,10 @@
     </descriptor>
 
     <descriptor name="ItemScheduleDiscussion">
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="body_text" displayable="view edit add" localizable="view edit">
             <show modes="view edit" />
         </field>
@@ -492,7 +538,10 @@
         <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
     </descriptor>
 
     <descriptor name="Minister">
@@ -509,7 +558,10 @@
             <show modes="edit" />
             <hide modes="view listing" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
             <hide modes="view edit listing" />
         </field>
@@ -533,7 +585,10 @@
         <field name="combined_name" displayable="listing" localizable="listing">
             <show modes="listing" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="description" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
@@ -562,8 +617,9 @@
         <field name="owner_id" displayable="view edit add listing" localizable="view listing">
             <hide modes="view listing" roles="bungeni.Anonymous" />
         </field>
-        <field name="language" displayable="view edit add" localizable="view">
-            <show modes="view" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
         </field>
         <field name="body_text" displayable="view edit add" localizable="view">
             <show modes="view" />
@@ -603,7 +659,10 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="language" displayable="view add listing" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="body_text" displayable="view edit add" localizable="view edit">
             <show modes="view edit" />
         </field>
@@ -631,7 +690,10 @@
             <show modes="edit" />
             <hide modes="view listing" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
             <hide modes="view edit listing" />
         </field>
@@ -673,7 +735,10 @@
         <field name="combined_name" displayable="listing" localizable="listing">
             <show modes="listing" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="description" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
@@ -699,7 +764,10 @@
             <show modes="edit" />
             <hide modes="view listing" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
             <hide modes="view edit listing" />
         </field>
@@ -718,7 +786,10 @@
         <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="description" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
@@ -745,7 +816,10 @@
             <show modes="edit" />
             <hide modes="view listing" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
             <hide modes="view edit listing" />
         </field>
@@ -769,7 +843,10 @@
         <field name="combined_name" displayable="listing" localizable="listing">
             <show modes="listing" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="description" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
@@ -785,7 +862,10 @@
     </descriptor>
 
     <descriptor name="Province">
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="province" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -808,8 +888,9 @@
         <field name="owner_id" displayable="view edit add listing" localizable="view listing">
             <hide modes="view listing" roles="bungeni.Anonymous" />
         </field>
-        <field name="language" displayable="view edit add" localizable="view">
-            <show modes="view" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
         </field>
         <field name="body_text" displayable="view edit add" localizable="view">
             <show modes="view" />
@@ -864,7 +945,10 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="language" displayable="view add listing" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="body_text" displayable="view edit add" localizable="view edit">
             <show modes="view edit" />
         </field>
@@ -872,14 +956,20 @@
     </descriptor>
 
     <descriptor name="Region">
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="region" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
     </descriptor>
 
     <descriptor name="Report4Sitting">
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -898,7 +988,10 @@
     </descriptor>
 
     <descriptor name="Report">
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -930,7 +1023,10 @@
         <field name="end_date" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="notes" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
@@ -947,7 +1043,10 @@
     </descriptor>
 
     <descriptor name="Sitting">
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="start_date" displayable="view add listing" localizable="view listing">
             <show modes="view listing" />
         </field>
@@ -976,8 +1075,9 @@
         <field name="owner_id" displayable="view edit add listing" localizable="view listing">
             <hide modes="view listing" roles="bungeni.Anonymous" />
         </field>
-        <field name="language" displayable="view edit add" localizable="view">
-            <show modes="view" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
         </field>
         <field name="body_text" displayable="view edit add" localizable="view">
             <show modes="view" />
@@ -1014,7 +1114,10 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="language" displayable="view add listing" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="body_text" displayable="view edit add" localizable="view edit">
             <show modes="view edit" />
         </field>
@@ -1022,11 +1125,14 @@
     </descriptor>
 
     <descriptor name="TitleType">
-        <field name="title_name" displayable="view edit add listing" />
         <field name="role_id" displayable="view edit add listing" />
+        <field name="title_name" displayable="view edit add listing" />
         <field name="user_unique" displayable="view edit add listing" />
         <field name="sort_order" displayable="view edit add listing" />
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
     </descriptor>
 
     <descriptor name="UserAddress">
@@ -1122,7 +1228,10 @@
             <show modes="view" />
             <hide modes="add listing" />
         </field>
-        <field name="language" displayable="edit add" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="description" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
