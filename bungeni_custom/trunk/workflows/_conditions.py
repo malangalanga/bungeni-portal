@@ -55,5 +55,6 @@ from bungeni.core.workflows._conditions import (
     pi_has_signatories,
     pi_signatories_check,
     pi_allow_signature,
+    user_is_parent_document_owner,
 )
 

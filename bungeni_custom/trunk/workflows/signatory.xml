@@ -24,6 +24,13 @@
 
     <state id="rejected" title="Signature Rejected" like_state="consented"/>
 
+    <transition title="Create and Sign"
+        source=""
+        destination="consented"
+        trigger="automatic"
+        condition="user_is_parent_document_owner"
+    />
+
     <transition title="Create"
         source=""
         destination="awaiting_consent"
