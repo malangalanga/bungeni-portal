@@ -4,22 +4,26 @@
     domain="bungeni"
     initial_state="">
     
-    <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
+    <grant permission="bungeni.signatory.View" role="bungeni.Clerk"/>
+    <grant permission="bungeni.signatory.View" role="bungeni.Speaker"/>
+    <grant permission="bungeni.signatory.View" role="bungeni.Owner"/>
+    <grant permission="bungeni.signatory.View" role="bungeni.MP"/>
+    <grant permission="bungeni.signatory.View" role="bungeni.Minister"/>
+    <grant permission="bungeni.signatory.View" role="bungeni.Authenticated"/>
     <grant permission="bungeni.signatory.Edit" role="bungeni.Clerk"/>
     <grant permission="bungeni.signatory.Edit" role="bungeni.Owner"/>
+    <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
     <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
     <grant permission="bungeni.signatory.Act" role="bungeni.Signatory"/>
 
     <state id="awaiting_consent" title="Awaiting Consent">
-        <deny permission="bungeni.signatory.Edit" role="bungeni.Owner"/>
         <deny permission="bungeni.signatory.Edit" role="bungeni.Clerk"/>
-        <grant permission="zope.View" role="bungeni.Owner"/>
-        <deny permission="zope.View" role="bungeni.Authenticated"/>
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
     </state>
 
     <state id="consented" title="Signature Consented" 
         like_state="awaiting_consent">
-        <deny permission="bungeni.signatory.Edit" role="bungeni.Clerk"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
     </state>
 
     <state id="rejected" title="Signature Rejected" like_state="consented"/>
