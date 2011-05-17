@@ -1,4 +1,4 @@
-<ui roles="bungeni.Clerk bungeni.Speaker bungeni.MP bungeni.Minister bungeni.Anonymous">
+<ui roles="bungeni.Clerk bungeni.Speaker bungeni.Owner bungeni.MP bungeni.Signatory bungeni.Minister bungeni.Anonymous">
 
     <descriptor name="AgendaItem">
         <field name="parliament_id" displayable="view listing" localizable="view listing">
@@ -1033,12 +1033,15 @@
     </descriptor>
 
     <descriptor name="Signatory">
-        <field name="signatory_id" displayable="listing" />
+        <field name="signatory_id" displayable="listing" localizable="listing">
+            <show modes="listing" roles="bungeni.Owner bungeni.Signatory" />
+        </field>
         <field name="user_id" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
+        <field name="political_party" displayable="listing" />
         <field name="status" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
+            <show modes="view listing" roles="bungeni.Clerk bungeni.Owner bungeni.Signatory" />
         </field>
     </descriptor>
 
@@ -1125,8 +1128,8 @@
     </descriptor>
 
     <descriptor name="TitleType">
-        <field name="role_id" displayable="view edit add listing" />
         <field name="title_name" displayable="view edit add listing" />
+        <field name="role_id" displayable="view edit add listing" />
         <field name="user_unique" displayable="view edit add listing" />
         <field name="sort_order" displayable="view edit add listing" />
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
