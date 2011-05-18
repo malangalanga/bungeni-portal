@@ -19,6 +19,13 @@
     <state id="awaiting_consent" title="Awaiting Consent">
         <deny permission="bungeni.signatory.Edit" role="bungeni.Clerk"/>
         <grant permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <grant permission="zope.View" role="bungeni.Clerk"/>
+        <grant permission="zope.View" role="bungeni.Speaker"/>
+        <grant permission="zope.View" role="bungeni.Owner"/>
+        <grant permission="zope.View" role="bungeni.MP"/>
+        <grant permission="zope.View" role="bungeni.Minister"/>
+        <grant permission="zope.View" role="bungeni.Signatory"/>
+        <grant permission="zope.View" role="bungeni.Authenticated"/>
     </state>
 
     <state id="consented" title="Signature Consented" 
@@ -26,8 +33,17 @@
         <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
     </state>
 
-    <state id="rejected" title="Signature Rejected" like_state="consented"/>
+    <state id="rejected" title="Signature Rejected" like_state="consented">
+        <deny permission="zope.View" role="bungeni.Speaker"/>
+        <deny permission="zope.View" role="bungeni.Owner"/>
+        <deny permission="zope.View" role="bungeni.MP"/>
+        <deny permission="zope.View" role="bungeni.Minister"/>
+        <deny permission="zope.View" role="bungeni.Signatory"/>
+        <deny permission="zope.View" role="bungeni.Authenticated"/>
+    </state>
 
+    <state id="withdrawn" title="Signature Withdrawn" like_state="rejected"/>
+    
     <transition title="Create and Sign"
         source=""
         destination="consented"
@@ -56,6 +72,21 @@
         trigger="manual"
         roles="bungeni.Owner"
         require_confirmation="true"
-        condition="user_is_context_owner"
+        condition="pi_allow_signature_actions"
+    />
+
+    <transition title="withdraw"
+        source="consented"
+        destination="withdrawn"
+        trigger="manual"
+        roles="bungeni.Owner"
+        require_confirmation="true"
+        condition="pi_allow_signature_actions"
+    />
+    <transition title="withdrawauto"
+        source="awaiting_consent"
+        destination="withdrawn"
+        trigger="automatic"
+        condition="pi_signature_period_expired"
     />
 </workflow>
