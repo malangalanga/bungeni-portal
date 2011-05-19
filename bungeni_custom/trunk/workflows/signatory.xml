@@ -10,6 +10,7 @@
     <grant permission="bungeni.signatory.View" role="bungeni.MP"/>
     <grant permission="bungeni.signatory.View" role="bungeni.Minister"/>
     <grant permission="bungeni.signatory.View" role="bungeni.Authenticated"/>
+    <grant permission="bungeni.signatory.View" role="bungeni.Anonymous"/>
     <grant permission="bungeni.signatory.Edit" role="bungeni.Clerk"/>
     <grant permission="bungeni.signatory.Edit" role="bungeni.Owner"/>
     <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
@@ -26,11 +27,13 @@
         <grant permission="zope.View" role="bungeni.Minister"/>
         <grant permission="zope.View" role="bungeni.Signatory"/>
         <grant permission="zope.View" role="bungeni.Authenticated"/>
+        <deny permission="zope.View" role="bungeni.Anonymous"/>
     </state>
 
     <state id="consented" title="Signature Consented" 
         like_state="awaiting_consent">
         <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <grant permission="zope.View" role="bungeni.Anonymous"/>
     </state>
 
     <state id="rejected" title="Signature Rejected" like_state="consented">
@@ -40,6 +43,7 @@
         <deny permission="zope.View" role="bungeni.Minister"/>
         <deny permission="zope.View" role="bungeni.Signatory"/>
         <deny permission="zope.View" role="bungeni.Authenticated"/>
+        <deny permission="zope.View" role="bungeni.Anonymous"/>
     </state>
 
     <state id="withdrawn" title="Signature Withdrawn" like_state="rejected"/>
