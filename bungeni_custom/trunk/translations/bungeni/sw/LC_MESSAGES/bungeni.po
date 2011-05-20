@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: Tue May 17 16:34:23 2011\n"
+"POT-Creation-Date: Fri May 20 16:15:23 2011\n"
 "PO-Revision-Date: 2010-06-04 14:08+0300\n"
 "Last-Translator: UN/DESA <undesa@apkn.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr "shughuli za bunge"
 
 #: src/bungeni.main/bungeni/core/app.py:113
 #: src/bungeni.main/bungeni/core/app.py:114
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3056
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3057
 #: src/bungeni.main/bungeni/ui/viewlets/schedule.py:42
 msgid "Scheduling"
 msgstr "ratibu"
@@ -352,7 +352,7 @@ msgid "Last modified"
 msgstr "imebadilishwa"
 
 #: src/bungeni.main/bungeni/core/dc.py:353
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3079
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3080
 msgid "Discussion"
 msgstr "mjadala"
 
@@ -831,15 +831,25 @@ msgstr "matokeo"
 msgid "Approve"
 msgstr "imekubaliwa"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:583
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:584
 #, fuzzy
 msgid "consent"
 msgstr "yaliyomo"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:586
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:587
 #, fuzzy
 msgid "reject"
 msgstr "rudia"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:590
+#, fuzzy
+msgid "withdraw"
+msgstr "ondoa"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:593
+#, fuzzy
+msgid "withdrawauto"
+msgstr "ondoa"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:60
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:335
@@ -1023,7 +1033,7 @@ msgid "pending"
 msgstr "kichwa"
 
 #: src/bungeni.main/bungeni/core/workflows/simple.py:16
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:505
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:519
 #, fuzzy
 msgid "scheduled"
 msgstr "ratiba"
@@ -1039,7 +1049,7 @@ msgstr "imewasilishwa kwa wizara"
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:451
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:535
 #: src/bungeni.main/bungeni/ui/menu.zcml:1149
-#: src/bungeni.main/bungeni/ui/menu.zcml:1601
+#: src/bungeni.main/bungeni/ui/menu.zcml:1618
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:117
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:176
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:269
@@ -2396,6 +2406,21 @@ msgstr "mgeni wa bungeni"
 msgid "Document Signatory"
 msgstr "chanzo cha hati"
 
+#: src/bungeni.main/bungeni/models/roles.zcml:22
+#, fuzzy
+msgid "Party Member"
+msgstr "mwanachama wa chama"
+
+#: src/bungeni.main/bungeni/models/roles.zcml:23
+#, fuzzy
+msgid "Member of Government"
+msgstr "mwanachama wa bunge"
+
+#: src/bungeni.main/bungeni/models/roles.zcml:24
+#, fuzzy
+msgid "Committee Member"
+msgstr "ongeza mwanachama wa kamati ..."
+
 #: src/bungeni.main/bungeni/ui/attendance.py:142
 #: src/bungeni.main/bungeni/ui/forms/common.py:360
 #: src/bungeni.main/bungeni/ui/forms/common.py:480
@@ -2766,8 +2791,8 @@ msgid "Zip Code"
 msgstr "kodi ya zip"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1468
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2949
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2967
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2950
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2968
 msgid "Country"
 msgstr "nchi"
 
@@ -3047,8 +3072,8 @@ msgstr "chagua mchungaji aliyehamisha hati"
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2176
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2229
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2538
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3142
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3147
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3143
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3148
 #: src/bungeni.main/bungeni/ui/reports.py:77
 #: src/bungeni.main/bungeni/ui/reports.py:85
 #: src/bungeni.main/bungeni/ui/reports.py:93
@@ -3242,7 +3267,7 @@ msgstr "matukio"
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2548
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2549
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2633
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2984
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2985
 #: src/bungeni.main/bungeni/ui/reports.py:134
 #: src/bungeni.main/bungeni/ui/reports.py:323
 #: src/bungeni.main/bungeni/ui/reports.py:327
@@ -3361,7 +3386,7 @@ msgstr "ongeza chama"
 msgid "Signature status"
 msgstr "pointi za ajenda"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2875
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2876
 msgid "Constituencies"
 msgstr "maeneo-bunge"
 
@@ -3370,7 +3395,7 @@ msgstr "maeneo-bunge"
 msgid "active"
 msgstr "yaendelea"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2884
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2885
 msgid "Name of the constituency"
 msgstr "jina la eneo-bunge"
 
@@ -3384,96 +3409,96 @@ msgstr "haendelei"
 msgid "deceased"
 msgstr "amefariki"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2914
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2915
 msgid "Provinces"
 msgstr "mikoa"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2923
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2924
 msgid "Name of the Province"
 msgstr "jina la mkoa"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2931
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2940
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2932
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2941
 msgid "Region"
 msgstr "eneo"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2932
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2933
 msgid "Regions"
 msgstr "maeneo"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2941
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2942
 msgid "Name of the Region"
 msgstr "jina la jimbo"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2950
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2951
 #, fuzzy
 msgid "Countries"
 msgstr "nchi"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2958
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2959
 msgid "Country Code"
 msgstr "kodi ya nchi"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2959
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2960
 msgid "ISO Code of the  country"
 msgstr "kanuni ya iso ya nchi"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2968
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2969
 msgid "Name of the Country"
 msgstr "jina la nchi"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2976
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2977
 msgid "Constituency details"
 msgstr "maelezo ya eneo-bunge"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2977
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2978
 msgid "Details"
 msgstr "maelezo kwa undani"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2985
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2986
 msgid "Date the data was submitted from the Constituency"
 msgstr "tarehe data ilipowasilishwa kutoka eneo-bunge"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2997
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2998
 msgid "Population"
 msgstr "idadi ya watu"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2998
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2999
 msgid "Total Number of People living in this Constituency"
 msgstr "jumla ya idadi ya watu wanaoishi katika eneo-bunge hili"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3007
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3008
 msgid "Voters"
 msgstr "wapiga kura"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3008
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3009
 msgid "Number of Voters registered in this Constituency"
 msgstr "idadi ya wapiga kura waliojisajili katika eneo-bunge hili"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3057
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3058
 msgid "Schedulings"
 msgstr "ratibu"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3065
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3066
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:86
 msgid "Item"
 msgstr "pointi"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3080
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3081
 msgid "Discussions"
 msgstr "majadiliano"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3084
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3089
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3085
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3090
 #: src/bungeni.main/bungeni/ui/forms/viewlets.py:311
 msgid "Minutes"
 msgstr "kumbukumbu"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3104
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3105
 msgid "Report"
 msgstr "ripoti"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3105
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3106
 #: src/bungeni.main/bungeni/ui/rss.py:299
 #: src/bungeni.main/bungeni/ui/rss.py:300
 #: src/bungeni.main/bungeni/ui/menu.zcml:127
@@ -3481,22 +3506,22 @@ msgstr "ripoti"
 msgid "Reports"
 msgstr "ripoti"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3109
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3110
 msgid "Publications type"
 msgstr "aina machapisho "
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3115
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3120
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3116
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3121
 msgid "Sitting Date"
 msgstr "tarehe ya kikao"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3127
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3132
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3128
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3133
 #, fuzzy
 msgid "Published Date"
 msgstr "tarehe ya machapisho"
 
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3136
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3137
 msgid "Note"
 msgstr "kidokezo"
 
@@ -3577,7 +3602,7 @@ msgstr "watumiaji"
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1795
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2079
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2783
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2883
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2884
 msgid "Name"
 msgstr "jina"
 
@@ -3680,8 +3705,8 @@ msgstr "wajumbe"
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1850
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2718
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2719
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2892
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2893
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2894
 msgid "Start Date"
 msgstr "tarehe la kuanza"
 
@@ -3695,8 +3720,8 @@ msgstr "tarehe la kuanza"
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1860
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2728
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2729
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2902
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2903
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2904
 msgid "End Date"
 msgstr "tarehe ya mwisho"
 
@@ -3746,13 +3771,13 @@ msgid "Election/Nomination Date"
 msgstr "tarehe ya uchaguzi / kuteuliwa"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:905
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2874
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2875
 msgid "Constituency"
 msgstr "eneo-bunge"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:918
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2913
-#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2922
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2914
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2923
 msgid "Province"
 msgstr "mkoa"
 
@@ -3778,6 +3803,23 @@ msgstr "mwanachama"
 #, fuzzy
 msgid "members"
 msgstr "wanachama"
+
+#: src/bungeni.main/bungeni/ui/errors.py:21
+msgid "An error occurred in Bungeni."
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/errors.py:25
+#, fuzzy
+msgid "Bungeni - [Error]"
+msgstr "mgeni wa bungeni"
+
+#: src/bungeni.main/bungeni/ui/errors.py:40
+msgid "A system error occurred."
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/errors.py:53
+msgid "Your account is not authorized to view this item."
+msgstr ""
 
 #: src/bungeni.main/bungeni/ui/fields.py:20
 msgid "Choose items from provided vocabulary"
@@ -3903,6 +3945,8 @@ msgstr "kuorodhesha pointi"
 #: src/bungeni.main/bungeni/ui/menu.zcml:1577
 #: src/bungeni.main/bungeni/ui/menu.zcml:1585
 #: src/bungeni.main/bungeni/ui/menu.zcml:1593
+#: src/bungeni.main/bungeni/ui/menu.zcml:1601
+#: src/bungeni.main/bungeni/ui/menu.zcml:1609
 #: src/bungeni.main/bungeni/ui/menu-vocabularies.zcml:78
 msgid "Delete"
 msgstr "futa"
@@ -4383,23 +4427,23 @@ msgstr "ongeza ..."
 msgid "Add Party Member..."
 msgstr "ongeza mwanachama wa chama ..."
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1608
-#: src/bungeni.main/bungeni/ui/menu.zcml:1615
-#: src/bungeni.main/bungeni/ui/menu.zcml:1622
-#: src/bungeni.main/bungeni/ui/menu.zcml:1629
-#: src/bungeni.main/bungeni/ui/menu.zcml:1636
-#: src/bungeni.main/bungeni/ui/menu.zcml:1643
+#: src/bungeni.main/bungeni/ui/menu.zcml:1625
+#: src/bungeni.main/bungeni/ui/menu.zcml:1632
+#: src/bungeni.main/bungeni/ui/menu.zcml:1639
+#: src/bungeni.main/bungeni/ui/menu.zcml:1646
+#: src/bungeni.main/bungeni/ui/menu.zcml:1653
+#: src/bungeni.main/bungeni/ui/menu.zcml:1660
 #, fuzzy
 msgid "download pdf"
 msgstr "pakua"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1650
-#: src/bungeni.main/bungeni/ui/menu.zcml:1657
-#: src/bungeni.main/bungeni/ui/menu.zcml:1664
-#: src/bungeni.main/bungeni/ui/menu.zcml:1671
-#: src/bungeni.main/bungeni/ui/menu.zcml:1678
-#: src/bungeni.main/bungeni/ui/menu.zcml:1685
-#: src/bungeni.main/bungeni/ui/menu.zcml:1692
+#: src/bungeni.main/bungeni/ui/menu.zcml:1667
+#: src/bungeni.main/bungeni/ui/menu.zcml:1674
+#: src/bungeni.main/bungeni/ui/menu.zcml:1681
+#: src/bungeni.main/bungeni/ui/menu.zcml:1688
+#: src/bungeni.main/bungeni/ui/menu.zcml:1695
+#: src/bungeni.main/bungeni/ui/menu.zcml:1702
+#: src/bungeni.main/bungeni/ui/menu.zcml:1709
 #, fuzzy
 msgid "download odt"
 msgstr "pakua pdf"
@@ -4409,19 +4453,19 @@ msgstr "pakua pdf"
 msgid "Add Party Address..."
 msgstr "ongeza bunge ..."
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1764
-#: src/bungeni.main/bungeni/ui/menu.zcml:1772
-#: src/bungeni.main/bungeni/ui/menu.zcml:1780
-#: src/bungeni.main/bungeni/ui/menu.zcml:1788
-#: src/bungeni.main/bungeni/ui/menu.zcml:1796
-#: src/bungeni.main/bungeni/ui/menu.zcml:1804
-#: src/bungeni.main/bungeni/ui/menu.zcml:1812
-#: src/bungeni.main/bungeni/ui/menu.zcml:1820
-#: src/bungeni.main/bungeni/ui/menu.zcml:1828
-#: src/bungeni.main/bungeni/ui/menu.zcml:1836
-#: src/bungeni.main/bungeni/ui/menu.zcml:1844
-#: src/bungeni.main/bungeni/ui/menu.zcml:1852
-#: src/bungeni.main/bungeni/ui/menu.zcml:1860
+#: src/bungeni.main/bungeni/ui/menu.zcml:1781
+#: src/bungeni.main/bungeni/ui/menu.zcml:1789
+#: src/bungeni.main/bungeni/ui/menu.zcml:1797
+#: src/bungeni.main/bungeni/ui/menu.zcml:1805
+#: src/bungeni.main/bungeni/ui/menu.zcml:1813
+#: src/bungeni.main/bungeni/ui/menu.zcml:1821
+#: src/bungeni.main/bungeni/ui/menu.zcml:1829
+#: src/bungeni.main/bungeni/ui/menu.zcml:1837
+#: src/bungeni.main/bungeni/ui/menu.zcml:1845
+#: src/bungeni.main/bungeni/ui/menu.zcml:1853
+#: src/bungeni.main/bungeni/ui/menu.zcml:1861
+#: src/bungeni.main/bungeni/ui/menu.zcml:1869
+#: src/bungeni.main/bungeni/ui/menu.zcml:1877
 #, fuzzy
 msgid "rss"
 msgstr "anwani"
@@ -4431,16 +4475,16 @@ msgstr "anwani"
 msgid "Add Political Group Member..."
 msgstr "ongeza kikundi cha kisiasa ..."
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1868
-#: src/bungeni.main/bungeni/ui/menu.zcml:1876
-#: src/bungeni.main/bungeni/ui/menu.zcml:1884
-#: src/bungeni.main/bungeni/ui/menu.zcml:1892
-#: src/bungeni.main/bungeni/ui/menu.zcml:1900
-#: src/bungeni.main/bungeni/ui/menu.zcml:1908
-#: src/bungeni.main/bungeni/ui/menu.zcml:1916
-#: src/bungeni.main/bungeni/ui/menu.zcml:1924
-#: src/bungeni.main/bungeni/ui/menu.zcml:1932
-#: src/bungeni.main/bungeni/ui/menu.zcml:1940
+#: src/bungeni.main/bungeni/ui/menu.zcml:1885
+#: src/bungeni.main/bungeni/ui/menu.zcml:1893
+#: src/bungeni.main/bungeni/ui/menu.zcml:1901
+#: src/bungeni.main/bungeni/ui/menu.zcml:1909
+#: src/bungeni.main/bungeni/ui/menu.zcml:1917
+#: src/bungeni.main/bungeni/ui/menu.zcml:1925
+#: src/bungeni.main/bungeni/ui/menu.zcml:1933
+#: src/bungeni.main/bungeni/ui/menu.zcml:1941
+#: src/bungeni.main/bungeni/ui/menu.zcml:1949
+#: src/bungeni.main/bungeni/ui/menu.zcml:1957
 msgid "akoma ntoso"
 msgstr ""
 
@@ -4854,7 +4898,7 @@ msgstr "hati zilizopendekezwa"
 
 #: src/bungeni.main/bungeni/ui/rss.py:347
 #: src/bungeni.main/bungeni/ui/search.py:323
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:723
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:737
 #, fuzzy
 msgid "changes from"
 msgstr "badili"
@@ -5245,69 +5289,69 @@ msgstr "mada"
 msgid "workspace_no_items"
 msgstr "hakuna pointi zinazopatikana"
 
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:147
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:146
 msgid "My Groups"
 msgstr "vikundi vyangu"
 
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:267
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:266
 msgid "Items in Stage"
 msgstr ""
 
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:357
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:440
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:368
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:454
 msgid "draft items"
 msgstr "pointi rasimu"
 
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:371
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:425
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:474
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:383
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:439
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:488
 msgid "to review"
 msgstr "kufanya"
 
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:390
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:453
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:628
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:402
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:467
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:642
 msgid "in progress"
 msgstr "katika maendeleo"
 
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:409
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:606
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:422
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:620
 msgid "archived items"
 msgstr "pointi katika nyaraka"
 
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:414
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:428
 msgid "Archived Items"
 msgstr "vitu vilimo kwenye nyaraka"
 
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:450
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:464
 msgid "pending with the clerk"
 msgstr "inasubiri kwa karani"
 
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:483
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:497
 msgid "approved"
 msgstr "imekubaliwa"
 
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:493
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:507
 msgid "to be scheduled"
 msgstr "yangoja ratiba"
 
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:540
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:554
 msgid "questions to the ministry"
 msgstr "maswali kwa wizara"
 
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:613
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:627
 msgid "oral questions"
 msgstr "maswali simulizi"
 
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:619
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:633
 msgid "written questions"
 msgstr "maswali yaliyoandikwa"
 
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:642
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:656
 msgid "agendas/minutes"
 msgstr "ajenda / kumbukumbu"
 
-#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:709
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:723
 #: src/bungeni.main/bungeni/ui/workspace.py:224
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.zcml:53
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.zcml:70
@@ -5709,9 +5753,6 @@ msgstr "pointi katika nyaraka"
 
 #~ msgid "Download PDF"
 #~ msgstr "pakua pdf"
-
-#~ msgid "Party member"
-#~ msgstr "mwanachama wa chama"
 
 #~ msgid "Party members"
 #~ msgstr "wanachama wa chama"
