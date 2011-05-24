@@ -45,8 +45,10 @@
         <deny permission="bungeni.response.Edit" role="bungeni.Minister" />
         <deny permission="bungeni.response.Edit" role="bungeni.Signatory" />
         <!-- signatories -->
-        <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
         <grant permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
     </state>
     
     <state id="draft" title="Draft" 
@@ -63,6 +65,11 @@
         <grant permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <!-- signatories -->
+        <grant permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
     </state>
 
     <state id="submitted" title="Submitted to clerk" 
@@ -78,8 +85,8 @@
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
         <!-- signatory -->
-        <deny permission="bungeni.signatory.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
 
         <notification condition="clerk_receive_notification"
             subject="Question submitted: ${item.short_name}"
@@ -90,9 +97,10 @@
     </state>
 
     <state id="submitted_signatories" title="Submitted to Signatories"
-        like_state="submitted">
+        version="true" like_state="submitted">
         <grant permission="bungeni.signatory.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
     </state>
 
     <state id="received" title="Received by clerk"
@@ -273,7 +281,24 @@
         roles="bungeni.Owner"
         order="1"
     />
-    
+
+    <transition title="Redraft"
+        source="submitted_signatories"
+        destination="draft"
+        condition="user_is_state_creator_and_owner"
+        roles="bungeni.Owner"
+        trigger="manual"
+    />
+
+    <transition title="Redraft"
+        source="submitted_signatories"
+        destination="working_draft"
+        condition="user_is_state_creator_not_owner"
+        roles="bungeni.Clerk"
+        trigger="manual"
+    />
+
+
     <transition title="Submit"
         source="working_draft draft submitted_signatories"
         destination="submitted"

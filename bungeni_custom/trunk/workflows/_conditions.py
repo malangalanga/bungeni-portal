@@ -50,7 +50,12 @@ from bungeni.core.workflows._conditions import (
     # user
     has_date_of_death,
     not_has_date_of_death,
-    
+
+    #auditables
+    user_is_state_creator,
+    user_is_state_creator_and_owner,
+    user_is_state_creator_not_owner,
+
     #signatories
     pi_has_signatories,
     pi_signatories_check,
@@ -58,5 +63,6 @@ from bungeni.core.workflows._conditions import (
     user_is_parent_document_owner,
     pi_signature_period_expired,
     pi_allow_signature_actions,
+    pi_unsign_signature,
 )
 

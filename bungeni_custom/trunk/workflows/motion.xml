@@ -166,6 +166,7 @@
         version="true" like_state="submitted">
         <grant permission="bungeni.signatory.Add" role="bungeni.Owner"/>
         <grant permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
     </state>
 
     <state id="received" title="Received by Clerks Office" 
@@ -337,6 +338,22 @@
         destination="submitted_signatories"
         condition="pi_has_signatories"
         roles="bungeni.Owner"
+        trigger="manual"
+    />
+    
+    <transition title="Redraft"
+        source="submitted_signatories"
+        destination="draft"
+        condition="user_is_state_creator_and_owner"
+        roles="bungeni.Owner"
+        trigger="manual"
+    />
+
+    <transition title="Redraft"
+        source="submitted_signatories"
+        destination="working_draft"
+        condition="user_is_state_creator_not_owner"
+        roles="bungeni.Clerk"
         trigger="manual"
     />
     

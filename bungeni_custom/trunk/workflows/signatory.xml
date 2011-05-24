@@ -93,4 +93,10 @@
         trigger="automatic"
         condition="pi_signature_period_expired"
     />
+    <transition title="unsignauto"
+        source="consented rejected withdrawn"
+        destination="awaiting_consent"
+        trigger="automatic"
+        condition="pi_unsign_signature"
+    />
 </workflow>

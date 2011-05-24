@@ -6,6 +6,7 @@
     
     <!-- global grants -->
     <grant permission="bungeni.agendaitem.View" role="bungeni.Owner" />
+    <grant permission="bungeni.agendaitem.View" role="bungeni.Signatory" />
     <grant permission="bungeni.agendaitem.Edit" role="bungeni.Owner" />
     <grant permission="bungeni.agendaitem.Add" role="bungeni.Clerk" />
     <!--grant permission="bungeni.agendaitem.Add" role="bungeni.MP" /-->
@@ -19,6 +20,7 @@
         <deny permission="zope.View" role="bungeni.Owner" />
         <deny permission="zope.View" role="bungeni.MP" />
         <deny permission="zope.View" role="bungeni.Minister" />
+        <deny permission="zope.View" role="bungeni.Signatory" />
         <deny permission="zope.View" role="bungeni.Authenticated" /> 
         <deny permission="zope.View" role="bungeni.Anonymous" />
         <grant permission="bungeni.agendaitem.Edit" role="bungeni.Clerk" />
@@ -34,6 +36,16 @@
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Speaker" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <!-- signatories -->
+        <grant permission="bungeni.signatory.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.MP" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Minister" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Authenticated" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Anonymous" />
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
     </state>
     
     <state id="draft" title="Draft" like_state="working_draft">
@@ -49,17 +61,27 @@
         <grant permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <!-- signatories -->
+        <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
     </state>
-    
+
     <state id="submitted" title="Submitted" version="true" like_state="draft">
         <!-- agendaitem -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Speaker" />
+        <grant permission="zope.View" role="bungeni.Signatory" />
         <deny permission="bungeni.agendaitem.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.agendaitem.Delete" role="bungeni.Owner" />
         <!-- fileattachment -->        
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <!-- signatories -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
         <notification condition="clerk_receive_notification"
             subject="Agenda Item submitted: ${item.short_name}"
             from="${site.clerk_email}"
@@ -67,7 +89,14 @@
             body="notification_email_to_clerk_upon_submit_of_agenda_item"
         />
     </state>
-    
+
+    <state id="submitted_signatories" title="Submitted to Signatories" 
+        version="true" like_state="submitted">
+        <grant permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
+        <grant permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
+    </state>
+
     <state id="received" title="Received by Clerks Office"
         version="true" 
         like_state="submitted">
@@ -192,13 +221,37 @@
     />
     
     <transition title="Submit"
-        source="working_draft draft"
+        source="working_draft draft submitted_signatories"
         destination="submitted"
         condition=""
         trigger="manual"
         roles="bungeni.Owner"
     />
+
+    <transition title="Submit to Signatories"
+        source="draft working_draft"
+        destination="submitted_signatories"
+        condition="pi_has_signatories"
+        roles="bungeni.Owner"
+        trigger="manual"
+    />
     
+    <transition title="Redraft"
+        source="submitted_signatories"
+        destination="draft"
+        condition="user_is_state_creator_and_owner"
+        roles="bungeni.Owner"
+        trigger="manual"
+    />
+
+    <transition title="Redraft"
+        source="submitted_signatories"
+        destination="working_draft"
+        condition="user_is_state_creator_not_owner"
+        roles="bungeni.Clerk"
+        trigger="manual"
+    />
+
     <transition title="Receive"
         source="submitted"
         destination="received"
