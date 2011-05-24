@@ -249,4 +249,15 @@ class MultiSelectListListener(ListSelectionListener):
         pass
     
 
+class Button(JButton):
+    """
+    Extended Jbutton class, allows setting tooltip during declaration
+    """
+    
+    def __init__(self, text, tooltip , actionPerformed = None):
+        JButton.__init__(self, text, actionPerformed = actionPerformed)
+        self.setToolTipText(tooltip)
+
+
+        
 

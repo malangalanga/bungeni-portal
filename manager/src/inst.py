@@ -1,3 +1,7 @@
+"""
+This module provides bungeni location info.
+"""
+
 
 from java.io import File
 

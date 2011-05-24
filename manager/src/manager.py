@@ -1,6 +1,10 @@
 __author__="Ashok Hariharan"
 __date__ ="$May 20, 2011 19:35:01 AM$"
 
+"""
+Defines application logic and views
+"""
+
 
 """
 System imports
@@ -20,47 +24,7 @@ class FieldPanel(Panel):
     """
     Extended Panel class for containing field controls
     """
-    
-    def update_selection_for_roles(self, src_list):
-        """
-        src_list is always either a roles_show or a roles_hide list
-        """
-        src_selected_values = src_list.get_selected_values()
-        print "src_selected", src_selected_values
-        assoc_selected_values = src_list.assoc_list.get_selected_values()
-        print "assoc_src_selected", assoc_selected_values
-        list_items = self.__get_items_in_list__(src_list.assoc_list)
-        print "list_items", list_items
-        for src_selected_value in src_selected_values:
-            # check if the same role has been selected in the corresponding 
-            # role selector 
-            if src_selected_value in assoc_selected_values:
-                """
-                If there are no selections in the modes list its like saying :
-                <show roles="bungeni.MP" /> which means :
-                <show modes="view edit add listing" roles="bungeni.MP" />
-                so there will be no <hide .../> element allowed
-                """
-                list_show_hide = self.list_show if src_list.getName() == "show" else self.list_hide
-                print "list_show_hide.get_selected_values", list_show_hide.get_selected_values()
-                if len(list_show_hide.get_selected_values()) == 0 :
-                    assoc_index = list_items.index(src_selected_value)
-                    src_list.assoc_list.removeSelectionInterval(assoc_index, assoc_index)
-        src_list.assoc_list.ignore_selection_event = False
-
-    
-    class RolesListListener(MultiSelectListListener):
-        """
-        Listener for Roles selector
-        """
-        def value_changed(self, lsevt, src_list):
-            if src_list.ignore_selection_event == False:
-                src_list.assoc_list.ignore_selection_event = True
-                self.outer_self.update_selection_for_roles(src_list)
-                src_list.assoc_list.ignore_selection_event = False
-            
-            
-
+  
     class ShowHideListener(MultiSelectListListener):
         """
         Listener for show hide list 
@@ -100,6 +64,10 @@ class FieldPanel(Panel):
                     """
                     roles_show_hide.setEnabled(False)
                 else:
+                    """
+                    Otherwise we enable the corresponding roles selector - and sync
+                    the modes list with the associated list.
+                    """
                     roles_show_hide.setEnabled(True)
                     for src_selected in src_selected_values:
                         if src_selected in assoc_selected_values:
@@ -109,28 +77,6 @@ class FieldPanel(Panel):
                     ### re-enable selection listener in the assoc_list
                     ######-TMP-- src_list.assoc_list.ignore_selection_event = False
     
-    
-        def value_deselected(self, lsevt, src_list):
-            """
-            When a value is deselected in the modes list - we also update the roles list
-            i.e. if no mode is selected and a role is selected it is applicable for all 
-            modes, so we have to deselect to make sure for situations like :
-            <show roles="bungeni.Clerk" /> <!-- (1) -->
-            <hide modes="view" roles="bungeni.Clerk" /> <!-- (2) -->
-             (1) <== modes="listing" was deselected here, so roles will have to be deselected
-            """
-            print "deselect", lsevt.getSource().getName(), lsevt.getFirstIndex(), lsevt.getLastIndex()
-            if src_list.ignore_selection_event == False:
-                # first get the corresponding roles list for the show/hide modes selector
-                roles_show_hide = self.outer_self.roles_show if src_list.getName() == "show" else self.outer_self.roles_hide
-                if len(src_list.get_selected_values()) == 0 :
-                    # No values selected
-                    roles_show_hide.setEnabled(False)
-                else:
-                    roles_show_hide.setEnabled(True)
-                #print "roles_show_hide.getName()", roles_show_hide.getName()
-                #print "calling update selection for role"
-                #self.outer_self.update_selection_for_roles(roles_show_hide)
 
     
     def __init__(self, title, index):
@@ -433,11 +379,15 @@ class UIXMLPanel(Panel):
         self.forms_list = JComboBox(self.uixml.get_form_names(), 
                                     actionListener = self.FormsListListener(self))
         self.add(self.forms_list, "growx")
-        self.save_bn = JButton("Save", actionPerformed=self.save_xml)
+        self.save_bn = Button("Save", 
+                              "Saves the customizations to the ui.xml file", 
+                              actionPerformed=self.save_xml)
         self.add(self.save_bn)
         actionPanel = Panel("for actions")
         actionPanel.setLayout(MigLayout("wrap 2"))
-        self.add(JButton("Reset Order", actionPerformed=self.reset_field_order))
+        self.add(Button("Reset Order", 
+                        "Restores the order represented by the un-saved XML file", 
+                        actionPerformed=self.reset_field_order))
         self.add(JButton("Reset All"))
         self.add(actionPanel, "span 2")
         #self.add(JButton("Reset Order", actionPerformed=self.reset_field_order))
@@ -545,8 +495,6 @@ class UIXMLPanel(Panel):
             
             field_panel.list_show.addListSelectionListener(field_panel.ShowHideListener(field_panel))
             field_panel.list_hide.addListSelectionListener(field_panel.ShowHideListener(field_panel))
-            field_panel.roles_show.addListSelectionListener(field_panel.RolesListListener(field_panel))
-            field_panel.roles_hide.addListSelectionListener(field_panel.RolesListListener(field_panel))
             
             field_panel.add(JButton(self.ResetModesAction(self.form_holder_panel, field_panel)),
                              "span 2")
