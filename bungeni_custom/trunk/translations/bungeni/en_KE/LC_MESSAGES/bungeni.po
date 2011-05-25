@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: Fri May 20 16:15:23 2011\n"
+"POT-Creation-Date: Wed May 25 18:04:25 2011\n"
 "PO-Revision-Date: 2011-04-21 16:26+0300\n"
 "Last-Translator: Murithi <bungeni.translator@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -85,8 +85,8 @@ msgstr "records of members of parliament"
 #: src/bungeni.main/bungeni/ui/menu.zcml:1270
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.zcml:49
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.zcml:66
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:201
 #: src/bungeni.main/bungeni/ui/templates/archive.pt:6
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:225
 msgid "Archive"
 msgstr "archive"
 
@@ -362,600 +362,661 @@ msgstr "html fragment to odt"
 msgid "Reverted to previous version $version"
 msgstr "reverted to previous version %s"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:111
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:228
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:241
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:256
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:300
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:402
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:557
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:100
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:349
+msgid "Debate"
+msgstr "debate"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:103
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:403
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:217
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:229
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:375
+msgid "Adjourn debate"
+msgstr "adjourn"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:106
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:385
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:513
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:109
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:132
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:139
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:204
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:356
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:363
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:371
+msgid "Defer"
+msgstr "defer"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:109
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:388
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:510
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:113
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:148
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:212
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:362
+msgid "Elapse"
+msgstr "elapse"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:112
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:116
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:237
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:415
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:419
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:525
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:529
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:607
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:35
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:40
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:41
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:56
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:57
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:69
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:75
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:85
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:110
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:112
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:114
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:117
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:118
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:124
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:129
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:138
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:144
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:180
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:181
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:184
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:185
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:190
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:193
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:195
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:203
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:209
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:282
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:285
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:289
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:292
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:300
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:303
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:305
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:306
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:339
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:341
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:342
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:350
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:351
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:358
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:362
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:345
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:346
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:352
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:354
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:368
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:378
+msgid "Withdraw"
+msgstr "withdraw"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:124
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:254
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:267
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:282
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:326
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:437
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:614
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:241
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:253
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:385
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:386
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:394
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:395
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:402
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:406
 msgid "Deactivate"
 msgstr "deactivate"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:127
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:317
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:415
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:72
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:120
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:135
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:179
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:194
-#, fuzzy
-msgid "Submit to Signatories"
-msgstr "submitted to ministry"
-
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:130
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:46
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:57
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:156
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:51
 msgid "Publish in Gazette"
 msgstr "publish in gazette"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:133
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:54
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:56
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:159
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:61
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:64
 msgid "Allow scheduling of First Reading"
 msgstr "allow scheduling first reading"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:136
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:60
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:162
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:68
 msgid "Schedule First Reading"
 msgstr "schedule first reading"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:139
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:53
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:165
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:60
 msgid "Reschedule First Reading"
 msgstr "reschedule first reading"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:142
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:44
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:168
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:49
 msgid "Adjourn First Reading"
 msgstr "adjourn first reading"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:145
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:58
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:171
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:52
 msgid "Send to Select Committee (I)"
 msgstr "send to committee"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:148
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:40
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:174
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:44
 msgid "Schedule First Report Reading"
 msgstr "send to committee"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:151
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:63
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:177
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:71
 msgid "Reschedule First Report Reading"
 msgstr "reschedule first report reading"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:154
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:33
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:39
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:71
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:180
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:37
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:43
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:80
 msgid "Allow scheduling of Second Reading"
 msgstr "allow scheduling second reading"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:157
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:43
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:183
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:48
 msgid "Schedule Second Reading"
 msgstr "schedule second reading"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:160
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:64
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:186
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:54
 msgid "Reschedule Second Reading"
 msgstr "reschedule second reading"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:163
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:62
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:189
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:70
 msgid "Adjourn First Report Reading"
 msgstr "adjourn first report reading"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:166
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:47
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:59
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:192
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:45
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:67
 msgid "Allow scheduling of First Report Reading"
 msgstr "allow scheduling report reading"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:169
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:35
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:195
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:39
 msgid "Adjourn Second Reading"
 msgstr "adjourn second reading"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:172
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:41
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:55
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:198
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:46
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:62
 msgid "Allow scheduling of Whole House Committee"
 msgstr "allow scheduling whole house committee"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:175
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:31
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:201
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:34
 msgid "Allow scheduling/rescheduling of Whole House Committee"
 msgstr "allow scheduling/rescheduling whole house committee"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:178
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:52
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:204
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:59
 msgid "Schedule Whole House Committee"
 msgstr "schedule whole house committee"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:181
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:45
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:207
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:50
 msgid "Reschedule Whole House Committee"
 msgstr "reschedule whole house committee"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:184
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:48
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:210
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:55
 msgid "Adjourn Whole House Committee"
 msgstr "adjourn whole house committee"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:187
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:29
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:213
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:32
 msgid "Send to Select Committee (II)"
 msgstr "send to committee"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:190
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:34
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:216
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:38
 msgid "Send/Resend to Select Committee (II)"
 msgstr "send/resend to committee"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:193
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:30
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:51
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:219
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:33
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:81
 msgid "Allow scheduling of Third Reading"
 msgstr "allow scheduling for third reading"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:196
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:68
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:222
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:76
 msgid "Schedule Third Reading"
 msgstr "schedule third reading"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:199
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:66
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:225
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:65
 msgid "Reschedule Third Reading"
 msgstr "reschedule third reading"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:202
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:70
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:228
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:78
 msgid "Adjourn Third Reading"
 msgstr "adjourn third reading"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:205
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:65
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:69
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:231
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:74
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:77
 msgid "Reject"
 msgstr "reject"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:220
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:248
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:394
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:560
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:218
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:227
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:228
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:345
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:346
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:354
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:355
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:246
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:274
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:429
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:617
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:242
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:251
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:252
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:389
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:390
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:398
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:399
 msgid "Activate"
 msgstr "activate"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:224
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:252
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:398
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:230
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:343
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:352
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:250
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:278
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:433
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:254
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:387
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:396
 msgid "Dissolve"
 msgstr "dissolve"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:26
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:234
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:235
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:258
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:259
 msgid "Publish internal"
 msgstr "publish internal"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:269
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:202
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:208
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:295
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:226
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:232
 msgid "Draft Agenda"
 msgstr "draft agenda"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:273
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:212
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:299
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:236
 msgid "Finalize Agenda"
 msgstr "finalize agenda"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:277
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:211
-msgid "Redraft Agenda"
-msgstr "redraft agenda"
-
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:281
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:203
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:207
-msgid "Draft Minutes"
-msgstr "draft minutes"
-
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:285
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:213
-msgid "Publish Minutes"
-msgstr "publish minutes"
-
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:289
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:210
-msgid "Redraft Minutes"
-msgstr "redraft minutes"
-
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:30
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:236
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:237
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:260
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:261
 msgid "Publish"
 msgstr "publish"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:304
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:303
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:235
+msgid "Redraft Agenda"
+msgstr "redraft agenda"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:307
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:227
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:231
+msgid "Draft Minutes"
+msgstr "draft minutes"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:311
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:237
+msgid "Publish Minutes"
+msgstr "publish minutes"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:315
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:234
+msgid "Redraft Minutes"
+msgstr "redraft minutes"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:330
 msgid "Reactivate"
 msgstr "reactivate"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:338
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:445
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:517
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:107
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:126
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:138
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:169
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:185
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:197
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:261
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:283
-msgid "Make available for scheduling"
-msgstr "make available for scheduling"
-
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:34
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:238
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:240
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:262
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:264
 msgid "Make private"
 msgstr "make private"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:359
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:190
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:373
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:489
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:574
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:120
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:140
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:156
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:188
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:205
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:221
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:287
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:317
+msgid "Make available for scheduling"
+msgstr "make available for scheduling"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:394
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:211
 msgid "Re-schedule"
 msgstr "re-scheduled"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:371
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:168
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:406
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:187
 msgid "Adopt"
 msgstr "adopt"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:374
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:192
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:409
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:214
 msgid "Adopt with amendments"
 msgstr "adopt with amendments"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:377
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:177
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:412
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:197
 msgid "Reject a scheduled motion"
 msgstr "reject motion"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:45
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:320
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:418
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:502
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:113
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:121
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:123
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:180
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:182
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:186
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:271
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:273
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:322
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:326
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:46
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:141
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:343
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:450
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:547
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:63
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:66
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:73
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:135
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:137
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:142
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:200
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:202
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:207
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:297
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:299
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:302
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:359
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:361
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:366
 msgid "Submit"
 msgstr "submit to clerk"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:454
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:108
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:49
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:144
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:346
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:453
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:550
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:58
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:84
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:134
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:153
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:199
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:218
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:296
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:314
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:358
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:376
+#, fuzzy
+msgid "Submit to Signatories"
+msgstr "submitted to ministry"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:498
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:121
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:127
 msgid "Send to Ministry"
 msgstr "send to ministry"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:457
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:114
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:501
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:128
 msgid "Submit Response"
 msgstr "submit response"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:460
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:112
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:504
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:125
 msgid "Redraft Response"
 msgstr "redraft response"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:463
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:116
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:507
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:130
 msgid "Complete Response"
 msgstr "complete response"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:475
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:85
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:134
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:159
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:302
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:519
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:98
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:152
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:169
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:338
 msgid "Debate adjourned"
 msgstr "debate adjourned"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:478
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:94
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:130
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:295
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:52
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:55
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:147
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:150
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:349
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:352
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:456
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:462
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:553
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:556
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:53
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:82
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:126
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:150
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:194
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:215
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:294
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:311
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:353
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:373
+#, fuzzy
+msgid "Redraft"
+msgstr "redraft agenda"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:522
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:107
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:145
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:330
 msgid "Debated"
 msgstr "debated"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:48
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:323
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:421
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:505
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:109
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:172
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:264
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:313
-msgid "Receive"
-msgstr "receive"
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:58
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:97
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:153
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:355
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:400
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:459
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:516
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:559
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:72
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:79
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:83
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:133
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:141
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:149
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:151
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:198
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:206
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:213
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:216
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:301
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:309
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:312
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:357
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:365
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:372
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:374
+msgid "Drop"
+msgstr "drop"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:51
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:326
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:424
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:508
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:106
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:136
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:167
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:195
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:260
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:580
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:281
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:333
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:337
-msgid "Require Clarification to Receive"
-msgstr "needs clarification"
-
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:523
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:255
 msgid "Needs Recomplete to Approve"
 msgstr "needs clarification"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:54
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:329
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:427
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:511
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:102
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:163
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:257
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:306
-msgid "Complete"
-msgstr "submit to house business"
-
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:541
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:254
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:598
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:280
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:313
 msgid "Adjourn"
 msgstr "adjourn"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:544
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:267
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:279
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:601
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:293
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:310
 msgid "Table"
 msgstr "table"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:563
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:220
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:222
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:61
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:358
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:465
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:562
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:122
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:191
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:290
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:350
+msgid "Receive"
+msgstr "receive"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:620
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:244
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:246
 msgid "Inhume"
 msgstr "inhume"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:566
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:221
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:623
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:245
 msgid "Resurrect"
 msgstr "resurrect"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:57
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:208
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:332
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:430
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:514
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:38
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:137
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:196
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:282
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:335
-msgid "Approve"
-msgstr "approve"
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:64
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:361
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:468
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:565
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:119
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:154
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:186
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:219
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:286
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:315
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:347
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:377
+msgid "Require Clarification to Receive"
+msgstr "needs clarification"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:584
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:641
 #, fuzzy
 msgid "consent"
 msgstr "content"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:587
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:644
 #, fuzzy
 msgid "reject"
 msgstr "reject"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:590
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:647
 #, fuzzy
 msgid "withdraw"
 msgstr "withdraw"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:593
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:650
 #, fuzzy
 msgid "withdrawauto"
 msgstr "withdraw"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:60
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:335
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:433
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:520
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:128
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:187
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:275
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:284
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:327
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:653
+#, fuzzy
+msgid "unsignauto"
+msgstr "cosignatory"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:67
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:364
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:471
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:568
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:115
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:182
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:283
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:343
+msgid "Complete"
+msgstr "submit to house business"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:70
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:234
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:367
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:474
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:571
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:42
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:155
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:220
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:316
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:379
+msgid "Approve"
+msgstr "approve"
+
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:73
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:370
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:477
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:577
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:143
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:208
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:304
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:318
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:367
 msgid "Disapprove"
 msgstr "disapprove"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:63
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:325
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:336
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:76
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:364
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:380
 msgid "Allow scheduling"
 msgstr "make available for scheduling"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:66
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:341
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:436
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:98
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:160
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:303
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:79
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:376
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:480
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:111
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:179
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:340
 msgid "Require Recomplete to Approve"
 msgstr "require recomplete to approve"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:69
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:344
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:439
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:526
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:122
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:181
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:270
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:321
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:82
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:379
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:483
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:583
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:136
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:201
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:298
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:360
 msgid "Recomplete"
 msgstr "submit to house business"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:72
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:347
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:442
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:529
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:131
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:189
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:277
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:329
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:85
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:382
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:486
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:586
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:146
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:210
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:307
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:369
 msgid "Resubmit"
 msgstr "resubmit to clerk"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:75
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:448
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:538
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:132
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:278
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:330
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:88
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:492
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:595
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:147
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:308
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:370
 msgid "Reschedule"
 msgstr "re-scheduled"
 
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:81
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:362
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:532
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:170
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:262
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:311
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:94
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:397
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:589
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:189
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:288
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:348
 msgid "Revert to admissible"
 msgstr "inadmissible"
-
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:84
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:365
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:472
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:119
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:178
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:319
-msgid "Drop"
-msgstr "drop"
-
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:87
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:312
-msgid "Debate"
-msgstr "debate"
-
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:90
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:368
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:193
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:332
-msgid "Adjourn debate"
-msgstr "adjourn"
-
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:93
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:350
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:469
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:96
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:118
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:125
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:184
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:318
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:324
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:331
-msgid "Defer"
-msgstr "defer"
-
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:96
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:353
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:466
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:100
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:133
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:191
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:323
-msgid "Elapse"
-msgstr "elapse"
-
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:99
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:103
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:211
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:380
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:384
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:481
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:485
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:550
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:32
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:36
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:37
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:49
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:50
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:61
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:67
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:73
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:97
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:99
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:101
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:104
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:105
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:111
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:115
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:124
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:129
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:161
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:162
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:165
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:166
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:171
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:174
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:175
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:183
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:188
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:256
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:259
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:263
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:266
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:268
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:272
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:274
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:276
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:304
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:305
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:308
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:309
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:315
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:316
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:320
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:328
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:334
-msgid "Withdraw"
-msgstr "withdraw"
 
 #: src/bungeni.main/bungeni/core/workflows/simple.py:14
 msgid "visible"
@@ -975,410 +1036,424 @@ msgid "Submit to Clerk"
 msgstr "submit to clerk"
 
 #: src/bungeni.main/bungeni/core/workflows/simple.py:33
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:78
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:356
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:451
-#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:535
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:91
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:391
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:495
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:592
 #: src/bungeni.main/bungeni/ui/menu.zcml:1149
 #: src/bungeni.main/bungeni/ui/menu.zcml:1618
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:117
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:176
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:269
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:310
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:317
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:131
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:196
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:295
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:355
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:381
 msgid "Schedule"
 msgstr "schedule"
 
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:10
-msgid "Third Reading Adjourned"
-msgstr "third reading adjourned"
+#, fuzzy
+msgid "Submitted to Clerk"
+msgstr "submitted to clerk"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:103
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:100
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:172
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:335
+msgid "Elapsed"
+msgstr "elapsed"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:101
+msgid "Response submitted"
+msgstr "response submitted"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:102
+msgid "Received by clerk"
+msgstr "received by clerk"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:105
+msgid "Submitted to clerk"
+msgstr "submitted to clerk"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:106
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:177
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:328
+msgid "Deferred"
+msgstr "deferred"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:108
+#, fuzzy
+msgid "Require Clarification to Approve"
+msgstr "needs clarification"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:11
+msgid "Bill Withdrawn"
+msgstr "bill withdrawn"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:116
 msgid "Create Question"
 msgstr "create question"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:11
-msgid "Whole House Adjourned"
-msgstr "whole house adjourned"
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:12
+msgid "Third Reading Adjourned"
+msgstr "third reading adjourned"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:110
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:123
 msgid "Create Question (On behalf of)"
 msgstr "create question on behalf of..."
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:12
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:13
+msgid "Whole House Adjourned"
+msgstr "whole house adjourned"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:14
 msgid "Third Reading"
 msgstr "third reading"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:13
-msgid "Second Reading Pending"
-msgstr "second reading pending"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:14
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:15
 msgid "Draft Bill"
 msgstr "draft bill"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:140
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:242
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:286
-msgid "Received by Clerks Office"
-msgstr "received by clerk's office"
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:16
+msgid "Second Reading Pending"
+msgstr "second reading pending"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:142
-msgid "Rejected"
-msgstr "rejected"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:148
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:247
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:292
-msgid "Submitted"
-msgstr "submitted"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:15
-msgid "Third Reading Pending"
-msgstr "third reading pending"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:153
-msgid "Adopted"
-msgstr "adopted"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:154
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:163
 msgid "Adopted with amendments"
 msgstr "adopted with amendments"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:158
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:253
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:301
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:166
+msgid "Adopted"
+msgstr "adopted"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:17
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:97
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:168
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:265
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:319
+msgid "Working Draft"
+msgstr "working draft"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:171
+msgid "Rejected"
+msgstr "rejected"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:173
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:270
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:324
+msgid "Received by Clerks Office"
+msgstr "received by clerk's office"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:176
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:273
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:327
+msgid "Submitted"
+msgstr "submitted"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:178
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:279
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:337
 #, fuzzy
 msgid "Requires Clarification to Approve"
 msgstr "needs clarification"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:16
-msgid "Second Reading Adjourned"
-msgstr "second reading adjourned"
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:18
+msgid "Third Reading Pending"
+msgstr "third reading pending"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:164
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:183
 msgid "Create Motion"
 msgstr "create motion"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:17
-msgid "Rejected Bill"
-msgstr "rejected bill"
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:19
+msgid "Second Reading Adjourned"
+msgstr "second reading adjourned"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:173
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:192
 msgid "Create Motion (On behalf of)"
 msgstr "create motion on behalf of..."
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:18
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:20
 msgid "First Report Reading Pending"
 msgstr "report reading adjourned"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:19
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:21
+msgid "Rejected Bill"
+msgstr "rejected bill"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:22
 msgid "Select Committee (after 1st reading)"
 msgstr "select committee"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:198
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:222
 msgid "Archived"
 msgstr "archived"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:199
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:223
 msgid "Draft Translation"
 msgstr "draft translation"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:20
-msgid "First Reading Pending"
-msgstr "first reading pending"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:200
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:224
 msgid "Create Translation"
 msgstr "create translation"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:204
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:228
 msgid "Published Minutes"
 msgstr "published minutes"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:205
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:229
 msgid "Published Agenda"
 msgstr "published agenda"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:209
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:23
+msgid "First Reading Pending"
+msgstr "first reading pending"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:233
 msgid "Create Sitting"
 msgstr "create sitting"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:21
-msgid "Approved Bill"
-msgstr "approved bill"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:214
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:238
 #, fuzzy
 msgid "Active User"
 msgstr "notice date"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:215
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:239
 #, fuzzy
 msgid "Inactive User"
 msgstr "inactive event"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:216
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:24
+msgid "Approved Bill"
+msgstr "approved bill"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:240
 #, fuzzy
 msgid "Deceased User"
 msgstr "delete user"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:219
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:226
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:239
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:344
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:353
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:359
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:363
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:243
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:250
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:263
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:388
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:397
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:403
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:407
 msgid "Create"
 msgstr "create"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:22
-msgid "Whole House Pending"
-msgstr "whole house pending"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:223
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:247
 msgid "Active Group"
 msgstr "active group"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:224
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:248
 msgid "Group is Dissolved"
 msgstr "group is dissolved"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:225
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:249
 msgid "Draft - Group not yet Active"
 msgstr "group not yet active"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:23
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:91
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:145
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:25
+msgid "Whole House Pending"
+msgstr "whole house pending"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:255
+msgid "Internal - visible to bungeni users"
+msgstr "internal: visible to bungeni users"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:256
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:401
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:405
+msgid "Public"
+msgstr "public"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:257
+msgid "Private"
+msgstr "private"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:26
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:104
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:175
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:272
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:326
 #, fuzzy
 msgid "Submitted to Signatories"
 msgstr "submitted to ministry"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:231
-msgid "Internal - visible to bungeni users"
-msgstr "internal: visible to bungeni users"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:232
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:357
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:361
-msgid "Public"
-msgstr "public"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:233
-msgid "Private"
-msgstr "private"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:24
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:27
 msgid "First Report Reading Adjourned"
 msgstr "report reading adjourned"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:25
-msgid "Select Committee (after 2nd reading)"
-msgstr "select committee (after 2nd reading)"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:250
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:276
 msgid "Tabled"
 msgstr "tabled"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:258
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:28
+msgid "Select Committee (after 2nd reading)"
+msgstr "select committee (after 2nd reading)"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:284
 msgid "Create Tabled Document"
 msgstr "create tabled document"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:26
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:29
 msgid "Second Reading"
 msgstr "second reading"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:265
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:291
 msgid "Create Tabled Document (On behalf of)"
 msgstr "create tabled document on behalf of..."
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:27
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:30
 msgid "First Reading"
 msgstr "first reading"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:28
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:31
 msgid "Bill Published in Gazette"
 msgstr "bill published in gazette"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:307
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:344
 msgid "Create Agenda Item"
 msgstr "create agenda items..."
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:314
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:351
 msgid "Create Agenda Item (On behalf of)"
 msgstr "create agenda item on behalf of..."
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:338
-msgid "Active Committee"
-msgstr "active committee"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:339
-msgid "Committee is Dissolved"
-msgstr "committee is dissolved"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:340
-msgid "Draft - Committee not yet Active"
-msgstr "draft: committee not yet active"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:347
-msgid "Active Parliament"
-msgstr "active parliament"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:348
-msgid "Parliament is Dissolved"
-msgstr "parliament is dissolved"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:349
-msgid "Draft - Parliament not yet Active"
-msgstr "draft: parliament not yet active"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:356
-msgid "Inactive file obsolete"
-msgstr "inactive file obsolete"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:360
-msgid "Inactive event"
-msgstr "inactive event"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:364
-msgid "Published"
-msgstr "publish"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:365
-msgid "Create Report"
-msgstr "create report"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:42
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:36
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:47
 msgid "Create Bill"
 msgstr "create bill"
 
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:382
+msgid "Active Committee"
+msgstr "active committee"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:383
+msgid "Committee is Dissolved"
+msgstr "committee is dissolved"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:384
+msgid "Draft - Committee not yet Active"
+msgstr "draft: committee not yet active"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:391
+msgid "Active Parliament"
+msgstr "active parliament"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:392
+msgid "Parliament is Dissolved"
+msgstr "parliament is dissolved"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:393
+msgid "Draft - Parliament not yet Active"
+msgstr "draft: parliament not yet active"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:400
+msgid "Inactive file obsolete"
+msgstr "inactive file obsolete"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:404
+msgid "Inactive event"
+msgstr "inactive event"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:408
+msgid "Published"
+msgstr "publish"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:409
+msgid "Create Report"
+msgstr "create report"
+
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:6
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:86
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:91
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:157
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:161
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:266
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:320
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:333
+msgid "Dropped"
+msgstr "dropped"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:7
 msgid "First Reading Adjourned"
 msgstr "first reading adjourned"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:7
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:8
 msgid "Whole House"
 msgstr "whole house"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:74
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:155
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:251
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:299
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:87
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:158
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:277
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:334
 msgid "Scheduled"
 msgstr "scheduled"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:75
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:151
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:243
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:296
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:88
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:159
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:267
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:331
 msgid "Schedule pending"
 msgstr "schedule pending"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:76
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:144
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:244
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:289
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:89
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:160
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:268
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:323
 #, fuzzy
 msgid "Requires Clarification to Receive"
 msgstr "needs clarification"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:77
-msgid "Pending response"
-msgstr "pending response"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:78
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:146
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:298
-msgid "Dropped"
-msgstr "dropped"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:79
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:90
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:143
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:157
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:252
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:287
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:300
-msgid "Withdrawn"
-msgstr "withdrawn"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:8
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:9
 msgid "First Report Reading"
 msgstr "first report reading"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:80
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:141
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:245
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:288
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:90
+msgid "Pending response"
+msgstr "pending response"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:92
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:103
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:162
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:174
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:278
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:321
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:336
+msgid "Withdrawn"
+msgstr "withdrawn"
+
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:93
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:164
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:269
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:322
 msgid "Inadmissible"
 msgstr "inadmissible"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:81
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:150
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:248
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:294
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:94
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:165
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:274
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:329
 msgid "Admissible"
 msgstr "admissible"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:82
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:95
 msgid "Response completed"
 msgstr "response completed"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:83
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:152
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:249
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:297
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:96
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:167
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:275
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:332
 msgid "Draft"
 msgstr "draft"
 
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:84
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:139
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:241
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:285
-msgid "Working Draft"
-msgstr "working draft"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:86
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:147
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:246
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:291
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:99
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:170
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:271
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:325
 msgid "Submitted to the Speaker"
 msgstr "submitted to house business"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:87
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:156
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:293
-msgid "Elapsed"
-msgstr "elapsed"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:88
-msgid "Response submitted"
-msgstr "response submitted"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:89
-msgid "Received by clerk"
-msgstr "received by clerk"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:9
-msgid "Bill Withdrawn"
-msgstr "bill withdrawn"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:92
-msgid "Submitted to clerk"
-msgstr "submitted to clerk"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:93
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:149
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:290
-msgid "Deferred"
-msgstr "deferred"
-
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:95
-#, fuzzy
-msgid "Require Clarification to Approve"
-msgstr "needs clarification"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:222
 msgid "Speaker's Office Email"
@@ -1486,63 +1561,79 @@ msgstr ""
 msgid "Maximum consented signatories for a motion"
 msgstr ""
 
-#: src/bungeni.main/bungeni/models/interfaces.py:307
+#: src/bungeni.main/bungeni/models/interfaces.py:303
+msgid "Minimum consented signatories for an agenda item"
+msgstr ""
+
+#: src/bungeni.main/bungeni/models/interfaces.py:306
+msgid "Maximum consented signatories for an agenda item"
+msgstr ""
+
+#: src/bungeni.main/bungeni/models/interfaces.py:309
+msgid "Minimum consented signatories for a tabled document"
+msgstr ""
+
+#: src/bungeni.main/bungeni/models/interfaces.py:313
+msgid "Maximum consented signatories for a tabled document"
+msgstr ""
+
+#: src/bungeni.main/bungeni/models/interfaces.py:321
 msgid "Email Notifications Enabled?"
 msgstr "email notifications enabled?"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:313
+#: src/bungeni.main/bungeni/models/interfaces.py:327
 msgid "Email server hostname or IP address"
 msgstr "email server hostname or IP address"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:317
+#: src/bungeni.main/bungeni/models/interfaces.py:331
 msgid "Email server port"
 msgstr "email server port"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:321
+#: src/bungeni.main/bungeni/models/interfaces.py:335
 msgid "Email server login name"
 msgstr "email server login name"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:325
+#: src/bungeni.main/bungeni/models/interfaces.py:339
 msgid "Email server password"
 msgstr "email server password"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:329
+#: src/bungeni.main/bungeni/models/interfaces.py:343
 msgid "Default sender address"
 msgstr "default sender address"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:333
+#: src/bungeni.main/bungeni/models/interfaces.py:347
 msgid "Use TLS to connect"
 msgstr "use TLS to connect?"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:342
+#: src/bungeni.main/bungeni/models/interfaces.py:356
 msgid "Name of the Assignment"
 msgstr "name of the assignment"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:343
+#: src/bungeni.main/bungeni/models/interfaces.py:357
 msgid "Start Date of the Assignment"
 msgstr "start date of the assignment"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:344
+#: src/bungeni.main/bungeni/models/interfaces.py:358
 msgid "End Date of the Assignment"
 msgstr "end date of the assignment"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:345
+#: src/bungeni.main/bungeni/models/interfaces.py:359
 msgid "Assignment Type"
 msgstr "assignment type"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:346
+#: src/bungeni.main/bungeni/models/interfaces.py:360
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1238
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1242
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2000
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2005
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2098
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2103
-#: src/bungeni.main/bungeni/ui/search.py:593
+#: src/bungeni.main/bungeni/ui/search.py:606
 #: src/bungeni.main/bungeni/ui/viewlets/templates/workspace_sitting_viewlet.pt:29
 msgid "Status"
 msgstr "status"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:347
+#: src/bungeni.main/bungeni/models/interfaces.py:361
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:958
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:994
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1368
@@ -2263,7 +2354,7 @@ msgstr "venues"
 #: src/bungeni.main/bungeni/ui/calendar/browser.py:475
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:505
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:508
-#: src/bungeni.main/bungeni/ui/search.py:119
+#: src/bungeni.main/bungeni/ui/search.py:130
 #: src/bungeni.main/bungeni/ui/templates/bungenicontent.pt:20
 msgid "Language"
 msgstr "language"
@@ -2598,7 +2689,7 @@ msgstr ""
 #: src/bungeni.main/bungeni/ui/reports.py:91
 #: src/bungeni.main/bungeni/ui/reports.py:99
 #: src/bungeni.main/bungeni/ui/reports.py:107
-#: src/bungeni.main/bungeni/ui/search.py:149
+#: src/bungeni.main/bungeni/ui/search.py:160
 #: src/bungeni.main/bungeni/ui/forms/templates/version-attached-files.pt:10
 #: src/bungeni.main/bungeni/ui/forms/templates/attached-files.pt:10
 msgid "Title"
@@ -2753,11 +2844,11 @@ msgstr "file type"
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2016
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2108
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2114
-#: src/bungeni.main/bungeni/ui/search.py:139
-#: src/bungeni.main/bungeni/ui/viewlets/templates/workspace_group_viewlet.pt:31
-#: src/bungeni.main/bungeni/ui/viewlets/templates/workspace_item_viewlet.pt:30
+#: src/bungeni.main/bungeni/ui/search.py:150
 #: src/bungeni.main/bungeni/ui/forms/templates/version-attached-files.pt:12
 #: src/bungeni.main/bungeni/ui/forms/templates/attached-files.pt:12
+#: src/bungeni.main/bungeni/ui/viewlets/templates/workspace_group_viewlet.pt:31
+#: src/bungeni.main/bungeni/ui/viewlets/templates/workspace_item_viewlet.pt:30
 msgid "Status date"
 msgstr "status date"
 
@@ -2846,7 +2937,7 @@ msgstr "headings"
 #: src/bungeni.main/bungeni/ui/reports.py:94
 #: src/bungeni.main/bungeni/ui/reports.py:102
 #: src/bungeni.main/bungeni/ui/reports.py:110
-#: src/bungeni.main/bungeni/ui/search.py:591
+#: src/bungeni.main/bungeni/ui/search.py:604
 #: src/bungeni.main/bungeni/models/roles.zcml:15
 #: src/bungeni.main/bungeni/ui/viewlets/templates/workspace_item_viewlet.pt:31
 msgid "Owner"
@@ -2993,8 +3084,8 @@ msgstr "events"
 #: src/bungeni.main/bungeni/ui/reports.py:134
 #: src/bungeni.main/bungeni/ui/reports.py:323
 #: src/bungeni.main/bungeni/ui/reports.py:327
-#: src/bungeni.main/bungeni/ui/viewlets/templates/workspace_sitting_viewlet.pt:27
 #: src/bungeni.main/bungeni/ui/forms/templates/timeline_viewlet.pt:14
+#: src/bungeni.main/bungeni/ui/viewlets/templates/workspace_sitting_viewlet.pt:27
 msgid "Date"
 msgstr "date"
 
@@ -3012,7 +3103,7 @@ msgid "Tabled Document version"
 msgstr "tabled document version"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2606
-#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:206
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:230
 msgid "Sitting"
 msgstr "sitting"
 
@@ -3549,7 +3640,7 @@ msgid "file"
 msgstr "file"
 
 #: src/bungeni.main/bungeni/ui/file.py:95
-#: src/bungeni.main/bungeni/ui/search.py:239
+#: src/bungeni.main/bungeni/ui/search.py:250
 msgid "status"
 msgstr "status"
 
@@ -4564,7 +4655,7 @@ msgid "Tabled Documents"
 msgstr "tabled documents"
 
 #: src/bungeni.main/bungeni/ui/rss.py:347
-#: src/bungeni.main/bungeni/ui/search.py:323
+#: src/bungeni.main/bungeni/ui/search.py:334
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.py:737
 msgid "changes from"
 msgstr "changes from"
@@ -4574,55 +4665,55 @@ msgstr "changes from"
 msgid "timeline"
 msgstr "chronology"
 
-#: src/bungeni.main/bungeni/ui/search.py:114
+#: src/bungeni.main/bungeni/ui/search.py:125
 msgid "Query"
 msgstr "query"
 
-#: src/bungeni.main/bungeni/ui/search.py:122
+#: src/bungeni.main/bungeni/ui/search.py:133
 msgid "Content type"
 msgstr "committee type"
 
-#: src/bungeni.main/bungeni/ui/search.py:143
+#: src/bungeni.main/bungeni/ui/search.py:154
 msgid "Highlight words"
 msgstr "highlight words"
 
-#: src/bungeni.main/bungeni/ui/search.py:150
+#: src/bungeni.main/bungeni/ui/search.py:161
 msgid "Annotation"
 msgstr "annotation"
 
-#: src/bungeni.main/bungeni/ui/search.py:233
+#: src/bungeni.main/bungeni/ui/search.py:244
 msgid "rank"
 msgstr "rank"
 
-#: src/bungeni.main/bungeni/ui/search.py:235
+#: src/bungeni.main/bungeni/ui/search.py:246
 msgid "type"
 msgstr "type"
 
-#: src/bungeni.main/bungeni/ui/search.py:237
+#: src/bungeni.main/bungeni/ui/search.py:248
 msgid "title"
 msgstr "title"
 
-#: src/bungeni.main/bungeni/ui/search.py:241
+#: src/bungeni.main/bungeni/ui/search.py:252
 msgid "weight"
 msgstr "weight"
 
-#: src/bungeni.main/bungeni/ui/search.py:243
+#: src/bungeni.main/bungeni/ui/search.py:254
 msgid "percent"
 msgstr "percent"
 
-#: src/bungeni.main/bungeni/ui/search.py:486
-#: src/bungeni.main/bungeni/ui/search.py:600
-#: src/bungeni.main/bungeni/ui/templates/pagedsearch.pt:7
+#: src/bungeni.main/bungeni/ui/search.py:497
+#: src/bungeni.main/bungeni/ui/search.py:613
 #: src/bungeni.main/bungeni/ui/templates/search.pt:7
+#: src/bungeni.main/bungeni/ui/templates/pagedsearch.pt:7
 msgid "Search"
 msgstr "search"
 
-#: src/bungeni.main/bungeni/ui/search.py:492
-#: src/bungeni.main/bungeni/ui/search.py:615
+#: src/bungeni.main/bungeni/ui/search.py:503
+#: src/bungeni.main/bungeni/ui/search.py:628
 msgid "Invalid Query"
 msgstr "invalid query"
 
-#: src/bungeni.main/bungeni/ui/search.py:595
+#: src/bungeni.main/bungeni/ui/search.py:608
 msgid "Field"
 msgstr "field"
 
@@ -4632,8 +4723,8 @@ msgid "upload-file"
 msgstr "upload file"
 
 #: src/bungeni.main/bungeni/ui/templates/advanced-pagedsearch.pt:20
-#: src/bungeni.main/bungeni/ui/templates/pagedsearch.pt:21
 #: src/bungeni.main/bungeni/ui/templates/search.pt:19
+#: src/bungeni.main/bungeni/ui/templates/pagedsearch.pt:21
 msgid "Results"
 msgstr "results"
 
@@ -4665,6 +4756,24 @@ msgstr "sitting attendance record"
 #: src/bungeni.main/bungeni/ui/templates/bungenicontent.pt:16
 msgid "Registry Number"
 msgstr "registry number"
+
+#: src/bungeni.main/bungeni/ui/templates/changes.pt:6
+#: src/bungeni.main/bungeni/ui/templates/workspace-section.pt:6
+#: src/bungeni.main/bungeni/ui/forms/templates/timeline_viewlet.pt:1
+#: src/bungeni.main/bungeni/ui/forms/templates/timeline_viewlet.pt:19
+#: src/bungeni.main/bungeni/ui/forms/templates/library-container.pt:1
+#: src/bungeni.main/bungeni/ui/forms/templates/generic-sub-container.pt:1
+#: src/bungeni.main/bungeni/ui/forms/templates/content-view.pt:7
+#: src/bungeni.main/bungeni/ui/forms/templates/content-view.pt:11
+#: src/bungeni.main/bungeni/ui/forms/templates/content-view.pt:12
+#: src/bungeni.main/bungeni/ui/viewlets/templates/ministry_ws_viewlet.pt:14
+#: src/bungeni.main/bungeni/ui/viewlets/templates/schedulable_items.pt:1
+#: src/bungeni.main/bungeni/ui/viewlets/templates/questions.pt:14
+#: src/bungeni.main/bungeni/ui/viewlets/templates/bungeni-navigation-tree.pt:33
+#: src/bungeni.main/bungeni/ui/viewlets/templates/workspace_sitting_viewlet.pt:14
+#: src/bungeni.main/bungeni/ui/viewlets/templates/workspace_sitting_viewlet.pt:36
+msgid "${DYNAMIC_CONTENT}"
+msgstr "${dynamiccontent}"
 
 #. Default: "Keep existing file"
 #: src/bungeni.main/bungeni/ui/templates/editfilewidget.pt:21
@@ -4872,24 +4981,6 @@ msgstr "you are here:"
 #: src/bungeni.main/bungeni/ui/viewlets/templates/breadcrumbs.pt:7
 msgid "tabs_home"
 msgstr "home"
-
-#: src/bungeni.main/bungeni/ui/viewlets/templates/ministry_ws_viewlet.pt:14
-#: src/bungeni.main/bungeni/ui/viewlets/templates/schedulable_items.pt:1
-#: src/bungeni.main/bungeni/ui/viewlets/templates/workspace_sitting_viewlet.pt:14
-#: src/bungeni.main/bungeni/ui/viewlets/templates/workspace_sitting_viewlet.pt:36
-#: src/bungeni.main/bungeni/ui/viewlets/templates/bungeni-navigation-tree.pt:33
-#: src/bungeni.main/bungeni/ui/viewlets/templates/questions.pt:14
-#: src/bungeni.main/bungeni/ui/forms/templates/content-view.pt:7
-#: src/bungeni.main/bungeni/ui/forms/templates/content-view.pt:11
-#: src/bungeni.main/bungeni/ui/forms/templates/content-view.pt:12
-#: src/bungeni.main/bungeni/ui/forms/templates/library-container.pt:1
-#: src/bungeni.main/bungeni/ui/forms/templates/timeline_viewlet.pt:1
-#: src/bungeni.main/bungeni/ui/forms/templates/timeline_viewlet.pt:19
-#: src/bungeni.main/bungeni/ui/forms/templates/generic-sub-container.pt:1
-#: src/bungeni.main/bungeni/ui/templates/changes.pt:6
-#: src/bungeni.main/bungeni/ui/templates/workspace-section.pt:6
-msgid "${DYNAMIC_CONTENT}"
-msgstr "${dynamiccontent}"
 
 #: src/bungeni.main/bungeni/ui/viewlets/templates/questions.pt:24
 msgid "No items"
