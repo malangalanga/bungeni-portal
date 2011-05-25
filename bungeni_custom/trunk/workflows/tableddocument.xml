@@ -13,7 +13,7 @@
     <grant permission="bungeni.tableddocument.Delete" role="bungeni.Owner" />
 
     
-    <state id="working_draft" title="Working Draft">
+    <state id="working_draft" title="Working Draft" version="true">
         <!-- tableddocument -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <deny permission="zope.View" role="bungeni.Speaker" />
@@ -48,7 +48,7 @@
         <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
     </state>
     
-    <state id="draft"  title="Draft" like_state="working_draft">
+    <state id="draft" title="Draft" version="true" like_state="working_draft">
         <!-- tableddocument -->
         <deny permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Owner" />
@@ -66,6 +66,18 @@
         <deny permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
         <grant permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
         <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
+    </state>
+    
+    <state id="withdrawn_external" title="Dropped" like_state="draft">
+        <!-- tableddocument -->
+        <deny permission="bungeni.tableddocument.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.tableddocument.Delete" role="bungeni.Owner" />
+        <!-- fileattachment -->
+        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" /> 
+        <!-- signatories -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
     </state>
     
     <state id="submitted" title="Submitted" 
@@ -237,6 +249,14 @@
         destination="working_draft"
         condition="user_is_state_creator_not_owner"
         roles="bungeni.Clerk"
+        trigger="manual"
+    />
+
+    <transition title="Drop"
+        source="draft working_draft submitted_signatories"
+        destination="withdrawn_external"
+        condition="user_is_state_creator"
+        roles="bungeni.Owner"
         trigger="manual"
     />
 

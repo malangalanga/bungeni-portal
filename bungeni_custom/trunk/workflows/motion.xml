@@ -62,7 +62,7 @@
         to a "bureaucratic" destination states should not.
     -->
     
-    <state id="working_draft" title="Working Draft">
+    <state id="working_draft" title="Working Draft" version="true">
         <!-- motion -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <deny permission="zope.View" role="bungeni.Speaker" />
@@ -118,7 +118,7 @@
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Anonymous" />
     </state>
     
-    <state id="draft" title="Draft" like_state="working_draft">
+    <state id="draft" title="Draft" version="true" like_state="working_draft">
         <!-- motion -->
         <deny permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Owner" />
@@ -136,6 +136,18 @@
         <grant permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+    </state>
+    
+    <state id="withdrawn_external" title="Dropped" like_state="draft">
+        <!-- motion -->
+        <deny permission="bungeni.motion.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.motion.Delete" role="bungeni.Owner" />
+        <!-- signatory -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
+        <!-- fileattachment -->
+        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
     </state>
 
     <state id="submitted" title="Submitted" 
@@ -332,7 +344,15 @@
         condition="user_is_not_context_owner"
         trigger="automatic"
     />
-    
+
+    <transition title="Submit"
+        source="working_draft draft submitted_signatories"
+        destination="submitted"
+        condition="pi_signatories_check"
+        trigger="manual"
+        roles="bungeni.Owner"
+    />
+
     <transition title="Submit to Signatories"
         source="draft working_draft"
         destination="submitted_signatories"
@@ -356,15 +376,15 @@
         roles="bungeni.Clerk"
         trigger="manual"
     />
-    
-    <transition title="Submit"
-        source="working_draft draft submitted_signatories"
-        destination="submitted"
-        condition="pi_signatories_check"
-        trigger="manual"
+
+    <transition title="Drop"
+        source="draft working_draft submitted_signatories"
+        destination="withdrawn_external"
+        condition="user_is_state_creator"
         roles="bungeni.Owner"
+        trigger="manual"
     />
-    
+
     <transition title="Receive" 
         source="submitted"
         destination="received" 

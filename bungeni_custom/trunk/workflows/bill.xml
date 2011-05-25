@@ -17,7 +17,7 @@
     <grant permission="bungeni.bill.Delete" role="bungeni.Owner" />
     
     
-    <state id="working_draft" title="Working Draft">
+    <state id="working_draft" title="Working Draft" version="true">
         <!-- bill -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <deny permission="zope.View" role="bungeni.Speaker" />
@@ -66,7 +66,19 @@
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
     </state>
-
+    
+    <state id="withdrawn_external" title="Dropped" like_state="draft">
+        <!-- bill -->
+        <deny permission="bungeni.bill.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.bill.Delete" role="bungeni.Owner" />
+        <!-- signatory -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
+        <!-- attachedfile -->
+        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+    </state>
+    
     <state id="submitted" title="Submitted to Clerk" version="true"
         like_state="draft">
         <grant permission="zope.View" role="bungeni.Clerk" />
@@ -195,8 +207,7 @@
     <state id="rejected" title="Rejected Bill" like_state="approved" />
     
     <state id="withdrawn" title="Bill Withdrawn" like_state="approved" />
-    
-    
+
     <transition title="Create Bill"
         source=""
         destination="working_draft"
@@ -210,7 +221,15 @@
         condition="user_is_context_owner"
         trigger="automatic"
     />
-    
+
+    <transition title="Submit"
+        source="working_draft draft submitted_signatories"
+        destination="submitted"
+        condition="pi_signatories_check"
+        trigger="manual"
+        roles="bungeni.Owner"
+    />
+
     <transition title="Submit to Signatories"
         source="draft working_draft"
         destination="submitted_signatories"
@@ -235,12 +254,12 @@
         trigger="manual"
     />
 
-    <transition title="Submit"
-        source="working_draft draft submitted_signatories"
-        destination="submitted"
-        condition="pi_signatories_check"
-        trigger="manual"
+    <transition title="Drop"
+        source="draft working_draft submitted_signatories"
+        destination="withdrawn_external"
+        condition="user_is_state_creator"
         roles="bungeni.Owner"
+        trigger="manual"
     />
 
     <transition title="Publish in Gazette"
