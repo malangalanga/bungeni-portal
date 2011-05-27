@@ -1,0 +1,66 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master">
+      
+    <tal:js metal:fill-slot="javascript_head_slot">
+    
+    <script type="text/javascript">
+        // wait until document is fully scriptable
+        (function($) {
+        
+        $().ready(function() {
+        // initialize scrollable together with the navigator plugin
+        $("#flowpanes").scrollable().navigator({
+            navi:'ul.tabs'
+        });
+    });
+    
+    })(jQuery);
+    </script>
+    </tal:js> 
+<body class="memberspace">
+<metal:content-core fill-slot="content-core">
+    <metal:content-core define-macro="content-core">
+        <tal:blog_entries condition="view/have_containers">
+            <div class="containers">
+            <h2 i18n:translate="title_blog_entries">Browse</h2>         
+                <ul class="tabs">
+                    <tal:block repeat="container_category view/container_categories">
+                        <li>
+                            <a tal:attributes="href python:'#' + container_category[1];
+                                               class python:''"                       
+                               tal:content="python:container_category[0]" />
+                        </li>
+                    </tal:block>            
+                </ul>     
+                </div>
+            <div id="flowpanes">
+                <div class="items">
+                    <tal:block repeat="container_listing view/container_listings">
+                        <div>
+                        <h1 tal:content="python:container_listing['title']"></h1>
+                            <dl>
+                                <tal:block repeat="container_listing_item python:container_listing['items']">
+                    <dt>
+                           <a tal:attributes="href container_listing_item/url"
+                           tal:content="container_listing_item/title" />
+                    </dt>          
+                    <dd tal:content="container_listing_item/description" />                      
+                                </tal:block>
+                            </dl>                                          
+                        </div>
+                    </tal:block>
+                </div>
+            </div>                                
+        </tal:blog_entries>
+        <!-- panes -->
+
+
+    </metal:content-core>
+</metal:content-core>
+
+</body>
+</html>
