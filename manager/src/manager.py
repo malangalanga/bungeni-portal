@@ -16,7 +16,7 @@ from net.miginfocom.swing import MigLayout
 """
 Application Imports
 """
-from xml import UIXML
+from xml import UIXML, WorkflowXML
 
 
     
@@ -272,8 +272,8 @@ class UIXMLPanel(Panel):
         def actionPerformed(self, evt):
             uixml = UIXML(__uixml__())
             
-            self.field_panel.list_show.ignore_selection_event = True
-            self.field_panel.list_hide.ignore_selection_event = True
+            #self.field_panel.list_show.ignore_selection_event = True
+            #self.field_panel.list_hide.ignore_selection_event = True
             
             elems_show = uixml.get_form_field_show(self.form_panel.title, 
                                                    self.field_panel.title)
@@ -295,8 +295,8 @@ class UIXMLPanel(Panel):
             else:
                 print "elems hide was none", elems_hide
 
-            self.field_panel.list_show.ignore_selection_event = False
-            self.field_panel.list_hide.ignore_selection_event = False
+            #self.field_panel.list_show.ignore_selection_event = False
+            #self.field_panel.list_hide.ignore_selection_event = False
  
     def load_form(self, form_name):
         """
@@ -516,6 +516,267 @@ class UIXMLPanel(Panel):
                
 
 
+class WorkflowXMLPanel(Panel):
+    """
+    Container panel for  a workflow.
+    
+    It uses the following structure
+    
+    WorkflowXMLPanel
+        |
+        --wfs_list combo selector for workflows
+        |
+        --forms_scroll (scroll pane)
+            |
+            -- forms panel (FormPanel) (for 1 workflow)
+                |
+                --- StatePanel (per workflow state)
+                |
+                --- StatePanel (per workflow state)
+        
+    """
+  
+    __panel_title__ = "Workflows"
+    WF_list = []
+  
+    def __init__(self):
+        """
+        """
+        Panel.__init__(self, self.__panel_title__)
+        self.setLayout(MigLayout("wrap 2"))
+        self.__build_wf_list__()
+        self.wfs_list = JComboBox(self.WF_list, actionListener=self.WFListListener(self))
+        self.add(self.wfs_list, "span 2, growx")
+        # Now add the form_panel container
+        self.form_panel = FormPanel("Workflow", 0)
+        self.form_panel.addContainerListener(self.AddStatesPanelListener(self))
+        self.form_panel.setLayout(MigLayout("wrap 1"))
+        # We let MigLayout() figure out the preferred size
+        self.form_scroll = JScrollPane(self.form_panel)    
+        self.add(self.form_scroll, "span 2, grow, push")
+
+    
+    def get_WF_list(self):
+        return [str(WF) for WF in self.WF_list]
+    
+    def __build_wf_list__(self):
+        for wf in __wfxmls__():
+            wfxml = WorkflowXML(wf)
+            self.WF_list.append(self.WF(wfxml.get_title(), wf))
+
+    def load_wf(self, wf):
+        """
+        Loads a descriptor into the UI
+        """
+        WFxml = WorkflowXML(wf.file)
+        self.form_panel.remove_field_panels()
+        for state in WFxml.get_states():
+            self.load_state(WFxml,state)
+            
+    def load_state(self, WFxml, state):
+        self.form_panel.add_field_panel(self.StatePanel(self, WFxml, state))
+        self.form_scroll.validate()
+
+    """
+    All contained classes here
+    """
+
+    """
+    General use classes
+    """
+
+    class WF:
+        """
+        Object that groups workflow title and source file
+        Used by wfs_list selector 
+        """
+        def __init__(self, title, file):
+            self.title = title
+            self.file = file
+        
+        def __repr__(self):
+            """
+            The list iterator uses the __repr__ to represent the 
+            list objects
+            """
+            return self.title
+
+
+    """
+    Listener classes
+    """
+    from java.awt.event import ActionListener
+    class WFListListener(ActionListener):
+        """
+        ActionListener class for forms_list combo selection change
+        """
+        
+        def __init__(self, outer_self):
+            self.outer_self = outer_self
+        
+        def actionPerformed(self, evt):
+            wf = self.outer_self.wfs_list.getSelectedItem()
+            from java.awt import Cursor
+            self.outer_self.setCursor(Cursor(Cursor.WAIT_CURSOR))
+            self.outer_self.load_wf(wf)
+  
+
+    from java.awt.event import ContainerAdapter
+    class AddStatesPanelListener(ContainerAdapter):
+        """
+        This is invoked whenever a state panel is added
+        to the form panel
+        """
+        def __init__(self, parent_self):
+            self.outer_self = parent_self
+        
+        def componentAdded(self, container_event):
+            added_container = container_event.getChild()
+            pass
+
+
+    """
+    Contained Panel classes
+    """
+        
+    class StatePanel(Panel):
+        """
+        Every state in the workflow is rendered in a panel - StatePanel
+        """
+        
+        """
+        This is the state node
+        """
+        state = None
+    
+                    
+        def __init__(self, outer_self, WFxml, state):
+            self.outer_self = outer_self
+            self.WFxml = WFxml
+            self.state = state
+            self.state_id = state.attributeValue("id")
+            Panel.__init__(self, self.state_id)
+            self.setLayout(MigLayout("wrap 2"))
+            from javax.swing.border import TitledBorder
+            border = BorderFactory.createTitledBorder(None, 
+                                                  state.attributeValue("title"), 
+                                                  TitledBorder.DEFAULT_JUSTIFICATION, 
+                                                  TitledBorder.DEFAULT_POSITION,
+                                                  Font("Courier", Font.BOLD, 19),
+                                                  Color.MAGENTA.brighter())
+            self.setName(self.title)
+            self.setBorder(border)
+            self.__setup_widgets__()
+        
+        def __setup_widgets__(self):
+            self.StateTableLoader(self, self.state_id).execute()
+            pass
+          
+        def __load_table__(self, table_model):
+            self.grants_table  = JTable(table_model)
+            self.grants_scroll = JScrollPane(self.grants_table)
+            from java.awt import Dimension
+            self.grants_scroll.setPreferredSize(Dimension(300, 100))
+            self.add(self.grants_scroll, "span 2, growx,push")
+            #self.grants_scroll.validate()
+            self.save_bn = Button("Save State","Save the grants for this state", actionPerformed=self.save_state )
+            self.add(self.save_bn)
+            self.validateTree()
+            
+        """
+        All Contained classes in StatePanel
+        """
+
+        """
+        Listener classes and functions
+        """
+        def save_state(self, evt):
+            table_model = self.grants_table.getModel()
+            table_assignments = table_model.assignments
+            print table_assignments
+        
+        """
+        JTable related classes
+        """
+        
+        from javax.swing.table import DefaultTableModel
+        class StateTableModel(DefaultTableModel):
+            """
+            This class describes the Model for the table used
+            to present the grant, deny for a state
+            """
+            
+            column_names = ["Grant/Deny", "Permission", "Role"]
+            
+            """
+            Presents a state node as a table model
+            """
+            def __init__(self, outer_self, state_id):
+                self.outer_self = outer_self
+                self.assignments = outer_self.WFxml.get_applicable_state_assignments(state_id)
+                
+            def getColumnName(self, col):
+                return self.column_names[col] 
+            
+            def getColumnCount(self):
+                return len(self.column_names)   
+            
+            def getRowCount(self):
+                return len(self.assignments)
+            
+            def getValueAt(self, row, col):
+                if col == 0:
+                    return self.assignments[row].grant
+                if col == 1:
+                    return self.assignments[row].permission
+                if col == 2:
+                    return self.assignments[row].role
+            
+            def getColumnClass(self, index):
+                from java.lang import Boolean,String,Object
+                if index == 0:
+                    return Object.getClass(Boolean.TRUE)
+                else:
+                    return Object.getClass(String(""))
+            
+            def isCellEditable(self, row, col):
+                if col == 0:
+                    return True
+                else:
+                    return False
+                
+            def setValueAt(self, value, row, col):
+                if col == 0:
+                    self.assignments[row].grant = value
+                    print self.assignments[row].inherited
+                else:
+                    pass
+                    
+        class StateTableLoader(SwingWorker):
+            
+            def __init__(self, outer_self, state_id):
+                self.outer_self = outer_self
+                self.state_id  = state_id
+                
+            def doInBackground(self):
+                table_model = self.outer_self.StateTableModel(self.outer_self, self.state_id)
+                return table_model
+            
+            def done(self):
+                from java.util.concurrent import ExecutionException
+                try:
+                    table_model = self.get()
+                    self.outer_self.__load_table__(table_model)
+                    from java.awt import Cursor
+                    self.outer_self.outer_self.setCursor(Cursor(Cursor.DEFAULT_CURSOR))
+                except ExecutionException, e:
+                    print "Error while loading table", e
+
+
+        class StateTableSaver(SwingWorker):
+            pass
+
+
 class Manager:
     """
     Entry point class for the application
@@ -541,10 +802,10 @@ class Manager:
         panel1 = UIXMLPanel()
         # add panels to tabs
         tabPane.add_tab(panel1)
-        panel2 = Panel("Roles & Sub-Roles")
-        panel3 = Panel("Workflows")
+        panel2 = WorkflowXMLPanel()
+        #panel3 = Panel("Workflows")
         tabPane.add_tab(panel2)
-        tabPane.add_tab(panel3)
+        #tabPane.add_tab(panel3)
         # add to frame
         self.FRAME.add(tabPane.tab, "grow, push")
         self.FRAME.show()
@@ -563,9 +824,24 @@ def __uixml__():
     global manage
     return manage.BUNGENI.ui_xml()
 
+def __wfxml__(name):
+    global manage
+    return manage.BUNGENI.workflow(name)
+
+def __wfxmls__():
+    global manage
+    return manage.BUNGENI.workflows()
+
+
 def __manager_init__(path):
     global manage
     manage.init(path)
 
 if __name__ == '__main__':
-    __manager_init__('/home/undesa/cinst/bungeni')
+    import sys
+    print sys.argv
+    if len(sys.argv) == 2:
+        print "bungeni running in ", sys.argv[1]
+        __manager_init__(sys.argv[1])
+    else:
+        print "you need to pass the bungeni installation directory as a parameter"

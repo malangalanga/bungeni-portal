@@ -35,3 +35,28 @@ class Bungeni:
         """
         return self.bungeni_custom() + separator + separator.join(["forms", "ui.xml"])
     
+    
+    def workflow_folder(self):
+        return self.bungeni_custom() + separator + "workflows"
+    
+    def workflow(self, wf_name):
+        """
+        Returns path to a specific workflow
+        """
+        import os
+        return os.path.join(self.workflow_folder(), wf_name)
+
+    def workflows(self):
+        """
+        Returns all the workflows in a list
+        """
+        import os,glob
+        return glob.glob(os.path.join(self.workflow_folder(), '*.xml'))
+    
+    def roles(self):
+        import os
+        return [os.path.join(self.bungeni_main(), "bungeni", "models", "roles.zcml"),
+                os.path.join(self.bungeni_custom(), "sys", "acl", "roles.zcml")]
+                             
+    
+            
