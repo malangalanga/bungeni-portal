@@ -42,7 +42,7 @@ def build_python24():
 
 def build_imaging():
     """
-    Build python imaging for Python 2.5 and 2.4
+    Build python imaging for active pythons
     """
 
     bungenipre = bungeni.Presetup()
@@ -55,6 +55,7 @@ def setup_pylibs():
     """
 
     bungenipre = bungeni.Presetup()
+    bungenipre.build_imaging
     bungenipre.required_pylibs()
     bungenipre.install_appy()
 
