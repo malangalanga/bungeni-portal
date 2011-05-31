@@ -83,7 +83,7 @@
         like_state="draft">
         <grant permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Signatory" />
-        <grant permission="bungeni.bill.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.bill.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.bill.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.bill.Delete" role="bungeni.Owner" />
         <!-- signatory -->
@@ -92,6 +92,16 @@
         <!-- attachedfile -->
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+    </state>
+
+    <state id="received" title="received by clerk"
+        version="true"
+        like_state="submitted">
+        <!-- bill -->
+        <grant permission="bungeni.bill.Edit" role="bungeni.Clerk" />
+        <!-- fileattachment -->
+        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
     </state>
 
     <state id="submitted_signatories" title="Submitted to Signatories"
@@ -103,7 +113,7 @@
 
     <state id="gazetted" title="Bill Published in Gazette"
         version="true"
-        like_state="submitted">
+        like_state="received">
         <!-- bill -->
         <grant permission="zope.View" role="bungeni.Speaker" />
         <grant permission="zope.View" role="bungeni.MP" />
@@ -262,14 +272,23 @@
         trigger="manual"
     />
 
-    <transition title="Publish in Gazette"
+    <transition title="Receive"
         source="submitted"
+        destination="received"
+        trigger="manual"
+        condition=""
+        roles="bungeni.Clerk"
+        order="2"
+    />
+
+    <transition title="Publish in Gazette"
+        source="received"
         destination="gazetted"
-        condition="pi_signatories_check"
+        condition=""
         trigger="manual"
         roles="bungeni.Clerk"
     />
-    
+
     <transition title="Allow scheduling of First Reading"
         source="gazetted first_reading_adjourned"
         destination="first_reading_pending"
