@@ -2,13 +2,22 @@
 <object name="portal_javascripts">
 
     <javascript 
+        id="++resource++jquery.tools.min.js"
         cacheable="True" 
         compression="none" 
         cookable="True"
         enabled="True" 
         expression=""
-        id="++resource++jquery.tools.min.js"
         inline="False"
     />
+    
+    <javascript       
+        id="++resource++plone.app.discussion.javascripts/comments.js"
+        cacheable="False"
+        compression="safe"
+        cookable="False"
+        enabled="False"
+        expression=""
+        inline="False"/>  
 
 </object>
