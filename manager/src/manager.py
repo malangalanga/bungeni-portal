@@ -138,19 +138,26 @@ class UIXMLPanel(Panel):
         
         def doInBackground(self):
             self.form_name = self.outer_self.forms_list.getSelectedItem()
+            print self.form_name
             for field in self.outer_self.form_holder_panel.fields:
                 # get the field node
-                field_node = self.outer_self.uixml.get_form_field(self.form_name, field.title)
-                # get selected mode values in show, hide
-                self.outer_self.__save_visib_node__(field_node, 
-                                         field.list_show.getSelectedValues(), 
-                                         field.roles_show.getSelectedValues(), 
-                                         "show")
-                self.outer_self.__save_visib_node__(field_node,
-                                         field.list_hide.getSelectedValues(), 
-                                         field.roles_hide.getSelectedValues(), 
-                                         "hide")
-                self.outer_self.uixml.save_xml()
+                if len(field.localizable) > 0 :
+                    # ignore fields which are not localizable
+                    field_node = self.outer_self.uixml.get_form_field(self.form_name, field.title)
+                    # get selected mode values in show, hide
+                    print "field name = ", field.title
+                    show_modes_selected = field.list_show.get_selected_values()
+                    print "show selected" , show_modes_selected
+                    
+                    self.outer_self.__save_visib_node__(field_node, 
+                                             field.list_show.get_selected_values(), 
+                                             field.roles_show.get_selected_values(), 
+                                             "show")
+                    self.outer_self.__save_visib_node__(field_node,
+                                             field.list_hide.get_selected_values(), 
+                                             field.roles_hide.get_selected_values(), 
+                                             "hide")
+                    self.outer_self.uixml.save_xml()
         
         def done(self):
             from java.util.concurrent import ExecutionException
@@ -333,12 +340,12 @@ class UIXMLPanel(Panel):
         
     def __save_visib_node__(self, node, modes, roles, show_or_hide = "show"):
         visib_node = node.element(QName(show_or_hide))
-        if visib_node is None and (len(modes) > 0 or len(roles) > 0):
+        if visib_node is None and modes is not None and (len(modes) > 0 or len(roles) > 0):
             # if there is no show/hide node create it only if 
             # some modes and roles have been selected
             visib_node = node.addElement(QName(show_or_hide))
         if visib_node is not None:
-            if len(modes) == 0:
+            if modes is None or len(modes) == 0:
                 visib_node.detach()
             else:
                 #if the show/hide node exists add the attributes to it
@@ -349,6 +356,8 @@ class UIXMLPanel(Panel):
         
     def save_xml(self, evt):
         self.save_bn.setEnabled(False)
+        for field in self.form_holder_panel.fields:
+            print "Before invoking background thread " , field.list_show
         self.SaveXmlWorker(self).execute()    
         
         
@@ -468,6 +477,7 @@ class UIXMLPanel(Panel):
                 """
                 modes = show_element.attributeValue("modes")
                 if modes is not None and len(modes.strip()) > 0:
+                    print "field = " , field_panel.title, "show modes = " , modes.split(" ")
                     field_panel.list_show.set_selected_values(modes.split(" "))
                 
                 roles = show_element.attributeValue("roles")
@@ -693,8 +703,37 @@ class WorkflowXMLPanel(Panel):
         def save_state(self, evt):
             table_model = self.grants_table.getModel()
             table_assignments = table_model.assignments
-            print table_assignments
-        
+            for assignment in table_assignments:
+                print assignment , assignment.grant
+                if assignment.edited:
+                    ## if it has been edited save it
+                    if assignment.grant:
+                        """
+                        if it is granted, confirm with QName
+                        """
+                        print assignment.state_node.getQName().getName()
+                        if assignment.state_node.getQName().getName() == "grant":
+                            """
+                            Nothing to do 
+                            """
+                            pass
+                        else:
+                            ## rename to deny
+                            assignment.state_node.setName("deny")
+                            self.WFxml.save_xml()
+                    else:
+                        if assignment.state_node.getQName().getName() == "deny":
+                            """
+                            Nothing to do 
+                            """
+                            pass
+                        else:
+                            ## rename to deny
+                            assignment.state_node.setName("grant")
+                            self.WFxml.save_xml()
+                else:
+                    print "nothing to save"
+                
         """
         JTable related classes
         """
@@ -706,7 +745,7 @@ class WorkflowXMLPanel(Panel):
             to present the grant, deny for a state
             """
             
-            column_names = ["Grant/Deny", "Permission", "Role"]
+            column_names = ["Grant", "Permission", "Role"]
             
             """
             Presents a state node as a table model
@@ -748,9 +787,14 @@ class WorkflowXMLPanel(Panel):
             def setValueAt(self, value, row, col):
                 if col == 0:
                     self.assignments[row].grant = value
-                    print self.assignments[row].inherited
+                    self.assignments[row].edited = True
                 else:
                     pass
+            
+            def __update_assignment__(self, row, grant_value):
+                self.assignments[row].grant = grant_value
+                self.assignments[row].edited = True
+            
                     
         class StateTableLoader(SwingWorker):
             

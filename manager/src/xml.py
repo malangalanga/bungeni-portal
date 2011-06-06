@@ -156,6 +156,13 @@ class WorkflowXML(XML):
     __workflow_root__ = "/workflow"
     
 
+
+    def save_xml(self):
+        """
+        Simply call the parent class save_xml
+        """
+        XML.save_xml(self, self.xmlfile, True)
+
     def xpath_workflow(self):
         return self.__workflow_root__
     
@@ -174,8 +181,8 @@ class WorkflowXML(XML):
 
     def xpath_workflow_state_assignments(self, id):
         return self.xpath_workflow_state(id) + self.xpath_relative_state_assignments()
+ 
     
-
     def get_workflow(self):
         return self.xmldoc.selectSingleNode(self.__workflow_root__)
     
@@ -246,7 +253,8 @@ class WorkflowXML(XML):
                 grant_boolean =  True if grant_or_deny=="grant" else False
                 inherited_boolean = False if key == "self" else True
                 
-                p_g = self.PermissionGrant(permission = permission, 
+                p_g = self.PermissionGrant(state_node = state_grant,
+                                           permission = permission, 
                                            role = role, 
                                            grant= grant_boolean, 
                                            inherited = inherited_boolean)
@@ -282,8 +290,9 @@ class WorkflowXML(XML):
         Used by get_applicable_state_assignments
         """
             
-        def __init__(self, permission="zope.View", grant=True, 
+        def __init__(self, state_node = None, permission="zope.View", grant=True, 
                      role="bungeni.Anonymous", inherited = True):
+            self.state_node = state_node
             """
             The permission associated with the grant
             """
@@ -302,6 +311,10 @@ class WorkflowXML(XML):
             otherwise if it is declared locally in the state inherited = False
             """
             self.inherited = inherited
+            """
+            Has it been manually edited - default = False
+            """
+            self.edited = False
             
         def __cmp__(self, other):
             """
@@ -319,8 +332,9 @@ class WorkflowXML(XML):
         def __repr__(self):
             return (
                     ("grant" if self.grant else "deny") + " " +  
-                    self.permission + "," + self.role + " "
-                    ("*inherited*" if self.inherited else "*local*")
+                    self.permission + "," + self.role + " " +
+                    ("*inherited*" if self.inherited else "*local*") +
+                    (" edited = " + str(self.edited))
                    )
                 
 

@@ -150,13 +150,17 @@ class MultiSelectList(JList):
     
     def __init__(self, data):
         JList.__init__(self, data)
+        ## copy to easily access the model data
+        self.data = data
         self.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION)
         self.ignore_selection_event = False
 
     def set_selected_values(self, list_data, should_scroll = False):
         if list_data is not None:
             for item in list_data:
-                self.setSelectedValue(item, should_scroll)
+                idx = self.data.index(item)
+                self.addSelectionInterval(idx, idx)
+                #self.setSelectedValue(item, should_scroll)
     
     def get_selected_values(self):
         """
