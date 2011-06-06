@@ -839,4 +839,14 @@
         layer="zope.publisher.interfaces.http.IHTTPRequest"
         name="index"
         />
+        
+    <!--Traversers -->
+   	<view
+       for="bungeni.core.interfaces.IAkomaNtosoSection"
+       type="bungeni.ui.interfaces.IBungeniSkin"
+       provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+       factory=".traversal.SiteTraverser"
+       permission="zope.Public"
+       allowed_interface="zope.publisher.interfaces.browser.IBrowserPublisher"
+       />
 </configure>
