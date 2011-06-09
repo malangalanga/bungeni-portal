@@ -31,3 +31,7 @@ zope_i18n_compile_mo_files = True
 # string, language identifier, must be one of zope_i18n_allowed_languages
 default_language = "en"
 
+# integer, minimum number of seconds to wait between checks for whether a 
+# localization file needs reloading; 0 means never check (deployment)
+check_auto_reload_localization = 5
+
