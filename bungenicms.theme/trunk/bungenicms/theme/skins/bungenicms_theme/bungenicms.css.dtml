@@ -132,4 +132,20 @@ ul#portal-globalnav {
     text-align:left; ****
 }
 
+#portal-personaltools li.navigation {
+    float: left;
+    margin: 0 2em 0 0;
+    padding: 0;
+}
+
+#portal-personaltools li.navigation.selected {
+    font-weight: bold;
+}
+
+#personaltools-dashboard,
+#personaltools-preferences {
+    display: none !important;
+}
+
+
 /* </dtml-with> */

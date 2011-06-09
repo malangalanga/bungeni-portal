@@ -4,6 +4,12 @@
    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
    xmlns:browser="http://namespaces.zope.org/browser"
    xmlns:plone="http://namespaces.plone.org/plone">
+   
+  <includeOverrides file="overrides.zcml" />
+  <include package="plone.app.layout.viewlets" />
+  <include package="plone.app.layout.presentation" />  
+  <include package="Products.ATContentTypes" />
+  <include package="Products.CMFPlone.browser" />  
 
   <include file="skins.zcml" />
 
