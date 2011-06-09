@@ -82,7 +82,7 @@
     text-align: left;
 }
 #portal-breadcrumbs a {
-    color:#e1af2a;
+    color:#d08720;
     font-weight:bold;
 }
 #portal-breadcrumbs a:hover {
@@ -451,11 +451,15 @@ input.inputLabelActive {
 }
 .actionMenu .actionMenuContent ul li a {
     background: none;
-    color: #000;
+    color: #000 !important;
+}
+.actionMenu .actionMenuContent ul li a#calendar-link-15 {
+    background: none;
+    color: #fff !important;
 }
 .actionMenu .actionMenuContent ul li a:hover {
     background-color: #f5f1f2 !important;
-    color: #000;
+    color: #000 !important;
 }
 .actionmenu .actionMenuHeader ul#contentActionMenus li.context_translate a {
 	background-image:none !important;
@@ -1292,10 +1296,11 @@ div.main-column #collage h2 {
     border-right: 1px dotted #000 !important;
 }
 div.dhx_cal_navline {
-    color:#fff !important;
+    color:#000 !important;
 }
 div.dhx_cal_navline div.active {
     background:#513d72 !important;
+    color:#fff;
 }
 .template-workspace.section-bungeni-archive .dhx_cal_header,
 .template-workspace.section-bungeni-archive .dhx_cal_data,
