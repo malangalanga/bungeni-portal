@@ -895,22 +895,6 @@
         <field name="body_text" displayable="view edit add" localizable="view">
             <show modes="view" />
         </field>
-        <field name="submission_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="status" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="note" displayable="edit add" localizable="edit add">
-            <show modes="edit add" />
-        </field>
-        <field name="receive_notification" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
-            <hide modes="listing" />
-        </field>
         <field name="question_number" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
         </field>
@@ -933,6 +917,22 @@
         <field name="response_text" displayable="edit" />
         <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="submission_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="note" displayable="edit add" localizable="edit add">
+            <show modes="edit add" />
+        </field>
+        <field name="receive_notification" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
             <hide modes="listing" />
         </field>
     </descriptor>
