@@ -16,7 +16,8 @@
     <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
     <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
     <grant permission="bungeni.signatory.Act" role="bungeni.Signatory"/>
-
+    
+    
     <state id="awaiting_consent" title="Awaiting Consent">
         <deny permission="bungeni.signatory.Edit" role="bungeni.Clerk"/>
         <grant permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
@@ -47,6 +48,7 @@
     </state>
 
     <state id="withdrawn" title="Signature Withdrawn" like_state="rejected"/>
+    
     
     <transition title="Create and Sign"
         source=""
@@ -99,4 +101,5 @@
         trigger="automatic"
         condition="pi_unsign_signature"
     />
+
 </workflow>

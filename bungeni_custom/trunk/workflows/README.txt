@@ -1,4 +1,4 @@
-Custom Definitions of the Workflows of Parlaimentary Documents
+Custom Definitions of the Workflows of Parliamentary Documents
 ==============================================================
 
 This file reference information and guidelines about how to define/localize the 
