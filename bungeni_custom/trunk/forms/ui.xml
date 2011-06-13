@@ -15,7 +15,13 @@
             <hide modes="edit listing" />
         </field>
         <field name="owner_id" displayable="view edit add listing" localizable="view listing">
-            <hide modes="view listing" roles="bungeni.Anonymous" />
+            <show modes="view listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -25,13 +31,8 @@
             <show modes="view" />
         </field>
         <field name="submission_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="status" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
+            <show modes="view" />
+            <hide modes="listing" />
         </field>
         <field name="note" displayable="edit add" localizable="edit add">
             <show modes="edit add" />
@@ -41,7 +42,8 @@
             <hide modes="listing" />
         </field>
         <field name="admissible_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
+            <show modes="view" />
+            <hide modes="listing" />
         </field>
     </descriptor>
 
@@ -136,12 +138,14 @@
         <field name="full_name" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
-        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
-            <show modes="view" />
-            <hide modes="edit listing" />
-        </field>
         <field name="owner_id" displayable="view edit add listing" localizable="view listing">
-            <hide modes="view listing" roles="bungeni.Anonymous" />
+            <show modes="view listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -151,13 +155,8 @@
             <show modes="view" />
         </field>
         <field name="submission_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="status" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
+            <show modes="view" />
+            <hide modes="listing" />
         </field>
         <field name="note" displayable="edit add" localizable="edit add">
             <show modes="edit add" />
@@ -170,7 +169,8 @@
             <show modes="view edit listing" />
         </field>
         <field name="ministry_id" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="identifier" displayable="view edit listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -178,6 +178,10 @@
         </field>
         <field name="publication_date" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
+        </field>
+        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view" />
+            <hide modes="edit listing" />
         </field>
     </descriptor>
 
@@ -219,34 +223,43 @@
             <show modes="view edit add" />
         </field>
         <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+            <show modes="view edit" />
+            <hide modes="listing" />
         </field>
         <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="committee_type_id" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
         <field name="num_members" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="min_num_members" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="quorum" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="num_clerks" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="num_researchers" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="proportional_representation" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="reinstatement_date" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
     </descriptor>
 
@@ -610,12 +623,18 @@
         <field name="full_name" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
-        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+        <field name="motion_number" displayable="view listing" localizable="view listing">
             <show modes="view" />
-            <hide modes="edit listing" />
+            <hide modes="listing" />
         </field>
         <field name="owner_id" displayable="view edit add listing" localizable="view listing">
-            <hide modes="view listing" roles="bungeni.Anonymous" />
+            <show modes="view listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -625,13 +644,8 @@
             <show modes="view" />
         </field>
         <field name="submission_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="status" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
+            <show modes="view" />
+            <hide modes="listing" />
         </field>
         <field name="note" displayable="edit add" localizable="edit add">
             <show modes="edit add" />
@@ -641,13 +655,15 @@
             <hide modes="listing" />
         </field>
         <field name="admissible_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
+            <show modes="view" />
+            <hide modes="listing" />
         </field>
         <field name="notice_date" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
         </field>
-        <field name="motion_number" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
+        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view" />
+            <hide modes="edit listing" />
         </field>
     </descriptor>
 
@@ -678,7 +694,8 @@
             <show modes="view edit listing" />
         </field>
         <field name="election_nomination_date" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+            <show modes="view edit" />
+            <hide modes="listing" />
         </field>
         <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
@@ -704,16 +721,19 @@
             <show modes="view edit add listing" />
         </field>
         <field name="province_id" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="region_id" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="party_id" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
         </field>
         <field name="leave_reason" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="notes" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
@@ -872,6 +892,7 @@
     </descriptor>
 
     <descriptor name="Question">
+        <field name="response_text" displayable="edit" />
         <field name="parliament_id" displayable="view listing" localizable="view listing">
             <hide modes="view listing" />
         </field>
@@ -881,45 +902,10 @@
         <field name="full_name" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
-        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
-            <show modes="view" />
-            <hide modes="edit listing" />
-        </field>
-        <field name="owner_id" displayable="view edit add listing" localizable="view listing">
-            <hide modes="view listing" roles="bungeni.Anonymous" />
-        </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
-            <hide modes="listing" />
-        </field>
-        <field name="body_text" displayable="view edit add" localizable="view">
-            <show modes="view" />
-        </field>
         <field name="question_number" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
         </field>
-        <field name="ministry_id" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="admissible_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="ministry_submit_date" displayable="view edit listing" localizable="view listing">
-            <show modes="view" />
-            <hide modes="listing" />
-        </field>
-        <field name="question_type_id" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="response_type_id" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="response_text" displayable="edit" />
-        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add" />
-            <hide modes="listing" />
-        </field>
-        <field name="submission_date" displayable="view listing" localizable="view listing">
+        <field name="owner_id" displayable="view edit add listing" localizable="view listing">
             <show modes="view listing" />
         </field>
         <field name="status" displayable="view listing" localizable="view listing">
@@ -928,12 +914,48 @@
         <field name="status_date" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
         </field>
+        <field name="question_type_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="response_type_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="body_text" displayable="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="submission_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
         <field name="note" displayable="edit add" localizable="edit add">
             <show modes="edit add" />
         </field>
         <field name="receive_notification" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
+        </field>
+        <field name="ministry_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="admissible_date" displayable="view listing" localizable="view listing">
+            <show modes="view" />
+            <hide modes="listing" />
+        </field>
+        <field name="ministry_submit_date" displayable="view edit listing" localizable="view listing">
+            <show modes="view" />
+            <hide modes="listing" />
+        </field>
+        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view" />
+            <hide modes="edit listing" />
         </field>
     </descriptor>
 
@@ -1071,12 +1093,17 @@
         <field name="full_name" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
-        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
-            <show modes="view" />
-            <hide modes="edit listing" />
+        <field name="tabled_document_number" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
         </field>
         <field name="owner_id" displayable="view edit add listing" localizable="view listing">
-            <hide modes="view listing" roles="bungeni.Anonymous" />
+            <show modes="view listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -1086,13 +1113,8 @@
             <show modes="view" />
         </field>
         <field name="submission_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="status" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
+            <show modes="view" />
+            <hide modes="listing" />
         </field>
         <field name="note" displayable="edit add" localizable="edit add">
             <show modes="edit add" />
@@ -1101,11 +1123,13 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="tabled_document_number" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
         <field name="admissible_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
+            <show modes="view" />
+            <hide modes="listing" />
+        </field>
+        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view" />
+            <hide modes="edit listing" />
         </field>
     </descriptor>
 
