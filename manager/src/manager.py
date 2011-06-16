@@ -44,17 +44,14 @@ class FieldPanel(Panel):
             """
             Event handler for list item change
             """
-            print "event triggered :", src_list.getName()
             if src_list.ignore_selection_event == False:
                 ### first disable list selection listeners in the assoc_list
-                #####-TMP-- src_list.assoc_list.ignore_selection_event = True
                 # We first get the selected values in the source list
                 # then we get the selected values in the associated list
                 # then we un-select the values in the associated list that
                 # have been selected in the source list 
                 
                 src_selected_values =  src_list.get_selected_values()#[str(sel) for sel in src_list.getSelectedValues()]
-                print "values count :", src_selected_values, src_list.getName()
                 assoc_selected_values = src_list.assoc_list.get_selected_values() #[str(sel) for sel in src_list.assoc_list.getSelectedValues()]
                 list_items = self.outer_self.__get_items_in_list__(src_list.assoc_list)
                 roles_show_hide = self.__roles_element_for__(src_list)
@@ -71,12 +68,9 @@ class FieldPanel(Panel):
                     roles_show_hide.setEnabled(True)
                     for src_selected in src_selected_values:
                         if src_selected in assoc_selected_values:
-                            print src_selected, list_items, assoc_selected_values
                             assoc_index = list_items.index(src_selected)
                             src_list.assoc_list.removeSelectionInterval(assoc_index, assoc_index)
-                    ### re-enable selection listener in the assoc_list
-                    ######-TMP-- src_list.assoc_list.ignore_selection_event = False
-    
+
 
     
     def __init__(self, title, index):
@@ -138,14 +132,12 @@ class UIXMLPanel(Panel):
         
         def doInBackground(self):
             self.form_name = self.outer_self.forms_list.getSelectedItem()
-            print self.form_name
             for field in self.outer_self.form_holder_panel.fields:
                 # get the field node
                 if len(field.localizable) > 0 :
                     # ignore fields which are not localizable
                     field_node = self.outer_self.uixml.get_form_field(self.form_name, field.title)
                     # get selected mode values in show, hide
-                    print "field name = ", field.title
                     show_modes_selected = field.list_show.get_selected_values()
                     print "show selected" , show_modes_selected
                     
@@ -477,7 +469,6 @@ class UIXMLPanel(Panel):
                 """
                 modes = show_element.attributeValue("modes")
                 if modes is not None and len(modes.strip()) > 0:
-                    print "field = " , field_panel.title, "show modes = " , modes.split(" ")
                     field_panel.list_show.set_selected_values(modes.split(" "))
                 
                 roles = show_element.attributeValue("roles")
@@ -579,14 +570,26 @@ class WorkflowXMLPanel(Panel):
         Loads a descriptor into the UI
         """
         WFxml = WorkflowXML(wf.file)
+        self.__load_wf_xml(WFxml)
+        
+    
+    def __load_wf_xml(self, WFxml):
         self.form_panel.remove_field_panels()
         for state in WFxml.get_states():
             self.load_state(WFxml,state)
+
             
     def load_state(self, WFxml, state):
         self.form_panel.add_field_panel(self.StatePanel(self, WFxml, state))
         self.form_scroll.validate()
-
+        
+    def reload_wf(self):
+        wf = self.wfs_list.getSelectedItem()
+        from java.awt import Cursor
+        self.setCursor(Cursor(Cursor.WAIT_CURSOR))
+        self.load_wf(wf)
+        self.setCursor(Cursor(Cursor.DEFAULT_CURSOR))
+        
     """
     All contained classes here
     """
@@ -688,9 +691,8 @@ class WorkflowXMLPanel(Panel):
             from java.awt import Dimension
             self.grants_scroll.setPreferredSize(Dimension(300, 100))
             self.add(self.grants_scroll, "span 2, growx,push")
-            #self.grants_scroll.validate()
-            self.save_bn = Button("Save State","Save the grants for this state", actionPerformed=self.save_state )
-            self.add(self.save_bn)
+            #self.save_bn = Button("Save State","Save the grants for this state", actionPerformed=self.save_state_grants )
+            #self.add(self.save_bn)
             self.validateTree()
             
         """
@@ -700,40 +702,118 @@ class WorkflowXMLPanel(Panel):
         """
         Listener classes and functions
         """
-        def save_state(self, evt):
+        
+        def __lookdown_assignment_and_act(self, grant_or_deny = False, assignment = None):
+            """
+             If the state appears as a like_state for another state - we need to go all 
+             the way down the hierarchy to grant/deny in all the inheriting states
+            """
+            child_states = self.WFxml.get_child_states(self.state_id)
+            for child_state in child_states:
+                child_assignments = self.WFxml.get_applicable_state_assignments(child_state.attributeValue("id"))
+                for child_assignment in child_assignments:
+                    if child_assignment.inherited == False and grant_or_deny == child_assignment.grant:
+                        child_assignment.state_grant.detach()
+                            
+                #if child_assignment.inherited == False:
+                #    if assignment == child_assignment:
+                #        child_assignment.state_grant.detach()
+        
+        def __lookup_assignment_and_act(self, grant_or_deny = False, assignment = None):
+            
+            """
+             We check the applicable assignment of the like_state
+             if there is no like_state, we grant/deny appropriately for the permission+role
+             if there is a like_state
+                We get the applicable assignments of the like_state
+                if the permission+role combination exists for the like_state ;
+                     -- and it matches the action (grant or deny), we delete the 
+                     grant in the current state
+            """ 
+            name = "grant" if grant_or_deny==True else "deny"
+            like_state = assignment.state_node.attributeValue("like_state")
+     
+            if like_state is None:
+                assignment.state_grant.setName(name)
+                self.__lookdown_assignment_and_act(grant_or_deny, assignment)
+            else:
+                ###
+                # !-(LIKE_STATE) query the likeness and if the applicable assignment in the like
+                # is a grant then delete the current element #
+                pg_list = self.WFxml.get_applicable_state_assignments(like_state)
+                if assignment in pg_list:
+                    idx = pg_list.index(assignment)
+                    if pg_list[idx].grant == grant_or_deny:
+                        assignment.state_grant.detach()
+       
+
+        def save_state_grants(self, evt):
+            self.save_state()                
+
+        def save_state(self):
+            """
+            Saves a state
+            """
+            do_save = False
             table_model = self.grants_table.getModel()
             table_assignments = table_model.assignments
             for assignment in table_assignments:
-                print assignment , assignment.grant
                 if assignment.edited:
                     ## if it has been edited save it
                     if assignment.grant:
                         """
                         if it is granted, confirm with QName
                         """
-                        print assignment.state_node.getQName().getName()
-                        if assignment.state_node.getQName().getName() == "grant":
+                        if assignment.state_grant.getQName().getName() == "grant":
                             """
                             Nothing to do 
+                            If its granting the permission and the node is already a 'grant' node
                             """
                             pass
                         else:
-                            ## rename to deny
-                            assignment.state_node.setName("deny")
-                            self.WFxml.save_xml()
+                            if assignment.inherited:
+                                print "Inherited assignment was changed ! add a grant node here "
+                                self.WFxml.add_grant_to_state(assignment.state_node, 
+                                                         assignment.state_grant.attributeValue("permission"), 
+                                                         assignment.state_grant.attributeValue("role"))
+                                print "Checking down the hierarchy"
+                                #self.__lookdown_assignment_and_act(True, assignment)
+                            else:
+                                # Here we check up the like_state tree to see if a the same
+                                # permission + role grant exists.
+                                # if it exists 
+                                #    We check it is also a grant, 
+                                #    if it is a grant
+                                #        we delete the current grant since its anyway inherited
+                                self.__lookup_assignment_and_act(grant_or_deny = True, assignment = assignment)
+                            do_save = True
                     else:
-                        if assignment.state_node.getQName().getName() == "deny":
+                        if assignment.state_grant.getQName().getName() == "deny":
                             """
                             Nothing to do 
+                            If its denying the permission and the node is already a 'deny' node
                             """
                             pass
                         else:
                             ## rename to deny
-                            assignment.state_node.setName("grant")
-                            self.WFxml.save_xml()
+                            if assignment.inherited:
+                                print "Inherited assignment was changed ! add a deny node here"
+                                self.WFxml.add_deny_to_state(assignment.state_node, 
+                                                             assignment.state_grant.attributeValue("permission"), 
+                                                             assignment.state_grant.attributeValue("role"))
+                            else:
+                                self.__lookup_assignment_and_act(grant_or_deny=False, assignment=assignment)
+                            do_save = True
                 else:
                     print "nothing to save"
-                
+            
+            if do_save:
+                print "saving xml"
+                self.WFxml.save_xml()
+        
+        def reload_wf(self):
+            self.outer_self.reload_wf()
+                    
         """
         JTable related classes
         """
@@ -786,8 +866,12 @@ class WorkflowXMLPanel(Panel):
                 
             def setValueAt(self, value, row, col):
                 if col == 0:
+                    print "setting value for ", self.assignments[row], "edited = true"
                     self.assignments[row].grant = value
                     self.assignments[row].edited = True
+                    self.outer_self.save_state()
+                    self.outer_self.reload_wf()
+                    #self.assignments[row].edited = False
                 else:
                     pass
             

@@ -10,6 +10,7 @@ XML Document classes
 from org.dom4j.io import SAXReader
 from org.dom4j.io import XMLWriter
 from org.dom4j.io import OutputFormat
+from org.dom4j.tree import DefaultAttribute
 
 from java.io import File
 from java.io import FileWriter
@@ -163,6 +164,11 @@ class WorkflowXML(XML):
         """
         XML.save_xml(self, self.xmlfile, True)
 
+    """
+    XPath statements
+    """
+
+    
     def xpath_workflow(self):
         return self.__workflow_root__
     
@@ -182,24 +188,80 @@ class WorkflowXML(XML):
     def xpath_workflow_state_assignments(self, id):
         return self.xpath_workflow_state(id) + self.xpath_relative_state_assignments()
  
+    def xpath_child_states(self, id):
+        return self.xpath_workflow_states()+"[@like_state='"+ id +"']"
+    
+    def xpath_transitions(self):
+        return self.xpath_workflow() + "/transition"
+
+    def xpath_transition_by_title(self, title):
+        return self.xpath_transitions()+"[@title='"+  title+ "']"
+    
+    def get_transitions_where_state_is_source(self, state_id):
+        transitions = self.xmldoc.selectNodes(self.xpath_transitions())
+        for transition in transitions:
+            source = transition.attributeValue("source")
+            lst_source = source.split(" ")
+            
+    
+    """
+    Workflow API
+    """
     
     def get_workflow(self):
         return self.xmldoc.selectSingleNode(self.__workflow_root__)
     
 
     def get_title(self):
+        """
+        Get the title of the workflow
+        """
         return self.get_workflow().attributeValue("title")
             
 
     def get_states(self):
+        """
+        Return all the state elements in a workflow
+        """
         return self.xmldoc.selectNodes(self.xpath_workflow_states())
     
 
     def get_state(self, id):
+        """
+        Returns a specific state element by id
+        """
         return self.xmldoc.selectSingleNode(self.xpath_workflow_state(id))
     
 
+    def add_grant_to_state(self, state, permission, role):
+        """
+        For a state -- allows adding a grant 
+        """
+        return self.__add_grant_or_deny_to_state("grant", state, permission, role)
+
+
+    def add_deny_to_state(self, state, permission, role):
+        """
+        For a state -- allows adding a deny
+        """
+        return self.__add_grant_or_deny_to_state("deny", state, permission, role)
+
+    
+    def __add_grant_or_deny_to_state(self, type, state, permission, role):
+        """
+        Common api used by grant_to_state and deny_to_state
+        """
+        grant = state.addElement(type)
+        grant.add(DefaultAttribute("permission", permission))
+        grant.add(DefaultAttribute("role", role))
+        return grant
+           
+
     def __get_inherited_assignments(self, id, key, assignments, order):
+        """
+        Goes up the state inheritance chain and returns all the inherited assignments in a list 
+        of StateAssignment objects
+        """
         state = self.get_state(id)
         state_assignment = self.StateAssignment(key, 
                                                 order, 
@@ -217,6 +279,12 @@ class WorkflowXML(XML):
         else:
             return assignments    
     
+    def get_child_states(self, id):
+        """
+        Get all states having like_state = id
+        """
+        return self.xmldoc.selectNodes(self.xpath_child_states(id))
+        
 
     def get_state_assignments(self, id):
         """
@@ -238,9 +306,15 @@ class WorkflowXML(XML):
         Returns a list of applicable grants for an object,
         inherited grants are normalized, i.e. only the last applicable 
         grant / deny is reflected as 'active'
+        Applicable grant is represented by a PermissionGrant object
         """
+        state_node = self.get_state(id)
         inherited_assignments = self.get_state_assignments(id)
-        inherited_assignments = sorted(inherited_assignments, key=lambda state_assignment: state_assignment.order, reverse=True)
+        print "inherited assignments for id = " + id, inherited_assignments
+        inherited_assignments = sorted(inherited_assignments, 
+                                       key=lambda state_assignment: state_assignment.order, 
+                                       reverse=True)
+        print "sorted inherited assignments for id = " + id, inherited_assignments
         permission_assignments = []
         for state_grants in inherited_assignments:
             print "state_grants == " , state_grants
@@ -253,18 +327,26 @@ class WorkflowXML(XML):
                 grant_boolean =  True if grant_or_deny=="grant" else False
                 inherited_boolean = False if key == "self" else True
                 
-                p_g = self.PermissionGrant(state_node = state_grant,
+                p_g = self.PermissionGrant(state_node = state_node,
+                                           state_grant = state_grant,
                                            permission = permission, 
                                            role = role, 
                                            grant= grant_boolean, 
                                            inherited = inherited_boolean)
                 
                 if  p_g not in permission_assignments:
+                    """
+                    if the permission - role combination isnt in the list add it
+                    """
                     permission_assignments.append(p_g)
                 else:
+                    """
+                    if the permission - role combination exists in the list update it
+                    """
                     p_g = permission_assignments[permission_assignments.index(p_g)]
                     p_g.grant = grant_boolean
                     p_g.inherited = inherited_boolean
+                    p_g.state_grant = state_grant
                                                   
         return permission_assignments
 
@@ -279,7 +361,7 @@ class WorkflowXML(XML):
             self.assignments = assignments
         
         def __str__(self):
-            return "key="+self.key + ", order=" + str(self.order) + ", assign=" + str(self.assignments)
+            return "key="+self.key + ", order=" + str(self.order) + ", assign=" + str(self.assignments) + "\n"
     
         def __repr__(self):
             return self.__str__()
@@ -288,13 +370,23 @@ class WorkflowXML(XML):
     class PermissionGrant:
         """
         Used by get_applicable_state_assignments
+        Stores a single <grant ..> or <deny ...> element
         """
             
-        def __init__(self, state_node = None, permission="zope.View", grant=True, 
+        def __init__(self, state_node = None, state_grant = None, 
+                     permission="zope.View", grant=True, 
                      role="bungeni.Anonymous", inherited = True):
+            
+            """
+            The state node containing the permission grant
+            """
             self.state_node = state_node
             """
-            The permission associated with the grant
+            The grant element for this specific permission grant
+            """
+            self.state_grant = state_grant
+            """
+            The permission name associated with the grant
             """
             self.permission = permission
             """
@@ -334,7 +426,8 @@ class WorkflowXML(XML):
                     ("grant" if self.grant else "deny") + " " +  
                     self.permission + "," + self.role + " " +
                     ("*inherited*" if self.inherited else "*local*") +
-                    (" edited = " + str(self.edited))
+                    (" edited = " + str(self.edited)) +
+                    " " + str(self.state_grant)
                    )
                 
 
