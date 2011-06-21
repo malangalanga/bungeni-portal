@@ -14,6 +14,7 @@ from zope.app.component.hooks import getSite
 from zope.interface.declarations import alsoProvides
 import datetime, traceback, sys
 from sqlalchemy import extract
+from zope.app.publisher.browser import getDefaultViewName
         
 
 class SiteTraverser(ContainerTraverser):
@@ -31,8 +32,10 @@ class SiteTraverser(ContainerTraverser):
             try:
                 object = self.get_query(self.context.type, self.context.id, self.context.date, self.context.lang).one()
                 object.__parent__ = self.context
-                #return getMultiAdapter((object, request), name='feed.akomantoso')
-                return object
+                defaultview = getDefaultViewName(object, self.request)
+                print "Default view:", defaultview
+                return getMultiAdapter((object, request), name=defaultview)
+                #return object
             except:
                 traceback.print_exception(*sys.exc_info())
 
