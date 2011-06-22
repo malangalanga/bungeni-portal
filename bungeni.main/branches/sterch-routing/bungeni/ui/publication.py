@@ -101,7 +101,7 @@ mapping_on_path = (
     ),
     (re.compile(r'^/members(/.*)?$'), interfaces.IMembersSectionLayer),
     (re.compile(r'^/admin(/.*)?$'), interfaces.IAdminSectionLayer),
-    (re.compile(r'^/bungeni(/.*)?$'), interfaces.IBusinessSectionLayer)
+    (re.compile(r'^/bungeni(/.*)?$'), interfaces.IPermalinkSectionLayer)
 )
 mapping_on_path_info = (
     (re.compile(r'^/(\+\+)|(@@)'), interfaces.IResourceNonLayer),

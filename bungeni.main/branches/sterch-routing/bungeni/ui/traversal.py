@@ -1,20 +1,16 @@
-#from zope.component import getUtility
 from zope.container.traversal import ContainerTraverser
-from zope.interface import alsoProvides
-#import re
-from bungeni.core.content import AkomaNtosoSection, Section
-from zope.security.proxy import removeSecurityProxy
+from zope.security.checker import ProxyFactory
+from zope.traversing.browser import AbsoluteURL
 
-from zope.dottedname import resolve
+from bungeni.core.content import AkomaNtosoSection
 from bungeni.alchemist import Session
 from bungeni.models.domain import ParliamentaryItem, Bill
-from zope.component import queryMultiAdapter, getMultiAdapter
-from zope.security.checker import ProxyFactory
-from zope.app.component.hooks import getSite
-from zope.interface.declarations import alsoProvides
-import datetime, traceback, sys
+
 from sqlalchemy import extract
-from zope.app.publisher.browser import getDefaultViewName
+
+import datetime
+import traceback
+import sys
         
 
 class SiteTraverser(ContainerTraverser):
@@ -30,12 +26,11 @@ class SiteTraverser(ContainerTraverser):
         # last section, retrieve object
         if name == "main":
             try:
-                object = self.get_query(self.context.type, self.context.id, self.context.date, self.context.lang).one()
+                object = self.get_query(self.context.type, self.context.id,\
+                                        self.context.date, self.context.lang).one()
                 object.__parent__ = self.context
-                defaultview = getDefaultViewName(object, self.request)
-                print "Default view:", defaultview
-                return getMultiAdapter((object, request), name=defaultview)
-                #return object
+                if object.uri is not None:
+                    return object
             except:
                 traceback.print_exception(*sys.exc_info())
 
@@ -90,3 +85,15 @@ class SiteTraverser(ContainerTraverser):
                                                      filter(extract('year',ParliamentaryItem.status_date)==date.year).\
                                                      filter(extract('month',ParliamentaryItem.status_date)==date.month).\
                                                      filter(extract('day',ParliamentaryItem.status_date)==date.day)
+                                                     
+                                                    
+class Permalink(AbsoluteURL):
+    
+    def __str__(self):
+            from bungeni.alchemist import Session
+            from zope.security.proxy import removeSecurityProxy
+            session = Session()
+            object = session.merge(removeSecurityProxy(self.context))
+            return object.uri
+
+    __call__ = __str__

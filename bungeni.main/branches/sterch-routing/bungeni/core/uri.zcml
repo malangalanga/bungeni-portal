@@ -15,12 +15,5 @@
           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
         handler=".uri.generate_uri"
      />
-     
-    <browser:view
-        for="bungeni.models.interfaces.IBungeniParliamentaryContent"
-        name="show_uri"
-        class=".uri.ShowURI"
-        permission="zope.Public"
-        />
-     
+
 </configure>
