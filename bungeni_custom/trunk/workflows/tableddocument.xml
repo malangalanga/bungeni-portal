@@ -46,6 +46,9 @@
         <deny permission="bungeni.signatory.Add" role="bungeni.Anonymous" />
         <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
         <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <!-- groupitemassignment -->
+        <deny permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
     
     <state id="draft" title="Draft" version="true" like_state="working_draft">
@@ -144,6 +147,9 @@
         <grant permission="zope.View" role="bungeni.MP" />
         <grant permission="zope.View" role="bungeni.Minister" />
         <grant permission="zope.View" role="bungeni.Anonymous" />
+        <!-- groupitemassignment -->
+        <grant permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
     
     <state id="schedule_pending" title="Schedule pending" like_state="admissible" />
@@ -201,6 +207,9 @@
         <!-- tableddocument -->
         <grant permission="zope.View" role="bungeni.Authenticated" />
         <grant permission="zope.View" role="bungeni.Anonymous" />
+        <!-- groupitemassignment -->
+        <deny permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
     
     <state id="withdrawn" title="Withdrawn" like_state="submitted" />

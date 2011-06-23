@@ -46,6 +46,9 @@
         <deny permission="bungeni.signatory.Add" role="bungeni.Anonymous" />
         <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
         <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
+        <!-- groupitemassignment -->
+        <deny permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
     
     <state id="draft" title="Draft" version="true" like_state="working_draft">
@@ -175,13 +178,20 @@
         <!-- agendaitem -->
         <grant permission="zope.View" role="bungeni.Authenticated" />
         <grant permission="zope.View" role="bungeni.Anonymous" />
+        <!-- groupitemassignment -->
+        <grant permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
     
     <state id="schedule_pending" title="Schedule pending" 
         like_state="admissible" 
-    />
+    >
+    </state>>
     
     <state id="debated" title="Debated" like_state="admissible">
+        <!-- groupitemassignment -->
+        <deny permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
         <notification condition="owner_receive_notification"
             subject="Agenda Item was debated: ${item.short_name}"
             from="${site.clerk_email}"
@@ -191,6 +201,9 @@
     </state>
     
     <state id="scheduled" title="Scheduled" like_state="admissible">
+        <!-- groupitemassignment -->
+        <grant permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
         <notification condition="owner_receive_notification"
             subject="Agenda Item scheduled: ${item.short_name}"
             from="${site.clerk_email}"
@@ -210,11 +223,11 @@
         />
     </state>
     
-    <state id="elapsed" title="Elapsed" like_state="admissible" />
+    <state id="elapsed" title="Elapsed" like_state="debated" />
     
-    <state id="dropped" title="Dropped" like_state="admissible"  />
+    <state id="dropped" title="Dropped" like_state="debated"  />
     
-    <state id="withdrawn" title="Withdrawn" like_state="admissible" />
+    <state id="withdrawn" title="Withdrawn" like_state="debated" />
     
     
     <transition title="Create Agenda Item"
