@@ -1,41 +1,73 @@
 <?xml version="1.0"?>
 <workflow title="Event Workflow"
     description="Workflow for attached files"
-    domain="bungeni.ui"
+    domain="bungeni"
     initial_state="">
     
     <!-- global grants -->
-    <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
-    <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
     <grant permission="bungeni.event.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.event.Add" role="bungeni.Speaker" />
+    <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
     <grant permission="bungeni.event.Delete" role="bungeni.Clerk" />
     <grant permission="bungeni.event.Delete" role="bungeni.Speaker" />
     
     
-    <state id="public" title="Public">
-        <!-- event -->
-        <grant permission="zope.View" role="bungeni.Clerk" />
-        <grant permission="zope.View" role="bungeni.Speaker" />
-        <grant permission="zope.View" role="bungeni.Authenticated" /> 
+    <state id="private" title="Private">
+        <grant permission="zope.View" role="bungeni.Owner"/>
+        <deny permission="zope.View" role="bungeni.Clerk" />
+        <deny permission="zope.View" role="bungeni.Speaker" />
+        <deny permission="zope.View" role="bungeni.Authenticated" /> 
+        <deny permission="zope.View" role="bungeni.Signatory" /> 
+        <deny permission="zope.View" role="bungeni.Anonymous" />
+        <deny permission="zope.View" role="bungeni.MP" />
+        <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
+    </state>
+    <state id="internal" title="Published internal" like_state="private">
+        <grant permission="zope.View" role="bungeni.Clerk"/>
+        <grant permission="zope.View" role="bungeni.Speaker"/>
+        <grant permission="zope.View" role="bungeni.Authenticated"/>
+        <grant permission="zope.View" role="bungeni.MP"/>
+        <grant permission="zope.View" role="bungeni.Signatory"/>
+        <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <grant permission="bungeni.event.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Delete" role="bungeni.Speaker" />
+    </state>
+    <state id="public" title="Public event" like_state="internal">
         <grant permission="zope.View" role="bungeni.Anonymous" />
     </state>
 
-    <state id="inactive" title="Inactive event" like_state="public" >
-        <!-- event -->
-        <deny permission="zope.View" role="bungeni.Authenticated" /> 
-        <deny permission="zope.View" role="bungeni.Anonymous" /> 
+    <state id="inactive" title="Inactive event" like_state="internal">
+        <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
     </state>
-    
     
     <transition title="Create"
         source=""
-        destination="public"
+        destination="private"
         trigger="automatic"
     />
     
+    <transition title="Publish to Public"
+        source="private internal"
+        destination="public"
+        trigger="manual"
+        roles="bungeni.Clerk bungeni.Speaker"
+    />
+
+    <transition title="Publish Internal"
+        source="private public"
+        destination="internal"
+        trigger="manual"
+        roles="bungeni.Clerk bungeni.Speaker"
+    />
+    
     <transition title="Deactivate"
-        source="public"
+        source="public internal private"
         destination="inactive"
         trigger="manual"
         roles="bungeni.Clerk bungeni.Speaker"
