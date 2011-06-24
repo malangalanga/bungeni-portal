@@ -1,1 +1,3 @@
-Workspace config goes here
+Workspace configuration goes here.
+
+
