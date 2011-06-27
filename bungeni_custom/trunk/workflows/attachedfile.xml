@@ -1,17 +1,29 @@
 <?xml version="1.0"?>
 <workflow title="Attached File Workflow"
     description="Workflow for attached files"
-    domain="bungeni.ui"
+    domain="bungeni"
     initial_state="">
     
     <!-- global grants -->
     <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
     
-    
-    <state id="public" title="Public">
-        <!-- attachedfile -->
+    <state id="private" title="Private">
+        <grant permission="zope.View" role="bungeni.Owner"/>
+        <deny permission="zope.View" role="bungeni.Clerk" />
+        <deny permission="zope.View" role="bungeni.Speaker" />
+        <deny permission="zope.View" role="bungeni.Authenticated" /> 
+        <deny permission="zope.View" role="bungeni.Signatory" /> 
+        <deny permission="zope.View" role="bungeni.Anonymous" />
+    </state>
+
+    <state id="internal" title="Published Internal" like_state="private">
         <grant permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Speaker" />
+        <grant permission="zope.View" role="bungeni.Signatory" /> 
+    </state>
+    
+    <state id="public" title="Public" like_state="internal">
+        <!-- attachedfile -->
         <grant permission="zope.View" role="bungeni.Authenticated" /> 
         <grant permission="zope.View" role="bungeni.Anonymous" />
     </state>
@@ -19,18 +31,40 @@
     <state id="inactive" like_state="public" title="Inactive file obsolete">
         <!-- attachedfile -->
         <deny permission="zope.View" role="bungeni.Authenticated" /> 
+        <deny permission="zope.View" role="bungeni.Signatory" /> 
         <deny permission="zope.View" role="bungeni.Anonymous" /> 
     </state>
     
     
     <transition title="Create"
         source=""
-        destination="public"
+        destination="private"
         trigger="automatic"
     />
     
+    <transition title="Publish Internal"
+        source="private"
+        destination="internal"
+        trigger="manual"
+        roles="bungeni.Owner"
+    />
+    
+    <transition title="Publish to Public"
+        source="private internal"
+        destination="public"
+        trigger="manual"
+        roles="bungeni.Owner"
+    />
+    
+    <transition title="Drop"
+        source="private"
+        destination="inactive"
+        trigger="manual"
+        roles="bungeni.Owner"
+    />
+    
     <transition title="Deactivate"
-        source="public"
+        source="public internal"
         destination="inactive"
         trigger="manual"
         roles="bungeni.Clerk bungeni.Speaker"
