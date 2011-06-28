@@ -427,7 +427,7 @@ input.inputLabelActive {
     border: 0 none;
 }
 .contentActions a {
-    color: #000;
+    color: #000 !important;
     text-decoration: none;
 }
 .contentActions li {
@@ -471,6 +471,15 @@ dl#context_actions.actionMenu .actionMenuContent ul {
 }
 dl#context_actions.actionMenu .actionMenuContent ul li {
     border-bottom: 0 none;
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a {
+    color: #000 !important;
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a.selected, 
+dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
+    border-right: 1px solid #090;
+    background-color: #fb6400 !important;
+    color: white !important;
 }
 /*
  * portal-globalnav
@@ -1427,8 +1436,9 @@ div.dhx_cal_navline div.active {
 }
 .template-workspace dl#context_actions.actionMenu .actionMenuContent ul li a.selected,
 .template-workspace dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
-    border-right: 1px solid #aaf;
-    background-color: #888888 !important;
+    border-right: 1px solid #090;
+    background-color: #fb6400 !important;
+    color: white !important;
 }
 .template-workspace div.contentActions dt.label-state-first_reading_pending a,
 .template-workspace div.contentActions dt.label-state-active a,
@@ -1436,10 +1446,10 @@ div.dhx_cal_navline div.active {
 .template-workspace div.contentActions dt.label-state-public a {
     color:#000 !important;
 }
-.template-workspace div.contentActions dd.actionMenuContent ul li > a span {
+.template-workspace div.contentActions ul#contentActionMenus li.context_translate dl.actionMenu dd.actionMenuContent ul li a span {
     color:#fff !important;
 }
-.template-workspace div.contentActions dd.actionMenuContent ul li > a:hover span {
+.template-workspace div.contentActions ul#contentActionMenus li.context_translate dl.actionMenu dd.actionMenuContent ul li a:hover span {
     color:#000 !important;
 }
 /*
@@ -1607,10 +1617,17 @@ div.dhx_cal_navline div.active {
 .template-workspace.section-bungeni-workspace table.listing th,
 .template-workspace.section-bungeni-workspace table.listingdescription th,
 .template-workspace.section-bungeni-workspace .stx table th,
-.template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th {
-    background:#21a1ba url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x !important;
+.template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th,
+.section-bungeni-workspace tr.yui-dt-first th {
+    background:#21a1ba !important;
     text-shadow: 0 0 0  #fff;
     color: #000;
+}
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a.selected, 
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
+    border-right: 1px solid #090;
+    background-color: #e4702d !important;
+    color: #fff !important;
 }
 .template-workspace.section-bungeni-admin ul.formTabs li.formTab a:hover,
 .template-workspace.section-bungeni-admin ul.formTabs li.formTab a:active,

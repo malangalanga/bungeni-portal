@@ -82,7 +82,7 @@
     text-align: left;
 }
 #portal-breadcrumbs a {
-    color:#6e6e6e;
+    color:#333333;
     font-weight:bold;
 }
 #portal-breadcrumbs a:hover {
@@ -113,7 +113,7 @@ div.main-column h1 {
     font-size: 200%;
     font-weight: bold;
     line-height: 20px;
-    color: #059f01 !important;
+    color: #090 !important;
     text-shadow: 0 0 1px #fff;
     text-align:center;
 }
@@ -124,16 +124,16 @@ div.main-column h1.title {
     line-height: 20px;
     text-shadow: 0 0 1px #fff;
     text-align: center;
-    color:#059f01 !important;
+    color:#090 !important;
 }
 div.main-column h1.reportmaintitle,
 div.main-column h1.reportdoctype {
     font-size: 180%;
-    color:#059f01 !important;
+    color:#090 !important;
 }
 div.main-column h2.reportdate {
     font-size: 180%;
-    color:#059f01 !important;
+    color:#090 !important;
     font-weight: bold !important;
 }
 
@@ -149,11 +149,11 @@ div.main-column h1.reportheading {
 .documentContent div h2:first-child {
     font-size:1.4em;
     font-weight:normal !important;
-    color:#059f01 !important;
+    color:#090 !important;
 }
 div.main-column h2.reporttitle {
     text-align:left;
-    color:#059f01 !important;
+    color:#090 !important;
     font-size:1.1em;    
     font-weight:normal !important;
 }
@@ -161,7 +161,7 @@ div.main-column h2 {
     text-shadow: 0px 0px 1px #fff;
     font-size: 120%;
     font-weight: normal !important;
-    color: #059f01 !important;
+    color: #090 !important;
     text-align: center;
 }
 div.main-column h2 span {
@@ -195,10 +195,10 @@ div.main-column h3 {
     border-color: #aaf;
 }
 .section-bungeni-workspace #portal-column-one {
-    border-color: #000080;  
+    border-color: #fe0000;  
 }
 .section-bungeni-archive #portal-column-one {
-    border-color: #000080;
+    border-color: #fe0000;
 }
 
 /* footer  */
@@ -232,7 +232,7 @@ input.inputLabelActive {
 }
 #whats-on-overview h1 a {
     text-decoration: none;
-    color: #059f01 !important;
+    color: #090 !important;
 }
 #whats-on-overview p {
     color: #222;
@@ -249,8 +249,8 @@ input.inputLabelActive {
 }
 #portal-column-content #whats-on-overview .whats-on-viewlet dd {
     border: 0 none;
-    border-top: 4px solid #000080;
-    border-bottom: 1px solid #000080;
+    border-top: 4px solid #fe0000;
+    border-bottom: 1px solid #fe0000;
 }
 #portal-column-content #whats-on-overview .whats-on-viewlet dd ul {
     background: #fff;
@@ -320,7 +320,7 @@ input.inputLabelActive {
  * Portlets
  */
 .portlet, .portletHeader, .portletFooter { border: 0 none; } 
-.portletItem { border: 1px solid #000080; border-top: 0 none; }
+.portletItem { border: 1px solid #fe0000; border-top: 0 none; }
 #portal-column-one .portletHeader,
 #portal-column-content .portletHeader,
 #portal-column-two .portletHeader,
@@ -344,21 +344,21 @@ input.inputLabelActive {
 #portal-column-one .portletFooter,
 #portal-column-content .portletFooter,
 #whats-on-overview .portletFooter {
-    border: 1px solid #000080;
+    border: 1px solid #fe0000;
 }
 /* hides the portlet header. */
 #portal-column-one .portlet .portletItem.even,
 #portal-column-one .portlet .portletItem {
     background: #fff;
-    border: 1px solid #000080;
+    border: 1px solid #fe0000;
 }
 #portal-column-one .portlet .portletItem a {
     background: #fff;
     border: 0 none;
 }
 #portal-column-one .portlet .portletItem a.navTreeCurrentItem {
-    background: #000080;
-    border-bottom-color: #000080 !important;
+    background: #fe0000;
+    border-bottom-color: #fe0000 !important;
     border-top: 0 none !important;
     line-height: 20px;
 }
@@ -394,12 +394,12 @@ input.inputLabelActive {
 }
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul a:hover,
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul a.navTreeCurrentItem {
-    background: #000080 !important;
+    background: #fe0000 !important;
     
 }
 #portal-column-one .portlet .portletItem ul li.navTreeCurrentNode ul a:hover,
 #portal-column-one .portlet .portletItem ul li.navTreeCurrentNode a.navTreeCurrentItem {
-    background: #000080 !important;
+    background: #fe0000 !important;
     color:#fff !important;
 }
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul ul {
@@ -411,12 +411,12 @@ input.inputLabelActive {
     font-weight: normal;
 }
 #whats-on-overview .portlet dd {
-    border: 1px solid #000080;
+    border: 1px solid #fe0000;
     border-top: 0 none;
 }
 /* portal-column-two portlets */
 #portal-column-two .portlet dd {
-    border: 1px solid #000080;
+    border: 1px solid #fe0000;
     border-top: 0 none;
 }
 /*
@@ -437,10 +437,10 @@ input.inputLabelActive {
     border: 0 none;
 }
 .actionMenu .actionMenuContent ul {
-    border: 1px solid #000080;
+    border: 1px solid #fe0000;
     border-bottom: 0 none;
     border-top: 0 none;
-    background:#000080;
+    background:#fe0000;
 }
 .actionMenu .actionMenuContent ul li {
     border: 0 none;
@@ -478,7 +478,7 @@ dl#context_actions.actionMenu .actionMenuContent ul li a {
 dl#context_actions.actionMenu .actionMenuContent ul li a.selected, 
 dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
     border-right: 1px solid #090;
-    background-color: #059f01 !important;
+    background-color: #009901 !important;
     color: white !important;
 }
 /*
@@ -498,20 +498,25 @@ div#portal-globalnav ul.level0 li {
 div#portal-globalnav ul.level0 li a { 
     text-shadow: 0 0 0 #fff;
     color: #fff;
-    background:#035005;
-    border: 1px solid #035005;
-    border-bottom: 1px solid #035005;
+    background:#000;
+    border: 1px solid #000;
+    border-bottom: 1px solid #000;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     font-family: tahoma,verdana,sans-serif;
     font-size: 12px;
 }
-div#portal-globalnav ul.level0 li.selected a,
-div#portal-globalnav ul.level0 li a:hover {
+div#portal-globalnav ul.level0 li.selected a{
     font-weight: normal;
     color: #fff;
-    border: 1px solid #000080;
-    background:#000080;
+    border: 1px solid #fe0000;
+    background:#fe0000;
+}
+div#portal-globalnav ul.level0 li a:hover {
+    font-weight: normal;
+    color: #000;
+    border: 1px solid #e7e7e7;
+    background:#e7e7e7;
 }
 /*
  * Notes:
@@ -532,7 +537,7 @@ div#portal-globalnav ul.level0 li a:hover {
 }
 div#portal-globalnav ul.level0 ul.level1 {
     border-top: 0 none;
-    background: #000080;
+    background: #fe0000;
 }
 div#portal-globalnav ul.level0 ul.level1 a {
     background: transparent;
@@ -552,7 +557,7 @@ div#portal-globalnav ul.level0 ul.level1 li.selected a {
     color: #d50005 !important;
 }
 .template-portal div#portal-globalnav ul.level0 ul.level1 li.selected a {
-	color:#fffa38 !important;
+	color:#000 !important;
 }
 /*
  * Notes:
@@ -656,7 +661,7 @@ table.listingdescription tr:hover,
 .stx table tr:hover,
 .yui-skin-sam .yui-dt table tr.yui-dt-odd:hover,
 .yui-skin-sam .yui-dt table tr:hover {
-    background:#ffffa8;
+    background:#ffe685;
 }
 .yui-skin-sam .yui-dt table tr.yui-dt-odd {
     background: #e6e6e6;
@@ -668,7 +673,7 @@ table.listing th,
 table.listingdescription th,
 .stx table th,
 .yui-skin-sam .yui-dt-first th {
-    background:#000080 !important;
+    background:#fe0000 !important;
     border: 0 none;
     border-left: 1px solid #bbf;
     border-right: 1px solid #88f;
@@ -677,7 +682,7 @@ table.listingdescription th,
     color: #fff !important;
 }
 .dhx_now .dhx_month_head {
-    background-color:#000080 !important;
+    background-color:#fe0000 !important;
     color:#f1f1f1 !important;
 }
 .dhx_now .dhx_month_body {
@@ -710,7 +715,7 @@ table.listing td a,
 table.listingdescription td a,
 .stx table th a,
 .yui-skin-sam td a {
-    color: #059f01 !important;
+    color: #090 !important;
     border: 0 none;
 }
 table.listing td,
@@ -763,18 +768,18 @@ li.formTab a.selected {
     border-top-color: #000000;
     border-right: 1px solid #000000;
     border-left: 1px solid #000000;
-    border-bottom: 2px solid #000080;
+    border-bottom: 2px solid #fe0000;
     text-decoration: none;
-    background:#000080;
+    background:#fe0000;
 }
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:hover,
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:active,
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a.selected {
     text-align: left;
     text-decoration: none;
-    background: #000080;
+    background: #fe0000;
     border: 1px solid #aaa;
-    border-bottom-color: #000080;
+    border-bottom-color: #fe0000;
     border-top-color: #999;
     color: #222;
 }
@@ -822,10 +827,10 @@ dl.portalMessage dd {
     text-shadow: 0.1em #f79f10;
 }
 #display_form_spacer {
-    background: #000080;
+    background: #fe0000;
 }
 .template-portal dd#fieldset-written-question-response div.documentDescription {
-    background:#000080 !important;
+    background:#fe0000 !important;
     color:#fff;
     font-weight:normal;
 }
@@ -979,7 +984,7 @@ div.main-column #collage h2 {
     text-shadow:  0 0 0 #fff;
     font-size: 120%;
     font-weight: bold !important;
-    color: #059f01 !important;
+    color: #090 !important;
 }
 #collage .three-columns-equal .block_1 ul {
     list-style-type:none; 
@@ -1057,24 +1062,25 @@ div.main-column #collage h2 {
 
 /*********************************************************************************************************/
 .template-portal {
-    background: #eeeeee !important;
+    background: #535961 url(../images/body_bg.png) !important;
 }
 .template-portal #header-wrapper {
-    background: #eeeeee;
+    background: #000;
     border-bottom: 0px solid #fff;
 }
 
 .template-portal #header-in-left {
-    background: #eeeeee;
+    border-top:27px solid #000;
+    background: #000 url(../images/nicebg-left.jpg) repeat-x bottom center;
 }
 
 .template-portal #header-in-right {
-    background: #eeeeee;
+    border-top:27px solid #000;
+    background: #000 url(../images/nicebg-right.jpg) repeat-x bottom center;
 }
 
 .template-portal #top-layer div {
-    border-top:3px solid #eeeeee;
-    background:#000080;
+    background:#000;
 }
 
 .template-portal #visual-table-wrapper {
@@ -1106,7 +1112,7 @@ div.main-column #collage h2 {
     color: #000000;
 }
 .template-portal #portal-breadcrumbs {
-    border-bottom:1px solid #000080;
+    border-bottom:1px solid #fe0000;
 }
 /*
  * main-columns
@@ -1161,8 +1167,8 @@ div.main-column #collage h2 {
     border-left: 0 none;
     border-top: 0 none;
     border-right: 1px solid #aaa;
-    border-bottom:1px solid #000080;
-    background:#000080 !important;
+    border-bottom:1px solid #fe0000;
+    background:#fe0000 !important;
 }
 /*
  * formTabs
@@ -1296,9 +1302,9 @@ div.main-column #collage h2 {
 .template-portal .dhx_cal_container,
 .template-portal .dhx_scale_bar,
 .template-portal .dhx_scale_hour {
-    background: #5454ef;
-    border-color: #000080;
-    color:#fff !important;
+    background: #fe8c8c;
+    border-color: #fe0000;
+    color:#000 !important;
 }
 .dhx_scale_holder {
     border-right: 1px dotted #000 !important;
@@ -1307,7 +1313,7 @@ div.dhx_cal_navline {
     color:#000 !important;
 }
 div.dhx_cal_navline div.active {
-    background:#000080 !important;
+    background:#fe0000 !important;
     color:#fff !important;
 }
 .template-workspace.section-bungeni-archive .dhx_cal_header,
@@ -1318,7 +1324,7 @@ div.dhx_cal_navline div.active {
 .template-workspace.section-bungeni-members .dhx_cal_data,
 .template-portal .dhx_cal_header,
 .template-portal .dhx_cal_data{
-    border-color: #000080;
+    border-color: #fe0000;
 }
 .template-workspace.section-bungeni-archive .dhx_cal_tab,
 .template-workspace.section-bungeni-business .dhx_cal_tab,
@@ -1403,13 +1409,13 @@ div.dhx_cal_navline div.active {
  * DocumentActions & contentActions
  */
 .template-workspace.section-bungeni-admin .contentActions {
-    border: 1px solid #000080 !important;
+    border: 1px solid #fe0000 !important;
     background: #888888 url(wrong/static/images/w-bg-admin.png) repeat-x top center;
 } 
 .template-workspace.section-bungeni-archive .contentActions,
 .template-workspace.section-bungeni-business .contentActions,
 .template-workspace.section-bungeni-members .contentActions {
-    border: 1px solid #000080 !important;
+    border: 1px solid #fe0000 !important;
     background: #fff;
 }
 .section-bungeni-workspace .actionMenu .actionMenuContent ul,
@@ -1419,11 +1425,14 @@ div.dhx_cal_navline div.active {
     border-bottom: 0 none;
     border-top: 0 none;
 }
+.template-workspace dl#context_actions.actionMenu .actionMenuContent ul li a {
+    color: #000 !important;
+}
 .template-workspace dl#context_actions.actionMenu .actionMenuContent ul li a.selected,
 .template-workspace dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
     border-right: 1px solid #090;
-    background-color: #059f01 !important;
-    color: white !important;
+    background-color: #009901 !important;
+    color: #fff !important;
 }
 .template-workspace div.contentActions dt.label-state-first_reading_pending a,
 .template-workspace div.contentActions dt.label-state-active a,
@@ -1449,18 +1458,20 @@ div.dhx_cal_navline div.active {
 .template-workspace div#portal-globalnav ul.level0 li.selected a {
     border-bottom-color: #d8d8d9;
     border-bottom-color: #222;
-    background:#000080;
+    background:#fe0000;
 }
 .template-workspace div#portal-globalnav ul.level0 li.selected a,
 .template-workspace div#portal-globalnav ul.level0 li a:hover {
-    border-top: 1px solid #000080;
-    border-bottom: 1px solid #000080;
-    background:#000080;
+    border-top: 1px solid #fe0000;
+    border-bottom: 1px solid #fe0000;
+    border-left:1px solid #fe0000;
+    border-right:1px solid #fe0000;
+    background:#fe0000;
 }
 .template-workspace.section-bungeni-business div#portal-globalnav ul.level0 li#portaltab-business-whats-on a {
-    border-top: 1px solid #000080;
-    border-bottom: 1px solid #000080;
-    background:#000080;
+    border-top: 1px solid #fe0000;
+    border-bottom: 1px solid #fe0000;
+    background:#fe0000;
 }
 .template-workspace div#portal-globalnav ul.level0 li#portaltab-:first-child a,
 .template-workspace div#portal-globalnav ul.level0 li#portaltab-:first-child a:hover {
@@ -1494,7 +1505,7 @@ div.dhx_cal_navline div.active {
     border-right: 0 !important;
     border-top: 0 none !important;
     border-bottom:1px solid #d8d8d9;
-    background:#000080 !important;
+    background:#fe0000 !important;
     display: block;
 }
 .section-bungeni-workspace div#portal-globalnav ul.level0 ul.level1 {
@@ -1514,7 +1525,7 @@ div.dhx_cal_navline div.active {
     display: block;
 }
 .template-workspace div#portal-globalnav ul.level0 ul.level1 li.selected a {
-    color: #ffc61e !important;
+    color: #000 !important;
 }
 .section-bungeni-workspace div#portal-globalnav ul.level0 ul.level1 li.selected a {
     color:#3f3f3f !important;
@@ -1544,8 +1555,8 @@ div.dhx_cal_navline div.active {
     border-left: 0 none;
     border-top: 0 none;
     border-right: 1px solid #aaa;
-    border-bottom:1px solid #000080;
-    background:#000080 !important;
+    border-bottom:1px solid #fe0000;
+    background:#fe0000 !important;
 }
 /*
  * formTabs
@@ -1581,7 +1592,7 @@ div.dhx_cal_navline div.active {
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a.selected {
     text-align: left;
     text-decoration: none;
-    background: #000080;
+    background: #fe0000;
     border: 1px solid #aaa;
     border-bottom-color: #bbb;
     border-top-color: #999;
@@ -1629,14 +1640,14 @@ div.dhx_cal_navline div.active {
     color: #333;
 }
 .template-workspace dd#fieldset-written-question-response div.documentDescription {
-    background:#000080 !important;
+    background:#fe0000 !important;
     color:#fff !important;
 }
 .template-workspace div.documentContent p.documentDescription {
     margin-top:15px !important;
 }
 .template-workspace.section-bungeni-admin .formPanel #display_form_spacer {
-    background:#000080;
+    background:#fe0000;
 }
 .template-workspace.section-bungeni-workspace .formPanel #display_form_spacer {
     background: url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x;
@@ -1672,7 +1683,7 @@ div.dhx_cal_navline div.active {
 .template-workspace table.listing td a,
 .template-workspace table.listing td a:visited,
 .template-workspace table.listing td a:active {
-    color:#059f01 !important;
+    color:#090 !important;
 } 
 .template-workspace.section-bungeni-workspace table.listing td a,
 .template-workspace.section-bungeni-workspace table.listing td a:visited,
