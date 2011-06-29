@@ -3,37 +3,37 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: Wed May 25 18:04:25 2011\n"
-"PO-Revision-Date: 2010-07-24 13:11+0300\n"
-"Last-Translator: Administrator <admin@apkn.org>\n"
+"PO-Revision-Date: 2011-06-29 15:13+0300\n"
+"Last-Translator: UNDESA <bungeni.translator@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.4\n"
 "Domain: DOMAIN\n"
-"Language: pt\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"X-Generator: Pootle 2.0.4\n"
 
 #: src/bungeni.main/bungeni/core/app.py:104
 #: src/bungeni.main/bungeni/ui/menu.zcml:1236
 msgid "Workspace"
-msgstr "workspace"
+msgstr "área de trabalho"
 
 #: src/bungeni.main/bungeni/core/app.py:105
 #: src/bungeni.main/bungeni/core/app.py:162
 #: src/bungeni.main/bungeni/ui/workspace.py:266
 msgid "Current parliamentary activity"
-msgstr "atividade parlamentar atual"
+msgstr "actividade parlamentar actual"
 
 #: src/bungeni.main/bungeni/core/app.py:113
 #: src/bungeni.main/bungeni/core/app.py:114
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3057
 #: src/bungeni.main/bungeni/ui/viewlets/schedule.py:42
 msgid "Scheduling"
-msgstr "programação"
+msgstr "agendamento"
 
 #: src/bungeni.main/bungeni/core/app.py:120
 #: src/bungeni.main/bungeni/core/app.py:169
@@ -269,7 +269,7 @@ msgstr "gerir glossários"
 
 #: src/bungeni.main/bungeni/core/audit.py:247
 msgid "Audit error. No user logged in."
-msgstr ""
+msgstr "erro de auditoria - nenhum user está ligado"
 
 #: src/bungeni.main/bungeni/core/dc.py:104
 #: src/bungeni.main/bungeni/ui/rss.py:396
@@ -755,9 +755,16 @@ msgstr "submeter"
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:314
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:358
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:376
-#, fuzzy
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:127
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:317
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:415
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:72
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:120
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:135
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:179
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:194
 msgid "Submit to Signatories"
-msgstr "Apresentado ao Ministério"
+msgstr "submeter aos signatários"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:498
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:121
@@ -903,14 +910,16 @@ msgid "Require Clarification to Receive"
 msgstr "requer esclarecimentos para receber"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:641
-#, fuzzy
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:584
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:583
 msgid "consent"
-msgstr "conteúdo"
+msgstr "consentir"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:644
-#, fuzzy
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:587
+#: src/bungeni.main/bungeni/core/workflows/permissions.zcml:586
 msgid "reject"
-msgstr "repetir"
+msgstr "rejeitar"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:647
 #, fuzzy
@@ -1274,9 +1283,11 @@ msgstr "privado"
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:175
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:272
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:326
-#, fuzzy
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:23
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:91
+#: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:145
 msgid "Submitted to Signatories"
-msgstr "Apresentado ao Ministério"
+msgstr "submetido aos signatários"
 
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:27
 msgid "First Report Reading Adjourned"
@@ -1544,27 +1555,27 @@ msgstr "max perguntas por sessão por mp"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:285
 msgid "Minimum consented signatories for a bill"
-msgstr ""
+msgstr "número mínimo de signatários permitido para uma iniciativa"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:288
 msgid "Maximum consented signatories for a bill"
-msgstr ""
+msgstr "número máximo de signatários permitido para uma iniciativa"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:291
 msgid "Minimum consented signatories for a question"
-msgstr ""
+msgstr "número mínimo de signatários permitido para uma pergunta"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:294
 msgid "Maximum consented signatories for a question"
-msgstr ""
+msgstr "número máximo de signatários permitido para uma pergunta"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:297
 msgid "Minimum consented signatories for a motion"
-msgstr ""
+msgstr "número mínimo de signatários permitido para um requerimento"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:300
 msgid "Maximum consented signatories for a motion"
-msgstr ""
+msgstr "número máximo de signatários permitido para um requerimento"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:303
 msgid "Minimum consented signatories for an agenda item"
@@ -1980,28 +1991,24 @@ msgid "View comments"
 msgstr "ver comentários"
 
 #: src/bungeni.main/bungeni/models/permissions.zcml:253
-#, fuzzy
 msgid "Add Signatory"
-msgstr "adicionar co-signatário ..."
+msgstr "adicionar signatário"
 
 #: src/bungeni.main/bungeni/models/permissions.zcml:254
 msgid "Consent or Reject"
-msgstr ""
+msgstr "consentir ou rejeitar"
 
 #: src/bungeni.main/bungeni/models/permissions.zcml:255
-#, fuzzy
 msgid "Delete Signatory"
-msgstr "co-signatário"
+msgstr "apagar signatário"
 
 #: src/bungeni.main/bungeni/models/permissions.zcml:256
-#, fuzzy
 msgid "Edit Signatory"
-msgstr "co-signatário"
+msgstr "editar signatário"
 
 #: src/bungeni.main/bungeni/models/permissions.zcml:257
-#, fuzzy
 msgid "View Signatory"
-msgstr "co-signatário"
+msgstr "visualizar signatário"
 
 #: src/bungeni.main/bungeni/models/permissions.zcml:26
 msgid "Delete an item from a schedule"
@@ -2251,9 +2258,8 @@ msgid "Bungeni Visitor"
 msgstr "visitante bungeni"
 
 #: src/bungeni.main/bungeni/models/roles.zcml:21
-#, fuzzy
 msgid "Document Signatory"
-msgstr "fonte documental"
+msgstr "signatário do documento"
 
 #: src/bungeni.main/bungeni/models/roles.zcml:22
 #, fuzzy
@@ -2496,14 +2502,12 @@ msgstr "data da dissolução"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1206
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1212
-#, fuzzy
 msgid "Committee type status"
-msgstr "comissões"
+msgstr "estado do tipo de comissão"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1207
-#, fuzzy
 msgid "Committee type statuses"
-msgstr "comissões"
+msgstr "estados do tipo de comissões"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1220
 msgid "Committee type"
@@ -2514,9 +2518,8 @@ msgid "Committee types"
 msgstr "tipos de comissões"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1226
-#, fuzzy
 msgid "Committee Type"
-msgstr "Comissão"
+msgstr "tipo de comissão"
 
 # A tradução deste termo depende do objecto a que se refere.
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1234
@@ -2642,13 +2645,12 @@ msgstr "introduzir um número de fax por linha"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1531
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1532
-#, fuzzy
 msgid "Title types"
-msgstr "Tipo de Projeto de lei"
+msgstr "tipos de título"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1541
 msgid "Role associated with title"
-msgstr ""
+msgstr "papel associado ao título"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1543
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1691
@@ -2657,27 +2659,27 @@ msgstr "papel"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1544
 msgid "Role associated with this title"
-msgstr ""
+msgstr "papel associado a este título"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1551
-#, fuzzy
 msgid "User Unique"
-msgstr "username"
+msgstr "único utilizador"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1552
 msgid "Whether or not only one person at a time is allowed to have this title"
-msgstr ""
+msgstr "se este título só pode ser utilizado por uma pessoa de cada vez ou não"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1558
-#, fuzzy
 msgid "Sort Order"
-msgstr "nome abreviado"
+msgstr "reordenar"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1559
 msgid ""
 "The order in which members with this title will appear relative to other "
 "members"
 msgstr ""
+"ordem pela qual os deputados com este título serão organizados em relação a "
+"outros deputados"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1567
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1571
@@ -3164,15 +3166,13 @@ msgstr "tipo de comparecimento"
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2824
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2840
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2846
-#, fuzzy
 msgid "Signatory"
-msgstr "co-signatário"
+msgstr "signatário"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2825
 #: src/bungeni.main/bungeni/ui/reports.py:79
-#, fuzzy
 msgid "Signatories"
-msgstr "cosignatories"
+msgstr "signatários"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2830
 #: src/bungeni.main/bungeni/ui/forms/common.py:222
@@ -3183,19 +3183,16 @@ msgid "View"
 msgstr "ver"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2832
-#, fuzzy
 msgid "review"
-msgstr "visualização"
+msgstr "rever"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2855
-#, fuzzy
 msgid "no party"
-msgstr "partido adicionar"
+msgstr "nenhum partido"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2863
-#, fuzzy
 msgid "Signature status"
-msgstr "itens da agenda"
+msgstr "estado do signatário"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2876
 msgid "Constituencies"
@@ -3867,7 +3864,7 @@ msgstr "escritório"
 
 #: src/bungeni.main/bungeni/ui/forms/templates/rss_link.pt:12
 msgid "Unsubscribe"
-msgstr ""
+msgstr "retirar subscrição"
 
 #: src/bungeni.main/bungeni/ui/forms/templates/rss_link.pt:4
 msgid "Subscribe"
@@ -3963,9 +3960,8 @@ msgstr ""
 "existente"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:579
-#, fuzzy
 msgid "A title with %s sub role already exists"
-msgstr "uma pessoa com o %s título já existe"
+msgstr "já existe uma pessoa com o título %s"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:59
 msgid "End date must be equal to start date"
@@ -4054,9 +4050,8 @@ msgid "Add committee type..."
 msgstr "adicionar tipo de comissão"
 
 #: src/bungeni.main/bungeni/ui/menu-vocabularies.zcml:57
-#, fuzzy
 msgid "Add committee type status..."
-msgstr "adicionar comissão "
+msgstr "adicionar estado do tipo de comissão "
 
 #: src/bungeni.main/bungeni/ui/menu-vocabularies.zcml:64
 msgid "Add postal type..."
@@ -4170,7 +4165,7 @@ msgstr "anexos"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:1335
 msgid "review signature"
-msgstr ""
+msgstr "rever assinatura"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:1343
 msgid "Audit Log"
@@ -4369,9 +4364,8 @@ msgstr "\"adicionar ...\" menu - para o movimento"
 #: src/bungeni.main/bungeni/ui/menu.zcml:575
 #: src/bungeni.main/bungeni/ui/menu.zcml:624
 #: src/bungeni.main/bungeni/ui/menu.zcml:940
-#, fuzzy
 msgid "Add signatory..."
-msgstr "adicionar co-signatário ..."
+msgstr "adicionar signatário"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:442
 #: src/bungeni.main/bungeni/ui/menu.zcml:513
@@ -4425,9 +4419,8 @@ msgid "Actions for Calendar Sittings"
 msgstr "ações para as sessões de calendário"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:547
-#, fuzzy
 msgid "Add Title Type..."
-msgstr "adicionar arquivo ..."
+msgstr "adicionar tipo de título"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:555
 msgid "The 'Add...' menu - for question"
@@ -4464,9 +4457,8 @@ msgid "Add Office Address..."
 msgstr "adicionar morada do Gabinete"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:692
-#, fuzzy
 msgid "Add Title..."
-msgstr "adicionar um título ..."
+msgstr "adicionar título"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:70
 msgid "The 'Calendar' menu - allows user to select a scheduling context"
