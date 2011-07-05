@@ -38,7 +38,7 @@
                         padding: 0 0.5em;
                         text-align: left;
                     }
-                    tr.yellow td {
+                    tr.yellow td th {
                         border-top: 1px solid #FB7A31;
                         border-bottom: 1px solid #FB7A31;
                         background: #FFC;
@@ -163,17 +163,21 @@
                     <xsl:call-template name="diagram"/>
                 </div>
                 <table border="1">
+                    <thead>                    
                     <tr class="yellow">
-                        <td>Transition Name</td>
-                        <td>Source</td>
-                        <td>Destination</td>
-                        <td>Roles</td>
-                        <td>Action/Condition</td>                        
-                        <td>Confirm?</td>
+                        <th>Transition Name</th>
+                        <th>Source</th>
+                        <th>Destination</th>
+                        <th>Roles</th>
+                        <th>Action/Condition</th>                        
+                        <th>Confirm?</th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <xsl:for-each select="./transition">
                         <xsl:call-template name="match-transition"/>
                     </xsl:for-each>
+                    </tbody>
                 </table>
                 <a href="#table-of-contents">[Document Index]</a>
                 
@@ -200,14 +204,18 @@
                 <h4>State Grants</h4>
                 
                 <table border="1">
+                    <thead>
                     <tr class="yellow">
-                        <td>State Name</td>
-                        <td>Allow</td>
-                        <td>Deny</td>
+                        <th>State Name</th>
+                        <th>Allow</th>
+                        <th>Deny</th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <xsl:for-each select="./state">
                         <xsl:call-template name="match-state"/>
                     </xsl:for-each>
+                    </tbody>
                 </table>
                 <a href="#table-of-contents">[Document Index]</a>
                 
