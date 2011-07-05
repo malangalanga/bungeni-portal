@@ -867,5 +867,15 @@
         class=".traversal.Permalink"
         permission="zope.Public"
         />
+        
+   
+   <!-- View to store and retreive the document that the user is being editing -->
+   <browser:page
+   		for="bungeni.models.interfaces.IBungeniParliamentaryContent"
+   		name="nowediting"
+   		class=".views.StoreNowEditView"
+   		layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin"
+   		permission="zope.View"
+   		/>
        
 </configure>
