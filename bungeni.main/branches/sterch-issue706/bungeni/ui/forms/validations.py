@@ -579,3 +579,14 @@ def validate_sub_role_unique(action, data, context, container):
                         _(u"A title with %s sub role already exists") % 
                         sub_role_id))
     return errors
+
+def diff_validator(form, context, data):
+    context = removeSecurityProxy(context)
+    errors = []
+    #fields = get_fields(context)
+            
+    current_timestamp = data.get('timestamp', '')
+    db_timestamp = context.timestamp
+    if current_timestamp != db_timestamp:
+        errors.append(interface.Invalid(_(u"Timestamp was changed!")))
+    return errors

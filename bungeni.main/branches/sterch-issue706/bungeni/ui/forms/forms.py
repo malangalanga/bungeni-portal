@@ -25,6 +25,7 @@ from bungeni.ui.forms.common import PageForm
 from bungeni.ui.forms.common import AddForm
 from bungeni.ui.forms.common import EditForm
 from bungeni.ui.forms.common import DeleteForm
+from zope.app.form.browser.textwidgets import PasswordWidget
 
 
 FormTemplate = namedtemplate.NamedTemplateImplementation(
@@ -213,3 +214,7 @@ class ItemScheduleContainerDeleteForm(DeleteForm):
             session.delete(i)
         self.request.response.redirect(self.next_url)
 
+
+class DiffEditForm(EditForm):
+    CustomValidation = validations.diff_validator
+    template = ViewPageTemplateFile("templates/diff-form.pt")

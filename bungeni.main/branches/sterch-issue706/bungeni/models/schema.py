@@ -874,6 +874,12 @@ parliamentary_items = rdb.Table("parliamentary_items", metadata,
     rdb.Column("custom2", rdb.UnicodeText, nullable=True),
     rdb.Column("custom3", rdb.UnicodeText, nullable=True),
     rdb.Column("custom4", rdb.UnicodeText, nullable=True),
+    
+    # Timestamp of last modification
+    rdb.Column("timestamp", rdb.DateTime(timezone=False),
+        server_default=(text("now()")),
+        nullable=False
+    ),
 )
 
 # Agenda Items:

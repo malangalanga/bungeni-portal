@@ -2081,7 +2081,7 @@ class ParliamentaryItemDescriptor(ModelDescriptor):
                 show("view edit listing"),
             ],
             property=schema.TextLine(title=_("Title")),
-            edit_widget=widgets.TextWidget,
+            edit_widget=widgets.DiffTextWidget,
             add_widget=widgets.TextWidget,
         ),
         Field(name="full_name", # [user]
@@ -2128,6 +2128,12 @@ class ParliamentaryItemDescriptor(ModelDescriptor):
             localizable=[ show("view listing"), ],
             property=schema.Date(title=_("Submission Date"), required=False),
             listing_column=day_column("submission_date", _("Submission Date")),
+        ),
+        Field(name="timestamp", # [derived]
+            modes="edit",
+            localizable=[ show("edit"), ],
+            property=schema.Datetime(title=_(""), required=False),
+            edit_widget=widgets.HiddenTimestampWidget,
         ),
         Field(name="status", label=_("Status"), # [sys]
             modes="view listing",
