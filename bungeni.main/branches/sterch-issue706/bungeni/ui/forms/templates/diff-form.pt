@@ -28,12 +28,16 @@
     
     <div metal:fill-slot="body">
       <h1 i18n:translate="" tal:content="view/form_name|nothing" />
-
+	  <span>
+	  	<tal:block i18n:translate="">
+	  		Also editing the document:
+	  	</tal:block>
+	  	<strong id="nowediting" tal:content="context/@@nowediting" />
+	  </span>
       <metal:block define-macro="form"
                    i18n:domain="alchemist">
 <!-- template: bungeni/ui/forms/templates/form.pt -->
 <!-- !+DEFINE-MACRO-FORM(mr, jul-2010) ui/forms/templates/form.pt START line34 -->
-
         <p class="documentDescription"
            i18n:translate=""
            tal:content="view/form_description|nothing" />

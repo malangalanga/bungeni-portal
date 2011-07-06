@@ -1,7 +1,7 @@
 from bungeni.alchemist import Session
 from bungeni.models import CurrentlyEditingDocument
 from bungeni.models.utils import get_db_user_id
-from datetime import datetime
+from datetime import datetime, timedelta
 from zope.publisher.browser import BrowserView
 
 
@@ -34,12 +34,19 @@ class StoreNowEditView(BrowserView):
         currently_editing_document.currently_editing_id = document_id
 
         # And the current date and time
-        currently_editing_document.editing_date = datetime.now()
+        current_datetime = datetime.now()
+        ago_datetime = current_datetime - timedelta(seconds=20)
+        currently_editing_document.editing_date = current_datetime
+
 
         # Fetching amount of users that are being editing the document
+        # taking into account that last time the ajax request was sent
+        # no longer than 20 seconds ago
         count = session.query(CurrentlyEditingDocument)\
                        .filter(CurrentlyEditingDocument.currently_editing_id == document_id)\
+                       .filter(CurrentlyEditingDocument.user_id != user_id)\
+                       .filter(CurrentlyEditingDocument.editing_date.between(ago_datetime, current_datetime))\
                        .count()
 
         # Returning the amount, excluding current document editing
-        return str(count - 1)
+        return str(count)
