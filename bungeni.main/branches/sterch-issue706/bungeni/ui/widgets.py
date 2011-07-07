@@ -46,7 +46,8 @@ from bungeni.ui.interfaces import IGenenerateVocabularyDefault
 from bungeni.models.utils import get_db_user_id
 from bungeni.core.language import get_default_language
 
-import random
+from zope.app.form.interfaces import IInputWidget, IDisplayWidget
+from zope import component
 
 
 path = os.path.split(os.path.abspath(__file__))[0]
@@ -61,6 +62,10 @@ class LongTextWidget(TextWidget):
 class DiffTextWidget(TextWidget):
     def __call__(self):
         session = Session()
+        self.context.readonly = True
+        self.context.for_input = False
+        #return component.getMultiAdapter((self.context, self.request), IDisplayWidget)()
+        #return LongTextWidget(self.context, self.request).__call__()
         return super(DiffTextWidget, self).__call__()
 
 

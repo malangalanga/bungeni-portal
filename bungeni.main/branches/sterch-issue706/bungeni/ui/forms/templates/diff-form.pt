@@ -101,6 +101,10 @@
                 <input type="hidden" name="next_url"
                        tal:condition="view/next_url|nothing"
                        tal:attributes="value view/next_url" />
+                       
+                <input type="hidden" name="diff"
+                       tal:condition="view/diff"
+                       tal:attributes="value view/diff" />
 
                 <metal:block define-slot="top-fieldset">
                 </metal:block>
@@ -119,7 +123,7 @@
                               tal:content="legend"
                               i18n:translate="" />
                       
-                      <tal:block define="widgets python: groups.get(name)"
+                      <tal:block condition="not: view/diff" define="widgets python: groups.get(name)"
                                  repeat="widget widgets">
                     <tal:field define="description widget/hint;
                                        error widget/error;
@@ -164,12 +168,85 @@
 
                     </tal:field>
                   </tal:block>
+                  
+                  <tal:block condition="view/diff">
+                  <div class="diff-widgets">
+          			<table>
+          				<tr>
+			          		<td><h3>Current version</h3></td>
+			          		<td><h3>Your version</h3></td>
+			          	</tr>
+          			<tal:block define="widgets view/diff_widgets"
+                                 repeat="widget widgets">
+                     <tr>
+                     <td>
+                	 <div tal:define="widget python:widget[1]">
+                	 <tal:field define="description widget/hint;
+                                       error widget/error;
+                                       odd repeat/widget/odd;
+                                       changed widget/changed | nothing"
+                               condition="widget/visible">
+
+
+                      <tal:standard >
+                        <div class="field"
+                             tal:define="name python: widget.__class__.__name__.lower(); fieldid widget/name"
+                             tal:attributes="class string:$default widget-$name;id string:field.$fieldid">
+                          <metal:header use-macro="macros/header" />
+                        
+                          <div tal:attributes="class python:'widget'+(error and ' error' or '') + (changed and ' changed' or '')">
+                            <div class="widget" tal:content="structure widget"  >
+                              <input type="text" />
+	                    </div>
+	                    <div tal:condition="error" tal:content="structure error" tal:attributes="class python:'errormessage' + (changed and ' changed' or '')">
+                              The Error
+                            </div>
+	                  </div>
+                        </div>
+                      </tal:standard>
+                    </tal:field>
+                    </div>
+                    </td>
+                    <td>
+                    <div tal:define="widget python:widget[0]">
+                    <tal:field define="description widget/hint;
+                                       error widget/error;
+                                       odd repeat/widget/odd;
+                                       changed widget/changed | nothing"
+                               condition="widget/visible">
+                      <tal:standard >
+                        <div class="field"
+                             tal:define="name python: widget.__class__.__name__.lower(); fieldid widget/name"
+                             tal:attributes="class string:$default widget-$name;id string:field.$fieldid">
+                          <metal:header use-macro="macros/header" />
+                        
+                          <div tal:attributes="class python:'widget'+(error and ' error' or '') + (changed and ' changed' or '')">
+                            <div class="widget" tal:content="structure widget"  >
+                              <input type="text" />
+	                    </div>
+	                    <div tal:condition="error" tal:content="structure error" tal:attributes="class python:'errormessage' + (changed and ' changed' or '')">
+                              The Error
+                            </div>
+	                  </div>
+                        </div>
+                      </tal:standard>
+                    </tal:field>
+                    </div>
+                    </td>
+                    </tr>
+                    
+		            </tal:block>
+		            </table>
+		          	</div>
+          			</tal:block>
+                  
                     </fieldset>
                   </tal:groups>
                 </table>
               </metal:block>
             </fieldset>
           </metal:block>
+          
           <div id="actionsView"> 
             <span class="actionButtons"
                   tal:condition="view/availableActions">

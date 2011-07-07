@@ -28,6 +28,10 @@ from bungeni.ui.forms.common import EditForm
 from bungeni.ui.forms.common import DeleteForm
 from zope.app.form.browser.textwidgets import PasswordWidget
 
+from interfaces import Modified
+from zope import component
+from zope.app.form.interfaces import IDisplayWidget
+
 
 FormTemplate = namedtemplate.NamedTemplateImplementation(
     ViewPageTemplateFile('templates/form.pt')
@@ -43,10 +47,10 @@ def hasDeletePermission(context):
     ``bungeni.<classname>.Delete`` where 'classname' is the lowercase
     of the name of the python class.
     """
-
+    
     interaction = zope.security.management.getInteraction()
-    class_name = context.__class__.__name__
-    permission_name = 'bungeni.' + class_name.lower() + '.Delete'
+    class_name = context.__class__.__name__ 
+    permission_name = 'bungeni.' + class_name.lower() +'.Delete'
     return interaction.checkPermission(permission_name, context)
 
 def set_widget_errors(widgets, errors):
@@ -60,7 +64,7 @@ def set_widget_errors(widgets, errors):
                 if widget._error is None:
                     widget._error = error
 
-def flag_changed_widgets(widgets, context, data):
+def flag_changed_widgets( widgets, context, data):
     for widget in widgets:
         name = widget.context.getName()
         # If the field is not in the data, then go on to the next one
@@ -73,27 +77,27 @@ def flag_changed_widgets(widgets, context, data):
             widget.changed = True
     return []
 
-class ResponseEditForm(EditForm):
+class ResponseEditForm( EditForm ):
     """ Answer a Question
     UI for ministry to input response
     Display the question when adding the answer.
     """
-    CustomValidations = validations.null_validator
+    CustomValidations =  validations.null_validator
 
-
-class ResponseAddForm(AddForm):
+    
+class ResponseAddForm( AddForm ):
     """
     Answer a Question
     UI for ministry to input response
     Display the question when adding the answer.
     """
-    CustomValidation = validations.null_validator
+    CustomValidation =  validations.null_validator
 
-
+    
 class ItemScheduleContainerReorderForm(ReorderForm):
     """Specialization of the general reorder form for item
     schedulings."""
-
+    
     def save_ordering(self, ordering):
         for name, scheduling in self.context.items():
             scheduling.planned_order = ordering.index(name)
@@ -111,7 +115,7 @@ class ItemScheduleReorderForm(PageForm):
             ('planned_order', 'real_order'),
             title=_(u"AM"),
             required=True)
-
+            
     form_fields = form.Fields(IReorderForm)
 
     @form.action(_(u"Move"))
@@ -138,24 +142,24 @@ class ItemScheduleReorderForm(PageForm):
         name = self.context.__name__
         schedulings = container.batch(order_by=field, limit=None)
         ordering = [scheduling.__name__ for scheduling in schedulings]
-        for i in range(0, len(ordering)):
-            setattr(container[ordering[i]], field, i + 1)
-
+        for i in range(0,len(ordering)):
+            setattr(container[ordering[i]], field, i+1)
+            
         index = ordering.index(name)
 
         if mode == 'up' and index > 0:
             # if this item has a category assigned, and there's an
             # item after it, swap categories with it
-            if  index < len(ordering) - 1:
-                next = container[ordering[index + 1]]
-            prev = container[ordering[index - 1]]
+            if  index < len(ordering)-1:
+                next = container[ordering[index+1]]
+            prev = container[ordering[index-1]]
             order = getattr(self.context, field)
             setattr(self.context, field, getattr(prev, field))
             setattr(prev, field, order)
 
         if mode == 'down' and index < len(ordering) - 1:
-            next = container[ordering[index + 1]]
-
+            next = container[ordering[index+1]]
+ 
 
 class ItemScheduleDeleteForm(DeleteForm):
     def get_subobjects(self):
@@ -194,14 +198,14 @@ class ItemScheduleDeleteForm(DeleteForm):
             count += 1
         #session.close()
         return count
-
+        
 class ItemScheduleContainerDeleteForm(DeleteForm):
     class IDeleteForm(interface.Interface):
         item_id = schema.Int(
             title=_(u"Item ID"),
             required=True)
     form_fields = form.Fields(IDeleteForm)
-
+    
     @form.action(_(u"Delete"))
     def handle_delete(self, action, data):
         session = Session()
@@ -210,16 +214,54 @@ class ItemScheduleContainerDeleteForm(DeleteForm):
             sql.and_(
                 model_schema.item_schedules.c.group_sitting_id == group_sitting_id,
                 model_schema.item_schedules.c.item_id == data['item_id']
-            )).all()
+            )).all()        
         for i in sch:
             session.delete(i)
         self.request.response.redirect(self.next_url)
 
 
 class DiffEditForm(EditForm):
+    """ Form to display diff view if timestamp was changes.
+    """
     CustomValidation = validations.diff_validator
     template = ViewPageTemplateFile("templates/diff-form.pt")
-
-    def __init__(self, *args):
-        super(DiffEditForm, self).__init__(*args)
+    
+    def __init__(self, context, request):
+        self.diff_widgets = []
+        self.diff = False
+        super(DiffEditForm, self).__init__(context, request)
         need("diff-form")
+        
+    
+    def update(self):
+        """ Checks if we have Modified errors and renders split view 
+            with display widgets for db values and normal for input 
+        """
+        super(DiffEditForm, self).update()
+
+        for error in self.errors:
+            if error.__class__ == Modified:
+                # Set flag that form is in diff mode
+                if not self.diff:
+                    self.diff=True
+                # Get name of the field from the error
+                name = error[1]
+                # Get widget and its value
+                widget = self.widgets[name]
+                value = widget.getInputValue()
+                # Get widget's field    
+                form_field = self.form_fields.get(widget.context.__name__)                    
+                field = form_field.field.bind(self.context)
+                
+                # Form display widget for our field 
+                if form_field.custom_widget is not None:
+                    display_widget = form_field.custom_widget(
+                        field, self.request)
+                else:
+                    display_widget = component.getMultiAdapter(
+                        (field, self.request), IDisplayWidget)
+                # Assign current db value
+                display_widget.setRenderedValue(field.get(self.context))
+                display_widget.name = widget.name + ".diff.display"
+                # Add display - input widgets pair to list of diff widgets
+                self.diff_widgets.append((widget, display_widget))
