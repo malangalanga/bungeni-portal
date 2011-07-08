@@ -43,13 +43,6 @@
     />
     <browser:page name="edit"
         for="bungeni.alchemist.interfaces.IAlchemistContent"
-        class=".common.EditForm"
-        permission="zope.ManageContent"
-        layer="bungeni.ui.interfaces.IBungeniSkin"
-    />
-    
-    <browser:page name="diff-edit"
-        for="bungeni.alchemist.interfaces.IAlchemistContent"
         class=".forms.DiffEditForm"
         permission="zope.ManageContent"
         layer="bungeni.ui.interfaces.IBungeniSkin"
