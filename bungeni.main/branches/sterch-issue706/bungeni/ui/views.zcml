@@ -877,5 +877,21 @@
    		layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin"
    		permission="zope.View"
    		/>
+   		
+   <adapter
+      for="zope.schema.interfaces.IText
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides=".widgets.IDiffDisplayWidget"
+      factory=".widgets.HTMLDisplay"
+      permission="zope.Public"
+      />
+      
+   <adapter
+      for="zope.schema.interfaces.ITextLine
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides=".widgets.IDiffDisplayWidget"
+      factory=".widgets.HTMLDisplay"
+      permission="zope.Public"
+      />
        
 </configure>

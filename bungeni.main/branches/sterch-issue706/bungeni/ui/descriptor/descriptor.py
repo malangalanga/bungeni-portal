@@ -2081,7 +2081,7 @@ class ParliamentaryItemDescriptor(ModelDescriptor):
                 show("view edit listing"),
             ],
             property=schema.TextLine(title=_("Title")),
-            edit_widget=widgets.DiffTextWidget,
+            edit_widget=widgets.TextWidget,
             add_widget=widgets.TextWidget,
         ),
         Field(name="full_name", # [user]

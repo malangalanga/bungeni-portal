@@ -52,21 +52,15 @@ from zope import component
 
 path = os.path.split(os.path.abspath(__file__))[0]
 
+class IDiffDisplayWidget(zope.app.form.interfaces.IDisplayWidget):
+    """ Marker interface for diff text widgets
+    """
+    pass
 
 class TextWidget(zope.app.form.browser.textwidgets.TextWidget):
     displayWidth = 60
 class LongTextWidget(TextWidget):
     displayWidth = 90
-    
-
-class DiffTextWidget(TextWidget):
-    def __call__(self):
-        session = Session()
-        self.context.readonly = True
-        self.context.for_input = False
-        #return component.getMultiAdapter((self.context, self.request), IDisplayWidget)()
-        #return LongTextWidget(self.context, self.request).__call__()
-        return super(DiffTextWidget, self).__call__()
 
 
 class HiddenTimestampWidget(zope.app.form.browser.textwidgets.TextWidget):

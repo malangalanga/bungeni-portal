@@ -31,6 +31,9 @@ from zope.app.form.browser.textwidgets import PasswordWidget
 from interfaces import Modified
 from zope import component
 from zope.app.form.interfaces import IDisplayWidget
+from zope.schema.interfaces import IText, ITextLine
+from bungeni.ui.widgets import IDiffDisplayWidget
+from bungeni.ui.diff import textDiff
 
 
 FormTemplate = namedtemplate.NamedTemplateImplementation(
@@ -229,6 +232,7 @@ class DiffEditForm(EditForm):
     def __init__(self, context, request):
         self.diff_widgets = []
         self.diff = False
+        self.last_timestamp = None
         super(DiffEditForm, self).__init__(context, request)
         need("diff-form")
         
@@ -238,17 +242,23 @@ class DiffEditForm(EditForm):
             with display widgets for db values and normal for input 
         """
         super(DiffEditForm, self).update()
-
         for error in self.errors:
             if error.__class__ == Modified:
                 # Set flag that form is in diff mode
                 if not self.diff:
                     self.diff=True
-                # Get name of the field from the error
-                name = error[1]
-                # Get widget and its value
-                widget = self.widgets[name]
-                value = widget.getInputValue()
+                
+        if self.diff:
+            # Set last timestamp which we store in hidden field because
+            # document may be modified during diff and from.timestamp field
+            # contains old value
+            self.last_timestamp = self.context.timestamp
+            for widget in self.widgets:
+                try:
+                    value = widget.getInputValue()
+                except:
+                    value = ""
+                
                 # Get widget's field    
                 form_field = self.form_fields.get(widget.context.__name__)                    
                 field = form_field.field.bind(self.context)
@@ -256,12 +266,22 @@ class DiffEditForm(EditForm):
                 # Form display widget for our field 
                 if form_field.custom_widget is not None:
                     display_widget = form_field.custom_widget(
-                        field, self.request)
+                        field, self.request)                 
                 else:
                     display_widget = component.getMultiAdapter(
                         (field, self.request), IDisplayWidget)
-                # Assign current db value
-                display_widget.setRenderedValue(field.get(self.context))
+                
+                # If field is Text or TextLine we display HTML diff
+                if IText.providedBy(field) or ITextLine.providedBy(field):
+                    if value:
+                        diff_val = textDiff(field.get(self.context), value)
+                    else:
+                        diff_val = ""
+                    display_widget = component.getMultiAdapter(
+                        (field, self.request), IDiffDisplayWidget)
+                    display_widget.setRenderedValue(diff_val)
+                else:
+                    display_widget.setRenderedValue(field.get(self.context))
                 display_widget.name = widget.name + ".diff.display"
                 # Add display - input widgets pair to list of diff widgets
                 self.diff_widgets.append((widget, display_widget))

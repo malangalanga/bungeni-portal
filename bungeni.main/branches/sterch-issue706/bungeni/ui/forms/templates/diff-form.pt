@@ -105,6 +105,11 @@
                 <input type="hidden" name="diff"
                        tal:condition="view/diff"
                        tal:attributes="value view/diff" />
+                       
+                
+                <input type="hidden" name="last_timestamp"
+                       tal:condition="view/last_timestamp"
+                       tal:attributes="value view/last_timestamp" />
 
                 <metal:block define-slot="top-fieldset">
                 </metal:block>
@@ -179,7 +184,7 @@
           			<tal:block define="widgets view/diff_widgets"
                                  repeat="widget widgets">
                      <tr>
-                     <td>
+                     <td width="50%" valign="top">
                 	 <div tal:define="widget python:widget[1]">
                 	 <tal:field define="description widget/hint;
                                        error widget/error;
@@ -207,7 +212,7 @@
                     </tal:field>
                     </div>
                     </td>
-                    <td>
+                    <td width="50%" valign="top">
                     <div tal:define="widget python:widget[0]">
                     <tal:field define="description widget/hint;
                                        error widget/error;

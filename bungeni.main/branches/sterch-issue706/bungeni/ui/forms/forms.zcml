@@ -42,6 +42,11 @@
         permission="bungeni.motion.Edit"
         layer="bungeni.ui.interfaces.IBungeniSkin"
     />
+    <browser:page name="diff-edit" for="bungeni.models.interfaces.IMotion"
+        class=".forms.DiffEditForm"
+        permission="bungeni.motion.Edit"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+    />
     <browser:page name="delete" for="bungeni.models.interfaces.IMotion"
         class=".common.DeleteForm"
         permission="bungeni.motion.Delete"

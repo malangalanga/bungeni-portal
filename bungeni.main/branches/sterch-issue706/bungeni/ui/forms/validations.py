@@ -588,15 +588,16 @@ def diff_validator(form, context, data):
         Returns list of Modified errors for fields which differs from db values.
     """
     diff = form.request.form.get("diff","")
-    context = removeSecurityProxy(context)
     errors = []
-    form.diff_widgets =[]
-
-    current_timestamp = data.get('timestamp', '')
-    db_timestamp = context.timestamp
-
-    if current_timestamp != db_timestamp and diff != "True":
-        for name, value in data.items():
-            if context.__dict__[name] != value:
-                errors.append(Modified(_(u"Value was changed!"),name))
+    last_timestamp = form.request.form.get("last_timestamp","")
+    context = removeSecurityProxy(context)    
+    current_timestamp = str(data.get('timestamp', ''))
+    db_timestamp = str(context.timestamp)
+    
+    # if we're in diff mode we don't care if form.timestamp equals db timestamp    
+    if (current_timestamp != db_timestamp and diff!="True") or\
+       (last_timestamp!=db_timestamp and last_timestamp):
+            for name, value in data.items():
+                if context.__dict__[name] != value:
+                    errors.append(Modified(_(u"Value was changed!"),name))
     return errors
