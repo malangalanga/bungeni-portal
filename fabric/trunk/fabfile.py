@@ -55,7 +55,7 @@ def setup_pylibs():
     """
 
     bungenipre = bungeni.Presetup()
-    bungenipre.build_imaging
+    bungenipre.build_imaging()
     bungenipre.required_pylibs()
     bungenipre.install_appy()
 
