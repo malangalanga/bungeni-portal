@@ -40,7 +40,7 @@
         require_confirmation="true"
     />
     
-    <transition title="Inhume"
+    <transition title="Move to Deceased"
         source="A I"
         destination="D"
         condition="has_date_of_death"
@@ -49,7 +49,7 @@
         require_confirmation="true"
     />
     
-    <transition title="Resurrect"
+    <transition title="Move from Deceased"
         source="D"
         destination="A"
         trigger="manual"

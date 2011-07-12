@@ -137,7 +137,8 @@
         like_state="gazetted" 
     />
     
-    <state id="first_committee" title="Select Committee (after 1st reading)"
+    <state id="first_committee" 
+        title="Submitted to Select Committee (after 1st reading)"
         like_state="gazetted" >
         <!-- signatory -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Clerk" />
@@ -186,7 +187,8 @@
         like_state="first_committee"
     />
         
-    <state id="second_committee" title="Select Committee (after 2nd reading)"
+    <state id="second_committee" 
+        title="Submitted to Select Committee (after 2nd reading)"
         like_state="first_committee"
     />
     
@@ -321,7 +323,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition title="Send to Select Committee (I)"
+    <transition title="Submit Bill to Select Committee (I)"
         source="first_reading"
         destination="first_committee"
         condition=""
@@ -433,7 +435,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition title="Send to Select Committee (II)"
+    <transition title="Submit Bill to Select Committee (II)"
         source="second_reading"
         destination="second_committee"
         condition=""
@@ -441,7 +443,7 @@
         roles="bungeni.Clerk"
     />
     
-    <transition title="Send/Resend to Select Committee (II)"
+    <transition title="Submit/Resubmit Bill to Select Committee (II)"
         source="whole_house"
         destination="second_committee"
         condition=""
