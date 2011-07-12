@@ -45,6 +45,9 @@
             <show modes="view" />
             <hide modes="listing" />
         </field>
+        <field name="timestamp" displayable="edit" localizable="edit">
+            <show modes="edit" />
+        </field>
     </descriptor>
 
     <descriptor name="AgendaItemVersion">
@@ -182,6 +185,9 @@
         <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
             <show modes="view" />
             <hide modes="edit listing" />
+        </field>
+        <field name="timestamp" displayable="edit" localizable="edit">
+            <show modes="edit" />
         </field>
     </descriptor>
 
@@ -660,6 +666,9 @@
             <show modes="view" />
             <hide modes="edit listing" />
         </field>
+        <field name="timestamp" displayable="edit" localizable="edit">
+            <show modes="edit" />
+        </field>
     </descriptor>
 
     <descriptor name="MotionVersion">
@@ -952,6 +961,9 @@
             <show modes="view" />
             <hide modes="edit listing" />
         </field>
+        <field name="timestamp" displayable="edit" localizable="edit">
+            <show modes="edit" />
+        </field>
     </descriptor>
 
     <descriptor name="QuestionVersion">
@@ -1125,6 +1137,9 @@
         <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
             <show modes="view" />
             <hide modes="edit listing" />
+        </field>
+        <field name="timestamp" displayable="edit" localizable="edit">
+            <show modes="edit" />
         </field>
     </descriptor>
 
