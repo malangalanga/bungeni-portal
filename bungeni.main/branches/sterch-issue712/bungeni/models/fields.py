@@ -1,9 +1,7 @@
 from md5 import md5
-from sqlalchemy.types import TypeDecorator, Binary, String, UnicodeText
+from sqlalchemy.types import TypeDecorator, Binary, String
 from sqlalchemy.util import buffer
 from zope.component import getUtility
-from zope.i18nmessageid.message import Message
-
 
 class FSBlob(TypeDecorator, Binary):
     """ Sqlalchemy's type to store
@@ -38,13 +36,3 @@ class FSBlob(TypeDecorator, Binary):
 
     def copy(self):
         return FSBlob()
-
-class I18nAwareUnicodeText(TypeDecorator):
-    
-    impl = UnicodeText
-    
-    def process_bind_param(self, value, dialect):
-        if isinstance(value, Message):
-            value = unicode(value)
-        return value
-

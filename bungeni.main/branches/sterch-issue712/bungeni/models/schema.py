@@ -10,7 +10,7 @@ log = __import__("logging").getLogger("bungeni.models.schema")
 
 import re
 import sqlalchemy as rdb
-from fields import FSBlob, I18nAwareUnicodeText
+from fields import FSBlob
 from sqlalchemy.sql import text, functions
 from datetime import datetime
 
@@ -97,8 +97,8 @@ def make_changes_table(table, metadata):
             default=functions.current_timestamp(),
             nullable=False
         ),
-        rdb.Column("description", I18nAwareUnicodeText),
-        rdb.Column("notes", I18nAwareUnicodeText),
+        rdb.Column("description", rdb.UnicodeText),
+        rdb.Column("notes", rdb.UnicodeText),
         rdb.Column("user_id", rdb.Integer, rdb.ForeignKey("users.user_id")),
     )
     return changes_table
