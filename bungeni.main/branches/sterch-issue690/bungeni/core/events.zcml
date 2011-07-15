@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope">
+ <!-- Audit events are defined in audit.zcml, workflow events in
+ workflows/configure.zcml -->
+     
+    <subscriber
+     for="bungeni.models.interfaces.IBungeniGroupMembership
+          zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+     handler=".events.group_member_modified"
+     />
+     
+     <!-- Generate timestamp of last modification -->
+     <subscriber
+        for="bungeni.models.interfaces.IBungeniParliamentaryContent
+          zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+        handler=".events.timestamp"
+     /> 
+  
+</configure>
