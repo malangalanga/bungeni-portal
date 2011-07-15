@@ -33,7 +33,7 @@
     color: #fff;
 }
 #top-layer ul#portal-personaltools li a:hover {
-    color: #888;
+    color: #fffd6e !important;
 }
 #top-layer ul#portal-languageselector {
     font-size: 100%;
@@ -42,7 +42,8 @@
     color: #fff;
 }
 #top-layer ul#portal-languageselector li a:hover {
-    color: #888;
+    color: #fffd6e !important;
+    background:transparent !important;
 }
 #top-layer ul#portal-languageselector li.selected a {
     color: #000000;
@@ -105,6 +106,12 @@
 .template-portal #main-body-table {
     background: #fff;
 }
+/*
+ *form_login
+ */
+.template-portal #login-form .formControls input {
+    border:1px solid #013394 !important;
+} 
 
 /*
  * main-columns
@@ -777,6 +784,9 @@ dd#items-to-be-scheduled-dl ul.formTabs li.formTab a.selected {
     border-bottom-color: #013394;
     border-top-color: #999;
     color: #222;
+}
+.template-portal #content li.formTab a:target {
+background: #013394 !important;
 }
 /*
  * formPanel styles
@@ -1687,6 +1697,15 @@ div.dhx_cal_navline div.active {
 .template-workspace.section-bungeni-workspace table.listing td a:active {
     color:#21a1ba !important;
 } 
+.template-workspace.section-bungeni-workspace #content ul.formTabs li a.selected,
+.template-workspace.section-bungeni-workspace #content ul.formTabs li a:hover,
+.template-workspace.section-bungeni-workspace #content ul.formTabs li a:target {
+    background:#21a1ba !important;
+}
+.template-workspace #content ul.formTabs li a:hover,
+.template-workspace #content ul.formTabs li a:target {
+    background:#013394 !important;
+}
 /*
  * yui paginator
  */
@@ -1697,4 +1716,34 @@ div.dhx_cal_navline div.active {
 .template-workspace #portal-footer div {
 
     border: 0 none;
+}
+/*Workspace overrides*/
+.template-workspace.section-bungeni-workspace table.listing th,
+.template-workspace.section-bungeni-workspace table.listingdescription th,
+.template-workspace.section-bungeni-workspace .stx table th,
+.template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th,
+.section-bungeni-workspace tr.yui-dt-first th {
+    background:#aaa !important;
+    text-shadow: 0 0 0  #fff;
+    color: #000 !important;
+}
+.template-workspace.section-bungeni-workspace #display_form_spacer {
+    background:#aaa !important;
+}
+
+/*MailBox*/
+.template-workspace .portlet ul.contentViewsLeftPort li {
+    border:0 none !important;
+}
+.template-workspace .portlet ul.contentViewsLeftPort li a {
+    border:1px solid #888 !important;
+    -moz-border-radius: 3px; 
+    -webkit-border-radius: 3px; 
+    border-radius: 3px;
+    background-color:#f9f9f9 !important;
+}
+.template-workspace .portlet ul.contentViewsLeftPort li.selected,
+.template-workspace .portlet ul.contentViewsLeftPort li a:hover {
+    background-color:#21a1ba !important;
+    color:#fff !important;
 }

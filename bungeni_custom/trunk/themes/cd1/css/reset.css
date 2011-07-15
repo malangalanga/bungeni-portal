@@ -53,6 +53,11 @@
     height: 20px;
     line-height: 20px;
 }
+.template-portal #top-layer ul#portal-personaltools li:last-child {
+    margin-right:0px;
+    float:right;
+    clear:both;
+}
 #top-layer #demoWarning {
     width: 150px;
     height: 18px;
@@ -110,7 +115,7 @@ div.main-column h2.reportdate {
 div.main-column h1.reportheading {
     padding:0.1em 10% 0.1em 10% !important;
     width:50% !important;
-    margin:1em auto 2em auto;
+    margin:3em auto 0em auto;
 }
 div.main-column h2.reporttitle {
     margin-left:0em;
@@ -1205,14 +1210,14 @@ div.main-column #collage h2 {
     margin-left:auto;
     margin-right:auto;
     width:960px;    
-    height:115px;
+    height:105px;
     position:relative;
 }
 .template-portal #portal-logo {
     display: block;
     margin: .5em 0 0 0;
     width:960px;
-    height: 115px;
+    height: 105px;
 }
 .template-portal a#portal-logo img.ws-left,.template-portal a#portal-logo img.ws-right {
 	display:none;
@@ -1320,6 +1325,36 @@ div.main-column #collage h2 {
 }
  dl.portalMessage {
     margin-top:.3em;
+}
+
+/*
+ * login-form
+ */
+.template-portal #login-form,
+.template-portal #login-forgotten-password {
+    margin-left:auto;
+    margin-right:auto;
+    width:330px;
+}
+.template-portal #login-form .field {
+    margin-bottom:5px;
+    clear:both;
+}
+.template-portal #login-form .formControls {
+    margin-top:10px;
+    clear:both;
+}
+.template-portal #login-form .formControls input {
+    border:1px solid #f79f10 !important;
+}
+.template-portal #login-form .field input {
+    float:right;
+}
+.template-portal #login-form .field label {
+    padding-top:10px !important;
+    text-align:left;
+    vertical-align:bottom;
+    float:left;
 }
 
 /*********************************************************************************************************/

@@ -33,7 +33,7 @@
     color: #fff;
 }
 #top-layer ul#portal-personaltools li a:hover {
-    color: #888;
+    color: #000 !important;
 }
 #top-layer ul#portal-languageselector {
     font-size: 100%;
@@ -42,7 +42,8 @@
     color: #fff;
 }
 #top-layer ul#portal-languageselector li a:hover {
-    color: #888;
+    color: #000 !important;
+    background:transparent !important;
 }
 #top-layer ul#portal-languageselector li.selected a {
     color: #000000;
@@ -765,14 +766,17 @@ li.formTab a.selected {
     border-left: 1px solid #000000;
     border-bottom: 2px solid #607a4a;
     text-decoration: none;
-    background:#607a4a;
+    background:#607a4a !important;
+}
+.template-portal #content li.formTab a:target {
+background-color: #607a4a !important;
 }
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:hover,
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:active,
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a.selected {
     text-align: left;
     text-decoration: none;
-    background: #607a4a;
+    background: #607a4a !important;
     border: 1px solid #aaa;
     border-bottom-color: #607a4a;
     border-top-color: #999;
@@ -1216,6 +1220,15 @@ div.main-column #collage h2 {
 .template-workspace #portal-logo img {
     border: 0 none;
 }
+.template-workspace #top-layer ul#portal-personaltools li a:hover {
+    color: #fffd6e !important;
+}
+.template-workspace #top-layer ul#portal-languageselector li a:hover {
+    color: #fffd6e !important;
+}
+.template-workspace #top-layer ul#portal-languageselector li.selected a:hover {
+    color: #000000;
+}
 
 /*
  * Breadcrumbs
@@ -1475,8 +1488,6 @@ div.dhx_cal_navline div.active {
 .section-bungeni-admin div#portal-globalnav ul.level0 li#portaltab-admin-content a,
 .section-bungeni-admin div#portal-globalnav ul.level0 li#portaltab-admin-content a:hover {
 	border-top:2px solid #666;
-	border-left:#888888;
-	border-right:#888888;	
     background: url(/static/images/w-globalnav-level0-a-last.png) top left repeat-x !important;
 	color:#fff !important;
 	text-shadow:0 0 0 #fff;
@@ -1677,6 +1688,15 @@ div.dhx_cal_navline div.active {
 .template-workspace.section-bungeni-workspace table.listing td a:active {
     color:#21a1ba !important;
 } 
+.template-workspace.section-bungeni-workspace #content ul.formTabs li a.selected,
+.template-workspace.section-bungeni-workspace #content ul.formTabs li a:hover,
+.template-workspace.section-bungeni-workspace #content ul.formTabs li a:target {
+    background:#21a1ba !important;
+}
+.template-workspace #content ul.formTabs li a:hover,
+.template-workspace #content ul.formTabs li a:target {
+    background:#607a4a !important;
+}
 /*
  * yui paginator
  */
@@ -1687,4 +1707,35 @@ div.dhx_cal_navline div.active {
 .template-workspace #portal-footer div {
 
     border: 0 none;
+}
+
+/*Workspace overrides*/
+.template-workspace.section-bungeni-workspace table.listing th,
+.template-workspace.section-bungeni-workspace table.listingdescription th,
+.template-workspace.section-bungeni-workspace .stx table th,
+.template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th,
+.section-bungeni-workspace tr.yui-dt-first th {
+    background:#aaa !important;
+    text-shadow: 0 0 0  #fff;
+    color: #000 !important;
+}
+.template-workspace.section-bungeni-workspace #display_form_spacer {
+    background:#aaa !important;
+}
+
+/*MailBox*/
+.template-workspace .portlet ul.contentViewsLeftPort li {
+    border:0 none !important;
+}
+.template-workspace .portlet ul.contentViewsLeftPort li a {
+    border:1px solid #888 !important;
+    -moz-border-radius: 3px; 
+    -webkit-border-radius: 3px; 
+    border-radius: 3px;
+    background-color:#f9f9f9 !important;
+}
+.template-workspace .portlet ul.contentViewsLeftPort li.selected,
+.template-workspace .portlet ul.contentViewsLeftPort li a:hover {
+    background-color:#21a1ba !important;
+    color:#fff !important;
 }
