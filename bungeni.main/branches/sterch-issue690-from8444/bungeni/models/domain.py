@@ -213,6 +213,11 @@ class UserDelegation(Entity):
 class CurrentlyEditingDocument(object):
     """The document (parliamentary item) 
     that the user is currently being editing"""
+    
+    
+class PasswordRecoveryToken(object):
+    """ 
+    """
 
 #class HansardReporter(User):
 #    """ a reporter who reports on parliamentary procedings

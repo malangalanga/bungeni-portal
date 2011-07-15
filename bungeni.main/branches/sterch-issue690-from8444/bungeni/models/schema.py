@@ -240,6 +240,15 @@ currently_editing_document = rdb.Table("currently_editing_document", metadata,
         rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
     ),
     rdb.Column("editing_date", rdb.DateTime(timezone=False)) 
+)
+
+password_recovery_token = rdb.Table("password_recovery_token", metadata,
+    rdb.Column("user_id", rdb.Integer,
+        rdb.ForeignKey("users.user_id"),
+        primary_key=True
+    ),
+    rdb.Column("token", rdb.String(56), nullable=False),
+    rdb.Column("expiration", rdb.DateTime(timezone=False)) 
 ) 
 
 member_election_types = make_vocabulary_table("member_election", metadata)

@@ -1,8 +1,17 @@
 from bungeni.alchemist import Session
-from bungeni.models import CurrentlyEditingDocument
-from bungeni.models.utils import get_db_user_id
+from bungeni.models import CurrentlyEditingDocument, User
+from bungeni.models.utils import get_db_user_id, get_db_user
 from datetime import datetime, timedelta
 from zope.publisher.browser import BrowserView
+from bungeni.core.interfaces import IPasswordRecoveryTokenUtility
+from bungeni.models.domain import PasswordRecoveryToken
+from zope.component import getUtility
+from bungeni.ui.forms.common import PageForm
+from zope import schema, interface
+from bungeni.core.i18n import _
+from zope.formlib import form
+from email.mime.text import MIMEText
+import bungeni.ui.utils as ui_utils
 
 
 class StoreNowEditView(BrowserView):
@@ -50,3 +59,87 @@ class StoreNowEditView(BrowserView):
 
         # Returning the amount, excluding current document editing
         return str(count)
+
+
+class RecoverPasswordForm(PageForm):
+    """ Form to change user password
+    """
+
+    class IPassRecoveryForm(interface.Interface):
+        password = schema.Password(title=_(u"Password"),
+                               required=True)
+        retyped_password = schema.Password(title=_(u"Retype password"),
+                               required=True)    
+    form_fields = form.Fields(IPassRecoveryForm)
+
+    @form.action(_(u"Reset"))
+    def handle_reset(self, action, data):
+        password = data.get("password", "")
+        retyped_password = data.get("retyped_password", "")
+        
+        if password and retyped_password==password:
+            session = Session()
+            token = self.request.get("token", "")
+            db_token = session.query(PasswordRecoveryToken)\
+                              .filter(PasswordRecoveryToken.token == token)\
+                              .first()
+            user = db_token.user
+            # TODO save password 
+            
+    def __call__(self):
+        utility = getUtility(IPasswordRecoveryTokenUtility)
+        session = Session()
+        token = self.request.get("token", "")
+        if token:
+            db_token = session.query(PasswordRecoveryToken)\
+                              .filter(PasswordRecoveryToken.token == token)\
+                              .first()
+            if not db_token:
+                return "ERROR! INVALID TOKEN!"
+            if utility.expired(db_token):
+                return "ERROR! TOKEN EXPIRED!"
+        else:
+            return "ERROR! NO DATA!"
+        
+        return super(RecoverPasswordForm, self).__call__() 
+        
+
+
+class SendPasswordRecoveryLinkForm(PageForm):
+    """Form to generate token and send it to the user."""
+
+    class IPassRecoveryForm(interface.Interface):
+        login = schema.TextLine(title=_(u"Login"),
+                               required=False)
+        email = schema.TextLine(title=_(u"Email"),
+                               required=False)
+            
+    form_fields = form.Fields(IPassRecoveryForm)
+
+    @form.action(_(u"Send"))
+    def handle_send(self, action, data):
+        session = Session()
+        utility = getUtility(IPasswordRecoveryTokenUtility)
+        email = data.get("email", "")
+        login = data.get("login", "")
+            
+        if login:
+            user = session.query(User).filter(User.login==login).first()
+        else:
+            user = session.query(User).filter(User.email==email).first()
+        if user:
+            token = utility.get_token(user)
+            if token:
+                if not utility.expired(token):
+                    return "Your old link haven't expired yet" 
+            token = utility.generate_token(user)
+            base_url = ui_utils.url.absoluteURL(getSite(), self.request) 
+            
+            text = "Password recovery link:" + base_url + "/recover-password?token="+token.token
+            msg = MIMEText(text)
+            msg["Subject"] = "Password recovery"
+            # this must be changed
+            msg["From"] = "support@bungeni.com"
+            msg["To"] = user.email
+            print msg
+            dispatch(msg)

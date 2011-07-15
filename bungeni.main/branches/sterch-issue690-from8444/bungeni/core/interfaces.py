@@ -290,3 +290,16 @@ class IWorkspaceTabsUtility(interface.Interface):
     def getType(key):
         """Given a domain_class, returns the item type
         """
+        
+
+class IPasswordRecoveryTokenUtility(interface.Interface):
+    
+    def get_token(self, user):
+        """ Get token for user
+        """
+    def generate_token(user, expire_time=86400):
+        """ Generate token for user
+        """
+    def expired(token):
+        """Check if token is expired
+        """

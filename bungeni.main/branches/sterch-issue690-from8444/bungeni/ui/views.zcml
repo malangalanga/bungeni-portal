@@ -877,6 +877,20 @@
    		layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin"
    		permission="zope.View"
    		/>
+
+   	<browser:page name="recover-password" 
+   		for="bungeni.models.interfaces.IBungeniApplication"
+        class=".views.RecoverPasswordForm"
+        permission="zope.Public"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+    />
+
+   	<browser:page name="generate-pass-recovery" 
+   		for="bungeni.models.interfaces.IBungeniApplication"
+        class=".views.SendPasswordRecoveryLinkForm"
+        permission="zope.Public"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+    />
    		
    <adapter
       for="zope.schema.interfaces.IText

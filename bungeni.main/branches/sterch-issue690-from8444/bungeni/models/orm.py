@@ -132,6 +132,12 @@ mapper(domain.CurrentlyEditingDocument, schema.currently_editing_document,
     }
 )
 
+mapper(domain.PasswordRecoveryToken, schema.password_recovery_token,
+    properties = {
+        "user": relation(domain.User, uselist=False),
+    }
+)
+
 # Groups
 
 mapper(domain.Group, schema.groups,
