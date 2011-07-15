@@ -33,7 +33,7 @@
     color: #fff;
 }
 #top-layer ul#portal-personaltools li a:hover {
-    color: #888;
+    color: #000 !important;
 }
 #top-layer ul#portal-languageselector {
     font-size: 100%;
@@ -42,11 +42,12 @@
     color: #fff;
 }
 #top-layer ul#portal-languageselector li a:hover {
-    color: #888;
+    color: #000 !important;
 }
 #top-layer ul#portal-languageselector li.selected a {
     color: #000000;
 }
+
 /*
  * Notes:
  * - set text-decoration to 'none' to remove blinking effect.
@@ -1230,6 +1231,15 @@ div.main-column #collage h2 {
 }
 .template-workspace #portal-logo img {
     border: 0 none;
+}
+.template-workspace #top-layer ul#portal-personaltools li a:hover {
+    color: #fffd6e !important;
+}
+.template-workspace #top-layer ul#portal-languageselector li a:hover {
+    color: #fffd6e !important;
+}
+.template-workspace #top-layer ul#portal-languageselector li.selected a:hover {
+    color: #000000;
 }
 
 /*
