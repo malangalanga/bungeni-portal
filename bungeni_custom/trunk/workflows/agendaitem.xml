@@ -2,7 +2,9 @@
 <workflow title="Agenda Item Workflow"
     description="Agenda Item"
     domain="bungeni.ui"
-    initial_state="">
+    initial_state=""
+    auditable="true"
+    versionable="true">
     
     <!-- global grants -->
     <grant permission="bungeni.agendaitem.View" role="bungeni.Owner" />

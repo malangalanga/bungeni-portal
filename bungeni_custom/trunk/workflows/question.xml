@@ -2,7 +2,9 @@
 <workflow title="Question Workflow"
     description="A question"
     domain="bungeni.ui"
-    initial_state="">
+    initial_state=""
+    auditable="true"
+    versionable="true">
     
     <!-- global grants -->
     <grant permission="bungeni.question.View" role="bungeni.Owner" />

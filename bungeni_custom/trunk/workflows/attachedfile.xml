@@ -2,7 +2,9 @@
 <workflow title="Attached File Workflow"
     description="Workflow for attached files"
     domain="bungeni"
-    initial_state="">
+    initial_state=""
+    auditable="true"
+    versionable="true">
     
     <!-- global grants -->
     <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />

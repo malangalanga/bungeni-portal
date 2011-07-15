@@ -12,8 +12,43 @@ administartor of a Bungeni deployment.
 Workflow XML Source Style Guide
 ===============================
 
+Workflow (root element):
+
+RNC definition for <workflow> XML element:
+
+grammar { 
+    start = workflow
+    element workflow {
+        attribute title { text },
+        attribute description { text },
+        attribute domain { "bungeni.ui" },
+        attribute initial_state { "" }?,
+        attribute auditable { boolean="false" }?, # versionable -> must be "true"
+        attribute versionable { boolean="false" }?, 
+        attribute note { text }?,
+        
+        element grant {...}*,
+        element state {...}*,
+        element transition {...}*,
+    }
+}
+
 States
 ------
+
+RNC definition for <state> XML element:
+    
+    element state {
+        attribute id { text },
+        attribute title { text },
+        attribute version { boolean="false" }?,
+        attribute like_state {  }?,
+        attribute note { text }?,
+        attribute obsolete { boolean="false" }?,
+        
+        (element grant {...} | element deny {...} )*,
+        element notification {...}*
+    }
 
 - the state ID should be a lowercase *adverb* (more or less) that describes 
 the _condition_ an object is in, given the transition trail of the object.
@@ -76,6 +111,23 @@ logging level to DEBUG.
 
 Transitions
 -----------
+
+RNC definition for <transition> XML element:
+    
+    element transition {
+        attribute title { text },
+        attribute source { text }, # state id
+        attribute destination { text }, # state id
+        attribute condition { test } ?,
+        attribute title { text } ?,
+        attribute trigger { "automatic" | "system" | "manual" },
+        attribute roles { text }, # "bungeni.Clerk ..."
+        attribute title { text },
+        attribute order { integer=0 },
+        attribute require_confirmation { boolean="false" },
+        attribute note { text },
+    }
+
 
 - the transition title should be a lowercase *verb*.
 

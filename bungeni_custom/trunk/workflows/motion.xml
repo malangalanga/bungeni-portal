@@ -2,7 +2,9 @@
 <workflow title="Motion Workflow" 
     description="A Motion" 
     domain="bungeni.ui"
-    initial_state="">
+    initial_state=""
+    auditable="true"
+    versionable="true">
     
     <!-- global grants -->
     <grant permission="bungeni.motion.View" role="bungeni.Owner" />

@@ -2,7 +2,9 @@
 <workflow title="Tabled Document Workflow"
     description="A tabled document"
     domain="bungeni.ui"
-    initial_state="">
+    initial_state=""
+    auditable="true"
+    versionable="true">
     
     <!-- global grants -->
     <grant permission="bungeni.tableddocument.View" role="bungeni.Owner" />
