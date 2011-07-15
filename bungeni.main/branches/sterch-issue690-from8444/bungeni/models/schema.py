@@ -249,7 +249,7 @@ password_recovery_token = rdb.Table("password_recovery_token", metadata,
     ),
     rdb.Column("token", rdb.String(56), nullable=False),
     rdb.Column("expiration", rdb.DateTime(timezone=False)) 
-) 
+)
 
 member_election_types = make_vocabulary_table("member_election", metadata)
 

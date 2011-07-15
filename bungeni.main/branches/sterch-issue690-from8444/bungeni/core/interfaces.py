@@ -293,13 +293,21 @@ class IWorkspaceTabsUtility(interface.Interface):
         
 
 class IPasswordRecoveryTokenUtility(interface.Interface):
+    """ Used in password recovery process. We generate a token for password re-
+    covery and send it a way of a direct url to the user. If the user will not 
+    perform the recovery in the destinated expiration time, than the token will
+    be marked as expired and will not allow password change.
+    """
     
-    def get_token(self, user):
-        """ Get token for user
+    def get_user(token):
+        """ Get user by token
         """
     def generate_token(user, expire_time=86400):
-        """ Generate token for user
+        """ Generate new token for user. Cleanups old ones.
         """
     def expired(token):
         """Check if token is expired
+        """
+    def expire(token):
+        """Expires token before time
         """

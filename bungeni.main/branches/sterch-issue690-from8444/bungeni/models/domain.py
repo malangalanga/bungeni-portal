@@ -216,7 +216,8 @@ class CurrentlyEditingDocument(object):
     
     
 class PasswordRecoveryToken(object):
-    """ 
+    """ An object that helps with token management for password recovery.
+        Stores the expire date to test if the token is still valid.
     """
 
 #class HansardReporter(User):

@@ -121,7 +121,6 @@ class IGenenerateVocabularyDefault(interface.Interface):
     def getDefaultVocabularyValue():
         "Get the default value in vocabulary"
 
-
 class ITreeVocabulary(interface.Interface):
     """ Generate tree vocabulary as JSON data.
         Also provides a validation of values

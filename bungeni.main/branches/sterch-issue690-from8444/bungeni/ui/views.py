@@ -62,8 +62,15 @@ class StoreNowEditView(BrowserView):
 
 
 class RecoverPasswordForm(PageForm):
-    """ Form to change user password
+    """ Form to change user password. Uses IPasswordRecoveryTokenUtility utility
+    to manage expiration and token existance checks.
     """
+    
+    class ERROR_CODES:
+        OK = None
+        NO_TOKEN = "no_token"
+        BAD_TOKEN = "bad_token"
+        EXPIRED_TOKEN = "expired_token"
 
     class IPassRecoveryForm(interface.Interface):
         password = schema.Password(title=_(u"Password"),
@@ -71,35 +78,53 @@ class RecoverPasswordForm(PageForm):
         retyped_password = schema.Password(title=_(u"Retype password"),
                                required=True)    
     form_fields = form.Fields(IPassRecoveryForm)
-
+    
     @form.action(_(u"Reset"))
-    def handle_reset(self, action, data):
+    def handle_reset(self, action, data):        
         password = data.get("password", "")
         retyped_password = data.get("retyped_password", "")
         
-        if password and retyped_password==password:
+        if password and retype_password and retyped_password==password:
+            # TODO: We have a new password. Most likely we would want to:
+            #    - Test it for valid string.
+            # This test is most likely not needed, but it is still a good
+            # idea to make shure.
+            assert self.test_precondition() is self.ERROR_CODES.OK
+            utility = getUtility(IPasswordRecoveryTokenUtility)
             session = Session()
-            token = self.request.get("token", "")
-            db_token = session.query(PasswordRecoveryToken)\
-                              .filter(PasswordRecoveryToken.token == token)\
-                              .first()
-            user = db_token.user
-            # TODO save password 
+            # We tested the precondition. It is valid.
+            token = self.request["token"]
+            user = utility.get_user(token)
             
-    def __call__(self):
+            # TODO: Save password to database
+            
+            # After we changed the password we expire the token. Do not worry, 
+            # its still one transaction.
+            utility.expire(token)
+            
+    def test_precondition(self):
+        """ tests if token exists, is_valid and is not expired
+            Returns error code:
+        """
         utility = getUtility(IPasswordRecoveryTokenUtility)
         session = Session()
-        token = self.request.get("token", "")
-        if token:
-            db_token = session.query(PasswordRecoveryToken)\
-                              .filter(PasswordRecoveryToken.token == token)\
-                              .first()
-            if not db_token:
-                return "ERROR! INVALID TOKEN!"
-            if utility.expired(db_token):
-                return "ERROR! TOKEN EXPIRED!"
-        else:
-            return "ERROR! NO DATA!"
+        token = self.request.get("token")
+        if token is None:
+            return self.ERROR_CODES.NO_TOKEN
+        # TODO: Maybe we should set a test for token validation. Maybe its a 
+        # bad string. We might get an error in the database.
+        res = None
+        if utility.expired(token):
+            return self.ERROR_CODES.EXPIRED_TOKEN
+            
+    def __call__(self):
+        # We test the preconditions to avoid the update call if the precondition
+        # did not pass
+
+
+        if self.test_precondition() is not self.ERROR_CODES.OK:
+            # TODO: We must set a redirect or render error page.
+            return ""
         
         return super(RecoverPasswordForm, self).__call__() 
         
@@ -109,10 +134,8 @@ class SendPasswordRecoveryLinkForm(PageForm):
     """Form to generate token and send it to the user."""
 
     class IPassRecoveryForm(interface.Interface):
-        login = schema.TextLine(title=_(u"Login"),
-                               required=False)
-        email = schema.TextLine(title=_(u"Email"),
-                               required=False)
+        login_or_email = schema.TextLine(title=_(u"Login or email"),
+                                         required=False)
             
     form_fields = form.Fields(IPassRecoveryForm)
 
@@ -120,25 +143,22 @@ class SendPasswordRecoveryLinkForm(PageForm):
     def handle_send(self, action, data):
         session = Session()
         utility = getUtility(IPasswordRecoveryTokenUtility)
-        email = data.get("email", "")
-        login = data.get("login", "")
+        login_or_email = data.get("login_or_email", "")
             
-        if login:
-            user = session.query(User).filter(User.login==login).first()
-        else:
-            user = session.query(User).filter(User.email==email).first()
-        if user:
-            token = utility.get_token(user)
-            if token:
-                if not utility.expired(token):
-                    return "Your old link haven't expired yet" 
+        user = session.query(User).filter(or_(User.login==login_or_email,
+                                              User.email==login_or_email)).first()
+        if user is not None:
             token = utility.generate_token(user)
             base_url = ui_utils.url.absoluteURL(getSite(), self.request) 
+            recovery_url = base_url + "/recover-password?token=" + token.token
             
-            text = "Password recovery link:" + base_url + "/recover-password?token="+token.token
+            # TODO: Isn't there a way to change this template in an easy way(in 
+            # admin maybe? Or as a ZPT)
+            text = "Password recovery link:" + recovery_url
             msg = MIMEText(text)
             msg["Subject"] = "Password recovery"
-            # this must be changed
+            # TODO: this must be changed. There must be a global config for info
+            # email.
             msg["From"] = "support@bungeni.com"
             msg["To"] = user.email
             print msg
