@@ -21,7 +21,8 @@
                 status_date
                 registry_number
                 note
-                receive_notification"
+                receive_notification
+                timestamp"
         />
     </class>
     
@@ -57,7 +58,8 @@
                 full_name
                 receive_notification
                 owner_id
-                note"
+                note
+                timestamp"
         />
     </class>
     
@@ -94,7 +96,8 @@
                 receive_notification
                 owner_id
                 note
-                subject"
+                subject
+                timestamp"
         />
         <!-- !+WORKFLOW_TRANSITION(ah, jan-2011) to be reviewed for now we 
             use the permission used for running transition  -->
@@ -146,7 +149,8 @@
                 receive_notification
                 public
                 seconder_id
-                party_id"
+                party_id
+                timestamp"
         />
 
         <!-- !+WORKFLOW_TRANSITION(ah, jan-2011) was bungeni.historical.Edit 
@@ -240,7 +244,8 @@
                 body_text
                 note
                 receive_notification
-                group_id"
+                group_id
+                timestamp"
         />
     </class>
     <class class=".domain.TabledDocument">
@@ -272,7 +277,8 @@
                 body_text
                 note
                 receive_notification
-                link"
+                link
+                timestamp"
         />
 
 
