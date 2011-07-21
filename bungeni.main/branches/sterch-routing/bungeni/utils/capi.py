@@ -19,6 +19,7 @@ __all__ = ["capi", "bungeni_custom_errors"]
 
 log = __import__("logging").getLogger("bungeni.utils.capi")
 
+import time
 import os
 from zope.dottedname.resolve import resolve
 import bungeni_custom as bc
@@ -69,6 +70,16 @@ class CAPI(object):
                 self.zope_i18n_allowed_languages,)
         return bc.default_language
     
+    @property
+    @bungeni_custom_errors
+    def check_auto_reload_localization(self):
+        """ () -> int
+        minimum number of seconds to wait between checks for whether a 
+        localization file needs reloading; 0 means never check (deployment)
+        """
+        int(bc.check_auto_reload_localization) # TypeError if not an int
+        return bc.check_auto_reload_localization
+    
     @bungeni_custom_errors
     def get_workflow_condition(self, condition):
         conds_module = resolve("._conditions", "bungeni_custom.workflows")
@@ -116,6 +127,31 @@ class CAPI(object):
                 # ensure that the original object value defines a __repr__ 
                 # that can correctly re-instantiate the original object
                 assert eval(os.environ[key]) == value
+    
+    _is_modified_since_last_times = {} # {path: (last_checked, last_modified)}
+    def is_modified_since(self, abspath, modified_on_first_check=True):
+        """ (abspath:str, modified_on_first_check:bool) -> bool
+        Checks file path st_mtime to see if file has been modified since last 
+        check. Updates entry per path, with last (check, modified) times.
+        """
+        check_auto_reload_localization = self.check_auto_reload_localization
+        now = time.time()
+        last_checked, old_last_modified = \
+            self._is_modified_since_last_times.get(abspath) or (0, 0)
+        if not check_auto_reload_localization:
+            # 0 =>> never check (unless this is the first check...)
+            if last_checked or not modified_on_first_check:
+                return False
+        if not now-last_checked > check_auto_reload_localization:
+            # last check too recent, avoid doing os.stat
+            return False
+        last_modified = os.stat(abspath).st_mtime
+        self._is_modified_since_last_times[abspath] = (now, last_modified)
+        if not last_checked:
+            # last_checked==0, this is the first check
+            return modified_on_first_check
+        return (old_last_modified < last_modified)
+
 
 # we access all via the singleton instance
 capi = CAPI()

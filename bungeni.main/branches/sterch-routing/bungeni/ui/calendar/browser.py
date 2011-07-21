@@ -239,7 +239,10 @@ class CalendarView(BungeniBrowserView):
         session = Session()
         venues = session.query(domain.Venue).all()
         languages = get_all_languages()
-        session.close()
+        # !+SESSION_CLOSE(taras.sterch, july-2011) there is no need to close the 
+        # session. Transaction manager will take care of this. Hope it does not 
+        # brake anything.
+        #session.close()
         self.display_language = get_default_language()
         if self.request.get("I18N_LANGUAGE"):
             self.display_language = self.request.get("I18N_LANGUAGE")
@@ -334,7 +337,10 @@ class GroupSittingScheduleView(BrowserView):
             rendered = self.render(date, template=self.ajax)
         else:    
             rendered = self.render(date)
-        session.close()
+        # !+SESSION_CLOSE(taras.sterch, july-2011) there is no need to close the 
+        # session. Transaction manager will take care of this. Hope it does not 
+        # brake anything.
+        #session.close()
         return rendered
         
     def reorder_field(self):
@@ -459,11 +465,11 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
                                 description=u'Sitting ID',
                                 required=False
                         )
-        start_date = schema.Datetime(title=_(u"Start Date and Time"),
-                            description=_(u"Choose a start date and time"),
+        start_date = schema.Datetime(title=_(u"Start date and time of sitting"),
+                            description=_(u"Choose sitting's start date and time"),
                             required=True)
-        end_date = schema.Datetime(title=_(u"End Date and Time"),
-                            description=_(u"Choose an end date and time"),
+        end_date = schema.Datetime(title=_(u"End date and time of sitting"),
+                            description=_(u"Choose sitting's end date and time"),
                             required=True)
         venue = schema.Choice(title=_(u"Venue"),
                               source="bungeni.vocabulary.Venues",
@@ -510,7 +516,7 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
                     adapters=self.adapters, ignore_request=ignore_request) 
         
     def insert_sitting_failure_handler(self, action, data, errors):
-        error_message = _(u"The following errors occured while adding a sitting")
+        error_message = _(u"Unable to add a sitting. Please make corrections.")
         error_string = u""
         for error in errors:
             if error.message not in ('', None): 

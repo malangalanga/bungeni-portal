@@ -24,66 +24,6 @@
         permission="zope.Public"
         template="templates/app-index.pt"
     />
-    <!-- when logged in, requests to "/" are redirected to the index view of
-    the user's first workspace OR (if no workspaces) to "/workspace" -->
-    <browser:page name="index"
-        for="bungeni.models.interfaces.IBungeniApplication"
-        permission="zope.View"
-        layer=".interfaces.IBungeniAuthenticatedSkin"
-        class=".redirect.WorkspaceRootRedirect"
-    />
-
-    <!-- Workspace -->
-
-    <!-- !+NotAuthenticated(mr, 08-2010), not-logged-in gives NotFound?
-        adopt a standard handling of (the numerous) such situations e.g.
-        - redirect to login?
-        - standard error page, with suggestion that may need to log in?
-    -->
-    <browser:page name="workspace-index"
-        for="bungeni.core.interfaces.ISection"
-        permission="zope.View"
-        layer=".interfaces.IBungeniAuthenticatedSkin"
-        template="templates/app-index.pt"
-    /><!-- class=".redirect.WorkspaceRootRedirect"
-    <browser:page
-        name="no-workspace-index"
-        for="bungeni.core.interfaces.ISection"
-        permission="zope.View"
-        layer=".interfaces.IBungeniAuthenticatedSkin"
-        template="templates/app-index.pt"
-    /> !+ ??? -->
-    <browser:page name="view"
-        for=".interfaces.IWorkspaceContainer"
-        class=".redirect.WorkspaceContainerIndexRedirect"
-        permission="zope.View"
-        layer=".interfaces.IWorkspaceSectionLayer"
-    /><!-- why does name must be "view"? e.g. "workspace-container-index" will
-           not match -->
-
-    <adapter factory=".workspace.WorkspaceContainerTraverser"
-        permission="zope.Public"
-        trusted="true"
-    />
-    <browser:page name="workspace-pi"
-        for=".interfaces.IWorkspacePIContext"
-        layer=".interfaces.IBungeniAuthenticatedSkin"
-        class=".workspace.WorkspacePIView"
-        permission="zope.View"
-    />
-  <browser:page name="workspace-mi"
-        for=".interfaces.IWorkspaceMIContext"
-        layer=".interfaces.IBungeniAuthenticatedSkin"
-        class=".workspace.WorkspaceMIView"
-        permission="zope.View"
-    />
-    <browser:page name="workspace-archive"
-        for=".interfaces.IWorkspaceArchiveContext"
-        layer=".interfaces.IBungeniAuthenticatedSkin"
-        class=".workspace.WorkspaceArchiveView"
-        permission="zope.View"
-    />
-    <!-- bungeni.models.interfaces.IGroupSittingContainer -->
 
     <!-- Setup Access to Browser Resources on the Application -->
 
@@ -100,6 +40,12 @@
         for="bungeni.models.interfaces.IBungeniApplication"
         permission="zope.Public"
         class=".redirect.RedirectToCurrent"
+    />
+    <browser:page name="index"
+        for="bungeni.models.interfaces.IBungeniApplication"
+        permission="zope.View"
+        layer=".interfaces.IBungeniAuthenticatedSkin"
+        class=".redirect.WorkspaceRootRedirect"
     />
     <browser:view for="bungeni.alchemist.interfaces.IAlchemistContent"
         permission="zope.View"
@@ -122,7 +68,7 @@
      />
 
     <browser:view for="bungeni.models.interfaces.IAttachedFile"
-        permission="bungeni.attachedfile.wf.public.inactive"
+        permission="bungeni.attachedfile.wf.public.internal.inactive"
         name="deactivate"
         class=".file.FileDeactivate"
     /><!-- !+WORKFLOW_TRANSITION(mr, feb-2011) -->
@@ -535,7 +481,12 @@
         permission="zope.Public"
         class=".container.ContainerJSONTableHeaders"
     />
-
+    <browser:page name="jsonlisting"
+        for="bungeni.models.interfaces.IWorkspaceContainer"
+        permission="bungeni.workspace.View"
+        class=".workspace.WorkspaceContainerJSONListing"
+    />
+   
     <!-- container UI -->
     <browser:page name="index"
         for="bungeni.alchemist.interfaces.IAlchemistContainer"
@@ -545,7 +496,47 @@
         class=".table.AjaxContainerListing"
         layer="bungeni.ui.interfaces.IBungeniSkin"
     />
-
+    <browser:page name="index"
+        for="bungeni.models.interfaces.IWorkspaceContainer"
+        class=".workspace.WorkspaceContainerListing"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        permission="bungeni.workspace.View"
+    />
+    
+    <!-- Workspace Add views -->
+    <!-- CONVENTION - view names must follow the following convention
+    the word "add", then an undescore(_) then the item type as registered in the
+    workspace configuration in  bungeni.core.workspace-->
+    <browser:page name="add_question"
+        for="bungeni.core.interfaces.IWorkspaceDraft"
+        class=".workspace.WorkspaceAddForm"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        permission="bungeni.question.Add"
+    />
+    <browser:page name="add_motion"
+        for="bungeni.core.interfaces.IWorkspaceDraft"
+        class=".workspace.WorkspaceAddForm"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        permission="bungeni.motion.Add"
+    />
+    <browser:page name="add_tableddocument"
+        for="bungeni.core.interfaces.IWorkspaceDraft"
+        class=".workspace.WorkspaceAddForm"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        permission="bungeni.tableddocument.Add"
+    />
+    <browser:page name="add_agendaitem"
+        for="bungeni.core.interfaces.IWorkspaceDraft"
+        class=".workspace.WorkspaceAddForm"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        permission="bungeni.agendaitem.Add"
+    />
+    <browser:page name="add_bill"
+        for="bungeni.core.interfaces.IWorkspaceDraft"
+        class=".workspace.WorkspaceAddForm"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        permission="bungeni.bill.Add"
+    />
   <!-- RSS/XML views -->
 
   <!-- RSS views for html content -->
@@ -876,5 +867,31 @@
         class=".traversal.Permalink"
         permission="zope.Public"
         />
+        
+   
+   <!-- View to store and retreive the document that the user is being editing -->
+   <browser:page
+   		for="bungeni.models.interfaces.IBungeniParliamentaryContent"
+   		name="nowediting"
+   		class=".views.StoreNowEditView"
+   		layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin"
+   		permission="zope.View"
+   		/>
+   		
+   <adapter
+      for="zope.schema.interfaces.IText
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides=".widgets.IDiffDisplayWidget"
+      factory=".widgets.HTMLDisplay"
+      permission="zope.Public"
+      />
+      
+   <adapter
+      for="zope.schema.interfaces.ITextLine
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides=".widgets.IDiffDisplayWidget"
+      factory=".widgets.HTMLDisplay"
+      permission="zope.Public"
+      />
        
 </configure>

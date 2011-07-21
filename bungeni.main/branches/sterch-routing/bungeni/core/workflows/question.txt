@@ -8,23 +8,18 @@ Setup
 Imports.
 
   >>> from bungeni.models import domain
-  >>> from bungeni.models import schema
   >>> from bungeni.core.workflows import adapters
-
 
 Questions are versionable.
   
   >>> from zope.interface import classImplements
   >>> from bungeni.models import interfaces
   >>> classImplements(domain.Question, interfaces.IQuestion)
-  >>> from bungeni.core.interfaces import IVersionable
-  >>> classImplements(domain.Question, IVersionable)
 
 Setting up database connection and utilities:
 
   >>> from bungeni.core.testing import setup_db
   >>> engine = setup_db()
-  
   >>> from bungeni.alchemist import Session
   >>> session = Session()
 
@@ -134,6 +129,28 @@ send the question notifications.
   ...    language="en",
   ...    gender="F")
 
+    >>> c1 = add_content(
+    ...    domain.User,
+    ...    "clerk",
+    ...    first_name="d", 
+    ...    birth_country="KE",
+    ...    last_name="de",
+    ...    date_of_birth=today,
+    ...    email="c1@example.com", 
+    ...    language="en",
+    ...    gender="M")
+    
+    >>> s1 = add_content(
+    ...    domain.User,
+    ...    "speaker",
+    ...    first_name="e", 
+    ...    birth_country="KE",
+    ...    last_name="ef",
+    ...    date_of_birth=today,
+    ...    email="s1@example.com", 
+    ...    language="en",
+    ...    gender="F")
+
 !+setParliamentId(mr, mar-2011) we manually set the parliament_id here and 
 remove the call to setParliamentId() when creating the question -- the 
 parliament_id is automatically set on a question (when saved to the db) 
@@ -144,15 +161,15 @@ Create a question type
   ...   domain.QuestionType,
   ...   question_type_name=u"Ordinary",
   ...   language="en")
-  >>> qtype.question_type_id
-  1L
+  >>> int(qtype.question_type_id)
+  1
   
   >>> rtype = add_content(
   ...   domain.ResponseType,
   ...   response_type_name=u"Written",
   ...   language="en")
-  >>> rtype.response_type_id
-  1L
+  >>> int(rtype.response_type_id)
+  1
   
   >>> question = add_content(
   ...     domain.Question,

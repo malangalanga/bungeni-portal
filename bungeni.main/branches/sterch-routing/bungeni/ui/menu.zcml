@@ -55,7 +55,7 @@
         title="Actions for Calendar Sittings"
     />
     <browser:menu id="discussion_actions"
-        title="Actions for Scheduling Discussions"
+        title="Discussions in scheduling"
     />
     <browser:menu id="scheduling_actions"
         title="Actions for Calendar Schedulings"
@@ -78,6 +78,10 @@
     <browser:menu id="context_translate"
         title="The 'Translate' menu - allows user to translate content"
         class=".menu.TranslateMenu"
+    />
+    <browser:menu id="workspace_add_parliamentary_content"
+        title="The 'Add' menu - allows user to add content while in workspace"
+        class="ploned.ui.menu.PloneBrowserMenu"
     />
     <!-- 
     Translation language options are dynamic, so we define an adapter to 
@@ -108,13 +112,12 @@
     
     
     <!-- CONTENT SUBMENUS -->
-    
     <browser:subMenuItem menu="plone_contentmenu"
-        for=".interfaces.IWorkspacePIContext"
+        for="bungeni.models.interfaces.IWorkspaceContainer"
         title="Add Parliamentary Content..."
-        action="add_content"
+        action="workspace_add_content"
         permission="zope.View"
-        submenu="context_add_parliamentary_content"
+        submenu="workspace_add_parliamentary_content"
     />
     <browser:subMenuItem menu="plone_contentmenu"
         for="bungeni.models.interfaces.IParliament"
@@ -238,7 +241,7 @@
     />
     <browser:menuItem menu="committee_additems"
         for="bungeni.models.interfaces.ICommittee"
-        title="Assign a bill..."
+        title="Assign an item..."
         action="./assigneditems/add"
         permission="bungeni.groupitemassignment.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
@@ -284,7 +287,7 @@
     />
     
     <browser:menu id="group_sitting_additems"
-        title="The 'Add...' menu - for a Parliament's GroupSittingContainer"
+        title="The 'Add...' menu - for a parliament's sittings"
         class="ploned.ui.menu.PloneBrowserMenu"
     />
     <browser:subMenuItem menu="plone_contentmenu"
@@ -447,7 +450,14 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="20"
     />
-    
+    <browser:menuItem menu="motion_additems"
+        for="bungeni.models.interfaces.IMotion"
+        title="Assign motion to a group..."
+        action="./assignedgroups/add"
+        permission="bungeni.groupitemassignment.Add"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        order="50"
+    />
     <browser:menu id="bill_additems"
         title="The 'Add...' menu - for bill"
         class="ploned.ui.menu.PloneBrowserMenu"
@@ -520,7 +530,7 @@
     />
     <browser:menuItem menu="bill_additems"
         for="bungeni.models.interfaces.IBill"
-        title="Assign bill to a group..."
+        title="Assign bill to a committee..."
         action="./assignedgroups/add"
         permission="bungeni.groupitemassignment.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
@@ -580,6 +590,14 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="22"
     />
+    <browser:menuItem menu="question_additems"
+        for="bungeni.models.interfaces.IQuestion"
+        title="Assign question to a group..."
+        action="./assignedgroups/add"
+        permission="bungeni.groupitemassignment.Add"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        order="50"
+    />
     <browser:subMenuItem menu="plone_contentmenu"
         for="bungeni.models.interfaces.IQuestion"
         title="Add..."
@@ -629,6 +647,14 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="22"
     />
+    <browser:menuItem menu="tableddocument_additems"
+        for="bungeni.models.interfaces.ITabledDocument"
+        title="Assign this document to a group..."
+        action="./assignedgroups/add"
+        permission="bungeni.groupitemassignment.Add"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        order="50"
+    />
     <browser:subMenuItem menu="plone_contentmenu"
         for="bungeni.models.interfaces.ITabledDocument"
         title="Add..."
@@ -659,7 +685,15 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         submenu="agendaitem_additems"
     />
-    
+    <browser:menuItem menu="agendaitem_additems"
+        for="bungeni.models.interfaces.IAgendaItem"
+        title="Assign agenda item to a group..."
+        action="./assignedgroups/add"
+        permission="bungeni.groupitemassignment.Add"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        order="50"
+    />
+
     <browser:menu id="office_additems"
         title="The 'Add...' menu - for offices"
         class="ploned.ui.menu.PloneBrowserMenu"
@@ -1089,7 +1123,7 @@
     />
 
   <!--adapter
-     for="bungeni.core.interfaces.IVersionable *"
+     for="bungeni.models.interfaces.IVersionable *"
      name="plone.contentmenu.translation"
      factory=".menu.TranslationSubMenuItem"
      provides="ploned.ui.interfaces.IContentMenuItem" /-->
@@ -1220,6 +1254,39 @@
         action="tableddocuments/add"
         permission="bungeni.tableddocument.Add"
     />
+    
+    <!-- Workspace add menu items -->
+    <browser:menuItem menu="workspace_add_parliamentary_content"
+        for="*"
+        title="Bill"
+        action="../../draft/add_bill"
+        permission="bungeni.bill.Add"
+    />
+    <browser:menuItem menu="workspace_add_parliamentary_content"
+        for="*"
+        title="Motion"
+        action="../../draft/add_motion"
+        permission="bungeni.motion.Add"
+    />
+    <browser:menuItem menu="workspace_add_parliamentary_content"
+        for="*"
+        title="Question"
+        action="../../draft/add_question"
+        permission="bungeni.question.Add"
+    /><!-- this is the one appearing in /workspace/pi -->
+    <browser:menuItem menu="workspace_add_parliamentary_content"
+        for="*"
+        title="Agenda item"
+        action="../../draft/add_agendaitem"
+        permission="bungeni.agendaitem.Add"
+    />
+    <browser:menuItem menu="workspace_add_parliamentary_content"
+        for="*"
+        title="Tabled document"
+        action="../../draft/add_tableddocument"
+        permission="bungeni.tableddocument.Add"
+    />
+    
     <!--browser:menuItem
      for="bungeni.alchemist.interfaces.IAlchemistContainer"
      menu="context_actions"
@@ -1341,7 +1408,7 @@
         order="30"
     />
     <browser:menuItem menu="context_actions"
-        for="bungeni.core.interfaces.IAuditable"
+        for="bungeni.models.interfaces.IAuditable"
         action="audit-log"
         title="Audit Log"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
@@ -1349,7 +1416,7 @@
         order="22"
     />
     <browser:menuItem menu="context_actions"
-        for="bungeni.core.interfaces.IVersionable"
+        for="bungeni.models.interfaces.IVersionable"
         action="versions"
         title="Versions"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"

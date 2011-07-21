@@ -31,7 +31,7 @@ from bungeni.core.i18n import _
 from bungeni.models.utils import get_current_parliament
 from bungeni.models.utils import container_getter
 from bungeni.ui.utils import url, common
-
+from bungeni.models.workspace import WorkspaceContainer
 
 def onWSGIApplicationCreatedEvent(application, event):
     """Subscriber to the ore.wsgiapp.interfaces.IWSGIApplicationCreatedEvent."""
@@ -99,22 +99,49 @@ class AppSetup(object):
         # EXCEPTION: the "/", when logged in, is redirected to "/workspace/pi"
         
         self.context["bungeni"] = AkomaNtosoSection(
-            title=_(u"Bungenis"),
+            title=_(u"Bungeni"),
             description=_(u"Current parliamentary activity"),
             default_name="bung",
         )
         
         # top-level sections
-        from bungeni.ui.workspace import workspace_resolver
         workspace = self.context["workspace"] = Section(
             title=_(u"Workspace"),
             description=_(u"Current parliamentary activity"),
-            default_name="workspace-index",
-            publishTraverseResolver=workspace_resolver
+            default_name="documents",
         )
         
         alsoProvides(workspace, interfaces.ISearchableSection)
-        
+        workspace["documents"] = Section(
+            title=_(u"documents"),
+            description=_(u"documents"),
+            default_name="inbox",
+            marker = interfaces.IWorkspaceDocuments,
+        )
+        workspace["documents"]["draft"] = WorkspaceContainer(
+                                            parent = workspace["documents"], 
+                                            tab_type = "draft",
+                                            title = _("draft"),
+                                            description = _("draft documents"),
+                                            marker = interfaces.IWorkspaceDraft)
+        workspace["documents"]["inbox"] = WorkspaceContainer(
+                                            parent = workspace["documents"], 
+                                            tab_type = "inbox",
+                                            title = _("inbox"),
+                                            description = _("incoming documents"),
+                                            marker = interfaces.IWorkspaceInbox)
+        workspace["documents"]["sent"] = WorkspaceContainer(
+                                            workspace["documents"], 
+                                            tab_type = "sent",
+                                            title = _("sent"),
+                                            description = _("sent documents"),
+                                            marker = interfaces.IWorkspaceSent)
+        workspace["documents"]["archive"] = WorkspaceContainer(
+                                                workspace["documents"], 
+                                                tab_type = "archive",
+                                                title = _("archive"),
+                                                description = _("archived documents"),
+                                                marker = interfaces.IWorkspaceArchive)
         
         workspace["scheduling"] = Section(
             title=_(u"Scheduling"),
@@ -141,7 +168,7 @@ class AppSetup(object):
             default_name="business-index")
         members = self.context["members"] = Section(
             title=_(u"Members"),
-            description=_(u"Records on members of parliament"),
+            description=_(u"Records of members of parliament"),
             default_name="members-index")
         archive = self.context["archive"] = Section(
             title=_(u"Archive"),
@@ -157,7 +184,7 @@ class AppSetup(object):
             
         admin = self.context["admin"] = AdminSection(
             title=_(u"Administration"),
-            description=_(u"Administer bungeni settings"),
+            description=_(u"Manage bungeni settings"),
             default_name="admin-index",
             marker=model_interfaces.IBungeniAdmin)
         
@@ -181,19 +208,19 @@ class AppSetup(object):
             container_getter(get_current_parliament, 'bills'),
             title=_(u"Bills"),
             marker=interfaces.IBillAddContext,
-            description=_(u"View bills issued by the current parliament"))
+            description=_(u"View bills introduced in the current parliament"))
 
         business[u"questions"] = QueryContent(
             container_getter(get_current_parliament, 'questions'),
             title=_(u"Questions"),
             marker=interfaces.IQuestionAddContext,
-            description=_(u"View questions issued by the current parliament"))
+            description=_(u"View questions tabled in the current parliament"))
 
         business[u"motions"] = QueryContent(
             container_getter(get_current_parliament, 'motions'),
             title=_(u"Motions"),
             marker=interfaces.IMotionAddContext,
-            description=_(u"View motions issued by the current parliament"))
+            description=_(u"View motions moved in the current parliament"))
 
 
         business[u"tableddocuments"] = QueryContent(
@@ -201,7 +228,7 @@ class AppSetup(object):
             title=_(u"Tabled documents"),
             marker=interfaces.ITabledDocumentAddContext,
             description=\
-                _(u"View the tabled documents of the current parliament")
+                _(u"View the documents tabled in the current parliament")
         )
 
         business[u"agendaitems"] = QueryContent(
@@ -227,7 +254,7 @@ class AppSetup(object):
             title=_(u"Publications"),
             marker=interfaces.IReportAddContext,
             description=\
-                _(u"View Agenda and Minutes reports of the current parliament")
+                _(u"browse and download parliamentary publications")
         )
         
         
@@ -246,13 +273,13 @@ class AppSetup(object):
 
         # archive
         records = archive[u"browse"] = Section(
-            title=_(u"Browse"),
-            description=_(u"Current and historical records"),
+            title=_(u"Browse archives"),
+            description=_(u"Browse records from the archive"),
             default_name="browse-archive")
 
         documents = archive["documents"] = Section(
             title=_(u"Documents"),
-            description=_(u"Visit the digital document repository"),
+            description=_(u"Browse documents in the archive"),
             default_name="browse-archive")
             
         
@@ -307,7 +334,7 @@ class AppSetup(object):
         
         content = admin["content"] = Section(
             title=_(u"Content"),
-            description=_(u"browse the content"),
+            description=_(u"browse bungeni content"),
             marker=model_interfaces.IBungeniAdmin,
             default_name="browse-admin")
 
@@ -319,13 +346,13 @@ class AppSetup(object):
 
         admin["email-settings"] = Section(
             title=_(u"email settings"),
-            description=_(u"email settings"),
+            description=_(u"manage email settings"),
             marker=model_interfaces.IBungeniAdmin,
             default_name="email-settings")
 
         admin["xapian-settings"] = Section(
-            title=_(u"xapian settings"),
-            description=_(u"xapian settings"),
+            title=_(u"search index settings"),
+            description=_(u"manage search index settings"),
             marker=model_interfaces.IBungeniAdmin,
             default_name="xapian-settings")
         

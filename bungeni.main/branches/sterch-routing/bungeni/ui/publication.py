@@ -8,6 +8,8 @@ $Id$
 """
 log = __import__("logging").getLogger("bungeni.ui.publication")
 
+import re
+
 from zope import interface
 from zope import component
 from zope.app.publication.interfaces import IBeforeTraverseEvent
@@ -16,11 +18,14 @@ from zope.annotation.interfaces import IAnnotations
 
 from bungeni.alchemist import Session
 
-import re
-import interfaces
+from bungeni.ui import interfaces
+from bungeni.ui.utils import url
+from bungeni.ui.descriptor.localization import check_reload_localization
 
-from utils import url
-from workspace import prepare_user_workspaces
+# !+IStartRequestEvent(mr, jun-2011) the once_per_request() below is a 
+# workaround to simulate the above event, gthat was introduced in. 
+# zope.app.publication 3.12.0. This utility and code using it should be
+# cleaned out after updating to that package.
 
 def once_per_request(event_handler):
     """Wrap event_handler to limit execution of it to once per request."""
@@ -34,8 +39,8 @@ def once_per_request(event_handler):
     return event_handler_closure
 
 
-# filter prepare_user_workspaces event handler to be called only ONCE per request
-prepare_user_workspaces = once_per_request(prepare_user_workspaces)
+# guard event handlers to be called only ONCE per request
+check_reload_localization = once_per_request(check_reload_localization)
 
 
 # event subscribers, dispatch co-ordinators
@@ -46,11 +51,11 @@ def on_before_traverse(event):
     request pre-processors. We intercept centrally and then call processors
     explicitly to guarantee execution order.
     """
-    log.info("IBeforeTraverseEvent:%s:%s" % (id(event.request), event.object))
+    log.debug("IBeforeTraverseEvent:%s:%s:%s" % (
+        id(event.request), event.request.getURL(), event.object))
     apply_request_layer_by_url(event)
     remember_traversed_context(event)
-    prepare_user_workspaces(event)
-
+    check_reload_localization(event)
 
 @component.adapter(IEndRequestEvent)
 def on_end_request(event):
@@ -61,7 +66,10 @@ def on_end_request(event):
     log.info("""IEndRequestEvent:%s:%s
         closing SqlAlchemy session: %s""" % (
                                     id(event.request), event.object, session))
-    session.close()
+    # !+SESSION_CLOSE(taras.sterch, july-2011) there is no need to close the 
+    # session. Transaction manager will take care of this. Hope it does not 
+    # brake anything.
+    #session.close()
 
 
 # some actual handlers

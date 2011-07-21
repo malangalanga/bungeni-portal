@@ -39,8 +39,8 @@
   <!-- TimeZone Definition -->
   <adapter factory=".tz.tzinfo" />
 
-  <!-- Site Skin Definition -->
-  <include file="skin.zcml"/>
+    <!-- Site Skin Definition -->
+    <include file="skin.zcml"/>
 
   <!-- search -->
   <include file="search.zcml" />
@@ -92,14 +92,8 @@
   <!-- rest views -->
   <include file="rest.zcml"/>
 
-  <subscriber
-    handler=".publication.on_before_traverse"
-    trusted="True"
-  />
-  <subscriber
-    handler=".publication.on_end_request"
-    trusted="True"
-  />
+    <subscriber handler=".publication.on_before_traverse" trusted="True" />
+    <subscriber handler=".publication.on_end_request" trusted="True" />
 
   <!-- Marginalia Settings for bungeni types -->
 
@@ -229,5 +223,8 @@
         factory=".widgets.widget"
         name="widget"
       />
-
+    
+   <!-- Workspace Adapters -->
+   <adapter factory=".workspace-adapters.WorkspaceAdapter" /> 
+    
 </configure>

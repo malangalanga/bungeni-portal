@@ -178,7 +178,9 @@ class IGroupSitting(interface.Interface):
 
 class IGroupSittingAttendance(interface.Interface):
     pass
-
+    
+class IGroupSittingType(interface.Interface):
+    pass
 
 class IItemSchedule(interface.Interface):
     pass
@@ -224,14 +226,16 @@ class IBungeniSettings(interface.Interface):
     )
     speakers_office_notification = schema.Bool(
         title=_(u"Speaker's Office Notification"),
-        description=_(u"true if the Speakers office wants to be alerted by "
-            "mail whenever a bill, motion, question is submitted"),
+        description=_(u"Alert the speaker's office when a document is "
+            "submitted"
+        ),
         default=False
     )
     clerks_office_notification = schema.Bool(
         title=_(u"Clerk's Office Notification"),
-        description=_(u"true if the clerks office wants to be alerted by mail"
-            u"whenever a bill, motion, question is submitted"),
+        description=_(u"Alert the clerk's office by e-mail when a document is "
+            "submitted"
+        ),
         default=False
     )
     clerks_office_email = schema.TextLine(
@@ -240,8 +244,8 @@ class IBungeniSettings(interface.Interface):
     )
     ministries_notification = schema.Bool(
         title = _(u"Ministries Notification"),
-        description = _(u"true if the Ministries want to be notified by email"
-              u" of submitted questions"),
+        description = _(u"Notify concerned ministries by e-mail when a document "
+        "is submitted"),
         default = False
     )
     administrators_email = schema.TextLine(
@@ -254,15 +258,15 @@ class IBungeniSettings(interface.Interface):
     )
     days_to_defer_question = schema.Int(
         title=_(u"Days to Defer Question"),
-        description=_(u"Time after which admissible questions are "
-            "automatically deferred"),
+        description=_(u"number of days after which admissible questions are "
+        "automatically deferred"),
         default = 10
     )
     days_to_notify_ministry_unanswered = schema.Int(
         title=_(u"Days to Notify Ministry of Pending Response"),
-        description=_(u"Timeframe after which the clerksoffice and the "
-            "ministry is alerted that questions that are pending response "
-            "are not yet answered"),
+        description=_(u"Days after which to notify concerned ministry and  "
+            "clerk's office of questions with pending responses"
+        ),
         default = 5
     )
     days_before_question_schedule = schema.Int(
@@ -274,11 +278,11 @@ class IBungeniSettings(interface.Interface):
         default = 3
     )
     max_questions_sitting = schema.Int(
-        title=_(u"Max Questions Per Sitting"),
+        title=_(u"Maximum Questions Per Sitting"),
         default = 15
     )
     max_mp_questions_sitting = schema.Int(
-        title=_(u"Max Questions Per Sitting Per MP"),
+        title=_(u"Maximum Questions Per Sitting Per MP"),
         default = 1
     )
     bill_signatories_min = schema.Int(
@@ -344,7 +348,7 @@ class IBungeniEmailSettings(interface.Interface):
         default = u"",
     )
     use_tls = schema.Bool(
-        title = _("Use TLS to connect"),
+        title = _("Connect securely to mail server (using TLS)"),
         default = False,
     )
 
@@ -353,10 +357,12 @@ class IAssignment(IAlchemistContent):
 
     content = schema.Object(IAlchemistContent)
     context = schema.Object(IAlchemistContent)
-    title = schema.TextLine(title=_(u"Name of the Assignment"))
-    start_date = schema.Date(title=_(u"Start Date of the Assignment"))
-    end_date = schema.Date(title=_(u"End Date of the Assignment"))
-    type = schema.TextLine(title=_(u"Assignment Type"), readonly=True)
+    title = schema.TextLine(
+        title=_(u"Title of document assignment to group or committee")
+    )
+    start_date = schema.Date(title=_(u"Start date of document assignment"))
+    end_date = schema.Date(title=_(u"End date of document assignment"))
+    type = schema.TextLine(title=_(u"Document assignment type"), readonly=True)
     status = schema.TextLine(title=_(u"Status"), readonly=True)
     notes = schema.Text(title=_(u"Notes"), description=_(u"Notes"))
 
@@ -449,7 +455,13 @@ class IProxiedDirectory(interface.Interface):
     """An interface for a contained directory we can attach menu links
     to that point back to our parent.
     """
-
+# svn st models/ core/interfaces.py core/workflows/transitioncron.py core/workflows/_conditions.py core/audit.zcml core/ftesting.zcml core/audit.py core/configure.zcml core/interfaces.py ui/workflow.py ui/menu.zcml ui/audit.zcml
+class IAuditable(interface.Interface):
+    """Marker interface to apply auditing/object log feature.
+    """
+class IVersionable(interface.Interface):
+    """Marker to apply versioning feature (requires IAuditable/objectlog)
+    """
 class IVersion(interface.Interface):
     """A version of an object is identical in attributes to the actual 
     object, based on that object's domain schema.
@@ -503,7 +515,8 @@ class IItemGroupItemAssignment(IGroupItemAssignment):
 
 class IReport(IBungeniContent):
     pass
-
+class IReport4Sitting(IBungeniContent):
+    pass
 class IUserDelegation(interface.Interface):
     pass
 
@@ -574,3 +587,9 @@ class IPostalAddressType(IBungeniVocabulary):
 
 class ICommitteeTypeStatus(IBungeniVocabulary):
     """Marker interface for committe type statuses"""
+
+class ICountry(interface.Interface):
+    """Marker interface for Country"""
+
+class IWorkspaceContainer(interface.Interface):
+    pass

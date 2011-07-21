@@ -121,11 +121,11 @@ div.main-column h1.title {
 div.main-column h1.reportmaintitle,
 div.main-column h1.reportdoctype {
     font-size: 180%;
-    color:#c8631b !important;
+    color:#828282 !important;
 }
 div.main-column h2.reportdate {
     font-size: 180%;
-    color:#c8631b !important;
+    color:#828282 !important;
     font-weight: bold !important;
 }
 
@@ -135,8 +135,8 @@ div.main-column h1.reportheading {
     border-radius: 6px;
     font-size: 130%;
     font-weight: bold !important;
-    border:1px solid #f79f10;
-    color:#000 !important;
+    border:1px solid #ccc;
+    color:#828282 !important;
 }
 .documentContent div h2:first-child {
     font-size:1.4em;
@@ -145,9 +145,9 @@ div.main-column h1.reportheading {
 }
 div.main-column h2.reporttitle {
     text-align:left;
-    color:#c8631b !important;
+    color:#f79f10 !important;
     font-size:1.1em;    
-    font-weight:normal !important;
+    font-weight:bold !important;
 }
 div.main-column h2 {
     text-shadow: 0px 0px 1px #fff;
@@ -404,7 +404,7 @@ input.inputLabelActive {
     border: 0 none;
 }
 .contentActions a {
-    color: #000;
+    color: #000 !important;
     text-decoration: none;
 }
 .contentActions li {
@@ -428,7 +428,7 @@ input.inputLabelActive {
     color: #000;
 }
 .actionMenu .actionMenuContent ul li a:hover {
-    background: #cceaf3 !important;
+    background-color: #cceaf3 !important;
     color: #000;
 }
 .actionmenu .actionMenuHeader ul#contentActionMenus li.context_translate a {
@@ -635,7 +635,7 @@ table.listing th,
 table.listingdescription th,
 .stx table th,
 .yui-skin-sam .yui-dt-first th {
-    background:#d8d8d9 url(/static/images/w-globalnav-level1-bg.png) bottom left repeat-x !important;
+    background:#21a1ba !important;
     border: 0 none;
     border-left: 1px solid #bbf;
     border-right: 1px solid #88f;
@@ -662,7 +662,7 @@ table.listing th a,
 table.listingdescription th a,
 .stx table th a,
 .yui-skin-sam .yui-dt-first th a {
-    color: #222;
+    color: #000;
     border: 0 none;
 }
 table.listing td,
@@ -771,6 +771,11 @@ dl.portalMessage dd {
 }
 #display_form_spacer {
     background: #f9ac32 url(/static/images/globalnav-level1-bg.png) bottom left repeat-x;
+}
+.template-portal dd#fieldset-written-question-response div.documentDescription {
+    background:#013394 !important;
+    color:#000;
+    font-weight:normal;
 }
 .formPanel .field .content-left-column,
 #version-history .diff h4 {
@@ -1006,7 +1011,7 @@ div.main-column #collage h2 {
 
 .template-portal #header-wrapper {
     background: #434343;
-    border-bottom: 15px solid #c1c1c0;
+    border-bottom: 10px solid #c1c1c0;
 }
 
 .template-portal #header-in-left {
@@ -1029,7 +1034,7 @@ div.main-column #collage h2 {
     background:#434343 url(/static/images/portal_img.png) no-repeat bottom right;
 }
 .template-portal #portal-logo {
-    background: url(/static/images/portal_banner.png) top left no-repeat;
+    background:#434343 url(/static/images/portal_banner.png) top left no-repeat;
 }
 /* 
  * if display is set to block it will display the logo used on the workspace
@@ -1354,6 +1359,9 @@ div.main-column #collage h2 {
 .template-workspace div.contentActions dt.label-state-active a {
     color:#000 !important;
 }
+.template-workspace div.contentActions dd.actionMenuContent ul li > a:hover span {
+    color:#000 !important;
+}
 /*
  * portal-globalnav
  */
@@ -1426,11 +1434,23 @@ div.main-column #collage h2 {
     background:#888888 url(/static/images/w-globalnav-level1-bg-last.png) bottom left repeat-x !important;
     display: block;
 }
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a {
+    color: #000 !important;
+}
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a.selected, 
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
+    border-right: 1px solid #090;
+    background-color: #c8631b !important;
+    color: white !important;
+}
 .template-workspace div#portal-globalnav ul.level0 ul.level1 li.selected a {
     color: #1763aa !important;
 }
+.section-bungeni-workspace div#portal-globalnav ul.level0 ul.level1 a {
+    color:#fff !important;
+}
 .section-bungeni-workspace div#portal-globalnav ul.level0 ul.level1 li.selected a {
-    color:#333 !important;
+    color:#3f3f3f !important;
 }
 /*
  * Table styles
@@ -1504,17 +1524,24 @@ div.main-column #collage h2 {
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:active,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a.selected {
     background: #21a1ba url(/static/images/w-globalnav-level0-a-first.png) top left repeat-x;
-    color: #000;
+    color: #fff;
 	text-shadow:0 0 0 #fff;
 }
 
 .template-workspace.section-bungeni-workspace table.listing th,
 .template-workspace.section-bungeni-workspace table.listingdescription th,
 .template-workspace.section-bungeni-workspace .stx table th,
-.template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th {
-    background:#21a1ba url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x !important;
+.template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th,
+.section-bungeni-workspace tr.yui-dt-first th {
+    background:#21a1ba !important;
     text-shadow: 0 0 0  #fff;
     color: #000;
+}
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a.selected, 
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
+    border-right: 1px solid #090;
+    background-color: #e4702d !important;
+    color: #fff !important;
 }
 .template-workspace.section-bungeni-admin ul.formTabs li.formTab a:hover,
 .template-workspace.section-bungeni-admin ul.formTabs li.formTab a:active,
@@ -1575,4 +1602,11 @@ div.main-column #collage h2 {
 }
 .template-workspace div {
     border: 0 none;
+}
+.template-portal div#content div dl.enableFormTabbing form div.widget {
+    text-align:justify;
+    color:#000;
+}
+.template-portal div#content div dl.enableFormTabbing form div.widget h3.reportmover:first-child span {
+    font-weight:bold;
 }

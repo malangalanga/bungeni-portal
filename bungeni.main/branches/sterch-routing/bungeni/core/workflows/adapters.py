@@ -5,13 +5,12 @@ import zope.securitypolicy.interfaces
 from bungeni.models import interfaces
 from bungeni.core.workflow import xmlimport
 from bungeni.core.workflow.interfaces import IWorkflow, IWorkflowed, \
-    IStateController, IWorkflowController, IWorkspaceTabsUtility
+    IStateController, IWorkflowController
 from bungeni.core.workflow.states import StateController, WorkflowController, \
     get_object_state
 import bungeni.core.version
 import bungeni.core.interfaces
 from bungeni.utils.capi import capi
-from bungeni.core.workflow import workspace
 __all__ = ["get_workflow"]
 
 def get_workflow(name):
@@ -54,9 +53,6 @@ def load_workflow(name, iface,
     else:
         wf = get_workflow(name)
         log.debug("Already Loaded WORKFLOW : %s %s" % (name, wf))
-    #workspace
-    workspace_utility = component.queryUtility(IWorkspaceTabsUtility)
-    workspace_utility.setClassInterface(name, iface)
     # We "mark" the supplied iface with IWorkflowed, as a means to mark type 
     # the iface is applied (that, at this point, may not be unambiguously 
     # determined). This has the advantage of then being able to 
@@ -76,12 +72,11 @@ def load_workflow(name, iface,
     # !+VERSION_WORKFLOW(mr, apr-2011)
     if name == "version":
         component.provideAdapter(bungeni.core.version.ContextVersioned,
-            (bungeni.core.interfaces.IVersionable,),
+            (interfaces.IVersionable,),
             bungeni.core.interfaces.IVersioned)
 
 
 def load_workflows():
-    component.provideUtility(workspace.WorkspaceTabsUtility())
     # workflow instances (+ adapter *factories*)
     load_workflow("address", interfaces.IUserAddress)
     load_workflow("address", interfaces.IGroupAddress)

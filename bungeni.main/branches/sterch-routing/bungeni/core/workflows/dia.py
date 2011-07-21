@@ -15,9 +15,9 @@ def write_file(in_folder, file_name, contents):
 def main(argv):
     output_folder = ""
     if (len(argv) > 0 ):
-	    output_folder = argv[0]
-	    if (output_folder.endswith("/") == False):
-		output_folder = output_folder + "/"
+        output_folder = argv[0]
+        if (output_folder.endswith("/") == False):
+            output_folder = output_folder + "/"
     
     write_file(output_folder, "bill.dot", dot(get_workflow("bill")))
     write_file(output_folder, "question.dot", dot(get_workflow("question")))
@@ -38,6 +38,8 @@ def main(argv):
         dot(get_workflow("parliament")))
     write_file(output_folder, "signatory.dot", 
         dot(get_workflow("signatory")))
+    write_file(output_folder, "event.dot", 
+        dot(get_workflow("event")))
 
 
 if __name__ == "__main__":

@@ -22,8 +22,9 @@
     
     <!-- Roles -->
     <role id="zope.Member" title="Member" />
-    
+    <include package="zope.annotation"/>
     <!-- App configuration -->
+    <include package="bungeni.models" />
     <include package="bungeni.models" file="auth.zcml" />
     <include package="bungeni.models" file="roles.zcml" />
     <include package="bungeni.models" file="permissions.zcml" />
@@ -40,10 +41,6 @@
     <include package="ore.xapian" />
     <include package="z3c.pt" />
     <include file="audit.zcml"/>
-    <class class="bungeni.models.domain.Bill">
-        <implements interface=".interfaces.IVersionable
-                            .interfaces.IAuditable" />
-    </class>
     
     <!-- DB setup -->
     <db:engine name="bungeni-db" url="postgres://localhost/bungeni-test" />

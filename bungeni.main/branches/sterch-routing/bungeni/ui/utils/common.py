@@ -64,7 +64,7 @@ def get_traversed_context(request=None, index=-1):
         return IAnnotations(request).get("contexts")[index]
 
 
-def get_context_roles(context):
+def get_context_roles(context, principal):
     """Get the list of current principal's roles for the specified context.
     
     return [ role_id for role_id, role 
@@ -101,8 +101,8 @@ def get_context_roles(context):
                 elif role[1] == Deny:
                     if role[0] in roles:
                         roles.remove(role[0])
-    
-    principal = bungeni.models.utils.get_principal()
+    if not principal:
+        return []
     pg = principal.groups.keys()
     # ensure that the actual principal.id is included
     if not principal.id in pg:
@@ -117,6 +117,19 @@ def get_context_roles(context):
               "            roles %s" % (
             principal.id, str(pg), "\n".join(message), roles))
     return roles
+
+def get_principal_roles(principal):
+        """Returns roles associated with groups.
+        """
+        session = bungeni.alchemist.Session()
+        roles = []
+        for group_id in principal.groups.keys():
+            result = session.query(bungeni.models.domain.Group).filter(
+                            bungeni.models.domain.Group.group_principal_id == group_id).first()
+            if result:
+                roles.extend(get_context_roles(
+                                          bungeni.core.workflows.utils.get_group_context(result), principal))
+        return roles
 
 def get_request_context_roles(request):
     """Get the list of user's roles (including whether admin or not) relevant 
@@ -142,7 +155,7 @@ def get_request_context_roles(request):
     if IUnauthenticatedPrincipal.providedBy(principal):
         roles = ["bungeni.Anonymous"]
     else: 
-        roles = get_context_roles(context)
+        roles = get_context_roles(context, principal)
         if is_admin(context):
             roles.append("bungeni.Admin")
     log.debug(""" [get_request_context_roles]

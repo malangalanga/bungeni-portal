@@ -23,7 +23,6 @@ from bungeni.ui.utils import debug
 from bungeni.models.interfaces import ISubRoleAnnotations
 from zope.component import getUtility
 from zope.securitypolicy.interfaces import IRole
-from bungeni.core.workflow.workspace import TABS
 #
 
 ASSIGNMENTS = (GRANT, DENY)
@@ -161,7 +160,7 @@ def _load(workflow, name):
     domain = strip_none(workflow.get("domain"))
     wuids = set() # unique IDs in this XML workflow file
     note = strip_none(workflow.get("note"))
-    workspace_tabs = getUtility(interfaces.IWorkspaceTabsUtility)
+    
         
     # initial_state, must be ""
     assert workflow.get("initial_state") == "", "Workflow [%s] initial_state " \
@@ -296,13 +295,7 @@ def _load(workflow, name):
                 actions, permissions, notifications,
                 as_bool(strip_none(s.get("obsolete") or "false")))
         )
-        for w in s.iterchildren("workspace"):
-            for d in w.iterchildren():
-                if d.tag in TABS:
-                    if d.get("roles"):
-                        roles = d.get("roles").split()
-                        for role in roles:
-                            workspace_tabs.setContent(role, d.tag, name ,state_id)
+        
                     
     STATE_IDS = [ s.id for s in states ]
     

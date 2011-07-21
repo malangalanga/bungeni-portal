@@ -8,7 +8,7 @@ Set up the versions factory.
   
   >>> component.provideAdapter(
   ...    bungeni.core.version.ContextVersioned,
-  ...    (bungeni.core.interfaces.IVersionable,),
+  ...    (bungeni.models.interfaces.IVersionable,),
   ...    bungeni.core.interfaces.IVersioned)
 
 Adding a question.
@@ -18,10 +18,8 @@ Adding a question.
   >>> from bungeni.alchemist import Session
   >>> session = Session()
 
-
-
   >>> country = domain.Country()
-  >>> country.country_id = 'KE'
+  >>> country.country_id = "KE"
   >>> country.country_name = u"Kenya"
   >>> country.iso_name = u"KENYA"
   >>> country.language = "en"
@@ -30,12 +28,12 @@ Adding a question.
 
   >>> mp_1 = domain.User(u"mp_1", 
   ...        first_name=u"a", 
-  ...        last_name=u'ab', 
+  ...        last_name=u"ab", 
   ...        birth_country="KE",
   ...        email=u"mp1@example.com", 
   ...        date_of_birth=datetime.datetime.now(),
   ...        language="en",
-  ...        gender='M') 
+  ...        gender="M") 
   >>> session.add(mp_1)
   >>> session.flush()
 
@@ -44,23 +42,53 @@ Adding a question.
   ...     domain.Question,
   ...     short_name="A question",
   ...     type="question",
-  ...     owner_id = mp_1.user_id ,
+  ...     owner_id=mp_1.user_id,
   ...     language="en")
 
-The ``question`` object needs to provide the versionable interface.
-  
-  >>> from zope.interface import alsoProvides
-  >>> alsoProvides(question, bungeni.core.interfaces.IVersionable)
+In order to create a participation, we need a principal:
 
-Verify that no versions exist yet:
+  >>> from bungeni.core.testing import set_interaction
+  >>> set_interaction(None)
 
-  >>> versions =  bungeni.core.interfaces.IVersioned(question)
+  >>> from bungeni.core.testing import create_principal
+  >>> member = create_principal("mp_1", "Member", ())
+
+  >>> set_interaction(member)
+  >>> from bungeni.models.utils import get_principal_id
+  >>> get_principal_id()
+  'mp_1'
+
+
+Verify that no versions exist yet (assuming questions are IVersionable):
+
+  >>> versions = bungeni.core.interfaces.IVersioned(question)
   >>> len(tuple(versions.values()))
   0
 
-After creating a version, verify availability:
+To be versioned, a question should be in a valid state:
+
+!+INTERACTION(mr, jul-2011) remaining tests need to be upgraded to take into 
+account richer testing possibilities given the above newly added principal 
+interaction
+
+!+DRAFT_VERSION(mr, jul-2011) creating a draft should NOT also create a version.
+
+  >>> #from bungeni.core.workflow.interfaces import IWorkflowController
+  >>> #wfc = IWorkflowController(question)
+  >>> #wfc
+  #<bungeni.core.workflow.states.WorkflowController object at ...>
+  >>> #wfc.fireTransition("-draft") 
+  >>> #question.status
+  #'draft'
+  #'draft'
+  # FAILS, needs an interaction, etc, so we just hard-set a status instead
+  >>> question.status = 'draft'
   
-  >>> version = versions.create('New version created ...')
+After creating a version, verify availability:
+
+  >>> version = versions.create("New version created ...")
+
+
   >>> len(tuple(versions.values()))
   1
 
@@ -70,3 +98,5 @@ Cleanup
   >>> session.flush()
   >>> session.commit()
   >>> session.close()
+  >>> set_interaction(None)
+
