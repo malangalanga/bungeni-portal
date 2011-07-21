@@ -124,7 +124,7 @@ class ReportView(form.PageForm):
     class IReportForm(interface.Interface):
         short_name = schema.Choice(
                     title=_(u"Document Type"),
-                    description=_(u"Type of document to be produced"),
+                    description=_(u"Type of report to be produced"),
                     values=["Order of the day",
                              "Weekly Business",
                              "Questions of the week"],
@@ -227,7 +227,10 @@ class ReportView(form.PageForm):
                 ctx = ISchedulingContext(self.context)
             except:
                 errors.append(interface.Invalid(
-                                         _(u"Not a scheduling context")))
+                        _(u"You are trying to generate a report "
+                            "outside scheduling")
+                    )
+                )
             sittings = ctx.get_sittings(start_date, end_date).values()
             if not sittings:
                 errors.append(interface.Invalid(
@@ -407,9 +410,10 @@ class DefaultReportView(BrowserView):
 
     template = ViewPageTemplateFile("templates/default-report.pt")
 
-    def __init__(self, context, request):
+    def __init__(self, context, request, include_text=True):
         self.context = context
         self.request = request
+        self.include_text = include_text
         
     def __call__(self):
         return self.template() 
@@ -460,7 +464,7 @@ def default_reports(sitting, event):
         elif sitting.status == 'published_minutes':
             report.short_name = "Sitting Votes and Proceedings"
             drc = DefaultReportContent(sittings, report.short_name, True)
-            report.body_text = DefaultReportView(drc, TestRequest())()
+            report.body_text = DefaultReportView(drc, TestRequest(), False)()
         session.add(report)
         session.flush()
         notify(ObjectCreatedEvent(report))

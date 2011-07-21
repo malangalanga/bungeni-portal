@@ -276,7 +276,7 @@ class AddForm(BaseForm, catalyst.AddForm):
                 widget = self.widgets[ key ]
                 error = formlib.form.WidgetInputError(
                     widget.name, widget.label,
-                    _(u"Duplicate Value for Unique Field"))
+                    _(u"A record with this value already exists"))
                 widget._error = error
                 errors.append(error)
         return errors
@@ -355,7 +355,10 @@ class AddForm(BaseForm, catalyst.AddForm):
         if not self._next_url:
             self._next_url = url.absoluteURL(self.__parent__, self.request)
         self.request.response.redirect(self._next_url)
-        session.close()
+        # !+SESSION_CLOSE(taras.sterch, july-2011) there is no need to close the 
+        # session. Transaction manager will take care of this. Hope it does not 
+        # brake anything.
+        #session.close()
 
     @formlib.form.action(_(u"Save"), condition=formlib.form.haveInputWidgets)
     def handle_add_edit(self, action, data):
@@ -407,7 +410,7 @@ class EditForm(BaseForm, catalyst.EditForm):
         if self.is_translation:
             language = get_language_by_name(self.context.language)["name"]
             return _(u"edit_translation_legend",
-                     default=u'Editing $language translation of "$title"',
+                     default=u"Editing $language translation of '$title'",
                      mapping={"title": translate(props.title, context=self.request),
                               "language": language})
 
@@ -499,7 +502,10 @@ class EditForm(BaseForm, catalyst.EditForm):
         if not self._next_url:
             self._next_url = url.absoluteURL(self.context, self.request)
         self.request.response.redirect(self._next_url)
-        session.close()
+        # !+SESSION_CLOSE(taras.sterch, july-2011) there is no need to close the 
+        # session. Transaction manager will take care of this. Hope it does not 
+        # brake anything.
+        #session.close()
 
 
 class TranslateForm(AddForm):
@@ -666,8 +672,11 @@ class TranslateForm(AddForm):
             translation.field_text = data[form_field]
             session.add(translation)
         session.flush()
-        session.commit()
-        session.close()
+        # !+SESSION_CLOSE(taras.sterch, july-2011) there is no need to close the 
+        # session. Transaction manager will take care of this. Hope it does not 
+        # brake anything.
+        #session.commit()
+        #session.close()
         
         # !+EVENT_DRIVEN_CACHE_INVALIDATION(mr, mar-2011) no translate event
         # invalidate caches for this domain object type
@@ -799,7 +808,10 @@ class DeleteForm(PageForm):
                             "database integrity error")
 
             return self.render()
-        session.close()
+        # !+SESSION_CLOSE(taras.sterch, july-2011) there is no need to close the 
+        # session. Transaction manager will take care of this. Hope it does not 
+        # brake anything.
+        #session.close()
         
         #TODO: check that it is removed from the index!
         notify(ObjectRemovedEvent(
