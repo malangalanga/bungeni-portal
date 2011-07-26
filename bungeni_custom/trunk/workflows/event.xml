@@ -17,10 +17,10 @@
         <grant permission="zope.View" role="bungeni.Owner"/>
         <deny permission="zope.View" role="bungeni.Clerk" />
         <deny permission="zope.View" role="bungeni.Speaker" />
-        <deny permission="zope.View" role="bungeni.Authenticated" /> 
         <deny permission="zope.View" role="bungeni.Signatory" /> 
-        <deny permission="zope.View" role="bungeni.Anonymous" />
         <deny permission="zope.View" role="bungeni.MP" />
+        <deny permission="zope.View" role="bungeni.Authenticated" /> 
+        <deny permission="zope.View" role="bungeni.Anonymous" />
         <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
         <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
@@ -29,9 +29,9 @@
     <state id="internal" title="Published internal" like_state="private">
         <grant permission="zope.View" role="bungeni.Clerk"/>
         <grant permission="zope.View" role="bungeni.Speaker"/>
-        <grant permission="zope.View" role="bungeni.Authenticated"/>
-        <grant permission="zope.View" role="bungeni.MP"/>
         <grant permission="zope.View" role="bungeni.Signatory"/>
+        <grant permission="zope.View" role="bungeni.MP"/>
+        <grant permission="zope.View" role="bungeni.Authenticated"/>
         <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
         <grant permission="bungeni.event.Delete" role="bungeni.Clerk" />

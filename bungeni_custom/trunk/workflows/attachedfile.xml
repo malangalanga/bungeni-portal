@@ -10,11 +10,11 @@
     <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
     
     <state id="private" title="Private">
-        <grant permission="zope.View" role="bungeni.Owner"/>
         <deny permission="zope.View" role="bungeni.Clerk" />
         <deny permission="zope.View" role="bungeni.Speaker" />
-        <deny permission="zope.View" role="bungeni.Authenticated" /> 
+        <grant permission="zope.View" role="bungeni.Owner"/>
         <deny permission="zope.View" role="bungeni.Signatory" /> 
+        <deny permission="zope.View" role="bungeni.Authenticated" /> 
         <deny permission="zope.View" role="bungeni.Anonymous" />
     </state>
 
@@ -32,8 +32,8 @@
     
     <state id="inactive" like_state="public" title="Inactive file">
         <!-- attachedfile -->
-        <deny permission="zope.View" role="bungeni.Authenticated" /> 
         <deny permission="zope.View" role="bungeni.Signatory" /> 
+        <deny permission="zope.View" role="bungeni.Authenticated" /> 
         <deny permission="zope.View" role="bungeni.Anonymous" /> 
     </state>
     

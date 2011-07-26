@@ -77,7 +77,8 @@ workflow as a single XML document.
     obsolete=False
 
 - within each target-section, the order of appearance of permission actions 
-  (for appropriate actions) is:
+  (for appropriate actions) is the following, with the most general, 
+  e.g. zope.*, appearing first:
     View
     Edit
     Add
@@ -88,6 +89,7 @@ workflow as a single XML document.
     <role id="bungeni.Clerk" title="Clerks Office" />
     <role id="bungeni.Speaker" title="Speaker Office" />
     <role id="bungeni.Owner" title="Owner" />
+    <role id="bungeni.Signatory" title="Signatory" />
     <role id="bungeni.MP" title="Member of parliament" />
     <role id="bungeni.Minister" title="Minister" />
     <role id="bungeni.Authenticated" title="All authenticated users" />
