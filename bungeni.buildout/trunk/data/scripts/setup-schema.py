@@ -2,12 +2,14 @@
 some database value population scripts
 """
 
-import transaction
-
+from bungeni.alchemist import Session
+from bungeni.alchemist import security
 from bungeni import models
 from bungeni.models import schema
-from ore.alchemist import Session
-from alchemist import security
+
+# load the workflows--adjusts the model with features as per each workflow
+from bungeni.core.workflows import adapters
+
 from marginalia import schema as marginalia_schema
 from sqlalchemy import create_engine
 
