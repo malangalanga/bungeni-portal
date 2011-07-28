@@ -111,6 +111,13 @@ class BaseForm(formlib.form.FormBase):
 
         If ``next_url`` is provided, a redirect is issued upon
         successful form submission.
+        
+    As a viewlet
+        
+        Two additional init params to the "view" standard init API of 
+        (context, request) are specified for when usage is as as "viewlet"
+        i.e. (context, request, view, manager)
+    
     """
 
     Adapts = None
@@ -121,9 +128,20 @@ class BaseForm(formlib.form.FormBase):
 
     status = None
 
-    def __init__(self, *args):
-        super(BaseForm, self).__init__(*args)
-
+    def __init__(self, context, request,
+            # to support usage as a viewlet
+            view=None, manager=None
+        ):
+        # !+view/viewlet(mr, jul-2011): (self, context, request, view, manager)
+        # here, we make the distinction explicit, for some clarity, but in 
+        # subclasses we simply use the open-ended *args
+        if view is not None:
+            # viewlet api
+            super(BaseForm, self).__init__(context, request, view, manager)
+        else:
+            # view api
+            super(BaseForm, self).__init__(context, request)
+        
         if str(self.request.get("headless", "")).lower() in TRUE_VALS:
             self.setPrefix(NO_PREFIX)
 
@@ -133,7 +151,7 @@ class BaseForm(formlib.form.FormBase):
                 default = DefaultAction(action)
                 self.actions = formlib.form.Actions(default)
                 break
-
+        
         # the ``_next_url`` attribute is used internally by our
         # superclass to implement formlib's ``nextURL`` method
         next_url = self._next_url = self.request.get("next_url", None)
@@ -384,6 +402,7 @@ class EditForm(BaseForm, catalyst.EditForm):
     """
 
     def __init__(self, *args):
+        # !+view/viewlet(mr, jul-2011)
         super(EditForm, self).__init__(*args)
         # For bungeni content, mark the request that we are in edit mode e.g. 
         # useful for when editing a question's response, but not wanting to 
@@ -518,6 +537,7 @@ class TranslateForm(AddForm):
         return True
 
     def __init__(self, *args):
+        # !+view/viewlet(mr, jul-2011)
         super(TranslateForm, self).__init__(*args)
         self.language = self.request.get("language", get_default_language())
 
