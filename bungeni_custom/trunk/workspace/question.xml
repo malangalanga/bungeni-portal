@@ -5,8 +5,11 @@
     <state id="draft">
         <tab id="draft" roles="bungeni.Owner"/>
     </state>
+    <state id="redraft">
+        <tab id="draft" roles="bungeni.Owner"/>
+    </state>
     <state id="withdrawn_external">
-        <tab id="archive" roles="bungeni.Owner"/>
+        <tab id="archive" roles="bungeni.Owner bungeni.Signatory"/>
     </state>
     <state id="submitted">
         <tab id="inbox" roles="bungeni.Clerk"/>

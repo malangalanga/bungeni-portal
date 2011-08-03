@@ -19,7 +19,7 @@
     <grant permission="bungeni.bill.Delete" role="bungeni.Owner" />
     
     
-    <state id="working_draft" title="Working Draft" version="true">
+    <state id="working_draft" title="Working Draft">
         <!-- bill -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <deny permission="zope.View" role="bungeni.Speaker" />
@@ -48,8 +48,7 @@
         <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
 
-    <state id="draft" title="Draft Bill" version="true" 
-        like_state="working_draft">
+    <state id="draft" title="Draft Bill" like_state="working_draft">
         <!-- bill -->
         <deny permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Owner" /> 
@@ -68,32 +67,37 @@
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
     </state>
-    
-    <state id="withdrawn_external" title="Dropped" like_state="draft">
+
+    <state id="submitted_signatories" title="Submitted to Signatories"
+        version="true" like_state="draft">
         <!-- bill -->
+        <grant permission="zope.View" role="bungeni.Signatory" />
         <deny permission="bungeni.bill.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.bill.Delete" role="bungeni.Owner" />
         <!-- signatory -->
-        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
         <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
         <!-- attachedfile -->
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
     </state>
-    
-    <state id="submitted" title="Submitted to Clerk" version="true"
-        like_state="draft">
-        <grant permission="zope.View" role="bungeni.Clerk" />
-        <grant permission="zope.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.bill.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.bill.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.bill.Delete" role="bungeni.Owner" />
+
+    <state id="redraft" title="Redraft" version="true" like_state="draft"
+        note="document under review before resubmission">
+        <deny permission="bungeni.bill.Delete" role="bungeni.Owner"/>
+    </state>
+
+    <state id="withdrawn_external" title="Dropped" 
+        like_state="submitted_signatories">
         <!-- signatory -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
-        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
-        <!-- attachedfile -->
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+    </state>
+    
+    <state id="submitted" title="Submitted to Clerk" version="true"
+        like_state="submitted_signatories">
+        <!-- bill -->
+        <grant permission="zope.View" role="bungeni.Clerk" />
+        <!-- signatory -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
     </state>
 
     <state id="received" title="received by clerk"
@@ -106,13 +110,6 @@
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
     </state>
 
-    <state id="submitted_signatories" title="Submitted to Signatories"
-        version="true" like_state="submitted">
-        <grant permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
-        <grant permission="bungeni.signatory.Add" role="bungeni.Owner"/>
-        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
-    </state>
-
     <state id="gazetted" title="Bill Published in Gazette"
         version="true"
         like_state="received">
@@ -122,8 +119,6 @@
         <grant permission="zope.View" role="bungeni.Minister" />
         <grant permission="zope.View" role="bungeni.Authenticated" /> 
         <grant permission="zope.View" role="bungeni.Anonymous" />
-        <deny permission="bungeni.bill.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.bill.Delete" role="bungeni.Owner" />
         <!-- groupitemassignment -->
         <grant permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
@@ -237,15 +232,23 @@
     />
 
     <transition title="Submit"
-        source="working_draft draft submitted_signatories"
+        source="draft redraft submitted_signatories"
         destination="submitted"
         condition="pi_signatories_check"
         trigger="manual"
         roles="bungeni.Owner"
     />
 
+    <transition title="Submit"
+        source="working_draft"
+        destination="submitted"
+        condition="pi_signatories_check"
+        trigger="manual"
+        roles="bungeni.Clerk"
+    />
+
     <transition title="Submit to Signatories"
-        source="draft working_draft"
+        source="draft redraft"
         destination="submitted_signatories"
         condition="pi_has_signatories"
         trigger="manual"
@@ -254,24 +257,16 @@
 
     <transition title="Redraft"
         source="submitted_signatories"
-        destination="draft"
-        condition="user_is_state_creator_and_owner"
+        destination="redraft"
+        condition="user_is_context_owner"
         roles="bungeni.Owner"
         trigger="manual"
     />
 
-    <transition title="Redraft"
-        source="submitted_signatories"
-        destination="working_draft"
-        condition="user_is_state_creator_not_owner"
-        roles="bungeni.Clerk"
-        trigger="manual"
-    />
-
     <transition title="Drop"
-        source="draft working_draft submitted_signatories"
+        source="redraft submitted_signatories"
         destination="withdrawn_external"
-        condition="user_is_state_creator"
+        condition="user_is_context_owner"
         roles="bungeni.Owner"
         trigger="manual"
     />

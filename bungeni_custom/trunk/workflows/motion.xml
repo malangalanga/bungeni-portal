@@ -15,7 +15,7 @@
     <grant permission="bungeni.motion.Delete" role="bungeni.Owner" />
     
     
-    <state id="working_draft" title="Working Draft" version="true">
+    <state id="working_draft" title="Working Draft">
         <!-- motion -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <deny permission="zope.View" role="bungeni.Speaker" />
@@ -74,7 +74,7 @@
         <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
     
-    <state id="draft" title="Draft" version="true" like_state="working_draft">
+    <state id="draft" title="Draft" like_state="working_draft">
         <!-- motion -->
         <deny permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Owner" />
@@ -93,48 +93,46 @@
         <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
     </state>
-    
-    <state id="withdrawn_external" title="Dropped" like_state="draft">
+
+    <state id="submitted_signatories" title="Submitted to Signatories"
+        version="true" like_state="draft">
         <!-- motion -->
+        <grant permission="zope.View" role="bungeni.Signatory" />
         <deny permission="bungeni.motion.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.motion.Delete" role="bungeni.Owner" />
         <!-- signatory -->
-        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
         <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
         <!-- fileattachment -->
         <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
     </state>
 
+    <state id="redraft" title="Redraft" like_state="draft"
+        note="document under review before resubmission"
+        version="true">
+        <deny permission="bungeni.motion.Delete" role="bungeni.Owner" />
+    </state>
+
+    <state id="withdrawn_external" title="Dropped" 
+        like_state="submitted_signatories" 
+        note="motion has been withdrawn before submission to house">
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+    </state>
+
     <state id="submitted" title="Submitted" 
         version="true"
-        like_state="draft">
+        like_state="submitted_signatories">
         <!-- motion -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Speaker" />
-        <grant permission="zope.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.motion.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.motion.Delete" role="bungeni.Owner" />
         <!-- signatory -->
-        <deny permission="bungeni.signatory.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
-        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
-        <!-- fileattachment -->
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
         <notification condition="clerk_receive_notification"
             subject="Motion submitted: ${item.short_name}"
             from="${item.owner_email}"
             to="${site.clerk_email}"
             body="notification_email_to_clerk_upon_submit_of_motion"
         />
-    </state>
-
-    <state id="submitted_signatories" title="Submitted to Signatories"
-        version="true" like_state="submitted">
-        <grant permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
-        <grant permission="bungeni.signatory.Add" role="bungeni.Owner"/>
-        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
     </state>
 
     <state id="received" title="Received by Clerks Office" 
@@ -292,15 +290,23 @@
     />
 
     <transition title="Submit"
-        source="working_draft draft submitted_signatories"
+        source="draft submitted_signatories redraft"
         destination="submitted"
         condition="pi_signatories_check"
         trigger="manual"
         roles="bungeni.Owner"
     />
 
+    <transition title="Submit"
+        source="working_draft"
+        destination="submitted"
+        condition="pi_signatories_check"
+        trigger="manual"
+        roles="bungeni.Clerk"
+    />
+
     <transition title="Submit to Signatories"
-        source="draft working_draft"
+        source="draft redraft"
         destination="submitted_signatories"
         condition="pi_has_signatories"
         roles="bungeni.Owner"
@@ -309,24 +315,16 @@
     
     <transition title="Redraft"
         source="submitted_signatories"
-        destination="draft"
-        condition="user_is_state_creator_and_owner"
+        destination="redraft"
+        condition="user_is_context_owner"
         roles="bungeni.Owner"
         trigger="manual"
     />
 
-    <transition title="Redraft"
-        source="submitted_signatories"
-        destination="working_draft"
-        condition="user_is_state_creator_not_owner"
-        roles="bungeni.Clerk"
-        trigger="manual"
-    />
-
     <transition title="Drop"
-        source="draft working_draft submitted_signatories"
+        source="redraft submitted_signatories"
         destination="withdrawn_external"
-        condition="user_is_state_creator"
+        condition="user_is_context_owner"
         roles="bungeni.Owner"
         trigger="manual"
     />
@@ -347,7 +345,15 @@
         roles="bungeni.Clerk"
         require_confirmation="true"
     />
-    
+
+    <transition title="Redraft (Automatic)"
+        source="clarification_required"
+        destination="redraft"
+        condition="pi_has_signatories"
+        trigger="automatic"
+        note="incomplete document needs to be resubmitted to signatories"
+    />
+
     <transition title="Complete"
         source="received" 
         destination="completed" 
