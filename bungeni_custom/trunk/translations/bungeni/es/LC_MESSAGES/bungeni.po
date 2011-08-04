@@ -3,24 +3,23 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: Wed Jul 26 17:45:52 2011\n"
-"PO-Revision-Date: 2011-07-12 13:22+0300\n"
-"Last-Translator: Google Translate API\n"
+"PO-Revision-Date: 2011-08-03 18:35+0300\n"
+"Last-Translator: Flavio <flavio.zeni@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.4\n"
 "Domain: DOMAIN\n"
-"Language: es\n"
 "Language-Code: es\n"
 "Language-Name: Espanol\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"X-Generator: Pootle 2.0.4\n"
 
 #: src/bungeni.main/bungeni/core/app.py:102
-#, fuzzy
 msgid "Bungeni"
-msgstr "bungeni visitante"
+msgstr "bungeni"
 
 #: src/bungeni.main/bungeni/core/app.py:103
 #: src/bungeni.main/bungeni/core/app.py:110
@@ -161,7 +160,7 @@ msgstr "comités de vista creada por el actual Parlamento"
 #: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:65
 #: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:71
 msgid "Bills"
-msgstr "billetes"
+msgstr "proyecto de leyes"
 
 #: src/bungeni.main/bungeni/core/app.py:211
 msgid "View bills introduced in the current parliament"
@@ -191,11 +190,11 @@ msgstr "Ver las preguntas presentadas en el actual Parlamento"
 #: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:92
 #: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:98
 msgid "Motions"
-msgstr "movimientos"
+msgstr "mociones"
 
 #: src/bungeni.main/bungeni/core/app.py:223
 msgid "View motions moved in the current parliament"
-msgstr "movimientos de vista se trasladó en la actual legislatura"
+msgstr "ver los mociones se trasladó en el actual Parlamento"
 
 #: src/bungeni.main/bungeni/core/app.py:228
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2738
@@ -205,7 +204,7 @@ msgstr "movimientos de vista se trasladó en la actual legislatura"
 #: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:145
 #: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:151
 msgid "Tabled documents"
-msgstr "presentó los documentos"
+msgstr "documentos presentados"
 
 #: src/bungeni.main/bungeni/core/app.py:231
 msgid "View the documents tabled in the current parliament"
@@ -239,7 +238,7 @@ msgstr "navegar y descargar las publicaciones parlamentarias"
 
 #: src/bungeni.main/bungeni/core/app.py:264
 msgid "Current"
-msgstr "corriente"
+msgstr "actual"
 
 #: src/bungeni.main/bungeni/core/app.py:265
 msgid "View current parliament members (MPs)"
@@ -402,8 +401,8 @@ msgstr "grupo de usuarios desconocidos"
 msgid "title_html_fragment_odf_transform"
 msgstr "código html a odt"
 
-#. Default: ""
 # reverted to previous version $version
+#. Default: ""
 #: src/bungeni.main/bungeni/core/version.py:113
 msgid "Reverted to previous version $version"
 msgstr "volvió a la versión anterior %version"
@@ -781,7 +780,7 @@ msgstr "adoptar las enmiendas"
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:432
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:199
 msgid "Reject a scheduled motion"
-msgstr "rechazar el movimiento"
+msgstr "rechazar la moción"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:46
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:150
@@ -1227,7 +1226,7 @@ msgstr "necesita una aclaración"
 
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:185
 msgid "Create Motion"
-msgstr "crear un movimiento"
+msgstr "crear una moción"
 
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:19
 msgid "Second Reading Adjourned"
@@ -1235,7 +1234,7 @@ msgstr "la segunda lectura aplazada"
 
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:194
 msgid "Create Motion (On behalf of)"
-msgstr "crear un movimiento a favor de ..."
+msgstr "crear una moción a favor de ..."
 
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:20
 msgid "First Report Reading Pending"
@@ -1599,7 +1598,7 @@ msgstr "días antes de la pregunta prevista"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:277
 msgid "Days before bill scheduled"
-msgstr "días antes de la factura programada"
+msgstr "días antes de la ley programada"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:281
 msgid "Maximum Questions Per Sitting"
@@ -2183,19 +2182,19 @@ msgstr "vista la partida"
 
 #: src/bungeni.main/bungeni/models/permissions.zcml:60
 msgid "Add Motion"
-msgstr "añadir movimiento"
+msgstr "añadir moción"
 
 #: src/bungeni.main/bungeni/models/permissions.zcml:61
 msgid "Edit Motion"
-msgstr "edición de movimiento"
+msgstr "editar una moción"
 
 #: src/bungeni.main/bungeni/models/permissions.zcml:62
 msgid "Delete Motion"
-msgstr "eliminar el movimiento"
+msgstr "eliminar la moción"
 
 #: src/bungeni.main/bungeni/models/permissions.zcml:63
 msgid "View Motion"
-msgstr "ver el movimiento"
+msgstr "ver la moción"
 
 #: src/bungeni.main/bungeni/models/permissions.zcml:66
 msgid "Add agenda item"
@@ -2255,15 +2254,15 @@ msgstr "opinión del Parlamento Europeo"
 
 #: src/bungeni.main/bungeni/models/permissions.zcml:87
 msgid "Add Bill"
-msgstr "Añadir factura"
+msgstr "Añadir proyecto de ley"
 
 #: src/bungeni.main/bungeni/models/permissions.zcml:88
 msgid "Edit Bill"
-msgstr "editar factura"
+msgstr "editar proyecto de ley"
 
 #: src/bungeni.main/bungeni/models/permissions.zcml:89
 msgid "Delete Bill"
-msgstr "borrar cuenta"
+msgstr "borrar proyecto de ley"
 
 #: src/bungeni.main/bungeni/models/permissions.zcml:90
 msgid "View Bill"
@@ -3020,7 +3019,7 @@ msgstr "programa de versión del elemento"
 #: src/bungeni.main/bungeni/ui/menu.zcml:1233
 #: src/bungeni.main/bungeni/ui/menu.zcml:1265
 msgid "Motion"
-msgstr "movimiento"
+msgstr "moción"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2340
 msgid "Notice Date"
@@ -3033,17 +3032,17 @@ msgstr "identificación"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2399
 msgid "Motion version"
-msgstr "movimiento de la versión"
+msgstr "versión de la moción"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2405
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2414
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2446
 msgid "Bill Type"
-msgstr "proyecto de ley tipo"
+msgstr "tipo de proyecto de ley"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2406
 msgid "Bill types"
-msgstr "tipos de billetes"
+msgstr "tipos de proyecto de leyes"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2421
 #: src/bungeni.main/bungeni/ui/menu.zcml:1227
@@ -3063,7 +3062,7 @@ msgstr "fecha de publicación"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2511
 msgid "Bill version"
-msgstr "proyecto de ley versión"
+msgstr " versión del proyecto de ley"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2517
 msgid "Question type"
@@ -3160,11 +3159,11 @@ msgstr "fecha"
 #: src/bungeni.main/bungeni/ui/menu.zcml:1251
 #: src/bungeni.main/bungeni/ui/menu.zcml:1283
 msgid "Tabled document"
-msgstr "presentó el documento"
+msgstr "documentos presentados"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2746
 msgid "Tabled document Number"
-msgstr "presentó el número"
+msgstr "el número del documento presentado"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2788
 msgid "Tabled Document version"
@@ -3313,7 +3312,6 @@ msgid "Country Code"
 msgstr "código del país"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3171
-#, fuzzy
 msgid "Two letter ISO Code for this country e.g. DZ for Algeria"
 msgstr "dos letras del código ISO, por ejemplo para este país de Argelia DZ"
 
@@ -4117,7 +4115,7 @@ msgstr "que se registran ahora en"
 
 #: src/bungeni.main/bungeni/ui/menu-vocabularies.zcml:15
 msgid "Add bill type..."
-msgstr "Agregar tipo de billete ..."
+msgstr "Agregar tipo del proyecto de ley"
 
 #: src/bungeni.main/bungeni/ui/menu-vocabularies.zcml:22
 msgid "Add question type..."
@@ -4184,7 +4182,7 @@ msgstr "Añadir pregunta ..."
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:1032
 msgid "Add Motion..."
-msgstr "añadir movimiento ..."
+msgstr "añadir moción ..."
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:1039
 msgid "Add Heading..."
@@ -4198,7 +4196,7 @@ msgstr ""
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:1046
 msgid "Add Bill..."
-msgstr "Añadir cuenta ..."
+msgstr "Añadir proyecto de ley"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:1064
 #: src/bungeni.main/bungeni/ui/menu.zcml:1077
@@ -4462,7 +4460,7 @@ msgstr "la opción &quot;Agregar ...&quot; menú - en sesiones de grupo"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:424
 msgid "The 'Add...' menu - for motion"
-msgstr "la opción &quot;Agregar ...&quot; menú - para el movimiento"
+msgstr "la opción &quot;Agregar ...&quot; menú - para la moción"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:437
 #: src/bungeni.main/bungeni/ui/menu.zcml:474
@@ -4483,7 +4481,7 @@ msgstr "añadir el archivo ..."
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:453
 msgid "Assign motion to a group..."
-msgstr "asignar el movimiento de grupo"
+msgstr "asignar la moción a un grupo"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:461
 msgid "The 'Add...' menu - for bill"
@@ -4549,7 +4547,7 @@ msgstr "acciones para la programación del calendario"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:622
 msgid "The 'Add...' menu - for tabled document"
-msgstr "la opción &quot;Agregar ...&quot; menú - de presentado el documento"
+msgstr "la opción &quot;Agregar ...&quot; menú - de documento presentado"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:63
 msgid "The 'workflow' menu - allows user to execute workflow transitions"
@@ -4704,7 +4702,7 @@ msgstr "añadir el título / papel ..."
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:989
 msgid "Add Tabled document..."
-msgstr "añadir presentado el documento ..."
+msgstr "añadir documento presentado ..."
 
 #: src/bungeni.main/bungeni/ui/reports.py:126
 msgid "Document Type"
@@ -4758,7 +4756,7 @@ msgstr "los temas del programa"
 
 #: src/bungeni.main/bungeni/ui/reports.py:70
 msgid "Tabled Documents"
-msgstr "presentó los documentos"
+msgstr "documentos presentados"
 
 #: src/bungeni.main/bungeni/ui/rss.py:347
 #: src/bungeni.main/bungeni/ui/search.py:332
@@ -5124,11 +5122,11 @@ msgstr "el periodo seleccionado no tiene sesiones"
 
 #: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:67
 msgid "Period selected has no Bills"
-msgstr "el periodo seleccionado no tiene cuentas"
+msgstr "el periodo seleccionado no tiene proyecto de ley"
 
 #: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:94
 msgid "Period selected has no Motions"
-msgstr "el periodo seleccionado no tiene movimientos"
+msgstr "el periodo seleccionado no tiene mociones"
 
 #: src/bungeni.main/bungeni/ui/views.zcml:491
 msgid "Listing"
