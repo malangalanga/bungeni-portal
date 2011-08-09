@@ -11,6 +11,24 @@ body {
   text-align:justify;
 }
 
+#content {
+    font-size: 125% !important;
+    padding: 1em 1em 2em 1em !important;
+    background: White;
+}
+
+#content-core,
+#content-core div p {
+    text-align: justify !important;
+}
+
+#content-core h1, 
+#content-core h2 {
+    text-align: justify !important; 
+    width: 100% !important
+}
+
+
 h1, h2 {
   color: #C8631B;
 }
@@ -145,6 +163,40 @@ ul#portal-globalnav {
 #personaltools-dashboard,
 #personaltools-preferences {
     display: none !important;
+}
+
+.documentDescription, .description {
+    display: block !important;
+    font-weight: normal;
+    line-height: 1.5em !important;
+    margin: 0 0 0.5em !important;
+    width: 100% !important;
+}
+
+p.bodyparagraph {
+    color: black;
+    margin: 0 0 6px;
+    padding: 2px;
+    text-align: justify !important;
+}
+
+#collage .block_1{
+    width: 22.5% !important;
+}
+#collage .block_2{
+    width: 44.5% !important;
+}
+#collage .block_3 {
+    width: 30.5% !important;
+}
+
+.featured_content td {
+    padding-right: 0.5em !important;
+}
+
+#collage .block_2 div.main-column h1 {
+    text-align: left !important;
+    margin: 20px auto;
 }
 
 
