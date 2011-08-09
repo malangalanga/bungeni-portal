@@ -56,7 +56,7 @@
         source=""
         destination="consented"
         trigger="automatic"
-        condition="user_is_parent_document_owner"
+        condition="signatory_auto_sign"
     />
 
     <transition title="Create"
@@ -83,7 +83,7 @@
         condition="pi_allow_signature_actions"
     />
 
-    <transition title="withdraw"
+    <transition title="withdraw signature"
         source="consented"
         destination="withdrawn"
         trigger="manual"
@@ -91,17 +91,16 @@
         require_confirmation="true"
         condition="pi_allow_signature_actions"
     />
-    <transition title="withdrawauto"
+    <transition title="withdraw signature - automatic"
         source="awaiting_consent"
         destination="withdrawn"
         trigger="automatic"
         condition="pi_signature_period_expired"
     />
-    <transition title="unsignauto"
+    <transition title="unsign document - automatic"
         source="consented rejected withdrawn"
         destination="awaiting_consent"
         trigger="automatic"
         condition="pi_unsign_signature"
     />
-
 </workflow>
