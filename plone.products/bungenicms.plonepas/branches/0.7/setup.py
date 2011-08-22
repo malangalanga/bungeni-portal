@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 version = '0.1'
 
-setup(name='bungeni.plonepas',
+setup(name='bungenicms.plonepas',
       version=version,
       description="Bungeni SQLAlchemy PAS Plugins For Plone",
       keywords='plone pas sqlalchemy',

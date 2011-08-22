@@ -16,8 +16,8 @@ from Products.PlonePAS.Extensions import Install as ppasinstall
 
 import sqlalchemy as rdb
 
-import bungeni.plonepas
-from bungeni.plonepas import schema
+import bungenicms.plonepas
+from bungenicms.plonepas import schema
 
 SANDBOX_ID = 'sandbox'
 
@@ -27,7 +27,7 @@ class SQLLayer:
     def setUp( cls ):
         testing.setUp()
         zcml.load_config('meta.zcml', Products.Five)
-        zcml.load_config('configure.zcml', bungeni.plonepas )
+        zcml.load_config('configure.zcml', bungenicms.plonepas )
 
         app = ZopeTestCase.app()
 
@@ -59,7 +59,7 @@ class SQLLayer:
         factory.addPluggableAuthService(REQUEST=None)
         pas = container.acl_users
         ppasinstall.registerPluginTypes(pas)
-        from bungeni.plonepas import install
+        from bungenicms.plonepas import install
         install.install_pas_plugins( container )
         return pas
 

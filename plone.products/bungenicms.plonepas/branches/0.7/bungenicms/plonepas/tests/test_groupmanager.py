@@ -1,7 +1,7 @@
 
 # tests from sqlpasplugin ( GPL v2 )
 
-from bungeni.plonepas.tests import basetestcase
+from bungenicms.plonepas.tests import basetestcase
 from Products.PlonePAS.plugins.group import PloneGroup
 
 class TestGroupManager( basetestcase.BaseTestCase ):
