@@ -3,7 +3,7 @@ import logging
 from zope import component
 from zope.securitypolicy.interfaces import IRole
 from Products.PluggableAuthService.interfaces.plugins import *
-from bungeni.plonepas.install import install as install_plonepas
+from bungenicms.plonepas.install import install as install_plonepas
 from Products.CMFCore.utils import getToolByName
 import bungeni_custom as bc
 
