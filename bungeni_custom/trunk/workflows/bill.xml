@@ -216,7 +216,9 @@
     <state id="rejected" title="Rejected Bill" like_state="approved" />
     
     <state id="withdrawn" title="Bill Withdrawn" like_state="approved" />
-
+    
+    <state id="withdrawn_internal" title="Withdrawn" like_state="submitted" />
+    
     <transition title="Create Bill"
         source=""
         destination="working_draft"
@@ -496,8 +498,18 @@
         roles="bungeni.Clerk"
     />
     
+    <transition title="Withdraw" 
+        source="submitted"
+        destination="withdrawn_internal" 
+        condition=""
+        trigger="manual"
+        roles="bungeni.Owner"
+        require_confirmation="true" 
+    />
+    
     <transition title="Withdraw"
-        source="gazetted
+        source="submitted
+                gazetted
                 first_reading
                 first_committee
                 first_report_reading

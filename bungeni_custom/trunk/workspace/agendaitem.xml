@@ -9,8 +9,11 @@
         <tab id="draft" roles="bungeni.Owner"/>
     </state>
     <state id="withdrawn_external">
-        <tab id="archive" roles="bungeni.Owner bungeni.Clerk bungeni.Speaker 
-            bungeni.Signatory"
+        <tab id="archive" 
+	     roles="bungeni.Owner
+		    bungeni.Clerk
+		    bungeni.Speaker 
+		    bungeni.Signatory"
         />
     </state>
     <state id="submitted">
@@ -38,17 +41,26 @@
         <tab id="sent" roles="bungeni.Speaker"/>
     </state>
      <state id="inadmissible">
-        <tab id="archive" roles="bungeni.Speaker bungeni.Clerk bungeni.Owner"/>
+        <tab id="archive" 
+	     roles="bungeni.Speaker
+		    bungeni.Clerk
+		    bungeni.Owner"/>
     </state>
     <state id="withdrawn_external">
-        <tab id="archive" roles="bungeni.Speaker bungeni.Clerk bungeni.Owner"/>
+        <tab id="archive" 
+	     roles="bungeni.Speaker
+		    bungeni.Clerk
+		    bungeni.Owner"/>
     </state>
     <state id="admissible">
         <tab id="inbox" roles="bungeni.Speaker"/>
         <tab id="sent" roles="bungeni.Owner bungeni.Clerk"/>
     </state>
     <state id="schedule_pending">
-        <tab id="sent" roles="bungeni.Owner bungeni.Signatory bungeni.Speaker"/>
+        <tab id="sent" 
+	     roles="bungeni.Owner
+		    bungeni.Signatory
+		    bungeni.Speaker"/>
     </state>
     <state id="scheduled">
         <tab id="sent" roles="bungeni.Clerk bungeni.Owner"/>
@@ -58,18 +70,32 @@
         <tab id="sent" roles="bungeni.Owner"/>
     </state>
     <state id="adjourned">
-        <tab id="archive" roles="bungeni.Clerk bungeni.Speaker bungeni.Owner"/>
+        <tab id="archive" 
+	     roles="bungeni.Clerk
+		    bungeni.Speaker
+		    bungeni.Owner"/>
     </state>
     <state id="deferred">
-        <tab id="archive" roles="bungeni.Clerk bungeni.Speaker bungeni.Owner"/>
+        <tab id="archive" 
+	     roles="bungeni.Clerk
+		    bungeni.Speaker
+		    bungeni.Owner"/>
     </state>
     <state id="elapsed">
-        <tab id="archive" roles="bungeni.Clerk bungeni.Speaker bungeni.Owner"/>
+        <tab id="archive" 
+	     roles="bungeni.Clerk
+		    bungeni.Speaker
+		    bungeni.Owner"/>
     </state>
     <state id="dropped">
-        <tab id="archive" roles="bungeni.Speaker bungeni.Owner"/>
+        <tab id="archive" 
+	     roles="bungeni.Speaker
+		    bungeni.Owner"/>
     </state>
     <state id="withdrawn">
-        <tab id="archive" roles="bungeni.Owner bungeni.Clerk bungeni.Speaker"/>
+        <tab id="archive" 
+	     roles="bungeni.Owner
+		    bungeni.Clerk
+		    bungeni.Speaker"/>
     </state>
 </workspace>
