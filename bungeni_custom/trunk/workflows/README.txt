@@ -4,7 +4,7 @@ Custom Definitions of the Workflows of Parliamentary Documents
 This file reference information and guidelines about how to define/localize the 
 workflow instances of parliamentary documents, for a given Bungeni deployment.
 
-!+DEVELOPER_ORIENTED(mr, jun-2011) this README is tyo be reworked, as
+!+DEVELOPER_ORIENTED(mr, jun-2011) this README is to be reworked, as
 currently oriented more towards the Bungeni developer than to the site 
 administartor of a Bungeni deployment.
 
@@ -74,6 +74,7 @@ workflow as a single XML document.
     version=False
     like_state
     note
+    permissions_from_parent=False
     obsolete=False
 
 - within each target-section, the order of appearance of permission actions 

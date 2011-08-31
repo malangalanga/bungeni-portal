@@ -25,6 +25,8 @@ from bungeni.core.workflows._conditions import (
     # negation of condition) on each of the two transition options 
     user_is_not_context_owner, 
     user_is_context_owner,
+    # sub-instances
+    user_may_edit_context_parent,
     # common global settings
     clerk_receive_notification,
     owner_receive_notification,
