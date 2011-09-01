@@ -1071,10 +1071,26 @@ class PortalTasks:
         if not self.tasks.build_exists(self.exists_check):
             abort("Portal build requires a working bungeni buildout")
 
-    def setup(self):
-        self.tasks.src_checkout()
+
+    def setup(self, version = "default"):
+        """
+        31-08-2011 - New setup API to handle pegged releases
+        version = default , uses release info specified in setup.ini 
+        version = HEAD, uses HEAD
+        """
+
+        if version == "default":
+            # get release info
+            current_release = BungeniRelease().get_release(self.cfg.release)
+            self.tasks.src_checkout(current_release["portal"])
+        elif version == "HEAD":
+            self.tasks.src_checkout("HEAD")
+        else:
+            abort("setup() was called with an unknown version parameter")
+
         self.tasks.bootstrap(self.pycfg.python)
         self.deploy_ini()
+
 
     def build(self):
         self.local_config()
