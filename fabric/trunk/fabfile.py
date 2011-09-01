@@ -276,13 +276,13 @@ def plone_build_opt():
     tasks.build_opt()
 
 
-def plone_update():
+def plone_update(version = "default"):
     """
     Update the plone installation 
     """
     
     tasks = bungeni.PloneTasks()
-    tasks.update()
+    tasks.update(version)
 
 
 def plone_conf():
@@ -354,12 +354,12 @@ def __check(tasks):
     tasks.check_versions()
 
 
-def portal_update():
+def portal_update(version = "default"):
     """
     Update the portal
     """
     tasks = bungeni.PortalTasks()
-    tasks.update()
+    tasks.update(version)
 
 
 def portal_check():

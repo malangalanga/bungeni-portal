@@ -153,6 +153,8 @@ class OsEssentials:
         }
 
 
+
+
 class BungeniConfigReader:
 
     """
@@ -178,6 +180,33 @@ class BungeniConfigReader:
             return ""
 
 
+class BungeniRelease:
+
+    """
+    Reads release.ini for bungeni package release information
+    """
+    
+    def __init__(self):
+
+        utils = Utils()
+        release_ini = utils.get_fab_path() + "/release.ini"
+        self.cfg = BungeniConfigReader(release_ini)
+    
+
+    def get_release(self, release_name):
+
+        bungeni = self.cfg.get_config(release_name, "bungeni")
+        plone = self.cfg.get_config(release_name, "plone")
+        portal = self.cfg.get_config(release_name, "portal")
+        return {
+            "bungeni": bungeni,
+            "plone": plone,
+            "portal": portal
+            }
+
+
+
+
 class BungeniConfigs:
 
     """
@@ -193,6 +222,7 @@ class BungeniConfigs:
         self.cfg = BungeniConfigReader("setup.ini")
         self.svn_user = self.cfg.get_config("scm", "user")
         self.svn_password = self.cfg.get_config("scm", "pass")
+        # read settings under global section
         self.verbose = \
             self.utils.parse_boolean(self.cfg.get_config("global",
                 "verbose"))
@@ -213,6 +243,8 @@ class BungeniConfigs:
                 "system_root") + "/cinst"
         self.distro_override = self.cfg.get_config("global",
                 "distro_override")
+        # added release parameter on 2011-08-31 for release pegging support
+        self.release = self.cfg.get_config("global","release")
         self.linux_headers = "linux-headers-`uname -r`"
         # python 2.6
         self.user_python26_home = self.user_install_root + "/python26"
@@ -606,33 +638,37 @@ class SCM:
         self.address = address
         self.working_copy = workingcopy
 
-    def checkout(self):
+    def checkout(self, revision):
       """
       Checks out the source code either in dev-mode or anonymously
+      2011-08-31 - Added revision parameter to support pegged releases
       """
 
       cmd = ""
       if self.devmode == True:
           print "Checking out in dev-mode with username = ", self.user
-          cmd = "svn co https://%s --username=%s --password=%s %s" \
-              % (self.address, self.user, self.password,
+          cmd = "svn co https://%s -r%s --username=%s --password=%s %s" \
+              % (self.address, revision, self.user, self.password,
                  self.working_copy)
           self.svn_perm()
       else:
           print "Checkout out anonymously"
-          cmd = "svn co http://%s %s" % (self.address,
+          cmd = "svn co http://%s -r%s %s" % (self.address, revision, 
                   self.working_copy)
           self.svn_perm()
       run(cmd)
 
-    def update(self):
+
+    def update(self, revision):
        """
        Updates the working copy
+       2011-08-31 - Added revision parameter to support pegged releases
        """
 
        with cd(self.working_copy):
            self.svn_perm()
-           run("svn up")
+           run("svn up -r%s" % revision)
+
 
     def svn_perm(self):
        """
@@ -774,20 +810,25 @@ class Tasks:
                        self.cfg.svn_user, self.cfg.svn_password,
                        working_folder)
 
-    def src_checkout(self):
+
+    def src_checkout(self, revision):
         """
         Checks out the source code from subversion 
+        2011-08-31 - Added revision parameter for pegging releases
+        Takes a revision number as a parameter
         """
 
         run("mkdir -p %s" % self.scm.working_copy)
-        self.scm.checkout()
+        self.scm.checkout(revision)
 
-    def src_update(self):
+    def src_update(self, revision):
         """
         Update the source of the working copy
+        2011-08-31 - Added revision parameter for pegging releases
         """
 
-        self.scm.update()
+        self.scm.update(revision)
+
 
     def buildout(
         self,
@@ -906,10 +947,25 @@ class PloneTasks:
             abort(red("The Plone buildout requires an existing bungeni buildout"
                   ))
 
-    def setup(self):
-        self.tasks.src_checkout()
+    def setup(self, version = "default"):
+        """
+        31-08-2011 - New setup API to handle pegged releases
+        version = default , uses release info specified in setup.ini 
+        version = HEAD, uses HEAD
+        """
+
+        if version == "default":
+            # get release info
+            current_release = BungeniRelease().get_release(self.cfg.release)
+            self.tasks.src_checkout(current_release["plone"])
+        elif version == "HEAD":
+            self.tasks.src_checkout("HEAD")
+        else:
+            abort("setup() was called with an unknown version parameter")
+
         self.tasks.bootstrap(self.pycfg.python)
         self.deploy_ini()
+
 
     def build(self):
        """
@@ -988,11 +1044,19 @@ class PloneTasks:
                               "port", self.cfg.plone_http_port)
         self.update_plone_zope_conf()                              
 
-    def update(self):
+
+    def update(self, version = "default"):
        """
        Update the plone source
        """
-       self.tasks.src_update()
+    
+       if version == "default" :
+           current_release = BungeniRelease().get_release(self.cfg.release)
+           self.tasks.src_update(current_release["plone"]) 
+       elif version == "HEAD" :
+           self.tasks.src_update("HEAD") 
+       else:
+           abort("attempted to update to UNKNOWN version")
 
 
 class PortalTasks:
@@ -1007,10 +1071,26 @@ class PortalTasks:
         if not self.tasks.build_exists(self.exists_check):
             abort("Portal build requires a working bungeni buildout")
 
-    def setup(self):
-        self.tasks.src_checkout()
+
+    def setup(self, version = "default"):
+        """
+        31-08-2011 - New setup API to handle pegged releases
+        version = default , uses release info specified in setup.ini 
+        version = HEAD, uses HEAD
+        """
+
+        if version == "default":
+            # get release info
+            current_release = BungeniRelease().get_release(self.cfg.release)
+            self.tasks.src_checkout(current_release["portal"])
+        elif version == "HEAD":
+            self.tasks.src_checkout("HEAD")
+        else:
+            abort("setup() was called with an unknown version parameter")
+
         self.tasks.bootstrap(self.pycfg.python)
         self.deploy_ini()
+
 
     def build(self):
         self.local_config()
@@ -1079,12 +1159,18 @@ class PortalTasks:
             config_file.write(tmpl.template("deliverance-proxy.conf.tmpl", template_map))
         
 
-    def update(self):
+    def update(self, version = "default"):
        """
        Update the portal
        """
-
-       self.tasks.src_update()
+    
+       if version == "default" :
+           current_release = BungeniRelease().get_release(self.cfg.release)
+           self.tasks.src_update(current_release["portal"]) 
+       elif version == "HEAD" :
+           self.tasks.src_update("HEAD") 
+       else:
+           abort("attempted to update to UNKNOWN version")
 
 
 
@@ -1106,6 +1192,33 @@ class BungeniTasks:
         if not self.tasks.build_exists(self.exists_check):
             abort("Bungeni build requires a working python " + self.pycfg.python_ver )
 
+
+    def setup(self, version = "default"):
+        """
+        31-08-2011 - New setup API to handle pegged releases
+        version = default , uses release info specified in setup.ini 
+        version = HEAD, uses HEAD
+        """
+
+        if version == "default":
+            # get release info
+            current_release = BungeniRelease().get_release(self.cfg.release)
+            self.tasks.src_checkout(current_release["bungeni"])
+            # bungeni.main and bungeni_custom are not updated to HEAD
+        elif version == "HEAD":
+            self.tasks.src_checkout("HEAD")
+            # bungeni.main, bungeni_custom and ploned.ui are updated to HEAD
+            with cd(self.cfg.user_bungeni):
+                with cd("src"):
+                    run("svn up -rHEAD ./bungeni.main ./bungeni_custom ./ploned.ui")
+        else:
+            abort("setup() was called with an unknown version parameter")
+        self.tasks.bootstrap(self.pycfg.python)
+        self.install_bungeni_custom()
+        self.deploy_ini()
+
+
+    """
     def setup(self, version = "default"):
         self.tasks.src_checkout()
         if version == "HEAD":
@@ -1115,22 +1228,30 @@ class BungeniTasks:
         self.tasks.bootstrap(self.pycfg.python)
         self.install_bungeni_custom()
         self.deploy_ini()
+    """
 
     def deploy_ini(self):
         run("cp %(bungeni)s/deploy.ini %(deploy_ini)s" % {"bungeni"
             : self.cfg.user_bungeni, "deploy_ini"
             : self.cfg.bungeni_deploy_ini})
 
+
     def update(self, version = "default"):
        """
        Update the bungeni source folder
        """
-
-       self.tasks.src_update()
-       if version == "HEAD":
+    
+       if version == "default" :
+           current_release = BungeniRelease().get_release(self.cfg.release)
+           self.tasks.src_update(current_release["bungeni"]) 
+       elif version == "HEAD" :
+           self.tasks.src_update("HEAD") 
            with cd(self.cfg.user_bungeni):
                with cd("src"):
                    run("svn up -rHEAD ./bungeni.main ./bungeni_custom")
+       else:
+           abort("attempted to update to UNKNOWN version")
+
 
     def build(self):
        """
@@ -1161,9 +1282,11 @@ class BungeniTasks:
             run("./parts/postgresql/bin/dropdb bungeni")
             run("./parts/postgresql/bin/createdb bungeni")
 
+
     def reset_schema(self):
         with cd(self.cfg.user_bungeni):
             run("./bin/reset-db")
+
 
     def load_demo_data(self):
        """
