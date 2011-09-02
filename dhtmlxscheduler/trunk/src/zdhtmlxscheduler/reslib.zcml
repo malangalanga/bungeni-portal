@@ -357,4 +357,17 @@
        include="codebase/ext/dhtmlxscheduler_year_view.js"
        />       
   </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-timeline"
+                   require="dhtmlxscheduler-ext-css">
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_timeline.js"
+       />
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/ext/dhtmlxscheduler_timeline.js"
+       />       
+  </resourceLibrary>
 </configure>

@@ -1,3 +1,7 @@
+/*
+This software is allowed to use under GPL or you need to obtain Commercial or Enterise License
+to use it in not GPL project. Please contact sales@dhtmlx.com for details
+*/
 dhtmlx=function(obj){
 	for (var a in obj) dhtmlx[a]=obj[a];
 	return dhtmlx; //simple singleton
@@ -576,12 +580,15 @@ dhtmlDragAndDropObject.prototype.initFrameRoute=function(win, mode){
 	}
 }
 
-var _isFF = false;
-var _isIE = false;
-var _isOpera = false;
-var _isKHTML = false;
-var _isMacOS = false;
-var _isChrome = false;
+_isFF = false;
+_isIE = false;
+_isOpera = false;
+_isKHTML = false;
+_isMacOS = false;
+_isChrome = false;
+_KHTMLrv = false;
+_OperaRv = false;
+_FFrv = false;
 
 if (navigator.userAgent.indexOf('Macintosh') != -1)
 	_isMacOS=true;
@@ -896,6 +903,12 @@ dhtmlxEventable=function(obj){
 			if (id != false){
 				var list = id.split(':');           //get EventName and ID
 				this[list[0]].removeEvent(list[1]); //remove event
+			}
+		}
+		obj.detachAllEvents = function(){
+			for (var name in this){
+				if (name.indexOf("ev_")==0) 
+					delete this[name];
 			}
 		}
 }
