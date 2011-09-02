@@ -4,7 +4,7 @@
 import setuptools, os
 
 dest = os.path.join(os.path.dirname(__file__),
-                    'src', 'bungeni', 'dhtmlxscheduler', 'resources')
+                    'src', 'zdhtmlxscheduler', 'resources')
 lbase = len(os.path.dirname(dest))+1
 extpaths = []
 for path, dirs, files in os.walk(dest):
@@ -17,8 +17,8 @@ def read(*rnames):
     return open( file_path ).read()
 
 setuptools.setup(
-    name = 'bungeni.dhtmlxscheduler',
-    version = "0.9.0",
+    name = 'zdhtmlxscheduler',
+    version = "1.0.0",
     author='Miano Njoka',
     author_email='miano@parliaments.info',
     description = "Zope3 Package of DHTMLX Scheduler",
@@ -26,8 +26,7 @@ setuptools.setup(
                        + '\n\n' +
                        read('whatsnew.txt')
                        ),
-    url='http://pypi.python.org/pypi/bungeni.dhtmlxscheduler',
-    namespace_packages = ['bungeni'],
+    url='http://pypi.python.org/pypi/zdhtmlxscheduler',
     packages = setuptools.find_packages('src'),
     package_dir = {'':'src'},
     include_package_data = True,
