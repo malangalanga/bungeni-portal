@@ -4,6 +4,71 @@ from bungeni.models.utils import get_db_user_id
 from datetime import datetime, timedelta
 from zope.publisher.browser import BrowserView
 
+from bungeni.core.serialize import obj2dict, serialize
+import traceback
+from zope.security.checker import getCheckerForInstancesOf
+from bungeni.ui.utils.common import get_request_context_roles
+from bungeni.utils.capi import capi
+import os
+from zope.security.proxy import removeSecurityProxy
+from zipfile import ZipFile
+from zope.securitypolicy.interfaces import IPrincipalRoleMap
+
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+def setupStorageDirectory(part_target="xml_db"):
+    # we start in buildout/src/bungeni.core/bungeni/core
+    # we end in buildout/parts/index
+    # TODO: this is probably going to break with package restucturing
+    store_dir = __file__
+    x = 0
+    while x < 5:
+        x += 1
+        store_dir = os.path.split(store_dir)[0]
+    store_dir = os.path.join(store_dir, 'parts', part_target)
+    if os.path.exists(store_dir):
+        assert os.path.isdir(store_dir)
+    else:
+        os.mkdir(store_dir)
+    
+    return store_dir
+
+class Info(BrowserView):
+
+    def __call__(self):
+        try:
+            context = removeSecurityProxy(self.context)
+            
+            map = IPrincipalRoleMap(context)
+            print list(map.getPrincipalsAndRoles())
+            files = []
+            path = os.path.join(setupStorageDirectory(), self.context.type)
+            if not os.path.exists(path):
+                os.makedirs(path)
+            file_path = os.path.join(path,context.__name__)
+            files.append(file_path+'.xml') 
+            with open(file_path+'.xml','w') as file:
+                file.write(serialize(obj2dict(context,1,parent=None,include=['event','versions'],exclude=[])))
+            if len(context.attached_files) > 0:
+                for attachment in context.attached_files:
+                    attachment_path = os.path.join(path, attachment.file_name)
+                    files.append(attachment_path)
+                    with open(os.path.join(path, attachment.file_name), 'wb') as file:
+                         file.write(attachment.file_data)
+                zip = ZipFile(file_path+'.zip', 'w')
+                for file in files:
+                    zip.write(file, os.path.split(file)[-1])
+                    os.remove(file)
+                zip.close()
+                
+                    
+            return 'Done!'
+        except:
+            traceback.print_exception(*sys.exc_info())
+            
+        
 
 class StoreNowEditView(BrowserView):
     """View that is periodically called

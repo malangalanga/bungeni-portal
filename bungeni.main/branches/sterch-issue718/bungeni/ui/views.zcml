@@ -59,7 +59,7 @@
      name="download"
      class=".file.FileDownload"
      />
-
+     
   <browser:view
      for="bungeni.models.interfaces.IAttachedFileVersion"
      permission="zope.View"
@@ -872,6 +872,13 @@
         class=".traversal.Permalink"
         permission="zope.Public"
         />
+        
+  <browser:view
+     for="bungeni.models.interfaces.IBungeniParliamentaryContent"
+     permission="zope.Public"
+     name="info"
+     class=".views.Info"
+     />
         
    
    <!-- View to store and retreive the document that the user is being editing -->
