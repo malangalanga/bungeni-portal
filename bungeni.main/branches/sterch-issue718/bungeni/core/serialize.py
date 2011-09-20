@@ -4,22 +4,78 @@
 
 """ Utilities to serialize objects to XML
 """
-
 from StringIO import StringIO
 from xml.etree.cElementTree import Element, ElementTree
+from zope.security.proxy import removeSecurityProxy
+from sqlalchemy.orm import RelationshipProperty, class_mapper 
+import collections
+
+from zipfile import ZipFile
+from zope.securitypolicy.interfaces import IPrincipalRoleMap
+
 import traceback
 import sys
-from zope.security.proxy import removeSecurityProxy
-from bungeni.core.interfaces import IVersioned
-from sqlalchemy.orm import RelationshipProperty, class_mapper 
-from bungeni.ui.utils import queries, statements
-import collections
-from sqlalchemy.orm.collections import InstrumentedList
-
+import os
 
 custom = {
     "signatory": "signatories",
 }
+
+def setupStorageDirectory(part_target="xml_db"):
+    # we start in buildout/src/bungeni.core/bungeni/core
+    # we end in buildout/parts/index
+    # TODO: this is probably going to break with package restucturing
+    store_dir = __file__
+    x = 0
+    while x < 5:
+        x += 1
+        store_dir = os.path.split(store_dir)[0]
+    store_dir = os.path.join(store_dir, 'parts', part_target)
+    if os.path.exists(store_dir):
+        assert os.path.isdir(store_dir)
+    else:
+        os.mkdir(store_dir)
+    
+    return store_dir
+
+def publish_to_xml(context, type='', include=['event','versions']):
+    """ Generates XML for object and saves it to the file. If object contains
+        attachments - XML is saved in zip archive with all attached files. 
+    """
+    try:
+        context = removeSecurityProxy(context)
+        data = obj2dict(context,1,parent=None,include=include,exclude=['file_data', 'image', 'logo_data'])
+        if not type:
+            type = context.type
+            data['permissions']= []
+            map = IPrincipalRoleMap(context)
+            for x in list(map.getPrincipalsAndRoles()):
+                data['permissions'].append({'role':x[0], 'user':x[1], 'permission':x[2].getName()})
+            
+        files = []
+        path = os.path.join(setupStorageDirectory(), type)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        file_path = os.path.join(path,context.__name__)
+        files.append(file_path+'.xml') 
+        with open(file_path+'.xml','w') as file:
+            file.write(serialize(data, name=type))
+        try:
+            if len(context.attached_files) > 0:
+                for attachment in context.attached_files:
+                    attachment_path = os.path.join(path, attachment.file_name)
+                    files.append(attachment_path)
+                    with open(os.path.join(path, attachment.file_name), 'wb') as file:
+                        file.write(attachment.file_data)
+                zip = ZipFile(file_path+'.zip', 'w')
+                for file in files:
+                    zip.write(file, os.path.split(file)[-1])
+                    os.remove(file)
+                zip.close()
+        except AttributeError:
+            pass
+    except:
+        traceback.print_exception(*sys.exc_info())
 
 def singular(pname):
     """Get the english singular of (plural) name.
@@ -33,8 +89,8 @@ def singular(pname):
         return pname[:-1]
     return pname
 
-def serialize(data):
-    content_elem = Element('object')
+def serialize(data, name='object'):
+    content_elem = Element(name)
     _serialize(content_elem, data)
     tree = ElementTree(content_elem)
     f = StringIO()
@@ -47,10 +103,7 @@ def _serialize(parent_elem, data):
     elif isinstance(data, dict):
         _serialize_dict(parent_elem, data)
     else:
-        if len(str(data))>1500:
-            parent_elem.text = 'file_here'
-        else:
-            parent_elem.text = unicode(data)
+        parent_elem.text = unicode(data)
 
 def _serialize_list(parent_elem, data_list):
     for i in data_list:
@@ -65,9 +118,12 @@ def _serialize_dict(parent_elem, data_dict):
         _serialize(key_elem, v)
 
 def obj2dict(obj, depth, parent=None, include=[], exclude=[]):
+    """ Returns dictionary representation of an object.
+    """
     result = {}
     obj = removeSecurityProxy(obj)
     try:
+        # Get additional attributes
         for name in include:
             value = getattr(obj, name)
             if isinstance(value, collections.Iterable):
@@ -77,7 +133,8 @@ def obj2dict(obj, depth, parent=None, include=[], exclude=[]):
                 result[name] = res
             else:
                 result[name] = value
-            
+        
+        # Get mapped attributes
         for property in class_mapper(obj.__class__).iterate_properties:
             if property.key in exclude:
                 continue
@@ -92,9 +149,9 @@ def obj2dict(obj, depth, parent=None, include=[], exclude=[]):
                 if isinstance(value, collections.Iterable):
                     result[property.key] = []
                     for item in value:
-                        result[property.key].append(obj2dict(item, depth-1, parent=obj,include=[],exclude=['changes',]))
+                        result[property.key].append(obj2dict(item, depth-1, parent=obj,include=[],exclude=exclude+['changes',]))
                 else:
-                    result[property.key] = obj2dict(value, depth-1, parent=obj,include=[],exclude=['changes',])
+                    result[property.key] = obj2dict(value, depth-1, parent=obj,include=[],exclude=exclude+['changes',])
             else:
                 if isinstance(property, RelationshipProperty):
                     continue
