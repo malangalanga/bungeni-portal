@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template language="en">
+    <title>Weekly Business</title>
+    <description>Report of parliamentary business for one week.</description>
+    <length>1w</length>
+    <content>
+        <heading>
+            <text source="title" type="heading"/>
+            <text source="publication_number"/>
+            <text source="publication_date"/>
+        </heading>
+        <body>
+            <listing source="sittings">
+                <text source="dc:title" type="heading"/>
+                <text>Start Date:</text>
+                <text source="start_date"/>
+                <text>End Date:</text>
+                <text source="end_date"/>
+                <listing source="motions" title="Motions"/>
+                <listing source="bills" title="Bills"/>
+                <listing source="questions" title="Questions"/>
+                <listing source="agendaitems" title="Agenda Items"/>
+                <listing source="tableddocuments" title="Tabled Documents"/>
+            </listing>
+        </body>
+    </content>
+    <styles>
+        <style for="bills">
+            <text source="dc:title" type="heading"/>
+            <text source="dc:description"/>
+            <listing source="signatories" title="Signatories"/>
+            <listing source="attachments" title="Attachments"/>
+            <listing source="assignedgroups" title="Attachments"/>
+        </style>
+        <style for="*">
+            <text source="title" type="heading"/>
+            <text source="mover"/>
+            <listing source="signatories" title="Signatories"/>
+            <listing source="attachments" title="Attachments"/>
+            <listing source="timeline" title="Timeline"/>
+        </style>
+        <style for="tableddocuments">
+            <text source="dc:title" type="heading"/>
+            <text source="dc:mover"/>
+            <listing source="attachments" title="Attachments"/>
+            <listing source="timeline" title="Timeline"/>
+        </style>
+    </styles>
+</template>
