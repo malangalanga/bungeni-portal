@@ -3,8 +3,11 @@
     description="Workflow for Signatory documents"
     domain="bungeni"
     initial_state=""
-    auditable="true"
-    versionable="false">
+    >
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="false" />
     
     <grant permission="bungeni.signatory.View" role="bungeni.Clerk"/>
     <grant permission="bungeni.signatory.View" role="bungeni.Speaker"/>

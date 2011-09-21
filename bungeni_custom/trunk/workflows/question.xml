@@ -3,8 +3,11 @@
     description="A question"
     domain="bungeni.ui"
     initial_state=""
-    auditable="true"
-    versionable="true">
+    >
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="true" />
     
     <!-- global grants -->
     <grant permission="bungeni.question.View" role="bungeni.Owner" />

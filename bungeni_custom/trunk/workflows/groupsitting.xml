@@ -3,8 +3,11 @@
     description="Workflow for a group-sitting."
     domain="bungeni.ui"
     initial_state=""
-    auditable="true"
-    versionable="false">
+    >
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="false" />
     
     <!-- global grants -->
     <grant permission="bungeni.sitting.Edit" role="bungeni.Clerk" /> 

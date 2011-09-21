@@ -23,15 +23,40 @@ grammar {
         attribute description { text },
         attribute domain { "bungeni.ui" },
         attribute initial_state { "" }?,
-        attribute auditable { boolean="false" }?, # versionable -> must be "true"
-        attribute versionable { boolean="false" }?, 
         attribute note { text }?,
         
+        element feature {...}*,
         element grant {...}*,
         element state {...}*,
         element transition {...}*,
     }
 }
+
+
+Features
+--------
+
+Enables/disables a feature on the workflowed type--may define additional 
+feature-specific settings (!+ as attributes or sub-elements).
+
+RNC definition for <feature> XML element:
+
+    element state {
+        attribute name { text },
+        attribute enabled { boolean="true" }?,
+    }
+
+- @name must be for a supported feature of the workflowed type. 
+Currently known features, 
+    for archetype "document":
+        audit
+        version # implies "audit"
+        attachement
+
+- if no <feature> element present for a named feature, then that feature is not
+*enabled*; if a <feature> element is present then it is by default enabled 
+(unless @enabled is explicitly set to "false").
+
 
 States
 ------
