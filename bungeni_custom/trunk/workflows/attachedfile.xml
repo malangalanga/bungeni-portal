@@ -6,8 +6,11 @@
     >
     
     <!-- features -->
-    <feature name="audit" enabled="true" />
-    <feature name="version" enabled="true" />
+    <feature name="audit" enabled="true" /><!-- !+MUST be enabled -->
+    <feature name="version" enabled="true" /><!-- !+MUST be enabled -:- this is 
+    not the ability to version attached file itself, but the ability to log
+    which files were attached to a specific version of an item -->
+    <feature name="attachment" enabled="false" /><!-- !+MUST be disabled -->
     
     <!-- global grants -->
     <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />

@@ -8,6 +8,7 @@
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
+    <feature name="attachment" enabled="true" />
     
     <!-- global grants -->
     <grant permission="bungeni.bill.View" role="bungeni.Clerk" />  
@@ -88,7 +89,8 @@
         note="document under review before resubmission">
         <deny permission="bungeni.bill.Delete" role="bungeni.Owner"/>
     </state>
-
+    
+    <!-- !+withdrawn_external(mr, sep-2011) why do we still have withdrawn_external? -->
     <state id="withdrawn_external" title="Dropped" 
         like_state="submitted_signatories">
         <!-- signatory -->
@@ -267,7 +269,8 @@
         roles="bungeni.Owner"
         trigger="manual"
     />
-
+    
+    <!-- !+withdrawn_external(mr, sep-2011) -->
     <transition title="Drop"
         source="redraft submitted_signatories"
         destination="withdrawn_external"
@@ -501,6 +504,12 @@
         roles="bungeni.Clerk"
     />
     
+    <!-- !+unique_sources_grouping(mr, sep-2011) to avoid possibility of
+    integrity ionconsistencies... add possibility to declare two transitions as
+    have complementary sources, that would constrain that a soycre state may 
+    appear only once across such transitions. Maybe:
+        unique_sources_grouping="withdraw"
+    -->
     <transition title="Withdraw" 
         source="submitted"
         destination="withdrawn_internal" 
