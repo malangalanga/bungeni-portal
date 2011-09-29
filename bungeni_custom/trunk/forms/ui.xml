@@ -1080,6 +1080,9 @@
     </descriptor>
 
     <descriptor name="Sitting">
+        <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
@@ -1092,6 +1095,15 @@
         </field>
         <field name="venue_id" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
+        </field>
+        <field name="activity_type" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="meeting_type" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="convocation_type" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
         </field>
     </descriptor>
 
