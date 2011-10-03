@@ -98,7 +98,7 @@
         <deny permission="bungeni.question.Delete" role="bungeni.Owner"/>
     </state>
 
-    <state id="withdrawn_external" title="Dropped" 
+    <state id="withdrawn_signatory" title="Dropped" 
         like_state="submitted_signatories">
         <!-- signatories -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
@@ -332,7 +332,7 @@
 
     <transition title="Drop"
         source="redraft submitted_signatories"
-        destination="withdrawn_external"
+        destination="withdrawn_signatory"
         condition="user_is_context_owner"
         roles="bungeni.Owner"
         trigger="manual"

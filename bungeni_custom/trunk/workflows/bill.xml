@@ -90,8 +90,7 @@
         <deny permission="bungeni.bill.Delete" role="bungeni.Owner"/>
     </state>
     
-    <!-- !+withdrawn_external(mr, sep-2011) why do we still have withdrawn_external? -->
-    <state id="withdrawn_external" title="Dropped" 
+    <state id="withdrawn_signatory" title="Dropped" 
         like_state="submitted_signatories">
         <!-- signatory -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
@@ -270,10 +269,9 @@
         trigger="manual"
     />
     
-    <!-- !+withdrawn_external(mr, sep-2011) -->
     <transition title="Drop"
         source="redraft submitted_signatories"
-        destination="withdrawn_external"
+        destination="withdrawn_signatory"
         condition="user_is_context_owner"
         roles="bungeni.Owner"
         trigger="manual"
