@@ -144,13 +144,11 @@ RNC definition for <transition> XML element:
     
     element transition {
         attribute title { text },
-        attribute source { text }, # state id
+        attribute source { text }, # space separated list of state ids
         attribute destination { text }, # state id
         attribute condition { test } ?,
-        attribute title { text } ?,
         attribute trigger { "automatic" | "system" | "manual" },
         attribute roles { text }, # "bungeni.Clerk ..."
-        attribute title { text },
         attribute order { integer=0 },
         attribute require_confirmation { boolean="false" },
         attribute note { text },
@@ -158,6 +156,14 @@ RNC definition for <transition> XML element:
 
 
 - the transition title should be a lowercase *verb*.
+
+- for convenience, the source allows to specify multiple state ids, that are 
+specified as a "space separated string"; however, it is not possible to mix
+other state ids along with the special-case "initial" state of a workflow (that 
+by convention is the empty string). 
+
+- irrespective of how sources are grouped into <transition> elements, there may 
+be only *one* path from any given *source* to any given *destination* state. 
 
 - a bungeni _role_ name should *never* be part of a transition title.
 
@@ -177,7 +183,7 @@ transitions must have *no permission specified*.
     condition=None
     trigger=MANUAL
     roles=bungeni.Clerk
-    permission=CheckerPublic !+ bungeni.{module}.wf.{transition_id}
+    #permission=CheckerPublic !+ bungeni.{module}.wf.{transition_id}
     order=0
     require_confirmation=False
     note
