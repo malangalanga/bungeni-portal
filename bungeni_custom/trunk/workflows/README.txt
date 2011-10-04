@@ -146,6 +146,7 @@ RNC definition for <transition> XML element:
         attribute title { text },
         attribute source { text }, # space separated list of state ids
         attribute destination { text }, # state id
+        attribute grouping_unique_sources { text } # a transition grouping id
         attribute condition { test } ?,
         attribute trigger { "automatic" | "system" | "manual" },
         attribute roles { text }, # "bungeni.Clerk ..."
@@ -153,7 +154,6 @@ RNC definition for <transition> XML element:
         attribute require_confirmation { boolean="false" },
         attribute note { text },
     }
-
 
 - the transition title should be a lowercase *verb*.
 
@@ -176,16 +176,20 @@ creating the object, that presumably is already access-controlled with a
 `bungeni.{object}.Add` type permission. Because of this, all _initial_ 
 transitions must have *no permission specified*.
 
+- grouping_unique_sources used to semantically connect multiple transitions 
+and constrain that accumulative sources are unique.
+
 - the order of attributes should respect:
     title
     source
     destination
+    grouping_unique_sources=None # any grouping id
     condition=None
     trigger=MANUAL
     roles=bungeni.Clerk
     #permission=CheckerPublic !+ bungeni.{module}.wf.{transition_id}
     order=0
     require_confirmation=False
-    note
+    note=None
 
 

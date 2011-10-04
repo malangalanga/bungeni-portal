@@ -272,6 +272,7 @@
     <transition title="Drop"
         source="redraft submitted_signatories"
         destination="withdrawn_signatory"
+        grouping_unique_sources="withdrawn"
         condition="user_is_context_owner"
         roles="bungeni.Owner"
         trigger="manual"
@@ -502,15 +503,10 @@
         roles="bungeni.Clerk"
     />
     
-    <!-- !+unique_sources_grouping(mr, sep-2011) to avoid possibility of
-    integrity ionconsistencies... add possibility to declare two transitions as
-    have complementary sources, that would constrain that a soycre state may 
-    appear only once across such transitions. Maybe:
-        unique_sources_grouping="withdraw"
-    -->
     <transition title="Withdraw" 
         source="submitted"
-        destination="withdrawn_internal" 
+        destination="withdrawn_internal"
+        grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
         roles="bungeni.Owner"
@@ -518,16 +514,18 @@
     />
     
     <transition title="Withdraw"
-        source="submitted
-                gazetted
-                first_reading
-                first_committee
-                first_report_reading
-                second_reading
-                whole_house
-                second_committee
-                third_reading"
+        source="
+            gazetted
+            first_reading
+            first_committee
+            first_report_reading
+            second_reading
+            whole_house
+            second_committee
+            third_reading
+        "
         destination="withdrawn"
+        grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
         roles="bungeni.Clerk"
