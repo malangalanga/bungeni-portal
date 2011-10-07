@@ -46,6 +46,7 @@ def add_admin(login, password, email_address):
     user.language = "en"
     user.email=email_address
     user.is_admin = True
+    user.active_p = "A" # status, normally automatically set by the workflow
     session.add(user)
     admin_user = domain.AdminUser()
     admin_user.user = user
