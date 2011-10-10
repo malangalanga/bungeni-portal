@@ -109,17 +109,17 @@ def bungeni_setup():
     tasks.setup()
 
 
-def bungeni_install(version = "default"):
+def bungeni_install(revision="default"):
     """
     Checkout,bootstrap and build bungeni
-    version can be 'default' to use the pinned version
+    revision can be 'default' to use the pinned version
     or can be 'HEAD' which updates the bungeni.main and bungeni_custom packages
     to HEAD
     """
 
     tasks = bungeni.BungeniTasks()
     # bootstrap
-    tasks.setup(version)
+    tasks.setup(revision)
     # do any local configuations
     tasks.local_config()
     # buildout 
@@ -156,13 +156,13 @@ def bungeni_setupdb():
     tasks.setupdb()
 
 
-def bungeni_update(version = "default"):
+def bungeni_update(revision="default"):
     """
         Update the bungeni source
      """
 
     tasks = bungeni.BungeniTasks()
-    tasks.update(version)
+    tasks.update(revision)
 
 
 def bungeni_build_opt():
@@ -276,13 +276,13 @@ def plone_build_opt():
     tasks.build_opt()
 
 
-def plone_update(version = "default"):
+def plone_update(revision="default"):
     """
     Update the plone installation 
     """
     
     tasks = bungeni.PloneTasks()
-    tasks.update(version)
+    tasks.update(revision)
 
 
 def plone_conf():
@@ -354,12 +354,12 @@ def __check(tasks):
     tasks.check_versions()
 
 
-def portal_update(version = "default"):
+def portal_update(revision="default"):
     """
     Update the portal
     """
     tasks = bungeni.PortalTasks()
-    tasks.update(version)
+    tasks.update(revision)
 
 
 def portal_check():
@@ -408,7 +408,7 @@ def stop_service(service_name):
     service.stop_service(service_name)
 
 
-def start_bungeni(mode = "ABORT_ON_ERROR"):
+def start_bungeni(mode="ABORT_ON_ERROR"):
     """
     Start bungeni
     """
@@ -417,7 +417,7 @@ def start_bungeni(mode = "ABORT_ON_ERROR"):
     service.start_service("bungeni", mode)
 
 
-def stop_bungeni(mode = "ABORT_ON_ERROR"):
+def stop_bungeni(mode="ABORT_ON_ERROR"):
     """
     Stop bungeni
     """
@@ -426,7 +426,7 @@ def stop_bungeni(mode = "ABORT_ON_ERROR"):
     service.stop_service("bungeni", mode)
 
 
-def start_portal(mode = "ABORT_ON_ERROR"):
+def start_portal(mode="ABORT_ON_ERROR"):
     """
     Start the portal
     """
@@ -435,7 +435,7 @@ def start_portal(mode = "ABORT_ON_ERROR"):
     service.start_service("portal", mode)
 
 
-def stop_portal(mode = "ABORT_ON_ERROR"):
+def stop_portal(mode="ABORT_ON_ERROR"):
     """
     Stop the portal
     """
@@ -444,7 +444,7 @@ def stop_portal(mode = "ABORT_ON_ERROR"):
     service.stop_service("portal", mode)
 
 
-def start_plone(mode = "ABORT_ON_ERROR"):
+def start_plone(mode="ABORT_ON_ERROR"):
     """
     Start the plone service
     """
@@ -453,7 +453,7 @@ def start_plone(mode = "ABORT_ON_ERROR"):
     service.start_service("plone", mode)
 
 
-def stop_plone(mode = "ABORT_ON_ERROR"):
+def stop_plone(mode="ABORT_ON_ERROR"):
     """
     Stop the plone service
     """
