@@ -326,8 +326,8 @@
         source="submitted_signatories"
         destination="redraft"
         condition="user_is_context_owner"
-        roles="bungeni.Owner"
         trigger="manual"
+        roles="bungeni.Owner"
     />
 
     <transition title="Drop"
@@ -335,15 +335,15 @@
         destination="withdrawn_signatory"
         grouping_unique_sources="withdrawn"
         condition="user_is_context_owner"
-        roles="bungeni.Owner"
         trigger="manual"
+        roles="bungeni.Owner"
     />
     
     <transition title="Receive"
         source="submitted"
         destination="received"
-        trigger="manual"
         condition=""
+        trigger="manual"
         roles="bungeni.Clerk"
         order="2"
     />
@@ -550,8 +550,8 @@
         source="admissible schedule_pending scheduled deferred adjourned"
         destination="withdrawn"
         grouping_unique_sources="withdrawn"
-        trigger="manual"
         condition=""
+        trigger="manual"
         roles="bungeni.Clerk bungeni.Owner"
         order="27"
         require_confirmation="true"
