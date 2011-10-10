@@ -237,10 +237,13 @@ class BungeniConfigs:
         self.local_cache = \
             self.utils.parse_boolean(self.cfg.get_config("global",
                 "local_cache"))
-        self.user_build_root = self.cfg.get_config("global",
-                "system_root") + "/cbild"
-        self.user_install_root = self.cfg.get_config("global",
-                "system_root") + "/cinst"
+        system_root_expanded = run("".join([
+           "cd ",
+           self.cfg.get_config("global","system_root"),
+           " && pwd"
+        ]))
+        self.user_build_root = system_root_expanded + "/cbild"
+        self.user_install_root = system_root_expanded + "/cinst"
         self.distro_override = self.cfg.get_config("global",
                 "distro_override")
         # added release parameter on 2011-08-31 for release pegging support
@@ -476,11 +479,31 @@ class Presetup:
             run(self.cfg.python26_download_command)
             run("tar xvf " + self.cfg.python26_download_file)
             with cd(self.cfg.python26_src_dir):
-                run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl \
-                     ./configure --prefix=%(python_home)s USE=sqlite"\
-                     % {"python_home":self.cfg.user_python26_home})
-                run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
-                run("make install")
+                if (self.osinfo.release_id == "Ubuntu" and float(self.osinfo.release_no) > 11.00 ):
+                   #
+                   # Ubuntu releases >= 11.04 use multi arhictecture build. A bug in the python 2.6 
+                   # and 2.7 builds requires certain flags to be set.
+                   # See https://bugs.launchpad.net/ubuntu/+source/db4.8/+bug/738213
+                   #     https://lists.ubuntu.com/archives/ubuntu-devel/2011-April/033049.html
+                   #
+                   arch = run("dpkg-architecture -qDEB_HOST_MULTIARCH")
+                   flags = ("CPPFLAGS=-I/usr/include/openssl:/usr/include/%(arch)s "
+                       "LDFLAGS=-L/usr/lib/ssl:/usr/lib/%(arch)s:/lib/%(arch)s "
+                       "CFLAGS=-I/usr/lib/%(arch)s " % {"arch":arch})
+                   run(flags + "./configure --prefix=%(python_home)s USE=sqlite " 
+                         % {"python_home":self.cfg.user_python26_home})
+                   run(flags + " make")
+                   run("make install")
+                else:
+                   #
+                   # All other platforms revert to the normal build
+                   #
+                   run("CPPFLAGS=-I/usr/include/openssl "
+                       "LDFLAGS=-L/usr/lib/ssl "
+                       "./configure --prefix=%(python_home)s USE=sqlite"
+                        % {"python_home":self.cfg.user_python26_home})
+                   run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
+                   run("make install")
 
 
     def build_py25(self):
