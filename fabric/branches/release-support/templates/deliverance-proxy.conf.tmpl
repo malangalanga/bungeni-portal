@@ -1,37 +1,31 @@
-  <theme href="http://%(theme_url)s/themes/%(portal_theme)s" />
+<theme href="http://%(theme_url)s/themes/%(portal_theme)s" />
 		
-  <server-settings>
-      <server>%(app_host)s:%(portal_http_port)s</server>
-      <dev-allow>
+<server-settings>
+    <server>%(app_host)s:%(portal_http_port)s</server>
+    <dev-allow>
         127.0.0.1
         localhost
-      </dev-allow>
-      <dev-user username="dev" password="maendeleo" />
-      <dev-expiration>60</dev-expiration>
-  </server-settings>
+    </dev-allow>
+    <dev-user username="dev" password="maendeleo" />
+    <dev-expiration>60</dev-expiration>
+</server-settings>
 
-  <proxy path="/bungeni">
-      <dest href="http://%(app_host)s:%(bungeni_http_port)s/++vh++http:%(web_server_host)s:%(web_server_port)s/++/" />
-  </proxy>
+<proxy path="/bungeni">
+    <dest href="http://%(app_host)s:%(bungeni_http_port)s/++vh++http:%(web_server_host)s:%(web_server_port)s/++/" />
+</proxy>
 
-  <proxy path="/cynin">
-      <dest href="http://%(app_host)s:%(plone_http_port)s/VirtualHostBase/http/%(web_server_host)s:%(web_server_port)s/cynin/VirtualHostRoot/_vh_cynin/" />
-  </proxy>
+<proxy path="/plone">
+    <dest href="http://%(app_host)s:%(plone_http_port)s/VirtualHostBase/http/%(web_server_host)s:%(web_server_port)s/plone/VirtualHostRoot/_vh_plone/" />
+</proxy>
 
-  <proxy path="/plone">
-      <dest href="http://%(app_host)s:%(plone_http_port)s/VirtualHostBase/http/%(web_server_host)s:%(web_server_port)s/plone/VirtualHostRoot/_vh_plone/" />
-  </proxy>
+<proxy path="/themes">
+    <dest href="http://%(app_host)s:%(portal_static_port)s/themes/%(country_theme)s" />
+</proxy>
 
-  <proxy path="/themes">
-      <dest href="http://%(app_host)s:%(portal_static_port)s/themes/%(country_theme)s" />
-  </proxy>
+<proxy path="/static">
+    <dest href="http://%(app_host)s:%(portal_static_port)s" />
+</proxy>
 
-  <proxy path="/static">
-      <dest href="http://%(app_host)s:%(portal_static_port)s" />
-  </proxy>
-
-  <proxy path="/">
-      <dest href="http://%(app_host)s:%(bungeni_http_port)s/++vh++http:%(web_server_host)s:%(web_server_port)s/++/" />
-  </proxy>
-
-
+<proxy path="/">
+    <dest href="http://%(app_host)s:%(bungeni_http_port)s/++vh++http:%(web_server_host)s:%(web_server_port)s/++/" />
+</proxy>
