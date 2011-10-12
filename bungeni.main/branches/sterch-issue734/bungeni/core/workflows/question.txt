@@ -1,0 +1,635 @@
+Question and response workflow
+==============================
+
+
+Setup
+-----
+
+Imports.
+
+  >>> from bungeni.models import interfaces
+  >>> from bungeni.models import domain
+
+Questions are versionable.
+  
+  >>> from zope.interface import classImplements
+  >>> classImplements(domain.Question, interfaces.IQuestion)
+
+Setting up database connection and utilities:
+
+  >>> from bungeni.core.testing import setup_db
+  >>> engine = setup_db()
+  >>> from bungeni.alchemist import Session
+  >>> session = Session()
+    
+  >>> from bungeni.core.workflows.testing import setup_security_adapters
+  >>> setup_security_adapters()
+  
+
+Principals
+----------
+
+  >>> from bungeni.core.testing import set_interaction
+  >>> set_interaction(None)
+
+In order to create a participation, we need a principal:
+
+  >>> from bungeni.core.testing import create_principal
+  >>> member = create_principal("member", "Member", ())
+  >>> clerk = create_principal("clerk", "Clerk", ())
+  >>> speaker = create_principal("speaker", "Speaker", ())
+  >>> minister_1 = create_principal("minister 1", "Minister", ())
+  >>> minister_2 = create_principal("minister 2", "Minister", ())
+
+Assign roles.
+
+  >>> import zope.securitypolicy.interfaces
+  >>> global_prm = zope.securitypolicy.interfaces.IPrincipalRoleMap(app)
+  >>> global_prm.assignRoleToPrincipal(u"bungeni.MP", "member")
+  >>> global_prm.assignRoleToPrincipal(u"bungeni.Clerk", "clerk")
+  >>> global_prm.assignRoleToPrincipal(u"bungeni.Speaker", "speaker")
+  >>> global_prm.assignRoleToPrincipal(u"bungeni.Minister", "minister 1")
+  >>> global_prm.assignRoleToPrincipal(u"bungeni.Minister", "minister 2")
+
+
+Content creation
+----------------
+
+  >>> from bungeni.models.testing import add_content
+
+  >>> parliament = add_content(
+  ...    domain.Parliament,
+  ...    short_name=u"p_1",
+  ...    language="en",
+  ...    start_date=yesterday,
+  ...    election_date=yesterday)
+  
+  >>> gov = add_content(
+  ...    domain.Government,
+  ...    short_name=u"gov_1",
+  ...    language="en",
+  ...    start_date=yesterday,
+  ...    parliament_id=parliament.parliament_id)
+  
+  >>> ministry = add_content(
+  ...    domain.Ministry,
+  ...    short_name=u"ministry",
+  ...    language="en",
+  ...    start_date=yesterday,
+  ...    parent_group_id=gov.group_id)
+
+We need a parliament, government ministry and ministers to whom we can
+send the question notifications.
+
+  >>> country = add_content(
+  ...    domain.Country,
+  ...    country_id="KE",
+  ...    iso_name = u"KENYA",
+  ...    language="en",
+  ...    country_name=u"Kenya")
+  
+  >>> mp_1 = add_content(
+  ...    domain.User,
+  ...    u"minister 1",
+  ...    first_name=u"a", 
+  ...    last_name=u"ab", 
+  ...    birth_country="KE",
+  ...    email=u"mp1@example.com", 
+  ...    date_of_birth=today,
+  ...    language="en",
+  ...    gender="M")
+  
+  >>> mp_2 = add_content(
+  ...    domain.User,
+  ...    u"minister 2",
+  ...    first_name=u"b", 
+  ...    last_name=u"bc", 
+  ...    birth_country="KE",
+  ...    date_of_birth=today,
+  ...    email=u"mp2@example.com",
+  ...    language="en",
+  ...    gender="M")
+  
+  >>> mp_3 = add_content(
+  ...    domain.User,
+  ...    u"member",
+  ...    first_name=u"c", 
+  ...    birth_country="KE",
+  ...    last_name=u"cd",
+  ...    date_of_birth=today,
+  ...    email=u"mp3@example.com", 
+  ...    language="en",
+  ...    gender="F")
+
+    >>> c1 = add_content(
+    ...    domain.User,
+    ...    "clerk",
+    ...    first_name="d", 
+    ...    birth_country="KE",
+    ...    last_name="de",
+    ...    date_of_birth=today,
+    ...    email="c1@example.com", 
+    ...    language="en",
+    ...    gender="M")
+    
+    >>> s1 = add_content(
+    ...    domain.User,
+    ...    "speaker",
+    ...    first_name="e", 
+    ...    birth_country="KE",
+    ...    last_name="ef",
+    ...    date_of_birth=today,
+    ...    email="s1@example.com", 
+    ...    language="en",
+    ...    gender="F")
+
+!+setParliamentId(mr, mar-2011) we manually set the parliament_id here and 
+remove the call to setParliamentId() when creating the question -- the 
+parliament_id is automatically set on a question (when saved to the db) 
+that is created via the UI form. 
+  
+Create a question type
+  >>> qtype = add_content(
+  ...   domain.QuestionType,
+  ...   question_type_name=u"Ordinary",
+  ...   language="en")
+  >>> int(qtype.question_type_id)
+  1
+  
+  >>> rtype = add_content(
+  ...   domain.ResponseType,
+  ...   response_type_name=u"Written",
+  ...   language="en")
+  >>> int(rtype.response_type_id)
+  1
+  
+  >>> question = add_content(
+  ...     domain.Question,
+  ...     short_name=u"My subject",
+  ...     body_text=u"The question",
+  ...     owner_id=mp_3.user_id,
+  ...     language="en",
+  ...     question_type_id=qtype.question_type_id,
+  ...     response_type=rtype,
+  ...     parliament_id=parliament.parliament_id)
+  
+  >>> question.__parent__ = app
+  
+  >>> from bungeni.models.testing import create_sitting
+  >>> sitting = create_sitting(parliament.parliament_id, "en")
+
+Set up a security mapping.
+
+  >>> qprm = zope.securitypolicy.interfaces.IPrincipalRoleMap(question)
+
+  >>> #zope.securitypolicy.interfaces.IRolePermissionMap  
+  >>> from bungeni.alchemist.security import LocalRolePermissionMap
+  >>> qrpm = LocalRolePermissionMap(question)
+  
+
+Questions transitions 
+-------------------------------------
+
+  >>> from bungeni.core.workflow.interfaces import IWorkflowController
+  >>> wfc = IWorkflowController(question)
+  >>> wfc
+  <bungeni.core.workflow.states.WorkflowController object at ...>
+  >>> wf = wfc.workflow
+  >>> wf
+  <bungeni.core.workflow.states.Workflow object at ...>
+  >>> from bungeni.core.workflow.interfaces import IWorkflow
+  >>> wf is IWorkflow(question)
+  True
+
+  
+PRINCIPAL: member
+
+  >>> set_interaction(member)
+  >>> from bungeni.models.utils import get_principal_id
+  >>> get_principal_id()
+  'member'
+
+-------------------------------------
+Transition: "create" - assigns the role of "Owner" and sets the parliament id.
+
+!+ generalize these tests to not assume predefined transition names / sequence!
+
+!+initializeWorkflow(mr, oct-2011) should not the question workflow be made to
+auto-kick-in on question creation, as in application, via the event handlers?
+
+  >>> wfc.fireAutomatic()
+  >>> question.status
+  'draft'
+
+  >>> question.parliament_id==parliament.parliament_id
+  True
+  
+  >>> tuple(qprm.getRolesForPrincipal("member"))
+  ((u'bungeni.Owner', PermissionSetting: Allow),)
+  >>> tuple(qprm.getRolesForPrincipal("clerk"))
+  ()
+  >>> tuple(qprm.getRolesForPrincipal("speaker"))
+  ()
+  >>> tuple(qprm.getRolesForPrincipal("minister 1"))
+  ()
+  >>> tuple(qprm.getRolesForPrincipal("minister 2"))
+  ()
+
+
+PERMISSIONS for member principal for "draft" question.status
+  
+  >>> from zope.security import checkPermission
+  >>> [ checkPermission("bungeni.question.Edit", question), 
+  ...   checkPermission("bungeni.question.Add", question), 
+  ...   checkPermission("zope.View", question), 
+  ...   checkPermission("bungeni.question.Delete", question), 
+  ...   checkPermission("bungeni.fileattachment.Add", question), 
+  ...   checkPermission("bungeni.fileattachment.Edit", question),
+  ... ]
+  [True, True, True, True, True, True]
+
+TODO: also check permissions for other roles, i.e.
+    <deny permission="zope.View" role="bungeni.Clerk" />
+    <deny permission="zope.View" role="bungeni.Speaker" />
+    <deny permission="zope.View" role="bungeni.Minister" />
+    <deny permission="zope.View" role="bungeni.Authenticated" /> 
+    <deny permission="zope.View" role="bungeni.Anonymous" />
+this would require to run with an interaction, one with a participation that 
+consists of a principal with the specific role.
+
+TODO: also check Clerk create_on_behalf_of MP
+
+-------------------------------------
+
+Setup mock delivery component.
+
+  >>> import zope.sendmail.interfaces
+  
+  >>> class MockMailDelivery(object):
+  ...     interface.implements(zope.sendmail.interfaces.IMailDelivery)
+  ...
+  ...     def send(self, *args):
+  ...         pass#print "From: %s\nTo: %s\n\n%s" % args
+
+  >>> component.provideUtility(MockMailDelivery())
+
+  >>> question.status
+  'draft'
+  
+  >>> from bungeni.core.interfaces import IVersioned
+  >>> versions = IVersioned(question)
+  >>> len(versions)
+  0
+
+Transition: "submit"
+
+  >>> question.owner is mp_3
+  True
+  >>> wfc.fireTransition("%s-submitted" % question.status)
+  >>> question.status
+  'submitted'
+  >>> len(versions)
+  1
+
+  >>> tuple(qprm.getRolesForPrincipal("member"))
+  ((u'bungeni.Owner', PermissionSetting: Allow),)
+
+  >>> tuple(qprm.getRolesForPrincipal("clerk"))
+  ()
+  >>> #tuple(qrpm.getRolesAndPermissions())
+  >>> #tuple(qrpm.getPermissionsForRole(u"bungeni.Owner"))
+  >>> #tuple(qrpm.getRolesForPermission(u"bungeni.question.Edit"))
+
+Version instances are not workflowed.
+
+    >>> version_1 = list(versions.values())[0]
+    >>> version_1
+    <bungeni.models.domain.QuestionVersion object at ...>
+    
+    >>> IWorkflow(version_1, None) is None
+    True
+    
+
+PRINCIPAL: clerk
+
+Switch to the clerk, and check permission for Clerk on the question 
+in "submitted" state:
+
+  >>> set_interaction(clerk)
+  >>> get_principal_id()
+  'clerk'
+
+-------------------------------------
+Transition: "receive" (from "submit")
+
+  >>> wfc.fireTransition("%s-received" % question.status)
+  >>> question.status
+  'received'
+  >>> len(versions)
+  2
+
+
+"Needs Clarification to Receive" (from "received" or "incomplete")
+
+  >>> wfc.fireTransition("%s-clarification_required" % question.status)
+  >>> question.status
+  'clarification_required'
+  >>> len(versions)
+  3
+
+
+PRINCIPAL: member
+
+Must re-submit:
+
+  >>> set_interaction(member)
+  >>> get_principal_id()
+  'member'
+  >>> wfc.fireTransition("%s-submitted" % question.status)
+  >>> question.status
+  'submitted'
+  >>> len(versions)
+  4
+  
+
+PRINCIPAL: clerk
+
+And re-receive:
+
+  >>> set_interaction(clerk)
+  >>> get_principal_id()
+  'clerk'
+  >>> wfc.fireTransition("%s-received" % question.status)
+  >>> question.status
+  'received'
+  >>> len(versions)
+  5
+
+
+"Complete" (from "received" or "incomplete")
+
+  >>> wfc.fireTransition("%s-completed" % question.status)
+  >>> question.status
+  'completed'
+  >>> len(versions)
+  6
+
+
+PRINCIPAL: speaker
+
+  >>> set_interaction(speaker)
+  >>> get_principal_id()
+  'speaker'
+
+"Require recomplete" (from "completed")
+
+  >>> wfc.fireTransition("%s-incomplete" % question.status)
+  >>> question.status
+  'incomplete'
+  >>> len(versions)
+  7
+
+
+PRINCIPAL: clerk
+
+"Re-complete" (from "incomplete")
+
+  >>> set_interaction(clerk)
+  >>> get_principal_id()
+  'clerk'
+
+  >>> wfc.fireTransition("%s-completed" % question.status)
+  >>> question.status
+  'completed'
+  >>> len(versions)
+  8
+
+
+PRINCIPAL: speaker
+
+"Approve" (from "completed")
+
+  >>> set_interaction(speaker)
+  >>> get_principal_id()
+  'speaker'
+
+
+  >>> wfc.fireTransition("%s-admissible" % question.status)
+  >>> question.status
+  'admissible'
+  >>> len(versions)
+  9
+  
+!+FIRETRANSITION(mr, dec-2010) workflow transitions (only partly) executed in 
+this way do not create the expected auditlog. 
+
+  >>> #question.admissible_date == today
+  True
+
+
+PRINCIPAL: clerk
+
+"Allow response" (send to ministry)
+
+  >>> set_interaction(clerk)
+  >>> get_principal_id()
+  'clerk'
+
+!+FIRETRANSITION(mr, feb-2011) should review/update/evolve tests below to use 
+fireTransition() (instead of directly executing actions), and to use the new
+convention adopted for internal transition ids composed of:
+    "%s-%s" % (source_state, destination_state)
+
+!+FIRETRANSITION(mr, mar-2011) now that fireTransition is being used instead of 
+simply executing actions indpendetly, the following fails (correctly) as the
+needed condition (written querstion) is not satisfied 
+
+  >>> #wfc.fireTransition("%s-response_pending" % question.status)
+  >>> #question.status
+  #'response_pending'
+  >>> #len(versions)
+  #10
+  >>> #question.ministry_submit_date == today
+  #True
+
+
+"Repond"
+
+!+FIRETRANSITION(mr, mar-2011) complete response tests
+
+  >>> #actions.answer(question)
+
+
+Question conditions
+-------------------
+!+CUSTOM(mr, mar-2011) update to test with bungeni_custom
+
+  >>> from bungeni_custom.workflows import _conditions
+  
+"Is scheduled".
+
+  >>> _conditions.is_scheduled(question)
+  False
+
+  >>> from bungeni.models.testing import create_sitting
+  >>> sitting = create_sitting(parliament.parliament_id)
+
+  >>> scheduling = add_content(
+  ...     domain.ItemSchedule,
+  ...     group_sitting_id=sitting.group_sitting_id,
+  ...     item_id=question.parliamentary_item_id)
+  
+  >>> _conditions.is_scheduled(question)
+  True
+
+"Is written response / ministry set".
+
+  >>> _conditions.is_written_response(question)
+  False
+
+  >>> question.ministry_id = ministry.group_id
+  >>> _conditions.is_written_response(question)
+  True
+
+Notifications
+-------------
+
+Setup mock delivery component.
+
+  >>> import zope.sendmail.interfaces
+  
+  >>> class MockMailDelivery(object):
+  ...     interface.implements(zope.sendmail.interfaces.IMailDelivery)
+  ...
+  ...     def send(self, *args):
+  ...         print "From: %s\nTo: %s\n\n%s" % args
+
+  >>> component.provideUtility(MockMailDelivery())
+
+Set up a user.
+
+  >>> user = add_content(
+  ...     domain.User,
+  ...     first_name=u"John",
+  ...     last_name=u"Doe",
+  ...     language="en",
+  ...     email="john.doe@localhost")
+
+  >>> _minister_1 = add_content(
+  ...     domain.Minister,
+  ...     language="en",
+  ...     group_id=ministry.group_id,
+  ...     user_id=mp_1.user_id)
+
+  >>> _minister_2 = add_content(
+  ...     domain.Minister,
+  ...     language="en",
+  ...     group_id=ministry.group_id,
+  ...     user_id=mp_2.user_id)
+
+  >>> question.receive_notification = False
+  >>> question.owner_id = user.user_id
+  
+Question received.
+  
+  >>> wf.get_state("received").notifications[0](question)
+
+Let's change our setting for receive notification so an email message
+is dispatched.
+
+  >>> question.receive_notification = True
+  >>> wf.get_state("received").notifications[0](question)
+  From: clerks.office@parliament.go.tld
+  To: "John Doe" <john.doe@localhost> 
+  ...
+  Subject: Question received: My subject
+  ...
+  
+Send notification to Clerk's office upon submit.
+
+!+BUNGENISETTINGS(mr, mar-2011) since r7987 changes the default of  
+clerks_office_notification to False, the subsequent notification test will
+not notify, so it fails... so, we hard-reset clerks_office_notification to True:
+!+BUNGENISETTINGS(mr, mar-2011) generalize and apply to all notification tests
+
+  >>> from bungeni.core import globalsettings as prefs
+  >>> if prefs.getClerksOfficeReceiveNotification() is False:
+  ...     prefs.BungeniSettings(prefs.app).clerks_office_notification = True
+
+  >>> wf.get_state("submitted").notifications[0](question)
+  From: "John Doe" <john.doe@localhost>
+  To: clerks.office@parliament.go.tld ...
+  Subject: Question submitted: My subject ...
+
+the question is marked as “completed” and is made available / forwarded
+to the Speaker's Office for reviewing and to make it “admissible”.
+
+  >>> wf.get_state("completed").notifications[0](question)
+  From: clerks.office@parliament.go.tld
+  To: "John Doe" <john.doe@localhost> ...
+  Subject: Question forwarded to Speaker's Office: My subject ...
+
+At the same time the question is also forwarded to the ministry.
+
+!+BUNGENISETTINGS(mr, mar-2011)
+  >>> if prefs.getMinistriesReceiveNotification() is False:
+  ...     prefs.BungeniSettings(prefs.app).ministries_notification = True
+  
+  >>> question.ministry_id = ministry.group_id
+  >>> wf.get_state("completed").notifications[1](question)
+  From: clerks.office@parliament.go.tld
+  To: "a ab" <mp1@example.com> ,"b bc" <mp2@example.com> ...
+  Subject: Question asked to ministry: ...
+  
+A question was rejected by the speakers office.
+
+  >>> wf.get_state("inadmissible").notifications[0](question)
+  From: speakers.office@parliament.go.tld
+  To: "John Doe" <john.doe@localhost> ...
+  Subject: Question rejected: My subject ... 
+
+A question needs clarification by the MP
+
+  >>> wf.get_state("clarification_required").notifications[0](question)
+  From: clerks.office@parliament.go.tld
+  To: "John Doe" <john.doe@localhost> ...
+  Subject: Question needs clarification: My subject ...
+
+A question was deferred by Clerk's office.
+
+  >>> wf.get_state("deferred").notifications[0](question)
+  From: speakers.office@parliament.go.tld
+  To: "John Doe" <john.doe@localhost> ...
+  Subject: Question deferred: My subject ...
+
+A question was scheduled by Speakers office.
+
+  >>> wf.get_state("scheduled").notifications[0](question)
+  From: clerks.office@parliament.go.tld
+  To: "John Doe" <john.doe@localhost> ...
+  Subject: Question scheduled: My subject ...
+
+A question was sent to a ministry for written response.
+
+  >>> wf.get_state("response_pending").notifications[0](question)
+  From: clerks.office@parliament.go.tld
+  To: "John Doe" <john.doe@localhost> ...
+  Subject: Question sent to ministry: My subject ...
+
+A questions answer was reviewed by Clerk's office.
+
+  >>> wf.get_state("response_submitted").notifications[0](question)
+  From: clerks.office@parliament.go.tld
+  To: "John Doe" <john.doe@localhost> ...
+  Subject: Question answered: My subject ...
+
+
+  
+Cleanup
+-------
+
+  >>> session.flush()
+  >>> session.commit()
+  >>> session.close()
+  >>> set_interaction(None)
+
