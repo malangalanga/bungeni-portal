@@ -35,3 +35,6 @@ default_language = "en"
 # localization file needs reloading; 0 means never check (deployment)
 check_auto_reload_localization = 5
 
+#Default number of items in listings
+default_number_of_listing_items = 100
+
