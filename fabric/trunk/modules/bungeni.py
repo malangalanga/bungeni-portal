@@ -242,8 +242,10 @@ class BungeniConfigs:
            self.cfg.get_config("global","system_root"),
            " && pwd"
         ]))
-        self.user_build_root = system_root_expanded + "/cbild"
-        self.user_install_root = system_root_expanded + "/cinst"
+        self.apps_dir = self.cfg.get_config("global","apps_dir")
+        self.apps_tmp = self.cfg.get_config("global","apps_tmp")
+        self.user_build_root = system_root_expanded + "/" + self.apps_tmp
+        self.user_install_root = system_root_expanded + "/" + self.apps_dir
         self.distro_override = self.cfg.get_config("global",
                 "distro_override")
         # added release parameter on 2011-08-31 for release pegging support
