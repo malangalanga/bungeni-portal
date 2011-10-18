@@ -287,7 +287,7 @@ def getItemsBySections(self, **kwargs):
             itemSections = b.getSections
         else:
             itemSections = b.getObject().getSections()
-        if len(itemSections) < 1:
+        if not itemSections:
             itemSections = ['No category']
         matchedSections = [s for s in sections if s['section'] in itemSections]
         for s in matchedSections:
