@@ -5,7 +5,12 @@ import  sqlalchemy as rdb
 from zope import component
 from bungeni.alchemist.interfaces import IDatabaseEngine
 from sqlalchemy import create_engine
-from bungeni.models import metadata
+# !+ORM_IMPORT(ah, oct-2011)
+# The below was added after breakaged in r8689.
+# orm is required, but was not directly imported, which broke
+# in r8689 
+import bungeni.models.orm
+from bungeni.models.schema import metadata
 
 def admin_exists():
     # Restricting this script to only adding the first admin user
