@@ -3,10 +3,22 @@
 from __future__ import with_statement
 import os
 from fabric.api import *
+
+#!+FAB_VERSION(ah,oct-2011) - the below are supported only by fab 1.0+
+# pre 1.0 fab will not be supported anymore
 from fabric.colors import red, green
 from fabric.contrib.files import exists
+
+#!+CONFIG_READER(ah,oct-2011) - we use SafeConfigParser only for reading
+# buildout configurations, since buildout itself uses SafeConfigParser. 
+# For reading fabric specific configurations we use ConfigObj as it 
+# supports sub-sections and other niceties.
 from ConfigParser import SafeConfigParser
-import checkversions
+from configobj import ConfigObj
+
+#!+CHECK_VERSIONS(ah,oct-2011) - dont do this anymore, we use the inbuilt
+# mechanism in buildout to check missing pegs
+#import checkversions
 
 
 class Utils:
@@ -108,8 +120,7 @@ class OsEssentials:
     def __init__(self):
         utils = Utils()
         distro_ini = utils.get_fab_path() + "/distro.ini"
-        self.distro = SafeConfigParser()
-        self.distro.read(distro_ini)
+        self.distro = BungeniConfigReader(distro_ini)
 
     def __parse_config(self, dist_id, dist_rel):
         pkgs = self.distro.get(dist_id, dist_rel)
@@ -162,14 +173,12 @@ class BungeniConfigReader:
     """
 
     def __init__(self, inifile):
-        self.config = SafeConfigParser()
-        self.config.read(inifile)
+        self.config = ConfigObj(inifile)
 
     def get_config(self, section_name, config_name):
-        if self.config.has_section(section_name):
-            if self.config.has_option(section_name, config_name):
-                return self.config.get(section_name,
-                        config_name).strip()
+        if self.config.has_key(section_name):
+            if self.config[section_name].has_key(config_name):
+                return self.config[section_name][config_name].strip()
             else:
                 print "warning : section [", section_name, \
                     "] does not have option name ", config_name, " !!!!"
