@@ -45,5 +45,7 @@ class DummySMTPMailer(object):
             "%s -> %s: %s." % (fromaddr, toaddrs, repr(message)))
         
 def dispatch(msg):
-    delivery = zope.component.getUtility(zope.sendmail.interfaces.IMailDelivery)
+    delivery = zope.component.queryUtility(
+        zope.sendmail.interfaces.IMailDelivery, default=SMTPMailer()
+    )
     delivery.send(msg['From'], msg['To'], msg.as_string())
