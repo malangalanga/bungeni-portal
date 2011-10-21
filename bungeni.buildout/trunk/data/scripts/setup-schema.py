@@ -13,9 +13,9 @@ from bungeni.core.workflows import adapters
 from marginalia import schema as marginalia_schema
 from sqlalchemy import create_engine
 
-models.metadata.bind = db = create_engine('postgres://localhost/bungeni')
-models.metadata.drop_all()
-models.metadata.create_all()
+schema.metadata.bind = db = create_engine('postgres://localhost/bungeni')
+schema.metadata.drop_all()
+schema.metadata.create_all()
 # the unbound sequences and indexes wont get created so we have to
 # create them maunually
 schema.QuestionSequence.create(db)
