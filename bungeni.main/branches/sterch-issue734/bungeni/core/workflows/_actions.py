@@ -46,10 +46,7 @@ def __pi_create(context):
     utils.assign_owner_role_pi(context)
 
 def __pi_submit(context):
-    try:
-        utils.set_pi_registry_number(context)
-    except:
-        traceback.print_exception(*sys.exc_info())
+    utils.set_pi_registry_number(context)
     utils.pi_update_signatories(context)
     utils.pi_unset_signatory_roles(context)
 

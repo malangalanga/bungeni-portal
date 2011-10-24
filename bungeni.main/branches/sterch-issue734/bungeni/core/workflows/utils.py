@@ -88,11 +88,11 @@ def create_version(context):
 
 
 def get_mask(context):
-    path = capi.get_path_for('registry')
+    path = capi.get_path_for("registry")
     config = ConfigParser()
-    config.readfp(open(os.path.join(path,'config.ini')))
+    config.readfp(open(os.path.join(path,"config.ini")))
     type = context.type
-    return config.get('types',type)
+    return config.get("types",type)
     
 
 def set_pi_registry_number(context):
@@ -101,21 +101,21 @@ def set_pi_registry_number(context):
     """
     
     mask = get_mask(context)
-    if mask == 'manual':
+    if mask == "manual":
         return
-    #mask = '{registry_number}-{type}:{status}<<<{progressive_number}'
     
-    items = re.findall(r'\{(\w+)\}',mask)
+    items = re.findall(r"\{(\w+)\}",mask)
     
     for name in items:
-        if name == 'registry_number':
-            mask = mask.replace('{%s}'%name, str(dbutils.get_next_reg()))
+        if name == "registry_number":
+            mask = mask.replace("{%s}" % name, str(dbutils.get_next_reg()))
             continue
-        if name == 'progressive_number':
-            mask = mask.replace('{%s}'%name, str(dbutils.get_next_prog(context)))
+        if name == "progressive_number":
+            mask = mask.replace("{%s}" % name, 
+                                         str(dbutils.get_next_prog(context)))
             continue
         value = getattr(context, name)
-        mask = mask.replace('{%s}'%name, value)
+        mask = mask.replace("{%s}" % name, value)
     
     if context.registry_number == None:
         dbutils.set_pi_registry_number(context, mask)
