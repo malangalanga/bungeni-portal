@@ -188,8 +188,11 @@ class ReportGeneratorXHTML(_BaseGenerator):
                         
                         if listing_count == 0:
                             parent = element.getparent()
-                            no_items_element = etree.SubElement(element, "p")
-                            no_items_element.text = translate_i18n(
+                            tr_no_elements = etree.SubElement(element, "tr")
+                            td_no_elements = etree.SubElement(tr_no_elements,
+                                "td"
+                            )
+                            td_no_elements.text = translate_i18n(
                                 _(u"No items found")
                             )
                         else:
