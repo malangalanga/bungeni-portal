@@ -213,7 +213,7 @@ class ReportBuilder(form.Form, DateTimeFormatMixin):
             sittings = ISchedulingContext(self.context).get_sittings(
                 start_date, end_date
             ).values()
-            self.sittings = map(removeSecurityProxy,sittings)
+            self.sittings = map(removeSecurityProxy, sittings)
         self.sittings = [ ExpandedSitting(sitting) for sitting in self.sittings ]
 
     def generateContent(self, data):
