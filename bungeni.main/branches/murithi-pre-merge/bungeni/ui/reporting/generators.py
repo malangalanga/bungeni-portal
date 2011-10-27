@@ -145,6 +145,29 @@ class ReportGeneratorXHTML(_BaseGenerator):
         """Generate report content based on report template and context
         """
         request = common.get_request()
+        
+        def process_single_node(node, context, typ, src):
+            clean_element(node)
+            if typ=="text":
+                node.text = get_element_value(context, src)
+            elif typ=="html":
+                html_element = etree.fromstring("<div>%s</div>" % 
+                    get_element_value(context, src)
+                )
+                for (key, value) in node.attrib.iteritems():
+                    html_element.attrib[key] = value
+                node.addnext(html_element)
+                node.insert(0, html_element)
+            elif type=="link":
+                url_src = get_attr(node, "url")
+                if url_source:
+                    link_url = get_element_value(context, url_src)
+                else:
+                    link_url = url.absoluteURL(context, request)
+                node.attrib["href"] = link_url
+                if src:
+                    node.text = get_element_value(context, src)
+
         def process_document_tree(root, context):
             """Iterate and optionally update children of provided root node.
             
@@ -155,33 +178,19 @@ class ReportGeneratorXHTML(_BaseGenerator):
             with content from the provided context.
             """
             iter_children = root.getchildren() or [root]
+            if not (root in iter_children):
+                root_typ = get_attr(root, "type")
+                if root_typ:
+                    process_single_node(root, context, root_typ, 
+                        get_attr(root, "source")
+                    )
             for child in iter_children:
                 typ = get_attr(child, "type")
                 src = get_attr(child, "source")
                 children = child.getchildren()
                 if len(children) == 0:
                     if typ:
-                        clean_element(child)
-                        if typ=="text":
-                            child.text = get_element_value(context, src)
-                        elif typ=="html":
-                            parent = child.getparent()
-                            html_element = etree.fromstring("<div>%s</div>" % 
-                                get_element_value(context, src)
-                            )
-                            for (key, value) in child.attrib.iteritems():
-                                html_element.attrib[key] = value
-                            child.addnext(html_element)
-                            parent.remove(child)
-                        elif type=="link":
-                            url_src = get_attr(child, "url")
-                            if url_source:
-                                link_url = get_element_value(context, url_src)
-                            else:
-                                link_url = url.absoluteURL(context, request)
-                            child.attrib["href"] = link_url
-                            if src:
-                                child.text = get_element_value(context, src)
+                        process_single_node(child, context, typ, src)
                 else:
                     if typ:
                         if typ == "listing":
@@ -213,7 +222,6 @@ class ReportGeneratorXHTML(_BaseGenerator):
                                         )
                                         child.append(iroot)
                         else:
-                            context = getattr(context, src)
                             process_document_tree(child, context)
                     else:
                         process_document_tree(child, context)
