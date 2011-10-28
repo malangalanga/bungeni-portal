@@ -236,7 +236,10 @@
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="committee_type_id" displayable="view edit add listing" localizable="view edit listing">
+        <field name="group_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="group_continuity" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
         <field name="num_members" displayable="view edit add listing" localizable="view edit add listing">
