@@ -10,15 +10,6 @@ SET escape_string_warning = off;
 
 SET search_path = public, pg_catalog;
 
---
--- Data for Name: address_types; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY address_types (address_type_name, language) FROM stdin;
-Office	en
-Home	en
-Other	en
-\.
 
 --
 -- Data for Name: question_types; Type: TABLE DATA; Schema: public; Owner: -
@@ -46,17 +37,6 @@ COPY member_election_types (member_election_type_name, language) FROM stdin;
 elected	en
 nominated	en
 ex officio	en
-\.
-
---
--- Data for Name: postal_address_types; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY postal_address_types (postal_address_type_name, language) FROM stdin;
-P.O. Box	en
-Street/Physical	en
-Military	en
-Undefined / Unknown	en
 \.
 
 
