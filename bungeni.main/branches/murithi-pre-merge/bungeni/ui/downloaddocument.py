@@ -34,13 +34,10 @@ from zope.app.component.hooks import getSite
 from interfaces import IOpenOfficeConfig
 from bungeni.alchemist import Session
 from bungeni.models import domain, interfaces
-from bungeni.ui.table import LinkColumn, SimpleContainerListing
 from appy.pod.renderer import Renderer
 
 
 from bungeni.utils.capi import capi
-from bungeni.core.dc import IDCDescriptiveProperties
-from bungeni.core.translation import translate_i18n
 from bungeni.ui.i18n import _
 from bungeni.ui.utils import url, misc
 from bungeni.ui.reporting import generators
@@ -209,8 +206,6 @@ class DownloadDocument(BrowserView):
         #TODO : Either generate a hash of a mutable content item and store it 
         # with the odt/pdf doc or track changes to a doc
         # Add caching by state. items in terminal states do not change
-        tempFileName = os.path.dirname(__file__) + "/tmp/%f.%s" % (
-                                                time.time(),self.document_type)
         if cached:
             session = Session()
             d = [f.file_title for f in self.document.attached_files]

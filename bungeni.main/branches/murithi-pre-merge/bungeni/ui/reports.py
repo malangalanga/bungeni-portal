@@ -190,6 +190,7 @@ class ReportBuilder(form.Form, DateTimeFormatMixin):
     title = _(u"Report Title")
     generated_content = None
     show_preview = False
+    language = None
 
     def __init__(self, context, request):
         self.context = context
@@ -221,7 +222,9 @@ class ReportBuilder(form.Form, DateTimeFormatMixin):
             datetime.datetime.today().date()
         )
         generator = generators.ReportGeneratorXHTML(data.get("report_type"))
+        self.language = generator.language
         self.title = generator.title
+        self.language = generator.language
         self.publication_number = data.get("publication_number")
         self.end_date = self.get_end_date(self.start_date, generator.coverage)
         self.buildSittings(self.start_date, self.end_date)
@@ -247,11 +250,11 @@ class ReportBuilder(form.Form, DateTimeFormatMixin):
             context_group_id = self.context.group_id
 
         report = domain.Report(short_name = self.title,
-            start_date = start_date,
-            end_date = end_date,
+            start_date = self.start_date,
+            end_date = self.end_date,
             body_text = self.generated_content,
             owner_id = get_db_user_id(),
-            language = generator.language,
+            language = self.language,
             group_id = context_group_id
         )
         session = Session()

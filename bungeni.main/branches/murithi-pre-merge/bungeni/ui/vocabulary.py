@@ -165,9 +165,31 @@ YesNoSource = vocabulary.SimpleVocabulary([
 
 # !+TYPES_CUSTOM - enum sources to move out to bungeni custom
 
-bill_types = vocabulary.SimpleVocabulary([
+bill_type = vocabulary.SimpleVocabulary([
     vocabulary.SimpleTerm("government", title="Government Initiative"),
     vocabulary.SimpleTerm("member", title="Member Initiative"),
+])
+committee_type = vocabulary.SimpleVocabulary([
+    vocabulary.SimpleTerm("housekeeping", title="House Keeping"),
+    vocabulary.SimpleTerm("departmental", title="Departmental"),
+    vocabulary.SimpleTerm("adhoc", title="Ad Hoc"),
+    vocabulary.SimpleTerm("watchdog", title="Watch Dog"),
+    vocabulary.SimpleTerm("liaison", title="Liaison"),
+])
+committee_continuity = vocabulary.SimpleVocabulary([
+    vocabulary.SimpleTerm("permanent", title="Permanent"),
+    vocabulary.SimpleTerm("temporary", title="Temporary"),
+])
+logical_address_type = vocabulary.SimpleVocabulary([
+    vocabulary.SimpleTerm("office", title="Office"),
+    vocabulary.SimpleTerm("home", title="Home"),
+    vocabulary.SimpleTerm("other", title="Other"),
+])
+postal_address_type = vocabulary.SimpleVocabulary([
+    vocabulary.SimpleTerm("street", title="Street/Physical"),
+    vocabulary.SimpleTerm("pobox", title="P.O. Box"),
+    vocabulary.SimpleTerm("military", title="Military"),
+    vocabulary.SimpleTerm("unknown", title="Undefined/Unknown"),
 ])
 
 
@@ -386,12 +408,6 @@ class AttachedFileTypeSource(SpecializedSource):
 #    title_field="group_sitting_type",
 #    token_field="group_sitting_type_id",
 #    value_field="group_sitting_type_id")
-
-PostalAddressType = DatabaseSource(domain.PostalAddressType,
-    token_field="postal_address_type_id",
-    value_field="postal_address_type_id",
-    title_field="postal_address_type_name"
-)
 
 MemberElectionType = DatabaseSource(domain.MemberElectionType, 
     token_field="member_election_type_id",
@@ -920,12 +936,6 @@ ResponseType = DatabaseSource(domain.ResponseType,
     title_field="response_type_name"
 )
 
-CommitteeTypeStatus = DatabaseSource(domain.CommitteeTypeStatus,
-    token_field="committee_type_status_id",
-    value_field="committee_type_status_id",
-    title_field="committee_type_status_name"
-)
-
 
 class CommitteeSource(SpecializedSource):
 
@@ -937,6 +947,7 @@ class CommitteeSource(SpecializedSource):
             domain.Committee.status == 'active',
             domain.Committee.parent_group_id == parliament_id))
         return query
+
 
 class CommitteeAssignmentSource(SpecializedSource):
 

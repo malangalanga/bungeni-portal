@@ -11,7 +11,8 @@ from zope.formlib import form
 from bungeni.alchemist import Session
 from alchemist.traversal.interfaces import IManagedContainer
 from bungeni.alchemist import catalyst
-from bungeni.models import domain, interfaces, utils
+from bungeni.models import domain, interfaces
+from bungeni.core.index import IndexReset
 from bungeni.core.index import IndexReset
 from bungeni.ui import container, search, browser
 from bungeni.ui.calendar import utils as calendar_utils

@@ -103,7 +103,7 @@ def configurable_mappings(kls):
 # !+/PARAMETRIZABLE_DOCTYPES
 
 #user address types
-mapper(domain.PostalAddressType, schema.postal_address_types)
+#!+TYPES_CUSTOM mapper(domain.PostalAddressType, schema.postal_address_types)
 
 # Users
 # general representation of a person
@@ -229,6 +229,7 @@ mapper(domain.Ministry,
     polymorphic_identity="ministry"
 )
 
+''' !+TYPES_CUSTOM
 mapper(domain.CommitteeTypeStatus, schema.committee_type_status)
 mapper(domain.CommitteeType, schema.committee_type,
     properties={
@@ -238,16 +239,11 @@ mapper(domain.CommitteeType, schema.committee_type,
         )
     }
 )
+'''
 mapper(domain.Committee, schema.committees,
     inherits=domain.Group,
     polymorphic_on=schema.groups.c.type,
     polymorphic_identity="committee",
-    properties={
-        "committee_type": relation(domain.CommitteeType,
-            uselist=False,
-            lazy=False
-        ),
-    },
 )
 
 mapper(domain.Office, schema.offices,
@@ -571,22 +567,14 @@ mapper(domain.MemberTitle, schema.member_titles,
     }
 )
 
-mapper(domain.AddressType, schema.address_types)
+#!+TYPES_CUSTOM mapper(domain.AddressType, schema.address_types)
 mapper(domain.UserAddress, schema.user_addresses,
     properties={
-        "address_type": relation(domain.AddressType, uselist=False, lazy=False),
-        "postal_address_type": relation(domain.PostalAddressType, uselist=False,
-            lazy=False
-        ),
         "country": relation(domain.Country, uselist=False, lazy=False),
     },
 )
 mapper(domain.GroupAddress, schema.group_addresses,
     properties={
-        "address_type": relation(domain.AddressType, uselist=False, lazy=False),
-        "postal_address_type": relation(domain.PostalAddressType, 
-            uselist=False, lazy=False
-        ),
         "country": relation(domain.Country, uselist=False, lazy=False),
     },
 )

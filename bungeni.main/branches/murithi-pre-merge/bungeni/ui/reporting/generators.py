@@ -160,7 +160,7 @@ class ReportGeneratorXHTML(_BaseGenerator):
                 node.insert(0, html_element)
             elif type=="link":
                 url_src = get_attr(node, "url")
-                if url_source:
+                if url_src:
                     link_url = get_element_value(context, url_src)
                 else:
                     link_url = url.absoluteURL(context, request)
