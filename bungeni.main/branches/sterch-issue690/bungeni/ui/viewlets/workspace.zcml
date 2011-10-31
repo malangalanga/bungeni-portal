@@ -5,9 +5,17 @@
     i18n_domain="bungeni">
     <browser:viewlet name="bungeni.workspace_context_navigation"
         layer="..interfaces.IWorkspaceSectionLayer"
-        permission="zope.Public"
+        permission="bungeni.workspace.View"
         manager="ploned.ui.interfaces.ILeftColumnManager"
         class=".workspace.WorkspaceContextNavigation"
         weight="1"
+    />
+    <browser:viewlet name="bungeni.workspace_signatory_status"
+        for="bungeni.models.interfaces.IBungeniParliamentaryContent"
+        layer="..interfaces.IWorkspaceSectionLayer"
+        class=".workspace.SignatoriesStatus"
+        manager="ploned.ui.interfaces.IAboveContentManager"
+        permission="zope.View"
+        weight="99"
     />
 </configure>

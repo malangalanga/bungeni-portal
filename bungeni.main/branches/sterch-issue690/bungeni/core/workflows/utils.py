@@ -18,6 +18,7 @@ from bungeni.ui.utils import debug
 
 import dbutils
 
+SIGNATORIES_REJECT_STATES = [u"rejected", u"withdrawn"]
 
 ''' !+UNUSED(mr, mar-2011)
 def get_parliament(context):
@@ -95,6 +96,15 @@ is_pi_scheduled = dbutils.is_pi_scheduled
 def setMinistrySubmissionDate(context):
     if context.ministry_submit_date == None:
         context.ministry_submit_date = datetime.date.today()
+
+def assign_question_minister_role(context):
+    assert interfaces.IQuestion.providedBy(context), \
+        "Not a Question: %s" % (context)
+    if context.ministry is not None:
+        ministry_login_id = context.ministry.group_principal_id
+        if ministry_login_id:
+            IPrincipalRoleMap(context).assignRoleToPrincipal("bungeni.Minister", 
+                ministry_login_id)
 
 # !+QuestionScheduleHistory(mr, mar-2011) rename appropriately e.g. "unschedule"
 # !+QuestionScheduleHistory(mr, mar-2011) only pertinent if question is 
@@ -226,8 +236,30 @@ def assign_signatory_role(context, owner_login, unset=False):
 
 def pi_update_signatories(context):
     """fire automatic transitions on submission of document"""
-    #first commit all pending db transactions
     for signatory in context.signatories.values():
         wfc = IWorkflowController(signatory, None)
         if wfc is not None:
             wfc.fireAutomatic()
+
+def pi_unset_signatory_roles(context, all=False):
+    """Unset signatory roles for members who have rejected document
+    """
+    if all:
+        for signatory in context.signatories.values():
+            owner_login = get_owner_login_pi(signatory)
+            assign_signatory_role(context, owner_login, unset=True)
+    else:
+        for signatory in context.signatories.values():
+            wfc = IWorkflowController(signatory, None)
+            if wfc is not None:
+                if (wfc.state_controller.get_status() 
+                        in SIGNATORIES_REJECT_STATES
+                    ):
+                    owner_login = get_owner_login_pi(signatory)
+                    log.debug("Removing signatory role for [%s] on "
+                        "document: [%s]", 
+                        owner_login, signatory.item
+                    )
+                    assign_signatory_role(context, owner_login, unset=True)
+            else:
+                log.debug("Unable to get workflow controller for : %s", signatory)

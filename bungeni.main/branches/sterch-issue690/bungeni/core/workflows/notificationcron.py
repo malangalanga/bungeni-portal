@@ -24,7 +24,6 @@ from bungeni.alchemist import Session
 from bungeni.core.workflows import  dbutils, utils
 from bungeni.models import domain
 from bungeni.models import schema
-from bungeni.models import metadata
 import bungeni.core.globalsettings as prefs
 #from bungeni.core.workflows.question import states as q_state
 from bungeni.server.smtp import dispatch
@@ -35,6 +34,11 @@ from zope import component
 from sqlalchemy import create_engine
 from bungeni.alchemist.interfaces import IDatabaseEngine
 #import bungeni.core.interfaces
+
+# !+MODEL_MAPPING(mr, oct-2011) import bungeni.models.orm is needed to ensure 
+# that mappings of domain classes to schema tables is executed.
+import bungeni.models.orm
+
 
 def _getQuestionsPendingResponse(date, ministry):
     """
@@ -185,7 +189,7 @@ def main(argv=None):
     #This needs to be factored out
     db = create_engine('postgres://localhost/bungeni', echo=False)
     component.provideUtility( db, IDatabaseEngine, 'bungeni-db' )
-    metadata.bind = db
+    schema.metadata.bind = db
     session = Session()
     
     sendAllNotifications()

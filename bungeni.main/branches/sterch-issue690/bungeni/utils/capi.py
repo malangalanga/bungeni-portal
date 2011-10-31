@@ -22,6 +22,7 @@ log = __import__("logging").getLogger("bungeni.utils.capi")
 import time
 import os
 from zope.dottedname.resolve import resolve
+from bungeni.utils import error
 import bungeni_custom as bc
 
 
@@ -33,12 +34,7 @@ def bungeni_custom_errors(f):
     class BungeniCustomError(Exception):
         """A Localization Error.
         """
-    def _errorable(*args, **kw):
-        try: 
-            return f(*args, **kw)
-        except Exception, e: 
-            raise BungeniCustomError("%s: %s" % (e.__class__.__name__, e))
-    return _errorable
+    return error.exceptions_as(BungeniCustomError, True)(f)
 
 
 class CAPI(object):
@@ -85,6 +81,13 @@ class CAPI(object):
         conds_module = resolve("._conditions", "bungeni_custom.workflows")
         return getattr(conds_module, condition) # raises AttributeError
     
+    @property
+    @bungeni_custom_errors
+    def default_number_of_listing_items(self):
+        """This is the max number of items that are displayed in a listing by
+        default. Returns an integer
+        """
+        return int(bc.default_number_of_listing_items)
     
     # utility methods
     

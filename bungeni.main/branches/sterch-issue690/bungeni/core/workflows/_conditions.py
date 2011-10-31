@@ -12,6 +12,7 @@ $Id$
 """
 log = __import__("logging").getLogger("bungeni.core.workflows._conditions")
 
+from zope.security import checkPermission
 from bungeni.ui.interfaces import IFormEditLayer
 from bungeni.ui.utils import common
 from bungeni.core import globalsettings as prefs
@@ -19,7 +20,7 @@ from bungeni.core.workflows import utils
 from bungeni.models.interfaces import IAuditable, ISignatoriesValidator
 from bungeni.models import domain
 from bungeni.alchemist import Session
-from bungeni.models import utils as model_utils
+from bungeni.models import utils as model_utils, delegation
 # common
 
 # the condition for the transition from "" (None) to either "draft" or to 
@@ -36,15 +37,21 @@ def user_is_context_owner(context):
     """
     user = model_utils.get_db_user()
     owner_login = utils.get_owner_login_pi(context)
-    session = Session()
-    delegations = session.query(domain.User) \
-                    .join((domain.UserDelegation, domain.User.user_id
-                                        ==domain.UserDelegation.user_id)) \
-                    .filter(domain.UserDelegation.delegation_id == user.user_id) \
-                    .all()
+    if user.login == owner_login:
+        return True
+    delegations = delegation.get_user_delegations(user.user_id)
     users = [delegate.login for delegate in delegations]
-    users.append(owner_login) 
-    return user.login in users
+    return owner_login in users
+
+def user_may_edit_context_parent(context):
+    """Does user have edit permission on the context's parent?
+    For a context that is a workflowed sub-object, such as an Attachment or 
+    an Event; context must define an "item" proeprty that returns the parent.
+    """
+    parent = context.item
+    permission = "bungeni.%s.Edit" % (parent.__class__.__name__.lower())
+    return checkPermission(permission, parent)
+
 
 def clerk_receive_notification(context):
     return prefs.getClerksOfficeReceiveNotification()
@@ -116,6 +123,24 @@ def user_is_parent_document_owner(context):
         utils.get_owner_login_pi(context.item)
     )
 
+def signatory_auto_sign(context):
+    """ Determines whether signature is automatically signed when a signatory
+        is added.
+    
+    Whenever the signature is that of the document owner, we auto sign.
+    Also, signature is signed if parent document is created on behalf of a 
+    member. The assumption is that the user has provided a list of consented
+    signatories to the document.
+    """
+    if user_is_parent_document_owner(context):
+        return True
+    # if user adding signatory is not parent document owner, then auto sign
+    #!+SIGNATORIES(mb, aug-2011) this could be tricky versus checking if parent
+    # document is in a 'working_draft' state
+    if user_is_not_context_owner(context.item):
+        return True
+    return False
+
 def user_is_not_parent_document_owner(context):
     return not user_is_parent_document_owner(context)
 
@@ -158,12 +183,14 @@ def pi_allow_signature_actions(context):
     """allow/disallow other signature actions => such as withdraw and reject
     """
     validator = ISignatoriesValidator(context.item, None)
-    return (validator and user_is_context_owner(context) 
-        and validator.documentSubmitted()
-        and user_is_not_parent_document_owner(context)
-    )
+    if validator is not None:
+        return (user_is_context_owner(context) and
+            validator.documentSubmitted() and
+            user_is_not_parent_document_owner(context))
+    return False
 
-#auditables
+# auditables
+
 def user_is_state_creator(context):
     """Did the current user create current state - based on workflow log?
     """
@@ -185,3 +212,4 @@ def user_is_state_creator_and_owner(context):
 
 def user_is_state_creator_not_owner(context):
     return user_is_state_creator(context) and user_is_not_context_owner(context)
+

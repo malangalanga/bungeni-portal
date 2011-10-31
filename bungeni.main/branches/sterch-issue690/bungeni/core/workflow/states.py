@@ -19,8 +19,10 @@ import zope.event
 import zope.lifecycleevent
 from bungeni.alchemist import Session
 from bungeni.core.workflow import interfaces
+from bungeni.utils import error
 
-#
+
+GRANT, DENY = 1, 0
 
 # we only have 1 or 0 i.e. only Allow or Deny, no Unset.
 IntAsSetting = { 
@@ -28,29 +30,6 @@ IntAsSetting = {
     0: zope.securitypolicy.interfaces.Deny
 }
 
-GRANT, DENY = 1, 0
-
-# !+ needed to make the tests pass in the absence of interactions
-# !+nullCheckPermission(mr, mar-2011) shouldn't the tests ensure there is 
-# always an interaction?
-def nullCheckPermission(permission, principal_id):
-    return True
-
-def exceptions_as(exc_kls, include_name=True):
-    def _exceptions_as(f):
-        """Decorator to intercept any error raised by function f and 
-        re-raise it as a exc_kls. 
-        """
-        def _errorable_f(*args, **kw):
-            try: 
-                return f(*args, **kw)
-            except Exception, e:
-                if include_name:
-                    raise exc_kls("%s: %s" % (e.__class__.__name__, e))
-                else:
-                    raise exc_kls("%s" % (e))
-        return _errorable_f
-    return _exceptions_as
 
 def wrapped_condition(condition):
     def test(context):
@@ -63,7 +42,16 @@ def wrapped_condition(condition):
                 e.__class__.__name__, e, context, condition))
     return test
 
-#
+
+class Feature(object):
+    """Status/settings of an optional feature on a workflowed type.
+    """
+    def __init__(self, name, enabled=True, note=None, **kws):
+        self.name = name
+        self.enabled = enabled
+        self.note = note
+        self.params = kws
+
 
 class State(object):
     """A workflow state instance. 
@@ -74,7 +62,7 @@ class State(object):
     zope.interface.implements(zope.securitypolicy.interfaces.IRolePermissionMap)
     
     def __init__(self, id, title, note, actions, permissions, notifications,
-            obsolete=False
+            permissions_from_parent=False, obsolete=False
         ):
         self.id = id # status
         self.title = title
@@ -82,11 +70,12 @@ class State(object):
         self.actions = actions # [callable]
         self.permissions = permissions
         self.notifications = notifications
+        self.permissions_from_parent = permissions_from_parent
         self.obsolete = obsolete
     
-    @exceptions_as(interfaces.WorkflowStateActionError)
+    @error.exceptions_as(interfaces.WorkflowStateActionError)
     def execute_actions(self, context):
-        """Execute the actions and permissions associated with this state.
+        """Execute the actions associated with this state.
         """
         assert context.status == self.id, \
             "Context [%s] status [%s] has not been updated to [%s]" % (
@@ -131,8 +120,7 @@ class Transition(object):
     multiple transitions). 
     
     Each Transition ID is automatically determined from the source and 
-    destination states (therefore it is not passed in as a constructor 
-    parameter) in the following predictable way:
+    destination states in the following predictable way:
     
         id = "%s-%s" % (source or "", destination)
     
@@ -141,6 +129,7 @@ class Transition(object):
     """
     
     def __init__(self, title, source, destination,
+            grouping_unique_sources=None,
             condition=None,
             trigger=interfaces.MANUAL, 
             permission=CheckerPublic,
@@ -152,6 +141,7 @@ class Transition(object):
         self.title = title
         self.source = source
         self.destination = destination
+        self.grouping_unique_sources = grouping_unique_sources
         self._raw_condition = condition # remember unwrapped condition
         self.condition = wrapped_condition(condition)
         self.trigger = trigger
@@ -160,9 +150,10 @@ class Transition(object):
         self.require_confirmation = require_confirmation
         self.note = note
         self.user_data = user_data
-   
+    
     @property
     def id(self):
+        # source may be either a valid starus_id or None
         return "%s-%s" % (self.source or "", self.destination)
     
     def __cmp__(self, other):
@@ -203,16 +194,46 @@ class StateController(object):
     
 
 def get_object_state(context):
-    """Lookup the workflow.states.State instance for the context's status.
+    """Utility to look up the workflow.states.State singleton instance that 
+    corresponds to the context's urrent status.
     
-    Serves also as the IRolePermissionMap(context) adapter factory.
-    
-    May need to be called numerous times per request, so is a lightweight 
-    and performance-aware adapter -- there is no creation of any adapter 
-    instance, just lookup of the object's Workflow instance off which to 
-    retrieve existing State instances.
+    Implemented as the IWorkflow adaptor for the context--but as may need to 
+    be called numerous times per request, note that it is a lightweight and 
+    performance-aware adapter -- there is no creation of any adapter instance, 
+    just lookup of the object's Workflow instance off which to retrieve 
+    existing State instances.
     """
     return interfaces.IWorkflow(context).get_state(context.status)
+
+def get_object_state_rpm(context):
+    """IRolePermissionMap(context) adapter factory. 
+    
+    Looks up the workflow.states.State singleton instance that is the current
+    IRolePermissionMap responsible for the context.
+    
+    Lighweight and high-performance wrapper on get_object_state(context), 
+    to *lookup* (note: no creation of any instance) the workflow.states.State 
+    singleton instance.
+    """
+    state = get_object_state(context)
+    if state.permissions_from_parent:
+        # this state delegates permissions to parent, 
+        # so just recurse passing parent item instead
+        return get_object_state_rpm(context.item)
+    return state
+
+def get_object_version_state_rpm(version):
+    """IRolePermissionMap(version) adapter factory.
+    
+    Lighweight and high-performance wrapper on get_object_state(context), 
+    to *lookup* (note: no creation of any instance) the workflow.states.State 
+    singleton instance for the version's context's status.
+    
+    Note that version instances are NOT workflowed.
+    """
+    # !+HEAD_DOCUMENT_ITEM(mr, sep-2011) standardize name, "head", "document" 
+    # or "item"?
+    return interfaces.IWorkflow(version.head).get_state(version.status)
 
 
 class Workflow(object):
@@ -224,17 +245,15 @@ class Workflow(object):
     
     initial_state = None
     
-    def __init__(self, name, states, transitions, 
-            auditable=False, versionable=False, note=None
-        ):
+    def __init__(self, name, features, states, transitions, note=None):
         self.name = name
-        self.auditable = auditable # must be True if versionable
-        self.versionable = versionable
+        self.features = features
         self.note = note
         self._states_by_id = {} # {id: State}
         self._transitions_by_id = {} # {id: Transition}
         self._transitions_by_source = {} # {source: [Transition]}
         self._transitions_by_destination = {} # {destination: [Transition]}
+        self._transitions_by_grouping_unique_sources = {} # {grouping: [Transition]}
         self._permission_role_pairs = None # set([ (permission, role) ])
         self.refresh(states, transitions)
     
@@ -247,6 +266,8 @@ class Workflow(object):
         tbys.clear()
         tbyd = self._transitions_by_destination
         tbyd.clear()
+        tbygus = self._transitions_by_grouping_unique_sources
+        tbygus.clear()
         # states
         tbys[self.initial_state] = [] # special case source: initial state
         for s in states:
@@ -261,10 +282,11 @@ class Workflow(object):
             tbyid[tid] = t
             tbys[t.source].append(t)
             tbyd[t.destination].append(t)
+            tbygus.setdefault(t.grouping_unique_sources, []).append(t)
         # integrity
         self.validate()
     
-    @exceptions_as(interfaces.InvalidWorkflow, False)
+    @error.exceptions_as(interfaces.InvalidWorkflow, False)
     def validate(self):
         states = self._states_by_id.values()
         # at least one state
@@ -275,8 +297,13 @@ class Workflow(object):
             (p[1], p[2]) for p in states[0].permissions ])
         num_prs = len(prs)
         for s in states:
+            if s.permissions_from_parent:
+                assert not len(s.permissions), "Workflow state [%s -> %s] " \
+                    "with permissions_from_parent must not specify any own " \
+                    "permissions" % (self.name, s.id)
+                continue
             assert len(s.permissions) == num_prs, \
-                "Workflow state [%s -> %s] does not explictly set same " \
+                "Workflow state [%s -> %s] does not explicitly set same " \
                 "permissions used across other states... " \
                 "\nTHIS:\n  %s\nOTHER:\n  %s" % (self.name, s.id, 
                     "\n  ".join([str(p) for p in s.permissions]),
@@ -300,6 +327,23 @@ class Workflow(object):
                 assert sources, \
                     "Unreachable state [%s] in Workflow [%s]" % (
                         dest_id, self.name)
+        # inter-transition validation
+        # grouping_unique_sources - used to semantically connect multiple 
+        # transitions and constrain that accumulative sources are unique
+        for grouping, ts in self._transitions_by_grouping_unique_sources.items():
+            if grouping is not None:
+                all_sources = [ t.source for t in ts ]
+                assert len(all_sources)==len(set(all_sources)), "Duplicate " \
+                    "sources in grouped transitions [%s] in workflow [%s]" % (
+                        grouping, self.name)
+    
+    def has_feature(self, name):
+        """Does this workflow enable the named feature?
+        """
+        for f in self.features:
+            if f.name == name:
+                return f.enabled
+        return False
     
     @property
     def states(self):
@@ -308,16 +352,16 @@ class Workflow(object):
             "use Workflow.get_state(status) instead" % (self.name))
         return self._states_by_id
     
-    @exceptions_as(interfaces.InvalidStateError)
+    @error.exceptions_as(interfaces.InvalidStateError)
     def get_state(self, state_id):
         return self._states_by_id[state_id]
     
-    @exceptions_as(interfaces.InvalidTransitionError)
+    @error.exceptions_as(interfaces.InvalidTransitionError)
     def get_transition(self, transition_id):
         return self._transitions_by_id[transition_id]
     
     # !+ get_transitions_to(destination) ? 
-    @exceptions_as(interfaces.InvalidStateError)
+    @error.exceptions_as(interfaces.InvalidStateError)
     def get_transitions_from(self, source):
         return sorted(self._transitions_by_source[source])
     
@@ -352,46 +396,33 @@ class WorkflowController(object):
         return interfaces.IWorkflow(self.context)
     
     def _get_checkPermission(self):
-        try:
-            return zope.security.management.getInteraction().checkPermission
-        except zope.security.interfaces.NoInteraction:
-            return nullCheckPermission
+        return zope.security.management.getInteraction().checkPermission
     
     def _check(self, transition, check_security):
         """Check whether we may execute this workflow transition.
         """
         if check_security:
             checkPermission = self._get_checkPermission()
-        else:
-            checkPermission = nullCheckPermission
-        if not checkPermission(transition.permission, self.context):
-            raise zope.security.interfaces.Unauthorized(self.context,
-                "transition: %s" % transition.id,
-                transition.permission)
+            if not checkPermission(transition.permission, self.context):
+                raise zope.security.interfaces.Unauthorized(self.context,
+                    "transition: %s" % transition.id, 
+                    transition.permission)
         # now make sure transition can still work in this context
-        if not transition.condition(self.context):
-            raise interfaces.ConditionFailedError
+        transition.condition(self.context) # raises WorkflowConditionError
     
     # !+ RENAME
     def fireTransition(self, transition_id, comment=None, check_security=True):
-        # !+fireTransitionParams(mr, mar-2011) needed?
         if not (comment is None and check_security is True):
             log.warn("%s.fireTransition(%s, comment=%s, check_security=%s)" % (
                 self, transition_id, comment, check_security))
         # raises InvalidTransitionError if id is invalid for current state
         transition = self.workflow.get_transition(transition_id)
-        # skip security check for transitions
-        # !+CHECK_SECURITY(murithi, may-2011) some auto transitions have
-        # sources - to either, fix zcml_regenerate or directive in xml
-        if transition.trigger == interfaces.AUTOMATIC:
-            check_security = False
         self._check(transition, check_security)
         # change status of context or new object
         self.state_controller.set_status(transition.destination)
         # notify wf event observers
-        event = WorkflowTransitionEvent(self.context, 
-            transition.source, transition.destination, transition, comment)
-        zope.event.notify(event)
+        zope.event.notify(WorkflowTransitionEvent(self.context,
+                transition.source, transition.destination, transition, comment))
         # send modified event for original or new object
         zope.event.notify(zope.lifecycleevent.ObjectModifiedEvent(self.context))
     
@@ -404,15 +435,21 @@ class WorkflowController(object):
         return self.fireTransition(transition_ids[0], comment, check_security)
     
     def fireAutomatic(self):
-        for transition in self._get_transitions(interfaces.AUTOMATIC):
-            try:
-                self.fireTransition(transition.id)
-            except interfaces.ConditionFailedError:
-                # fine, then we weren't ready to fire the transition as yet
-                pass
-            else:
-                # if we actually managed to fire a transition, we're done
-                return
+        # we take the first automatic transitions that passes condition (if any)
+        for transition in self._get_transitions(interfaces.AUTOMATIC, True):
+            # automatic transitions are not security-checked--assuming proviso
+            # that fireAutomatic() is never called as a user action 
+            # *directly*, but it is rather the logical consequence of handling 
+            # some other direct user action (for which the user would 
+            # presumabley have the necessary privilege) e.g. transiting an 
+            # item to draft is done automatically when the user creates the 
+            # item (assumes of course the privilege of creating the item).
+            # 
+            # Automatic transitions may still be fired manually, but then 
+            # otehr details also have to be handled manually e.g. not checking 
+            # the security and checking the condition.
+            self.fireTransition(transition.id, comment=None, 
+                check_security=False)
     
     def getFireableTransitionIdsToward(self, state):
         workflow = self.workflow

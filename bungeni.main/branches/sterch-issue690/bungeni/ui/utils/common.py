@@ -15,10 +15,12 @@ import zope
 from zope.annotation.interfaces import IAnnotations
 from zope.app.security.interfaces import IUnauthenticatedPrincipal
 from zope.securitypolicy.interfaces import IPrincipalRoleMap
+from zope.security import checkPermission, proxy
 
 # !+bungeni.models(mr, apr-2011) gives error when executing localization.py
 import bungeni
 import bungeni.ui.interfaces
+import bungeni.alchemist
 
 from ore.wsgiapp.interfaces import IApplication
 def get_application():
@@ -40,11 +42,64 @@ def has_feature(feature_name):
 
 def get_request():
     """ () -> either(IRequest, None)
+    
+    Raises zope.security.interfaces.NoInteraction if no interaction (and no 
+    request).
     """
+    # use queryInteraction() to raise 
     interaction = zope.security.management.getInteraction()
     for participation in interaction.participations:
         if zope.publisher.interfaces.IRequest.providedBy(participation):
             return participation
+
+''' !+REQUEST_CACHED(mr, sep-2011) experimetally replacing with a different 
+    implementation that does not require that the request be already 
+    initialized.
+
+def request_cached(f):
+    """Simple function decorator, for caching relatively expensive calls for 
+    the duration of a request. Annotates the request.
+    
+    Assumes request is not None.
+    """
+    fkey = id(f)  # f.__name__
+    def request_cached_f(*args, **kws):
+        key = "-rc-%s-%s-%s" % (fkey, id(args), hash(repr(kws)) if kws else "")
+        # ok, via annotated request as cache
+        aor = IAnnotations(get_request())  # annotations on request
+        if not aor.has_key(key):
+            #print "   REQUEST_CACHED...", key, f.__name__, args, kws
+            aor[key] = f(*args, **kws)
+        #print "***REQUEST_CACHED...", key, f.__name__, args, kws, "->", aor[key]
+        return aor[key]
+    return request_cached_f
+'''
+
+thread_local = __import__("threading").local()
+def request_cached(f):
+    """Simple function decorator, for caching relatively expensive calls until 
+    *end* of the current request. May be used for calls executing prior to
+    initialization of the request instance i.e. get_request() raises error.
+    
+    Stores on a mapping on threading.local(), and so requires explicit clearing 
+    at end of request (in ui.publication).
+    """
+    fkey = id(f)  # f.__name__
+    def request_cached_f(*args, **kws):
+        key = "-rc-%s-%s-%s" % (fkey, id(args), hash(repr(kws)) if kws else "")
+        rc = getattr(thread_local, "_request_cache", None)
+        if rc is None:
+            rc = thread_local._request_cache = {}
+        if not rc.has_key(key):
+             #print "   REQUEST_CACHED...", key, f.__name__, args, kws
+             rc[key] = f(*args, **kws)
+        #print "***REQUEST_CACHED...", key, f.__name__, args, kws, "->", rc[key]
+        return rc[key]
+    return request_cached_f
+def _clear_request_cache():
+    rc = getattr(thread_local, "_request_cache", None)
+    if rc is not None:
+        rc.clear()
 
 
 def get_traversed_context(request=None, index=-1):
@@ -80,8 +135,10 @@ def get_context_roles(context, principal):
     prms = []
     def _build_principal_role_maps(ctx):
         if ctx is not None:
-            if zope.component.queryAdapter(ctx, IPrincipalRoleMap):
-                prms.append(IPrincipalRoleMap(ctx))
+            prm = zope.component.queryAdapter(
+                ctx, IPrincipalRoleMap, default=None)
+            if prm:
+                prms.append(prm)
             _build_principal_role_maps(getattr(ctx, '__parent__', None))
     _build_principal_role_maps(context)
     prms.reverse()
@@ -103,6 +160,7 @@ def get_context_roles(context, principal):
                         roles.remove(role[0])
     if not principal:
         return []
+    
     pg = principal.groups.keys()
     # ensure that the actual principal.id is included
     if not principal.id in pg:
@@ -118,18 +176,37 @@ def get_context_roles(context, principal):
             principal.id, str(pg), "\n".join(message), roles))
     return roles
 
-def get_principal_roles(principal):
-        """Returns roles associated with groups.
-        """
-        session = bungeni.alchemist.Session()
-        roles = []
-        for group_id in principal.groups.keys():
-            result = session.query(bungeni.models.domain.Group).filter(
-                            bungeni.models.domain.Group.group_principal_id == group_id).first()
-            if result:
-                roles.extend(get_context_roles(
-                                          bungeni.core.workflows.utils.get_group_context(result), principal))
-        return roles
+
+@request_cached
+def get_workspace_roles():
+    """Returns all the roles that the current principal has that are 
+    relevant to the workspace configuration.
+    """
+    principal = bungeni.models.utils.get_principal()
+    session = bungeni.alchemist.Session()
+    roles = set()
+    groups = session.query(bungeni.models.domain.Group).filter(
+        bungeni.models.domain.Group.group_principal_id.in_(
+            principal.groups.keys())).all()
+    principal_groups = [
+        delegate.login for delegate in
+        bungeni.models.delegation.get_user_delegations(
+            bungeni.models.utils.get_db_user_id())] + [principal.id]
+    pg = []
+    Allow = zope.securitypolicy.settings.Allow
+    for group in groups:
+        context = bungeni.core.workflows.utils.get_group_context(group)
+        prm = zope.component.queryAdapter(
+            context, IPrincipalRoleMap, default=None)
+        if prm:
+            pg = principal_groups + [group.group_principal_id]
+            for principal_id in pg:
+                l_roles = prm.getRolesForPrincipal(principal_id)
+                for role in l_roles:
+                    if role[1] == Allow:
+                        roles.add(role[0])
+    return list(roles)
+
 
 def get_request_context_roles(request):
     """Get the list of user's roles (including whether admin or not) relevant 
@@ -178,4 +255,13 @@ def is_admin(context):
     return zope.security.management.getInteraction().checkPermission(
         "zope.ManageSite", context)
 
-
+def list_container_items(container_instance, permission="zope.View"):
+    """Generate list of container items with permission check
+    """
+    trusted = proxy.removeSecurityProxy(container_instance)
+    for contained in trusted.values():
+        if checkPermission(permission, contained):
+            yield bungeni.alchemist.container.contained(contained,
+                container_instance, 
+                bungeni.alchemist.container.stringKey(contained)
+            )

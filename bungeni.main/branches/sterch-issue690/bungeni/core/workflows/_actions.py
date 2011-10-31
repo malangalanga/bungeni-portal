@@ -29,6 +29,7 @@ from bungeni.core.workflows import dbutils
 from ore.alchemist import Session
 import zope.event
 import zope.lifecycleevent
+from bungeni.core.serialize import publish_to_xml
 
 # special handled action to make a new version of a ParliamentaryItem, that is 
 # not tied to a state name, but to <state> @version bool attribute
@@ -40,13 +41,17 @@ create_version = utils.create_version
 def __pi_create(context):
     #!+utils.setParliamentId(context)
     utils.assign_owner_role_pi(context)
-    utils.pi_update_signatories(context)
-
 
 def __pi_submit(context):
     utils.set_pi_registry_number(context)
     utils.pi_update_signatories(context)
+    utils.pi_unset_signatory_roles(context)
 
+def __pi_redraft(context):
+    """Signatory operations on redraft - Unsetting signatures e.t.c
+    """
+    utils.pi_update_signatories(context)
+    utils.pi_unset_signatory_roles(context, all=True)
 
 # address
 
@@ -60,22 +65,30 @@ def _address_private(context):
     if user_login:
         utils.assign_owner_role(context, user_login)
 
+def _address_attached(context):
+    publish_to_xml(context, type="groupaddress", include=[])
+
+
 
 # agendaitem
 
 _agendaitem_draft = _agendaitem_working_draft = __pi_create
 _agendaitem_submitted = __pi_submit
+_agendaitem_redraft = __pi_redraft
+_agendaitem_admissible = publish_to_xml
 
 
 # bill
 
 _bill_draft = _bill_working_draft = __pi_create
+_bill_redraft = __pi_redraft
+_bill_approved = publish_to_xml
 
 def _bill_gazetted(context):
     utils.setBillPublicationDate(context)
     utils.set_pi_registry_number(context)
     utils.pi_update_signatories(context)
-
+    publish_to_xml(context)
 
 # group
 
@@ -89,6 +102,7 @@ def _group_draft(context):
 
 def _group_active(context):
     utils.set_group_local_role(context)
+    publish_to_xml(context, type="group")
 
 def _group_dissolved(context):
     """ when a group is dissolved all members of this 
@@ -104,14 +118,14 @@ def _group_dissolved(context):
 
 # committee
 
-_committee_create = _group_draft
+_committee_draft = _group_draft
 _committee_active = _group_active
 _committee_dissolved = _group_dissolved
 
 
 # parliament
 
-_parliament_create = _group_draft
+_parliament_draft = _group_draft
 _parliament_active = _group_active
 _parliament_dissolved = _group_dissolved
 
@@ -123,21 +137,31 @@ def _groupsitting_draft_agenda(context):
         
 def _groupsitting_published_agenda(context):
     utils.schedule_sitting_items(context)
+    publish_to_xml(context, type="groupsitting",include=[])
 
 
 # motion
 
 _motion_draft = _motion_working_draft = __pi_create
 _motion_submitted = __pi_submit
+_motion_redraft = __pi_redraft
 
 def _motion_admissible(context):
     dbutils.setMotionSerialNumber(context)
+    publish_to_xml(context)
 
 
 # question
 
-_question_draft = _question_working_draft = __pi_create
+_question_response_completed = publish_to_xml
+
+def __question_create(context):
+    __pi_create(context)
+    utils.assign_question_minister_role(context)
+    
+_question_draft = _question_working_draft = __question_create
 _question_submitted = __pi_submit
+_question_redraft = __pi_redraft
 
 def _question_withdrawn(context):
     """A question can be withdrawn by the owner, it is visible to ...
@@ -157,18 +181,29 @@ def _question_admissible(context):
     or is available for scheduling in a sitting.
     """
     dbutils.setQuestionSerialNumber(context)
+    publish_to_xml(context)
+
+
+
+def _heading_public(context):
+    publish_to_xml(context,type="heading",include=[])
+
+def _report_published(context):
+    publish_to_xml(context,type="report",include=[])
 
 
 # tableddocument
 
 _tableddocument_draft = _tableddocument_working_draft = __pi_create
 _tableddocument_submitted = __pi_submit
+_tableddocument_redraft = __pi_redraft
 
 def _tableddocument_adjourned(context):
     utils.setTabledDocumentHistory(context)
 
 def _tableddocument_admissible(context):
     dbutils.setTabledDocumentSerialNumber(context)
+    publish_to_xml(context)
 
 
 # user
@@ -176,22 +211,23 @@ def _tableddocument_admissible(context):
 def _user_A(context):
     utils.assign_owner_role(context, context.login)
     context.date_of_death = None
+    publish_to_xml(context, type="user", include=[])
 
 #
 
 
-#signatories
+# signatories
+
 def __make_owner_signatory(context):
-    """
-    make document owner a default signatory when document is submited to
-    signatories for consent
+    """Make document owner a default signatory when document is submited to
+    signatories for consent.
     """
     signatories = context.signatories
     if context.owner_id not in [sgn.user_id for sgn in signatories._query]:
         session = Session()
         signatory = signatories._class()
-        signatory.user_id=context.owner_id,
-        signatory.item_id=context.parliamentary_item_id
+        signatory.user_id = context.owner_id,
+        signatory.item_id = context.parliamentary_item_id
         session.add(signatory)
         session.flush()
         zope.event.notify(zope.lifecycleevent.ObjectCreatedEvent(signatory))
@@ -212,8 +248,7 @@ _agendaitem_submitted_signatories = __pi_submitted_signatories
 _tableddocument_submitted_signatories = __pi_submitted_signatories
 
 def _signatory_awaiting_consent(context):
-    """
-    This is done when parent object is already in submitted_signatories stage.
+    """Done when parent object is already in submitted_signatories stage.
     Otherwise roles assignment is handled by `__pi_assign_signatory_roles`
     """
     if context.item.status == u"submitted_signatories":
@@ -222,8 +257,11 @@ def _signatory_awaiting_consent(context):
         utils.assign_signatory_role(context.item, owner_login)
 
 def _signatory_rejected(context):
-    owner_login = utils.get_owner_login_pi(context)
-    utils.assign_signatory_role(context.item, owner_login, unset=True)
+    #!+SIGNATORIES(mb, aug-2011) Unsetting of roles now handled when
+    # document is submitted or redrafted. Deprecate this action if not needed.
+    #owner_login = utils.get_owner_login_pi(context)
+    #utils.assign_signatory_role(context.item, owner_login, unset=True)
+    return
 
 _signatory_withdrawn = _signatory_rejected
 
@@ -235,3 +273,8 @@ def _event_private(context):
     login = utils.get_principal_id()
     if login is not None:
         utils.assign_owner_role(context, login)
+
+def _event_attached(context):
+    publish_to_xml(context, include=[])
+
+

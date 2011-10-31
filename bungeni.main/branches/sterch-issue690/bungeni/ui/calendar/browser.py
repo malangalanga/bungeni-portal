@@ -1,57 +1,91 @@
-# encoding: utf-8
-# TODO - Cleanup!!!!
+# Bungeni Parliamentary Information System - http://www.bungeni.org/
+# Copyright (C) 2010 - Africa i-Parliaments - http://www.parliaments.info/
+# Licensed under GNU GPL v2 - http://www.gnu.org/licenses/gpl-2.0.txt
+
+"""Calendar and Scheduling Browser and datasource Views
+
+$Id$
+"""
 
 log = __import__("logging").getLogger("bungeni.ui.calendar")
-
 
 import time
 import datetime
 timedelta = datetime.timedelta
 
+try:
+    import json
+except ImportError:
+    import simplejson as json
+
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
 from zope import interface
 from zope import component
-from zope.i18n import translate
 from zope.location.interfaces import ILocation
 from zope.dublincore.interfaces import IDCDescriptiveProperties
+from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.browser import BrowserView
-from bungeni.ui.browser import BungeniBrowserView
+from zope.app.publisher.interfaces.browser import IBrowserMenu
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.app.component.hooks import getSite
 from zope.security.proxy import removeSecurityProxy
 from zope.security.proxy import ProxyFactory
 from zope.security import checkPermission
-from bungeni.core.translation import get_all_languages
-from zope.publisher.interfaces import IPublishTraverse
+from zope.formlib import form
+from zope import schema
+from zope.schema.interfaces import IChoice
+from zc.resourcelibrary import need
 
-from bungeni.ui.calendar import utils
+from bungeni.core.location import location_wrapped
+from bungeni.core.interfaces import ISchedulingContext
+from bungeni.core.schedule import SittingContainerSchedulingContext
+from bungeni.core.workflow.interfaces import IWorkflowController
+from bungeni.core.language import get_default_language
+
+
+from ploned.ui.interfaces import IStructuralView
+from bungeni.ui.browser import BungeniBrowserView
+from bungeni.ui.calendar import utils, config, interfaces
 from bungeni.ui.tagged import get_states
 from bungeni.ui.i18n import _
 from bungeni.ui.utils import misc, url, debug
 from bungeni.ui.menu import get_actions
-from bungeni.ui.forms import common
-from bungeni.core.location import location_wrapped
-from bungeni.core.interfaces import ISchedulingContext
-from bungeni.core.schedule import SittingContainerSchedulingContext
 from bungeni.ui.interfaces import IBusinessSectionLayer
+from bungeni.ui.widgets import LanguageLookupWidget
 
 from bungeni.models import domain
-from bungeni.models.interfaces import IGroupSitting
-from ploned.ui.interfaces import IStructuralView
 from bungeni.alchemist.container import stringKey
 from bungeni.alchemist import Session
-from bungeni.core.workflow.interfaces import IWorkflowController
-from zope.formlib import form
-from zope import schema
-from zope.formlib import namedtemplate
-from zc.resourcelibrary import need
-from sqlalchemy.orm import eagerload
-from bungeni.ui import vocabulary
-from bungeni.core.language import get_default_language
+#from bungeni.ui import vocabulary
+
 class TIME_SPAN:
     daily = _(u"Daily")
     weekly = _(u"Weekly")
+
+class EventPartialForm(object):
+    """Partial form for event entry form
+    """
+    form_fields = form.Fields(interfaces.IEventPartial)
+    form_fields['select_sitting_lang'].custom_widget = LanguageLookupWidget
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+    
+    def get_widgets(self):
+        widgets = form.setUpWidgets(self.form_fields, '', self.context, 
+            self.request, ignore_request=True
+        )
+        for widget in widgets:
+            if IChoice.providedBy(widget.context):
+                if widget.context.default is None:
+                    widget._messageNoValue = _(u"event_form_field_default",
+                        default=u"choose ${event_field_title}",
+                        mapping={'event_field_title': widget.context.title}
+                    )
+            yield widget
+
 
 def get_scheduling_actions(context, request):
     return get_actions("scheduling_actions", context, request)
@@ -166,6 +200,7 @@ def create_sittings_map(sittings, request):
                
         proxied = ProxyFactory(sitting)
         
+        # !+ non-existant permission
         if checkPermission(u"bungeni.agendaitem.wf.schedule", proxied):
             link = "%s/schedule" % url.absoluteURL(sitting, request)
         else:
@@ -196,16 +231,15 @@ class CalendarView(BungeniBrowserView):
     """Main calendar view."""
 
     interface.implements(IStructuralView)
-
     template = ViewPageTemplateFile("templates/dhtmlxcalendar.pt")
-    
-    short_name = u"Scheduling"
+    macros_view = ViewPageTemplateFile("templates/calendar-macros.pt")
+    short_name = _(u"Scheduling")
     
     def __init__(self, context, request):
         log.debug("CalendarView.__init__: %s" % (context))
         super(CalendarView, self).__init__(
             ISchedulingContext(context), request)
-        
+    
     def __call__(self, timestamp=None):
         log.debug("CalendarView.__call__: %s" % (self.context))
         trusted = removeSecurityProxy(self.context)
@@ -225,10 +259,56 @@ class CalendarView(BungeniBrowserView):
         traverser = component.getMultiAdapter(
             (self.context, request), IPublishTraverse)
         return traverser.publishTraverse(request, name)
-    
+
+    @property
+    def calendar_macros(self):
+        return self.macros_view.macros
+
+    @property
+    def partial_event_form(self):
+        form = EventPartialForm(self.context, self.request)
+        return form
+
+    @property
+    def venues_as_json(self):
+        venues_vocabulary = component.queryUtility(
+            schema.interfaces.IVocabularyFactory, "bungeni.vocabulary.Venues"
+        )
+        venue_list = [ {"key": venue.value, "label": venue.title}
+            for venue in venues_vocabulary()
+        ]
+        return json.dumps(venue_list)
+
+    @property
+    def ical_url(self):
+        return u"/".join(
+            [url.absoluteURL(self.context, self.request), "dhtmlxcalendar.ics"]
+        )
+
+    def other_calendars(self):
+        """A list of URLs to other calendars - Loaded when selected"""
+        menu = menu=component.queryUtility(IBrowserMenu,"context_calendar")
+        if menu is None:
+            return []
+        items = menu.getMenuItems(self.context, self.request)
+        colors = utils.generate_event_colours(len(items))
+        map(lambda item:item[1].update([("color", colors[item[0]])]),
+            enumerate(items)
+        )
+        return items
+
     def render(self, template=None):
         need("dhtmlxscheduler")
         need("dhtmlxscheduler-recurring")
+        need("dhtmlxscheduler-year-view")
+        need("dhtmlxscheduler-agenda-view")
+        need("dhtmlxscheduler-expand")
+        need("bungeni-calendar-extensions")
+        need("dhtmlxscheduler-timeline")
+        need("dhtmlxscheduler-tooltip")
+        need("dhtmlxscheduler-minical")
+        need("dhtmlxscheduler-multisource")
+        need("multi-calendar-actions")
         if template is None:
             template = self.template
         if (not checkPermission(u"bungeni.sitting.Add", self.context)) or \
@@ -236,33 +316,6 @@ class CalendarView(BungeniBrowserView):
             self.edit = False
         else:
             self.edit = True
-        session = Session()
-        venues = session.query(domain.Venue).all()
-        languages = get_all_languages()
-        # !+SESSION_CLOSE(taras.sterch, july-2011) there is no need to close the 
-        # session. Transaction manager will take care of this. Hope it does not 
-        # brake anything.
-        #session.close()
-        self.display_language = get_default_language()
-        if self.request.get("I18N_LANGUAGE"):
-            self.display_language = self.request.get("I18N_LANGUAGE")
-        #html is hardcoded in here because doing it in the template
-        #would have been a colossal pain
-        #TODO: FIX THIS
-        s = '<div class="dhx_cal_ltext" style="height:90px;">' 
-        s += '<table>'
-        s += '<tr><td>Venue</td><td><select id="select_sitting_venue">'
-        for venue in venues:
-            s += '<option value="'+str(venue.venue_id)+'">'+venue.short_name+'</option>'
-        s += '</select></td></tr>'
-        s += '<tr><td>Language</td><td><select id="select_sitting_lang">'
-        for lang in languages:
-            if lang == 'en':
-                s += '<option value="'+lang+'" selected>'+lang+'</option>'
-            else:
-                s += '<option value="'+lang+'">'+lang+'</option>'
-        s += '</select></td></tr></table></div>'
-        self.sitting_details_form = s
         return template()
 
 class CommitteeCalendarView(CalendarView):
@@ -321,7 +374,7 @@ class GroupSittingScheduleView(BrowserView):
         self.__parent__ = context
 
     def __call__(self, timestamp=None):
-        session = Session()
+        #session = Session()
         if timestamp is None:
             # start the week on the first weekday (e.g. Monday)
             date = utils.datetimedict.fromdate(datetime.date.today())
@@ -353,6 +406,7 @@ class GroupSittingScheduleView(BrowserView):
             
     def render(self, date, template=None):
         #need('yui-editor')
+        need('yui-connection')
         need('yui-rte')
         need('yui-resize')
         need('yui-button')
@@ -422,7 +476,7 @@ class ItemScheduleOrder(BrowserView):
             for i in range(0,len(obj)):
                 sch = session.query(domain.ItemSchedule).get(obj[i])
                 setattr(sch, 'real_order', i+1)
-        session.commit()
+        session.flush()
 
 
 class SittingCalendarView(CalendarView):
@@ -459,47 +513,12 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
             elif request.form["!nativeeditor_status"] == "deleted":
                 request.form["actions.delete"] = "delete"
         super(DhtmlxCalendarSittingsEdit, self).__init__(context, request)
-         
-    class DhtmlxCalendarSittingsEditForm(interface.Interface):
-        ids = schema.TextLine(title=u'ID',
-                                description=u'Sitting ID',
-                                required=False
-                        )
-        start_date = schema.Datetime(title=_(u"Start date and time of sitting"),
-                            description=_(u"Choose sitting's start date and time"),
-                            required=True)
-        end_date = schema.Datetime(title=_(u"End date and time of sitting"),
-                            description=_(u"Choose sitting's end date and time"),
-                            required=True)
-        venue = schema.Choice(title=_(u"Venue"),
-                              source="bungeni.vocabulary.Venues",
-                              description=_(u"Venues"),
-                             required=True)
-        language = schema.Choice(title=_(u"Language"),
-                    default=get_default_language(),
-                    vocabulary="language_vocabulary",
-                    description=_(u'Language'),
-                    required = True
-                            )
-        rec_type = schema.TextLine( title = u'Recurrence Type',
-                                    required=False,
-                                    description = u"A string that contains the \
-                                            rules for reccurent sittings if any"
-                        )         
-        event_length = schema.TextLine( title = u'Event Length',
-                                    required=False,
-                                    description = u'Length of event'
-                        )      
-        nativeeditor_status = schema.TextLine( title = u'editor status',
-                                    required=False,
-                                    description = u'Editor Status'
-                        ) 
-            
                   
-    form_fields = form.Fields(DhtmlxCalendarSittingsEditForm)
+    form_fields = form.Fields(interfaces.IDhtmlxCalendarSittingsEditForm)
     def setUpWidgets(self, ignore_request=False):
         class context:
             ids = None
+            short_name = None
             start_date = None
             end_date = None
             location = None
@@ -508,8 +527,11 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
             rec_type = None
             event_length = None
             nativeeditor_status = None
+            activity_type = None
+            meeting_type = None
+            convocation_type = None
         self.adapters = {
-            self.DhtmlxCalendarSittingsEditForm: context
+            interfaces.IDhtmlxCalendarSittingsEditForm: context
             }
         self.widgets = form.setUpEditWidgets(
             self.form_fields, "", self.context, self.request,
@@ -522,8 +544,18 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
             if error.message not in ('', None): 
                 error_string += error.message + "\n"
             else:
-                error_string += error.__str__() + "\n"  
-        return "%s \n%s" % (error_message, error_string)
+                error_string += error.__str__() + "\n"
+        #!+CALENDAR(mb, oct-2011) Include error messages in XML
+        #return "%s \n%s" % (error_message, error_string)
+        self.template_data.append(
+            dict(action="invalid",
+                ids=data["ids"],
+                group_sitting_id=data["ids"]
+            )
+        )
+        self.request.response.setHeader("Content-type", "text/xml")
+        return self.xml_template()
+
     # The form action strings below do not need to be translated because they are 
     # not visible in the UI.      
     @form.action(u"insert", failure='insert_sitting_failure_handler')
@@ -562,13 +594,17 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
             for date in dates:
                 sitting = domain.GroupSitting()
                 sitting.group_id = trusted.group_id
+                sitting.short_name = data.get("short_name", None)
                 sitting.start_date = date
                 sitting.end_date = date + sitting_length
                 sitting.language = data["language"]
                 sitting.venue_id = data["venue"]
+                sitting.activity_type = data.get("activity_type", None)
+                sitting.meeting_type = data.get("meeting_type", None)
+                sitting.convocation_type = data.get("convocation_type", None)
                 session.add(sitting)
                 recurrent_sittings.append(sitting)
-            session.commit()
+            session.flush()
             for s in recurrent_sittings:    
                 notify(ObjectCreatedEvent(s))
                 self.template_data.append({"group_sitting_id": s.group_sitting_id, 
@@ -578,13 +614,17 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
             return self.xml_template()
         else:
             sitting = domain.GroupSitting()
+            sitting.short_name = data.get("short_name", None)
             sitting.start_date = data["start_date"].replace(tzinfo=None)
             sitting.end_date = data["end_date"].replace(tzinfo=None)
             sitting.group_id = trusted.group_id
             sitting.language = data["language"]
             sitting.venue_id = data["venue"]
+            sitting.activity_type = data.get("activity_type", None)
+            sitting.meeting_type = data.get("meeting_type", None)
+            sitting.convocation_type = data.get("convocation_type", None)
             session.add(sitting)
-            session.commit()
+            session.flush()
             notify(ObjectCreatedEvent(sitting))
             self.template_data.append({"group_sitting_id": sitting.group_sitting_id, 
                                        "action": "inserted",
@@ -594,6 +634,7 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
           
     def update_sitting_failure_handler(self, action, data, errors):
         error_string = u""
+        error_message = _(u"Error Updating Sitting")
         for error in errors:
             if error.message not in ('', None): 
                 error_string += error.message + "\n"
@@ -613,13 +654,17 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
             sitting.language = data["language"]
         if "venue" in data.keys():
             sitting.venue_id = data["venue"]
+        sitting.short_name = data.get("short_name", None)
+        sitting.activity_type = data.get("activity_type", None)
+        sitting.meeting_type = data.get("meeting_type", None)
+        sitting.convocation_type = data.get("convocation_type", None)
         # set extra data needed by template
-        session.update(sitting)
+        session.flush()
         notify(ObjectModifiedEvent(sitting))
         self.template_data.append({"group_sitting_id": sitting.group_sitting_id, 
                                     "action": "inserted",
                                     "ids": data["ids"]})
-        session.commit()
+        session.flush()
         self.request.response.setHeader('Content-type', 'text/xml')
         return self.xml_template()
         
@@ -645,7 +690,7 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
                                        "action": "deleted",
                                        "ids": data["ids"]})
             session.delete(sitting)
-            session.commit()
+            session.flush()
             return self.xml_template()
 
                           
@@ -654,7 +699,9 @@ class DhtmlxCalendarSittings(BrowserView):
     requested in a format acceptable by DHTMLX scheduler"""
     interface.implements(IStructuralView)
     
+    content_mimetype = "text/xml"
     template = ViewPageTemplateFile('templates/dhtmlxcalendarxml.pt')
+
     def __init__(self, context, request):
         super(DhtmlxCalendarSittings, self).__init__(
             ISchedulingContext(context), request)
@@ -662,8 +709,16 @@ class DhtmlxCalendarSittings(BrowserView):
         interface.alsoProvides(self.context, ILocation)
         interface.alsoProvides(self.context, IDCDescriptiveProperties)
         self.__parent__ = context
-               
-                          
+    
+    @property
+    def event_colour(self):
+        if not hasattr(self, "event_color"):
+            rq_color = unicode(self.request.form.get("color", ""))
+            assert len(rq_color) <= 6
+            self._event_color = rq_color
+        return self._event_color
+    
+    
     def __call__(self):
         try:
             date = self.request.get('from')
@@ -695,20 +750,41 @@ class DhtmlxCalendarSittings(BrowserView):
         for sitting in sittings.values():
             if checkPermission("zope.View", sitting):
                 trusted = removeSecurityProxy(sitting)
-                if trusted.venue:
-                    trusted.text = "<![CDATA[" \
-                        "<b>Venue:</b></br>%s</br><b>Status:</b></br>%s" \
-                        "]]>" % (trusted.venue.short_name, trusted.status)
-                else:
-                    trusted.text = "<![CDATA[<b>Status:</b></br>%s]]>" % (
-                        trusted.status)
-                # !+PRESENTATION_CODE(mr, mar-2011) should be in templates.
+                trusted.text = dict(
+                    sitting_status = _(
+                        misc.get_wf_state(trusted, trusted.status)
+                    )
+                )
                 self.sittings.append(trusted)
-        self.request.response.setHeader('Content-type', 'text/xml')
+        self.request.response.setHeader('Content-type', self.content_mimetype)
         return self.render()
-        #return super(DhtmlxCalendarSittings, self).__call__() 
         
     def render(self, template = None):
         return self.template()
 
 
+
+class DhtmlxCalendarSittingsIcal(DhtmlxCalendarSittings):
+    """ICS rendering of events in the current calendar view
+    """
+    content_mimetype = "text/calendar"
+
+    def render(self, template=None):
+        """Render ICAL or send WWW-AUTHENTICATE Header
+        
+        See `bungeni.ui.errors.Unauthorized`
+        """
+        event_data_list = [ 
+            config.ICAL_EVENT_TEMPLATE % dict(
+                event_start=sitting.start_date.strftime("%Y%m%dT%H%M%S"),
+                event_end=sitting.end_date.strftime("%Y%m%dT%H%M%S"),
+                event_venue=(IDCDescriptiveProperties(sitting.venue).title if
+                    hasattr(sitting, "venue") else u""
+                ),
+                event_summary=IDCDescriptiveProperties(sitting).verbose_title,
+            )
+            for sitting in self.sittings
+        ]
+        return config.ICAL_DOCUMENT_TEMPLATE % dict(
+            event_data = u"\n".join(event_data_list)
+        )

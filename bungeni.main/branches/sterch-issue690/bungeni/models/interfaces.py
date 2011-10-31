@@ -1,13 +1,12 @@
 
-from zope import interface, schema, lifecycleevent
-from zope.component.interfaces import IObjectEvent, ObjectEvent
+from zope import interface, schema
 from zope.app.container.interfaces import IContainer
 from bungeni.alchemist.interfaces import IAlchemistContent
 from bungeni.alchemist.interfaces import IAlchemistContainer
 from ore.wsgiapp.interfaces import IApplication
 from i18n import _
 from zope.configuration.fields import MessageID
-import zope.schema
+
 DEBUG = True
 ENABLE_LOGGING = False
 ENABLE_EVENT_LOGGING = False
@@ -130,6 +129,10 @@ class ICommitteeMemberContainer(IBungeniGroupMembershipContainer):
 class ICommitteeStaffContainer(IBungeniGroupMembershipContainer):
     pass
 
+class IVersion(interface.Interface):
+    """A version of an object is identical in attributes to the actual 
+    object, based on that object's domain schema.
+    """
 class IVersionContainer(IBungeniContainer):
     pass
 
@@ -140,37 +143,31 @@ class IHeading(IBungeniContent):
 class IEventItem(IBungeniContent):
     pass
 
+# !+IITEMVersion(mr, sep-2011): should IITEMVersion exist at all? if so, 
+# should it inherit from IITEM, or from IVersion? Note that 
+# IITEMVersionContainer inherits from IVersionContainer (is used by alchemist).
+
 class IQuestion(IBungeniContent):
     """Parliamentary Question.
     """
-
-class IQuestionVersion(IQuestion):
-    pass
-
-class IQuestionVersionContainer(IVersionContainer):
-    pass
+# !+IITEMVersion
+#class IQuestionVersion(IQuestion): pass
+class IQuestionVersionContainer(IVersionContainer): pass
 
 
 class IBill(IBungeniContent):
     """Parliamentary Bill.
     """
-
-class IBillVersion(IBill):
-    pass
-
-class IBillVersionContainer(IVersionContainer):
-    pass
+# !+IITEMVersion
+#class IBillVersion(IBill): pass
+class IBillVersionContainer(IVersionContainer): pass
 
 class IMotion(IBungeniContent):
     """Parliamentary Motion.
     """
-
-class IMotionVersion(IMotion):
-    pass
-
-class IMotionVersionContainer(IVersionContainer):
-    pass
-
+# !+IITEMVersion
+#class IMotionVersion(IMotion): pass
+class IMotionVersionContainer(IVersionContainer): pass
 
 
 class IGroupSitting(interface.Interface):
@@ -195,20 +192,14 @@ class IItemScheduleDiscussion(interface.Interface):
 class ITabledDocument(IBungeniContent):
     """Tabled document.
     """
-class ITabledDocumentVersion(ITabledDocument):
-    pass
+# !+IITEMVersion
+#class ITabledDocumentVersion(ITabledDocument): pass
+class ITabledDocumentVersionContainer(IVersionContainer): pass
 
-class ITabledDocumentVersionContainer(IVersionContainer):
-    pass
-
-class IAgendaItem(IBungeniContent):
-    pass
-
-class IAgendaItemVersion(IAgendaItem):
-    pass
-
-class IAgendaItemVersionContainer(IVersionContainer):
-    pass
+class IAgendaItem(IBungeniContent): pass
+# !+IITEMVersion
+#class IAgendaItemVersion(IAgendaItem): pass
+class IAgendaItemVersionContainer(IVersionContainer): pass
 
 class IParliamentSession(interface.Interface):
     pass
@@ -387,11 +378,9 @@ class IAssignmentFactory(interface.Interface):
         """Create a new assignment.
         """
 
-class IAttachedFile(interface.Interface):
-    pass
-
-class IAttachedFileVersionContainer(IVersionContainer):
-    pass
+class IAttachedFile(interface.Interface): pass
+class IAttachedFileVersion(IVersion): pass
+class IAttachedFileVersionContainer(IVersionContainer): pass
 
 class ISignatory(interface.Interface):
     """Signatories for bills, motions, ...
@@ -409,9 +398,15 @@ class ISignatoriesValidator(interface.Interface):
     signatories_count = interface.Attribute("""number of signatories""")
     
     consented_signatories = interface.Attribute("""number of consented """)
-
+    
+    # !+naming(mr, oct-2011) please follow standard python naming conventions!
+    
     def validateSignatories():
         """Validate signatories count on parliamentary item i.e. number added
+        """
+
+    def requireSignatures():
+        """Does the document or object require signatures
         """
 
     def validateConsentedSignatories():
@@ -455,21 +450,20 @@ class IProxiedDirectory(interface.Interface):
     """An interface for a contained directory we can attach menu links
     to that point back to our parent.
     """
-# svn st models/ core/interfaces.py core/workflows/transitioncron.py core/workflows/_conditions.py core/audit.zcml core/ftesting.zcml core/audit.py core/configure.zcml core/interfaces.py ui/workflow.py ui/menu.zcml ui/audit.zcml
+
+# feature markers - apply to a domain model, to declare it implements feature
+
 class IAuditable(interface.Interface):
-    """Marker interface to apply auditing/object log feature.
+    """Marker interface to apply audit feature.
     """
 class IVersionable(interface.Interface):
-    """Marker to apply versioning feature (requires IAuditable/objectlog)
+    """Marker to apply version feature (requires IAuditable/audit.
     """
-class IVersion(interface.Interface):
-    """A version of an object is identical in attributes to the actual 
-    object, based on that object's domain schema.
+class IAttachmentable(interface.Interface):
+    """Marker to apply attachment feature.
     """
 
-class IAttachedFileVersion(IVersion):
-    pass
-
+#
 
 ''' !+DATERANGEFILTER(mr, dec-2010) disabled until intention is understood
 class IDateRangeFilter(interface.Interface):
@@ -535,14 +529,21 @@ class ITranslatable(interface.Interface):
 class IBungeniVocabulary(interface.Interface):
     """Marker interface for vocabularies managed in admin UI."""
 
+'''!+TYPES_CUSTOM
 class IAddressType(IBungeniVocabulary):
     """Marker interface for address types vocabulary"""
+class IPostalAddressType(IBungeniVocabulary):
+    """Marker interface for address postal types"""
 
 class IBillType(IBungeniVocabulary):
     """Marker interface for bill types vocabulary"""
 
 class ICommitteeType(IBungeniVocabulary):
     """Marker interface for committee types vocabulary"""
+
+class ICommitteeTypeStatus(IBungeniVocabulary):
+    """Marker interface for committe type statuses"""
+'''
 
 class IAttendanceType(IBungeniVocabulary):
     """Marker interface for attendance types vocabulary"""
@@ -551,7 +552,7 @@ class IVenue(IBungeniVocabulary):
     """Marker interface for venues vocabulary"""
 class ISubRoleDirective(interface.Interface):
     """Define a new sub role."""
-    id = zope.schema.Id(
+    id = schema.Id(
         title=u"Id",
         description=u"Id as which this object will be known and used.",
         required=True)
@@ -566,10 +567,11 @@ class ISubRoleDirective(interface.Interface):
         description=u"Provides a description for the object.",
         required=False)
         
-    role = zope.schema.Id(
+    role = schema.Id(
         title=u"Parent Role ID",
         description=u"Role ID for role which this subrole extends",
         required=True)
+
 class IQuestionType(IBungeniVocabulary):
     """Marker interface for question types"""
 
@@ -581,12 +583,6 @@ class IMemberElectionType(IBungeniVocabulary):
 class ISubRoleAnnotations(interface.Interface):
     sub_roles = interface.Attribute('Sub_Roles')
     is_sub_role = interface.Attribute('Sub_Roles')
-
-class IPostalAddressType(IBungeniVocabulary):
-    """Marker interface for address postal types"""
-
-class ICommitteeTypeStatus(IBungeniVocabulary):
-    """Marker interface for committe type statuses"""
 
 class ICountry(interface.Interface):
     """Marker interface for Country"""

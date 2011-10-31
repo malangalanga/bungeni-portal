@@ -1,3 +1,13 @@
+# Bungeni Parliamentary Information System - http://www.bungeni.org/
+# Copyright (C) 2010 - Africa i-Parliaments - http://www.parliaments.info/
+# Licensed under GNU GPL v2 - http://www.gnu.org/licenses/gpl-2.0.txt
+
+"""Workflow UI
+
+$Id$
+"""
+log = __import__("logging").getLogger("bungeni.ui.workflow")
+
 
 import datetime
 
@@ -33,6 +43,7 @@ from bungeni.models.interfaces import IAuditable
 from bungeni.models.interfaces import IWorkspaceContainer
 from bungeni.ui.i18n import _
 from zope.i18n import translate
+from bungeni.ui.absoluteurl import WorkspaceAbsoluteURLView
 
 class WorkflowVocabulary(object):
     zope.interface.implements(IVocabularyFactory)
@@ -53,8 +64,7 @@ workflow_vocabulary_factory = WorkflowVocabulary()
 
 
 class WorkflowHistoryViewlet(viewlet.ViewletBase):
-    """Implements the workflowHistoryviewlet this viewlet shows the
-    current workflow state  and the workflow-history.
+    """Show the current workflow state and the workflow-history.
     """
     form_name = _(u"Workflow history")
     formatter_factory = TableFormatter
@@ -93,7 +103,7 @@ class WorkflowHistoryViewlet(viewlet.ViewletBase):
             has_wfstate = False
         self.wf_status = sc
         self.has_status = has_wfstate
-        self.entries = self.getFeedEntries()
+        self.entries = self.get_feed_entries()
     
     def render(self):
         columns = self.columns
@@ -113,15 +123,20 @@ class WorkflowHistoryViewlet(viewlet.ViewletBase):
         auditor = audit.get_auditor(self.context)
         return auditor.change_object
     
-    def getFeedEntries(self):
+    def get_feed_entries(self):
         instance = removeSecurityProxy(self.context)
         return [ change for change in instance.changes 
                 if change.action == "workflow" ]
         
 
 class WorkflowActionViewlet(browser.BungeniBrowserView, 
-        BaseForm, viewlet.ViewletBase):
-    """Display workflow status and actions."""
+        BaseForm, viewlet.ViewletBase
+    ):
+    """Display workflow status and actions.
+    """
+    # stores old_url of object before transition change
+    # we could use HTTP_REFERER but that would mean relying on client input
+    _old_url = None
     
     # evoque
     render = z3evoque.ViewTemplateFile("form.html#form")
@@ -175,7 +190,7 @@ class WorkflowActionViewlet(browser.BungeniBrowserView,
                 globalsettings.get_current_parliament().start_date,
                 datetime.time())
         # As the precision of the UI-submitted datetime is only to the minute, 
-        # we adjust min_date_time by a margin of 59 secs earlier to avoid 
+        # we adjust min_date_active by a margin of 59 secs earlier to avoid 
         # issues of doing 2 transitions in quick succession (within same minute) 
         # the 2nd of which could be taken to be too old...
         return min_date_active - datetime.timedelta(seconds=59)
@@ -190,10 +205,10 @@ class WorkflowActionViewlet(browser.BungeniBrowserView,
             min_date_active = self.get_min_date_active()
             if data.get("date_active") < min_date_active:
                 errors.append(zope.interface.Invalid(
-                    _("Active Date is in the past.")))
+                        _("Active Date is in the past.")))
             elif data.get("date_active") > datetime.datetime.now():
                 errors.append(zope.interface.Invalid(
-                    _("Active Date is in the future.")))
+                        _("Active Date is in the future.")))
         return errors
     
     def setUpWidgets(self, ignore_request=False):
@@ -207,34 +222,48 @@ class WorkflowActionViewlet(browser.BungeniBrowserView,
             self.form_fields, self.prefix, self.context, self.request,
             ignore_request=ignore_request)
     
-    def update(self, transition=None):
-        # !+RENAME(mr, apr-2011) should be transition_id
+    def update(self, transition_id=None):
+        if IWorkspaceContainer.providedBy(self.context.__parent__):
+            self._old_url = WorkspaceAbsoluteURLView(
+                self.context, self.request)()
         workflow = interfaces.IWorkflow(self.context)
-        if transition is not None:
-            state_transition = workflow.get_transition(transition)
-            state_title = translate(_(state_transition.title),
-                                context=self.request)
-            self.status = translate(_(
-                u"Confirmation required for workflow transition: '${title}'",
-                mapping={"title": state_title}), context = self.request)
-        self.setupActions(transition)
+        if transition_id:
+            transition = workflow.get_transition(transition_id)
+            title = translate(_(transition.title), context=self.request)
+            self.status = translate(
+                _(u"Confirmation required for workflow transition: '${title}'",
+                    mapping={"title": title}
+                ), 
+                context=self.request)
+        self.setupActions(transition_id)
         if not self.actions: 
             self.form_fields = self.form_fields.omit("note", "date_active")
         elif not IAuditable.providedBy(self.context):
             self.form_fields = self.form_fields.omit("note", "date_active")
         super(WorkflowActionViewlet, self).update()
     
-    def setupActions(self, transition):
+    @property
+    def next_url(self):
+        if IWorkspaceContainer.providedBy(self.context.__parent__):
+            # check if the object is in the same tab as before.
+            # if it is redirect to the object, if not redirect to the listing
+            if (WorkspaceAbsoluteURLView(self.context, self.request)() == 
+                self._old_url):
+                self._next_url = self._old_url
+            else:
+                self._next_url = absoluteURL(
+                    self.context.__parent__, self.request)
+        return self._next_url
+        
+    def setupActions(self, transition_id):
         # !+RENAME(mr, apr-2011) should be transition_id
         wfc = interfaces.IWorkflowController(self.context)
-        if transition is None:
-            transitions = wfc.getManualTransitionIds()
+        if transition_id is None:
+            transition_ids = wfc.getManualTransitionIds()
         else:
-            transitions = (transition,)
-        self.actions = bindTransitions(self, transitions, None, wfc.workflow)
-        if IWorkspaceContainer.providedBy(self.context.__parent__):
-            self._next_url = absoluteURL(self.context.__parent__, self.request)
-
+            transition_ids = (transition_id,)
+        self.actions = bindTransitions(self, transition_ids, wfc.workflow)
+        
 class WorkflowView(browser.BungeniBrowserView):
     """This view is linked to by the "workflow" context action and dislays the 
     workflow history and the action viewlet with all possible transitions
@@ -247,9 +276,7 @@ class WorkflowView(browser.BungeniBrowserView):
     
     _page_title = "Workflow"
     
-    def update(self, transition=None):
-        # !+RENAME(mr, apr-2011) should be transition_id
-        #
+    def update(self, transition_id=None):
         # set up viewlets; the view is rendered from viewlets for
         # historic reasons; this may be refactored anytime.
         if IAuditable.providedBy(self.context):
@@ -258,7 +285,7 @@ class WorkflowView(browser.BungeniBrowserView):
             self.history_viewlet.update()
         self.action_viewlet = WorkflowActionViewlet(
             self.context, self.request, self, None)
-        self.action_viewlet.update(transition=transition)
+        self.action_viewlet.update(transition_id=transition_id)
     
     def __call__(self):
         self.update()
@@ -268,7 +295,7 @@ class WorkflowView(browser.BungeniBrowserView):
 
 class WorkflowChangeStateView(WorkflowView):
     """This gets called on selection of a transition from the menu i.e. NOT:
-    a) when clicking on one of the trasition buttons in the workflow form.
+    a) when clicking on one of the transition buttons in the workflow form.
     b) when clicking Add of an object (automatic transitions).
     """
     
@@ -278,44 +305,42 @@ class WorkflowChangeStateView(WorkflowView):
     # zpt
     #ajax_template = ViewPageTemplateFile("templates/workflow_ajax.pt")
     
-    def __call__(self, headless=False, transition=None):
-        # !+RENAME(mr, apr-2011) should be transition_id
+    def __call__(self, transition_id=None, headless=False):
+        # parameters coming in via URL querystring or post vars !
         method = self.request["REQUEST_METHOD"]
+        # !+ALWAYS_POST(mr, sep-2011) requests coming from link clicks (GETs) 
+        # from the bungeni Web UI seem to always be intercepted and switched 
+        # into POSTs.
         workflow = interfaces.IWorkflow(self.context)
         
-        # !+REWITE(mr, jun-2011) the following needs to be rewritten!
-        if transition:
-            state_transition = workflow.get_transition(transition)
-            require_confirmation = getattr(
-                state_transition, "require_confirmation", False)
-            self.update(transition)
+        require_confirmation = True
+        if transition_id is not None: 
+            self.update(transition_id)
+            require_confirmation = workflow.get_transition(transition_id
+                ).require_confirmation
         else:
             self.update()
         
-        if transition and require_confirmation is False and method == "POST":
+        if (not require_confirmation and method == "POST"):
             actions = bindTransitions(
-                self.action_viewlet, (transition,), None, workflow)
+                self.action_viewlet, (transition_id,), workflow)
             assert len(actions) == 1
             # execute action
             # !+ should pass self.request.form as data? e.g. value is:
             # {u"next_url": u"...", u"transition": u"submit_response"}
-            result = actions[0].success({}) 
-            # !+REWITE(mr, jun-2011) this result is never used!
+            result = actions[0].success({})
+            # !+UNUSED(mr, jun-2011) this result is never used!
         
-        if headless is True:
+        if headless:
             actions = get_actions("context_workflow", self.context, self.request)
             state_title = workflow.get_state(self.context.status).title
             result = self.ajax_template(actions=actions, state_title=state_title)
-            
-            # !+REWITE(mr, jun-2011) require_confirmation only defined when 
-            # transition is True!
-            if require_confirmation is True:
+            if require_confirmation:
                 self.request.response.setStatus(403)
             else:
                 self.request.response.setStatus(200)
                 self.request.response.setResult(result)
                 self.request.response.setHeader("Content-Type", "text/xml")
-            
             return result
             
         template = self.template()

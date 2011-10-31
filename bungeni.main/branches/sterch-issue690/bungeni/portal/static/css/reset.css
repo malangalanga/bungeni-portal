@@ -53,6 +53,11 @@
     height: 20px;
     line-height: 20px;
 }
+.template-portal #top-layer ul#portal-personaltools li:last-child {
+    margin-right:0px;
+    float:right;
+    clear:both;
+}
 #top-layer #demoWarning {
     width: 150px;
     height: 18px;
@@ -444,7 +449,7 @@ div#region-content div#content > div:first-child {
     float: none;
     width: auto;
     position: absolute;
-    z-index: 10051;
+    z-index: 86;
     height:auto;
 }
 .section-bungeni-archive #portal-column-one {
@@ -461,6 +466,7 @@ div#region-content div#content > div:first-child {
 #portal-column-one .portlet .portletItem.even,
 #portal-column-one .portlet .portletItem {
     overflow: hidden;
+    margin-top:-1.7em !important;
 }
 #portal-column-one .portlet .portletItem a img {
     margin: 1px 0;
@@ -1322,6 +1328,36 @@ div.main-column #collage h2 {
     margin-top:.3em;
 }
 
+/*
+ * login-form
+ */
+.template-portal #login-form,
+.template-portal #login-forgotten-password {
+    margin-left:auto;
+    margin-right:auto;
+    width:330px;
+}
+.template-portal #login-form .field {
+    margin-bottom:5px;
+    clear:both;
+}
+.template-portal #login-form .formControls {
+    margin-top:10px;
+    clear:both;
+}
+.template-portal #login-form .formControls input {
+    border:1px solid #f79f10 !important;
+}
+.template-portal #login-form .field input {
+    float:right;
+}
+.template-portal #login-form .field label {
+    padding-top:10px !important;
+    text-align:left;
+    vertical-align:bottom;
+    float:left;
+}
+
 /*********************************************************************************************************/
 
 /***** BUNGENI-WORKSPACE *****/
@@ -1613,6 +1649,23 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
     height:15px;
     clear:both;
     width:99.5%;
+}
+.template-workspace.section-bungeni-admin dl.portalMessage {
+    margin-top:-25px !important;
+    margin-bottom:25px !important;
+    float:left;
+    margin-left:0.2%;
+    height:15px;
+    clear:both;
+    width:85%;
+}
+.template-workspace.section-bungeni-workspace dl.portalMessage {
+    margin-top:-20px !important;
+    margin-bottom:25px !important;
+    margin-left:0.2%;
+    height:15px;
+    clear:both;
+    width:85%;
 }
 .template-workspace .formPanel  #display_form_spacer {
     width: 95%;

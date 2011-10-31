@@ -21,7 +21,7 @@ import sqlalchemy.sql.expression as sql
 import interfaces
 
 
-# svn st 
+#
 
 def object_hierarchy_type(object):
     if isinstance(object, User):
@@ -38,6 +38,9 @@ class Entity(object):
     interface.implements(location.ILocation)
     __name__ = None
     __parent__ = None
+    
+    # !+ base archetype
+    __dynamic_features__ = False
     
     def __init__(self, **kw):
         try:
@@ -72,8 +75,8 @@ class ItemChanges(object):
     """An audit changelog of events in the lifecycle of a parliamentary content.
     """
     @classmethod
-    def makeChangeFactory(klass, name):
-        factory = type(name, (klass,), {})
+    def makeChangeFactory(cls, name):
+        factory = type(name, (cls,), {})
         interface.classImplements(factory, interfaces.IChange)
         return factory
     
@@ -89,10 +92,11 @@ class ItemVersions(Entity):
     """A collection of the versions of a parliamentary content object.
     """
     @classmethod
-    def makeVersionFactory(klass, name):
-        factory = type(name, (klass,), {})
+    def makeVersionFactory(cls, name):
+        factory = type(name, (cls,), {})
         interface.classImplements(factory, interfaces.IVersion)
-        interface.classImplements(factory, getattr(interfaces, "I%s" % (name)))
+        # !+IITEMVersion
+        #interface.classImplements(factory, getattr(interfaces, "I%s" % (name)))
         return factory
 
     #files = one2many("files", "bungeni.models.domain.AttachedFileContainer", "file_version_id")
@@ -107,15 +111,30 @@ class ItemVersions(Entity):
 # Note: in a simplified one-generic-document-type world, these can be 
 # simplified even further. 
 
+def configurable_domain(kls, workflow):
+    assert kls.__dynamic_features__, \
+        "Class [%s] does not allow dynamic features" % (kls)
+    # note: versionable implies auditable
+    for feature in workflow.features:
+        if feature.enabled:
+            kls = configurable_domain.feature_decorators[feature.name](kls)
+    return kls
+configurable_domain.feature_decorators = {}
+
+
 # convenience, per decorator name, remember decorated types
 CUSTOM_DECORATED = {
+    # decorator_name: set([kls])
     "auditable": set(), # [kls]
     "versionable": set(), # [kls]
+    "enable_attachment": set(), # [kls]
 }
 
 def auditable(kls):
     """Decorator for auditable domain types, to collect in one place all
     that is needed for a domain type to be auditale.
+    
+    Executed on adapters.load_workflow()
     """
     # assign interface (changes property added downstream)
     name = kls.__name__
@@ -126,10 +145,13 @@ def auditable(kls):
     change_kls = ItemChanges.makeChangeFactory(change_name)
     globals()[change_name] = change_kls
     return kls
+configurable_domain.feature_decorators["audit"] = auditable
 
 def versionable(kls):
     """Decorator for versionable domain types, to collect in one place all
     that is needed for a domain type to be versionable.
+    
+    Executed on adapters.load_workflow()
     
     Note: @versionable implies @auditable, here made explicit
     """
@@ -143,15 +165,33 @@ def versionable(kls):
     version_name = "%sVersion" % (name)
     globals()[version_name] = ItemVersions.makeVersionFactory(version_name)
     return kls
+configurable_domain.feature_decorators["version"] = versionable
+
+def enable_attachment(kls):
+    """Decorator for attachment-feature of domain types.
+    Executed on adapters.load_workflow()
+    
+    !+ currently assumes that the object is versionable.
+    !+ domain.AttachedFile is the only versionable type that is not a PI.
+    """
+    # !+ domain.AttachedFile is versionable, but does not support attachments
+    assert kls is not AttachedFile
+    # assign interface (versions property added downstream)
+    name = kls.__name__
+    interface.classImplements(kls, interfaces.IAttachmentable)
+    CUSTOM_DECORATED["enable_attachment"].add(kls)
+    return kls
+configurable_domain.feature_decorators["attachment"] = enable_attachment
 
 # !+/PARAMETRIZABLE_DOCTYPES
 
 class User(Entity):
     """Domain Object For A User. General representation of a person.
     """
-
+    __dynamic_features__ = True
+    
     interface.implements(interfaces.IBungeniUser, interfaces.ITranslatable)
-
+    
     def __init__(self, login=None, **kw):
         if login:
             self.login = login
@@ -186,6 +226,7 @@ class User(Entity):
 
     sort_on = ["last_name", "first_name", "middle_name"]
     sort_replace = {"user_id": ["last_name", "first_name"]}
+    sort_dir = "asc"
     addresses = one2many("addresses",
         "bungeni.models.domain.UserAddressContainer", "user_id")
     delegations = one2many("delegations",
@@ -226,13 +267,16 @@ class CurrentlyEditingDocument(object):
 class Group(Entity):
     """ an abstract collection of users
     """
+    __dynamic_features__ = True # !+ False
     interface.implements(interfaces.IBungeniGroup, interfaces.ITranslatable)
-
+    sort_on = ["short_name", "full_name"]
+    sort_dir = "asc"
+    sort_replace = {"group_id": ["short_name", ]}
     #users = one2many("users", 
     #   "bungeni.models.domain.GroupMembershipContainer", "group_id")
     #sittings = one2many("sittings", 
     #   "bungeni.models.domain.GroupSittingContainer", "group_id")
-
+    
     addresses = one2many("addresses",
         "bungeni.models.domain.GroupAddressContainer", "group_id")
     def active_membership(self, user_id):
@@ -254,11 +298,12 @@ class GroupMembership(Entity):
     """A user's membership in a group-abstract basis for 
     ministers, committeemembers, etc.
     """
+    __dynamic_features__ = False
     interface.implements(
         interfaces.IBungeniGroupMembership, interfaces.ITranslatable)
     sort_on = ["last_name", "first_name", "middle_name"]
     sort_replace = {"user_id": ["last_name", "first_name"]}
-
+    sort_dir = "asc"
     @property
     def image(self):
         return self.user.image
@@ -280,17 +325,15 @@ class GroupSitting(Entity):
     """Scheduled meeting for a group (parliament, committee, etc).
     """
     interface.implements(interfaces.ITranslatable)
+
+    __dynamic_features__ = True # !+ False
+
     attendance = one2many("attendance",
         "bungeni.models.domain.GroupSittingAttendanceContainer", "group_sitting_id")
     items = one2many("items",
         "bungeni.models.domain.ItemScheduleContainer", "group_sitting_id")
     sreports = one2many("sreports",
         "bungeni.models.domain.Report4SittingContainer", "group_sitting_id")
-    
-    @property
-    def short_name(self):
-        return self.start_date.strftime("%d %b %y %H:%M")
-
 
 class GroupSittingType(object):
     """Type of sitting: morning/afternoon/... 
@@ -440,7 +483,6 @@ class Committee(Group):
         "bungeni.models.domain.GroupSittingContainer", "group_id")
     assigneditems = one2many("assigneditems",
         "bungeni.models.domain.ItemGroupItemAssignmentContainer", "group_id")
-    sort_replace = {"committee_type_id": ["committee_type"]}
     title_types = one2many("title_types",
         "bungeni.models.domain.TitleTypeContainer", "group_id")
 
@@ -450,13 +492,14 @@ class CommitteeMember(GroupMembership):
     titles = one2many("titles",
         "bungeni.models.domain.MemberTitleContainer", "membership_id")
 
-
+''' !+TYPES_CUSTOM
 class CommitteeType(Entity):
     """Type of Committee.
     """
     interface.implements(interfaces.ITranslatable,
         interfaces.ICommitteeType
     )
+'''
 
 class Office(Group):
     """Parliamentary Office like speakers office, clerks office etc. 
@@ -479,20 +522,15 @@ class OfficeMember(GroupMembership):
 #    Debates
 #    """
 
-class AddressType(Entity):
-    """Address Types.
-    """
-    interface.implements(interfaces.ITranslatable, 
-        interfaces.IAddressType
-    )
-
-class _Address(Entity):
+class Address(Entity):
     """Address base class
     """
-class UserAddress(_Address):
+    __dynamic_features__ = False
+    # !+ note corresponding tbls exist only for subclasses
+class UserAddress(Address):
     """User address (personal)
     """
-class GroupAddress(_Address):
+class GroupAddress(Address):
     """Group address (official)
     """
 
@@ -506,6 +544,7 @@ class ItemVotes(object):
 class ParliamentaryItem(Entity):
     """
     """
+    __dynamic_features__ = True
     interface.implements(
         interfaces.IBungeniContent,
         interfaces.IBungeniParliamentaryContent,
@@ -521,8 +560,10 @@ class ParliamentaryItem(Entity):
         "bungeni.models.domain.AttachedFileContainer", "item_id")
     signatories = one2many("signatories",
         "bungeni.models.domain.SignatoryContainer", "item_id")
+    # !+NAMING(mr, jul-2011) plural!
     event = one2many("event",
         "bungeni.models.domain.EventItemContainer", "item_id")
+    # !+NAMING(mr, jul-2011) inconsistent... should be assigned_groups
     assignedgroups = one2many("assignedgroups",
         "bungeni.models.domain.GroupGroupItemAssignmentContainer", "item_id")
     
@@ -541,15 +582,17 @@ class ParliamentaryItem(Entity):
         Returns None if no such workflow states has been transited to as yet.
         """
         assert states, "Must specify at least one workflow state."
+        # merge into Session to avoid sqlalchemy.orm.exc.DetachedInstanceError 
+        # when lazy loading;
         # order of self.changes is chronological--we want latest first
-        for c in reversed(self.changes):
+        for c in reversed(Session().merge(self).changes):
             if c.action != "workflow":
                 continue
             extras = c.extras
             if extras:
                 if extras.get("destination") in states:
                     return c.date_active
-
+    
     @property
     def submission_date(self):
         # As base meaning of "submission_date" we take the most recent date
@@ -566,13 +609,14 @@ class AttachedFileType(object):
 class AttachedFile(Entity):
     """Files attached to a parliamentary item.
     """
+    __dynamic_features__ = True # !+ should be False?
 
-
+# !+ why a parliamentaryItem? Review whole heading idea!
 class Heading(ParliamentaryItem):
     """A heading in a report.
     """
     interface.implements(interfaces.ITranslatable)
-
+    __dynamic_features__ = False
 
 class _AdmissibleMixin(object):
     """Assumes self._get_workflow_date()
@@ -586,7 +630,6 @@ class _AdmissibleMixin(object):
 class AgendaItem(ParliamentaryItem, _AdmissibleMixin):
     """Generic Agenda Item that can be scheduled on a sitting.
     """
-
 
 # versionable (by default)
 class Question(ParliamentaryItem, _AdmissibleMixin):
@@ -607,11 +650,12 @@ class Motion(ParliamentaryItem, _AdmissibleMixin):
     def notice_date(self):
         return self._get_workflow_date("scheduled")
 
-
+''' !+TYPES_CUSTOM
 class BillType(Entity):
     """Type of bill: public/ private, ....
     """
     interface.implements(interfaces.ITranslatable, interfaces.IBillType)
+'''
 
 # versionable (by default)
 class Bill(ParliamentaryItem):
@@ -624,7 +668,9 @@ class Signatory(Entity):
     """Signatories for a Bill or Motion.
     """
     interface.implements(interfaces.IBungeniContent)
-
+    
+    __dynamic_features__ = True
+    
     @property
     def owner_id(self):
         return self.user_id
@@ -642,22 +688,6 @@ class ParliamentSession(Entity):
     sort_on = ["start_date", ]
     sort_dir = "desc"
     interface.implements(interfaces.ITranslatable)
-
-class Rota(object):
-    """
-    """
-
-class Take(object):
-    """
-    """
-
-class TakeMedia(object):
-    """
-    """
-
-class Transcript(object):
-    """
-    """
 
 
 class ObjectSubscriptions(object):
@@ -774,6 +804,7 @@ class DocumentSource(object):
     """
 '''
 
+# !+EventItem(mr, sep-2011) why is this a ParlaimentaryItem?
 class EventItem(ParliamentaryItem):
     """Bill events with dates and possiblity to upload files.
 
@@ -860,16 +891,25 @@ class MemberElectionType(Entity):
         interfaces.IMemberElectionType
     )
 
+''' !+TYPES_CUSTOM
+class AddressType(Entity):
+    """Address Types.
+    """
+    interface.implements(interfaces.ITranslatable, 
+        interfaces.IAddressType
+    )
 class PostalAddressType(Entity):
     """Postal address type
     """
     interface.implements(interfaces.ITranslatable, 
         interfaces.IPostalAddressType
     )
-    
+
 class CommitteeTypeStatus(Entity):
     """Committee type status
     """
     interface.implements(interfaces.ITranslatable,
         interfaces.ICommitteeTypeStatus
     )
+'''
+

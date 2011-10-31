@@ -11,8 +11,9 @@ import unittest
 from zope.testing import doctest, doctestunit
 from zope.app.testing import placelesssetup
 from zope.configuration import xmlconfig
-from bungeni.models import metadata
+from bungeni.models.schema import metadata
 from bungeni.core.workflows import adapters
+from bungeni.ui import descriptor
 
 import forms.test_dates
 
@@ -34,6 +35,8 @@ def test_suite():
     doctests = (
                 'forms/readme.txt',
                 'downloaddocument.txt',
+                'utils/misc.py',
+                'utils/report_tools.py',
                 )
     docfiles = (
         "bungeni.ui.forms.forms",

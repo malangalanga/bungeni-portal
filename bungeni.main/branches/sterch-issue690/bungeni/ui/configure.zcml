@@ -155,6 +155,14 @@
         provides="zope.schema.interfaces.IVocabularyFactory"
         component=".reports.tabledDocumentOptions"
     />
+    <utility name="bungeni.vocabulary.ReportXHTMLTemplates"
+        provides="zope.schema.interfaces.IVocabularyFactory"
+        component=".vocabulary.report_xhtml_templates"
+    />
+    <utility name="bungeni.vocabulary.DocumentXHTMLTemplates"
+        provides="zope.schema.interfaces.IVocabularyFactory"
+        component=".vocabulary.document_xhtml_templates"
+    />
     <utility name="bungeni.vocabulary.ParliamentSource"
         provides="zope.schema.interfaces.IVocabularyFactory"
         component=".vocabulary.ParliamentSource"
@@ -162,6 +170,18 @@
     <utility name="bungeni.vocabulary.SubjectTerms"
         provides="bungeni.ui.interfaces.ITreeVocabulary"
         component=".vocabulary.subject_terms_vocabulary"
+    />
+    <utility name="bungeni.vocabulary.SittingActivityTypes"
+        provides="zope.schema.interfaces.IVocabularyFactory"
+        component=".vocabulary.sitting_activity_types"
+    />
+    <utility name="bungeni.vocabulary.SittingMeetingTypes"
+        provides="zope.schema.interfaces.IVocabularyFactory"
+        component=".vocabulary.sitting_meeting_types"
+    />
+    <utility name="bungeni.vocabulary.SittingConvocationTypes"
+        provides="zope.schema.interfaces.IVocabularyFactory"
+        component=".vocabulary.sitting_convocation_types"
     />
     <!--
    <utility
@@ -225,6 +245,5 @@
       />
     
    <!-- Workspace Adapters -->
-   <adapter factory=".workspace-adapters.WorkspaceAdapter" /> 
-    
+   <adapter factory=".workspaceadapters.WorkspaceContentAdapter" /> 
 </configure>

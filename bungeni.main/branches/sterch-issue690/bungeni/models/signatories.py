@@ -1,18 +1,23 @@
-"""
-Signatories validation machinery
+# Bungeni Parliamentary Information System - http://www.bungeni.org/
+# Copyright (C) 2010 - Africa i-Parliaments - http://www.parliaments.info/
+# Licensed under GNU GPL v2 - http://www.gnu.org/licenses/gpl-2.0.txt
 
-$Id:$
+"""Signatories validation machinery for parliamentary documents
+
+$Id$
 """
 
 import zope.component
 import zope.interface
+from zope.security.proxy import removeSecurityProxy
 
 from bungeni.models.interfaces import (IBill, IMotion, IQuestion,
     IAgendaItem, ITabledDocument, ISignatoriesValidator
 )
 from bungeni.models.settings import BungeniSettings
 from bungeni.core.app import BungeniApp
-from bungeni.core.workflow.interfaces import IWorkflow
+
+log = __import__("logging").getLogger("bungeni.models.signatories")
 
 app = BungeniApp()
 
@@ -29,7 +34,22 @@ class SignatoryValidator(object):
 
     @property
     def signatories(self):
-        return self.pi_instance.signatories.values()
+        #!+VERSIONS(mb, aug-2011) automatic transitions firing for versions?
+        # as at r8488 - check whether the context actually has signatories
+        #!+SECURITY(mb, aug-2011) remove proxy to allow access to 
+        # signature status. View permission only checked on attribute access
+        # from container `values` listing
+        if hasattr(self.pi_instance, "signatories"):
+            return removeSecurityProxy(
+               self.pi_instance.signatories.values()
+            )
+            return self.pi_instance.signatories.values()
+        else:
+            log.warning("The object  %s has no signatories. Returning empty"
+                " list of signatories.", 
+                self.pi_instance.__str__()
+            )
+            return []
 
     @property
     def signatories_count(self):
@@ -49,13 +69,16 @@ class SignatoryValidator(object):
     def consented_signatories(self):
         return self.consentedSignatories()
 
+    def requireSignatures(self):
+        return self.min_signatories > 0
+
+    def validateSignatories(self):
+        return self.signatories_count > 0
+
     def consentedSignatories(self, status=u"consented"):
         return len(filter(
                     lambda cs:cs.status==u"consented", self.signatories
         ))
-    
-    def validateSignatories(self):
-        return self.signatories_count > 0
 
     def validateConsentedSignatories(self):
         return ( (self.consented_signatories >= self.min_signatories) and
@@ -76,14 +99,9 @@ class SignatoryValidator(object):
         return unicode(self.pi_instance.status) == u"submitted_signatories"
 
     def documentInDraft(self):
-        """Assume destinations of transitions with no sources are draft
+        """Check that a document is being redrafted
         """
-        wf = IWorkflow(self.pi_instance, None)
-        if wf:
-            return (self.pi_instance.status in 
-                [tr.destination for tr in wf.get_transitions_from(None)]
-            )
-        return False
+        return unicode(self.pi_instance.status) == u"redraft"
 
 class BillSignatoryValidator(SignatoryValidator):
     zope.component.adapts(IBill)

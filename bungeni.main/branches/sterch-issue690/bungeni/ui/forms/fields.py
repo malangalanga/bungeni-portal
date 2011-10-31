@@ -48,11 +48,11 @@ def filterFields(context, form_fields):
 
 
 class BungeniAttributeDisplay(DynamicFields, form.SubPageDisplayForm,
-    browser.BungeniViewlet):
+        browser.BungeniViewlet
+    ):
+    """bungeni.subform.manager
     """
-    bungeni.subform.manager
-    """
-
+    
     # evoque
     render = z3evoque.ViewTemplateFile("form.html#display")
     # zpt
@@ -80,8 +80,8 @@ class BungeniAttributeDisplay(DynamicFields, form.SubPageDisplayForm,
         wfc = interfaces.IWorkflowController(self.context, None)
         if wfc is not None:
             transitions = wfc.getManualTransitionIds()
-            self.actions = tuple(bindTransitions(
-                self, transitions, None, wfc.workflow))
+            self.actions = tuple(
+                bindTransitions(self, transitions, wfc.workflow))
     
     def setUpWidgets(self, ignore_request=False):
         languages = get_all_languages()
@@ -161,8 +161,11 @@ class BungeniAttributeDisplay(DynamicFields, form.SubPageDisplayForm,
             name = self.context.__class__.__name__
 
         return name
-
+    
+    # !+RENAME get_object_class_name
     def getObjectClass(self):
+        """Get the context object's class name. Called from the view template.
+        """
         return self.context.__class__.__name__
 
     # !+ from ui.forms.common.BaseForm -- merge these 2 base classes? 

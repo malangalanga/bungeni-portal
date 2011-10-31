@@ -68,7 +68,7 @@
      />
 
     <browser:view for="bungeni.models.interfaces.IAttachedFile"
-        permission="bungeni.attachedfile.wf.public.internal.inactive"
+        permission="bungeni.attachedfile.wf.attached.inactive"
         name="deactivate"
         class=".file.FileDeactivate"
     /><!-- !+WORKFLOW_TRANSITION(mr, feb-2011) -->
@@ -147,7 +147,6 @@
      permission="bungeni.reports.Edit"
      class=".reports.GroupSittingContextAgendaReportView"
      />
-
   <browser:page
      name="agenda"
      for="bungeni.models.interfaces.ICommittee"
@@ -179,7 +178,7 @@
      permission="bungeni.reports.Edit"
      class=".reports.SchedulingContextAgendaReportView"
      />
-  <browser:page
+    <browser:page
      name="save-report"
      for="bungeni.models.interfaces.IGroupSitting"
      permission="bungeni.reports.Edit"
@@ -191,7 +190,12 @@
      permission="bungeni.reports.Edit"
      class=".reports.SaveReportView"
      />
-
+     <!-- !+Reports(mb, 09-2011) To use one interface for registration. -->
+     <browser:page name="report-builder"
+        for="*"
+        permission="bungeni.reports.Edit"
+        class=".reports.ReportBuilder"
+    />
   <!-- Calendar -->
 
   <browser:page
@@ -299,7 +303,18 @@
      name="dhtmlxcalendar"
      class=".calendar.browser.DhtmlxCalendarSittings"
     />
-
+    <browser:page
+     for="bungeni.core.interfaces.IWorkspaceScheduling"
+     permission="zope.Public"
+     name="dhtmlxcalendar.ics"
+     class=".calendar.browser.DhtmlxCalendarSittingsIcal"
+    />
+    <browser:page
+     for="bungeni.core.interfaces.ISchedulingContext"
+     permission="zope.Public"
+     name="dhtmlxcalendar.ics"
+     class=".calendar.browser.DhtmlxCalendarSittingsIcal"
+    />
     <browser:page
      for="*"
      permission="bungeni.sitting.Edit"
@@ -524,12 +539,6 @@
         class=".workspace.WorkspaceAddForm"
         layer="bungeni.ui.interfaces.IBungeniSkin"
         permission="bungeni.tableddocument.Add"
-    />
-    <browser:page name="add_agendaitem"
-        for="bungeni.core.interfaces.IWorkspaceDraft"
-        class=".workspace.WorkspaceAddForm"
-        layer="bungeni.ui.interfaces.IBungeniSkin"
-        permission="bungeni.agendaitem.Add"
     />
     <browser:page name="add_bill"
         for="bungeni.core.interfaces.IWorkspaceDraft"

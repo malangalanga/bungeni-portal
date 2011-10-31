@@ -25,7 +25,8 @@ from bungeni.models import interfaces as model_interfaces
 
 from bungeni.core import interfaces
 from bungeni.core import location
-from bungeni.core.content import Section, AdminSection, AkomaNtosoSection
+from bungeni.core.content import Section, AdminSection, AkomaNtosoSection, \
+    WorkspaceSection
 from bungeni.core.content import QueryContent
 from bungeni.core.i18n import _
 from bungeni.models.utils import get_current_parliament
@@ -101,11 +102,11 @@ class AppSetup(object):
         self.context["bungeni"] = AkomaNtosoSection(
             title=_(u"Bungeni"),
             description=_(u"Current parliamentary activity"),
-            default_name="bung",
+            default_name="bung", # !+NAMING(mr, jul-2011) bung?!?
         )
         
         # top-level sections
-        workspace = self.context["workspace"] = Section(
+        workspace = self.context["workspace"] = WorkspaceSection(
             title=_(u"Workspace"),
             description=_(u"Current parliamentary activity"),
             default_name="documents",
@@ -119,45 +120,47 @@ class AppSetup(object):
             marker = interfaces.IWorkspaceDocuments,
         )
         workspace["documents"]["draft"] = WorkspaceContainer(
-                                            parent = workspace["documents"], 
-                                            tab_type = "draft",
-                                            title = _("draft"),
-                                            description = _("draft documents"),
-                                            marker = interfaces.IWorkspaceDraft)
+            tab_type="draft",
+            title=_("draft"),
+            description=_("draft documents"),
+            marker=interfaces.IWorkspaceDraft
+        )
         workspace["documents"]["inbox"] = WorkspaceContainer(
-                                            parent = workspace["documents"], 
-                                            tab_type = "inbox",
-                                            title = _("inbox"),
-                                            description = _("incoming documents"),
-                                            marker = interfaces.IWorkspaceInbox)
+            tab_type="inbox",
+            title=_("inbox"),
+            description=_("incoming documents"),
+            marker=interfaces.IWorkspaceInbox
+        )
         workspace["documents"]["sent"] = WorkspaceContainer(
-                                            workspace["documents"], 
-                                            tab_type = "sent",
-                                            title = _("sent"),
-                                            description = _("sent documents"),
-                                            marker = interfaces.IWorkspaceSent)
+            tab_type="sent",
+            title=_("sent"),
+            description=_("sent documents"),
+            marker=interfaces.IWorkspaceSent
+        )
         workspace["documents"]["archive"] = WorkspaceContainer(
-                                                workspace["documents"], 
-                                                tab_type = "archive",
-                                                title = _("archive"),
-                                                description = _("archived documents"),
-                                                marker = interfaces.IWorkspaceArchive)
+            tab_type="archive",
+            title=_("archive"),
+            description=_("archived documents"),
+            marker=interfaces.IWorkspaceArchive
+        )
         
         workspace["scheduling"] = Section(
             title=_(u"Scheduling"),
             description=_(u"Scheduling"),
             default_name="index",
-            marker = interfaces.IWorkspaceScheduling,
+            marker=interfaces.IWorkspaceScheduling,
         )
         workspace["scheduling"]["committees"] = QueryContent(
             container_getter(get_current_parliament, 'committees'),
             title=_(u"Committees"),
             marker=interfaces.ICommitteeAddContext,
-            description=_(u"Committee schedules"))
+            description=_(u"Committee schedules")
+        )
         workspace["scheduling"]["sittings"] = QueryContent(
             container_getter(get_current_parliament, 'sittings'),
             title=_(u"Sittings"),
-            description=_(u"Plenary Sittings"))
+            description=_(u"Plenary Sittings")
+        )
         # Proof-of-concept: support for selective inclusion in breadcrumb trail:
         # a view marked with an attribute __crumb__=False is NOT included in 
         # the breadcrumb trail (see ui/viewlets/navigation.py)
@@ -386,18 +389,22 @@ class AppSetup(object):
             marker=model_interfaces.IBungeniAdmin,
             default_name="vocabularies")
 
+        ''' !+TYPES_CUSTOM
         vocabularies[u"address-types"] = domain.AddressTypeContainer()
         to_locatable_container(domain.AddressType, 
             vocabularies[u"address-types"]
         )
+        '''
         vocabularies[u"attendance-types"] = domain.AttendanceTypeContainer()
         to_locatable_container(domain.AttendanceType, 
             vocabularies[u"attendance-types"]
         )
+        ''' !+TYPES_CUSTOM
         vocabularies[u"bill-types"] = domain.BillTypeContainer()
         to_locatable_container(domain.BillType, 
             vocabularies[u"bill-types"]
         )
+        '''
         vocabularies[u"question-types"] = domain.QuestionTypeContainer()
         to_locatable_container(domain.QuestionType, 
             vocabularies[u"question-types"]
@@ -406,10 +413,17 @@ class AppSetup(object):
         to_locatable_container(domain.ResponseType, 
             vocabularies[u"response-types"]
         )
+        ''' !+TYPES_CUSTOM
         vocabularies[u"committee-types"] = domain.CommitteeTypeContainer()
         to_locatable_container(domain.CommitteeType, 
             vocabularies[u"committee-types"]
         )
+        vocabularies[u"committee-types-statuses"] = \
+            domain.CommitteeTypeStatusContainer()
+        to_locatable_container(domain.CommitteeTypeStatus, 
+            vocabularies[u"committee-types-statuses"]
+        )
+        '''
         vocabularies[u"venues"] = domain.VenueContainer()
         to_locatable_container(domain.Venue, vocabularies[u"venues"])
         
@@ -417,12 +431,10 @@ class AppSetup(object):
         to_locatable_container(domain.MemberElectionType, 
             vocabularies[u"m-election-types"]
         )
+        ''' !+TYPES_CUSTOM
         vocabularies[u"p-address-types"] = domain.PostalAddressTypeContainer()
         to_locatable_container(domain.PostalAddressType, 
             vocabularies[u"p-address-types"]
         )
-        vocabularies[u"committee-types-statuses"] = \
-            domain.CommitteeTypeStatusContainer()
-        to_locatable_container(domain.CommitteeTypeStatus, 
-            vocabularies[u"committee-types-statuses"]
-        )
+        '''
+

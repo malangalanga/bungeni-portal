@@ -16,13 +16,11 @@ from zope.dottedname.resolve import resolve
 from zope.i18nmessageid import Message
 from bungeni.core.workflow import interfaces
 from bungeni.core.workflow.states import GRANT, DENY
-from bungeni.core.workflow.states import State, Transition, Workflow
+from bungeni.core.workflow.states import Feature, State, Transition, Workflow
 from bungeni.core.workflow.notification import Notification
 from bungeni.utils.capi import capi, bungeni_custom_errors
 from bungeni.ui.utils import debug
-from bungeni.models.interfaces import ISubRoleAnnotations
-from zope.component import getUtility
-from zope.securitypolicy.interfaces import IRole
+
 #
 
 ASSIGNMENTS = (GRANT, DENY)
@@ -38,11 +36,14 @@ trigger_value_map = {
 # only letters, numbers and "_" char i.e. no whitespace or "-"
 ID_RE = re.compile("^[\w\d_]+$")
 
-STATE_ATTRS = ("id", "title", "version", "like_state", "note", "obsolete")
+FEATURE_ATTRS = ("name", "enabled", "note")
+
+STATE_ATTRS = ("id", "title", "version", "like_state", "note",
+    "permissions_from_parent", "obsolete")
 
 TRANS_ATTRS_REQUIREDS = ("title", "source", "destination")
-TRANS_ATTRS_OPTIONALS = ("condition", "trigger", "roles", "order", 
-    "require_confirmation", "note")
+TRANS_ATTRS_OPTIONALS = ("grouping_unique_sources", "condition", "trigger", 
+    "roles", "order", "require_confirmation", "note")
 TRANS_ATTRS = TRANS_ATTRS_REQUIREDS + TRANS_ATTRS_OPTIONALS
 
 
@@ -75,8 +76,8 @@ bungeni.core.workflow.xmlimport.zcml_check_regenerate()
 It would need to be regenerated when any workflow transition is modified 
 or added, a condition that is checked for and flagged automatically.
 
-Defines a DEDICATED permission per workflow TRANSITION, and grants it to
-the various Roles, as specified by each transition.
+Defines a DEDICATED permission per workflow XML-TRANSITION, and grants it 
+to the various Roles, as specified in same transition definition.
 
 See the Bungeni Source Code Style Guide for further details. 
 
@@ -87,7 +88,8 @@ See the Bungeni Source Code Style Guide for further details.
 """
 
 def strip_none(s):
-    """Ensure non-empty whitespace-stripped string, else None."""
+    """Ensure non-empty whitespace-stripped string, else None.
+    """
     if s is not None:
         return s.strip() or None
     return None
@@ -105,12 +107,15 @@ def as_bool(s):
 #
 
 def zcml_check_regenerate():
-    """Called after all XML workflows have been loaded (see adapers.py). 
+    """Called after all XML workflows have been loaded (see adapers.py).
     """
-    # ZCML_FILENAME is under bungeni.core.workflows
-    import bungeni.core.workflows
-    __path__ = os.path.dirname(bungeni.core.workflows.__file__)
-    filepath = os.path.join(__path__, ZCML_FILENAME)
+    #!+permissions.zcml(mr, aug-2011) bypass writing to disk?
+    def get_filepath():
+        # ZCML_FILENAME is under bungeni.core.workflows
+        import bungeni.core.workflows
+        __path__ = os.path.dirname(bungeni.core.workflows.__file__)
+        return os.path.join(__path__, ZCML_FILENAME)
+    filepath = get_filepath()
     # read current file
     persisted = open(filepath, "r").read().decode("utf-8")
     # regenerate, compare, and re-write if needed
@@ -124,13 +129,8 @@ def zcml_check_regenerate():
             "Must restart system with updated file: %s" % (filepath))
 
 def is_zcml_permissionable(trans_elem):
-    # The "create" transitions should NOT have any permission assigned to them,
-    # as the action of creating this object is controlled via an application
-    # level bungeni.{type}.Add permission granted to the user in question. 
-    #
-    # The assumption here is that a "create" transition has a NULL source,
-    # (by convention "" i.e. the empty string).
-    return bool(strip_none(trans_elem.get("source")))
+    # Automatically triggered transitions may not be permissioned.
+    return not strip_none(trans_elem.get("trigger")) == "automatic"
 
 def zcml_transition_permission(pid, title, roles):
     ZCML_LINES.append(ZCML_INDENT)
@@ -158,16 +158,11 @@ def _load(workflow, name):
     transitions = []
     states = []
     domain = strip_none(workflow.get("domain")) 
-    # !+domain(mr, jul-2011) drop? only used as state/transition title default
+    # !+domain(mr, jul-2011) needed?
     wuids = set() # unique IDs in this XML workflow file
-    auditable = as_bool(strip_none(workflow.get("auditable")) or "false")
-    versionable = as_bool(strip_none(workflow.get("versionable")) or "false")
-    if versionable:
-        assert auditable, "Workflow [%s] is versionable but not auditable" % (
-            name)
     note = strip_none(workflow.get("note"))
-        
-    # initial_state, must be ""
+    
+    # initial_state, in XML this must be ""
     assert workflow.get("initial_state") == "", "Workflow [%s] initial_state " \
         "attribute must be empty string, not [%s]" % (
             name, workflow.get("initial_state"))
@@ -195,7 +190,7 @@ def _load(workflow, name):
         for state in states:
             if state.id == state_id:
                 return state
-        assert False, 'Invalid value: like_state="%s"' % (state_id)
+        raise ValueError('Invalid value: like_state="%s"' % (state_id))
     
     def check_add_permission(permissions, like_permissions, assignment, p, r):
         for perm in [(GRANT, p, r), (DENY, p, r)]:
@@ -206,29 +201,46 @@ def _load(workflow, name):
                 like_permissions.remove(perm)
         permissions.append((assignment, p, r))
     
-    def assert_valid_attr_names(e, allowed_attr_names):
-        for key in e.keys():
+    def assert_valid_attr_names(elem, allowed_attr_names):
+        for key in elem.keys():
             assert key in allowed_attr_names, \
                 "Workflow [%s]: unknown attribute %s in %s" % (
-                    name, key, etree.tostring(e))
+                    name, key, etree.tostring(elem))
     
     # top-level child ordering
-    grouping, allowed_child_ordering = 0, ("grant", "state", "transition")
+    grouping, allowed_child_ordering = 0, (
+        "feature", "grant", "state", "transition")
     for child in workflow.iterchildren():
         if not isinstance(child.tag, basestring):
             # ignore comments
             continue
         while child.tag != allowed_child_ordering[grouping]:
             grouping += 1
-            assert grouping < 3, "Workflow [%s] element <%s> %s not allowed " \
+            assert grouping < 4, "Workflow [%s] element <%s> %s not allowed " \
                 "here -- element order must respect: %s" % (
                     name, child.tag, child.items(), allowed_child_ordering)
+    
+    # features
+    features = []
+    for f in workflow.iterchildren("feature"):
+        assert_valid_attr_names(f, FEATURE_ATTRS)
+        # @name
+        feature_name = strip_none(f.get("name"))
+        assert feature_name, "Workflow Feature must define @name"
+        # !+ archetype/feature inter-dep; should be part of feature descriptor
+        feature_enabled = as_bool(strip_none(f.get("enabled")) or "true")
+        if feature_enabled and feature_name == "version": 
+            assert "audit" in [ fe.name for fe in features if fe.enabled ], \
+                "Workflow [%s] has version but no audit feature" % (name)
+        features.append(Feature(feature_name, enabled=feature_enabled, 
+                note=strip_none(f.get("note"))))
     
     # global grants
     for p in workflow.iterchildren("grant"):
         pid = strip_none(p.get("permission"))
         role = strip_none(p.get("role"))
         #+!assertRegisteredPermission(permission)
+        assert pid and role, "Global grant must specify valid permission/role" 
         ZCML_LINES.append(
             '%s<grant permission="%s" role="%s" />' % (ZCML_INDENT, pid, role))
     
@@ -295,13 +307,15 @@ def _load(workflow, name):
             )
         # states
         states.append(
-            State(state_id, Message(s.get("title", domain)), 
+            State(state_id, Message(strip_none(s.get("title")), domain),
                 strip_none(s.get("note")),
                 actions, permissions, notifications,
-                as_bool(strip_none(s.get("obsolete")) or "false"))
+                as_bool(strip_none(s.get("permissions_from_parent")) or "false"),
+                as_bool(strip_none(s.get("obsolete")) or "false")
+            )
         )
-        
-                    
+    
+    
     STATE_IDS = [ s.id for s in states ]
     
     # transitions
@@ -315,6 +329,8 @@ def _load(workflow, name):
                 raise SyntaxError('No required "%s" attribute in %s' % (
                     key, etree.tostring(t)))
         
+        # title
+        title = strip_none(t.get("title"))
         # sources, empty string -> initial_state
         sources = t.get("source").split() or [initial_state]
         assert len(sources) == len(set(sources)), \
@@ -327,20 +343,11 @@ def _load(workflow, name):
         destination = t.get("destination")
         assert destination in STATE_IDS, \
             "Unknown transition destination state [%s]" % (destination)
-        # update ZCML for dedicated permission for (XML multi-source) transition
-        tid = "%s.%s" % (
-            ".".join([ source or "" for source in sources ]),
-            destination)
-        pid = "bungeni.%s.wf.%s" % (name, tid)
-        if not ZCML_PROCESSED:
-            if is_zcml_permissionable(t):
-                zcml_transition_permission(pid, t.get("title"), 
-                    t.get("roles", "bungeni.Clerk").split())
         
-        kw = {}
         # optionals -- only set on kw IFF explicitly defined
+        kw = {}
         for i in TRANS_ATTRS_OPTIONALS:
-            val = t.get(i)
+            val = strip_none(t.get(i))
             if not val:
                 # we let setting of defaults be handled upstream
                 continue
@@ -351,12 +358,46 @@ def _load(workflow, name):
         # trigger
         if "trigger" in kw:
             kw["trigger"] = trigger_value_map[kw["trigger"]]
-        # permission - one-to-one per transition, may only be {pid} or None
-        if is_zcml_permissionable(t):
-            kw["permission"] = pid
+        # roles -> permission - one-to-one per transition
+        roles = kw.pop("roles", None) # space separated str
+        if not is_zcml_permissionable(t):
+            assert not roles, "Workflow [%s] - non-permissionable transition " \
+                "does not allow @roles [%s]." % (name, roles)
+            kw["permission"] = None # None -> CheckerPublic
+        # !+CAN_EDIT_AS_DEFAULT_TRANSITION_PERMISSION(mr, oct-2011) this feature
+        # is functional (uncomment following elif clause) but as yet not enabled. 
+        #
+        # Advantage would be that it would be easier to keep transitions 
+        # permissions in sync with object permissions (set in state) as the 
+        # majority of transition require exactly this as privilege; for the 
+        # occassional transition needing a different privilege, the current 
+        # transition.@roles mechanism may be used to make this explicit. 
+        #
+        # Need to consider implications further; the zope_principal_role_map db 
+        # table, that caches contextual roles for principals, should probably 
+        # first be reworked to be db-less (as for zope_role_permission_map).
+        #
+        #elif not roles:
+        #    # then as fallback transition permission use can modify object
+        #    kw["permission"] = "bungeni.%s.Edit" % (name) # fallback permission
         else:
-            assert kw.get("permission") is None, "Not allowed to set a " \
-                "permission on (creation) transition: %s" % (tid)
+            # Dedicated permission for XML multi-source transition.
+            # Given that, irrespective of how sources are grouped into 
+            # multi-source XML <transition> elements, there may be only *one* 
+            # path from any given *source* to any given *destination* state, 
+            # it suffices to use only the first source element + the destination 
+            # to guarantee a unique identifier for an XML transition element.
+            #
+            # Note: the "-" char is not allowed within a permission id 
+            # (so we use "." also here).
+            #
+            tid = "%s.%s" % (sources[0] or "", destination)
+            pid = "bungeni.%s.wf.%s" % (name, tid)
+            if not ZCML_PROCESSED:
+                # use "bungeni.Clerk" as default list of roles
+                roles = roles or "bungeni.Clerk"
+                zcml_transition_permission(pid, title, roles.split())
+            kw["permission"] = pid
         # python resolvables
         if "condition" in kw:
             kw["condition"] = capi.get_workflow_condition(kw["condition"])
@@ -374,10 +415,10 @@ def _load(workflow, name):
                         t.get("require_confirmation")))
         # multiple-source transitions are really multiple "transition paths"
         for source in sources:
-            args = (Message(t.get("title"), domain), source, destination)
+            args = (Message(title, domain), source, destination)
             transitions.append(Transition(*args, **kw))
             log.debug("[%s] adding transition [%s-%s] [%s]" % (
                 name, source or "", destination, kw))
     
-    return Workflow(name, states, transitions, auditable, versionable, note)
+    return Workflow(name, features, states, transitions, note)
 

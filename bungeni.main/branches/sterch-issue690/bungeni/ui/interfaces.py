@@ -1,3 +1,4 @@
+from zope import interface
 from zope.publisher.interfaces.browser import IBrowserView
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
@@ -8,14 +9,13 @@ from bungeni.rest.interfaces import IRESTLayer
 from zope.configuration import fields
 from zope import schema
 from zope.viewlet.interfaces import IViewletManager
+
 class IBungeniSkin(IPlonedSkin, IYUILayer):
     """Bungeni application skin."""
 class IBungeniAuthenticatedSkin(IBungeniSkin):
     """Skin for authenticated users."""
 class IBungeniRESTSkin(IRESTLayer):
     """Bungeni REST skin."""
-
-from zope import interface
 class IWorkspaceContainer(interface.Interface):
     """Marker for a domain object that is also a user's workspace container."""
 class IWorkspaceSectionContext(interface.Interface):
@@ -34,6 +34,10 @@ class IWorkspaceSchedulingContainer(interface.Interface):
     """Marker"""
 class IWorkspaceCommitteeSchedulingContainer(interface.Interface):
     """Marker"""
+
+class IWorkspaceReportGeneration(interface.Interface):
+    """Marker for report generation UI"""
+
 class ISpeakerWorkspace(IBrowserView):
     """Speaker's workspace."""
 class IClerkWorkspace(IBrowserView):
@@ -140,6 +144,6 @@ class IVocabularyTextField(schema.interfaces.IText):
     """Text field supporting vocabulary """
     vocabulary = interface.Attribute("A vocabulary")
 
-class IWorkspaceAdapter(interface.Interface):
+class IWorkspaceContentAdapter(interface.Interface):
     """Provides workspace item fields
     """

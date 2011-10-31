@@ -6,8 +6,7 @@
 
 """Additional UI enhancement viewlets
 
-$Id:$
-$URL:$
+$Id$
 """
 
 from zope.app.pagetemplate import ViewPageTemplateFile
@@ -20,4 +19,4 @@ class ProcessingViewlet(object):
     render = ViewPageTemplateFile("templates/processing.pt")
 
     def update(self):
-        need("jqueryuiblock")
+        need("bungeni-form-block-ui")

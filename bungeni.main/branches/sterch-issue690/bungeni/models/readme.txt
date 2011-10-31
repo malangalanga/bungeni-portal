@@ -8,7 +8,7 @@ Setup
 some setup for tests
    >>> from zope import component
    >>> from bungeni.alchemist import Session
-   >>> from bungeni import models as model
+   >>> from bungeni.models import domain as model
    >>> import datetime
    >>> from sqlalchemy.orm import mapper
    >>> from bungeni.models import domain, schema
@@ -112,29 +112,12 @@ they work.
   >>> session.add(mp_3)
   >>> session.flush()
 
-Committee types and status
-  >>> committee_type_status_1 = model.CommitteeTypeStatus()
-  >>> committee_type_status_1.committee_type_status_name = u"Permanent"
-  >>> committee_type_status_1.language="en"
-  >>> session.add(committee_type_status_1)
-  >>> session.flush()
-  >>> int(committee_type_status_1.committee_type_status_id)
-  1
-  >>> committee_type_1 = model.CommitteeType()
-  >>> committee_type_1.committee_type = u"Monitoring Committee"
-  >>> committee_type_1.committee_type_status = committee_type_status_1
-  >>> committee_type_1.description = u"Monitoring and Oversight committee"
-  >>> committee_type_1.life_span = u"parliament"
-  >>> committee_type_1.language = "en"
-  >>> session.add(committee_type_1)
-  >>> session.flush()
-  >>> int(committee_type_1.committee_type_id)
-  1
 
-Now the actual committee
+The actual committee
   >>> committee_a = model.Committee(short_name=u"committee_1", start_date=datetime.datetime.now())
   >>> committee_a.parent_group_id = parliament.parliament_id
-  >>> committee_a.committee_type = committee_type_1
+  >>> committee_a.group_type = "housekeeping"
+  >>> committee_a.group_continuity = "permanent"
   >>> committee_a.language = "en"
   >>> session.add(committee_a)
   >>> session.flush()
@@ -168,28 +151,12 @@ Check that we can access the membership through the containment object
 
 Group and user addresses
 -------------------------
-  >>> address_type_1 = model.AddressType()
-  >>> address_type_1.address_type_name = u"Personal"
-  >>> address_type_1.language = "en"
-  >>> session.add(address_type_1)
-  >>> session.flush()
-  >>> int(address_type_1.address_type_id)
-  1
-
-Add a postal address type
-  >>> postal_address_type_1 = model.PostalAddressType()
-  >>> postal_address_type_1.postal_address_type_name = u"P.O. Box"
-  >>> postal_address_type_1.language = "en"
-  >>> session.add(postal_address_type_1)
-  >>> session.flush()
-  >>> int(postal_address_type_1.postal_address_type_id)
-  1
 
 Add a user address
   >>> user_address_1 = model.UserAddress()
   >>> user_address_1.user_id = mp_1.user_id
-  >>> user_address_1.address_type = address_type_1
-  >>> user_address_1.postal_address_type = postal_address_type_1
+  >>> user_address_1.logical_address_type = "home"
+  >>> user_address_1.postal_address_type = "street"
   >>> user_address_1.street = u"MP1 Avenue"
   >>> user_address_1.city = u"Megapolis"
   >>> user_address_1.country = country
@@ -203,8 +170,8 @@ Add a user address
 Add a group address
   >>> group_address_1 = model.GroupAddress()
   >>> group_address_1.group_id = parliament.group_id
-  >>> group_address_1.address_type = address_type_1
-  >>> group_address_1.postal_address_type = postal_address_type_1
+  >>> group_address_1.logical_address_type = "home"
+  >>> group_address_1.postal_address_type = "street"
   >>> group_address_1.street = u"Parliament Road"
   >>> group_address_1.city = u"Loliondo"
   >>> group_address_1.country = country
@@ -471,19 +438,12 @@ Assignment
 
 assigning a question to a ministry
 
-Bill Type:
------------
-  >>> bt = model.BillType()
-  >>> bt.bill_type_name = u"private"
-  >>> bt.language = "en"
-  >>> session.add(bt)
-  >>> session.flush()
-
 Bill
 ----
+
   >>> bill = model.Bill()
   >>> bill.short_name = u"Bill"
-  >>> bill.bill_type_id = bt.bill_type_id
+  >>> bill.doc_type = "member"
   >>> bill.language = 'en'
   >>> bill.owner = mp_3
   >>> session.add(bill)

@@ -36,18 +36,6 @@
         provides="zope.error.interfaces.IErrorReportingUtility"
     />
     
-    <!-- Setup Domain Model Audit/ObjectLog Feature-->
-    <include file="audit.zcml"/>
-    
-    <!-- Setup Domain Model Versioning Feature-->
-    <include file="version.zcml"/>
-    
-    <!-- events -->
-    <include file="events.zcml" />
-    
-    <!-- attached files -->
-    <include file="files.zcml" />
-    
     <!-- Setup WebDAV -->
     <!--include file="webdav.zcml" /-->
     
@@ -157,9 +145,10 @@
     <class class="bungeni.models.domain.Report">
         <implements interface="ore.xapian.interfaces.IIndexable" />
     </class>
-    <!-- Workflow -->
-    <include package=".workflows" />
     
+    <!-- Workflow -->
+    <include package=".workflows" file="permissions.zcml" />
+        
     <!-- Pluggable Traversal for Parliamentary Content -->
     <adapter for="bungeni.models.interfaces.IBungeniContent
             zope.publisher.interfaces.IPublisherRequest"
@@ -184,7 +173,11 @@
         factory=".workspace.WorkspaceContainerTraverser"
         provides="zope.publisher.interfaces.IPublishTraverse"
     />
-    
+    <!-- Security declaration for workspace section -->
+    <class class=".content.WorkspaceSection">
+        <require permission="bungeni.workspace.View"
+            interface="zope.publisher.interfaces.browser.IBrowserPublisher" />
+    </class>
     <!-- Application Setup -->
     <adapter for="bungeni.models.interfaces.IBungeniApplication"
         factory=".app.AppSetup"
@@ -233,7 +226,7 @@
         />
         <allow interface="zope.publisher.interfaces.IPublishTraverse" />
     </class>
-
+    
     <class class=".schedule.DailySchedulingContext">
         <require permission="zope.Public"
             interface=".interfaces.IDailySchedulingContext"
@@ -275,16 +268,18 @@
     <adapter factory=".dc.AttachedFileVersionDescriptiveProperties" />
     <adapter factory=".dc.EventItemProperties" />
     <adapter factory=".dc.HeadingDescriptiveProperties" />
+    <!-- !+TYPES_CUSTOM
     <adapter factory=".dc.AddressTypeDescriptiveProperties" />
+    <adapter factory=".dc.PostalAddressTypeDescriptiveProperties" />
     <adapter factory=".dc.BillTypeDescriptiveProperties" />
-    <adapter factory=".dc.AttendanceTypeDescriptiveProperties" />
     <adapter factory=".dc.CommitteeTypeDescriptiveProperties" />
+    <adapter factory=".dc.CommitteeTypeStatusDescriptiveProperties" />
+    -->
+    <adapter factory=".dc.AttendanceTypeDescriptiveProperties" />
     <adapter factory=".dc.VenueDescriptiveProperties" />
     <adapter factory=".dc.QuestionTypeDescriptiveProperties" />
     <adapter factory=".dc.ResponseTypeDescriptiveProperties" />
     <adapter factory=".dc.MemberElectionTypeDescriptiveProperties" />
-    <adapter factory=".dc.PostalAddressTypeDescriptiveProperties" />
-    <adapter factory=".dc.CommitteeTypeStatusDescriptiveProperties" />
     <adapter factory=".dc.TitleTypeDescriptiveProperties" />
     <adapter name="dc"
         for="*"

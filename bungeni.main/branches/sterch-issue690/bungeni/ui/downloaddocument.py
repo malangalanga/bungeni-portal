@@ -1,25 +1,46 @@
 # encoding: utf-8
+# Bungeni Parliamentary Information System - http://www.bungeni.org/
+# Copyright (C) 2010 - Africa i-Parliaments - http://www.parliaments.info/
+# Licensed under GNU GPL v2 - http://www.gnu.org/licenses/gpl-2.0.txt
 from __future__ import with_statement
+"""Views for download of documents in formats - PDF/ODT
+
+$Id$
+"""
+
 log = __import__("logging").getLogger("bungeni.ui")
-import re
+
+
 import os
 import time
+import re
 import htmlentitydefs
 import random
+import base64
 from tidylib import tidy_fragment
-from interfaces import IOpenOfficeConfig
-from bungeni.alchemist import Session
-from bungeni.models import domain
-from zope import interface
+from lxml import etree
+
+from zope.security.proxy import removeSecurityProxy
+from zope.component import getUtility, queryUtility
+#from zope.lifecycleevent import ObjectCreatedEvent
+#from zope.event import notify
+from zope.component.interfaces import ComponentLookupError
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
-from zope.security.proxy import removeSecurityProxy
-from zope.component import getUtility
-from zope.lifecycleevent import ObjectCreatedEvent
-from zope.event import notify
+from zope.schema.interfaces import IVocabularyFactory
+from zope.app.component.hooks import getSite
+
+from interfaces import IOpenOfficeConfig
+from bungeni.alchemist import Session
+from bungeni.models import domain, interfaces
 from appy.pod.renderer import Renderer
-from zope.component.interfaces import ComponentLookupError
-from threading import BoundedSemaphore
+
+
+from bungeni.utils.capi import capi
+from bungeni.ui.i18n import _
+from bungeni.ui.utils import url, misc
+from bungeni.ui.reporting import generators
+
 def unescape(text):
     def fixup(m):
         text = m.group(0)
@@ -57,47 +78,102 @@ def cleanupText(text):
     #tidylib returns a <tidy.lib._Document object>
     return str(aftertidy)
 
+class DocumentGenerationError(Exception):
+    """Raised when document generation fails"""
 
-    
 class DownloadDocument(BrowserView):
     """Abstact base class for ODT and PDF views"""
     #path to the odt template. Must be set by sub-class
     oo_template_file = None
     #Error page in case of failure to generate document
     error_template = ViewPageTemplateFile("templates/report_error.pt")
+    #Custom Template selection UI
+    document_template_select = ViewPageTemplateFile(
+        "templates/choose_oo_template.pt"
+    )
     #Source document
     document = None
     #document type to be produced
     document_type = None
+    site_url = ""
+    error_messages = []
+
     def __init__(self, context, request):
         self.document = removeSecurityProxy(context)
+        self.site_url = url.absoluteURL(getSite(), request)
         super(DownloadDocument, self).__init__(context, request)
 
     def setHeader(self, document_type):
         content_type_mapping ={"pdf":"application/pdf",
                                "odt":"application/vnd.oasis.opendocument.text"}
-        self.request.response.setHeader("Content-type", "%s" % 
-                                            content_type_mapping[document_type])
+        self.request.response.setHeader("Content-type",
+            "%s" % content_type_mapping[document_type]
+        )
         self.request.response.setHeader("Content-disposition", 
-                                            'inline;filename="%s.%s"' %  
-                                                (self.document.short_name,
-                                                 document_type))
+            'inline;filename="%s"' % self.file_name
+        )
     def bodyText(self):
         """Returns body text of document. Must be implemented by subclass"""
-    
+
+    @property
+    def file_name(self):
+        fname = misc.slugify(self.document.short_name)
+        if interfaces.IReport.providedBy(self.document):
+            fname = misc.slugify(
+                u'-'.join((self.document.short_name, 
+                    self.document.start_date.isoformat(), 
+                    self.document.end_date.isoformat()))
+            )
+        return u"%s.%s" %(fname, self.document_type)
+
+    def generateDocumentText(self):
+        """Generate document using template from templates stored in
+        
+        src/bungeni_custom/reporting/templates/documents
+        Each template has a config parameter with the document type for
+        which it may be used.
+        """
+        template_vocabulary = queryUtility(IVocabularyFactory, 
+            "bungeni.vocabulary.DocumentXHTMLTemplates"
+        )
+        
+        doc_templates = [ term.value for term in template_vocabulary() if 
+            self.document.type in term.doctypes
+        ]
+        log.debug("Looking for templates to generate [%s] report. Found : %s",
+            self.document.type, doc_templates
+        )
+        if len(doc_templates) == 0:
+            self.error_messages.append(
+                _(u"No template for document of type: ${dtype}. Contact admin.",
+                    mapping={ "dtype": self.document.type }
+                )
+            )
+            raise DocumentGenerationError(
+                "No template found to generate this document"
+            )
+        #!+REPORTS(mrb, OCT-2011) Provide UI to select templates if more than 1
+        generator = generators.ReportGeneratorXHTML(doc_templates[0], 
+            self.document
+        )
+        #return generator.generateReport()
+        return generator.generateReport()
+
     def generateDoc(self):
         """Generates ODT/PDF doc"""
         tempFileName = os.path.dirname(__file__) + "/tmp/%f-%f.%s" % (
                             time.time(),random.random(),self.document_type)
-        params = {}
-        params["body_text"] = cleanupText(self.bodyText())
+        if interfaces.IReport.providedBy(self.document):
+            document_text = self.bodyText()
+        else:
+            document_text = self.generateDocumentText()
+        params = dict(body_text=cleanupText(document_text))
         openofficepath = getUtility(IOpenOfficeConfig).getPath()
         ooport = getUtility(IOpenOfficeConfig).getPort()
         renderer = Renderer(self.oo_template_file, params, tempFileName,
                                                pythonWithUnoPath=openofficepath,
                                                ooPort=ooport)
         from globalSemaphore import globalOpenOfficeSemaphore
-        
         try:
             # appy.pod only connects with openoffice when converting to
             # PDF. We need to restrict number of connections to the
@@ -129,8 +205,6 @@ class DownloadDocument(BrowserView):
         #TODO : Either generate a hash of a mutable content item and store it 
         # with the odt/pdf doc or track changes to a doc
         # Add caching by state. items in terminal states do not change
-        tempFileName = os.path.dirname(__file__) + "/tmp/%f.%s" % (
-                                                time.time(),self.document_type)
         if cached:
             session = Session()
             d = [f.file_title for f in self.document.attached_files]
@@ -172,28 +246,69 @@ class DownloadDocument(BrowserView):
             except ComponentLookupError:
                 return u"An error occured during ODT/PDF generation."
         else:
-            return self.generateDoc()
+            try:
+                return self.generateDoc()
+            except DocumentGenerationError:
+                return self.error_template()
         
+    def documentTemplates(self):
+        templates = []
+        templates_path = capi.get_path_for("reporting", "templates", 
+            "templates.xml"
+        )
+        if os.path.exists(templates_path):
+            template_config = etree.fromstring(open(templates_path).read())
+            for template in template_config.iter(tag="template"):
+                location = capi.get_path_for("reporting", "templates", 
+                    template.get("file")
+                )
+                template_file_name = template.get("file")
+                if os.path.exists(location):
+                    template_dict = dict(
+                        title = template.get("name"),
+                        language = template.get("language"),
+                        location = base64.encodestring(template_file_name)
+                    )
+                    templates.append(template_dict)
+                else:
+                    log.error("Template does noet exist. No file found at %s.", 
+                        location
+                    )
+        return templates
+
+    def templateSelected(self):
+        """Check if a template was provided in the request as url/form 
+        parameter.
+        """
+        template_selected = False
+        template_encoded = self.request.form.get("template", "")
+        if template_encoded != "":
+            template_file_name = base64.decodestring(template_encoded)
+            template_path = capi.get_path_for("reporting", "templates", 
+                template_file_name
+            )
+            if os.path.exists(template_path):
+                template_selected = True
+                self.oo_template_file = template_path
+        return template_selected
+
 class ReportODT(DownloadDocument):
     oo_template_file = os.path.dirname(__file__) + "/templates/agenda.odt"
     document_type = "odt"
     
     def bodyText(self):
         return self.document.body_text
-        
+
     def __call__(self):
+        if self.documentTemplates():
+            if not self.templateSelected():
+                return self.document_template_select()
         return self.documentData(cached=True)
-            
-class ReportPDF(DownloadDocument):
-    oo_template_file = os.path.dirname(__file__) + "/templates/agenda.odt"
+
+
+class ReportPDF(ReportODT):
     document_type = "pdf"
-    
-    def bodyText(self):
-        return self.document.body_text
-        
-    def __call__(self):
-        return self.documentData(cached=True)
-        
+
 #The classes below generate ODT and PDF documents of bungeni content items
 #TODO:This implementation displays a default set of the content item's attributes
 #once the localisation API is complete it should get info on which attributes

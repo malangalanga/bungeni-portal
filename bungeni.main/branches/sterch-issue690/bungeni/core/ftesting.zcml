@@ -28,7 +28,7 @@
     <include package="bungeni.models" file="auth.zcml" />
     <include package="bungeni.models" file="roles.zcml" />
     <include package="bungeni.models" file="permissions.zcml" />
-    <include package="bungeni.core.workflows" file="configure.zcml" />
+    <include package="bungeni.core.workflows" file="permissions.zcml" />
     
     <adapter factory="bungeni.models.signatories.BillSignatoryValidator"/>
     <adapter factory="bungeni.models.signatories.MotionSignatoryValidator"/>
@@ -36,15 +36,13 @@
     
     <include package="bungeni.alchemist" file="meta.zcml"/>
     <include package="alchemist.catalyst" file="meta.zcml"/>
-    <include package="bungeni.ui.descriptor" file="catalyst.zcml"/>
     <include package="ore.xapian" file="meta.zcml" />
     <include package="ore.xapian" />
     <include package="z3c.pt" />
-    <include file="audit.zcml"/>
     
     <!-- DB setup -->
     <db:engine name="bungeni-db" url="postgres://localhost/bungeni-test" />
-    <db:bind engine="bungeni-db" metadata="bungeni.models.metadata" />
+    <db:bind engine="bungeni-db" metadata="bungeni.models.schema.metadata" />
     <db:bind engine="bungeni-db" metadata="bungeni.alchemist.security.metadata" />
     
 </configure>

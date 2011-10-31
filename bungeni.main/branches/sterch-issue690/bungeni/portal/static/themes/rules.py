@@ -1,10 +1,20 @@
-import urllib2
+import httplib
 from pyquery import PyQuery as pq
-from urlparse import urlsplit
+from urlparse import urlsplit, urlparse
 
 def get_theme_host(log):
     theme_host = urlsplit(log.theme_url)[1].split("/themes")[0]
     return theme_host
+    
+def check_url(url):
+    """
+    Get the header for a given url and check response code.
+    """
+    parsed_url = urlparse(url)
+    http_instance = httplib.HTTP(parsed_url[1])
+    http_instance.putrequest('HEAD', parsed_url[2])
+    http_instance.endheaders()
+    return http_instance.getreply()[0] == httplib.OK
 
 def add_section_links(content, theme, resource_fetcher, log):
     """
@@ -12,10 +22,13 @@ def add_section_links(content, theme, resource_fetcher, log):
     (workspace and portal).
     """
     host_url = urlsplit(log.theme_url)
-    if "logout" in theme('#portal-personaltools').html():
-        theme('body').addClass('template-workspace')
-    else:
+    if theme('#portal-personaltools').html() == None:
         theme('body').addClass('template-portal')
+    else:
+        if "logout" in theme('#portal-personaltools').html():
+            theme('body').addClass('template-workspace')
+        else:
+            theme('body').addClass('template-portal')
 
 def image_links(content, theme, resource_fetcher, log):
     """
@@ -37,20 +50,7 @@ def image_links(content, theme, resource_fetcher, log):
                 link_node.replaceWith('<div id="region-content" \
                 class="documentContent">' + new_value + '</div>')
                 
-def switch_links_to_cynin(content, theme, resource_fetcher, log):
-    """
-    Switch links in the 'my_groups' tab of the workspace view to point
-    to the cynin workspaces.
-    """
-    wtmg = content("#workspace-table-my_groups a")
-    for link in wtmg:
-        if "politicalgroups" in link.get("href"):
-            obj_id = "/cynin/home/group.political-group." + \
-                     link.get("href").split("/", 6)[-1].split("-", 1)[-1]
-        else:
-            obj_id = "/plone/groups/" + link.get("href").split("/", 3)[-1]
-        pq(link).attr('href', obj_id)
-        
+       
 def add_member_workspace_links(content, theme, resource_fetcher, log):
     """
     Add a member's 'private space' and 'web space' links to the workspace
@@ -66,15 +66,11 @@ def add_member_workspace_links(content, theme, resource_fetcher, log):
     theme_host = get_theme_host(log).split(":")[0]
     test_url = "http://" + theme_host + ":8082" + "/plone/membership/" + \
                 member_id + "/web_space"
-
-    try:
-        if urllib2.urlopen(test_url).code == 200:
-            content('#portal-personaltools').append("<li class='navigation'>\
-            <a href='/plone/membership/" + member_id + \
-            "/web_space/folder_contents" + "'>web space</a></li>")
-    except:
-        pass 
-        
+                
+    if check_url(test_url):
+        content('#portal-personaltools').append("<li class='navigation'>\
+        <a href='/plone/membership/" + member_id + \
+        "/web_space/folder_contents" + "'>web space</a></li>")                   
         
 def add_group_workspace_links(content, theme, resource_fetcher, log):
     """
@@ -118,22 +114,7 @@ def add_space_tab(content, theme, resource_fetcher, log, space_type):
                         space_id + "web_space"            
         else:
             link_val = plone_url + "/plone/groups/group.political-group." + \
-                        space_id + "web_space" 
-    try:
-        if urllib2.urlopen(link_val).code == 200:
-            response = urllib2.urlopen(link_val)
-            html_content = pq(response.read())
-            head_content = html_content("head").html().replace(
-                            plone_port, theme_port)
-            space_tab = html_content("#content-core").html().replace(
-                        plone_port, theme_port)                    
-            content("head").append(head_content)
-            content(".enableFormTabbing").append(
-            "<dt id='fieldsetlegend-web_space'>web space</dt>\
-            <dd id='fieldset-web_space'>" + space_tab + "</dd>")
-            theme(".level0").prepend(content("#portal-globalnav").children())
-    except:
-        pass   
+                        space_id + "web_space"  
 
 def replace_login_link(content, theme, resource_fetcher, log):
     """Login and logout will be via plone to facilitate creation of
@@ -177,41 +158,6 @@ def add_menu_items(content, theme, resource_fetcher, log):
                 pq(list_item).addClass("2ndlevel")
                 theme(".row_1 .three-columns-equal .block_1 ul").append(
                     list_item)
-     
-def add_rss_feeds(content, theme, resource_fetcher, log):
-    """
-    Add rss feeds and news content.
-    """
-    news_query_value = "/plone/news"
-    language_selector = content("#portal-languageselector .selected a").attr(
-        "href")
-    if language_selector != None:
-        language = language_selector.split("=")[1]
-        if language !="en":
-            news_query_value = "/plone/news-" + language + "?set_language=" + \
-                               language
-
-    host_url = urlsplit(log.theme_url)
-    source_dest_mapping = {news_query_value:
-                           ".row_1 .three-columns-equal .block_2",
-                           "/plone/feeds/sittings":
-                           ".row_1 .three-columns-equal .block_3",                      
-                           "/plone/feeds/question-listing":
-                           ".row_1 .three-columns-equal .block_3",
-                           "/plone/feeds/motion-listing":
-                           ".row_1 .three-columns-equal .block_3",
-                           "/plone/feeds/bill-listing":
-                           ".row_1 .three-columns-equal .block_3"}
-    for item in source_dest_mapping:
-        try:
-            response = urllib2.urlopen(host_url[0] + "://" + host_url[1] +
-                                   item)
-            url_content = response.read()
-            content_data =  pq(url_content)
-            theme(source_dest_mapping[item]).append(
-                content_data("#content").html().replace("/akomantoso.xml", ""))
-        except:
-            pass
 
 def reposition_contentActions(content, theme, resource_fetcher, log):
     """

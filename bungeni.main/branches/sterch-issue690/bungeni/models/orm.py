@@ -9,7 +9,8 @@ $Id$
 log = __import__("logging").getLogger("bungeni.models.orm")
 
 import sqlalchemy as rdb
-from sqlalchemy.orm import mapper, relation, column_property, backref
+from sqlalchemy.orm import mapper, class_mapper, relation, column_property, \
+    backref
 from bungeni.alchemist.traversal import one2many
 
 import schema
@@ -17,22 +18,19 @@ import domain
 import interfaces
 
 # !+PARAMETRIZABLE_DOCTYPES
-def configurable_mappings(kls, kls_mapper=None):
+def configurable_mappings(kls):
     """Add mappings, as per configured features for a domain type.
-
-    !+kls_mapper(mr, jul-2011) when called at time of loading this module i.e.
-    mappers are in the process of being defined, cannot seem to retrieve 
-    the mapper with class_mapper(kls), so as workaround am passing the newly 
-    created mapper instance; calling this downstream does not require to 
-    specify the mapper instance as it is retrievable with class_mapper(kls).
+    
+    Executed on adapters.load_workflow()
     """
-    name = kls.__name__    
+    name = kls.__name__
     # auditable, determine properties and set mapper for change class/table
     if interfaces.IAuditable.implementedBy(kls):
         change_kls = getattr(domain, "%sChange" % (name))
         change_tbl = getattr(schema, "%s_changes" % (schema.un_camel(name)))
         def changes_properties(change_tbl):
-            return {"user": relation(domain.User,
+            return {
+                "user": relation(domain.User,
                     primaryjoin=(change_tbl.c.user_id == schema.users.c.user_id),
                     uselist=False,
                     lazy=True
@@ -41,7 +39,7 @@ def configurable_mappings(kls, kls_mapper=None):
         mapper(change_kls, change_tbl, 
             properties=changes_properties(change_tbl)
         )
-    # versionable,determine properties and set mapper for change class/table
+    # versionable, determine properties and set mapper for version class/table
     if interfaces.IVersionable.implementedBy(kls):
         assert change_kls, "May not be IVersionable and not IAuditable"
         version_kls = getattr(domain, "%sVersion" % (name))
@@ -51,32 +49,31 @@ def configurable_mappings(kls, kls_mapper=None):
                 "change": relation(change_class, uselist=False),
                 "head": relation(item_class, uselist=False)
             }
-            # Notes:
-            # - domain.AttachedFile is the only versionable type that is 
-            # not a ParliamentaryItem.
-            # - !+IVersionable(mr, jul-2011) an AttachedFile does not have 
-            # attached_files; but, this violates the meaning of IVersionable? 
-            # Or, the ability to have attached_files should be independent of
-            # being versionable? IMayAttachFiles
-            if item_class is not domain.AttachedFile:
-                props["attached_files"] = relation(domain.AttachedFileVersion,
-                    primaryjoin=rdb.and_(
-                        versions_table.c.content_id ==
-                            schema.attached_file_versions.c.item_id,
-                        versions_table.c.version_id ==
-                            schema.attached_file_versions.c.file_version_id
-                    ),
-                    foreign_keys=[
-                        schema.attached_file_versions.c.item_id,
-                        schema.attached_file_versions.c.file_version_id
-                    ]
-                )
             return props
         mapper(version_kls, version_tbl,
             properties=versions_properties(kls, change_kls, version_tbl)
         )
+    # attachmentable, add related properties to version class/table 
+    if interfaces.IAttachmentable.implementedBy(kls):
+        # !+ current constrain
+        assert version_kls, "May not be IAttachmentable and not IVersionable"
+        class_mapper(version_kls).add_property("attached_files",
+            relation(domain.AttachedFileVersion,
+                primaryjoin=rdb.and_(
+                    version_tbl.c.content_id ==
+                        schema.attached_file_versions.c.item_id,
+                    version_tbl.c.version_id ==
+                        schema.attached_file_versions.c.file_version_id
+                ),
+                foreign_keys=[
+                    schema.attached_file_versions.c.item_id,
+                    schema.attached_file_versions.c.file_version_id
+                ]
+            )
+        )
     # finally, add any properties to the master kls itself
-    def mapper_add_configurable_properties(kls, kls_mapper):
+    def mapper_add_configurable_properties(kls):
+        kls_mapper = class_mapper(kls)
         def configurable_properties(kls, mapper_properties):
             """Add properties, as per configured features for a domain type.
             """
@@ -85,7 +82,7 @@ def configurable_mappings(kls, kls_mapper=None):
                 change_kls = getattr(domain, "%sChange" % (name))
                 mapper_properties["changes"] = relation(change_kls,
                     backref="origin", 
-                    lazy=False,
+                    lazy=True,
                     cascade="all, delete-orphan",
                     passive_deletes=False
                 )
@@ -94,24 +91,28 @@ def configurable_mappings(kls, kls_mapper=None):
                 kls.versions = one2many("versions",
                     "bungeni.models.domain.%sVersionContainer" % (name),
                     "content_id")
+            # attachmentable
+            if interfaces.IAttachmentable.implementedBy(kls):
+                pass # nothing to do
             return mapper_properties
         for key, prop in configurable_properties(kls, {}).items():
             kls_mapper.add_property(key, prop)
-    # !+kls_mapper
-    if kls_mapper is None:
-        from sqlalchemy.orm import class_mapper
-        kls_mapper = class_mapper(kls)
-    mapper_add_configurable_properties(kls, kls_mapper)
+    #
+    mapper_add_configurable_properties(kls)
+
 # !+/PARAMETRIZABLE_DOCTYPES
 
 #user address types
-mapper(domain.PostalAddressType, schema.postal_address_types)
+#!+TYPES_CUSTOM mapper(domain.PostalAddressType, schema.postal_address_types)
 
 # Users
 # general representation of a person
 mapper(domain.User, schema.users,
     properties={
-        "user_addresses": relation(domain.UserAddress),
+        "user_addresses": relation(domain.UserAddress,
+            # !+HEAD_DOCUMENT_ITEM(mr, sep-2011) standardize name
+            backref=backref("item", remote_side=schema.users.c.user_id)
+        ),
         "subscriptions": relation(domain.ParliamentaryItem,
             secondary=schema.users_parliamentary_items
         ),
@@ -138,26 +139,21 @@ mapper(domain.Group, schema.groups,
     primary_key=[schema.groups.c.group_id],
     properties={
         "members": relation(domain.GroupMembership),
-        "group_principal_id": column_property(
-            #
-            # !+ ATTENTION: the following sqlalchemy str concat (on c.type) 
-            # gives some VERY strange behaviour :
-            #
-            # print "group." + schema.groups.c.type + "."
-            # >>> :type_1 || groups.type || :param_1
-            #
-            # print group.groups.type.
-            # >>> "group.%s." % (schema.groups.c.type)
-            #
-            ("group." + schema.groups.c.type + "." +
-             rdb.cast(schema.groups.c.group_id, rdb.String)
-            ).label("group_principal_id")
-        ),
+        # !+GROUP_PRINCIPAL_ID(ah,sep-2011) - removing group_principal_id as 
+        # orm property, this is now on the schema.
+        #"group_principal_id": column_property(
+        #    ("group." + schema.groups.c.type + "." +
+        #     rdb.cast(schema.groups.c.group_id, rdb.String)
+        #    ).label("group_principal_id")
+        #),
         "contained_groups": relation(domain.Group,
             backref=backref("parent_group",
                 remote_side=schema.groups.c.group_id)
         ),
-        "group_addresses": relation(domain.GroupAddress),
+        "group_addresses": relation(domain.GroupAddress,
+            # !+HEAD_DOCUMENT_ITEM(mr, sep-2011) standardize name
+            backref=backref("item", remote_side=schema.groups.c.group_id)
+        ),
         # "keywords": relation(domain.Keyword, secondary=schema.groups_keywords)
     },
     polymorphic_on=schema.groups.c.type,
@@ -233,24 +229,21 @@ mapper(domain.Ministry,
     polymorphic_identity="ministry"
 )
 
+''' !+TYPES_CUSTOM
 mapper(domain.CommitteeTypeStatus, schema.committee_type_status)
 mapper(domain.CommitteeType, schema.committee_type,
     properties={
         "committee_type_status": relation(domain.CommitteeTypeStatus,
-            uselist=False, lazy=False
+            uselist=False, 
+            lazy=False
         )
     }
 )
+'''
 mapper(domain.Committee, schema.committees,
     inherits=domain.Group,
     polymorphic_on=schema.groups.c.type,
     polymorphic_identity="committee",
-    properties={
-        "committee_type": relation(domain.CommitteeType,
-            uselist=False,
-            lazy=False
-        ),
-    },
 )
 
 mapper(domain.Office, schema.offices,
@@ -364,7 +357,6 @@ mapper(domain.CommitteeStaff,
 
 mapper(domain.ParliamentSession, schema.parliament_sessions)
 
-configurable_mappings(domain.GroupSitting,
 mapper(domain.GroupSitting, schema.group_sittings,
     properties={
         "group_sitting_type": relation(domain.GroupSittingType, uselist=False),
@@ -384,7 +376,7 @@ mapper(domain.GroupSitting, schema.group_sittings,
         ),
         "venue": relation(domain.Venue),
     }
-))
+)
 
 mapper(domain.ResourceType, schema.resource_types)
 mapper(domain.Resource, schema.resources)
@@ -404,9 +396,23 @@ mapper(domain.ParliamentaryItem, schema.parliamentary_items,
                 schema.users.c.user_id),
             uselist=False,
             lazy=False),
-        "itemsignatories": relation(domain.User,
-            secondary=schema.signatories),
-        "attached_files": relation(domain.AttachedFile)
+        # !+NAMING(mr, jul-2011)
+        "itemsignatories": relation(domain.User, secondary=schema.signatories),
+        "attached_files": relation(domain.AttachedFile,
+            # !+HEAD_DOCUMENT_ITEM(mr, sep-2011) standardize name, "head", 
+            # "document", "item"
+            backref=backref("item",
+                remote_side=schema.parliamentary_items.c.parliamentary_item_id)
+        ),
+        "event_item": relation(domain.EventItem,
+            primaryjoin=rdb.and_(
+                schema.parliamentary_items.c.parliamentary_item_id ==
+                    schema.event_items.c.item_id),
+            uselist=False,
+            # !+HEAD_DOCUMENT_ITEM(mr, sep-2011) standardize name
+            backref=backref("item",
+                remote_side=schema.parliamentary_items.c.parliamentary_item_id),
+        ),
     }
 )
 
@@ -419,7 +425,6 @@ mapper(domain.Heading,
 mapper(domain.QuestionType, schema.question_types)
 mapper(domain.ResponseType, schema.response_types)
 
-configurable_mappings(domain.Question,
 mapper(domain.Question, schema.questions,
     inherits=domain.ParliamentaryItem,
     polymorphic_on=schema.parliamentary_items.c.type,
@@ -433,23 +438,21 @@ mapper(domain.Question, schema.questions,
             lazy=False
         ),
     }
-))
+)
 
-configurable_mappings(domain.Motion,
 mapper(domain.Motion, schema.motions,
     inherits=domain.ParliamentaryItem,
     polymorphic_on=schema.parliamentary_items.c.type,
     polymorphic_identity="motion",
     properties={}
-))
+)
 
-configurable_mappings(domain.Bill,
 mapper(domain.Bill, schema.bills,
     inherits=domain.ParliamentaryItem,
     polymorphic_on=schema.parliamentary_items.c.type,
     polymorphic_identity="bill",
     properties={}
-))
+)
 
 mapper(domain.EventItem, schema.event_items,
     inherits=domain.ParliamentaryItem,
@@ -461,7 +464,6 @@ mapper(domain.EventItem, schema.event_items,
     polymorphic_identity="event"
 )
 
-configurable_mappings(domain.AgendaItem,
 mapper(domain.AgendaItem, schema.agenda_items,
     inherits=domain.ParliamentaryItem,
     polymorphic_on=schema.parliamentary_items.c.type,
@@ -475,23 +477,21 @@ mapper(domain.AgendaItem, schema.agenda_items,
             uselist=False
         )
     }
-))
+)
 
-configurable_mappings(domain.TabledDocument,
 mapper(domain.TabledDocument, schema.tabled_documents,
     inherits=domain.ParliamentaryItem,
     polymorphic_on=schema.parliamentary_items.c.type,
     polymorphic_identity="tableddocument",
     properties={}
-))
+)
 
 mapper(domain.AttachedFileType, schema.attached_file_types)
-configurable_mappings(domain.AttachedFile,
 mapper(domain.AttachedFile, schema.attached_files,
     properties={
         "type": relation(domain.AttachedFileType, uselist=False)
     }
-))
+)
 
 #Items scheduled for a sitting expressed as a relation
 # to their item schedule
@@ -516,15 +516,14 @@ mapper(domain.ItemScheduleDiscussion, schema.item_schedule_discussions)
 # items scheduled for a sitting
 # expressed as a join between item and schedule
 
-configurable_mappings(domain.Signatory,
 mapper(domain.Signatory, schema.signatories,
     properties={
         "item": relation(domain.ParliamentaryItem, uselist=False),
         "user": relation(domain.User, uselist=False),
     }
-))
+)
 
-mapper(domain.BillType, schema.bill_types)
+#!+TYPES_CUSTOM mapper(domain.BillType, schema.bill_types)
 #mapper(domain.DocumentSource, schema.document_sources)
 
 mapper(domain.HoliDay, schema.holidays)
@@ -568,22 +567,14 @@ mapper(domain.MemberTitle, schema.member_titles,
     }
 )
 
-mapper(domain.AddressType, schema.address_types)
+#!+TYPES_CUSTOM mapper(domain.AddressType, schema.address_types)
 mapper(domain.UserAddress, schema.user_addresses,
     properties={
-        "address_type": relation(domain.AddressType, uselist=False, lazy=False),
-        "postal_address_type": relation(domain.PostalAddressType, uselist=False,
-            lazy=False
-        ),
         "country": relation(domain.Country, uselist=False, lazy=False),
     },
 )
 mapper(domain.GroupAddress, schema.group_addresses,
     properties={
-        "address_type": relation(domain.AddressType, uselist=False, lazy=False),
-        "postal_address_type": relation(domain.PostalAddressType, 
-            uselist=False, lazy=False
-        ),
         "country": relation(domain.Country, uselist=False, lazy=False),
     },
 )

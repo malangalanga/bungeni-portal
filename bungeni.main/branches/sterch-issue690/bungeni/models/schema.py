@@ -50,11 +50,15 @@ def plural(sname):
     """
     return plural.custom.get(sname, None) or "%ss" % (sname)
 plural.custom = {
+    "user_address": "user_addresses",
+    "group_address": "group_addresses",
     "signatory": "signatories",
 }
 
 def configurable_schema(kls):
     """Add tables, as per configured features for a domain type.
+    
+    Executed on adapters.load_workflow()
     """
     # assign interface (changes property added downstream)
     entity_name = un_camel(kls.__name__)
@@ -72,6 +76,10 @@ def configurable_schema(kls):
             secondary_table = parliamentary_items
         globals()[version_tbl_name] = make_versions_table(
             tbl, metadata, secondary_table)
+    # attachmentable
+    if interfaces.IAttachmentable.implementedBy(kls):
+        # !+ current constrain
+        assert change_tbl_name, "May not be IAttachmentable and not IVersionable"
 
 def make_changes_table(table, metadata):
     """Create an object log table for an object.
@@ -82,7 +90,12 @@ def make_changes_table(table, metadata):
     fk_id = "%s_id" % (entity_name)
     changes_table = rdb.Table(changes_name, metadata,
         rdb.Column("change_id", rdb.Integer, primary_key=True),
-        rdb.Column("content_id", rdb.Integer, rdb.ForeignKey(table.c[fk_id])),
+        # the item_id of the "owning" item being logged !+HEAD_DOCUMENT_ITEM
+        rdb.Column("content_id", rdb.Integer, 
+            rdb.ForeignKey(table.c[fk_id]),
+            nullable=False,
+            index=True
+        ),
         rdb.Column("action", rdb.Unicode(16)),
         # audit date, exclusively managed by the system
         rdb.Column("date_audit", rdb.DateTime(timezone=False),
@@ -99,7 +112,8 @@ def make_changes_table(table, metadata):
         rdb.Column("description", rdb.UnicodeText),
         rdb.Column("notes", rdb.UnicodeText),
         rdb.Column("user_id", rdb.Integer, rdb.ForeignKey("users.user_id")),
-        useexisting=True # !+ZCA_TESTS(mr, jul-2011) tests break without this
+        #!+SA0.7 rdb.Index("%s_changes_cid_idx" % (entity_name), "content_id"),
+        useexisting=False
     )
     return changes_table
 
@@ -117,10 +131,22 @@ def make_versions_table(table, metadata, secondary_table=None):
     versions_name = "%s_versions" % (entity_name)
     fk_id = "%s_id" % (entity_name)
     columns = [
+        # the id of this record
         rdb.Column("version_id", rdb.Integer, primary_key=True),
-        rdb.Column("content_id", rdb.Integer, rdb.ForeignKey(table.c[fk_id])),
+        # the item_id of the "owning" item being versioned !+HEAD_DOCUMENT_ITEM
+        rdb.Column("content_id", rdb.Integer, 
+            rdb.ForeignKey(table.c[fk_id]), 
+            nullable=False,
+            index=True
+        ),
+        # the id of the change record triggered by this version !+needed?
         rdb.Column("change_id", rdb.Integer,
-            rdb.ForeignKey("%s_changes.change_id" % entity_name)
+            rdb.ForeignKey("%s_changes.change_id" % entity_name),
+            #nullable=False # !+VERSION_CHANGE_ID(mr, sep-2011) application 
+            # policy stipulates that a new version is *always* logged also as 
+            # a change, thus this should filed should not be nullable. But, 
+            # setting it so breaks the versions.txt doctest. 
+            # See also related issue: ATTACHED_FILE_VERSIONS
         ),
         rdb.Column("manual", rdb.Boolean, nullable=False, default=False),
     ]
@@ -135,7 +161,7 @@ def make_versions_table(table, metadata, secondary_table=None):
     if secondary_table is not None:
         extend_cols(columns, secondary_table.columns)
     versions_table = rdb.Table(versions_name, metadata, *columns,
-        useexisting=True # !+ZCA_TESTS(mr, jul-2011) tests break without this
+        useexisting=False
     )
     return versions_table
 
@@ -194,9 +220,15 @@ users = rdb.Table("users", metadata,
     rdb.Column("salt", rdb.String(24)),
     rdb.Column("description", rdb.UnicodeText),
     rdb.Column("image", rdb.Binary),
+    # !+active_p(mr, sep-2011) why is this "workflow status" column named
+    # "active_p" and not "status"? Rename...
+    # !+active_p(mr, sep-2011) why have identically named columns here and on 
+    # group_memberships, with one being a string and other a bool?
     rdb.Column("active_p", rdb.String(1),
         rdb.CheckConstraint("""active_p in ('A', 'I', 'D')"""),
-        default="A", # active/inactive/deceased
+        # !+active_p(mr, sep-2011) workflow status columns MUST not have a
+        # default value--it is up to the workflow to decide what this should be!
+        #default="A", # active/inactive/deceased
     ),
     # comment out for now - will be used for user preferences
     rdb.Column("receive_notification", rdb.Boolean, default=True),
@@ -241,6 +273,7 @@ currently_editing_document = rdb.Table("currently_editing_document", metadata,
     ),
     rdb.Column("currently_editing_id", rdb.Integer,
         rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
+        nullable=False
     ),
     rdb.Column("editing_date", rdb.DateTime(timezone=False)) 
 ) 
@@ -254,6 +287,8 @@ parliament_memberships = rdb.Table("parliament_memberships", metadata,
         primary_key=True
     ),
     # the constituency/province/region of the MP as of the time he was elected
+    # !+constituency_id/province_id/region_id/party_id(mr, jul-2011) are also 
+    # defined as mapper properties!
     rdb.Column("constituency_id", rdb.Integer,
         rdb.ForeignKey("constituencies.constituency_id")
     ),
@@ -335,8 +370,8 @@ constituency_details = rdb.Table("constituency_details", metadata,
 
 groups = rdb.Table("groups", metadata,
     rdb.Column("group_id", rdb.Integer, PrincipalSequence, primary_key=True),
-    rdb.Column("short_name", rdb.Unicode(32), nullable=False), #!+ACRONYM
-    rdb.Column("full_name", rdb.Unicode(256)), #!+NAME
+    rdb.Column("short_name", rdb.Unicode(512), nullable=False), #!+ACRONYM
+    rdb.Column("full_name", rdb.Unicode(1024)), #!+NAME
     rdb.Column("description", rdb.UnicodeText),
     rdb.Column("status", rdb.Unicode(32)), # workflow for groups
     rdb.Column("status_date", rdb.DateTime(timezone=False),
@@ -346,6 +381,8 @@ groups = rdb.Table("groups", metadata,
     rdb.Column("start_date", rdb.Date, nullable=False),
     rdb.Column("end_date", rdb.Date),
     rdb.Column("type", rdb.String(30), nullable=False),
+    # !+GROUP_PRINCIPAL_ID(ah,sep-2011) adding group principal id to schema
+    rdb.Column("group_principal_id", rdb.Unicode(50)),
     rdb.Column("parent_group_id", rdb.Integer,
         rdb.ForeignKey("groups.group_id")
      ),
@@ -356,6 +393,10 @@ groups = rdb.Table("groups", metadata,
     rdb.Column("custom2", rdb.UnicodeText, nullable=True),
     rdb.Column("custom3", rdb.UnicodeText, nullable=True),
     rdb.Column("custom4", rdb.UnicodeText, nullable=True),
+)
+# !+GROUP_PRINCIPAL_ID(ah,sep-2011) adding index on group_principal_id column
+groups_principal_id_index = rdb.Index("grp_grpprincipalid_idx", 
+    groups.c["group_principal_id"]
 )
 
 offices = rdb.Table("offices", metadata,
@@ -377,9 +418,9 @@ parliaments = rdb.Table("parliaments", metadata,
    rdb.Column("election_date", rdb.Date, nullable=False),
 )
 
+''' !+TYPES_CUSTOM
 committee_type_status = make_vocabulary_table("committee_type_status", metadata,
     table_suffix="", column_suffix="")
-
 committee_type = rdb.Table("committee_types", metadata,
     rdb.Column("committee_type_id", rdb.Integer, primary_key=True),
     rdb.Column("committee_type", rdb.Unicode(256), nullable=False),
@@ -391,14 +432,22 @@ committee_type = rdb.Table("committee_types", metadata,
     ),
     rdb.Column("language", rdb.String(5), nullable=False),
 )
+'''
 
 committees = rdb.Table("committees", metadata,
     rdb.Column("committee_id", rdb.Integer,
         rdb.ForeignKey("groups.group_id"),
         primary_key=True
     ),
-    rdb.Column("committee_type_id", rdb.Integer,
-        rdb.ForeignKey("committee_types.committee_type_id")
+    rdb.Column("group_type",
+        rdb.Unicode(128),
+        default="housekeeping",
+        nullable=False,
+    ),
+    rdb.Column("group_continuity",
+        rdb.Unicode(128),
+        default="permanent",
+        nullable=False,
     ),
     rdb.Column("num_members", rdb.Integer),
     rdb.Column("min_num_members", rdb.Integer),
@@ -409,6 +458,10 @@ committees = rdb.Table("committees", metadata,
     rdb.Column("default_chairperson", rdb.Boolean),
     rdb.Column("reinstatement_date", rdb.Date),
 )
+# !+TYPES_CUSTOM_life_span(mr, oct-2011) the old and unused column "life_span" 
+# on committee_types (values: "parliament", "annual"). But, if concept will
+# still be needed, the planned and more generic "group.root_container" idea 
+# can approximately provide it, and is what should be used. 
 
 # political parties (outside the parliament) and 
 # political groups (inside the parliament)
@@ -482,7 +535,8 @@ group_item_assignments = rdb.Table("group_assignments", metadata,
     ),
     rdb.Column("item_id", rdb.Integer,
         rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
-        nullable=False),
+        nullable=False
+    ),
     #rdb.Column("object_type", rdb.String(128), nullable=False),
     rdb.Column("group_id", rdb.Integer,
         rdb.ForeignKey("groups.group_id"),
@@ -500,6 +554,9 @@ group_item_assignments = rdb.Table("group_assignments", metadata,
     rdb.Column("language", rdb.String(5), nullable=False),
 )
 
+group_item_assignments_index = rdb.Index("grpassign_itemid_idx", 
+    group_item_assignments.c["item_id"]
+)
 
 ##############
 # Titles
@@ -527,16 +584,15 @@ member_titles = rdb.Table("member_titles", metadata,
 ############
 # Addresses
 ############
-# Adresses can be attached to a user or to a role title 
-# as the official address for this function
 
+''' !+TYPES_CUSTOM 
 address_types = rdb.Table("address_types", metadata,
     rdb.Column("address_type_id", rdb.Integer, primary_key=True),
     rdb.Column("address_type_name", rdb.Unicode(40)),
     rdb.Column("language", rdb.String(5), nullable=False),
 )
-
 postal_address_types = make_vocabulary_table("postal_address", metadata)
+'''
 
 def _make_address_table(metadata, fk_key="user"):
     assert fk_key in ("user", "group")
@@ -550,13 +606,15 @@ def _make_address_table(metadata, fk_key="user"):
             rdb.ForeignKey(fk_target),
             nullable=False
         ),
-        rdb.Column("address_type_id", rdb.Integer,
-            rdb.ForeignKey("address_types.address_type_id"),
-            nullable=False
+        rdb.Column("logical_address_type",
+            rdb.Unicode(128),
+            default="office",
+            nullable=False,
         ),
-        rdb.Column("postal_address_type_id", rdb.Integer,
-            rdb.ForeignKey("postal_address_types.postal_address_type_id"),
-            nullable=False
+        rdb.Column("postal_address_type",
+            rdb.Unicode(128),
+            default="street",
+            nullable=False,
         ),
         rdb.Column("street", rdb.Unicode(256), nullable=False),
         rdb.Column("city", rdb.Unicode(256), nullable=False),
@@ -589,8 +647,8 @@ parliament_sessions = rdb.Table("sessions", metadata,
         rdb.ForeignKey("parliaments.parliament_id"),
         nullable=False
     ),
-    rdb.Column("short_name", rdb.Unicode(32), nullable=False), #!+ACRONYM
-    rdb.Column("full_name", rdb.Unicode(256), nullable=False), #!+NAME
+    rdb.Column("short_name", rdb.Unicode(512), nullable=False), #!+ACRONYM
+    rdb.Column("full_name", rdb.Unicode(1024), nullable=False), #!+NAME
     rdb.Column("start_date", rdb.Date, nullable=False),
     rdb.Column("end_date", rdb.Date),
     rdb.Column("notes", rdb.UnicodeText),
@@ -603,7 +661,7 @@ group_sittings = rdb.Table("group_sittings", metadata,
         rdb.ForeignKey("groups.group_id"),
         nullable=False
     ),
-    rdb.Column("short_name", rdb.Unicode(32)), #!+ACRONYM
+    rdb.Column("short_name", rdb.Unicode(512)), #!+ACRONYM
     rdb.Column("start_date", rdb.DateTime(timezone=False), nullable=False),
     rdb.Column("end_date", rdb.DateTime(timezone=False), nullable=False),
     rdb.Column("group_sitting_type_id", rdb.Integer,
@@ -622,8 +680,11 @@ group_sittings = rdb.Table("group_sittings", metadata,
     # venues for sittings
     rdb.Column("venue_id", rdb.Integer, rdb.ForeignKey("venues.venue_id")),
     rdb.Column("language", rdb.String(5), nullable=False),
+    #other vocabularies
+    rdb.Column("activity_type", rdb.Unicode(1024)),
+    rdb.Column("meeting_type", rdb.Unicode(1024)),
+    rdb.Column("convocation_type", rdb.Unicode(1024)),
 )
-configurable_schema(domain.GroupSitting)
 
 # Currently not used
 group_sitting_types = rdb.Table("group_sitting_types", metadata,
@@ -660,7 +721,7 @@ attendance_types = rdb.Table("attendance_types", metadata,
 
 venues = rdb.Table("venues", metadata,
     rdb.Column("venue_id", rdb.Integer, primary_key=True),
-    rdb.Column("short_name", rdb.Unicode(128), nullable=False),
+    rdb.Column("short_name", rdb.Unicode(512), nullable=False),
     rdb.Column("description", rdb.UnicodeText),
     rdb.Column("language", rdb.String(5), nullable=False),
 )
@@ -670,7 +731,7 @@ venues = rdb.Table("venues", metadata,
 
 resource_types = rdb.Table("resource_types", metadata,
     rdb.Column("resource_type_id", rdb.Integer, primary_key=True),
-    rdb.Column("short_name", rdb.Unicode(32), nullable=False), #!+ACRONYM
+    rdb.Column("short_name", rdb.Unicode(512), nullable=False), #!+ACRONYM
     rdb.Column("language", rdb.String(5), nullable=False),
 )
 
@@ -680,7 +741,7 @@ resources = rdb.Table("resources", metadata,
         rdb.ForeignKey("resource_types.resource_type_id"),
         nullable=False
     ),
-    rdb.Column("short_name", rdb.Unicode(128), nullable=False),
+    rdb.Column("short_name", rdb.Unicode(512), nullable=False),
     rdb.Column("description", rdb.UnicodeText),
     rdb.Column("language", rdb.String(5), nullable=False),
 )
@@ -804,14 +865,16 @@ attached_file_types = rdb.Table("attached_file_types", metadata,
 )
 attached_files = rdb.Table("attached_files", metadata,
     rdb.Column("attached_file_id", rdb.Integer, primary_key=True),
+    # the id of the "owning" item !+HEAD_DOCUMENT_ITEM
     rdb.Column("item_id", rdb.Integer,
-        rdb.ForeignKey("parliamentary_items.parliamentary_item_id")
+        rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
+        nullable=False
     ),
     rdb.Column("attached_file_type_id", rdb.Integer,
         rdb.ForeignKey("attached_file_types.attached_file_type_id"),
         nullable=False
     ),
-    rdb.Column("file_version_id", rdb.Integer),
+    rdb.Column("file_version_id", rdb.Integer), # !+ATTACHED_FILE_VERSIONS
     rdb.Column("file_title", rdb.Unicode(255), nullable=False),
     rdb.Column("file_description", rdb.UnicodeText),
     rdb.Column("file_data", FSBlob(32)),
@@ -825,7 +888,9 @@ attached_files = rdb.Table("attached_files", metadata,
     ),
     rdb.Column("language", rdb.String(5), nullable=False),
 )
-configurable_schema(domain.AttachedFile)
+attached_files_index = rdb.Index("attfiles_itemid_idx", 
+    attached_files.c["item_id"]
+)
 
 registrySequence = rdb.Sequence("registry_number_sequence", metadata = metadata)
 
@@ -859,7 +924,7 @@ parliamentary_items = rdb.Table("parliamentary_items", metadata,
     # short_name <=> dc:Title !+DescriptiveProperties(mr, jan-2011)
     # The name given to the resource. Typically, a Title will be a name
     # by which the resource is formally known.
-    rdb.Column("short_name", rdb.Unicode(128), nullable=False), 
+    rdb.Column("short_name", rdb.Unicode(512), nullable=False), 
     # full_name <=> no dc equivalent
     rdb.Column("full_name", rdb.Unicode(1024), nullable=True),
     rdb.Column("body_text", rdb.UnicodeText),
@@ -936,6 +1001,11 @@ parliamentary_items = rdb.Table("parliamentary_items", metadata,
     ),
 )
 
+# Index for parliamentary_items status
+parliamentary_items_index = rdb.Index("pi_status_idx", 
+    parliamentary_items.c["status"]
+)
+
 # Agenda Items:
 # generic items to be put on the agenda for a certain group
 # they can be scheduled for a sitting
@@ -949,7 +1019,6 @@ agenda_items = rdb.Table("agenda_items", metadata,
         nullable=False
     ),
 )
-configurable_schema(domain.AgendaItem)
 
 
 QuestionSequence = rdb.Sequence("question_number_sequence", metadata = metadata)
@@ -981,7 +1050,6 @@ questions = rdb.Table("questions", metadata,
     rdb.Column("ministry_id", rdb.Integer, rdb.ForeignKey("groups.group_id")),
     rdb.Column("response_text", rdb.UnicodeText),
 )
-configurable_schema(domain.Question)
 
 MotionSequence = rdb.Sequence("motion_number_sequence", metadata = metadata)
 # Number that indicate the order in which motions have been approved 
@@ -1008,9 +1076,8 @@ motions = rdb.Table("motions", metadata,
         rdb.ForeignKey("political_parties.party_id")
     ),
 )
-configurable_schema(domain.Motion)
 
-
+''' !+TYPES_CUSTOM
 bill_types = rdb.Table("bill_types", metadata,
     rdb.Column("bill_type_id", rdb.Integer, primary_key=True),
     rdb.Column("bill_type_name", rdb.Unicode(256),
@@ -1019,20 +1086,29 @@ bill_types = rdb.Table("bill_types", metadata,
     ),
     rdb.Column("language", rdb.String(5), nullable=False),
 )
+'''
 bills = rdb.Table("bills", metadata,
     rdb.Column("bill_id", rdb.Integer,
         rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
         primary_key=True
     ),
-    rdb.Column("bill_type_id", rdb.Integer,
-        rdb.ForeignKey("bill_types.bill_type_id"),
-        nullable=False
+    rdb.Column("doc_type",
+        # We could use rdb.Enum("government", "member", native_enum=False) but
+        # that would imply schema change whenever the enum list changes. For
+        # validation of this field, we let upstream logic e.g. UI fields using 
+        # zope.schema.Choice combined with a vocabulary, to take responsibilty 
+        # of validating this for *this* document type.
+        rdb.Unicode(128),
+        default="government",
+        nullable=False,
     ),
+    # !+BILL_MINISTRY(fz, oct-2011) the ministry field here logically means the 
+    # bill is presented by the Ministry and so... Ministry should be the author,
+    # not a "field" 
     rdb.Column("ministry_id", rdb.Integer, rdb.ForeignKey("groups.group_id")),
     rdb.Column("identifier", rdb.Integer),
     rdb.Column("publication_date", rdb.Date),
 )
-configurable_schema(domain.Bill)
 
 
 committee_reports = ()
@@ -1041,6 +1117,7 @@ signatories = rdb.Table("signatories", metadata,
     rdb.Column("signatory_id", rdb.Integer,
         primary_key=True
     ),
+    # the id of the "owning" item !+HEAD_DOCUMENT_ITEM
     rdb.Column("item_id", rdb.Integer,
         rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
         nullable=False,
@@ -1052,7 +1129,7 @@ signatories = rdb.Table("signatories", metadata,
     rdb.Column("status", rdb.Unicode(32)),
     rdb.UniqueConstraint("item_id", "user_id")
 )
-configurable_schema(domain.Signatory)
+
 
 # Tabled documents:
 # a tabled document captures metadata about the document (owner, date, title, 
@@ -1085,7 +1162,6 @@ tabled_documents = rdb.Table("tabled_documents", metadata,
     rdb.Column("link", rdb.String(2000)),
     rdb.Column("tabled_document_number", rdb.Integer),
 )
-configurable_schema(domain.TabledDocument)
 
 
 # Events with dates and possibility to upload files.
@@ -1109,7 +1185,7 @@ event_items = rdb.Table("event_items", metadata,
     ),
     rdb.Column("item_id", rdb.Integer,
         rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
-        nullable=True
+        nullable=False
     ),
     rdb.Column("event_date", rdb.DateTime(timezone=False),
         nullable=False
@@ -1130,7 +1206,9 @@ settings = rdb.Table("settings", metadata,
     rdb.Column("value", rdb.String(400)),
     rdb.Column("type", rdb.String(40)),
 )
-
+settings_index = rdb.Index("settings_propsheet_idx", 
+    settings.c["propertysheet"]
+)
 
 holidays = rdb.Table("holidays", metadata,
     rdb.Column("holiday_id", rdb.Integer, primary_key=True),
@@ -1150,7 +1228,6 @@ translations = rdb.Table("translations", metadata,
     rdb.Column("field_name", rdb.String(50), primary_key=True, nullable=False),
     rdb.Column("field_text", rdb.UnicodeText),
 )
-
 translation_lookup_index = rdb.Index("translation_lookup_index",
     translations.c.object_id,
     translations.c.object_type,
