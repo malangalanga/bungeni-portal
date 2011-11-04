@@ -11,25 +11,6 @@ SET escape_string_warning = off;
 SET search_path = public, pg_catalog;
 
 
---
--- Data for Name: question_types; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY question_types (question_type_name, language) FROM stdin;
-Ordinary	en
-Private Notice	en
-\.
-
---
--- Data for Name: response_types; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY response_types (response_type_name, language) FROM stdin;
-Oral	en
-Written	en
-\.
-
-
 
 --
 -- Data for Name: countries; Type: TABLE DATA; Schema: public; Owner: -
