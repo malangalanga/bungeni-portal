@@ -1,6 +1,6 @@
 <workspace id="agendaitem">
     <state id="working_draft">
-        <tab id="draft" roles="bungeni.Clerk"/>
+        <tab id="draft" roles="bungeni.Owner"/>
     </state>
     <state id="draft">
         <tab id="draft" roles="bungeni.Owner"/>
@@ -60,7 +60,8 @@
         <tab id="sent" 
 	     roles="bungeni.Owner
 		    bungeni.Signatory
-		    bungeni.Speaker"/>
+		    bungeni.Speaker
+		    bungeni.Clerk"/>
     </state>
     <state id="scheduled">
         <tab id="sent" roles="bungeni.Clerk bungeni.Owner"/>
