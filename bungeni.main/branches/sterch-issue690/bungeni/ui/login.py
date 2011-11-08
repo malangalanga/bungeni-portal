@@ -22,6 +22,9 @@ from bungeni.ui.widgets import HiddenTextWidget
 
 import datetime
 import hashlib
+from email.mime.text import MIMEText
+from bungeni.models.settings import EmailSettings
+from bungeni.core.app import BungeniApp
 
 SECRET_KEY = "bungeni"
 
@@ -85,14 +88,20 @@ class RestoreLogin(form.FormBase):
     def handle_restore(self, action, data):
         email = data.get("email", "")
         if email:
+            app = BungeniApp()
+            settings = EmailSettings(app)
             session = Session()
             user = session.query(User).filter(
                             User.email==email).first()
             if user:
                 mailer = getUtility(ISMTPMailer, name="bungeni.smtp")
-                self.message = "Your login is '%s'" % user.login
-                message = ViewPageTemplateFile("templates/mail.pt")(self)
-                mailer.send("admin@bungeni.com", email, message)
+                self.message = _(u"Your login is: ") + user.login
+                
+                text = ViewPageTemplateFile("templates/mail.pt")(self)
+                message = MIMEText(text)
+                message["Subject"] = _(u"Bungeni login restoration")
+                message["From"] = settings.default_sender
+                mailer.send(settings.default_sender, email, message)
                 self.status = _(u"Your login was sent to you email.")
             else:
                 self.status = _(u"Wrong email address.")
@@ -125,6 +134,9 @@ class RestorePassword(form.FormBase):
         email = data.get("email", "")
         user = None
         
+        app = BungeniApp()
+        settings = EmailSettings(app)
+        
         session = Session()
         if email:
             user = session.query(User).filter(
@@ -135,7 +147,8 @@ class RestorePassword(form.FormBase):
             email = user.email
     
         if user:
-            link = session.query(PasswordRestoreLink).filter(PasswordRestoreLink.user_id==user.user_id).first()
+            link = session.query(PasswordRestoreLink).filter(
+                PasswordRestoreLink.user_id==user.user_id).first()
             if link:
                 if not link.expired():
                     self.status = _(u"This user's link is still active!")
@@ -143,15 +156,25 @@ class RestorePassword(form.FormBase):
             else:
                 link = PasswordRestoreLink()
             
-            link.hash = hashlib.sha224(user.login + SECRET_KEY + str(datetime.datetime.now())).hexdigest()
+            link.hash = hashlib.sha224(user.login + 
+                                       SECRET_KEY + 
+                                       str(datetime.datetime.now())).hexdigest()
             link.expiration_date = datetime.datetime.now() + datetime.timedelta(1)
             link.user_id = user.user_id
             session.add(link)
                     
             mailer = getUtility(ISMTPMailer, name="bungeni.smtp")
-            self.message = "Restore password link: %s/reset_password?key=%s" % (site_url, link.hash)
-            message = ViewPageTemplateFile("templates/mail.pt")(self)
-            mailer.send("admin@bungeni.com", email, message)
+            
+            
+            self.message = _(u"Restore password link: ")\
+                 + "%s/reset_password?key=%s" % (site_url, link.hash)
+            
+            text = ViewPageTemplateFile("templates/mail.pt")(self)
+            message = MIMEText(text)
+            message["Subject"] = _(u"Bungeni password restoration")
+            message["From"] = settings.default_sender
+            
+            mailer.send(settings.default_sender, email, message)
             self.status = _(u"Email was sent!")
             
             
@@ -202,10 +225,10 @@ class ResetPassword(form.FormBase):
             
 
 class IProfileForm(interface.Interface):
-    login = schema.TextLine(title=_(u"Username"))
     email = schema.TextLine(title=_(u"Email"))
     password = schema.Password(title=_(u"Password"), required=False)
-    confirm_password = schema.Password(title=_(u"Confirm password"), required=False)
+    confirm_password = schema.Password(title=_(u"Confirm password"),
+                                       required=False)
     
     @interface.invariant
     def passwordMatch(self):
@@ -224,36 +247,30 @@ class Profile(form.FormBase):
         super(Profile, self).__init__(*args, **kwargs)
         self.session = Session()
         user_id = get_db_user_id(self.context)
-        self.user = self.session.query(User).filter(User.user_id==user_id).first()
+        self.user = self.session.query(User)\
+                                .filter(User.user_id==user_id).first()
     
     def __call__(self):
         if IUnauthenticatedPrincipal.providedBy(self.request.principal):
             self.request.response.redirect(
-                        ui_utils.url.absoluteURL(getSite(), self.request)+'/login')
+                        ui_utils.url.absoluteURL(
+                        getSite(), self.request)+'/login'
+                        )
         return super(Profile, self).__call__()
     
     def setUpWidgets(self, ignore_request=False):
         super(Profile, self).setUpWidgets(ignore_request=ignore_request)
-        self.widgets["login"].setRenderedValue(self.user.login)
         self.widgets["email"].setRenderedValue(self.user.email)
    
     @form.action(_(u"Save"))
     def save_profile(self, action, data):
-        login = data.get("login","")
         email = data.get("email","")
         password = data.get("password","")
-            
-        if login:
-            users = self.session.query(User).filter(User.login==login)
-            if (users.count() == 1 and users.first().user_id == self.user.user_id) or users.count() == 0:
-                self.user.login = login
-            else:
-                self.status = _("Login already taken!")
-                return
-            
+                        
         if email:
             users = self.session.query(User).filter(User.email==email)
-            if (users.count() == 1 and users.first().user_id == self.user.user_id) or users.count() == 0:
+            if (users.count() == 1 and users.first().user_id == self.user.user_id) or\
+                users.count() == 0:
                 self.user.email = email
             else:
                 self.status = _("Email already taken!")

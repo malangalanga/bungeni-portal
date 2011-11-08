@@ -89,31 +89,27 @@
      class=".login.Logout"
      />
      
-   <browser:page
+   <browser:page name="restore_login"
      for="bungeni.models.interfaces.IBungeniApplication"
      permission="zope.Public"
-     name="restore_login"
      class=".login.RestoreLogin"
      />
      
-   <browser:page
+   <browser:page name="restore_password"
      for="bungeni.models.interfaces.IBungeniApplication"
      permission="zope.Public"
-     name="restore_password"
      class=".login.RestorePassword"
      />
 
-   <browser:page
+   <browser:page name="reset_password"
      for="bungeni.models.interfaces.IBungeniApplication"
      permission="zope.Public"
-     name="reset_password"
      class=".login.ResetPassword"
      />
      
-   <browser:page
+   <browser:page name="profile"
      for="bungeni.models.interfaces.IBungeniApplication"
      permission="zope.Public"
-     name="profile"
      class=".login.Profile"
      />
 
