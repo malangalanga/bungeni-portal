@@ -649,8 +649,6 @@ class CommitteeTypeStatusDescriptiveProperties(DescriptiveProperties):
         context = session.merge(removeSecurityProxy(self.context))
         return self.translate(context, "committee_type_status_name")
 
-'''
-
 class AttendanceTypeDescriptiveProperties(DescriptiveProperties):
     component.adapts(interfaces.IAttendanceType)
     
@@ -659,6 +657,7 @@ class AttendanceTypeDescriptiveProperties(DescriptiveProperties):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
         return self.translate(context, "attendance_type")
+'''
 
 class VenueDescriptiveProperties(DescriptiveProperties):
     component.adapts(interfaces.IVenue)
@@ -669,6 +668,7 @@ class VenueDescriptiveProperties(DescriptiveProperties):
         context = session.merge(removeSecurityProxy(self.context))
         return self.translate(context, "short_name")
 
+''' !+TYPES_CUSTOM
 class QuestionTypeDescriptiveProperties(DescriptiveProperties):
     component.adapts(interfaces.IQuestionType)
     
@@ -695,7 +695,7 @@ class MemberElectionTypeDescriptiveProperties(DescriptiveProperties):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
         return self.translate(context, "member_election_type_name")
-
+'''
 
 class TitleTypeDescriptiveProperties(DescriptiveProperties):
     component.adapts(interfaces.ITitleType)

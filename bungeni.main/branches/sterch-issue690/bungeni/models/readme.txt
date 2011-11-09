@@ -289,15 +289,6 @@ Members of parliament
 Members of parliament are defined by their membership in
 the parliaments group and additional attributes.
 
-Construct member election type
-  >>> met1 = model.MemberElectionType()
-  >>> met1.member_election_type_name = u"Elected"
-  >>> met1.language = u"en"
-  >>> session.add(met1)
-  >>> session.flush()
-  >>> int(met1.member_election_type_id)
-  1
-
   >>> mp4 = model.MemberOfParliament()
   >>> mp4.group_id = parliament.group_id
   >>> mp4.user_id = mp_1.user_id
@@ -306,7 +297,7 @@ Construct member election type
   >>> mp4.constituency = constituency
   >>> mp4.province_id = province.province_id
   >>> mp4.region_id = region.region_id
-  >>> mp4.member_election_type = met1
+  >>> mp4.member_election_type = "elected"
   >>> mp4.language = "en"
   >>> session.add(mp4)
   >>> session.flush()
@@ -345,16 +336,10 @@ Sitting attendance
 
 the attendance of a member at a sitting.
 
- >>> at = model.AttendanceType()
- >>> at.language = "en"
- >>> at.attendance_type = u"present"
- >>> session.add(at)
- >>> session.flush()
- 
  >>> gsa = model.GroupSittingAttendance()
  >>> gsa.group_sitting_id = sit.group_sitting_id
  >>> gsa.member_id = mp_1.user_id
- >>> gsa.attendance_type_id = at.attendance_type_id
+ >>> gsa.attendance_type = "present"
  >>> session.add(gsa)
  >>> session.flush() 
  
@@ -391,7 +376,7 @@ Attendance
  >>> sgsa = model.GroupSittingAttendance()
  >>> sgsa.group_sitting_id = ssit.group_sitting_id
  >>> sgsa.member_id = mp_1.user_id
- >>> sgsa.attendance_type_id = at.attendance_type_id
+ >>> sgsa.attendance_type = "present"
  >>> session.add(sgsa)
  >>> session.flush() 
 
@@ -410,20 +395,12 @@ Questions
 ---------
 
 Note that the questions workflow is tested separated (see workflows/question.txt).
-    Add a question type
-  >>> qtype = model.QuestionType()
-  >>> qtype.question_type_name = u"Ordinary"
-  >>> qtype.language = "en"
-  >>> session.add(qtype)
-  >>> session.flush()
-  >>> int(qtype.question_type_id)
-  1
 
   >>> question = model.Question()
   >>> question.short_name = u"question"
   >>> question.language = 'en'
   >>> question.owner = mp_2
-  >>> question.question_type = qtype
+  >>> question.question_type = "ordinary"
   >>> session.add(question)
   >>> session.flush()
   

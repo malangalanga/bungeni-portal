@@ -3,10 +3,29 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="bungeni">
-
-  <!-- Expose form for use as macro -->
-
-  <include file="files.zcml" />
+    
+    
+    <!-- access control:
+    
+    the basic component registration utilities do not support also specifiying
+    required permissions, but...
+    
+    "We now know that:
+    - Permissions should be handled independently from registration. In most 
+    cases, components that are pure software should be public."
+    
+    See: http://wiki.zope.org/zope3/LocalComponentManagementSimplification
+    -->
+    
+    <class class=".files.LibraryViewlet">
+        <require permission="zope.View" attributes="render" />
+    </class>
+    <class class=".viewlets.AddressesViewlet">
+        <require permission="zope.View" attributes="render" />
+    </class>
+    <class class=".viewlets.RssLinkViewlet">
+        <require permission="zope.View" attributes="render" />
+    </class>
 
   <!-- /++apidoc++/... but does not work:
 
@@ -131,41 +150,6 @@
         layer="bungeni.ui.interfaces.IBungeniSkin"
     />
 
- <!-- Viewlet manager for subforms -->
-
-  <browser:viewletManager
-     name="bungeni.subform.manager"
-     provides=".interfaces.ISubFormViewletManager"
-     class=".viewlets.SubFormViewletManager"
-     permission="zope.View"
-     />
-
-  <!-- Viewlet manager for rss subscription mark -->
-
-  <browser:viewletManager
-     name="bungeni.content.rss"
-   provides=".interfaces.ISubformRssSubscriptionViewletManager"
-   class=".viewlets.SubformRssSubscriptionViewletManager"
-   permission="zope.View"
-   />
-
-
-  <browser:viewlet
-     name="bungeni.viewlet.member-addresses"
-     manager=".interfaces.ISubFormViewletManager"
-     class=".viewlets.AddressesViewlet"
-     for="bungeni.models.interfaces.IMemberOfParliament"
-     permission="zope.View"
-     weight="99"
-     />
-  <browser:viewlet
-     name="bungeni.viewlet.group-addresses"
-     manager=".interfaces.ISubFormViewletManager"
-     class=".viewlets.AddressesViewlet"
-     for="bungeni.models.interfaces.IBungeniGroup"
-     permission="zope.View"
-     weight="99"
-     />
 
 <!-- XXX-INFO-FOR-PLONE - MR - 2010-05-03
   <browser:viewlet
@@ -217,48 +201,6 @@
      />
 -->
 
-  <!-- Rss subscription marks -->
-
-  <browser:viewlet
-     name="bungeni.viewlet.rsslink"
-   manager=".interfaces.ISubformRssSubscriptionViewletManager"
-   class=".viewlets.RssLinkViewlet"
-   for="bungeni.models.interfaces.IBill"
-   permission="zope.View"
-     layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin"
-   />
-    <browser:viewlet
-     name="bungeni.viewlet.rsslink"
-   manager=".interfaces.ISubformRssSubscriptionViewletManager"
-   class=".viewlets.RssLinkViewlet"
-   for="bungeni.models.interfaces.IQuestion"
-   permission="zope.View"
-     layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin"
-   />
-   <browser:viewlet
-     name="bungeni.viewlet.rsslink"
-   manager=".interfaces.ISubformRssSubscriptionViewletManager"
-   class=".viewlets.RssLinkViewlet"
-   for="bungeni.models.interfaces.ITabledDocument"
-   permission="zope.View"
-     layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin"
-   />
-   <browser:viewlet
-     name="bungeni.viewlet.rsslink"
-   manager=".interfaces.ISubformRssSubscriptionViewletManager"
-   class=".viewlets.RssLinkViewlet"
-   for="bungeni.models.interfaces.IAgendaItem"
-   permission="zope.View"
-     layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin"
-   />
-   <browser:viewlet
-     name="bungeni.viewlet.rsslink"
-   manager=".interfaces.ISubformRssSubscriptionViewletManager"
-   class=".viewlets.RssLinkViewlet"
-   for="bungeni.models.interfaces.IMotion"
-   permission="zope.View"
-     layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin"
-   />
   <!-- GroupSitting -->
 
   <browser:viewlet

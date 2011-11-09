@@ -359,6 +359,12 @@ class AppSetup(object):
             marker=model_interfaces.IBungeniAdmin,
             default_name="xapian-settings")
         
+        admin["registry-settings"] = Section(
+            title=_(u"registry settings"),
+            description=_(u"manage registry settings"),
+            marker=model_interfaces.IBungeniAdmin,
+            default_name="registry-settings")
+        
         content[u"parliaments"] = domain.ParliamentContainer()
         to_locatable_container(domain.Parliament, content[u"parliaments"])
         
@@ -383,28 +389,25 @@ class AppSetup(object):
         content[u"parties"] = domain.PoliticalPartyContainer()
         to_locatable_container(domain.PoliticalParty, content[u"parties"])
 
+        ''' !+TYPES_CUSTOM
         vocabularies = admin["vocabularies"] = Section(
             title=_(u"vocabularies"),
             description=_(u"manage vocabularies"),
             marker=model_interfaces.IBungeniAdmin,
             default_name="vocabularies")
-
-        ''' !+TYPES_CUSTOM
+        
         vocabularies[u"address-types"] = domain.AddressTypeContainer()
         to_locatable_container(domain.AddressType, 
             vocabularies[u"address-types"]
         )
-        '''
         vocabularies[u"attendance-types"] = domain.AttendanceTypeContainer()
         to_locatable_container(domain.AttendanceType, 
             vocabularies[u"attendance-types"]
         )
-        ''' !+TYPES_CUSTOM
         vocabularies[u"bill-types"] = domain.BillTypeContainer()
         to_locatable_container(domain.BillType, 
             vocabularies[u"bill-types"]
         )
-        '''
         vocabularies[u"question-types"] = domain.QuestionTypeContainer()
         to_locatable_container(domain.QuestionType, 
             vocabularies[u"question-types"]
@@ -413,7 +416,6 @@ class AppSetup(object):
         to_locatable_container(domain.ResponseType, 
             vocabularies[u"response-types"]
         )
-        ''' !+TYPES_CUSTOM
         vocabularies[u"committee-types"] = domain.CommitteeTypeContainer()
         to_locatable_container(domain.CommitteeType, 
             vocabularies[u"committee-types"]
@@ -423,7 +425,7 @@ class AppSetup(object):
         to_locatable_container(domain.CommitteeTypeStatus, 
             vocabularies[u"committee-types-statuses"]
         )
-        '''
+        
         vocabularies[u"venues"] = domain.VenueContainer()
         to_locatable_container(domain.Venue, vocabularies[u"venues"])
         
@@ -431,7 +433,6 @@ class AppSetup(object):
         to_locatable_container(domain.MemberElectionType, 
             vocabularies[u"m-election-types"]
         )
-        ''' !+TYPES_CUSTOM
         vocabularies[u"p-address-types"] = domain.PostalAddressTypeContainer()
         to_locatable_container(domain.PostalAddressType, 
             vocabularies[u"p-address-types"]
