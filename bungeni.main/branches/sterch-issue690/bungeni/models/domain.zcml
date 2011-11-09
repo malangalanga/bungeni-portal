@@ -745,25 +745,19 @@
                 language
             "
         /><!-- !+ date_of_death: bungeni.user.AdminRecord? -->
-        <require permission="zope.ManageContent"
+        <require permission="bungeni.user.Edit"
             set_attributes="
-                user_id
-                status
-                login
                 titles
                 first_name
                 last_name
                 middle_name
+                password
                 email
                 gender
                 date_of_birth
-                date_of_death
                 birth_country
                 birth_nationality
                 current_nationality
-                uri
-                type_of_id
-                national_id
                 description
                 image
                 receive_notification
