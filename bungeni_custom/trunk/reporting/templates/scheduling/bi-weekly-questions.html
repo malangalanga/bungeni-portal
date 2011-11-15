@@ -12,7 +12,7 @@
         <h1 class="heading" br:type="text" br:source="title"/>
         <div id="listing-body">
             <div br:type="listing" br:source="sittings">
-                <h2 br:type="text" br:source="title"/>
+                <h2 br:type="text" br:source="dc:title"/>
                 <h3>Questions</h3>
                 <div class="questions">
                     <ul br:type="listing" br:source="questions">
@@ -21,6 +21,13 @@
                             <span>
                                 Asked by (<span br:type="text" br:source="dc:mover"/>)
                             </span>
+                        </li>
+                        <li><strong>Attachments:</strong>
+                            <p br:type="listing" br:source="files">
+                                <strong br:type="text" br:source="file_title">
+                                    <span>(File Title)</span>
+                                </strong>
+                            </p>
                         </li>
                     </ul>
                 </div>
