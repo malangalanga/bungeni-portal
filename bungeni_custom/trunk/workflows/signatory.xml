@@ -56,7 +56,13 @@
 
     <state id="withdrawn" title="Signature Withdrawn" like_state="rejected"/>
     
-    
+    <transition title="Create"
+        source=""
+        condition="signatory_manual_sign"
+        destination="awaiting_consent"
+        trigger="automatic"
+    />
+
     <transition title="Create and Sign"
         source=""
         destination="consented"
@@ -64,12 +70,6 @@
         condition="signatory_auto_sign"
     />
 
-    <transition title="Create"
-        source=""
-        destination="awaiting_consent"
-        trigger="automatic"
-    />
-    
     <transition title="consent"
         source="awaiting_consent"
         destination="consented"
@@ -96,12 +96,14 @@
         require_confirmation="true"
         condition="pi_allow_signature_actions"
     />
+    
     <transition title="withdraw signature - automatic"
         source="awaiting_consent"
         destination="withdrawn"
         trigger="automatic"
         condition="pi_signature_period_expired"
     />
+    
     <transition title="unsign document - automatic"
         source="consented rejected withdrawn"
         destination="awaiting_consent"

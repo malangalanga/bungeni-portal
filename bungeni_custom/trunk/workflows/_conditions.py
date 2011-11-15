@@ -63,6 +63,7 @@ from bungeni.core.workflows._conditions import (
     pi_signatories_check,
     pi_allow_signature,
     signatory_auto_sign,
+    signatory_manual_sign,
     pi_signature_period_expired,
     pi_allow_signature_actions,
     pi_unsign_signature,
