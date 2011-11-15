@@ -992,6 +992,15 @@
     />
     
     <browser:menuItem menu="context_actions"
+        for="bungeni.models.domain.User"
+        title="change password"
+        action="./change-password"
+        permission="bungeni.user.Edit"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        order="30"
+    />
+    
+    <browser:menuItem menu="context_actions"
         for="bungeni.models.domain.UserAddress"
         title="Edit"
         action="./edit"

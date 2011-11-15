@@ -26,6 +26,11 @@ from bungeni.models.settings import EmailSettings
 from bungeni.core.app import BungeniApp
 import bungeni.ui.utils as ui_utils
 
+MIN_AGE = 25
+MAX_AGE = 70
+
+from bungeni.ui.constraints import check_email
+
 SECRET_KEY = "bungeni"
 
 class ILoginForm(interface.Interface):
@@ -102,7 +107,7 @@ class RestoreLogin(form.FormBase):
                 message.set_charset("utf-8")
                 message["Subject"] = _(u"Bungeni login restoration")
                 message["From"] = settings.default_sender
-                mailer.send(settings.default_sender, email, message)
+                mailer.send(settings.default_sender, email, str(message))
                 self.status = _(u"Your login was sent to you email.")
             else:
                 self.status = _(u"Wrong email address.")
@@ -176,7 +181,7 @@ class RestorePassword(form.FormBase):
             message["Subject"] = _(u"Bungeni password restoration")
             message["From"] = settings.default_sender
             
-            mailer.send(settings.default_sender, email, message)
+            mailer.send(settings.default_sender, email, str(message))
             self.status = _(u"Email was sent!")
             
             
@@ -232,20 +237,25 @@ countries = vocabulary.DatabaseSource(domain.Country,
             value_field="country_id"
             )
 
+
 class IProfileForm(interface.Interface):
     first_name = schema.TextLine(title=_(u"First name"))
     last_name = schema.TextLine(title=_(u"Last name"))
     middle_name = schema.TextLine(title=_(u"Middle name"), required=False)
-    email = schema.TextLine(title=_(u"Email"))
-    password = schema.Password(title=_(u"Password"), required=False)
-    confirm_password = schema.Password(title=_(u"Confirm password"),
-                                       required=False)
+    email = schema.TextLine(title=_(u"Email"),constraint=check_email)
     description = schema.Text(title=_(u"Biographical notes"), required=False)
     gender = schema.Choice(title=_("Gender"), vocabulary=vocabulary.Gender)
-    date_of_birth = schema.Date(title=_("Date of Birth"))
-    birth_nationality = schema.Choice(title=_("Nationality at Birth"), source=countries)
-    birth_country = schema.Choice(title=_("Country of Birth"), source=countries)
-    current_nationality = schema.Choice(title=_("Current Nationality"), source=countries)
+    date_of_birth = schema.Date(title=_("Date of Birth"), 
+                                min = datetime.datetime.now().date() - \
+                                        datetime.timedelta(MAX_AGE*365),
+                                max = datetime.datetime.now().date() - \
+                                        datetime.timedelta(MIN_AGE*365))
+    birth_nationality = schema.Choice(title=_("Nationality at Birth"), 
+                                      source=countries)
+    birth_country = schema.Choice(title=_("Country of Birth"), 
+                                  source=countries)
+    current_nationality = schema.Choice(title=_("Current Nationality"), 
+                                        source=countries)
     image = schema.Bytes(title=_("Image"))
 
 class Profile(form.FormBase):
@@ -268,7 +278,7 @@ class Profile(form.FormBase):
         user_id = get_db_user_id(self.context)
         self.user = self.session.query(User)\
                                 .filter(User.user_id==user_id).first()
-    
+            
     def __call__(self):
         if IUnauthenticatedPrincipal.providedBy(self.request.principal):
             self.request.response.redirect(
@@ -298,8 +308,6 @@ class Profile(form.FormBase):
     @form.action(_(u"Save"))
     def save_profile(self, action, data):
         email = data.get("email","")
-        password = data.get("password","")
-        confirm_password= data.get("confirm_password","")
         first_name = data.get("first_name","")
         last_name = data.get("last_name","") 
         middle_name = data.get("middle_name","")
@@ -320,12 +328,6 @@ class Profile(form.FormBase):
                 self.status = _("Email already taken!")
                 return
             
-        if password.__class__ is not object:
-            if password != confirm_password:
-                self.status = _("Password confirmation failed")
-                return
-            self.user._password = password
-        
         if first_name:
             self.user.first_name = first_name
             
@@ -357,3 +359,46 @@ class Profile(form.FormBase):
             self.user.current_nationality = current_nationality
                 
         self.status = _("Profile data updated")
+        
+
+class IChangePasswordForm(interface.Interface):
+    pswd = schema.Password(title=_(u"Password"), required=True)
+    confirm_password = schema.Password(title=_(u"Confirm password"),
+                                       required=True)
+
+class ChangePasswordForm(form.FormBase):
+    form_fields = form.Fields(IChangePasswordForm)
+    
+    prefix = ""
+    form_name = _(u"Change password")
+    
+    # !+ only used here [ bungeni.ui.login.Login ] ?
+    template = NamedTemplate("alchemist.form")
+    
+    def __init__(self, *args, **kwargs):
+        super(ChangePasswordForm, self).__init__(*args, **kwargs)
+        self.session = Session()
+        user_id = get_db_user_id(self.context)
+        self.user = self.session.query(User)\
+                                .filter(User.user_id==user_id).first()
+            
+    def __call__(self):
+        if IUnauthenticatedPrincipal.providedBy(self.request.principal):
+            self.request.response.redirect(
+                        ui_utils.url.absoluteURL(
+                        getSite(), self.request)+"/login"
+                        )
+        return super(ChangePasswordForm, self).__call__()
+    
+    @form.action(_(u"Change password"))
+    def save_password(self, action, data):
+        password = data.get("pswd","")
+        confirm_password= data.get("confirm_password","")
+        
+        if password:
+            if password != confirm_password:
+                self.status = _("Password confirmation failed")
+                return
+            self.user._password = password
+        
+        self.status = _("Password changed")

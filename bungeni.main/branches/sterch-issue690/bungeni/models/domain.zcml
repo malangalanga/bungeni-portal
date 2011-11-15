@@ -765,6 +765,31 @@
             "
         /><!-- !+ date_of_death: bungeni.user.AdminRecord? -->
     </class>
+    
+    <class class=".domain.UserAddress">
+        <require permission="zope.View"
+            attributes="
+                logical_address_type
+                postal_address_type
+                street
+                city
+                country
+            "
+        />
+        <require permission="bungeni.address.Edit"
+            set_attributes="
+                logical_address_type
+                postal_address_type
+                street
+                city
+                country
+                zipcode
+                phone
+                fax
+                email
+            "
+        />
+    </class>
   
 </configure>
 
