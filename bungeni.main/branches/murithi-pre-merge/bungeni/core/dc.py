@@ -597,11 +597,7 @@ class HeadingDescriptiveProperties(DescriptiveProperties):
     def title(self):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
-        return self.translate(context, "short_name")
-
-    @property
-    def description(self):
-        return ""
+        return self.translate(context, "text")
 
 ''' !+TYPES_CUSTOM
 class AddressTypeDescriptiveProperties(DescriptiveProperties):

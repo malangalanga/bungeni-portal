@@ -278,7 +278,11 @@ class Group(Entity):
     #   "bungeni.models.domain.GroupSittingContainer", "group_id")
     
     addresses = one2many("addresses",
-        "bungeni.models.domain.GroupAddressContainer", "group_id")
+        "bungeni.models.domain.GroupAddressContainer", "group_id"
+    )
+    headings = one2many("headings", "bungeni.models.domain.HeadingContainer",
+        "group_id"
+    )
     def active_membership(self, user_id):
         session = Session()
         query = session.query(GroupMembership).filter(
@@ -346,14 +350,13 @@ class GroupSittingAttendance(object):
     sort_on = ["last_name", "first_name", "middle_name"]
     sort_replace = {"member_id": ["last_name", "first_name", ]}
 
-''' !+TYPES_CUSTOM
 class AttendanceType(Entity):
     """Lookup for attendance type.
     """
     interface.implements(interfaces.ITranslatable,
         interfaces.IAttendanceType
     )
-'''
+
 
 class GroupItemAssignment(object):
     """The assignment of a parliamentary content object to a group.
@@ -599,7 +602,7 @@ class ParliamentaryItem(Entity):
         # As base meaning of "submission_date" we take the most recent date
         # of workflow transition to "submit" to clerk. Subclasses may need
         # to overload as appropriate for their respective workflows.
-        return self._get_workflow_date("submitted")
+        return self._get_workflow_date("submitted", "gazetted")
 
 ''' !+TYPES_CUSTOM
 class AttachedFileType(object):
@@ -613,19 +616,8 @@ class AttachedFile(Entity):
     """Files attached to a parliamentary item.
     """
     __dynamic_features__ = True # !+ should be False?
-    
-    # the owner of the "owning" item !+HEAD_DOCUMENT_ITEM
-    @property
-    def owner_id(self):
-        return self.item.owner_id
-    
-    @property
-    def owner(self):
-        return self.item.owner
 
-
-# !+ why a parliamentaryItem? Review whole heading idea!
-class Heading(ParliamentaryItem):
+class Heading(Entity):
     """A heading in a report.
     """
     interface.implements(interfaces.ITranslatable)
@@ -672,8 +664,9 @@ class BillType(Entity):
 
 # versionable (by default)
 class Bill(ParliamentaryItem):
-    """Bill Domain Type
-    """
+    @property
+    def submission_date(self):
+        return self._get_workflow_date("working_draft")
 
 # auditable (by default), but not a ParliamentaryItem
 class Signatory(Entity):
@@ -782,8 +775,7 @@ class ItemSchedule(Entity):
         s_discussion = self.discussion
         s_discussion.__parent__ = self
         return s_discussion
-
-
+        
 class ItemScheduleDiscussion(Entity):
     """A discussion on a scheduled item.
     """
@@ -883,8 +875,6 @@ class ObjectTranslation(object):
     """
 
 
-''' !+TYPES_CUSTOM
-
 #####################
 # DB vocabularies
 ######################
@@ -906,6 +896,7 @@ class MemberElectionType(Entity):
         interfaces.IMemberElectionType
     )
 
+''' !+TYPES_CUSTOM
 class AddressType(Entity):
     """Address Types.
     """

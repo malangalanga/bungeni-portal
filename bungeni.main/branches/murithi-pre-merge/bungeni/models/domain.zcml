@@ -264,7 +264,22 @@
     </class>
     
     <class class=".domain.Heading">
-        <require like_class=".domain.ParliamentaryItem" />
+        <require permission="zope.View"
+            attributes="
+                heading_id
+                text
+                language
+                status
+            "
+        />
+        <require permission="bungeni.heading.Edit"
+            set_attributes="
+                heading_id
+                text
+                language
+                status
+            "
+        />
     </class>
     
     

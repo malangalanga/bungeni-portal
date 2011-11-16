@@ -2271,7 +2271,7 @@ class HeadingDescriptor(ParliamentaryItemDescriptor):
     container_name = _("Headings")
     
     fields = [
-        Field(name="short_name", # [user-req]
+        Field(name="text", # [user-req]
             modes="view edit add listing",
             localizable=[
                 show("view edit listing"),
@@ -2280,31 +2280,7 @@ class HeadingDescriptor(ParliamentaryItemDescriptor):
             edit_widget=widgets.TextWidget,
             add_widget=widgets.TextWidget,
         ),
-        Field(name="owner_id", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("edit"),
-                hide("listing"),
-                hide("view", "bungeni.Anonymous"),
-            ],
-            property=schema.Choice(title=_("Owner"),
-                source=vocabulary.DatabaseSource(domain.User,
-                    token_field="user_id",
-                    title_field="fullname",
-                    value_field="user_id")
-            ),
-        ),
         LanguageField("language"), # [user-req]
-        Field(name="body_text", # [rtf]
-            modes="view edit add",
-            localizable=[ 
-                show("view edit"), 
-            ],
-            property=schema.Text(title=_("Text")),
-            view_widget=widgets.HTMLDisplay,
-            edit_widget=widgets.RichTextEditor,
-            add_widget=widgets.RichTextEditor,
-        )
     ]
     public_wfstates = [get_workflow_state("heading", "public").id]
 
