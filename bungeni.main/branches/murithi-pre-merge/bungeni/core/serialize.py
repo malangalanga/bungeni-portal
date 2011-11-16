@@ -6,8 +6,9 @@
 """
 
 from zope.security.proxy import removeSecurityProxy
-from zope.securitypolicy.interfaces import IPrincipalRoleMap
-from sqlalchemy.orm import RelationshipProperty, class_mapper 
+from sqlalchemy.orm import RelationshipProperty, class_mapper
+
+from bungeni.core.workflow.states import get_object_state_rpm, get_head_object_state_rpm
 from bungeni.models.schema import singular
 from bungeni.alchemist.container import stringKey
 from bungeni.models.interfaces import IAuditable, IVersionable, IAttachmentable
@@ -34,6 +35,14 @@ def setupStorageDirectory(part_target="xml_db"):
     
     return store_dir
 
+def get_permissions_dict(permissions):
+    results= []
+    for x in permissions:
+        results.append({"role":x[2], 
+                        "permission":x[1], 
+                        "setting":x[0] and "Allow" or "Deny"})
+    return results
+
 
 def publish_to_xml(context, type="", include=None):
     """ Generates XML for object and saves it to the file. If object contains
@@ -54,12 +63,9 @@ def publish_to_xml(context, type="", include=None):
                     exclude=["file_data", "image", "logo_data","event_item"])
     if type=="":
         type = getattr(context,"type", None)
-
-        data["permissions"]= []
-        map = IPrincipalRoleMap(context)
-        for x in list(map.getPrincipalsAndRoles()):
-            data["permissions"].append({"role":x[0], "user":x[1],
-                                        "permission":x[2].getName()})
+        
+        permissions = get_object_state_rpm(context).permissions
+        data["permissions"]= get_permissions_dict(permissions)
 
     assert type, "%s has no 'type' field. Use 'type' function parameter." % context.__class__
                 
@@ -140,7 +146,11 @@ def obj2dict(obj, depth, parent=None, include=[], exclude=[]):
         if isinstance(value, collections.Iterable):
             res = []
             for item in value.values():
-                res.append(obj2dict(item, 0))
+                i = obj2dict(item, 0)
+                if name == "versions":
+                    permissions = get_head_object_state_rpm(item).permissions
+                    i["permissions"] = get_permissions_dict(permissions)
+                res.append(i)
             result[name] = res
         else:
             result[name] = value

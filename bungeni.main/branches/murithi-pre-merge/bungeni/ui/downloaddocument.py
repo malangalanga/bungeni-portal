@@ -134,6 +134,13 @@ class DownloadDocument(BrowserView):
         Each template has a config parameter with the document type for
         which it may be used.
         """
+        def default_template(templates):
+            default_templates = filter(lambda term: "default" in term.doctypes,
+                templates
+            )
+            if default_templates:
+                return default_templates[0].value
+            return  None
         template_vocabulary = queryUtility(IVocabularyFactory, 
             "bungeni.vocabulary.DocumentXHTMLTemplates"
         )
@@ -144,7 +151,11 @@ class DownloadDocument(BrowserView):
         log.debug("Looking for templates to generate [%s] report. Found : %s",
             self.document.type, doc_templates
         )
-        if len(doc_templates) == 0:
+        if doc_templates:
+            doc_template = doc_templates[0]
+        else:
+            doc_template = default_template(template_vocabulary())
+        if doc_template is None:
             self.error_messages.append(
                 _(u"No template for document of type: ${dtype}. Contact admin.",
                     mapping={ "dtype": self.document.type }
@@ -154,7 +165,7 @@ class DownloadDocument(BrowserView):
                 "No template found to generate this document"
             )
         #!+REPORTS(mrb, OCT-2011) Provide UI to select templates if more than 1
-        generator = generators.ReportGeneratorXHTML(doc_templates[0], 
+        generator = generators.ReportGeneratorXHTML(doc_template, 
             self.document
         )
         #return generator.generateReport()
@@ -168,7 +179,7 @@ class DownloadDocument(BrowserView):
             document_text = self.bodyText()
         else:
             document_text = self.generateDocumentText()
-        params = dict(body_text=cleanupText(document_text))
+        params = dict(body_text = cleanupText(document_text))
         openofficepath = getUtility(IOpenOfficeConfig).getPath()
         ooport = getUtility(IOpenOfficeConfig).getPort()
         renderer = Renderer(self.oo_template_file, params, tempFileName,
@@ -207,26 +218,15 @@ class DownloadDocument(BrowserView):
         # with the odt/pdf doc or track changes to a doc
         # Add caching by state. items in terminal states do not change
         if cached:
-            session = Session()
-            d = [f.file_title for f in self.document.attached_files]
+            d = [ f.file_title for f in self.document.attached_files ]
             if self.document_type not in d:
-                file_type = session.query(domain.AttachedFileType) \
-                               .filter(domain.AttachedFileType \
-                                                .attached_file_type_name 
-                                            == "system") \
-                               .first()
-                if file_type is None:
-                    file_type = domain.AttachedFileType()
-                    file_type.attached_file_type_name = "system"
-                    file_type.language = self.document.language
-                    session.add(file_type)
-                    session.flush()
                 attached_file = domain.AttachedFile()
                 attached_file.file_title = self.document_type
                 attached_file.file_data = self.generateDoc()
                 attached_file.language = self.document.language
-                attached_file.type = file_type
+                attached_file.attached_file_type = "system" # !+ATTACHED_FILE_TYPE_SYSTEM
                 self.document.attached_files.append(attached_file)
+                session = Session()
                 session.add(self.document)
                 session.flush()
                 #!+ REPORTS(miano, apr-2011) Anonymous users may prompt 

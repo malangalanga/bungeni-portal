@@ -346,13 +346,14 @@ class GroupSittingAttendance(object):
     sort_on = ["last_name", "first_name", "middle_name"]
     sort_replace = {"member_id": ["last_name", "first_name", ]}
 
+''' !+TYPES_CUSTOM
 class AttendanceType(Entity):
     """Lookup for attendance type.
     """
     interface.implements(interfaces.ITranslatable,
         interfaces.IAttendanceType
     )
-
+'''
 
 class GroupItemAssignment(object):
     """The assignment of a parliamentary content object to a group.
@@ -598,18 +599,30 @@ class ParliamentaryItem(Entity):
         # As base meaning of "submission_date" we take the most recent date
         # of workflow transition to "submit" to clerk. Subclasses may need
         # to overload as appropriate for their respective workflows.
-        return self._get_workflow_date("submitted", "gazetted")
+        return self._get_workflow_date("submitted")
 
+''' !+TYPES_CUSTOM
 class AttachedFileType(object):
     """Type of attachment: image/annex/... 
     """
     interface.implements(interfaces.ITranslatable)
+'''
 
 # versionable (by default), but not a ParliamentaryItem
 class AttachedFile(Entity):
     """Files attached to a parliamentary item.
     """
     __dynamic_features__ = True # !+ should be False?
+    
+    # the owner of the "owning" item !+HEAD_DOCUMENT_ITEM
+    @property
+    def owner_id(self):
+        return self.item.owner_id
+    
+    @property
+    def owner(self):
+        return self.item.owner
+
 
 # !+ why a parliamentaryItem? Review whole heading idea!
 class Heading(ParliamentaryItem):
@@ -659,9 +672,8 @@ class BillType(Entity):
 
 # versionable (by default)
 class Bill(ParliamentaryItem):
-    @property
-    def submission_date(self):
-        return self._get_workflow_date("working_draft")
+    """Bill Domain Type
+    """
 
 # auditable (by default), but not a ParliamentaryItem
 class Signatory(Entity):
@@ -834,7 +846,7 @@ class HoliDay(object):
     if a date in in the table it is otherwise not
     """
 
-
+''' !+BookedResources
 class Resource (object):
     """A Resource that can be assigned to a sitting.
     """
@@ -845,6 +857,7 @@ class ResourceBooking (object):
 class ResourceType(object):
     """A Type of resource.
     """
+'''
 
 class Venue(Entity):
     """A venue for a sitting.
@@ -870,6 +883,8 @@ class ObjectTranslation(object):
     """
 
 
+''' !+TYPES_CUSTOM
+
 #####################
 # DB vocabularies
 ######################
@@ -891,7 +906,6 @@ class MemberElectionType(Entity):
         interfaces.IMemberElectionType
     )
 
-''' !+TYPES_CUSTOM
 class AddressType(Entity):
     """Address Types.
     """

@@ -20,9 +20,6 @@ from bungeni.utils import register
 $Id$
 """
 
-__all__ = ["handler"]
-
-
 from zope import component
 
 
@@ -60,4 +57,56 @@ def subscription_adapter(adapts=None, provides=None):
         component.provideSubscriptionAdapter(factory, adapts, provides)
         return factory
     return _subscription_adapter
+
+
+# wrapper registrators
+
+
+# viewlet
+
+def viewlet_manager(for_=None, layer=None, view=None, provides=None, name=""):
+    """Register a browser viewlet manager, using provideAdapter().
+    """
+    if provides is None:
+        from zope.viewlet.interfaces import IViewletManager as provides
+    def _viewlet_manager(factory):
+        component.provideAdapter(factory, 
+            adapts=(for_, layer, view),
+            provides=provides,
+            name=name)
+        return factory
+    return _viewlet_manager
+
+def viewlet(for_, layer=None, view=None, manager=None, provides=None, name=""):
+    """Register a browser viewlet, using provideAdapter().
+    """
+    if provides is None:
+        from zope.viewlet.interfaces import IViewlet as provides
+    def _viewlet(factory):
+        component.provideAdapter(factory, 
+            adapts=(for_, layer, view, manager),
+            provides=provides, 
+            name=name)
+        return factory
+    return _viewlet
+
+
+# view
+# note: layer default is zope.publisher.interfaces.browser.IDefaultBrowserLayer
+
+def view(for_, layer=None, provides=None, name=""):
+    """Register a browser view, using provideAdapter().
+    
+    Should be used to replace both browser:view and browser:page (that is 
+    essentially just browser:view with added support for templates).
+    """
+    if provides is None:
+        from zope.publisher.interfaces.browser import IBrowserPublisher as provides
+    def _view(factory):
+        component.provideAdapter(factory, 
+            adapts=(for_, layer),
+            provides=provides, 
+            name=name)
+        return factory
+    return _view
 

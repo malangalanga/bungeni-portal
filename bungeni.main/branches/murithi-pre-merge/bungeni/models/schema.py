@@ -112,6 +112,9 @@ def make_changes_table(table, metadata):
         rdb.Column("description", rdb.UnicodeText),
         rdb.Column("notes", rdb.UnicodeText),
         rdb.Column("user_id", rdb.Integer, rdb.ForeignKey("users.user_id")),
+        # Workflow State at time of change - visibility of a change record 
+        # depends on permissions of parent object in this specific state.
+        rdb.Column("status", rdb.Unicode(48)),
         #!+SA0.7 rdb.Index("%s_changes_cid_idx" % (entity_name), "content_id"),
         useexisting=False
     )
@@ -183,6 +186,14 @@ def make_vocabulary_table(vocabulary_prefix, metadata, table_suffix="_types",
         rdb.Column("language", rdb.String(5), nullable=False),
     )
 
+
+# Progressive number sequences for each parliamentary item type.
+AgendaItemRegistrySequence = rdb.Sequence("agendaitem_registry_sequence", metadata = metadata)
+QuestionRegistrySequence = rdb.Sequence("question_registry_sequence", metadata = metadata)
+MotionRegistrySequence = rdb.Sequence("motion_registry_sequence", metadata = metadata)
+BillRegistrySequence = rdb.Sequence("bill_registry_sequence", metadata = metadata)
+TabledDocumentRegistrySequence = rdb.Sequence("tableddocument_registry_sequence", metadata = metadata)
+ReportRegistrySequence = rdb.Sequence("report_registry_sequence", metadata = metadata)
 
 #######################
 # Users 
@@ -278,7 +289,7 @@ currently_editing_document = rdb.Table("currently_editing_document", metadata,
     rdb.Column("editing_date", rdb.DateTime(timezone=False)) 
 ) 
 
-member_election_types = make_vocabulary_table("member_election", metadata)
+#!+TYPES_CUSTOM member_election_types = make_vocabulary_table("member_election", metadata)
 
 # specific user classes
 parliament_memberships = rdb.Table("parliament_memberships", metadata,
@@ -303,9 +314,10 @@ parliament_memberships = rdb.Table("parliament_memberships", metadata,
         rdb.ForeignKey("political_parties.party_id")
     ),
     # is the MP elected, nominated, ex officio member, ...
-    rdb.Column("member_election_type_id", rdb.Integer,
-        rdb.ForeignKey("member_election_types.member_election_type_id"),
-        nullable=False
+    rdb.Column("member_election_type",
+        rdb.Unicode(128),
+        default="elected",
+        nullable=False,
     ),
     rdb.Column("election_nomination_date", rdb.Date), # nullable=False),
     rdb.Column("leave_reason", rdb.Unicode(40)),
@@ -680,13 +692,13 @@ group_sittings = rdb.Table("group_sittings", metadata,
     # venues for sittings
     rdb.Column("venue_id", rdb.Integer, rdb.ForeignKey("venues.venue_id")),
     rdb.Column("language", rdb.String(5), nullable=False),
-    #other vocabularies
+    # other vocabularies
     rdb.Column("activity_type", rdb.Unicode(1024)),
     rdb.Column("meeting_type", rdb.Unicode(1024)),
     rdb.Column("convocation_type", rdb.Unicode(1024)),
 )
 
-# Currently not used
+
 group_sitting_types = rdb.Table("group_sitting_types", metadata,
     rdb.Column("group_sitting_type_id", rdb.Integer, primary_key=True),
     rdb.Column("group_sitting_type", rdb.Unicode(40)),
@@ -704,18 +716,20 @@ group_sitting_attendance = rdb.Table("group_sitting_attendance", metadata,
         rdb.ForeignKey("users.user_id"),
         primary_key=True
     ),
-    rdb.Column("attendance_type_id", rdb.Integer,
-        rdb.ForeignKey("attendance_types.attendance_type_id"),
-        nullable=False
+    rdb.Column("attendance_type",
+        rdb.Unicode(128),
+        default="present",
+        nullable=False,
     ),
 )
 
+''' !+TYPES_CUSTOM
 attendance_types = rdb.Table("attendance_types", metadata,
     rdb.Column("attendance_type_id", rdb.Integer, primary_key=True),
     rdb.Column("attendance_type", rdb.Unicode(40), nullable=False),
     rdb.Column("language", rdb.String(5), nullable=False),
 )
-
+'''
 
 # venues for sittings:
 
@@ -727,6 +741,7 @@ venues = rdb.Table("venues", metadata,
 )
 
 
+''' !+BookedResources
 # resources for sittings like rooms ...
 
 resource_types = rdb.Table("resource_types", metadata,
@@ -756,6 +771,7 @@ resourcebookings = rdb.Table("resourcebookings", metadata,
         primary_key=True
     ),
 )
+'''
 
 #######################
 # Parliament
@@ -858,11 +874,13 @@ subscriptions = rdb.Table("object_subscriptions", metadata,
     # rdb.Column("delivery_type", rdb.Integer),
 )
 
+''' !+TYPES_CUSTOM 
 attached_file_types = rdb.Table("attached_file_types", metadata,
     rdb.Column("attached_file_type_id", rdb.Integer, primary_key=True),
     rdb.Column("attached_file_type_name", rdb.Unicode(40)),
     rdb.Column("language", rdb.String(5), nullable=False),
 )
+'''
 attached_files = rdb.Table("attached_files", metadata,
     rdb.Column("attached_file_id", rdb.Integer, primary_key=True),
     # the id of the "owning" item !+HEAD_DOCUMENT_ITEM
@@ -870,9 +888,11 @@ attached_files = rdb.Table("attached_files", metadata,
         rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
         nullable=False
     ),
-    rdb.Column("attached_file_type_id", rdb.Integer,
-        rdb.ForeignKey("attached_file_types.attached_file_type_id"),
-        nullable=False
+    # attached_file is NOT a parliamentary_item
+    rdb.Column("attached_file_type",
+        rdb.Unicode(128),
+        default="document",
+        nullable=False,
     ),
     rdb.Column("file_version_id", rdb.Integer), # !+ATTACHED_FILE_VERSIONS
     rdb.Column("file_title", rdb.Unicode(255), nullable=False),
@@ -1022,13 +1042,15 @@ agenda_items = rdb.Table("agenda_items", metadata,
 
 
 QuestionSequence = rdb.Sequence("question_number_sequence", metadata = metadata)
+
 # Approved questions are given a serial number enabling the clerks office
 # to record the order in which questions are received and hence enforce 
 # a first come first served policy in placing the questions on the order
 # paper. The serial number is re-initialized at the start of each session
-question_types = make_vocabulary_table("question", metadata)
-response_types = make_vocabulary_table("response", metadata)
-#
+
+#!+TYPES_CUSTOM question_types = make_vocabulary_table("question", metadata)
+#!+TYPES_CUSTOM response_types = make_vocabulary_table("response", metadata)
+
 questions = rdb.Table("questions", metadata,
     rdb.Column("question_id", rdb.Integer,
         rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
@@ -1036,11 +1058,15 @@ questions = rdb.Table("questions", metadata,
     ),
     rdb.Column("question_number", rdb.Integer),
     rdb.Column("ministry_submit_date", rdb.Date,),
-    rdb.Column("question_type_id", rdb.Integer,
-        rdb.ForeignKey("question_types.question_type_id")
+    rdb.Column("question_type", # !+doc_type
+        rdb.Unicode(128),
+        default="ordinary",
+        nullable=False,
     ),
-    rdb.Column("response_type_id", rdb.Integer,
-        rdb.ForeignKey("response_types.response_type_id")
+    rdb.Column("response_type",
+        rdb.Unicode(128),
+        default="oral",
+        nullable=False,
     ),
     # if supplementary question, this is the original/previous question
     rdb.Column("supplement_parent_id", rdb.Integer,

@@ -341,9 +341,10 @@ def ministry_column(name, title, default=""):
         return obj.short_name
     return column.GetterColumn(title, getter)
 
+''' !+TYPES_CUSTOM
 def enumeration_column(name, title,
-    item_reference_attr=None, # parent item attribute, for enum
-    enum_value_attr=None, # enum attribute, for desired value
+        item_reference_attr=None, # parent item attribute, for enum
+        enum_value_attr=None, # enum attribute, for desired value
     ):
     """Get getter for the enum-value of an enumerated column.
     """
@@ -357,12 +358,35 @@ def enumeration_column(name, title,
         enum_obj = translation.translate_obj(enum_obj)
         return getattr(enum_obj, enum_value_attr)
     return column.GetterColumn(title, getter)
+'''
 
+def vocabulary_column(name, title, vocabulary):
+    def getter(context, formatter):
+        return _(vocabulary.getTerm(getattr(context, name)).title)
+    return column.GetterColumn(title, getter)
+''' !+TYPES_CUSTOM_TRANSLATION(mr, nov-2011) issues with how translation for 
+the titles of such enum values should be handled:
+
+- such enum string values probably be considered part of UI (po) as opposed 
+to part of the data (translatable object records in the db)?
+
+- there is some "overlap" in, as in some cases, parent object is translatable 
+while in others it is not. Probably should auto-detect such enum columns, and 
+have them **always & only** auto-translated via UI.
+[Possible implementation may make use of view_widget/edit_widget on Field to
+autohandle how the str-values of these columns will be translated.]
+
+- small issue with pre-existing msgid's e.g. "Office", translations for which 
+are not picked up with _("Office") or equivalent... why?
+'''
+
+''' !+TYPES_CUSTOM
 def dc_getter(name, title, item_attribute, default=_(u"None")):
     def getter(item, formatter):
         obj = getattr(item, item_attribute)
         return IDCDescriptiveProperties(obj).title
     return column.GetterColumn(title, getter)
+'''
 
 def get_field(fields, name):
     return misc.get_keyed_item(fields, name, key="name")
@@ -527,6 +551,13 @@ def AdmissibleDateField(name="admissible_date"):
 # !+ID_NAME_LABEL_TITLE(mr, oct-2010) use of "id", "name", "label", "title",
 # should be conistent -- the (localized) {display, container}_name attributes
 # here should really all be {display, container}_label.
+
+# !+CHOICE_FIELDS(mr, nov-2011) for fields with a zope.schema._field.Choice
+# property that uses some kind of vocabulary as source, then there should be 
+# a sensible "default rendering" for view, edit, add and listing modes, that
+# will display the field value appropriately (including proper translation, 
+# of the value itself or of any label that may be associated with it).
+
 
 class UserDescriptor(ModelDescriptor):
     localizable = True
@@ -821,6 +852,8 @@ class GroupMembershipDescriptor(ModelDescriptor):
         validations.validate_group_membership_dates
     ]
 
+
+''' !+TYPES_CUSTOM
 class MemberElectionTypeDescriptor(ModelDescriptor):
     localizable = False
     display_name = _("Member election type")
@@ -833,7 +866,7 @@ class MemberElectionTypeDescriptor(ModelDescriptor):
         ),
         LanguageField("language"), # [user-req]
     ]
-
+'''
 
 class MpDescriptor(GroupMembershipDescriptor):
     localizable = True
@@ -859,17 +892,18 @@ class MpDescriptor(GroupMembershipDescriptor):
                 yui_maxResultsDisplayed=5),
             add_widget=widgets.AutoCompleteWidget()
         ),
-        Field(name="member_election_type_id", # [user-req]
+        Field(name="member_election_type", # [user-req]
             modes="view edit add listing",
             localizable=[
                 show("view edit listing"),
             ],
-            property=schema.Choice(title=_("elected/nominated"),
-                source=vocabulary.MemberElectionType
+            property=schema.Choice(title=_("Election Type"),
+                source=vocabulary.member_election_type
             ),
-            listing_column = dc_getter("member_election_type_id", 
-                _("Election Type"), "member_election_type"
-            )
+            listing_column=vocabulary_column("member_election_type",
+                "Election Type",
+                vocabulary.member_election_type
+            ),
         ),
         Field(name="election_nomination_date", # [user-req]
             modes="view edit add listing",
@@ -1283,6 +1317,10 @@ class CommitteeDescriptor(GroupDescriptor):
             property=schema.Choice(title=_("Committee Type"),
                 source=vocabulary.committee_type,
             ),
+            listing_column=vocabulary_column("group_type",
+                "Committee Type",
+                vocabulary.committee_type
+            ),
         ),
         Field(name="group_continuity", # [user-req]
             modes="view edit add listing",
@@ -1291,6 +1329,10 @@ class CommitteeDescriptor(GroupDescriptor):
             ],
             property=schema.Choice(title=_("Committee Status Type"),
                 source=vocabulary.committee_continuity,
+            ),
+            listing_column=vocabulary_column("group_continuity",
+                "Committee Status Type",
+                vocabulary.committee_continuity
             ),
         ),
         Field(name="num_members", # [user]
@@ -1439,11 +1481,16 @@ class AddressDescriptor(ModelDescriptor):
     fields = [
         Field(name="logical_address_type", # [user-req]
             modes="view edit add listing",
-            localizable=[ 
+            localizable=[
                 show("view edit listing"), 
             ],
+            # !+i18n(mr, nov-2011) shouldn't title be translated later?
             property=schema.Choice(title=_("Address Type"),
                 source=vocabulary.logical_address_type,
+            ),
+            listing_column=vocabulary_column("logical_address_type", 
+                "Address Type",
+                vocabulary.logical_address_type
             ),
         ),
         Field(name="postal_address_type", # [user-req]
@@ -1996,17 +2043,17 @@ class AttachedFileDescriptor(ModelDescriptor):
             add_widget=widgets.FileAddWidget,
             view_widget=widgets.FileDisplayWidget,
         ),
-        Field(name="attached_file_type_id", # [user-req]
+        Field(name="attached_file_type", # [user-req]
             modes="view edit add listing",
             localizable=[
                 show("view edit listing"),
             ],
-            property=schema.Choice(title=_("File type"),
-                source=vocabulary.DatabaseSource(domain.AttachedFileType,
-                    token_field="attached_file_type_id",
-                    title_field="attached_file_type_name",
-                    value_field="attached_file_type_id"
-                ),
+            property=schema.Choice(title=_("File Type"),
+                source=vocabulary.attached_file_type,
+            ),
+            listing_column=vocabulary_column("attached_file_type",
+                "File Type",
+                vocabulary.attached_file_type,
             ),
         ),
         Field(name="file_name", label="", # [user-req]
@@ -2417,6 +2464,10 @@ class BillDescriptor(ParliamentaryItemDescriptor):
             property=schema.Choice(title=_("Bill Type"),
                 source=vocabulary.bill_type,
             ),
+            listing_column=vocabulary_column("doc_type",
+                "Bill Type",
+                vocabulary.bill_type
+            ),
         ),
         Field(name="ministry_id", # [user]
             modes="view edit add listing",
@@ -2468,7 +2519,7 @@ class BillDescriptor(ParliamentaryItemDescriptor):
         "identifier",
         "publication_date",
         "registry_number",
-        ]
+    ]
 
     public_wfstates = get_states("bill", not_tagged=["private"])
 
@@ -2478,7 +2529,7 @@ class BillVersionDescriptor(VersionDescriptor):
     container_name = _("Versions")
     fields = deepcopy(VersionDescriptor.fields)
 
-
+''' !+TYPES_CUSTOM
 class QuestionTypeDescriptor(ModelDescriptor):
     localizable = False
     display_name = _("Question type")
@@ -2504,6 +2555,7 @@ class ResponseTypeDescriptor(ModelDescriptor):
         ),
         LanguageField("language"),
     ]
+'''
 
 class QuestionDescriptor(ParliamentaryItemDescriptor):
     localizable = True
@@ -2547,20 +2599,21 @@ class QuestionDescriptor(ParliamentaryItemDescriptor):
             edit_widget=widgets.DateWidget,
             add_widget=widgets.DateWidget,
         ),
-        Field(name="question_type_id", # [user-req]
+        Field(name="question_type", # [user-req]
             modes="view edit add listing",
             localizable=[ 
                 show("view edit listing"),
             ],
             property=schema.Choice(title=_("Question Type"),
                 description=_("Choose the type of question"),
-                source=vocabulary.QuestionType
+                source=vocabulary.question_type,
             ),
-            listing_column = dc_getter("question_type_id", _("Question Type"), 
-                "question_type"
-            )
+            listing_column=vocabulary_column("question_type",
+                "Question Type",
+                vocabulary.question_type
+            ),
         ),
-        Field(name="response_type_id", # [user-req]
+        Field(name="response_type", # [user-req]
             modes="view edit add listing",
             localizable=[ 
                 show("view edit"),
@@ -2569,11 +2622,12 @@ class QuestionDescriptor(ParliamentaryItemDescriptor):
             property=schema.Choice(title=_("Response Type"),
                 description=_(
                     "Choose the type of response expected for this question"),
-                source=vocabulary.ResponseType
+                source=vocabulary.response_type
             ),
-            listing_column = dc_getter("response_type_id", _("Response Type"), 
-                "response_type"
-            )
+            listing_column=vocabulary_column("response_type",
+                "Response Type",
+                vocabulary.response_type
+            ),
         ),
         Field(name="response_text", # [user-req]
             modes="edit",
@@ -2616,8 +2670,8 @@ class QuestionDescriptor(ParliamentaryItemDescriptor):
         "owner_id",
         "status",
         "status_date",
-        "question_type_id",
-        "response_type_id",
+        "question_type",
+        "response_type",
         "language",
         "body_text",
         "submission_date",
@@ -2653,7 +2707,7 @@ class EventItemDescriptor(ParliamentaryItemDescriptor):
             edit_widget=widgets.TextWidget,
             add_widget=widgets.TextWidget,
         ),
-        #!+SCHEMA(murithi, 06-2011) should event items should inherit owner?
+        #!+SCHEMA(murithi, 06-2011) should event items inherit owner?
         Field(name="owner_id", # [user-req]
             modes="view edit add listing",
             localizable=[ 
@@ -2989,27 +3043,23 @@ class AttendanceDescriptor(ModelDescriptor):
             ),
             listing_column=user_name_column("member_id", _("Name"), "user")
         ),
-        Field(name="attendance_type_id", # [user-req]
+        Field(name="attendance_type", # [user-req]
             modes="view edit add listing",
             localizable=[
                 show("view edit listing"),
             ],
             property=schema.Choice(title=_("Attendance"),
-                source=vocabulary.DatabaseSource(
-                    domain.AttendanceType,
-                    token_field="attendance_type_id",
-                    title_field="attendance_type",
-                    value_field="attendance_type_id"
-                )
+                source=vocabulary.attendance_type,
             ),
-            listing_column=enumeration_column("attendance_type_id",
-                _("Attendance"),
-                item_reference_attr="attendance_type"
+            listing_column=vocabulary_column("attendance_type",
+                "Attendance",
+                vocabulary.attendance_type
             ),
         ),
     ]
 
 
+''' !+TYPES_CUSTOM
 class AttendanceTypeDescriptor(ModelDescriptor):
     localizable = False
     display_name = _("Attendance types")
@@ -3024,7 +3074,7 @@ class AttendanceTypeDescriptor(ModelDescriptor):
         ),
        LanguageField("language"),
     ]
-
+'''
 
 class SignatoryDescriptor(ModelDescriptor):
     localizable = True

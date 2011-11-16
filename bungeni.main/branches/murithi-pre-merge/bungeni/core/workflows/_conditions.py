@@ -89,11 +89,11 @@ def has_venue(context):
 
 def is_written_response(context):
     return (context.ministry_id is not None and 
-        context.response_type.response_type_name == u"Written"
+        context.response_type == "written"
     )
 
 def is_oral_response(context):
-    return context.response_type.response_type_name == u"Oral"
+    return context.response_type == "oral"
 
 def response_allow_submit(context):
     # The "submit_response" workflow transition should NOT be displayed when 
@@ -140,6 +140,9 @@ def signatory_auto_sign(context):
     if user_is_not_context_owner(context.item):
         return True
     return False
+
+def signatory_manual_sign(context):
+    return not signatory_auto_sign(context)
 
 def user_is_not_parent_document_owner(context):
     return not user_is_parent_document_owner(context)

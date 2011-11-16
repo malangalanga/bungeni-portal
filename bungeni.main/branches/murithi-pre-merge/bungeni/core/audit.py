@@ -8,6 +8,10 @@ $Id$
 """
 log = __import__("logging").getLogger("bungeni.core.audit")
 
+
+__all__ = ["get_auditor", "set_auditor"]
+
+
 from datetime import datetime
 from types import StringTypes
 
@@ -22,82 +26,114 @@ from sqlalchemy import orm
 from bungeni.alchemist import Session
 from bungeni.alchemist.interfaces import IRelationChange
 
-from bungeni.core.workflow.interfaces import IWorkflow, IWorkflowTransitionEvent
-from bungeni.core.interfaces import IVersionCreated, IVersionReverted
-
-from bungeni.models import schema, domain
 from bungeni.models.utils import get_db_user_id
 from bungeni.models.interfaces import IAuditable
+from bungeni.models import schema
+from bungeni.models import domain
+from bungeni.core.workflow.interfaces import IWorkflow, IWorkflowTransitionEvent
+from bungeni.core.interfaces import IVersionCreated, IVersionReverted
 from bungeni.ui.utils import common
 from bungeni.utils import register
 
-from i18n import _ 
+from bungeni.core.i18n import _
 
 
-# public handlers
+def _trace_audit_handler(ah):
+    def _ah(ob, event):
+        log.debug("CALLING audit.%s(%s, %s)" % (ah.__name__, ob, event))
+        ah(ob, event)
+    return _ah
+
+
+# change handlers
 
 @register.handler(adapts=(IAuditable, IObjectCreatedEvent))
-def objectAdded(ob, event):
+@_trace_audit_handler
+def _object_added(ob, event):
     auditor = get_auditor(ob)
-    auditor.objectAdded(removeSecurityProxy(ob), event)
-
+    auditor.object_added(removeSecurityProxy(ob), event)
 
 @register.handler(adapts=(IAuditable, IObjectModifiedEvent))
-def objectModified(ob, event):
+@_trace_audit_handler
+def _object_modified(ob, event):
+    # !+CHECK_CHANGE_ID(mr, nov-2011) why was this check here in the first 
+    # place? The change db record is ALWAYS yet to be created at this point?!?
+    #try:
+    #    assert getattr(event, "change_id", None) is not None, \
+    #        "ObjectModified -> no change_id!"
+    #except AssertionError, e:
+    #    # !+CHANGE_ID(mr, nov-2011) change_id is sometimes not yet defined
+    #    log.warn(" *** %s: IGNORING EVENT %s FOR %s" % (e, event, ob))
+    #    return
     auditor = get_auditor(ob)
-    if getattr(event, "change_id", None):
-        return
-    auditor.objectModified(removeSecurityProxy(ob), event)
-
+    auditor.object_modified(removeSecurityProxy(ob), event)
 
 @register.handler(adapts=(IAuditable, IObjectRemovedEvent))
-def objectDeleted(ob, event):
+@_trace_audit_handler
+def _object_removed(ob, event):
     auditor = get_auditor(ob)
-    auditor.objectDeleted(removeSecurityProxy(ob), event)
-
+    auditor.object_removed(removeSecurityProxy(ob), event)
 
 @register.handler(adapts=(IAuditable, IWorkflowTransitionEvent))
-def objectStateChange(ob, event):
+@_trace_audit_handler
+def _object_transitioned(ob, event):
     auditor = get_auditor(ob)
-    change_id = auditor.objectStateChanged(removeSecurityProxy(ob), event)
+    change_id = auditor.object_transitioned(removeSecurityProxy(ob), event)
     event.change_id = change_id
 
-
+# !+CHANGELOG_DATA_DUPLICATION(mr, nov-2011)
 @register.handler(adapts=(IAuditable, IVersionCreated))
-def objectNewVersion(ob, event):
+@_trace_audit_handler
+def _object_versioned(ob, event):
     """When an auditable object is versioned, we audit creation of new version.
     """
     auditor = get_auditor(ob)
-    # !+NewVersion_CHANGE_ID(mr, jun-2011) when does an IVersionCreated 
-    # event for an IAuditable object ever have a "change_id" attribute ?
-    #if not getattr(event, "change_id", None):
-    change_id = auditor.objectNewVersion(removeSecurityProxy(ob), event)
-    #else:
-    #    change_id = event.change_id
+    change_id = auditor.object_versioned(removeSecurityProxy(ob), event)
     event.version.change_id = change_id
 
-
+# !+CHANGELOG_DATA_DUPLICATION(mr, nov-2011) possibly...
 @register.handler(adapts=(IAuditable, IVersionReverted))
-def objectRevertedVersion(ob, event):
-    # slightly obnoxious hand off between event handlers (objectnewV, objectrevertedV),
-    # stuffing onto the event for value passing
+@_trace_audit_handler
+def _object_version_reverted(ob, event):
     auditor = get_auditor(ob)
-    change_id = auditor.objectRevertedVersion(removeSecurityProxy(ob), event)
+    change_id = auditor.object_version_reverted(removeSecurityProxy(ob), event)
     event.change_id = change_id
 
 
-def objectAttachment(ob, event):
-    auditor = get_auditor(ob) 
-    auditor.objectAttachment(removeSecurityProxy(ob), event)
+# utilities 
 
-def objectContained(ob, event):
-    auditor = get_auditor(ob) 
-    auditor.objectContained(removeSecurityProxy(ob), event)
+# !+CHANGELOG_DATA_DUPLICATION(mr, nov-2011) attachment/signatory added/modified 
+# are already logged on the items themselves--changelogging these also on the 
+# parent object is essentially data duplication. 
+#
+# Clients of change information e.g. the timeline, should simply "aggregate" 
+# changes e.g. changes on head doc + changes on atttached + etc.
+
+@_trace_audit_handler
+def object_attachment(ob, event):
+    """Utility to log--on the parent object--changes on one of its attachments.
+    event.action: "added", "modified"
+    """
+    auditable_parent = _get_auditable_ancestor(ob)
+    # !+attachment_added(mr, nov-2011) auditable_parent is always None on "added"?
+    if auditable_parent:
+        event.description = "File attachment %s %s %s" % (
+            ob.file_title, ob.file_name, event.action)
+        get_auditor(auditable_parent).object_attachment(auditable_parent, event)
+
+@_trace_audit_handler
+def object_signatory(ob, event):
+    """Utility to log--on the parent object--changes on one of its signatories.
+    event.action: "added", "modified"
+    """
+    auditable_parent = ob.item
+    auditor = get_auditor(auditable_parent) 
+    auditor.object_signatory(auditable_parent, event)
 
 
-# internal auditing utilities
+# internal utilities
 
-def getAuditableParent(obj):
+def _get_auditable_ancestor(obj):
     parent = obj.__parent__
     while parent:
         if  IAuditable.providedBy(parent):
@@ -105,32 +141,37 @@ def getAuditableParent(obj):
         else:
             parent = getattr(parent, "__parent__", None)
 
-class AuditorFactory(object):
+class _AuditorFactory(object):
     
-    def __init__(self, change_table, change_object):
+    def __init__(self, change_table, change_class):
         self.change_table = change_table
-        self.change_object = change_object
+        self.change_class = change_class
     
-    def objectContained(self, object, event):
-        self._objectChanged(event.cls, object, event.description)
+    # handlers, return the change_id
     
-    def objectAttachment(self, object, event):
-        self._objectChanged("attachment", object, event.description)
+    # Called directly from signatory added/modified handlers
+    def object_signatory(self, ob, event):
+        return self._object_changed(event.action, ob, event.description)
     
-    def objectAdded(self, object, event):
-        return self._objectChanged("added", object)
+    # Called directly from attachment added/modified handlers
+    def object_attachment(self, ob, event):
+        # !+ this makes no distinction between added/modified changes anyway?!
+        return self._object_changed("attachment", ob, event.description)
     
-    def objectModified(self, object, event):
+    def object_added(self, ob, event):
+        return self._object_changed("added", ob)
+    
+    def object_modified(self, ob, event):
         attrset = []
         for attr in event.descriptions:
             if lifecycleevent.IAttributes.providedBy(attr):
                 attrset.extend(
-                    [ attr.interface[a].title for a in attr.attributes]
-                   )
+                    [ attr.interface[a].title for a in attr.attributes ]
+                )
             elif IRelationChange.providedBy(attr):
                 if attr.description:
                     attrset.append(attr.description)
-        attrset.append(getattr(object, "note", u""))
+        attrset.append(getattr(ob, "note", ""))
         str_attrset = []
         for a in attrset:
             if type(a) in StringTypes:
@@ -141,17 +182,17 @@ class AuditorFactory(object):
             extras = {"comment": change_data["note"]}
         else:
             extras = None
-        return self._objectChanged("modified", object, 
+        return self._object_changed("modified", ob, 
                         description=description,
                         extras=extras,
                         date_active=change_data["date_active"])
     
-    def objectStateChanged(self, object, event):
+    def object_transitioned(self, ob, event):
         """
-        object: origin domain workflowed object 
+        ob: origin domain workflowed object 
         event: bungeni.core.workflow.states.WorkflowTransitionEvent
             .object # origin domain workflowed object 
-            .source # souirce state
+            .source # source state
             .destination # destination state
             .transition # transition
             .comment #
@@ -159,13 +200,13 @@ class AuditorFactory(object):
         change_data = self._get_change_data()
         # if note, attach it on object (if object supports such an attribute)
         if change_data["note"]:
-            if hasattr(object, "note"):
-                object.note = change_data["note"]
+            if hasattr(ob, "note"):
+                ob.note = change_data["note"]
         # update object's workflow status date (if supported by object)
-        if hasattr(object, "status_date"):
-            object.status_date = change_data["date_active"] or datetime.now()
+        if hasattr(ob, "status_date"):
+            ob.status_date = change_data["date_active"] or datetime.now()
         # as a "base" description, use human readable workflow state title
-        wf = IWorkflow(object) # !+ adapters.get_workflow(object)
+        wf = IWorkflow(ob) # !+ adapters.get_workflow(ob)
         description = wf.get_state(event.destination).title
         # extras, that may be used e.g. to elaborate description at runtime
         extras = {
@@ -174,20 +215,20 @@ class AuditorFactory(object):
             "transition": event.transition.id,
             "comment": change_data["note"]
         }
-        return self._objectChanged("workflow", object, 
+        return self._object_changed("workflow", ob, 
                         description=description,
                         extras=extras,
                         date_active=change_data["date_active"])
         # description field is a "building block" for a UI description;
         # extras/notes field becomes interpolation data
     
-    def objectDeleted(self, object, event):
-        #return self._objectChanged("deleted", object)
+    def object_removed(self, ob, event):
+        #return self._object_changed("deleted", ob)
         return
 
-    def objectNewVersion(self, object, event):
+    def object_versioned(self, ob, event):
         """
-        object: origin domain workflowed object 
+        ob: origin domain workflowed object 
         event: bungeni.core.interfaces.VersionCreated
             .object # origin domain workflowed object 
             .message # title of the version object
@@ -207,19 +248,19 @@ class AuditorFactory(object):
         extras = {
             "version_id": event.version.version_id # !+version_id
         }
-        return self._objectChanged("new-version", object, description, extras)
-        #vkls = getattr(domain, "%sVersion" % (object.__class__.__name__))
+        return self._object_changed("new-version", ob, description, extras)
+        #vkls = getattr(domain, "%sVersion" % (ob.__class__.__name__))
         #versions = session.query(vkls
         #            ).filter(vkls.content_id==event.version.content_id
         #            ).order_by(vkls.status_date).all()
 
-    def objectRevertedVersion(self, object, event):
-        return self._objectChanged("reverted-version", object,
+    def object_version_reverted(self, ob, event):
+        return self._object_changed("reverted-version", ob,
             description=event.message)
     
     #
     
-    def _objectChanged(self, change_kind, object, 
+    def _object_changed(self, change_kind, ob, 
             description="", extras=None, date_active=None):
         """
         description: 
@@ -238,14 +279,14 @@ class AuditorFactory(object):
             with the "key/value" entries depending on the change "action"; 
 
             Specific examples, for actions: 
-                workflow: self.objectStateChanged()
+                workflow: self.object_transitioned()
                     source
                     destination
                     transition
                     comment
-                new-version: self.objectNewVersion()
+                new-version: self.object_versioned()
                     version_id
-                modified: self.objectModified()
+                modified: self.object_modified()
                     comment
             
             For now, this dict is serialized (using repr(), values are assumed 
@@ -262,11 +303,11 @@ class AuditorFactory(object):
             for data auditing. When not user-modified, the value should be equal 
             to date_audit. 
         """
-        oid, otype = self._getKey(object)
+        oid, otype = self._getKey(ob)
         user_id = get_db_user_id()
         assert user_id is not None, _("Audit error. No user logged in.")
         session = Session()
-        change = self.change_object()
+        change = self.change_class()
         change.action = change_kind
         change.date_audit = datetime.now()
         if date_active:
@@ -277,11 +318,15 @@ class AuditorFactory(object):
         change.description = description
         change.extras = extras
         change.content_type = otype
-        change.origin = object
+        change.head = ob # attach change to parent object
+        change.status = ob.status # remember parent's status at time of change
         session.add(change)
         session.flush()
+        log.debug("AUDITED CHANGE [%s] %s" % (change_kind, change.__dict__))
         return change.change_id
-        
+    
+    #
+    
     def _getKey(self, ob):
         mapper = orm.object_mapper(ob)
         primary_key = mapper.primary_key_from_instance(ob)[0]
@@ -319,7 +364,7 @@ def set_auditor(kls):
     log.debug("Setting AUDITOR %s [for type %s]" % (auditor_name, name))
     change_kls = getattr(domain, "%sChange" % (name))
     change_tbl = getattr(schema, "%s_changes" % (schema.un_camel(name)))
-    globals()[auditor_name] = AuditorFactory(change_tbl, change_kls)
+    globals()[auditor_name] = _AuditorFactory(change_tbl, change_kls)
 
 for kls in domain.CUSTOM_DECORATED["auditable"]:
     set_auditor(kls)

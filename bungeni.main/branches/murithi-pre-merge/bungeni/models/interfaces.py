@@ -102,8 +102,11 @@ class ICommitteeStaff(IBungeniGroupMembership):
 class IOfficeMember(IBungeniGroupMembership):
     pass
 
-
-class IBungeniContent(interface.Interface):
+class IOwned(interface.Interface):
+    """Object supports having an "owner" i.e. owner/owner_id attributes.
+    """
+    
+class IBungeniContent(IOwned):
     """Parliamentary content
     """
     # !+ schema attributes ?
@@ -309,6 +312,39 @@ class IBungeniSettings(interface.Interface):
         default=0
     )
 
+class IBungeniRegistrySettings(interface.Interface):
+
+    global_number = schema.Bool(
+        title=_(u"Reset global registry number"),
+        default=False
+    )
+    questions_number = schema.Bool(
+        title=_(u"Reset questions registry number"),
+        default=False
+    )
+    motions_number = schema.Bool(
+        title=_(u"Reset motions registry number"),
+        default=False
+    )
+    agendaitems_number = schema.Bool(
+        title=_(u"Reset agenda items registry number"),
+        default=False
+    )
+    bills_number = schema.Bool(
+        title=_(u"Reset bills registry number"),
+        default=False
+    )
+    reports_number = schema.Bool(
+        title=_(u"Reset reports registry number"),
+        default=False
+    )
+    tableddocuments_number = schema.Bool(
+        title=_(u"Reset tabled documents registry number"),
+        default=False
+    )
+    
+    
+
 class IBungeniUserSettings(interface.Interface):
 
     # examples
@@ -378,7 +414,7 @@ class IAssignmentFactory(interface.Interface):
         """Create a new assignment.
         """
 
-class IAttachedFile(interface.Interface): pass
+class IAttachedFile(IOwned): pass
 class IAttachedFileVersion(IVersion): pass
 class IAttachedFileVersionContainer(IVersionContainer): pass
 
@@ -538,15 +574,21 @@ class IPostalAddressType(IBungeniVocabulary):
 class IBillType(IBungeniVocabulary):
     """Marker interface for bill types vocabulary"""
 
+class IQuestionType(IBungeniVocabulary):
+    """Marker interface for question types"""
+class IResponseType(IBungeniVocabulary):
+    """Marker interface for response types"""
+
 class ICommitteeType(IBungeniVocabulary):
     """Marker interface for committee types vocabulary"""
 
 class ICommitteeTypeStatus(IBungeniVocabulary):
     """Marker interface for committe type statuses"""
-'''
-
 class IAttendanceType(IBungeniVocabulary):
     """Marker interface for attendance types vocabulary"""
+class IMemberElectionType(IBungeniVocabulary):
+    """Marker interface for member election types"""
+'''
 
 class IVenue(IBungeniVocabulary):
     """Marker interface for venues vocabulary"""
@@ -572,14 +614,6 @@ class ISubRoleDirective(interface.Interface):
         description=u"Role ID for role which this subrole extends",
         required=True)
 
-class IQuestionType(IBungeniVocabulary):
-    """Marker interface for question types"""
-
-class IResponseType(IBungeniVocabulary):
-    """Marker interface for response types"""
-
-class IMemberElectionType(IBungeniVocabulary):
-    """Marker interface for member election types"""
 class ISubRoleAnnotations(interface.Interface):
     sub_roles = interface.Attribute('Sub_Roles')
     is_sub_role = interface.Attribute('Sub_Roles')
@@ -589,3 +623,4 @@ class ICountry(interface.Interface):
 
 class IWorkspaceContainer(interface.Interface):
     pass
+

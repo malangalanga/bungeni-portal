@@ -15,8 +15,13 @@ import bungeni.core.interfaces
 #import bungeni.core.globalsettings as prefs
 from bungeni.ui.utils import debug
 
-
+import re
 import dbutils
+
+from bungeni.utils.capi import capi, bungeni_custom_errors
+
+from ConfigParser import ConfigParser, NoOptionError
+import os
 
 SIGNATORIES_REJECT_STATES = [u"rejected", u"withdrawn"]
 
@@ -49,10 +54,10 @@ def formatted_user_email(user):
 
 def get_owner_login_pi(context):
     """Get the login of the user who has been previously set as the owner of 
-    this ParliamentaryItem.
+    this item (must support IOwned i.e. ParliamentaryItem or AttachedFile).
     """
-    assert interfaces.IBungeniContent.providedBy(context), \
-        "Not a Parliamentary Item: %s" % (context)
+    assert interfaces.IOwned.providedBy(context), \
+        "Not an Owned (parliamentary) Item: %s" % (context)
     return dbutils.get_user(context.owner_id).login
 
 def assign_owner_role(context, login):
@@ -82,12 +87,50 @@ def create_version(context):
     versions.create(message)
 
 
+@bungeni_custom_errors
+def get_mask(context):
+    # !+IBungeniParliamentaryContent(mr, nov-2011) only context typed
+    # interfaces.IBungeniParliamentaryContent should ever get here!
+    # For some reason signatory instances are also being passed in here.
+    # Remove try/except wrapper here, once that is fixed (leaving the assert).
+    try:
+        m = "PI context [%s] for get_mask must specify a type attr" % (context)
+        assert hasattr(context, "type"), m
+    except AssertionError:
+        log.error(m)
+        return None
+    path = capi.get_path_for("registry")
+    config = ConfigParser()
+    config.readfp(open(os.path.join(path, "config.ini")))
+    try:
+        return config.get("types", context.type)
+    except NoOptionError:
+        return None
+
+
 def set_pi_registry_number(context):
     """A parliamentary_item's registry_number should be set on the item being 
     submitted to parliament.
     """
+    mask = get_mask(context)
+    if mask == "manual" or mask is None:
+        return
+    
+    items = re.findall(r"\{(\w+)\}", mask)
+    
+    for name in items:
+        if name == "registry_number":
+            mask = mask.replace("{%s}" % name, str(dbutils.get_next_reg()))
+            continue
+        if name == "progressive_number":
+            mask = mask.replace("{%s}" % name, 
+                                         str(dbutils.get_next_prog(context)))
+            continue
+        value = getattr(context, name)
+        mask = mask.replace("{%s}" % name, value)
+    
     if context.registry_number == None:
-        dbutils.set_pi_registry_number(context)
+        dbutils.set_pi_registry_number(context, mask)
 
 is_pi_scheduled = dbutils.is_pi_scheduled
 
@@ -263,3 +306,4 @@ def pi_unset_signatory_roles(context, all=False):
                     assign_signatory_role(context, owner_login, unset=True)
             else:
                 log.debug("Unable to get workflow controller for : %s", signatory)
+

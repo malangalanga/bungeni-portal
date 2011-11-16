@@ -2,6 +2,7 @@ from lxml import etree
 
 from ore import yuiwidget
 
+import zope
 from zope import schema, component
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
@@ -16,6 +17,11 @@ from bungeni.core.index import IndexReset
 from bungeni.core.index import IndexReset
 from bungeni.ui import container, search, browser
 from bungeni.ui.calendar import utils as calendar_utils
+from bungeni.ui.interfaces import IBungeniSkin
+from bungeni.utils import register
+
+from bungeni.ui.utils.queries import execute_sql
+
 
 ''' !+UNUSED(mr, oct-2010)
 class Menu(viewlet.ViewletBase):
@@ -42,6 +48,8 @@ class UserListing(BrowserView):
     pass
 
 
+#permission="zope.ManageSite"
+@register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="groups")
 class GroupListing(container.AjaxContainerListing):
     
     class GroupFormatter(yuiwidget.ContainerDataTableFormatter):
@@ -54,6 +62,8 @@ class GroupListing(container.AjaxContainerListing):
     formatter_factory = GroupFormatter
 
 
+#permission="zope.ManageSite"
+@register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="query-users")
 class UserQueryJSON(search.ConstraintQueryJSON):
     
     def getConstraintQuery(self):
@@ -70,16 +80,14 @@ class UserQueryJSON(search.ConstraintQueryJSON):
             ))
         return r
         
-
+''' !+UNUSED(mr, nov-2011)
 class GroupQueryJSON(search.ConstraintQueryJSON):
     def getConstraintQuery(self):
         return self.searcher.query_field("object_kind", domain.Group.__name__)
+'''
 
 
-class Index(BrowserView):
-    pass
-
-
+@register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="settings")
 class Settings(catalyst.EditForm):
 
     form_fields = form.Fields(interfaces.IBungeniSettings)
@@ -108,6 +116,8 @@ class Settings(catalyst.EditForm):
 ##             widget.setRenderedValue(self.get(item))
 ##         return widget()
 
+
+@register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="email-settings")
 class EmailSettings(catalyst.EditForm):
     
     form_fields = form.Fields(interfaces.IBungeniEmailSettings)
@@ -118,12 +128,15 @@ class EmailSettings(catalyst.EditForm):
         self.adapters = {interfaces.IBungeniEmailSettings : settings}
         super(EmailSettings, self).update()
 
+
 class UserGroups(BrowserView):
     
     def table(self):
         pass
 
 
+#permission="zope.Public"
+@register.view(None, IBungeniSkin, name="user-settings")
 class UserSettings(catalyst.EditForm):
 
     form_fields = form.Fields(interfaces.IBungeniUserSettings, interfaces.IUser)
@@ -145,16 +158,6 @@ class UserSettings(catalyst.EditForm):
                           interfaces.IUser : user}
         super(UserSettings, self).update()
 
-
-class VocabulariesIndex(browser.BungeniBrowserView):
-    
-    render = ViewPageTemplateFile("templates/vocabularies.pt")
-    
-    def __init__(self,  context, request):
-        return super(VocabulariesIndex, self).__init__(context, request)
-    
-    def __call__(self):
-        return self.render()
 
 SIMPLE_LIST = "<ul/>"
 X_TITLE = "font-weight:bold; padding:5px; color:#fff; display:block; background-color:#%s;"
@@ -214,7 +217,10 @@ def generate_doc_for(domain_class, title=None, color=0):
             elx.text = key
     return doc
 
-class ReportDocumentation(VocabulariesIndex):
+
+#permission="zope.ManageSite"
+@register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="report-documentation")
+class ReportDocumentation(browser.BungeniBrowserView):
     
     render = ViewPageTemplateFile("templates/report-documentation.pt")
     
@@ -232,6 +238,11 @@ class ReportDocumentation(VocabulariesIndex):
     def documentation(self):
         return self.generateDocumentation()
 
+    def __call__(self):
+        return self.render()
+
+
+@register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="xapian-settings")
 class XapianSettings(browser.BungeniBrowserView):
     
     render = ViewPageTemplateFile("templates/xapian-settings.pt")
@@ -240,6 +251,36 @@ class XapianSettings(browser.BungeniBrowserView):
         return super(XapianSettings, self).__init__(context, request)
     
     def __call__(self):
-        if self.request.method == 'POST':
+        if self.request.method == "POST":
             IndexReset().start()
         return self.render()
+    
+
+@register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="registry-settings")
+class RegistrySettings(catalyst.EditForm):
+    
+    form_fields = form.Fields(interfaces.IBungeniRegistrySettings)
+    
+    def update(self):
+        if self.request.method == "POST":
+            if self.request.get("form.questions_number") == "on":
+                execute_sql("SELECT setval('question_registry_sequence', 1);")
+            if self.request.get("form.motions_number") == "on":
+                execute_sql("SELECT setval('motion_registry_sequence', 1);")
+            if self.request.get("form.agendaitems_number") == "on":
+                execute_sql("SELECT setval('agendaitem_registry_sequence', 1);")
+            if self.request.get("form.bills_number") == "on":
+                execute_sql("SELECT setval('bill_registry_sequence', 1);")
+            if self.request.get("form.reports_number") == "on":
+                execute_sql("SELECT setval('report_registry_sequence', 1);")
+            if self.request.get("form.tableddocuments_number") == "on":
+                execute_sql("SELECT setval('tableddocument_registry_sequence', 1);")
+            if self.request.get("form.global_number") == "on":
+                execute_sql("SELECT setval('registry_number_sequence', 1);")
+
+        settings = \
+            component.getUtility(interfaces.IBungeniRegistrySettings)()
+        self.adapters = {interfaces.IBungeniRegistrySettings : settings}
+        super(RegistrySettings, self).update()
+
+

@@ -117,15 +117,6 @@ MonthlyRecurrenceVocabularyFactory = MonthlyRecurrenceVocabulary()
 
 # you have to add title_field to the vocabulary as only this gets 
 # translated, the token_field will NOT get translated
-# !+VOCABULARIES (murithi, may-2011) This is now a db persisted vocabulary
-#QuestionType = vocabulary.SimpleVocabulary([
-#    vocabulary.SimpleTerm('O', _(u"Ordinary"), _(u"Ordinary")), 
-#    vocabulary.SimpleTerm('P', _(u"Private Notice"), _(u"Private Notice"))
-#])
-#ResponseType = vocabulary.SimpleVocabulary([
-#    vocabulary.SimpleTerm('O', _("Oral"), _("Oral")), 
-#    vocabulary.SimpleTerm('W', _(u"Written"), _(u"Written"))
-#])
 Gender = vocabulary.SimpleVocabulary([
     vocabulary.SimpleTerm('M', _(u"Male"), _(u"Male")), 
     vocabulary.SimpleTerm('F', _(u"Female"), _(u"Female"))
@@ -191,7 +182,34 @@ postal_address_type = vocabulary.SimpleVocabulary([
     vocabulary.SimpleTerm("military", title="Military"),
     vocabulary.SimpleTerm("unknown", title="Undefined/Unknown"),
 ])
-
+attached_file_type = vocabulary.SimpleVocabulary([
+    vocabulary.SimpleTerm("image", title="Image"),
+    vocabulary.SimpleTerm("annex", title="Annex"),
+    vocabulary.SimpleTerm("document", title="Document"),
+    vocabulary.SimpleTerm("bill", title="Bill"),
+    # !+ATTACHED_FILE_TYPE_SYSTEM(mr, oct-2011) ui/downloaddocument and 
+    # ui/forms/files.py expects this, but should NOT be presented as an 
+    # option in the UI?
+    #vocabulary.SimpleTerm("system", title="System"),
+])
+attendance_type = vocabulary.SimpleVocabulary([
+    vocabulary.SimpleTerm("present", title="Present"),
+    vocabulary.SimpleTerm("absence_justified", title="Absence justified"),
+    vocabulary.SimpleTerm("absent", title="Absent"),
+])
+member_election_type = vocabulary.SimpleVocabulary([
+    vocabulary.SimpleTerm("elected", title="Elected"),
+    vocabulary.SimpleTerm("nominated", title="Nominated"),
+    vocabulary.SimpleTerm("ex_officio", title="Ex officio"),
+])
+question_type = vocabulary.SimpleVocabulary([
+    vocabulary.SimpleTerm("ordinary", title="Ordinary"),
+    vocabulary.SimpleTerm("private_notice", title="Private notice"),
+])
+response_type = vocabulary.SimpleVocabulary([
+    vocabulary.SimpleTerm("oral", title="Oral"),
+    vocabulary.SimpleTerm("written", title="Written"),
+])
 
 
 class OfficeRoles(object):
@@ -365,41 +383,6 @@ class TitleTypes(SpecializedSource):
                 ))
         return vocabulary.SimpleVocabulary(terms)
 
-class AttachedFileTypeSource(SpecializedSource):
-    """Returns a vocabulary of attached file types"""
-    def __init__(self): 
-        pass
-        
-    def constructQuery(self, context):
-        session= Session()
-        return session.query(domain.AttachedFileType)
-        
-    def __call__(self, context=None):
-        query = self.constructQuery(context)
-        results = query.all()
-        trusted=removeSecurityProxy(context)
-        type_id = getattr(trusted, "attached_file_type_id", None)
-        terms = []
-        if type_id:
-            session = Session()
-            attached_file_type = session.query(domain.AttachedFileType).get(type_id)
-            terms.append( 
-                        vocabulary.SimpleTerm( 
-                            value = getattr(attached_file_type, "attached_file_type_id"), 
-                            token = getattr(attached_file_type, "attached_file_type_id"),
-                            title = getattr(attached_file_type, "attached_file_type_name"))
-                         )       
-            return vocabulary.SimpleVocabulary( terms )
-        else:
-            for ob in results:
-                if ob.attached_file_type_name not in ["system"]:
-                    terms.append( 
-                        vocabulary.SimpleTerm( 
-                            value = getattr(ob, "attached_file_type_id"), 
-                            token = getattr(ob, "attached_file_type_id"),
-                            title = getattr(ob, "attached_file_type_name"),
-                        ))        
-            return vocabulary.SimpleVocabulary( terms )
 
         
 #XXX
@@ -409,11 +392,6 @@ class AttachedFileTypeSource(SpecializedSource):
 #    token_field="group_sitting_type_id",
 #    value_field="group_sitting_type_id")
 
-MemberElectionType = DatabaseSource(domain.MemberElectionType, 
-    token_field="member_election_type_id",
-    value_field="member_election_type_id", 
-    title_field="member_election_type_name"
-)
 
 class MemberOfParliament(object):
     """ Member of Parliament = user join group membership join parliament"""
@@ -925,16 +903,6 @@ class PIAssignmentSource(SpecializedSource):
                     )
                 )
         return query
-
-QuestionType = DatabaseSource(domain.QuestionType, token_field="question_type_id",
-    value_field="question_type_id", title_field="question_type_name"
-)
-
-ResponseType = DatabaseSource(domain.ResponseType, 
-    token_field="response_type_id",
-    value_field="response_type_id", 
-    title_field="response_type_name"
-)
 
 
 class CommitteeSource(SpecializedSource):
