@@ -174,6 +174,8 @@ class RestorePassword(form.FormBase):
             
             self.message = _(u"Restore password link: ")\
                  + "%s/reset_password?key=%s" % (site_url, link.hash)
+            self.message += u"\n\n"
+            self.message += _(u"This link will expire in 24 hours.")
             
             text = ViewPageTemplateFile("templates/mail.pt")(self)
             message = MIMEText(text)
