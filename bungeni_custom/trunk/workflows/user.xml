@@ -7,11 +7,19 @@
     <state id="A" title="Active User">
         <grant permission="bungeni.delegation.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.delegation.Add" role="bungeni.Owner" />
+        <grant permission="bungeni.user.Edit" role="bungeni.Authenticated" />
+        <grant permission="bungeni.address.Add" role="bungeni.Authenticated" />
+        <grant permission="bungeni.address.Edit" role="bungeni.Authenticated" />
+        <grant permission="bungeni.address.Delete" role="bungeni.Authenticated" />
     </state>
 
     <state id="I" like_state="A" title="Inactive User">
         <deny permission="bungeni.delegation.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.delegation.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.user.Edit" role="bungeni.Authenticated" />
+        <deny permission="bungeni.address.Add" role="bungeni.Authenticated" />
+        <deny permission="bungeni.address.Edit" role="bungeni.Authenticated" />
+        <deny permission="bungeni.address.Delete" role="bungeni.Authenticated" />
     </state>
     
     <state id="D" like_state="I" title="Deceased User" />
