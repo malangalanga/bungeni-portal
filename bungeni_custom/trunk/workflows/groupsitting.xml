@@ -77,7 +77,9 @@
         <grant permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Speaker" />
     </state>
     
-    <state id="published_agenda" title="Published Agenda" like_state="draft_agenda">
+    <state id="published_agenda" title="Published Agenda" 
+        publish="true" 
+        like_state="draft_agenda">
         <!-- sitting -->
         <grant permission="bungeni.sitting.View" role="bungeni.Authenticated" />
         <grant permission="bungeni.sitting.View" role="bungeni.Anonymous" />

@@ -115,6 +115,7 @@
 
     <state id="gazetted" title="Bill Published in Gazette"
         version="true"
+        publish="true"
         like_state="received">
         <!-- bill -->
         <grant permission="zope.View" role="bungeni.Speaker" />
@@ -203,7 +204,9 @@
     <state id="third_reading_adjourned" like_state="first_committee"
         title="Third Reading Adjourned" />
     
-    <state id="approved" title="Approved Bill" like_state="first_committee">
+    <state id="approved" title="Approved Bill" 
+        publish="true"
+        like_state="first_committee">
         <!-- bill -->
         <deny permission="bungeni.bill.Edit" role="bungeni.Clerk" />
         <!-- attachedfile -->

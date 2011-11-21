@@ -67,8 +67,10 @@ RNC definition for <state> XML element:
         attribute id { text },
         attribute title { text },
         attribute version { boolean="false" }?,
+        attribute publish { boolean="false" }?,
         attribute like_state {  }?,
         attribute note { text }?,
+        attribute permissions_from_parent { boolean="false" }?
         attribute obsolete { boolean="false" }?,
         
         (element grant {...} | element deny {...} )*,
@@ -97,6 +99,7 @@ workflow as a single XML document.
     id 
     title
     version=False
+    publish=False
     like_state
     note
     permissions_from_parent=False
