@@ -11,6 +11,7 @@ $Id$
 log = __import__("logging").getLogger("bungeni.models.domain")
 
 import md5, random, string
+import datetime
 
 from zope import interface, location
 from bungeni.alchemist import Session
@@ -28,6 +29,12 @@ def object_hierarchy_type(object):
     if isinstance(object, ParliamentaryItem):
         return "item"
     return ""
+
+def get_changes(auditable, *actions):
+    """Get changelog for auditable context, filtered for action.
+    """
+    # !+ assert *actions in CHANGE_ACTIONS
+    return [ c for c in auditable.changes if c.action in actions ]
 
 #
 
@@ -143,7 +150,7 @@ def auditable(kls):
     globals()[change_name] = change_kls
     return kls
 configurable_domain.feature_decorators["audit"] = auditable
-
+    
 def versionable(kls):
     """Decorator for versionable domain types, to collect in one place all
     that is needed for a domain type to be versionable.
@@ -251,6 +258,13 @@ class UserDelegation(Entity):
 class CurrentlyEditingDocument(object):
     """The document (parliamentary item) 
     that the user is currently being editing"""
+    
+class PasswordRestoreLink(object):
+    """Object containing hash and expiration date for
+    password restoration form"""
+    
+    def expired(self):
+        return self.expiration_date < datetime.datetime.now() 
 
 #class HansardReporter(User):
 #    """ a reporter who reports on parliamentary procedings
@@ -587,12 +601,9 @@ class ParliamentaryItem(Entity):
         # merge into Session to avoid sqlalchemy.orm.exc.DetachedInstanceError 
         # when lazy loading;
         # order of self.changes is chronological--we want latest first
-        for c in reversed(Session().merge(self).changes):
-            if c.action != "workflow":
-                continue
-            extras = c.extras
-            if extras:
-                if extras.get("destination") in states:
+        for c in reversed(get_changes(Session().merge(self), "workflow")):
+            if c.extras:
+                if c.extras.get("destination") in states:
                     return c.date_active
     
     @property

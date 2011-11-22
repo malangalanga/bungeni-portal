@@ -184,6 +184,7 @@ class BaseForm(formlib.form.FormBase):
     def update(self):
         self.status = self.request.get("portal_status_message", self.status)
         self.form_fields = self.filter_fields()
+        # !+SUPERFLUOUS_ObejctModifiedEvent(mr, nov-2011)
         super(BaseForm, self).update()
         set_widget_errors(self.widgets, self.errors)
 
@@ -848,4 +849,12 @@ class DeleteForm(PageForm):
                        "/?portal_status_message=%d items deleted" % count
 
         self.request.response.redirect(next_url)
+        
+    @formlib.form.action(_(u"Cancel"), validator=ui.null_validator)
+    def delete_cancel(self, action, data):
+        """Cancelling redirects to the listing."""
+        session = Session()
+        if not self._next_url:
+            self._next_url = url.absoluteURL(self.context, self.request)
+        self.request.response.redirect(self._next_url)
 

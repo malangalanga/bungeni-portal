@@ -19,14 +19,20 @@ from zope.security.proxy import removeSecurityProxy
 from zope.app.schema.vocabulary import IVocabularyFactory
 from zope.app.form.browser.textwidgets import TextAreaWidget
 from zc.table import column
+from zope.dublincore.interfaces import IDCDescriptiveProperties
+from zope.i18n import translate
 
-from bungeni.core.workflow import interfaces
-
+from bungeni.alchemist import Session
 from bungeni.alchemist.interfaces import IAlchemistContainer
 from bungeni.alchemist.interfaces import IAlchemistContent
 from bungeni.core import audit
 from bungeni.core import globalsettings
-from bungeni.core.workflow.interfaces import IWorkflowed
+from bungeni.core.workflow import interfaces
+from bungeni.core.workflows.utils import get_mask
+from bungeni.core.audit import CHANGE_ACTIONS
+from bungeni.models.interfaces import IAuditable, IWorkspaceContainer, \
+    IBungeniParliamentaryContent
+from bungeni.models.domain import ParliamentaryItem, get_changes
 from bungeni.ui.forms.workflow import bindTransitions
 from bungeni.ui.forms.common import BaseForm
 from bungeni.ui.widgets import TextDateTimeWidget
@@ -37,17 +43,12 @@ from bungeni.ui.utils import date
 from bungeni.ui import browser
 from bungeni.ui import z3evoque
 from bungeni.ui.utils.url import absoluteURL
-from zope.dublincore.interfaces import IDCDescriptiveProperties
-from bungeni.models.interfaces import IAuditable
 #from zope.app.pagetemplate import ViewPageTemplateFile
-from bungeni.models.interfaces import IWorkspaceContainer
 from bungeni.ui.i18n import _
-from zope.i18n import translate
 from bungeni.ui.absoluteurl import WorkspaceAbsoluteURLView
 
-from bungeni.core.workflows.utils import get_mask
-from ore.alchemist import Session
-from bungeni.models.domain import ParliamentaryItem
+from bungeni.utils import register
+
 
 class WorkflowVocabulary(object):
     zope.interface.implements(IVocabularyFactory)
@@ -128,10 +129,8 @@ class WorkflowHistoryViewlet(viewlet.ViewletBase):
         return auditor.change_class
     
     def get_feed_entries(self):
-        instance = removeSecurityProxy(self.context)
-        return [ change for change in instance.changes 
-                if change.action == "workflow" ]
-        
+        return get_changes(removeSecurityProxy(self.context), "workflow")
+
 
 class WorkflowActionViewlet(browser.BungeniBrowserView, 
         BaseForm, viewlet.ViewletBase
@@ -169,7 +168,7 @@ class WorkflowActionViewlet(browser.BungeniBrowserView,
         def is_workflowed_and_draft(instance):
             """is item workflowed, and is so is it in a logical draft state?
             """
-            if IWorkflowed.providedBy(instance):
+            if interfaces.IWorkflowed.providedBy(instance):
                 tagged_key = instance.__class__.__name__.lower()
                 draft_states = get_states(tagged_key, tagged=["draft"])
                 return instance.status in draft_states
@@ -185,8 +184,7 @@ class WorkflowActionViewlet(browser.BungeniBrowserView,
             # date_active of its last change as the min_date_active, but
             # let that min fallback to parliament's creation date...
             if not is_workflowed_and_draft(instance):
-                changes = [ change for change in instance.changes 
-                    if change.action == "workflow" ]
+                changes = get_changes(instance, "workflow")
                 if changes:
      	            # then use the "date_active" of the most recent entry
                     min_date_active = changes[-1].date_active
@@ -215,7 +213,6 @@ class WorkflowActionViewlet(browser.BungeniBrowserView,
             elif data.get("date_active") > datetime.datetime.now():
                 errors.append(zope.interface.Invalid(
                         _("Active Date is in the future.")))
-                
         if "registry_number" in data.keys():
             reg_number = data.get("registry_number")
             if reg_number:
@@ -223,9 +220,7 @@ class WorkflowActionViewlet(browser.BungeniBrowserView,
                 num = session.query(ParliamentaryItem).filter(ParliamentaryItem.registry_number==reg_number).count()
                 if num != 0:
                     errors.append(zope.interface.Invalid(
-                        _("This regisrty number is already taken.")))
-                
-            
+                        "This registry number is already taken."))
         return errors
     
     def setUpWidgets(self, ignore_request=False):
@@ -255,14 +250,21 @@ class WorkflowActionViewlet(browser.BungeniBrowserView,
                 context=self.request)
         self.setupActions(transition_id)
         
-        if get_mask(self.context) == 'manual' and not self.context.registry_number:
+        if (IBungeniParliamentaryContent.providedBy(self.context) and
+                get_mask(self.context) == "manual" and 
+                not self.context.registry_number
+            ):
             self.form_fields = self.form_fields.omit("note", "date_active")
         else:
             self.form_fields = self.form_fields.omit("registry_number")
+        
         if not self.actions: 
             self.form_fields = self.form_fields.omit("note", "date_active")
         elif not IAuditable.providedBy(self.context):
             self.form_fields = self.form_fields.omit("note", "date_active")
+        # !+SUPERFLUOUS_ObejctModifiedEvent(mr, nov-2011) the following update()
+        # is causing a ModifiedEvent to be fired, causing a modify change to be 
+        # logged (while this workflow change should be just that).
         super(WorkflowActionViewlet, self).update()
     
     @property
@@ -286,7 +288,9 @@ class WorkflowActionViewlet(browser.BungeniBrowserView,
         else:
             transition_ids = (transition_id,)
         self.actions = bindTransitions(self, transition_ids, wfc.workflow)
-        
+
+
+@register.view(interfaces.IWorkflowed, name="workflow")
 class WorkflowView(browser.BungeniBrowserView):
     """This view is linked to by the "workflow" context action and dislays the 
     workflow history and the action viewlet with all possible transitions
@@ -316,6 +320,7 @@ class WorkflowView(browser.BungeniBrowserView):
         return template
 
 
+@register.view(interfaces.IWorkflowed, name="change_workflow_state")
 class WorkflowChangeStateView(WorkflowView):
     """This gets called on selection of a transition from the menu i.e. NOT:
     a) when clicking on one of the transition buttons in the workflow form.
@@ -343,10 +348,13 @@ class WorkflowChangeStateView(WorkflowView):
                 ).require_confirmation
         else:
             self.update()
-            
-        if get_mask(self.context) == 'manual' and not self.context.registry_number:
+        
+        if (IBungeniParliamentaryContent.providedBy(self.context) and
+                get_mask(self.context) == "manual" and 
+                not self.context.registry_number
+            ):
             require_confirmation = True
-            
+        
         if (not require_confirmation and method == "POST"):
             actions = bindTransitions(
                 self.action_viewlet, (transition_id,), workflow)

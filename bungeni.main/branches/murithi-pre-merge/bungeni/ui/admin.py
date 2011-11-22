@@ -19,6 +19,9 @@ from bungeni.ui import container, search, browser
 from bungeni.ui.calendar import utils as calendar_utils
 from bungeni.ui.interfaces import IBungeniSkin
 from bungeni.utils import register
+import zope
+from bungeni.ui.i18n import _
+from bungeni.ui.utils.queries import execute_sql
 
 from bungeni.ui.utils.queries import execute_sql
 

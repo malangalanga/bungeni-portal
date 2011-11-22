@@ -26,6 +26,7 @@ from bungeni.ui.forms.common import PageForm
 from bungeni.ui.forms.common import AddForm
 from bungeni.ui.forms.common import EditForm
 from bungeni.ui.forms.common import DeleteForm
+from bungeni.ui.forms.common import DisplayForm
 from zope.app.form.browser.textwidgets import PasswordWidget
 
 from interfaces import Modified
