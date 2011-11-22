@@ -34,17 +34,17 @@
         <append theme="//head"
                 content="//head"
                 nocontent="ignore" />        
-        <replace href="/bungeni/business/whats-on"
+        <replace href="/bungeni"
             content="#portal-languageselector"
             theme="#portal-languageselector"/>  
         <drop content="#portal-personaltools"/>          
-        <replace href="/bungeni/business/whats-on"
+        <replace href="/bungeni"
             content="children:#portal-personaltools"
             theme="children:#portal-personaltools"/> 
         <drop theme="children:#portal-personaltools li.navigation" />                  
                         
         <!-- navigation -->
-        <prepend href="/bungeni/business/whats-on"
+        <prepend href="/bungeni"
             content="#portal-globalnav > li"
             theme="children:#portal-globalnav > ul" />
         <append content="#portal-globalnav > li:not(:first-child)"
