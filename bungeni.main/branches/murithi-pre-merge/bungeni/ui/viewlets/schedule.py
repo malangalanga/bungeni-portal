@@ -109,7 +109,10 @@ class SchedulableItemsViewlet(browser.BungeniItemsViewlet):
                 url.absoluteURL(getSite(), self.request), 
                 item.type, 
                 item.parliamentary_item_id))
-    
+
+    def _get_item_key(self, item):
+        return item.parliamentary_item_id
+
     def update(self):
         need("yui-dragdrop")
         need("yui-container")
@@ -136,11 +139,11 @@ class SchedulableItemsViewlet(browser.BungeniItemsViewlet):
                 #"date":item.changes[-1].date,
                 # not every item has a auditlog (headings) 
                 # use last status change instead.
-                "date": date_formatter.format(self._item_date(item)),
+                "date": self._item_date(item) and date_formatter.format(self._item_date(item)),
                 "state": IWorkflow(item).get_state(item.status).title,
-                "id": item.parliamentary_item_id,
+                "id": self._get_item_key(item),
                 "class": (
-                    (item.parliamentary_item_id in scheduled_item_ids and
+                    (self._get_item_key(item) in scheduled_item_ids and
                         "dd-disable") or 
                     ""),
                 "url": self._item_url(item),
@@ -160,6 +163,28 @@ class SchedulableHeadingsViewlet(SchedulableItemsViewlet):
     
     def _item_url(self, item):
         return ""
+        
+    def _get_item_key(self, item):
+        return item.heading_id
+
+    def get_group_id(self):
+        parent=self.context
+        while parent is not None:
+            group_id = getattr(parent, "group_id", None)
+            if group_id:
+                return group_id
+            else:
+                parent = parent.__parent__
+        raise ValueError("Unable to determine group.")
+
+    def _query_items(self):
+        return tuple(Session().query(self.model).filter(
+                sql.and_(
+                    self.model.status.in_(self.states),
+                    self.model.group_id == self.get_group_id()
+                )
+            )
+        )
 
 class SchedulableBillsViewlet(SchedulableItemsViewlet):
     view_name = "bill"

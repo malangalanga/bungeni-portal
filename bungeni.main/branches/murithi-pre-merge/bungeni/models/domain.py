@@ -20,9 +20,6 @@ import sqlalchemy.sql.expression as sql
 
 import interfaces
 
-
-#
-
 def object_hierarchy_type(object):
     if isinstance(object, User):
         return "user"
@@ -350,13 +347,14 @@ class GroupSittingAttendance(object):
     sort_on = ["last_name", "first_name", "middle_name"]
     sort_replace = {"member_id": ["last_name", "first_name", ]}
 
+''' !+TYPES_CUSTOM
 class AttendanceType(Entity):
     """Lookup for attendance type.
     """
     interface.implements(interfaces.ITranslatable,
         interfaces.IAttendanceType
     )
-
+'''
 
 class GroupItemAssignment(object):
     """The assignment of a parliamentary content object to a group.
@@ -602,7 +600,7 @@ class ParliamentaryItem(Entity):
         # As base meaning of "submission_date" we take the most recent date
         # of workflow transition to "submit" to clerk. Subclasses may need
         # to overload as appropriate for their respective workflows.
-        return self._get_workflow_date("submitted", "gazetted")
+        return self._get_workflow_date("submitted")
 
 ''' !+TYPES_CUSTOM
 class AttachedFileType(object):
@@ -616,12 +614,27 @@ class AttachedFile(Entity):
     """Files attached to a parliamentary item.
     """
     __dynamic_features__ = True # !+ should be False?
+    
+    # the owner of the "owning" item !+HEAD_DOCUMENT_ITEM
+    @property
+    def owner_id(self):
+        return self.item.owner_id
+    
+    @property
+    def owner(self):
+        return self.item.owner
 
 class Heading(Entity):
     """A heading in a report.
     """
     interface.implements(interfaces.ITranslatable)
     __dynamic_features__ = False
+    
+    type = "heading"
+    
+    @property
+    def status_date(self):
+        return None
 
 class _AdmissibleMixin(object):
     """Assumes self._get_workflow_date()
@@ -664,9 +677,8 @@ class BillType(Entity):
 
 # versionable (by default)
 class Bill(ParliamentaryItem):
-    @property
-    def submission_date(self):
-        return self._get_workflow_date("working_draft")
+    """Bill Domain Type
+    """
 
 # auditable (by default), but not a ParliamentaryItem
 class Signatory(Entity):
@@ -758,29 +770,6 @@ class MinistryInParliament(object):
     """Auxilliary class to get the parliament and government for a ministry.
     """
 
-class ItemSchedule(Entity):
-    """For which sitting was a parliamentary item scheduled.
-    """
-    discussions = one2many("discussions",
-        "bungeni.models.domain.ItemScheduleDiscussionContainer", "schedule_id")
-
-    @property
-    def getItem(self):
-        s_item = self.item
-        s_item.__parent__ = self
-        return s_item
-
-    @property
-    def getDiscussion(self):
-        s_discussion = self.discussion
-        s_discussion.__parent__ = self
-        return s_discussion
-        
-class ItemScheduleDiscussion(Entity):
-    """A discussion on a scheduled item.
-    """
-    interface.implements(interfaces.ITranslatable)
-
 # versionable (by default)
 class TabledDocument(ParliamentaryItem, _AdmissibleMixin):
     """Tabled documents:
@@ -832,6 +821,50 @@ class EventItem(ParliamentaryItem):
     All these "events" they may be listed together, in that case the 
     "workflow" once should be ... e.g. in bold.
     """
+# !+DOMAIN(mb, nov-2011) There should be a global configuration/lookup method
+# for content-type=>domain-class mapping. This is just for convenience.
+DOMAIN_CLASSES = {
+    "bill": Bill,
+    "question": Question,
+    "motion": Motion,
+    "agendaitem": AgendaItem,
+    "tableddocument": TabledDocument,
+    "heading": Heading,
+}
+
+class ItemSchedule(Entity):
+    """For which sitting was a parliamentary item scheduled.
+    """
+    discussions = one2many("discussions",
+        "bungeni.models.domain.ItemScheduleDiscussionContainer", "schedule_id")
+
+    @property
+    def item(self):
+        """Query for scheduled item by type and ORM mapped primary key
+        """
+        domain_class = DOMAIN_CLASSES.get(self.item_type, None)
+        if domain_class is None:
+            raise AttributeError("No such item exists in this schedule")
+        session = Session()
+        return session.query(domain_class).get(self.item_id)
+
+    @property
+    def getItem(self):
+        s_item = self.item
+        s_item.__parent__ = self
+        return s_item
+
+    @property
+    def getDiscussion(self):
+        s_discussion = self.discussion
+        s_discussion.__parent__ = self
+        return s_discussion
+        
+class ItemScheduleDiscussion(Entity):
+    """A discussion on a scheduled item.
+    """
+    interface.implements(interfaces.ITranslatable)
+
 
 class HoliDay(object):
     """Is this day a holiday?
@@ -875,6 +908,8 @@ class ObjectTranslation(object):
     """
 
 
+''' !+TYPES_CUSTOM
+
 #####################
 # DB vocabularies
 ######################
@@ -896,7 +931,6 @@ class MemberElectionType(Entity):
         interfaces.IMemberElectionType
     )
 
-''' !+TYPES_CUSTOM
 class AddressType(Entity):
     """Address Types.
     """

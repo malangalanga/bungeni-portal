@@ -206,7 +206,12 @@ class ItemScheduleContainerDeleteForm(DeleteForm):
     class IDeleteForm(interface.Interface):
         item_id = schema.Int(
             title=_(u"Item ID"),
-            required=True)
+            required=True
+        )
+        item_type = schema.TextLine(
+            title=_(u"Item Type"),
+            required=True
+        )
     form_fields = form.Fields(IDeleteForm)
     
     @form.action(_(u"Delete"))
@@ -216,7 +221,8 @@ class ItemScheduleContainerDeleteForm(DeleteForm):
         sch = session.query(domain.ItemSchedule).filter(
             sql.and_(
                 model_schema.item_schedules.c.group_sitting_id == group_sitting_id,
-                model_schema.item_schedules.c.item_id == data['item_id']
+                model_schema.item_schedules.c.item_id == data['item_id'],
+                model_schema.item_schedules.c.item_type == data['item_type']
             )).all()        
         for i in sch:
             session.delete(i)

@@ -816,10 +816,8 @@ item_member_votes = rdb.Table("item_member_votes", metadata,
 
 item_schedules = rdb.Table("item_schedules", metadata,
     rdb.Column("schedule_id", rdb.Integer, primary_key=True),
-    rdb.Column("item_id", rdb.Integer,
-        rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
-        nullable=False
-    ),
+    rdb.Column("item_id", rdb.Integer, nullable=False),
+    rdb.Column("item_type", rdb.String(30), nullable=False),
     rdb.Column("group_sitting_id", rdb.Integer,
         rdb.ForeignKey("group_sittings.group_sitting_id"),
         nullable=False

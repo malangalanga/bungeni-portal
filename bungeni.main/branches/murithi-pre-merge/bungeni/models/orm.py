@@ -28,7 +28,7 @@ def configurable_mappings(kls):
     if interfaces.IAuditable.implementedBy(kls):
         change_kls = getattr(domain, "%sChange" % (name))
         change_tbl = getattr(schema, "%s_changes" % (schema.un_camel(name)))
-        def changes_properties(change_tbl):
+        def changes_properties(item_class, change_tbl):
             return {
                 "user": relation(domain.User,
                     primaryjoin=(change_tbl.c.user_id == schema.users.c.user_id),
@@ -37,7 +37,7 @@ def configurable_mappings(kls):
                 ),
             }
         mapper(change_kls, change_tbl, 
-            properties=changes_properties(change_tbl)
+            properties=changes_properties(kls, change_tbl)
         )
     # versionable, determine properties and set mapper for version class/table
     if interfaces.IVersionable.implementedBy(kls):
@@ -81,7 +81,7 @@ def configurable_mappings(kls):
             if interfaces.IAuditable.implementedBy(kls):
                 change_kls = getattr(domain, "%sChange" % (name))
                 mapper_properties["changes"] = relation(change_kls,
-                    backref="origin", 
+                    backref="head", 
                     lazy=True,
                     cascade="all, delete-orphan",
                     passive_deletes=False
@@ -281,7 +281,7 @@ mapper(domain.GroupMembership, schema.user_group_memberships,
     polymorphic_identity="member",
 )
 
-mapper(domain.MemberElectionType, schema.member_election_types)
+#!+TYPES_CUSTOM mapper(domain.MemberElectionType, schema.member_election_types)
 
 mapper(domain.MemberOfParliament, schema.parliament_memberships,
     inherits=domain.GroupMembership,
@@ -315,9 +315,6 @@ mapper(domain.MemberOfParliament, schema.parliament_memberships,
             schema.user_group_memberships.c.start_date.label("start_date")),
         "end_date": column_property(
             schema.user_group_memberships.c.end_date.label("end_date")),
-        "member_election_type": relation(domain.MemberElectionType, uselist=False,
-            lazy=False
-        ),
     },
     polymorphic_on=schema.user_group_memberships.c.membership_type,
     polymorphic_identity="parliamentmember",
@@ -428,8 +425,8 @@ mapper(domain.Heading, schema.headings,
     }
 )
 
-mapper(domain.QuestionType, schema.question_types)
-mapper(domain.ResponseType, schema.response_types)
+#!+TYPES_CUSTOM mapper(domain.QuestionType, schema.question_types)
+#!+TYPES_CUSTOM mapper(domain.ResponseType, schema.response_types)
 
 mapper(domain.Question, schema.questions,
     inherits=domain.ParliamentaryItem,
@@ -437,12 +434,6 @@ mapper(domain.Question, schema.questions,
     polymorphic_identity="question",
     properties={
         "ministry": relation(domain.Ministry, lazy=False, join_depth=2),
-        "question_type": relation(domain.QuestionType, uselist=False,
-            lazy=False
-        ),
-        "response_type": relation(domain.ResponseType, uselist=False,
-            lazy=False
-        ),
     }
 )
 
@@ -500,10 +491,6 @@ mapper(domain.AttachedFile, schema.attached_files)
 
 mapper(domain.ItemSchedule, schema.item_schedules,
     properties={
-        "item": relation(
-            domain.ParliamentaryItem,
-            uselist=False
-        ),
         "discussion": relation(
             domain.ItemScheduleDiscussion,
             uselist=False,
@@ -551,14 +538,10 @@ mapper(domain.GroupSittingType, schema.group_sitting_types)
 mapper(domain.GroupSittingAttendance, schema.group_sitting_attendance,
     properties={
         "user": relation(domain.User, uselist=False, lazy=False),
-        "attendance_type": relation(domain.AttendanceType,
-            uselist=False,
-            lazy=False
-        ),
         "sitting": relation(domain.GroupSitting, uselist=False, lazy=False),
     }
 )
-mapper(domain.AttendanceType, schema.attendance_types)
+#!+TYPES_CUSTOM mapper(domain.AttendanceType, schema.attendance_types)
 mapper(domain.TitleType, schema.title_types,
     properties={ "group": relation(domain.Group, uselist=False, lazy=False) }
 )

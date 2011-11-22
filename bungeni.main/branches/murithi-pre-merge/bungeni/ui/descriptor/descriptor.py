@@ -3291,20 +3291,24 @@ class ItemScheduleDescriptor(ModelDescriptor):
     display_name = _("Scheduling")
     container_name = _("Schedulings")
 
+    #!+VOCABULARY(mb, nov-2010) item_id references a variety of content
+    # types identified by the type field. Scheduling 'add items' view suffices
+    # for now providing viewlets with a list of addable objects. TODO:
+    # TODO: validate scheduled items
     fields = [
         Field(name="item_id", # [user-req]
             modes="view edit add listing",
             localizable=[
-                show("view edit listing"),
+                show("view listing"),
             ],
-            property=schema.Choice(title=_("Item"),
-                source=vocabulary.DatabaseSource(domain.ParliamentaryItem,
-                    token_field="parliamentary_item_id",
-                    value_field="parliamentary_item_id",
-                    title_getter=lambda obj: "%s - %s" % (
-                        type(obj).__name__, obj.short_name)
-                )
-            ),
+            property=schema.Int(title=_("Item Id"))
+        ),
+        Field(name="item_type",
+            modes="view edit add listing",
+            localizable=[
+                show("view listing")
+            ],
+            property=schema.TextLine(title=_("Item Type")),
         ),
     ]
 
