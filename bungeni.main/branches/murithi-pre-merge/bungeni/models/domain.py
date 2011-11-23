@@ -18,6 +18,7 @@ from bungeni.alchemist import Session
 from bungeni.alchemist import model
 from bungeni.alchemist.traversal import one2many, one2manyindirect
 import sqlalchemy.sql.expression as sql
+from sqlalchemy.orm import object_mapper
 
 import interfaces
 
@@ -849,15 +850,21 @@ class ItemSchedule(Entity):
     discussions = one2many("discussions",
         "bungeni.models.domain.ItemScheduleDiscussionContainer", "schedule_id")
 
-    @property
-    def item(self):
+    def _get_item(self):
         """Query for scheduled item by type and ORM mapped primary key
         """
         domain_class = DOMAIN_CLASSES.get(self.item_type, None)
         if domain_class is None:
-            raise AttributeError("No such item exists in this schedule")
-        session = Session()
-        return session.query(domain_class).get(self.item_id)
+            log.error("There is no item assigned to this schedule entry")
+            return None
+        return Session().query(domain_class).get(self.item_id)
+
+    def _set_item(self, schedule_item):
+        mapper = object_mapper(schedule_item)
+        self.item_id = mapper.primary_key_from_instance(schedule_item)[0]
+        self.item_type = schedule_item.type
+
+    item = property(_get_item, _set_item)
 
     @property
     def getItem(self):
