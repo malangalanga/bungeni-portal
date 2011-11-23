@@ -57,16 +57,13 @@ class WhatsOnBrowserView(BrowserView):
         if sitting.status in get_states('groupsitting',tagged=['agendaprivate']):
             return s_list
         else:
-        # !+DCPROPERTIES(murithi, april-2011) Factor out properties+i18n to DC
             for schedule in sitting.item_schedule:
                 descriptor = queryModelDescriptor(schedule.item.__class__)
                 s_list.append({
-                    'name': IDCDescriptiveProperties(schedule.item).title,
+                    'name' : IDCDescriptiveProperties(schedule.item).title,
                     'status' : str(misc.get_wf_state(schedule.item))
                     ,
-                    'url' : url.set_url_context(('/business/' +
-                            schedule.item.type + 's/obj-' + 
-                        str(schedule.item.parliamentary_item_id))),
+                    'url' : IDCDescriptiveProperties(schedule.item).uri,
                     'item_type': schedule.item.type,
                     'item_type_title' : (
                         descriptor.display_name if descriptor else
@@ -90,8 +87,7 @@ class WhatsOnBrowserView(BrowserView):
                         schema.group_sittings.c.start_date).options(
                         eagerload('group'), 
                         #eagerload('sitting_type'),
-                        eagerload('item_schedule'), 
-                        eagerload('item_schedule.item')
+                        eagerload('item_schedule')
             )
         sittings = query.all()
         day = u''
@@ -145,9 +141,8 @@ class WhatsOnBrowserView(BrowserView):
             domain.GroupSitting
             ).filter( 
             where_clause).order_by(schema.group_sittings.c.start_date).options(
-                    eagerload('sitting'), eagerload('item'),
+                    eagerload('sitting'))
                     #eagerload('sitting.sitting_type'),
-                    lazyload('item.owner'))
         self.itemschedules = query.all()
                 
     def get_items_by_type(self, item_type):
