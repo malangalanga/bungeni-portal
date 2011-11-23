@@ -75,6 +75,17 @@
 
 
     <rule class="load-bungeni-navigation">
+        <!-- We need these for the plone login overlay... -->
+        <append  href="/plone"
+                  content='/html/head/script'
+                  theme='/html/head' />
+        <prepend  href="/plone"
+                  content='/html/head/link'
+                  theme='/html/head' />
+        <prepend  href="/plone"
+                  content='/html/head/style'
+                  theme='/html/head' />
+                  
         <append content="children:#portal-column-one"
             theme="children:#portal-column-one"
         />        
