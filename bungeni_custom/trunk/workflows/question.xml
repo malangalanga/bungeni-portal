@@ -158,7 +158,7 @@
     
     <state id="admissible" title="Admissible"
         version="true"
-        publish="true"
+        publish="false"
         like_state="submitted">
         <!-- question -->
         <grant permission="zope.View" role="bungeni.MP" />
@@ -243,7 +243,7 @@
     </state>
     
     <state id="response_completed" title="Response completed" 
-        publish="true"
+        publish="false"
         like_state="admissible">
         <!-- response -->
         <grant permission="bungeni.response.View" role="bungeni.Authenticated" />

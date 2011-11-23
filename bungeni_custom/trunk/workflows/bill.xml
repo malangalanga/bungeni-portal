@@ -115,7 +115,7 @@
 
     <state id="gazetted" title="Bill Published in Gazette"
         version="true"
-        publish="true"
+        publish="false"
         like_state="received">
         <!-- bill -->
         <grant permission="zope.View" role="bungeni.Speaker" />
@@ -205,7 +205,7 @@
         title="Third Reading Adjourned" />
     
     <state id="approved" title="Approved Bill" 
-        publish="true"
+        publish="false"
         like_state="first_committee">
         <!-- bill -->
         <deny permission="bungeni.bill.Edit" role="bungeni.Clerk" />
