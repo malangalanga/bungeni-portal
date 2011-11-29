@@ -23,7 +23,7 @@ $Id$
 """
 
 # language ids, either as a space-separated string or as a list of strings
-zope_i18n_allowed_languages = "en fr pt sw en-ke it" 
+zope_i18n_allowed_languages = "ar en fr it nl-sr pt sw" 
 
 # boolean: True, False
 zope_i18n_compile_mo_files = True 
