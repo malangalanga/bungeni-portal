@@ -341,6 +341,11 @@ def ministry_column(name, title, default=""):
         return obj.short_name
     return column.GetterColumn(title, getter)
 
+def scheduled_item_column(name, title):
+    def getter(item, formatter):
+        return IDCDescriptiveProperties(item.item).title
+    return column.GetterColumn(title, getter)
+
 ''' !+TYPES_CUSTOM
 def enumeration_column(name, title,
         item_reference_attr=None, # parent item attribute, for enum
@@ -3301,7 +3306,8 @@ class ItemScheduleDescriptor(ModelDescriptor):
             localizable=[
                 show("view listing"),
             ],
-            property=schema.Int(title=_("Item Id"))
+            property=schema.Int(title=_("Item")),
+            listing_column = scheduled_item_column("title", _(u"Item"))
         ),
         Field(name="item_type",
             modes="view edit add listing",

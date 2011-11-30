@@ -1,0 +1,14 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="context/@@standard_macros/page">
+
+  <div metal:fill-slot="body" i18n:domain="bungeni">
+    <div id="unscheduled-items-panel">
+        <div class="hd" i18n:translate="">Available Items</div>
+        <div class="bd">Tabs Panels</div>
+        <div class="ft">&nbsp;</div>
+    </div>
+    <div id="schedule-table"/>
+  </div>
+  
+</html>

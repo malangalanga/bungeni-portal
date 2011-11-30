@@ -480,6 +480,22 @@ class ItemScheduleOrder(BrowserView):
                 setattr(sch, 'real_order', i+1)
         session.flush()
 
+#
+# Group Scheduler New YUI based Stack UI
+#
+class GroupSittingScheduleViewNext(BrowserView):
+    
+    template = ViewPageTemplateFile("templates/scheduler.pt")
+    
+    def __init__(self, context, request):
+        super(GroupSittingScheduleViewNext, self).__init__(context, request)
+    
+    def __call__(self):
+        return self.render()
+    
+    def render(self):
+        need("bungeni-schedule-editor")
+        return self.template()
 
 class SittingCalendarView(CalendarView):
     """Sitting calendar view."""

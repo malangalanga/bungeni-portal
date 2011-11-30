@@ -84,4 +84,17 @@
         include="calendar-extensions.js"
     />
   </resourceLibrary>
+  <resourceLibrary name="scheduler-globals">
+    <directory
+      source="calendar"
+      include="scheduler-globals.js"
+      factory="bungeni.ui.resources.dynamic.DynamicDirectoryFactory"
+    />
+  </resourceLibrary>
+  <resourceLibrary name="bungeni-schedule-editor" 
+    require="scheduler-globals yui-datatable yui-container yui-connection yui-button">
+    <directory source="calendar" 
+        include="schedule-editor.js"
+    />
+  </resourceLibrary>
 </configure>
