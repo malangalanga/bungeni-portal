@@ -5,6 +5,18 @@
  * 
  */
 YAHOO.util.Event.addListener(window, "load", function(){
+    var scheduledActions = new YAHOO.widget.Panel("scheduled-item-controls",
+        {   
+            underlay: "none"
+        }
+    );
+    scheduledActions.currentItem = null;
+    
+    var commentButton = new YAHOO.util.Element("add-note");
+    commentButton.on("click", function(event){
+        console.log("Processing record", scheduledActions.currentItem);
+    });
+    
     var datatable_loader = function(){
         
         var columnDefinitions = [
@@ -22,8 +34,22 @@ YAHOO.util.Event.addListener(window, "load", function(){
         };
         
         var itemsDataTable = new YAHOO.widget.DataTable("schedule-table",
-            columnDefinitions, itemsDataSource
+            columnDefinitions, itemsDataSource, { selectionMode:"single" }
         );
+
+        itemsDataTable.subscribe("rowMouseoverEvent", itemsDataTable.onEventHighlightRow);
+        itemsDataTable.subscribe("rowMouseoutEvent", itemsDataTable.onEventUnhighlightRow);
+        itemsDataTable.subscribe("rowClickEvent", itemsDataTable.onEventSelectRow);
+
+        itemsDataTable.subscribe("rowHighlightEvent", function(args){
+            scheduledActions.currentItem = args.record;
+            console.log(args.record);
+            scheduledActions.cfg.setProperty("context",
+                [args.el.id, "tl", "tr"]
+            );
+            scheduledActions.render();
+            scheduledActions.show();
+        });
         
         return {
             oDS: itemsDataSource,
@@ -31,11 +57,4 @@ YAHOO.util.Event.addListener(window, "load", function(){
         };
     }();
     
-    //create panel
-    var build_items_panel = function(){
-        var itemsPanel = new YAHOO.widget.Panel("unscheduled-items-panel");
-        itemsPanel.render();
-        itemsPanel.show();
-        itemsPanel.center();
-    }();
 });
