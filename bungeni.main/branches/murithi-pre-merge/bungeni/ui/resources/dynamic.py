@@ -11,6 +11,10 @@ RESOURCE_MAPPING = {
     "scheduler-globals.js": "scheduler_globals"
 }
 
+## some global JS Strings ##
+YES = _(u"Yes")
+NO = _(u"Yes")
+
 def get_globals(group_name, **kwargs):
     language = kwargs.get("language", "en")
     globals_map = {
@@ -25,6 +29,13 @@ def get_globals(group_name, **kwargs):
             "initial_editor_text": i18n(
                 _(u"Double click to change this text..."), language
             ),
+            "delete_dialog_header": i18n(_(u"Remove item from schedule")),
+            "delete_dialog_text": i18n(
+                _(u"Are you sure you want to remove this item from schedule ?"),
+                language
+            ),
+            "delete_dialog_confirm": i18n(YES, language),
+            "delete_dialog_cancel": i18n(NO, language),
         }
     }
     return globals_map.get(group_name, {})
