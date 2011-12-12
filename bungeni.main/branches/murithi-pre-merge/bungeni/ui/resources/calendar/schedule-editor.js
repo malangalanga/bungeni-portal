@@ -5,14 +5,16 @@
  */
 
 (function() {
-    var Dom = YAHOO.util.Dom, Event = YAHOO.util.Event;
+    var Dom = YAHOO.util.Dom, Event = YAHOO.util.Event, Y$ = YAHOO.util.Selector;
     var itemsDataTable = null;
     var itemsDataSource = null;
     var schedulerActions = null;
     var deleteDialog = null;
+    var ITEM_SELECT_ROW_COLUMN = "item_select_row"
     var ITEM_MOVE_UP_COLUMN = "item_move_up";
     var ITEM_MOVE_DOWN_COLUMN = "item_move_down";
     var ITEM_DELETE_COLUMN = "item_delete";
+    var CHECK_BOX_SELECTOR = "input[type=checkbox]"
 
     // custom column formatters
     /**
@@ -109,7 +111,7 @@
      * down selectors are pushed
      */
     var reorderRow = function(args){
-        var target_column = itemsDataTable.getColumn(args.target);
+        var target_column = this.getColumn(args.target);
         if ([ITEM_MOVE_UP_COLUMN, ITEM_MOVE_DOWN_COLUMN].indexOf(
                 target_column.field
             ) >= 0
@@ -143,12 +145,36 @@
      * a dialog to confirm intention before deleting item
      * */
     var deleteRow = function(args){
-        var target_record = this.getRecord(args.target);
-        var target_index = this.getTrIndex(target_record);
-        this.unselectAllRows();
-        this.selectRow(target_index);
-        schedulerActions.hide();
-        deleteDialog.show();
+        var target_column = this.getColumn(args.target);
+        if (target_column.field == ITEM_DELETE_COLUMN){
+            var target_record = this.getRecord(args.target);
+            var target_index = this.getTrIndex(target_record);
+            this.unselectAllRows();
+            this.selectRow(target_index);
+            deleteDialog.show();
+            deleteDialog.bringToTop();
+        }
+    }
+    
+    /**
+     * @method checkRows
+     * @description check or uncheck selectors for all items on data table
+     * 
+     */
+    var checkRows = function(args){
+        var target_column = this.getColumn(args.target);
+        if(target_column.field == ITEM_SELECT_ROW_COLUMN){
+            var record_set = this.getRecordSet().getRecords();
+            var checked = false;
+            if (Y$.query(CHECK_BOX_SELECTOR, args.target, true).checked){
+                checked = true;
+            }
+            for (record_index in record_set){
+                var row = this.getTrEl(record_set[record_index]);
+                var select_td = this.getFirstTdEl(row);
+                Y$.query(CHECK_BOX_SELECTOR, select_td, true).checked = checked;
+            }
+        }
     }
 
     /**
@@ -186,15 +212,15 @@
                 label: scheduler_globals.text_button_text,
             }
         );
-        scheduleTextButton.appendTo(schedulerActions.footer);
+        scheduleTextButton.appendTo(schedulerActions.body);
         scheduleTextButton.on("click", addTextToSchedule);
         
         //create delete dialog and controls
         deleteDialog = new YAHOO.widget.SimpleDialog("scheduler-delete-dialog",
             {
-                width: "200px",
+                width: "auto",
                 fixedcenter: true,
-                model: true,
+                modal: true,
                 visible: false,
                 draggable: false,
             }
@@ -256,7 +282,7 @@
             var textCellEditor = YAHOO.widget.TextboxCellEditor;
             var columnDefinitions = [
                 {
-                    key:"item_checked", 
+                    key:ITEM_SELECT_ROW_COLUMN, 
                     label: "<input type='checkbox' name='rec-sel-all'/>", 
                     formatter: itemSelectFormatter 
                 },
@@ -292,7 +318,7 @@
                 fields: ["item_id", "item_type"],
             };
             
-            layout_centre = schedulerLayout.getUnitByPosition("left");
+            var layout_centre = schedulerLayout.getUnitByPosition("left");
             var scheduler_container = document.createElement("div");
             layout_centre.body.appendChild(scheduler_container);
 
@@ -311,6 +337,7 @@
             itemsDataTable.subscribe("cellClickEvent", reorderRow);
             itemsDataTable.subscribe("rowSelectEvent", showSchedulerControls);
             itemsDataTable.subscribe("cellClickEvent", deleteRow);
+            itemsDataTable.subscribe("theadCellClickEvent", checkRows);
             
             return {
                 oDS: itemsDataSource,
@@ -318,6 +345,67 @@
             }
         });
         
+        //render available items tabs
+        schedulerLayout.on("render", function(){
+            var availableItemsColumns = [
+                {
+                    key: ITEM_SELECT_ROW_COLUMN, 
+                    label: "<input type='checkbox' name='rec-sel-all'/>", 
+                    formatter: itemSelectFormatter 
+                },
+                {
+                    key: "item_title",
+                    label: scheduler_globals.column_title,
+                },
+                {
+                    key: "item_type",
+                    label: scheduler_globals.column_type,
+                },
+                {
+                    key: "status",
+                    label: scheduler_globals.column_status,
+                },
+            ]
+            
+            var availableItemsSchema = {
+                resultsList: "items",
+                fields: ["item_id", "item_type", "item_title", "status"]
+            }
+            
+            var availableItems = new YAHOO.widget.TabView();
+            for (type_index in scheduler_globals.schedulable_types){
+                (function(){
+                    var type = scheduler_globals.schedulable_types[type_index];
+                    var container_id = type + "data-table";
+                    availableItems.addTab(new YAHOO.widget.Tab(
+                        {
+                            label: type,
+                            content: "<div id='" + container_id +"'>Intel Inside</div>",
+                        }
+                    ));
+                    Event.onAvailable(container_id, function(event){
+                        var tabDataSource = new YAHOO.util.DataSource(
+                            scheduler_globals.schedulable_items_json_url + "?type="+ type
+                        );
+                        tabDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+                        tabDataSource.responseSchema = availableItemsSchema;
+                        
+                        var tabDataTable = new YAHOO.widget.DataTable(container_id,
+                            availableItemsColumns, tabDataSource, 
+                            { 
+                                selectionMode:"single",
+                                scrollable: true,
+                                initialLoad: true,
+                            }
+                        );
+                        tabDataTable.subscribe("theadCellClickEvent", checkRows);
+                    });
+                })();
+            }
+            var itemsPanel = schedulerLayout.getUnitByPosition("center");
+            availableItems.selectTab(0);
+            availableItems.appendTo(itemsPanel.body);
+        });
         schedulerLayout.render();
     });
 })();

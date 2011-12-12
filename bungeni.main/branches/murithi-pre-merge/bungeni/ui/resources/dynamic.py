@@ -11,19 +11,20 @@ RESOURCE_MAPPING = {
     "scheduler-globals.js": "scheduler_globals"
 }
 
-## some global JS Strings ##
+## some global strings to i18n ##
 YES = _(u"Yes")
-NO = _(u"Yes")
+NO = _(u"No")
 
 def get_globals(group_name, **kwargs):
     language = kwargs.get("language", "en")
     globals_map = {
         "SCHEDULER_GLOBALS" : {
             "json_listing_url" : "./items/jsonlisting",
+            "schedulable_items_json_url" : "./schedulable-items-json",
             "column_title": i18n(_(u"Title"), language),
             "column_type": i18n(_(u"Type"), language),
-            "text_button_text": i18n(_(u"Text"), language),
-            "remove_button_text": i18n(_(u"Bills"), language),
+            "column_status": i18n(_(u"Status"), language),
+            "text_button_text": i18n(_(u"add text"), language),
             "current_schedule_title": i18n(_(u"Schedule"), language),
             "available_items_title": i18n(_(u"Available Items"), language),
             "initial_editor_text": i18n(
@@ -36,6 +37,9 @@ def get_globals(group_name, **kwargs):
             ),
             "delete_dialog_confirm": i18n(YES, language),
             "delete_dialog_cancel": i18n(NO, language),
+            "schedulable_types": ["bill", "question", "motion", 
+                "tableddocument", "agendaitem"
+            ]
         }
     }
     return globals_map.get(group_name, {})

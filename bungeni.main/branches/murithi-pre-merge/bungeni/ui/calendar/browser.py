@@ -497,6 +497,25 @@ class GroupSittingScheduleViewNext(BrowserView):
         need("bungeni-schedule-editor")
         return self.template()
 
+class SchedulableItemsJSON(BrowserView):
+    
+    def __init__(self, context, request):
+        super(SchedulableItemsJSON, self).__init__(context, request)
+    
+    def get_json_items(self):
+        item_type = self.request.form.get("type")
+        if item_type is None:
+            return '{"items":[]}'
+        else:
+            items_getter = data.SchedulableItemsGetter(self.context,
+                item_type
+            )
+        return items_getter.as_json()
+    
+    def __call__(self):
+        self.request.response.setHeader("Content-type", "application/json")
+        return self.get_json_items()
+
 class SittingCalendarView(CalendarView):
     """Sitting calendar view."""
     
