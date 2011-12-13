@@ -25,6 +25,9 @@ def get_globals(group_name, **kwargs):
             "column_type": i18n(_(u"Type"), language),
             "column_status": i18n(_(u"Status"), language),
             "text_button_text": i18n(_(u"add text"), language),
+            "remove_button_text": i18n(_(u"remove selected items"), language),
+            "save_button_text": i18n(_(u"save changes"), language),
+            "discard_button_text": i18n(_(u"discard changes"), language),
             "current_schedule_title": i18n(_(u"Schedule"), language),
             "available_items_title": i18n(_(u"Available Items"), language),
             "initial_editor_text": i18n(
