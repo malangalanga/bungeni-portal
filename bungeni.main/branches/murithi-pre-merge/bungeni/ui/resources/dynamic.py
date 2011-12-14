@@ -14,12 +14,16 @@ RESOURCE_MAPPING = {
 ## some global strings to i18n ##
 YES = _(u"Yes")
 NO = _(u"No")
+OKAY = _(u"Okay")
+NOTICE = _(u"Notice")
+WORKING = _(u"Working")
 
 def get_globals(group_name, **kwargs):
     language = kwargs.get("language", "en")
     globals_map = {
         "SCHEDULER_GLOBALS" : {
             "json_listing_url" : "./items/jsonlisting",
+            "save_schedule_url": "./items/save-schedule",
             "schedulable_items_json_url" : "./schedulable-items-json",
             "column_title": i18n(_(u"Title"), language),
             "column_type": i18n(_(u"Type"), language),
@@ -40,6 +44,16 @@ def get_globals(group_name, **kwargs):
             ),
             "delete_dialog_confirm": i18n(YES, language),
             "delete_dialog_cancel": i18n(NO, language),
+            "save_dialog_header": i18n(NOTICE, language),
+            "save_dialog_empty_message": i18n(
+                _(u"No items have been scheduled. Add something then save."), 
+                language
+            ),
+            "save_dialog_confirm": i18n(OKAY, language),
+            "saving_dialog_header": i18n(WORKING, language),
+            "saving_dialog_text": i18n(_(u"saving changes to schedule..."), 
+                language
+            ),
             "schedulable_types": ["bill", "question", "motion", 
                 "tableddocument", "agendaitem"
             ]

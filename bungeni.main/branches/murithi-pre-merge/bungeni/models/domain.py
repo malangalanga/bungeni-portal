@@ -295,6 +295,10 @@ class Group(Entity):
     headings = one2many("headings", "bungeni.models.domain.HeadingContainer",
         "group_id"
     )
+    schedulingtexts = one2many("schedulingtexts", 
+        "bungeni.models.domain.ScheduleTextContainer",
+        "group_id"
+    )
     def active_membership(self, user_id):
         session = Session()
         query = session.query(GroupMembership).filter(
@@ -833,6 +837,14 @@ class EventItem(ParliamentaryItem):
     All these "events" they may be listed together, in that case the 
     "workflow" once should be ... e.g. in bold.
     """
+
+
+class ScheduleText(Entity):
+    """Arbitrary text inserted into schedule
+    """
+    type = u"text"
+    interface.implements(interfaces.ITranslatable)
+
 # !+DOMAIN(mb, nov-2011) There should be a global configuration/lookup method
 # for content-type=>domain-class mapping. This is just for convenience.
 DOMAIN_CLASSES = {
@@ -842,6 +854,7 @@ DOMAIN_CLASSES = {
     "agendaitem": AgendaItem,
     "tableddocument": TabledDocument,
     "heading": Heading,
+    "text": ScheduleText
 }
 
 class ItemSchedule(Entity):

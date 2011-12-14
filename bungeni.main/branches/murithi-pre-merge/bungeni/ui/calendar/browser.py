@@ -41,12 +41,13 @@ from bungeni.core.location import location_wrapped
 from bungeni.core.interfaces import ISchedulingContext
 from bungeni.core.schedule import SittingContainerSchedulingContext
 from bungeni.core.workflow.interfaces import IWorkflowController
+from bungeni.core.translation import get_request_language
 from bungeni.core.language import get_default_language
 
 
 from ploned.ui.interfaces import IStructuralView
 from bungeni.ui.browser import BungeniBrowserView
-from bungeni.ui.calendar import utils, config, interfaces
+from bungeni.ui.calendar import utils, config, interfaces, data
 from bungeni.ui.tagged import get_states
 from bungeni.ui.i18n import _
 from bungeni.ui.utils import misc, url, debug
@@ -148,7 +149,6 @@ def get_sitting_items(sitting, request, include_actions=False):
             'discussion': discussion,
             'truncated_discussion': truncated_discussion,
             'delete_url': "%s/delete" % url.absoluteURL(scheduling, request),
-            #'url': url.set_url_context(site_url+('/business/%ss/obj-%s' % (item.type, item.parliamentary_item_id)))}
             'url': url.absoluteURL(item, request),
         }
         
@@ -310,6 +310,7 @@ class CalendarView(BungeniBrowserView):
         need("dhtmlxscheduler-tooltip")
         need("dhtmlxscheduler-minical")
         need("dhtmlxscheduler-multisource")
+        need("dhtmlxscheduler-collision")
         need("multi-calendar-actions")
         if template is None:
             template = self.template
@@ -825,3 +826,68 @@ class DhtmlxCalendarSittingsIcal(DhtmlxCalendarSittings):
         return config.ICAL_DOCUMENT_TEMPLATE % dict(
             event_data = u"\n".join(event_data_list)
         )
+
+def getItemId(s):
+    return s.rstrip("/")
+
+class ScheduleAddView(BrowserView):
+    """Custom view to persist schedule items modified client side
+    """
+    def __init__(self, context, request):
+        super(ScheduleAddView, self).__init__(context, request)
+        self.sitting = self.context.__parent__
+        self.data = json.loads(self.request.form.get("data", "{}"))
+
+    def saveSchedule(self):
+        session = Session()
+        sitting_id = self.sitting.group_sitting_id
+        group_id = self.sitting.group_id
+        for (index, data_item) in enumerate(self.data):
+            print data_item
+            continue
+            actual_index = index + 1
+            data_object_id = data_item.get("object_id")
+            data_item_id = data_item.get("item_id")
+            data_item_type = data_item.get("item_type")
+            data_item_text = data_item.get("item_text")
+            if not data_item_id:
+                if data_item.get("item_type") == u"text":
+                    text_record = domain.ScheduleText(
+                        text=data_item_text,
+                        group_id=group_id,
+                        language=get_request_language()
+                    )
+                    session.add(text_record)
+                    session.flush()
+                    data_item_id = text_record.schedule_text_id
+                schedule_record = domain.ItemSchedule(
+                    item_id=data_item_id,
+                    item_type=data_item_type,
+                    planned_order=actual_index,
+                    group_sitting_id=group_sitting_id
+                )
+                session.add(schedule_record)
+                session.flush()
+            else:
+                if data_object_id:
+                    current_record = self.context.get(
+                        getItemKey(data_object_id)
+                    )
+                    current_record.planned_order = actual_index
+                    session.add(current_record)
+                    session.flush()
+                else:
+                    schedule_record = domain.ItemSchedule(
+                        item_id=data_item_id,
+                        item_type=data_item_type,
+                        planned_order=actual_index,
+                        group_sitting_id=group_sitting_id
+                    )
+                    session.add(schedule_record)
+                    session.flush()
+
+    def __call__(self):
+        self.request.response.setHeader("Content-type", "application/json")
+        self.saveSchedule()
+        return json.dumps(self.data)
+        

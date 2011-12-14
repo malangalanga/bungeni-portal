@@ -843,6 +843,15 @@ item_schedules = rdb.Table("item_schedules", metadata,
     rdb.Column("item_status", rdb.Unicode(64),)
 )
 
+schedule_text = rdb.Table("schedule_text", metadata,
+    rdb.Column("schedule_text_id", rdb.Integer, primary_key=True),
+    rdb.Column("text", rdb.UnicodeText, nullable=True),
+    rdb.Column("group_id", rdb.Integer, rdb.ForeignKey("groups.group_id"),
+        nullable=True
+    ),
+    rdb.Column("language", rdb.String(5), nullable=False)
+)
+
 # to produce the proceedings:
 # capture the discussion on this item
 

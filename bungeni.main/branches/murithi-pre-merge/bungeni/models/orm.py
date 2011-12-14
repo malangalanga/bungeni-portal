@@ -507,6 +507,8 @@ mapper(domain.ItemSchedule, schema.item_schedules,
     }
 )
 
+mapper(domain.ScheduleText, schema.schedule_text)
+
 mapper(domain.ItemScheduleDiscussion, schema.item_schedule_discussions)
 
 # items scheduled for a sitting

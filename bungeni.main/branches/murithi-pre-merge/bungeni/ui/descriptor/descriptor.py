@@ -3307,7 +3307,14 @@ class ItemScheduleDescriptor(ModelDescriptor):
                 show("view listing"),
             ],
             property=schema.Int(title=_("Item")),
-            listing_column = scheduled_item_column("title", _(u"Item"))
+        ),
+        Field(name="item_title", # [derived]
+            modes="view listing",
+            localizable=[
+                show("view listing")
+            ],
+            property=schema.TextLine(title=_("Title"), required=False),
+            listing_column = scheduled_item_column("title", _(u"Title"))
         ),
         Field(name="item_type",
             modes="view edit add listing",
@@ -3318,6 +3325,30 @@ class ItemScheduleDescriptor(ModelDescriptor):
         ),
     ]
 
+class ScheduleTextDescriptor(ModelDescriptor):
+    localizable = True
+    display_name = _("Scheduling Texts")
+    container_name = "Scheduling Texts"
+    fields = [
+        Field(name="schedule_text_id",
+            modes="view edit add listing",
+            localizable=[
+                show("view listing")
+            ],
+            property=schema.Int(title=_("Item"))
+        ),
+        Field(name="text", 
+            modes="view edit add listing",
+            localizable=[
+                show("view edit add listing")
+            ],
+            property=schema.Text(title=_(u"Text")),
+            view_widget=widgets.HTMLDisplay,
+            edit_widget=widgets.RichTextEditor,
+            add_widget=widgets.RichTextEditor,
+        ),
+        LanguageField("language")
+    ]
 
 class ItemScheduleDiscussionDescriptor(ModelDescriptor):
     localizable = True

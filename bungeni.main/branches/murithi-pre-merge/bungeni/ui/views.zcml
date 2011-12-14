@@ -387,9 +387,14 @@
         permission="bungeni.sittingschedule.View"
         class=".calendar.browser.GroupSittingScheduleViewNext"
     />
+    <browser:page name="save-schedule"
+        for="bungeni.models.interfaces.IItemScheduleContainer"
+        permission="bungeni.sittingschedule.Edit"
+        class=".calendar.browser.ScheduleAddView"
+    />
     <browser:page name="schedulable-items-json"
         for="bungeni.models.interfaces.IGroupSitting"
-        permission="bungeni.sittingschedule.View"
+        permission="bungeni.sittingschedule.Edit"
         class=".calendar.browser.SchedulableItemsJSON"
     />
       <browser:page
