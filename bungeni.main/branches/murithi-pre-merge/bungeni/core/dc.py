@@ -230,6 +230,13 @@ class ItemScheduleDescriptiveProperties(DescriptiveProperties):
                           'end': sitting.end_date})
 
 
+class ScheduleTextDescriptiveProperties(DescriptiveProperties):
+    component.adapts(interfaces.IScheduleText)
+    
+    @property
+    def title(self):
+        return self.context.text
+
 class VersionDescriptiveProperties(DescriptiveProperties):
     component.adapts(interfaces.IVersion)
     

@@ -336,22 +336,26 @@
      * @description posts schedule data to bungeni for persistence
      **/
     var saveSchedule = function(args){
-        var record_set = itemsDataTable.getRecordSet().getRecords();
-        var item_data = new Array();
-        for (index in record_set){
-            var record_data = record_set[index].getData();
-            var save_data = {
-                item_type: record_data.item_type,
-                item_id: record_data.item_id,
-                schedule_id: record_data.object_id,
-                item_text: record_data.item_title
+        var record_set = itemsDataTable.getRecordSet();
+        var records = record_set.getRecords();
+        if (record_set.getLength()){
+            var item_data = new Array();
+            for (index in records){
+                var record_data = records[index].getData();
+                var save_data = {
+                    item_type: record_data.item_type,
+                    item_id: record_data.item_id,
+                    schedule_id: record_data.object_id,
+                    item_text: record_data.item_title
+                }
+                item_data.push(YJSON.stringify(save_data));
             }
-            item_data.push(YJSON.stringify(save_data));
+            var post_data = "data=" + YJSON.stringify(item_data);
+            RequestObject.startRequest(post_data);
+        }else{
+            saveDialog.show();
+            saveDialog.bringToTop();
         }
-        var post_data = "data=" + YJSON.stringify(item_data);
-        RequestObject.startRequest(post_data);
-        //saveDialog.show();
-        //saveDialog.bringToTop();
     }
 
     /**
@@ -499,6 +503,7 @@
         savingDialog.cfg.queueProperty("icon",
             YAHOO.widget.SimpleDialog.ICON_BLOCK
         );
+        savingDialog.render(document.body);
         
         //create layout
         var schedulerLayout = new YAHOO.widget.Layout("scheduler-layout",

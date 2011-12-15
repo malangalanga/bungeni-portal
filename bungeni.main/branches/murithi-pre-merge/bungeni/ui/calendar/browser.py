@@ -827,12 +827,13 @@ class DhtmlxCalendarSittingsIcal(DhtmlxCalendarSittings):
             event_data = u"\n".join(event_data_list)
         )
 
-def getItemId(s):
+def getItemKey(s):
     return s.rstrip("/")
 
 class ScheduleAddView(BrowserView):
     """Custom view to persist schedule items modified client side
     """
+    RECORD_KEY = "%s:%d"
     def __init__(self, context, request):
         super(ScheduleAddView, self).__init__(context, request)
         self.sitting = self.context.__parent__
@@ -840,18 +841,20 @@ class ScheduleAddView(BrowserView):
 
     def saveSchedule(self):
         session = Session()
-        sitting_id = self.sitting.group_sitting_id
+        group_sitting_id = self.sitting.group_sitting_id
         group_id = self.sitting.group_id
-        for (index, data_item) in enumerate(self.data):
-            print data_item
-            continue
+        record_keys = []
+        for (index, data_item_text) in enumerate(self.data):
+            data_item = json.loads(data_item_text)
             actual_index = index + 1
-            data_object_id = data_item.get("object_id")
+            data_schedule_id = data_item.get("schedule_id")
             data_item_id = data_item.get("item_id")
             data_item_type = data_item.get("item_type")
             data_item_text = data_item.get("item_text")
+            
             if not data_item_id:
-                if data_item.get("item_type") == u"text":
+                # create text record before inserting into schedule
+                if data_item_type == u"text":
                     text_record = domain.ScheduleText(
                         text=data_item_text,
                         group_id=group_id,
@@ -869,13 +872,20 @@ class ScheduleAddView(BrowserView):
                 session.add(schedule_record)
                 session.flush()
             else:
-                if data_object_id:
-                    current_record = self.context.get(
-                        getItemKey(data_object_id)
+                if data_schedule_id:
+                    current_record = removeSecurityProxy(
+                        self.context.get(getItemKey(data_schedule_id))
                     )
                     current_record.planned_order = actual_index
                     session.add(current_record)
                     session.flush()
+                    
+                    #update text for text records
+                    if data_item_type == u"text":
+                        text_record = removeSecurityProxy(current_record.item)
+                        text_record.text = data_item_text
+                        session.add(text_record)
+                        session.flush()
                 else:
                     schedule_record = domain.ItemSchedule(
                         item_id=data_item_id,
@@ -885,7 +895,16 @@ class ScheduleAddView(BrowserView):
                     )
                     session.add(schedule_record)
                     session.flush()
-
+            record_keys.append(self.RECORD_KEY % (data_item_type, data_item_id))
+        
+        records_to_delete = filter(
+            lambda item:(self.RECORD_KEY % (item.item_type, item.item_id)
+                not in record_keys
+            ),
+            [removeSecurityProxy(rec) for rec in self.context.values()]
+        )
+        map(session.delete, records_to_delete)
+        
     def __call__(self):
         self.request.response.setHeader("Content-type", "application/json")
         self.saveSchedule()
