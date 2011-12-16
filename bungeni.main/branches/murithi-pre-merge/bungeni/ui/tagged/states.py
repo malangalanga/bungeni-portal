@@ -159,3 +159,8 @@ TAG_MAPPINGS["signatory"] = {
     "rejected": ["terminal"],
     "withdrawn": ["terminal"],
 }
+
+TAG_MAPPINGS["heading"] = {
+    "public": ["tobescheduled", "public"],
+    "inactive": ["private"],
+}

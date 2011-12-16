@@ -19,7 +19,9 @@ except ImportError:
     import simplejson as json
 
 from zope.event import notify
-from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
+from zope.lifecycleevent import (ObjectCreatedEvent, ObjectModifiedEvent, 
+    ObjectRemovedEvent
+)
 from zope import interface
 from zope import component
 from zope.location.interfaces import ILocation
@@ -862,6 +864,7 @@ class ScheduleAddView(BrowserView):
                     )
                     session.add(text_record)
                     session.flush()
+                    notify(ObjectCreatedEvent(text_record))
                     data_item_id = text_record.schedule_text_id
                 schedule_record = domain.ItemSchedule(
                     item_id=data_item_id,
@@ -871,6 +874,7 @@ class ScheduleAddView(BrowserView):
                 )
                 session.add(schedule_record)
                 session.flush()
+                notify(ObjectCreatedEvent(schedule_record))
             else:
                 if data_schedule_id:
                     current_record = removeSecurityProxy(
@@ -879,6 +883,7 @@ class ScheduleAddView(BrowserView):
                     current_record.planned_order = actual_index
                     session.add(current_record)
                     session.flush()
+                    notify(ObjectModifiedEvent(current_record))
                     
                     #update text for text records
                     if data_item_type == u"text":
@@ -886,6 +891,7 @@ class ScheduleAddView(BrowserView):
                         text_record.text = data_item_text
                         session.add(text_record)
                         session.flush()
+                        notify(ObjectModifiedEvent(text_record))
                 else:
                     schedule_record = domain.ItemSchedule(
                         item_id=data_item_id,
@@ -895,6 +901,7 @@ class ScheduleAddView(BrowserView):
                     )
                     session.add(schedule_record)
                     session.flush()
+                    notify(ObjectCreatedEvent(schedule_record))
             record_keys.append(self.RECORD_KEY % (data_item_type, data_item_id))
         
         records_to_delete = filter(
@@ -904,6 +911,9 @@ class ScheduleAddView(BrowserView):
             [removeSecurityProxy(rec) for rec in self.context.values()]
         )
         map(session.delete, records_to_delete)
+        map(lambda deleted:notify(ObjectRemovedEvent(deleted)), 
+            records_to_delete
+        )
         
     def __call__(self):
         self.request.response.setHeader("Content-type", "application/json")

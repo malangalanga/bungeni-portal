@@ -54,8 +54,11 @@ def get_globals(group_name, **kwargs):
             "saving_dialog_text": i18n(_(u"saving changes to schedule..."), 
                 language
             ),
+            "saving_dialog_refreshing": i18n(
+                _(u"reloading schedule data"), language
+            ),
             "schedulable_types": ["bill", "question", "motion", 
-                "tableddocument", "agendaitem"
+                "tableddocument", "agendaitem", "heading"
             ]
         }
     }

@@ -13,6 +13,8 @@
     var itemsDataTable = null;
     var itemsDataSource = null;
     var schedulerActions = null;
+    var schedulerLayout = null;
+    var available_items_loaded = false;
     var deleteDialog = null;
     var saveDialog = null;
     var savingDialog = null;
@@ -30,6 +32,21 @@
             underlay: "none",
     }
 
+
+    /**
+     * Custom method of added to data table to refresh data
+     **/
+    YAHOO.widget.DataTable.prototype.refresh = function() {
+        var datasource = this.getDataSource();
+        datasource.sendRequest(
+                (this.get("initialRequest")),
+                {
+                    success: this.onDataReturnInitializeTable,
+                    failure: this.onDataReturnInitializeTable,
+                    scope: this
+                }
+        );
+    };
 
     // custom column formatters
     /**
@@ -207,6 +224,97 @@
         schedulerActions.show();
     }
 
+
+   /**
+     * @method renderAvailableItems
+     * @description renders available items as tabs
+     */
+    var renderAvailableItems = function(args){
+        if (available_items_loaded){ return; }
+        available_items_loaded = true;
+        var existing_record_keys = new Array();
+        var record_set = itemsDataTable.getRecordSet().getRecords();
+        for(index in record_set){
+            data = record_set[index].getData();
+            existing_record_keys.push(data.item_id + ":" + data.item_type);
+        }
+
+        /**
+         * @method itemSelectorFormatter
+         * @description renders checkboxes to select items on the schedule
+         */
+        var availableItemSelectFormatter = function(el, record, column, data){
+            index = this.getTrIndex(record) + 1;
+            record_key = (record.getData().item_id + ":" + record.getData().item_type).toString()
+            checked = "";
+            if(existing_record_keys.indexOf(record_key)>=0){
+                checked = "checked='checked'";
+            }
+            el.innerHTML = "<input type='checkbox' name='rec-sel-" + index +"' " + checked + "/>"
+        }
+
+        var availableItemsColumns = [
+            {
+                key: ITEM_SELECT_ROW_COLUMN, 
+                label: "<input type='checkbox' name='rec-sel-all'/>", 
+                formatter: availableItemSelectFormatter
+            },
+            {
+                key: "item_title",
+                label: scheduler_globals.column_title,
+            },
+            {
+                key: "item_type",
+                label: scheduler_globals.column_type,
+            },
+            {
+                key: "status",
+                label: scheduler_globals.column_status,
+            },
+        ]
+        
+        var availableItemsSchema = {
+            resultsList: "items",
+            fields: ["item_id", "item_type", "item_title", "status"]
+        }
+        
+        var availableItems = new YAHOO.widget.TabView();
+        for (type_index in scheduler_globals.schedulable_types){
+            (function(){
+                var type = scheduler_globals.schedulable_types[type_index];
+                var container_id = type + "data-table";
+                availableItems.addTab(new YAHOO.widget.Tab(
+                    {
+                        label: type,
+                        content: "<div id='" + container_id + "'/>",
+                    }
+                ));
+                Event.onAvailable(container_id, function(event){
+                    var tabDataSource = new YAHOO.util.DataSource(
+                        scheduler_globals.schedulable_items_json_url + "?type="+ type
+                    );
+                    tabDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+                    tabDataSource.responseSchema = availableItemsSchema;
+                    
+                    var tabDataTable = new YAHOO.widget.DataTable(container_id,
+                        availableItemsColumns, tabDataSource, 
+                        { 
+                            selectionMode:"single",
+                            scrollable: true,
+                            initialLoad: true,
+                        }
+                    );
+                    tabDataTable.subscribe("cellClickEvent", addItemToSchedule);
+                    tabDataTable.subscribe("theadCellClickEvent", checkRows);
+                });
+            })();
+        }
+        var itemsPanel = schedulerLayout.getUnitByPosition("center");
+        availableItems.selectTab(0);
+        availableItems.appendTo(itemsPanel.body);
+    }
+
+
     /**
      * @method renderSchedule
      * @description renders the schedule to the provided container element
@@ -270,6 +378,7 @@
         itemsDataTable.subscribe("rowSelectEvent", showSchedulerControls);
         itemsDataTable.subscribe("cellClickEvent", deleteRow);
         itemsDataTable.subscribe("theadCellClickEvent", checkRows);
+        itemsDataTable.subscribe("initEvent", renderAvailableItems);
         
         return {
             oDS: itemsDataSource,
@@ -308,12 +417,16 @@
     //schedule save callback config
     var RequestObject = {
         handleSuccess: function(o){
+            savingDialog.setBody(scheduler_globals.saving_dialog_refreshing);
+            itemsDataTable.refresh();
+            savingDialog.setBody("");
             savingDialog.hide();
         },
         handleFailure: function(o){
             console.log(o);
         },
         startRequest: function(data){
+            savingDialog.setBody(scheduler_globals.saving_dialog_text);
             savingDialog.show();
             savingDialog.bringToTop();
             YCM.asyncRequest("POST", 
@@ -403,7 +516,10 @@
                 var record_set = itemsDataTable.getRecordSet().getRecords();
                 for (idx in record_set){
                     var record = record_set[idx];
-                    if(record.getData().object_id == targetData.object_id){
+                    var sdata = record.getData();
+                    if((sdata.item_id == targetData.item_id) &&
+                        (sdata.item_type == sdata.item_type)
+                    ){
                         itemsDataTable.deleteRow(Number(idx));
                     }
                 }
@@ -498,7 +614,7 @@
             DIALOG_CONFIG
         );
         savingDialog.setHeader(scheduler_globals.saving_dialog_header);
-        savingDialog.setBody(scheduler_globals.saving_dialog_text);
+        savingDialog.setBody("");
         savingDialog.cfg.queueProperty("close", false);
         savingDialog.cfg.queueProperty("icon",
             YAHOO.widget.SimpleDialog.ICON_BLOCK
@@ -506,7 +622,7 @@
         savingDialog.render(document.body);
         
         //create layout
-        var schedulerLayout = new YAHOO.widget.Layout("scheduler-layout",
+        schedulerLayout = new YAHOO.widget.Layout("scheduler-layout",
             {
                 height:500,
                 units: [
@@ -557,69 +673,7 @@
             innerLayout.render();
         });
         
-        
         //render available items tabs
-        schedulerLayout.on("render", function(){
-            var availableItemsColumns = [
-                {
-                    key: ITEM_SELECT_ROW_COLUMN, 
-                    label: "<input type='checkbox' name='rec-sel-all'/>", 
-                    formatter: itemSelectFormatter 
-                },
-                {
-                    key: "item_title",
-                    label: scheduler_globals.column_title,
-                },
-                {
-                    key: "item_type",
-                    label: scheduler_globals.column_type,
-                },
-                {
-                    key: "status",
-                    label: scheduler_globals.column_status,
-                },
-            ]
-            
-            var availableItemsSchema = {
-                resultsList: "items",
-                fields: ["item_id", "item_type", "item_title", "status"]
-            }
-            
-            var availableItems = new YAHOO.widget.TabView();
-            for (type_index in scheduler_globals.schedulable_types){
-                (function(){
-                    var type = scheduler_globals.schedulable_types[type_index];
-                    var container_id = type + "data-table";
-                    availableItems.addTab(new YAHOO.widget.Tab(
-                        {
-                            label: type,
-                            content: "<div id='" + container_id +"'>Intel Inside</div>",
-                        }
-                    ));
-                    Event.onAvailable(container_id, function(event){
-                        var tabDataSource = new YAHOO.util.DataSource(
-                            scheduler_globals.schedulable_items_json_url + "?type="+ type
-                        );
-                        tabDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
-                        tabDataSource.responseSchema = availableItemsSchema;
-                        
-                        var tabDataTable = new YAHOO.widget.DataTable(container_id,
-                            availableItemsColumns, tabDataSource, 
-                            { 
-                                selectionMode:"single",
-                                scrollable: true,
-                                initialLoad: true,
-                            }
-                        );
-                        tabDataTable.subscribe("cellClickEvent", addItemToSchedule);
-                        tabDataTable.subscribe("theadCellClickEvent", checkRows);
-                    });
-                })();
-            }
-            var itemsPanel = schedulerLayout.getUnitByPosition("center");
-            availableItems.selectTab(0);
-            availableItems.appendTo(itemsPanel.body);
-        });
         schedulerLayout.render();
     });
 })();

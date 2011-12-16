@@ -17,6 +17,7 @@ STATE_GETTERS = {
     "tableddocument": get_workflow("tableddocument").get_state,
     "groupsitting": get_workflow("groupsitting").get_state,
     "signatory": get_workflow("signatory").get_state,
+    "heading": get_workflow("heading").get_state,
 }
 
 from states import ACTIVE_TAGS, TAG_MAPPINGS
