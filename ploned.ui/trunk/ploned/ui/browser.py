@@ -1,5 +1,5 @@
 import types
-
+import interfaces
 from zope import interface
 from zope import component
 from zope.publisher.browser import BrowserView
@@ -10,7 +10,15 @@ from zope.viewlet.interfaces import IViewletManager
 class PloneView(BrowserView):
     def show_editable_border(self):
         return checkPermission("zope.ManageContent", self.context)
-
+    
+    def text_direction(self):
+        text_direction = component.queryUtility(interfaces.ITextDirection)
+        return text_direction and text_direction.get_text_direction() or "ltr"
+        
+    def body_css_class(self):
+        css = component.queryUtility(interfaces.IBodyCSS)
+        return css and css.get_body_css_class() or ""
+        
     def have_viewlets(self, view, name):
         gsm = component.getSiteManager()
 

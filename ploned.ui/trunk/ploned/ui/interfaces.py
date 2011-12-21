@@ -113,3 +113,9 @@ directlyProvides(IContentMenuItem, IMenuItemType)
 #   separator    :   True if the item should be preceded by a separator
 #   hideChildren :   True if the item's children should not be rendered
 
+class ITextDirection(interface.Interface):
+    """Interface class for utility that returns the text direction on the page"""
+
+class IBodyCSS(interface.Interface):
+    """Interface class for utility that return css classes for page body"""
+
