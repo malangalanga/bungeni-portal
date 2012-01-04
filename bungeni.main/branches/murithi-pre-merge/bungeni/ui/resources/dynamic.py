@@ -28,14 +28,17 @@ def get_globals(group_name, **kwargs):
             "column_title": i18n(_(u"Title"), language),
             "column_type": i18n(_(u"Type"), language),
             "column_status": i18n(_(u"Status"), language),
+            "column_status_date": i18n(_(u"Date"), language),
+            "column_registry_number": i18n(_(u"No."), language),
+            "column_mover": i18n(_(u"Mover"), language),
             "text_button_text": i18n(_(u"add text"), language),
             "remove_button_text": i18n(_(u"remove selected items"), language),
             "save_button_text": i18n(_(u"save changes"), language),
             "discard_button_text": i18n(_(u"discard changes"), language),
-            "current_schedule_title": i18n(_(u"Schedule"), language),
+            "current_schedule_title": i18n(_(u"Agenda"), language),
             "available_items_title": i18n(_(u"Available Items"), language),
             "initial_editor_text": i18n(
-                _(u"Double click to change this text..."), language
+                _(u"change this text"), language
             ),
             "delete_dialog_header": i18n(_(u"Remove item from schedule")),
             "delete_dialog_text": i18n(
@@ -56,6 +59,9 @@ def get_globals(group_name, **kwargs):
             ),
             "saving_dialog_refreshing": i18n(
                 _(u"reloading schedule data"), language
+            ),
+            "saving_dialog_exception": i18n(
+                _(u"there was an error while saving the schedule"), language
             ),
             "schedulable_types": ["bill", "question", "motion", 
                 "tableddocument", "agendaitem", "heading"

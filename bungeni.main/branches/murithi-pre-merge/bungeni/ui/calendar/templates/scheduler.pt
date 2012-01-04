@@ -4,11 +4,13 @@
 
   <div metal:fill-slot="body" i18n:domain="bungeni">
     <div id="scheduled-item-controls">
-        <div class="hd" i18n:translate="">Available Items</div>
-        <div class="bd">
-            <button id="add-note" type="button">+Add comment</button>
-        </div>
+        <div class="hd" i18n:translate="">Modify Item</div>
+        <div class="bd"></div>
         <div class="ft">&nbsp;</div>
+    </div>
+    <div>
+        <h1 class="title" tal:content="context/group/dc:title"/>
+        <p class="documentDescription" tal:content="context/dc:title"/>
     </div>
     <div id="schedule-table"></div>
     <div id="scheduler-layout" class="yui-layout-doc"></div>

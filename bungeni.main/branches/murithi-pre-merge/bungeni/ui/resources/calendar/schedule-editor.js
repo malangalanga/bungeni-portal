@@ -31,7 +31,8 @@
             draggable: false,
             underlay: "none",
     }
-
+    var HIGHLIGHT_TYPES = ["heading", "text"];
+    var HIGHLIGHT_TYPES_CSS_CLASS = "schedule-text-item";
 
     /**
      * Custom method of added to data table to refresh data
@@ -122,14 +123,23 @@
                 updated_record.getData()
             );
         }
-        schedulerActions.close();
+        //show cell editor
+        itemsDataTable.cancelCellEditor();
+        selected_index = itemsDataTable.getSelectedRows()[0];
+        selected_row = itemsDataTable.getTrEl(selected_index);
+        oRecord = itemsDataTable.getRecord(selected_index);
+        oColumn = itemsDataTable.getColumn("item_title");
+        Event.stopEvent(event);
+        itemsDataTable.showCellEditor(
+            itemsDataTable.getCell({ record: oRecord, column: oColumn })
+        );
     }
     
     /**
      * @method showCellEditor
      * @description displays an editor to modify text records on the schedule
      */
-    var showCellEditor = function(event){
+    var showCellEditorHandler = function(event){
         var target = Event.getTarget(event);
         var record = this.getRecord(target);
         if (record.getData().item_type == "text"){
@@ -163,10 +173,10 @@
             }
             
             if (swap_rows.length == 2){
-                var data_one = this.getRecord(swap_rows[0]).getData();
-                var data_two = this.getRecord(swap_rows[1]).getData();
-                this.updateRow(swap_rows[0], data_two)
-                this.updateRow(swap_rows[1], data_one)
+                var data_0 = this.getRecord(swap_rows[0]).getData();
+                var data_1 = this.getRecord(swap_rows[1]).getData();
+                this.updateRow(swap_rows[0], data_1)
+                this.updateRow(swap_rows[1], data_0)
             }
         }
     }
@@ -206,6 +216,21 @@
                 var select_td = this.getFirstTdEl(row);
                 Y$.query(CHECK_BOX_SELECTOR, select_td, true).checked = checked;
             }
+        }
+    }
+
+    var highlightTypedRows = function(oArgs){
+        if (oArgs == undefined){
+            var record_set = this.getRecordSet().getRecords();
+            for(record_index in record_set){
+                record = record_set[record_index];
+                if (HIGHLIGHT_TYPES.indexOf(record.getData().item_type) >= 0){
+                    row = this.getTrEl(record);
+                    Dom.addClass(row, HIGHLIGHT_TYPES_CSS_CLASS);
+                }
+            }
+        }else{
+            Dom.addClass(this.getTrEl(oArgs.record), HIGHLIGHT_TYPES_CSS_CLASS);
         }
     }
 
@@ -268,14 +293,27 @@
                 label: scheduler_globals.column_type,
             },
             {
+                key: "registry_number",
+                label: scheduler_globals.column_registry_number,
+            },
+            {
+                key: "mover",
+                label: scheduler_globals.column_mover,
+            },
+            {
                 key: "status",
                 label: scheduler_globals.column_status,
+            },
+            {
+                key: "status_date",
+                label: scheduler_globals.column_status_date,
+                formatter: "date"
             },
         ]
         
         var availableItemsSchema = {
             resultsList: "items",
-            fields: ["item_id", "item_type", "item_title", "status"]
+            fields: ["item_id", "item_type", "item_title", "status", "status_date", "registry_number", "mover"]
         }
         
         var availableItems = new YAHOO.widget.TabView();
@@ -373,12 +411,14 @@
         itemsDataTable.subscribe("rowMouseoverEvent", itemsDataTable.onEventHighlightRow);
         itemsDataTable.subscribe("rowMouseoutEvent", itemsDataTable.onEventUnhighlightRow);
         itemsDataTable.subscribe("rowClickEvent", itemsDataTable.onEventSelectRow);
-        itemsDataTable.subscribe("cellDblclickEvent", showCellEditor);
+        itemsDataTable.subscribe("cellDblclickEvent", showCellEditorHandler);
         itemsDataTable.subscribe("cellClickEvent", reorderRow);
         itemsDataTable.subscribe("rowSelectEvent", showSchedulerControls);
         itemsDataTable.subscribe("cellClickEvent", deleteRow);
         itemsDataTable.subscribe("theadCellClickEvent", checkRows);
         itemsDataTable.subscribe("initEvent", renderAvailableItems);
+        itemsDataTable.subscribe("initEvent", highlightTypedRows);
+        itemsDataTable.subscribe("rowAddEvent", highlightTypedRows);
         
         return {
             oDS: itemsDataSource,
@@ -423,7 +463,13 @@
             savingDialog.hide();
         },
         handleFailure: function(o){
-            console.log(o);
+            savingDialog.setBody(scheduler_globals.saving_dialog_exception);
+            setTimeout(function(){
+                    savingDialog.setBody("");
+                    savingDialog.hide("");
+                },
+                2000
+            );
         },
         startRequest: function(data){
             savingDialog.setBody(scheduler_globals.saving_dialog_text);

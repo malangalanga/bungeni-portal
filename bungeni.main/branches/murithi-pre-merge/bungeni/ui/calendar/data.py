@@ -12,6 +12,7 @@ from bungeni.models import domain
 from bungeni.core.dc import IDCDescriptiveProperties
 from bungeni.core.workflow.interfaces import IWorkflow
 from bungeni.ui.tagged import get_states
+from bungeni.ui.utils import date, common
 from bungeni.alchemist import Session
 
 class SchedulableItemsGetter(object):
@@ -44,7 +45,7 @@ class SchedulableItemsGetter(object):
             else:
                 parent = parent.__parent__
         raise ValueError("Unable to determine group.")
-
+    
     def query(self):
         items_query = Session().query(self.domain_class).filter(
             self.domain_class.status.in_(self.filter_states)
@@ -57,6 +58,9 @@ class SchedulableItemsGetter(object):
 
 
     def as_json(self):
+        date_formatter = date.getLocaleFormatter(common.get_request(), "date",
+            "medium"
+        )
         items_json = dict(
             items = [
                 dict(
@@ -65,7 +69,16 @@ class SchedulableItemsGetter(object):
                         item
                     )[0],
                     item_title = IDCDescriptiveProperties(item).title,
-                    status = IWorkflow(item).get_state(item.status).title
+                    status = IWorkflow(item).get_state(item.status).title,
+                    status_date = ( date_formatter.format(item.submission_date) 
+                        if hasattr(item, "submission_date") else None
+                    ),
+                    registry_number = ( item.registry_number if
+                        hasattr(item, "registry_number") else None
+                    ),
+                    mover = ( IDCDescriptiveProperties(item.owner).title if
+                        hasattr(item, "owner") else None
+                    )
                 )
                 for item in self.query()
             ]
