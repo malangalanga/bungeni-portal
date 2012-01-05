@@ -60,6 +60,23 @@
     }
 
     /**
+     * @method itemTitleFormatter
+     * @description renders title, emphasized text for titles and italicized
+     * text for text records
+     */
+     var itemTitleFormatter = function(el, record, column, data){
+         rec_data = record.getData();
+         console.log(rec_data);
+         if(rec_data.item_type == scheduler_globals.types.HEADING){
+             el.innerHTML = "<strong>" + rec_data.item_title + "</strong>";
+         }else if(rec_data.item_type == scheduler_globals.types.TEXT){
+             el.innerHTML = "<em>" + rec_data.item_title + "</em>";
+         }else{
+             el.innerHTML = rec_data.item_title;
+         }
+     }
+
+    /**
      * @method itemMoveFormatter
      * @description renders controls to move scheduled items up/down the
      * schedule depending on direction
@@ -95,13 +112,13 @@
      * cells of the current row.
      * 
      */
-    var addTextToSchedule = function(event){
+    var addTextToSchedule = function(event, item_type){
         var currentItem = schedulerActions.currentItem;
         var new_record_index = itemsDataTable.getTrIndex(currentItem) + 1;
         itemsDataTable.addRow(
             { 
                 item_title: scheduler_globals.initial_editor_text, 
-                item_type: "text"
+                item_type: (item_type || "text")
             }, 
             new_record_index
         );
@@ -134,6 +151,14 @@
             itemsDataTable.getCell({ record: oRecord, column: oColumn })
         );
     }
+    
+    /**
+     * @method addHeadingToSchedule
+     * @description add a heading record to schedule
+     */
+     var addHeadingToSchedule = function(event){
+         addTextToSchedule(event, "heading");
+     }
     
     /**
      * @method showCellEditor
@@ -219,6 +244,10 @@
         }
     }
 
+    /**
+     * @method highlightTypedRows
+     * @description applies additional css class to certain scheduled types
+     */
     var highlightTypedRows = function(oArgs){
         if (oArgs == undefined){
             var record_set = this.getRecordSet().getRecords();
@@ -369,6 +398,7 @@
                 key:"item_title", 
                 label: scheduler_globals.column_title,
                 editor: new YAHOO.widget.TextboxCellEditor(),
+                formatter: itemTitleFormatter
             },
             {key:"item_type", label: scheduler_globals.column_type},
             {
@@ -593,8 +623,15 @@
                 label: scheduler_globals.text_button_text,
             }
         );
+        var scheduleHeadingButton = new YAHOO.widget.Button(
+            {
+                label: scheduler_globals.heading_button_text,
+            }
+        );
         scheduleTextButton.appendTo(schedulerActions.body);
         scheduleTextButton.on("click", addTextToSchedule);
+        scheduleHeadingButton.appendTo(schedulerActions.body);
+        scheduleHeadingButton.on("click", addHeadingToSchedule);
         
         //create delete dialog and controls
         deleteDialog = new YAHOO.widget.SimpleDialog("scheduler-delete-dialog",

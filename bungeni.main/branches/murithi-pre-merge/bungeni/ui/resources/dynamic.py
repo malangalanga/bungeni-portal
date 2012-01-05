@@ -22,6 +22,10 @@ def get_globals(group_name, **kwargs):
     language = kwargs.get("language", "en")
     globals_map = {
         "SCHEDULER_GLOBALS" : {
+            "types": {
+                "HEADING": "heading",
+                "TEXT": "text"
+            },
             "json_listing_url" : "./items/jsonlisting?sort=planned_order",
             "save_schedule_url": "./items/save-schedule",
             "schedulable_items_json_url" : "./schedulable-items-json",
@@ -32,6 +36,7 @@ def get_globals(group_name, **kwargs):
             "column_registry_number": i18n(_(u"No."), language),
             "column_mover": i18n(_(u"Mover"), language),
             "text_button_text": i18n(_(u"add text"), language),
+            "heading_button_text": i18n(_(u"add heading"), language),
             "remove_button_text": i18n(_(u"remove selected items"), language),
             "save_button_text": i18n(_(u"save changes"), language),
             "discard_button_text": i18n(_(u"discard changes"), language),
