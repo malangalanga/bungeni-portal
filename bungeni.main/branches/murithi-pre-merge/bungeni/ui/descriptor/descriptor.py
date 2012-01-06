@@ -346,6 +346,13 @@ def scheduled_item_column(name, title):
         return IDCDescriptiveProperties(item.item).title
     return column.GetterColumn(title, getter)
 
+def scheduled_item_mover_column(name, title):
+    def getter(item, formatter):
+        if hasattr(item.item, "owner"):
+            return IDCDescriptiveProperties(item.item.owner).title
+        return ""
+    return column.GetterColumn(title, getter)
+
 ''' !+TYPES_CUSTOM
 def enumeration_column(name, title,
         item_reference_attr=None, # parent item attribute, for enum
@@ -3315,6 +3322,14 @@ class ItemScheduleDescriptor(ModelDescriptor):
             ],
             property=schema.TextLine(title=_("Title"), required=False),
             listing_column = scheduled_item_column("title", _(u"Title"))
+        ),
+        Field(name="item_mover", # [derived]
+            modes="view listing",
+            localizable=[
+                show("view listing")
+            ],
+            property=schema.TextLine(title=_("Mover"), required=False),
+            listing_column = scheduled_item_mover_column("mover", _(u"Mover"))
         ),
         Field(name="item_type",
             modes="view edit add listing",

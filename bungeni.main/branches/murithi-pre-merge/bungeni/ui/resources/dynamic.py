@@ -26,11 +26,12 @@ def get_globals(group_name, **kwargs):
                 "HEADING": "heading",
                 "TEXT": "text"
             },
-            "json_listing_url" : "./items/jsonlisting?sort=planned_order",
+            "json_listing_url" : "./items/jsonlisting?sort=sort_planned_order&dir=asc",
             "save_schedule_url": "./items/save-schedule",
             "schedulable_items_json_url" : "./schedulable-items-json",
             "column_title": i18n(_(u"Title"), language),
             "column_type": i18n(_(u"Type"), language),
+            "column_mover": i18n(_(u"Moved by"), language),
             "column_status": i18n(_(u"Status"), language),
             "column_status_date": i18n(_(u"Date"), language),
             "column_registry_number": i18n(_(u"No."), language),

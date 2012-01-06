@@ -19,6 +19,7 @@
     var saveDialog = null;
     var savingDialog = null;
     var ITEM_SELECT_ROW_COLUMN = "item_select_row"
+    var ITEM_MOVER_COLUMN = "item_mover"
     var ITEM_MOVE_UP_COLUMN = "item_move_up";
     var ITEM_MOVE_DOWN_COLUMN = "item_move_down";
     var ITEM_DELETE_COLUMN = "item_delete";
@@ -400,6 +401,10 @@
                 editor: new YAHOO.widget.TextboxCellEditor(),
                 formatter: itemTitleFormatter
             },
+            {
+                key:ITEM_MOVER_COLUMN, 
+                label: scheduler_globals.column_mover,
+            },
             {key:"item_type", label: scheduler_globals.column_type},
             {
                 key:ITEM_MOVE_UP_COLUMN, 
@@ -424,7 +429,7 @@
         itemsDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
         itemsDataSource.responseSchema = {
             resultsList: "nodes",
-            fields: ["item_id", "item_title", "item_type", "object_id"],
+            fields: ["item_id", "item_title", "item_type", "object_id", ITEM_MOVER_COLUMN],
         };
         
         var scheduler_container = document.createElement("div");
