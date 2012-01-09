@@ -15,7 +15,6 @@
     var schedulerActions = null;
     var schedulerLayout = null;
     var available_items_loaded = false;
-    var deleteDialog = null;
     var saveDialog = null;
     var savingDialog = null;
     var ITEM_SELECT_ROW_COLUMN = "item_select_row"
@@ -67,13 +66,12 @@
      */
      var itemTitleFormatter = function(el, record, column, data){
          rec_data = record.getData();
-         console.log(rec_data);
          if(rec_data.item_type == scheduler_globals.types.HEADING){
-             el.innerHTML = "<strong>" + rec_data.item_title + "</strong>";
+             el.innerHTML = "<span style='text-align:center;display:block;'><strong>" + rec_data.item_title + "</strong></spam>";
          }else if(rec_data.item_type == scheduler_globals.types.TEXT){
              el.innerHTML = "<em>" + rec_data.item_title + "</em>";
          }else{
-             el.innerHTML = rec_data.item_title;
+             el.innerHTML = rec_data.item_title + "<em><span style='display:block;'>Moved by: " + rec_data.item_mover + "</span></em>";
          }
      }
 
@@ -207,22 +205,6 @@
         }
     }
     
-    /**
-     * @method deleteRow
-     * @description deletes a row and record from the schedule. Displays
-     * a dialog to confirm intention before deleting item
-     * */
-    var deleteRow = function(args){
-        var target_column = this.getColumn(args.target);
-        if (target_column.field == ITEM_DELETE_COLUMN){
-            var target_record = this.getRecord(args.target);
-            var target_index = this.getTrIndex(target_record);
-            this.unselectAllRows();
-            this.selectRow(target_index);
-            deleteDialog.show();
-            deleteDialog.bringToTop();
-        }
-    }
     
     /**
      * @method checkRows
@@ -319,15 +301,11 @@
                 label: scheduler_globals.column_title,
             },
             {
-                key: "item_type",
-                label: scheduler_globals.column_type,
-            },
-            {
                 key: "registry_number",
                 label: scheduler_globals.column_registry_number,
             },
             {
-                key: "mover",
+                key: ITEM_MOVER_COLUMN,
                 label: scheduler_globals.column_mover,
             },
             {
@@ -391,19 +369,10 @@
         var textCellEditor = YAHOO.widget.TextboxCellEditor;
         var columnDefinitions = [
             {
-                key:ITEM_SELECT_ROW_COLUMN, 
-                label: "<input type='checkbox' name='rec-sel-all'/>", 
-                formatter: itemSelectFormatter 
-            },
-            {
                 key:"item_title", 
                 label: scheduler_globals.column_title,
                 editor: new YAHOO.widget.TextboxCellEditor(),
                 formatter: itemTitleFormatter
-            },
-            {
-                key:ITEM_MOVER_COLUMN, 
-                label: scheduler_globals.column_mover,
             },
             {key:"item_type", label: scheduler_globals.column_type},
             {
@@ -416,11 +385,6 @@
                 label:"", 
                 formatter:itemMoveDownFormatter
             },
-            {
-                key:ITEM_DELETE_COLUMN,
-                label:"",
-                formatter:itemDeleteFormatter
-            }
         ];
         
         itemsDataSource = new YAHOO.util.DataSource(
@@ -449,8 +413,6 @@
         itemsDataTable.subscribe("cellDblclickEvent", showCellEditorHandler);
         itemsDataTable.subscribe("cellClickEvent", reorderRow);
         itemsDataTable.subscribe("rowSelectEvent", showSchedulerControls);
-        itemsDataTable.subscribe("cellClickEvent", deleteRow);
-        itemsDataTable.subscribe("theadCellClickEvent", checkRows);
         itemsDataTable.subscribe("initEvent", renderAvailableItems);
         itemsDataTable.subscribe("initEvent", highlightTypedRows);
         itemsDataTable.subscribe("rowAddEvent", highlightTypedRows);
@@ -559,19 +521,14 @@
     var renderScheduleButtons = function(container){
         container.style.lineHeight = container.clientHeight;
         container.style.padding = "5px";
-        var removeButton = new YAHOO.widget.Button(
-            { label: scheduler_globals.remove_button_text }
-        );
         var saveButton = new YAHOO.widget.Button(
             { label: scheduler_globals.save_button_text }
         );
         var discardButton = new YAHOO.widget.Button(
             { label: scheduler_globals.discard_button_text }
         );
-        removeButton.on("click", removeCheckedItems);
         saveButton.on("click", saveSchedule);
         discardButton.on("click", discardChanges);
-        removeButton.appendTo(container);
         saveButton.appendTo(container);
         discardButton.appendTo(container);
     }
@@ -587,19 +544,37 @@
             var targetRecord = this.getRecord(args.target);
             var targetData = targetRecord.getData()
             if (Y$.query(CHECK_BOX_SELECTOR, args.target, true).checked){
-                var new_record_data = {
-                    item_id: targetData.item_id,
-                    item_title: targetData.item_title,
-                    item_type: targetData.item_type,
+                //check if item is already scheduled
+                var record_set = itemsDataTable.getRecordSet().getRecords();
+                var item_in_schedule = false;
+                for(idx in record_set){
+                    var record = record_set[idx];
+                    var oData = record.getData();
+                    if((oData.item_id == targetData.item_id) &&
+                        (oData.item_type == targetData.item_type)
+                    ){
+                        item_in_schedule = true;
+                        break;
+                    }
                 }
-                itemsDataTable.addRow(new_record_data);
+                if (!item_in_schedule){
+                    var new_record_data = {
+                        item_id: targetData.item_id,
+                        item_title: targetData.item_title,
+                        item_type: targetData.item_type,
+                        item_mover: targetData.item_mover,
+                    }
+                    selected_index = itemsDataTable.getSelectedRows()[0];
+                    var new_record_index = itemsDataTable.getTrIndex(selected_index)+1;
+                    itemsDataTable.addRow(new_record_data, new_record_index);
+                }
             }else{
                 var record_set = itemsDataTable.getRecordSet().getRecords();
                 for (idx in record_set){
                     var record = record_set[idx];
                     var sdata = record.getData();
                     if((sdata.item_id == targetData.item_id) &&
-                        (sdata.item_type == sdata.item_type)
+                        (sdata.item_type == targetData.item_type)
                     ){
                         itemsDataTable.deleteRow(Number(idx));
                     }
@@ -637,42 +612,7 @@
         scheduleTextButton.on("click", addTextToSchedule);
         scheduleHeadingButton.appendTo(schedulerActions.body);
         scheduleHeadingButton.on("click", addHeadingToSchedule);
-        
-        //create delete dialog and controls
-        deleteDialog = new YAHOO.widget.SimpleDialog("scheduler-delete-dialog",
-            DIALOG_CONFIG
-        );
-        deleteDialog.setHeader(scheduler_globals.delete_dialog_header);
-        deleteDialog.setBody(scheduler_globals.delete_dialog_text)
-        
-        var handleDeleteConfirm = function(){
-            selected_record_index = itemsDataTable.getSelectedRows()[0];
-            itemsDataTable.deleteRow(selected_record_index);
-            this.hide();
-        }
-        
-        var handleDeleteCancel = function(){
-            this.hide();
-        }
-        
-        var deleteDialogButtons = [
-            {
-                text: scheduler_globals.delete_dialog_confirm, 
-                handler: handleDeleteConfirm
-            },
-            {
-                text: scheduler_globals.delete_dialog_cancel, 
-                handler: handleDeleteCancel,
-                isDefault: true
-            },
-        ] 
-        
-        deleteDialog.cfg.queueProperty("buttons", deleteDialogButtons);
-        deleteDialog.cfg.queueProperty("icon", 
-            YAHOO.widget.SimpleDialog.ICON_WARN
-        );
-        deleteDialog.render(document.body);
-        
+                
         //create save dialog
         saveDialog = new YAHOO.widget.SimpleDialog("scheduler-save-dialog",
             DIALOG_CONFIG

@@ -114,6 +114,12 @@ def combined_name_column(name, title, default=""):
         return "%s [%s]" % (_(item.full_name), item.short_name)
     return column.GetterColumn(title, getter)
 
+def dc_property_column(name, title, property_name="title"):
+    def renderer(value):
+        if value:
+            return getattr(IDCDescriptiveProperties(value), property_name, "")
+        return ""
+    return _column(name, title, renderer)
 
 def _get_related_user(item_user, attr):
     """Get trhe user instance that is related to this item via <attr>,
@@ -2887,6 +2893,7 @@ class SittingDescriptor(ModelDescriptor):
                 ),
                 required=False
             ),
+            listing_column=dc_property_column("venue", _(u"Venue")),
         ),
         Field(name="activity_type",
             modes="view edit add",
