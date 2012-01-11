@@ -17,7 +17,9 @@
     var available_items_loaded = false;
     var saveDialog = null;
     var savingDialog = null;
+    var deleteDialog = null;
     var ITEM_SELECT_ROW_COLUMN = "item_select_row"
+    var ITEM_TYPE_COLUMN = "item_type";
     var ITEM_MOVER_COLUMN = "item_mover"
     var ITEM_MOVE_UP_COLUMN = "item_move_up";
     var ITEM_MOVE_DOWN_COLUMN = "item_move_down";
@@ -73,6 +75,14 @@
          }else{
              el.innerHTML = rec_data.item_title + "<em><span style='display:block;'>Moved by: " + rec_data.item_mover + "</span></em>";
          }
+     }
+
+    /**
+     * @method itemTypeFormatter
+     * @description render item type in reduced form
+     */
+     var itemTypeFormatter = function(el, record, column, data){
+         el.innerHTML = "<span style='font-size:10px;'>" + record.getData()[ITEM_TYPE_COLUMN] + "</span>";
      }
 
     /**
@@ -204,27 +214,17 @@
             }
         }
     }
-    
-    
+
     /**
-     * @method checkRows
-     * @description check or uncheck selectors for all items on data table
-     * 
-     */
-    var checkRows = function(args){
-        var target_column = this.getColumn(args.target);
-        if(target_column.field == ITEM_SELECT_ROW_COLUMN){
-            var record_set = this.getRecordSet().getRecords();
-            var checked = false;
-            if (Y$.query(CHECK_BOX_SELECTOR, args.target, true).checked){
-                checked = true;
-            }
-            for (record_index in record_set){
-                var row = this.getTrEl(record_set[record_index]);
-                var select_td = this.getFirstTdEl(row);
-                Y$.query(CHECK_BOX_SELECTOR, select_td, true).checked = checked;
-            }
-        }
+     * @method removeSelectedRow
+     * @description deletes a row and record from the schedule. Displays
+     * a dialog to confirm intention before deleting item
+     * */
+    var removeSelectedRow = function(args){
+        var target_row = itemsDataTable.getSelectedRows()[0];
+        var target_index = itemsDataTable.getTrIndex(itemsDataTable.getTrEl(target_row));
+        deleteDialog.show();
+        deleteDialog.bringToTop();
     }
 
     /**
@@ -255,11 +255,21 @@
     var showSchedulerControls = function(args){
         schedulerActions.currentItem = args.record;
         schedulerActions.cfg.setProperty("context",
-            [args.el.id, "tl", "tr"]
+            [args.el.id, "tl", "bl"]
         );
         schedulerActions.render();
         schedulerActions.show();
     }
+
+
+    /**
+     * @method setFilterMenuSelection
+     * @description sets the value of a filter menu button
+     */
+     var setFilterMenuSelection = function(event){
+         var menuItem = event.newValue;
+         this.set("label", ("<em>" + menuItem.cfg.getProperty("text") + "</em>"));
+     }
 
 
    /**
@@ -328,11 +338,12 @@
         for (type_index in scheduler_globals.schedulable_types){
             (function(){
                 var type = scheduler_globals.schedulable_types[type_index];
-                var container_id = type + "data-table";
+                var container_id = type + "-data-table";
+                var container_id_filters = container_id + "-filters";
                 availableItems.addTab(new YAHOO.widget.Tab(
                     {
                         label: type,
-                        content: "<div id='" + container_id + "'/>",
+                        content: "<div id='" + container_id_filters + "' class='schedule-available-item-filters'></div>" + "<div id='" + container_id + "'/>",
                     }
                 ));
                 Event.onAvailable(container_id, function(event){
@@ -352,6 +363,35 @@
                     );
                     tabDataTable.subscribe("cellClickEvent", addItemToSchedule);
                     tabDataTable.subscribe("theadCellClickEvent", checkRows);
+                    tabDataTable.subscribe("cellSelectEvent", addItemToSchedule);
+                    
+                    //create filter controls
+                    var filter_config = scheduler_globals.filter_config[type];
+                    if (filter_config.menu.length > 0){
+                        var statusFilterButton = new YAHOO.widget.Button(
+                            {
+                                type: "menu",
+                                label: "<em>" + filter_config.label + "</em>",
+                                id: "filter_status_" + type,
+                                name: "filter_status_" + type,
+                                menu: filter_config.menu,
+                                container: container_id_filters,
+                            }
+                        );
+                        statusFilterButton.on("selectedMenuItemChange",
+                            setFilterMenuSelection
+                        );
+                        var filterApplyButton = new YAHOO.widget.Button(
+                            {
+                                type: "button",
+                                label: "<em>" + scheduler_globals.filter_apply_label + "</em>",
+                                id: "filter_apply_" + type,
+                                name: "filter_apply_" + type,
+                                container: container_id_filters,
+                            }
+                        );
+                    }
+                    
                 });
             })();
         }
@@ -369,12 +409,16 @@
         var textCellEditor = YAHOO.widget.TextboxCellEditor;
         var columnDefinitions = [
             {
+                key:"item_type", 
+                label: scheduler_globals.column_type,
+                formatter: itemTypeFormatter,
+            },
+            {
                 key:"item_title", 
                 label: scheduler_globals.column_title,
                 editor: new YAHOO.widget.TextboxCellEditor(),
                 formatter: itemTitleFormatter
             },
-            {key:"item_type", label: scheduler_globals.column_type},
             {
                 key:ITEM_MOVE_UP_COLUMN, 
                 label:"", 
@@ -539,11 +583,13 @@
      * 
      */
     var addItemToSchedule = function(args){
-        var target_column = this.getColumn(args.target);
+        var target = args.target || args.el;
+        var target_column = this.getColumn(target);
+        console.log("TARGET_COL", target , target_column);
         if(target_column.field == ITEM_SELECT_ROW_COLUMN){
-            var targetRecord = this.getRecord(args.target);
+            var targetRecord = this.getRecord(target);
             var targetData = targetRecord.getData()
-            if (Y$.query(CHECK_BOX_SELECTOR, args.target, true).checked){
+            if (Y$.query(CHECK_BOX_SELECTOR, target, true).checked){
                 //check if item is already scheduled
                 var record_set = itemsDataTable.getRecordSet().getRecords();
                 var item_in_schedule = false;
@@ -584,6 +630,30 @@
     }
 
     /**
+     * @method checkRows
+     * @description check or uncheck selectors for all items on data table
+     * 
+     */
+    var checkRows = function(args){
+        var target_column = this.getColumn(args.target);
+        if(target_column.field == ITEM_SELECT_ROW_COLUMN){
+            var record_set = this.getRecordSet().getRecords();
+            var checked = false;
+            if (Y$.query(CHECK_BOX_SELECTOR, args.target, true).checked){
+                checked = true;
+            }
+            for (record_index in record_set){
+                var row = this.getTrEl(record_set[record_index]);
+                var select_td = this.getFirstTdEl(row);
+                Y$.query(CHECK_BOX_SELECTOR, select_td, true).checked = checked;
+                this.unselectAllCells();
+                this.selectCell(select_td);
+            }
+        }
+    }
+
+
+    /**
      * @method anonymous
      * @description Renders the panel UI and builds up schedule data table.
      * Also binds various events to handlers on the data table.
@@ -593,7 +663,8 @@
         //create scheduler actions panel
         schedulerActions = new YAHOO.widget.Panel("scheduled-item-controls",
             {   
-                underlay: "none"
+                underlay: "none",
+                width: "300px",
             }
         );
         schedulerActions.currentItem = null;
@@ -608,11 +679,54 @@
                 label: scheduler_globals.heading_button_text,
             }
         );
+        var scheduleRemoveButton = new YAHOO.widget.Button(
+            {
+                label: scheduler_globals.remove_button_text,
+            }
+        );
         scheduleTextButton.appendTo(schedulerActions.body);
         scheduleTextButton.on("click", addTextToSchedule);
         scheduleHeadingButton.appendTo(schedulerActions.body);
         scheduleHeadingButton.on("click", addHeadingToSchedule);
-                
+        scheduleRemoveButton.appendTo(schedulerActions.body);
+        scheduleRemoveButton.on("click", removeSelectedRow);
+
+        //create delete dialog and controls
+        deleteDialog = new YAHOO.widget.SimpleDialog("scheduler-delete-dialog",
+            DIALOG_CONFIG
+        );
+        deleteDialog.setHeader(scheduler_globals.delete_dialog_header);
+        deleteDialog.setBody(scheduler_globals.delete_dialog_text)
+        
+        var handleDeleteConfirm = function(){
+            selected_record_index = itemsDataTable.getSelectedRows()[0];
+            itemsDataTable.deleteRow(selected_record_index);
+            this.hide();
+            schedulerActions.hide();
+        }
+        
+        var handleDeleteCancel = function(){
+            this.hide();
+        }
+        
+        var deleteDialogButtons = [
+            {
+                text: scheduler_globals.delete_dialog_confirm, 
+                handler: handleDeleteConfirm
+            },
+            {
+                text: scheduler_globals.delete_dialog_cancel, 
+                handler: handleDeleteCancel,
+                isDefault: true
+            },
+        ] 
+        
+        deleteDialog.cfg.queueProperty("buttons", deleteDialogButtons);
+        deleteDialog.cfg.queueProperty("icon", 
+            YAHOO.widget.SimpleDialog.ICON_WARN
+        );
+        deleteDialog.render(document.body);
+
         //create save dialog
         saveDialog = new YAHOO.widget.SimpleDialog("scheduler-save-dialog",
             DIALOG_CONFIG

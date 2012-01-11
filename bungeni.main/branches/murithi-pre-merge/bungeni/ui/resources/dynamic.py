@@ -6,6 +6,7 @@ from bungeni.ui.i18n import _
 from bungeni.core.translation import (translate_i18n as i18n, 
     get_request_language
 )
+from bungeni.ui.calendar import data
 
 RESOURCE_MAPPING = {
     "scheduler-globals.js": "scheduler_globals"
@@ -38,7 +39,7 @@ def get_globals(group_name, **kwargs):
             "column_mover": i18n(_(u"Mover"), language),
             "text_button_text": i18n(_(u"add text"), language),
             "heading_button_text": i18n(_(u"add heading"), language),
-            "remove_button_text": i18n(_(u"remove selected items"), language),
+            "remove_button_text": i18n(_(u"remove item"), language),
             "save_button_text": i18n(_(u"save changes"), language),
             "discard_button_text": i18n(_(u"discard changes"), language),
             "current_schedule_title": i18n(_(u"Agenda"), language),
@@ -69,9 +70,9 @@ def get_globals(group_name, **kwargs):
             "saving_dialog_exception": i18n(
                 _(u"there was an error while saving the schedule"), language
             ),
-            "schedulable_types": ["bill", "question", "motion", 
-                "tableddocument", "agendaitem", "heading"
-            ]
+            "schedulable_types": data.get_schedulable_types(),
+            "filter_config": data.get_filter_config(),
+            "filter_apply_label": i18n(_(u"apply filters"), language),
         }
     }
     return globals_map.get(group_name, {})

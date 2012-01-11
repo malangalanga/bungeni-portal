@@ -11,9 +11,34 @@ from sqlalchemy import orm
 from bungeni.models import domain
 from bungeni.core.dc import IDCDescriptiveProperties
 from bungeni.core.workflow.interfaces import IWorkflow
+from bungeni.core.translation import translate_i18n
 from bungeni.ui.tagged import get_states
 from bungeni.ui.utils import date, common
 from bungeni.alchemist import Session
+from bungeni.ui.i18n import _
+
+def get_schedulable_types():
+    #!+CALENDAR(mb, Jan-2012) This should come from capi or workflow configuration
+    return ["bill", "question", "motion", "tableddocument", "agendaitem", "heading"]
+
+
+def get_filter_config(tag="tobescheduled"):
+    return dict(
+        [ (item_type, 
+            { 
+                "label": _(u"choose status"),
+                "menu": [ 
+                    { 
+                        "text": IWorkflow(domain.DOMAIN_CLASSES[item_type]()).get_state(status).title, 
+                        "value": status 
+                    } 
+                    for status in get_states(item_type, tagged=[tag])
+                ]
+            }
+           ) 
+            for item_type in get_schedulable_types()
+        ]
+    )
 
 class SchedulableItemsGetter(object):
     item_type = None
