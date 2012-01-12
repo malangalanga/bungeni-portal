@@ -249,8 +249,8 @@ input.inputLabelActive {
 }
 #portal-column-content #whats-on-overview .whats-on-viewlet dd {
     border: 0 none;
-    border-top: 4px solid #333436;
-    border-bottom: 1px solid #333436;
+    border-top: 4px solid #C60203;
+    border-bottom: 1px solid #C60203;
 }
 #portal-column-content #whats-on-overview .whats-on-viewlet dd ul {
     background: #fff;
@@ -440,18 +440,18 @@ input.inputLabelActive {
     color:#000 !important;
 }
 .actionMenu .actionMenuContent ul {
-    border: 1px solid #333436;
+    border: 1px solid #C60203;
     border-bottom: 0 none;
     border-top: 0 none;
-    background:#333436;
+    background:#C60203;
 }
 .actionMenu .actionMenuContent ul li {
     border: 0 none;
-    border-bottom: 1px solid #aaf;
+    border-bottom: 1px solid #000;
 }
 .actionMenu .actionMenuContent ul li a {
     background: none;
-    color: #000 !important;
+    color: #fff !important;
 }
 .actionMenu .actionMenuContent ul li a#calendar-link-15 {
     background: none;
@@ -661,10 +661,9 @@ table.listing th,
 table.listingdescription th,
 .stx table th,
 .yui-skin-sam .yui-dt-first th {
-    background:#333436 !important;
+    background:#C60203 !important;
     border: 0 none;
     border-left: 1px solid #bbf;
-    border-right: 1px solid #88f;
     border-top: 0 none;
     text-shadow: 0 0 0 #fff;
     color: #fff !important;
@@ -710,9 +709,17 @@ table.listing td,
 table.listingdescription td,
 .stx table td,
 .yui-skin-sam .yui-dt table tr td {
-    border-right: 1px solid #aaf;
     color: #222;
     text-shadow: 0 0 0 #fff;
+}
+#alchemist\.container\.listing th .yui-dt-liner {
+    background: url(../images/sort_none.gif) no-repeat right !important;
+}
+#alchemist\.container\.listing th.yui-dt-asc .yui-dt-liner {
+    background: url(../images/sort_up.gif) no-repeat right !important;
+}
+#alchemist\.container\.listing th.yui-dt-desc .yui-dt-liner {
+    background: url(../images/sort_down.gif) no-repeat right !important;
 }
 /*
  * formTabs
@@ -756,10 +763,13 @@ li.formTab a.selected {
     border-top-color: #000000;
     border-right: 1px solid #000000;
     border-left: 1px solid #000000;
-    border-bottom: 2px solid #333436;
+    border-bottom: 2px solid #C60203;
     text-decoration: none;
-    background-color:#2b2c2e !important;
-    background:#2b2c2e !important;
+    background-color:#C60203 !important;
+    background:#C60203 !important;
+}
+#content a:target {
+background-color: #C60203 !important;
 }
 
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:hover,
@@ -817,10 +827,10 @@ dl.portalMessage dd {
     text-shadow: 0.1em #f79f10;
 }
 #display_form_spacer {
-    background: #333436;
+    background: #C60203;
 }
 .template-portal dd#fieldset-written-question-response div.documentDescription {
-    background:#333436 !important;
+    background:#C60203 !important;
     color:#fff;
     font-weight:normal;
 }
@@ -868,6 +878,9 @@ dl.portalMessage dd {
 .formPanel.Report4Sitting .field .content-right-column h1,
 .formPanel.Report4Sitting .field .content-right-column h2 {
     text-align: left;
+}
+.formPanel, dd#items-to-be-scheduled-dl .formPanel div:last-child {
+    text-align: justify !important;
 }
 /*
  * Calendar
@@ -1155,8 +1168,8 @@ div.main-column #collage h2 {
     border-left: 0 none;
     border-top: 0 none;
     border-right: 1px solid #aaa;
-    border-bottom:1px solid #333436;
-    background:#333436 !important;
+    border-bottom:1px solid #C60203;
+    background:#C60203 !important;
 }
 /*
  * formTabs
@@ -1541,8 +1554,17 @@ div.dhx_cal_navline .dhx_cal_date {
     border-left: 0 none;
     border-top: 0 none;
     border-right: 1px solid #aaa;
-    border-bottom:1px solid #333436;
-    background:#333436 !important;
+    border-bottom:1px solid #C60203;
+    background:#C60203 !important;
+}
+.section-bungeni-workspace table.listing th, 
+.section-bungeni-workspace table.listingdescription th, 
+.section-bungeni-workspace .stx table th, .yui-skin-sam .yui-dt-first th {
+    background: #21a1ba !important;
+}
+.section-bungeni-workspace table.listing th a, 
+.section-bungeni-workspace table.listingdescription th a {
+    color:black !important;
 }
 /*
  * formTabs
