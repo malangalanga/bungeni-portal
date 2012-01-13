@@ -18,12 +18,7 @@
     
     <state id="internal" title="Published Internal">
         <!-- event -->
-        <grant permission="zope.View" role="bungeni.Clerk"/>
-        <grant permission="zope.View" role="bungeni.Speaker"/>
-        <grant permission="zope.View" role="bungeni.Owner"/>
-        <grant permission="zope.View" role="bungeni.Signatory"/>
-        <grant permission="zope.View" role="bungeni.MP"/>
-        <grant permission="zope.View" role="bungeni.Authenticated"/>
+        <grant permission="zope.View" role="bungeni.Authenticated" />
         <deny permission="zope.View" role="bungeni.Anonymous" />
         <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />

@@ -130,6 +130,7 @@ workflow as a single XML document.
 
 - the root element id should not contain "-" (use "_" as separator).
 
+
 NOTE: to easily see the the evaluated result of all permission assigments 
 for each workflow state definition (that uses like_state) set the 
 logging level to DEBUG.
@@ -138,6 +139,25 @@ logging level to DEBUG.
     transition to a "politicocratic" destination states need to allow 
     freedom to manually set the transition date_active, but transition 
     to a "bureaucratic" destination states should not.
+
+
+!+ AVOID contradictory/superfluous permissions assignments:
+When defining permissons on states, should avoid potentially contradictory or
+superfluous (e.g. always denied) assignments as the permission checking may 
+give incorrect results. There is logical overlap between being authenticated 
+and being an mp, clerk, etc, and the security model does not take into account.
+
+For example, in the case of AttachedFile, denying the "zope.View" permission 
+for "bungeni.Authenticated" and granting it for "bungeni.MP":
+
+    <grant permission="zope.View" role="bungeni.MP" />
+    <deny permission="zope.View" role="bungeni.Authenticated" /> 
+
+a) for "bungeni.Authenticated" this is superfluous as it is denied in all 
+states in same workflow
+b) adding it explicitly and with the **contrary** setting alongside another 
+**authenticated** role as for "bungeni.MP" gives incorrect results!
+
 
 
 Transitions

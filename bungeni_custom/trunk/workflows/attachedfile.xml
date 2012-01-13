@@ -30,11 +30,7 @@
     
     <state id="internal" title="Published Internal">
         <!-- attachedfile -->
-        <grant permission="zope.View" role="bungeni.Clerk" />
-        <grant permission="zope.View" role="bungeni.Speaker" />
-        <grant permission="zope.View" role="bungeni.Owner"/>
-        <grant permission="zope.View" role="bungeni.Signatory" /> 
-        <deny permission="zope.View" role="bungeni.Authenticated" /> 
+        <grant permission="zope.View" role="bungeni.Authenticated" />
         <deny permission="zope.View" role="bungeni.Anonymous" />
     </state>
     
@@ -42,13 +38,7 @@
         currently being used in attachdfile, heading, event
         consider using "dropped", "obsoleted", "removed"...
     -->
-    <state id="inactive" title="Inactive file" like_state="internal">
-        <!-- attachedfile -->
-        <deny permission="zope.View" role="bungeni.Signatory" /> 
-        <deny permission="zope.View" role="bungeni.Authenticated" /> 
-        <deny permission="zope.View" role="bungeni.Anonymous" /> 
-    </state>
-    
+    <state id="inactive" title="Inactive file" like_state="internal" />
     
     <!-- !+IDENTICAL_TRANSITIONS(mr, sep-2011) attachedfile, address, event -->
     <transition title="Create"
