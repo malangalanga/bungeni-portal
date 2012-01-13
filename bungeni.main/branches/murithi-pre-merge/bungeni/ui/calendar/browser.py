@@ -507,11 +507,18 @@ class SchedulableItemsJSON(BrowserView):
     
     def get_json_items(self):
         item_type = self.request.form.get("type")
+        item_filters = dict(
+            [
+                (filter_key[7:], self.request.form.get(filter_key)) 
+                for filter_key in self.request.form.keys()
+                if filter_key.startswith(FILTER_PREFIX)
+            ]
+        )
         if item_type is None:
             return '{"items":[]}'
         else:
             items_getter = data.SchedulableItemsGetter(self.context,
-                item_type
+                item_type, item_filters=item_filters
             )
         return items_getter.as_json()
     

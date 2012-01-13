@@ -7,7 +7,7 @@
 $Id$
 """
 import json
-from sqlalchemy import orm
+from sqlalchemy import orm, sql
 from bungeni.models import domain
 from bungeni.core.dc import IDCDescriptiveProperties
 from bungeni.core.workflow.interfaces import IWorkflow
@@ -46,7 +46,9 @@ class SchedulableItemsGetter(object):
     group_filter = False
     domain_class = None
     
-    def __init__(self, context, item_type, filter_states=None, group_filter=False):
+    def __init__(self, context, item_type, filter_states=None, 
+        group_filter=False, item_filters={}
+    ):
         self.context = context
         self.item_type = item_type
         self.filter_states = filter_states or get_states(item_type, 
@@ -59,6 +61,7 @@ class SchedulableItemsGetter(object):
             raise AttributeError("Domain Class mapping has no such type %s" %
                 item_type
             )
+        self.item_filters = item_filters
     
     @property
     def group_id(self):
@@ -75,6 +78,19 @@ class SchedulableItemsGetter(object):
         items_query = Session().query(self.domain_class).filter(
             self.domain_class.status.in_(self.filter_states)
         )
+        if len(self.item_filters):
+            for (key, value) in self.item_filters.iteritems():
+                column = getattr(self.domain_class, key)
+                #!+SCHEDULING(mb, Jan-2011) extend query spec to include sql filters
+                if "date" in key:
+                    if "|" in value:
+                        start, end = value.split("|")
+                        expression = sql.between(column, start, end)
+                    else:
+                        expression = (column==value)
+                else:
+                    expression = (column==value)
+                items_query = items_query.filter(expression)
         if self.group_filter:
             items_query = items_query.filter(
                 self.domain_class.group_id==self.group_id

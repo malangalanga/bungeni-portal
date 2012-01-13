@@ -39,10 +39,18 @@
     /**
      * Custom method of added to data table to refresh data
      **/
-    YAHOO.widget.DataTable.prototype.refresh = function() {
-        var datasource = this.getDataSource();
-        datasource.sendRequest(
-                (this.get("initialRequest")),
+    YAHOO.widget.DataTable.prototype.refresh = function(params) {
+        var dataSource = this.getDataSource();
+        var data_url = null;
+        if (params != undefined){
+            var data_params = new Array()
+            for (filter in params){
+                data_params.push([filter, params[filter]].join("="));
+            }
+            data_url = "&" + data_params.join("&");
+        }
+        dataSource.sendRequest(
+                data_url,
                 {
                     success: this.onDataReturnInitializeTable,
                     failure: this.onDataReturnInitializeTable,
@@ -271,6 +279,27 @@
          this.set("label", ("<em>" + menuItem.cfg.getProperty("text") + "</em>"));
      }
 
+    /**
+     * @method filterCalendarSetup
+     * @description sets up a calendar bound to a button
+     */
+    var filterCalendarSetup = function(button, type, menu, callback){
+        var sCalendar = new YAHOO.widget.Calendar(
+            "calendar_start_" + type,
+            menu.body.id
+        );
+        sCalendar.render();
+        
+        sCalendar.selectEvent.subscribe(function(sType, oArgs){
+            if(oArgs){
+                var sDate = oArgs[0][0];
+                button.set("label", sDate.join("-"));
+            }
+            menu.hide();
+        });
+        sCalendar.align();
+        button.unsubscribe("click", callback);
+    }
 
    /**
      * @method renderAvailableItems
@@ -381,6 +410,62 @@
                         statusFilterButton.on("selectedMenuItemChange",
                             setFilterMenuSelection
                         );
+
+                        /* 
+                         * Start Date Picker - Reorganize + Parametrize
+                         **/
+                        var dateStartMenu = new YAHOO.widget.Overlay(
+                            "cal_menu_start_" + type, { visible: false }
+                        );
+                        var dateStartButton = new YAHOO.widget.Button(
+                            {
+                                type: "menu",
+                                label: "<em>start date</em>",
+                                id: "filter_start_date_" + type,
+                                name: "filter_start_date_" + type,
+                                menu: dateStartMenu,
+                                container: container_id_filters,
+                            }
+                        );
+                        dateStartButton.on("appendTo", function(){
+                            dateStartMenu.setBody(" ");
+                            dateStartMenu.body.id = "calendar_start_container_" + type;
+                        });
+
+                        dateStartButton.on("click", function callback(){
+                            filterCalendarSetup(this, type, dateStartMenu, callback);
+                        });
+                        /* 
+                         * End start date picker logic
+                         **/
+                        /* 
+                         * Start Date Picker - Reorganize + Parametrize
+                         **/
+                        var dateEndMenu = new YAHOO.widget.Overlay(
+                            "cal_menu_end_" + type, { visible: false }
+                        );
+                        var dateEndButton = new YAHOO.widget.Button(
+                            {
+                                type: "menu",
+                                label: "<em>send date</em>",
+                                id: "filter_end_date_" + type,
+                                name: "filter_end_date_" + type,
+                                menu: dateEndMenu,
+                                container: container_id_filters,
+                            }
+                        );
+                        dateEndButton.on("appendTo", function(){
+                            dateEndMenu.setBody(" ");
+                            dateEndMenu.body.id = "calendar_end_container_" + type;
+                        });
+
+                        dateEndButton.on("click", function callback(){
+                            filterCalendarSetup(this, type, dateEndMenu, callback);
+                        });
+                        /* 
+                         * End start date picker logic
+                         **/
+                        
                         var filterApplyButton = new YAHOO.widget.Button(
                             {
                                 type: "button",
@@ -390,6 +475,16 @@
                                 container: container_id_filters,
                             }
                         );
+                        filterApplyButton.on("click", function(oArgs){
+                            var data_filters = {};
+                            var status_filter = statusFilterButton.getMenu().activeItem.value;
+                            data_filters["filter_status"] = status_filter;
+                            data_filters["filter_status_date"] = new Array(
+                                    dateStartButton.get("label"),
+                                    dateEndButton.get("label")
+                            ).join(":");
+                            tabDataTable.refresh(data_filters);
+                        });
                     }
                     
                 });
@@ -585,7 +680,6 @@
     var addItemToSchedule = function(args){
         var target = args.target || args.el;
         var target_column = this.getColumn(target);
-        console.log("TARGET_COL", target , target_column);
         if(target_column.field == ITEM_SELECT_ROW_COLUMN){
             var targetRecord = this.getRecord(target);
             var targetData = targetRecord.getData()
