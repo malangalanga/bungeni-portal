@@ -33,6 +33,10 @@
     <link rel="stylesheet" href="/@@/portal/A9-myinterests.css" type="text/css" />
     <link rel="stylesheet" href="/@@/portal/B0-globalnav.css" type="text/css" />
     <link rel="stylesheet" href="/@@/portal/jquery-ui-1.8.7.custom.css" type="text/css" />
+    
+    <link rel="stylesheet" href="/@@/portal/rtl.css" type="text/css"
+        tal:condition="context/@@plone/is_rtl"/>
+       
     <tal:block tal:replace="structure provider:plone-js">
       JS Includes, Dynamically Included by Context 
     </tal:block>

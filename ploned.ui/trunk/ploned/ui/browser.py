@@ -6,6 +6,7 @@ from zope.publisher.browser import BrowserView
 from zope.security import checkPermission
 from zope.viewlet.interfaces import IViewlet
 from zope.viewlet.interfaces import IViewletManager
+from bungeni.core import language
 
 class PloneView(BrowserView):
     def show_editable_border(self):
@@ -14,6 +15,9 @@ class PloneView(BrowserView):
     def text_direction(self):
         text_direction = component.queryUtility(interfaces.ITextDirection)
         return text_direction and text_direction.get_text_direction() or "ltr"
+        
+    def is_rtl(self):   
+        return language.is_rtl()
         
     def body_css_class(self):
         css = component.queryUtility(interfaces.IBodyCSS)
