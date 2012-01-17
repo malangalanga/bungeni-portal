@@ -2,7 +2,6 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="plone">
-
   <view
      for=".interfaces.ISkinDirectory"
      name="absolute_url"
@@ -13,7 +12,7 @@
      />
 
   <view
-     for="zope.app.publisher.browser.fileresource.FileResource"
+     for="zope.browserresource.file.FileResource"
      name="absolute_url"
      factory=".skindirectory.FileResourceAbsoluteURL"
      type="zope.publisher.interfaces.http.IHTTPRequest"

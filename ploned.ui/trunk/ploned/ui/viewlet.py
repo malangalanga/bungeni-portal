@@ -34,7 +34,7 @@ class StructureAwareViewlet(object):
 '''
 # specific content
 
-from zope.app.publisher.browser.menu import getMenu
+from zope.browsermenu.menu import getMenu
 from bungeni.ui import z3evoque
 from zope.app.pagetemplate import ViewPageTemplateFile
 

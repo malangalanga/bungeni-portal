@@ -9,7 +9,7 @@ $Id$
 from zope import interface, component
 
 try:
-    from zope.app.publisher.interfaces import IResource
+    from zope.browserresource.interfaces import IResource
 except ImportError:
     # backwards-compatibility
     from zope.component.interfaces import IResource
@@ -17,7 +17,7 @@ except ImportError:
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserRequest, IBrowserPublisher
 
-from zope.app.publisher.browser.directoryresource import DirectoryResource, Directory, _marker
+from zope.browserresource.directory import DirectoryResource, Directory, _marker
 
 from zope.traversing.browser.absoluteurl import AbsoluteURL
 
@@ -39,9 +39,6 @@ class SkinDirectory(DirectoryResource):
     interface.implements( interfaces.ISkinDirectory )
 
     layers = ()
-    
-    resource_factories = DirectoryResource.resource_factories.copy()
-    resource_factories['.dtml'] = dtmlresource.DTMLResourceFactory
         
     def get(self, name, default=_marker):
         value = super( SkinDirectory, self ).get( name, None)

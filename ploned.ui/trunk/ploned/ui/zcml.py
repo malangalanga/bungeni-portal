@@ -6,7 +6,7 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.security.checker import CheckerPublic, NamesChecker
 from zope.component.zcml import handler
-from zope.app.publisher.browser.metadirectives import IResourceDirectoryDirective
+from zope.browserresource.metadirectives import IResourceDirectoryDirective
 from zope.configuration.fields import GlobalInterface, Tokens
 
 import skindirectory

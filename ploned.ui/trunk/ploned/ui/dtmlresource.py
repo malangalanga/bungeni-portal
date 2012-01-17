@@ -2,8 +2,8 @@
 import os
 
 from zope.documenttemplate import HTML
-from zope.app.publisher.browser.fileresource import FileResource
-from zope.app.publisher.fileresource import File
+from zope.browserresource.file import FileResource
+from zope.browserresource.file import File
 
 class CSSPropertiedDTMLResource(FileResource):
     """ just enough burnt offerings to please the zope2 gods of plone """

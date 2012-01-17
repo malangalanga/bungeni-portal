@@ -17,9 +17,9 @@ from zope.security.proxy import removeSecurityProxy
 from zope.security import checkPermission
 
 from zope.interface import providedBy, Interface
-from zope.app.publisher.interfaces.browser import IBrowserSubMenuItem
-from zope.app.publisher.browser.menu import BrowserMenu, getMenu
-from zope.app.publisher.interfaces.browser import IBrowserMenu
+from zope.browsermenu.interfaces import IBrowserSubMenuItem
+from zope.browsermenu.menu import BrowserMenu, getMenu
+from zope.browsermenu.interfaces import IBrowserMenu
 from zope.app.component.hooks import getSite
 
 from zope.app.pagetemplate import ViewPageTemplateFile
@@ -108,9 +108,9 @@ class PloneBrowserMenu(BrowserMenu):
             extra.setdefault("id", 
                 # try "id", BrowserMenu, bungeni.ui.menu.BrowserSubMenuItem
                 getattr(item, "id", None) or
-                # try "submenuId": zope.app.publisher.browser.menu.BrowserSubMenuItem
+                # try "submenuId": zope.browsermenu.BrowserSubMenuItem
                 getattr(item, "submenuId", None) or 
-                # try "action": zope.app.publisher.browser.menu.BrowserMenuItem
+                # try "action": zope.browsermenu.BrowserMenuItem
                 action_to_id(getattr(item, "action", None))
             )
             # !+CSS_ID(mr, may-2011) the CSS menu styling should NOT be based 

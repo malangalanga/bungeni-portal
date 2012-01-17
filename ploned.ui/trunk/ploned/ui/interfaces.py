@@ -5,7 +5,7 @@ from zope.viewlet.interfaces import IViewletManager
 from z3c.menu.ready2go import interfaces as imenu
 
 from zope.interface import directlyProvides
-from zope.app.publisher.interfaces.browser import IMenuItemType
+from zope.browsermenu.interfaces import IMenuItemType
 from zope.contentprovider.interfaces import IContentProvider
 
 class IPlonedSkin( IDefaultBrowserLayer ):
