@@ -85,7 +85,14 @@ class SchedulableItemsGetter(object):
                 if "date" in key:
                     if "|" in value:
                         start, end = value.split("|")
-                        expression = sql.between(column, start, end)
+                        if start and end:
+                            expression = sql.between(column, start, end)
+                        elif start:
+                            expression = (column>=value)
+                        elif end:
+                            expression= (column<=value)
+                        else:
+                            continue
                     else:
                         expression = (column==value)
                 else:

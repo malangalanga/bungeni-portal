@@ -70,6 +70,15 @@ def get_globals(group_name, **kwargs):
             "saving_dialog_exception": i18n(
                 _(u"there was an error while saving the schedule"), language
             ),
+            "filters_no_filters_header": i18n(_(u"no filters selected"), 
+                language
+            ),
+            "filters_no_filters_message": i18n(
+                _(u"you did not choose any filters." "select some filters then"
+                    " hit apply"
+                ), 
+                language
+            ),
             "schedulable_types": data.get_schedulable_types(),
             "filter_config": data.get_filter_config(),
             "filter_apply_label": i18n(_(u"apply filters"), language),
