@@ -14,9 +14,10 @@
         <!-- parliament -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <deny permission="zope.View" role="bungeni.Speaker" />
+        <deny permission="zope.View" role="bungeni.Owner" />
+        <deny permission="zope.View" role="bungeni.Signatory" />
         <deny permission="zope.View" role="bungeni.MP" />
         <deny permission="zope.View" role="bungeni.Minister" />
-        <deny permission="zope.View" role="bungeni.Authenticated" />
         <deny permission="zope.View" role="bungeni.Anonymous" />
         <grant permission="bungeni.group.Delete" role="bungeni.Owner" />
         <!-- groupmember -->
@@ -28,9 +29,10 @@
     <state id="active" title="Active Parliament" like_state="draft">
         <!-- parliament -->
         <grant permission="zope.View" role="bungeni.Speaker" />
+        <grant permission="zope.View" role="bungeni.Owner" />
+        <grant permission="zope.View" role="bungeni.Signatory" />
         <grant permission="zope.View" role="bungeni.MP" />
         <grant permission="zope.View" role="bungeni.Minister" />
-        <grant permission="zope.View" role="bungeni.Authenticated" />
         <grant permission="zope.View" role="bungeni.Anonymous" />
         <deny permission="bungeni.group.Delete" role="bungeni.Owner" />
         <!-- groupmember -->
