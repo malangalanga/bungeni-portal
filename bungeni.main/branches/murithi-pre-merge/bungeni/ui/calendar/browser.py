@@ -493,6 +493,33 @@ class GroupSittingScheduleViewNext(BrowserView):
     def __init__(self, context, request):
         super(GroupSittingScheduleViewNext, self).__init__(context, request)
     
+    def sitting_dates(self):
+        date_formatter = date.getLocaleFormatter(self.request)
+        time_formatter = date.getLocaleFormatter(self.request, "time", "short")
+        delta = self.context.end_date - self.context.start_date
+        if delta.days == 0:
+            localized_start_date = "%s - %s" %(
+                date_formatter.format(self.context.start_date),
+                time_formatter.format(self.context.start_date)
+            )
+            localized_end_date = time_formatter.format(self.context.end_date)
+        else:
+            localized_start_date = "%s, %s" %(
+                date_formatter.format(self.context.start_date),
+                time_formatter.format(self.context.start_date)
+            )
+            localized_end_date = "%s, %s" %(
+                date_formatter.format(self.context.end_date),
+                time_formatter.format(self.context.end_date)
+            )
+            
+        return _("${localized_start_date} to ${localized_end_date}",
+            mapping = {
+                "localized_start_date" : localized_start_date,
+                "localized_end_date" : localized_end_date,
+            }
+        )
+    
     def __call__(self):
         return self.render()
     

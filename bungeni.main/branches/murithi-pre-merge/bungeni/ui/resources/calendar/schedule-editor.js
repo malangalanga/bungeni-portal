@@ -512,7 +512,9 @@
                             }
                         });
                     }
-                    
+                    schedulerLayout.on("resize", function(){
+                        //TODO: Resize datatable to fit new panel size
+                    });
                 });
             })();
         }
@@ -893,14 +895,16 @@
                         width: 600, 
                         body: '',
                         gutter: "5 5",
-                        height: 400 
+                        height: 400,
+                        resize: true,
+                        collapse: true
                     },
                     { 
                         position: "center", 
                         body: '',
                         header: scheduler_globals.available_items_title,
                         gutter: "5 5",
-                        height: 400 
+                        height: 400,
                     },
                 ]
             }
