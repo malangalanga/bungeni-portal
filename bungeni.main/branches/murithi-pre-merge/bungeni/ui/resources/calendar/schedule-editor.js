@@ -36,6 +36,16 @@
     var HIGHLIGHT_TYPES = ["heading", "text"];
     var HIGHLIGHT_TYPES_CSS_CLASS = "schedule-text-item";
 
+    /*utilities*/
+    /**
+     * @function wrapText
+     * @description returns text as html wrapped in el tags
+     */
+    var wrapText = function(text, el){
+        var _el = el || "em";
+        return "<" + _el + ">" + text + "</" + _el + ">";
+    }
+
     /**
      * Custom method of added to data table to refresh data
      **/
@@ -275,8 +285,15 @@
      * @description sets the value of a filter menu button
      */
      var setFilterMenuSelection = function(event){
+         if(this.original_label == undefined){
+             this.original_label = this.get("label");
+         }
          var menuItem = event.newValue;
-         this.set("label", ("<em>" + menuItem.cfg.getProperty("text") + "</em>"));
+         var selectionLabel = (
+            (menuItem && wrapText(menuItem.cfg.getProperty("text")))
+            || this.original_label
+        );
+         this.set("label", selectionLabel);
      }
 
     /**
@@ -299,10 +316,17 @@
             }
             return sDateText;
         };
+        button.clearSelection = function(){
+            sCalendar.deselectAll();
+            button.set("label", button.original_label);
+        }
         sCalendar.selectEvent.subscribe(function(sType, oArgs){
+            if (button.original_label == undefined){
+                button.original_label = button.get("label");
+            }
             if(oArgs){
                 var sDate = oArgs[0][0];
-                button.set("label", sDate.join("-"));
+                button.set("label", wrapText(sDate.join("-")));
             }
             menu.hide();
         });
@@ -388,12 +412,13 @@
         var availableItems = new YAHOO.widget.TabView();
         for (type_index in scheduler_globals.schedulable_types){
             (function(){
-                var type = scheduler_globals.schedulable_types[type_index];
+                var typedef = scheduler_globals.schedulable_types[type_index];
+                var type = typedef.name;
                 var container_id = type + "-data-table";
                 var container_id_filters = container_id + "-filters";
                 availableItems.addTab(new YAHOO.widget.Tab(
                     {
-                        label: type,
+                        label: typedef.title,
                         content: "<div id='" + container_id_filters + "' class='schedule-available-item-filters'></div>" + "<div id='" + container_id + "'/>",
                     }
                 ));
@@ -422,7 +447,7 @@
                         var statusFilterButton = new YAHOO.widget.Button(
                             {
                                 type: "menu",
-                                label: "<em>" + filter_config.label + "</em>",
+                                label: wrapText(filter_config.label),
                                 id: "filter_status_" + type,
                                 name: "filter_status_" + type,
                                 menu: filter_config.menu,
@@ -439,7 +464,9 @@
                         var dateStartButton = new YAHOO.widget.Button(
                             {
                                 type: "menu",
-                                label: "<em>start date</em>",
+                                label: wrapText(
+                                    scheduler_globals.filters_start_date_label
+                                ),
                                 id: "filter_start_date_" + type,
                                 name: "filter_start_date_" + type,
                                 menu: dateStartMenu,
@@ -461,7 +488,9 @@
                         var dateEndButton = new YAHOO.widget.Button(
                             {
                                 type: "menu",
-                                label: "<em>send date</em>",
+                                label: wrapText(
+                                    scheduler_globals.filters_end_date_label
+                                ),
                                 id: "filter_end_date_" + type,
                                 name: "filter_end_date_" + type,
                                 menu: dateEndMenu,
@@ -477,13 +506,18 @@
                             filterCalendarSetup(this, type, dateEndMenu, callback);
                         });
                         
+                        
                         dateStartButton.getSelectedDate = getDummyCalendarDate;
+                        dateStartButton.clearSelection = getDummyCalendarDate;
                         dateEndButton.getSelectedDate = getDummyCalendarDate;
+                        dateEndButton.clearSelection = getDummyCalendarDate;
                         
                         var filterApplyButton = new YAHOO.widget.Button(
                             {
                                 type: "button",
-                                label: "<em>" + scheduler_globals.filter_apply_label + "</em>",
+                                label: wrapText(
+                                    scheduler_globals.filter_apply_label
+                                ),
                                 id: "filter_apply_" + type,
                                 name: "filter_apply_" + type,
                                 container: container_id_filters,
@@ -511,6 +545,26 @@
                                 saveDialog.bringToTop();
                             }
                         });
+                        
+                        var clearFiltersButton = new YAHOO.widget.Button(
+                            {
+                                type: "button",
+                                label: wrapText(
+                                    scheduler_globals.filters_clear_label
+                                ),
+                                id: "filter_clear_" + type,
+                                name: "filter_clear_" + type,
+                                container: container_id_filters,
+                            }
+                        );
+                        clearFiltersButton.on("click", function(oArgs){
+                            //reset filters and then reload datatable
+                            statusFilterButton.set("selectedMenuItem", null);
+                            dateStartButton.clearSelection();
+                            dateEndButton.clearSelection();
+                            tabDataTable.refresh();
+                        });
+
                     }
                     schedulerLayout.on("resize", function(){
                         //TODO: Resize datatable to fit new panel size

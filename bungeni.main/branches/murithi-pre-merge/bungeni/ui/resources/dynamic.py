@@ -79,7 +79,13 @@ def get_globals(group_name, **kwargs):
                 ), 
                 language
             ),
-            "schedulable_types": data.get_schedulable_types(),
+            "filters_start_date_label": i18n(_(u"start date"), language),
+            "filters_end_date_label": i18n(_(u"end date"), language),
+            "filters_clear_label": i18n(_(u"clear filters"), language),
+            "schedulable_types": [ 
+                dict(name=name, title=i18n(title, language)) 
+                for (name, title) in data.get_schedulable_types().iteritems()
+             ],
             "filter_config": data.get_filter_config(),
             "filter_apply_label": i18n(_(u"apply filters"), language),
         }

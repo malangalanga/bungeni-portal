@@ -8,6 +8,7 @@ $Id$
 """
 import json
 from sqlalchemy import orm, sql
+from bungeni.alchemist import model
 from bungeni.models import domain
 from bungeni.core.dc import IDCDescriptiveProperties
 from bungeni.core.workflow.interfaces import IWorkflow
@@ -17,9 +18,16 @@ from bungeni.ui.utils import date, common
 from bungeni.alchemist import Session
 from bungeni.ui.i18n import _
 
+#!+CALENDAR(mb, Jan-2012) This should come from capi or workflow configuration
+SCHEDULABLE_TYPES = ["bill", "question", "motion", "tableddocument", "agendaitem", "heading"]
+
 def get_schedulable_types():
-    #!+CALENDAR(mb, Jan-2012) This should come from capi or workflow configuration
-    return ["bill", "question", "motion", "tableddocument", "agendaitem", "heading"]
+    return dict([
+        (name, 
+         model.queryModelDescriptor(domain.DOMAIN_CLASSES[name]).container_name)
+        for name in SCHEDULABLE_TYPES
+    ])
+
 
 
 def get_filter_config(tag="tobescheduled"):
@@ -36,7 +44,7 @@ def get_filter_config(tag="tobescheduled"):
                 ]
             }
            ) 
-            for item_type in get_schedulable_types()
+            for item_type in get_schedulable_types().keys()
         ]
     )
 
