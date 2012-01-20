@@ -40,6 +40,7 @@ from bungeni.ui.utils import url, queries, date
 from bungeni.ui import forms
 from bungeni.ui.interfaces import IWorkspaceReportGeneration
 from bungeni.ui.reporting import generators
+from bungeni.ui.calendar.data import ExpandedSitting
 
 class TIME_SPAN:
     daily = _(u"Daily")
@@ -142,43 +143,6 @@ class IReportBuilder(interface.Interface):
         description=_(u"Optional publication number for this Report"),
         required=False
     )
-
-class ExpandedSitting(object):
-    """Contains list of sittings and groups of documents in the schedule
-    """
-    sitting = None
-    grouped = {}
-    
-    def __init__(self, sitting=None):
-        self.sitting = sitting
-        if len(self.grouped.keys())==0:
-            self.groupItems()
-    
-    def __getattr__(self, name):
-        """ Attribute lookup fallback - Sitting should have access to item
-        """
-        if name in self.grouped.keys():
-            return self.grouped.get(name)
-        if hasattr(self.sitting, name):
-            return getattr(self.sitting, name)
-        dc_adapter = IDCDescriptiveProperties(self.sitting)
-        if hasattr(dc_adapter, name):
-            return getattr(dc_adapter, name)
-        else:
-            log.error("Sitting Context %s has no such attribute: %s",
-                self.sitting.__str__(), name
-            )
-            return []
-    
-    def groupItems(self):
-        for scheduled in self.sitting.item_schedule:
-            item_group = "%ss" % scheduled.item.type
-            if item_group not in self.grouped.keys():
-                log.debug("[Reports] Setting up expanded listing with:: %s", 
-                    item_group
-                )
-                self.grouped[item_group] = []
-            self.grouped[item_group].append(scheduled.item)
 
 class ReportBuilder(form.Form, DateTimeFormatMixin):
     template = namedtemplate.NamedTemplate("alchemist.form")
@@ -639,7 +603,7 @@ def default_reports(sitting, event):
         report.start_date = sitting.start_date
         report.end_date = sitting.end_date
         # owner ID is the ID of the user who performed last workflow change
-        for change in reversed(get_changes(sitting, "workflow")):
+        for change in reversed(domain.get_changes(sitting, "workflow")):
             owner_id = change.user_id
             break
         assert owner_id is not None, \

@@ -89,7 +89,7 @@
          if(rec_data.item_type == scheduler_globals.types.HEADING){
              el.innerHTML = "<span style='text-align:center;display:block;'><strong>" + rec_data.item_title + "</strong></spam>";
          }else if(rec_data.item_type == scheduler_globals.types.TEXT){
-             el.innerHTML = "<em>" + rec_data.item_title + "</em>";
+             el.innerHTML = wrapText(rec_data.item_title);
          }else{
              el.innerHTML = rec_data.item_title + "<em><span style='display:block;'>Moved by: " + rec_data.item_mover + "</span></em>";
          }
@@ -410,6 +410,7 @@
         }
         
         var availableItems = new YAHOO.widget.TabView();
+        var itemsPanel = schedulerLayout.getUnitByPosition("center");
         for (type_index in scheduler_globals.schedulable_types){
             (function(){
                 var typedef = scheduler_globals.schedulable_types[type_index];
@@ -428,18 +429,22 @@
                     );
                     tabDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
                     tabDataSource.responseSchema = availableItemsSchema;
-                    
                     var tabDataTable = new YAHOO.widget.DataTable(container_id,
                         availableItemsColumns, tabDataSource, 
                         { 
                             selectionMode:"single",
                             scrollable: true,
                             initialLoad: true,
+                            width: itemsPanel.body.clientWidth + "px",
                         }
                     );
                     tabDataTable.subscribe("cellClickEvent", addItemToSchedule);
                     tabDataTable.subscribe("theadCellClickEvent", checkRows);
                     tabDataTable.subscribe("cellSelectEvent", addItemToSchedule);
+                    tabDataTable.subscribe("postRenderEvent", function(){
+                        this.getHdTableEl().width = "100%";
+                        this.getBdTableEl().width = "100%";
+                    });
                     
                     //create filter controls
                     var filter_config = scheduler_globals.filter_config[type];
@@ -567,12 +572,16 @@
 
                     }
                     schedulerLayout.on("resize", function(){
-                        //TODO: Resize datatable to fit new panel size
+                        itemsDataTable.setAttributes({
+                            "width": this.getUnitByPosition("left").body.clientWidth + "px"
+                        }, true);
+                        tabDataTable.setAttributes({
+                            "width": this.getUnitByPosition("center").body.clientWidth + "px"
+                        }, true);
                     });
                 });
             })();
         }
-        var itemsPanel = schedulerLayout.getUnitByPosition("center");
         availableItems.selectTab(0);
         availableItems.appendTo(itemsPanel.body);
     }
@@ -583,7 +592,6 @@
      * @description renders the schedule to the provided container element
      **/
      var renderSchedule = function(container){
-        var textCellEditor = YAHOO.widget.TextboxCellEditor;
         var columnDefinitions = [
             {
                 key:"item_type", 
@@ -624,8 +632,8 @@
             columnDefinitions, itemsDataSource, 
             { 
                 selectionMode:"single",
-                scrollable: true,
-                width:"100%",
+                scrollable:true,
+                width:container.clientWidth + "px",
             }
         );
         itemsDataTable.subscribe("rowMouseoverEvent", itemsDataTable.onEventHighlightRow);
@@ -637,6 +645,10 @@
         itemsDataTable.subscribe("initEvent", renderAvailableItems);
         itemsDataTable.subscribe("initEvent", highlightTypedRows);
         itemsDataTable.subscribe("rowAddEvent", highlightTypedRows);
+        itemsDataTable.subscribe("postRenderEvent", function(){
+            this.getHdTableEl().width = "100%";
+            this.getBdTableEl().width = "100%";
+        });
         
         return {
             oDS: itemsDataSource,

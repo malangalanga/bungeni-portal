@@ -2,13 +2,15 @@
 
 from zope import interface
 from zope import component
+from zope.schema.interfaces import IVocabularyFactory
 
-#from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.dublincore.interfaces import IDCDescriptiveProperties
 from zope.location.interfaces import ILocation
 from zope.viewlet.manager import WeightOrderedViewletManager
 from zc.resourcelibrary import need
 from zope.app.component.hooks import getSite
+from zope.security.proxy import removeSecurityProxy
 
 import sqlalchemy.sql.expression as sql
 
@@ -28,6 +30,8 @@ from bungeni.ui.tagged import get_states
 from bungeni.ui.i18n import _
 from bungeni.ui.utils import url
 from bungeni.ui.calendar.utils import datetimedict
+from bungeni.ui.calendar.data import ExpandedSitting
+from bungeni.ui.reporting import generators
 from interfaces import ISchedulingManager
 
 
@@ -241,3 +245,29 @@ class SchedulableAgendaItemsViewlet(SchedulableItemsViewlet):
         return url.set_url_context(url.absoluteURL(item, self.request))
 
 
+class AgendaPreview(object):
+    """Agenda preview before publication
+    """
+    
+    available = True
+    render = ViewPageTemplateFile("templates/agenda_preview.pt")
+
+    def generatePreview(self):
+        vocabulary = component.queryUtility(IVocabularyFactory, 
+            "bungeni.vocabulary.ReportXHTMLTemplates"
+        )
+        preview_template = filter(lambda t: t.title=="Weekly Business",
+            vocabulary.terms
+        )[0]
+        doc_template = preview_template.value
+        generator = generators.ReportGeneratorXHTML(doc_template)
+        self.title = preview_template.title
+        self.language = generator.language
+        self.sittings = [
+            ExpandedSitting(removeSecurityProxy(self.context))
+        ]
+        generator.context = self
+        return generator.generateReport()
+
+    def update(self):
+        self.agenda_preview = self.generatePreview()
