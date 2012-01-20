@@ -3,6 +3,11 @@
     description="A Motion" 
     domain="bungeni.ui"
     initial_state=""
+    tags="draft private public
+        approved tobescheduled scheduled
+        actionclerk actionmp
+        terminal succeed fail
+    "
     >
     
     <!-- features -->
@@ -19,7 +24,7 @@
     <grant permission="bungeni.motion.Delete" role="bungeni.Owner" />
     
     
-    <state id="working_draft" title="Working Draft">
+    <state id="working_draft" title="Working Draft" tags="draft private">
         <!-- motion -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <deny permission="zope.View" role="bungeni.Speaker" />
@@ -71,7 +76,9 @@
         <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
     
-    <state id="draft" title="Draft" like_state="working_draft">
+    <state id="draft" title="Draft" 
+        like_state="working_draft" 
+        tags="draft private">
         <!-- motion -->
         <deny permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Owner" />
@@ -92,7 +99,9 @@
     </state>
 
     <state id="submitted_signatories" title="Submitted to Signatories"
-        version="true" like_state="draft">
+        version="true" 
+        like_state="draft"
+        tags="actionmp">
         <!-- motion -->
         <grant permission="zope.View" role="bungeni.Signatory" />
         <deny permission="bungeni.motion.Edit" role="bungeni.Owner" />
@@ -111,14 +120,15 @@
     </state>
 
     <state id="withdrawn_signatory" title="Dropped" 
-        like_state="submitted_signatories" 
+        like_state="submitted_signatories"
         note="motion has been withdrawn before submission to house">
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
     </state>
 
     <state id="submitted" title="Submitted" 
         version="true"
-        like_state="submitted_signatories">
+        like_state="submitted_signatories"
+        tags="actionclerk">
         <!-- motion -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Speaker" />
@@ -133,7 +143,8 @@
     </state>
 
     <state id="received" title="Received by Clerks Office" 
-        like_state="submitted">
+        like_state="submitted"
+        tags="actionclerk">
         <!-- motion -->
         <grant permission="bungeni.motion.Edit" role="bungeni.Clerk" />
         <!-- signatory -->
@@ -151,7 +162,8 @@
     
     <state id="clarification_required" title="Requires Clarification to Receive"
         version="true"
-        like_state="submitted">
+        like_state="submitted"
+        tags="actionmp">
         <!-- motion -->
         <grant permission="bungeni.motion.Edit" role="bungeni.Owner" />
         <!-- signatory -->
@@ -183,11 +195,17 @@
     <state id="incomplete" title="Requires Clarification to Approve"
         version="true"
         like_state="received"
+        tags="actionclerk"
     />
     
-    <state id="withdrawn_internal" title="Withdrawn" like_state="submitted" />
+    <state id="withdrawn_internal" title="Withdrawn" 
+        like_state="submitted"
+        tags="terminal fail"
+    />
     
-    <state id="inadmissible" title="Inadmissible" like_state="submitted">
+    <state id="inadmissible" title="Inadmissible" 
+        like_state="submitted"
+        tags="terminal fail">
         <notification condition="owner_receive_notification"
             subject="Motion rejected: ${item.short_name}"
             from="${site.speaker_email}"
@@ -199,7 +217,8 @@
     <state id="admissible" title="Admissible" 
         version="true"
         publish="false"
-        like_state="submitted">
+        like_state="submitted"
+        tags="public approved">
         <!-- motion -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Speaker" />
@@ -215,9 +234,12 @@
     
     <state id="schedule_pending" title="Schedule pending"
         like_state="admissible"
+        tags="public tobescheduled"
     />
     
-    <state id="scheduled" title="Scheduled" like_state="admissible">
+    <state id="scheduled" title="Scheduled" 
+        like_state="admissible"
+        tags="public scheduled">
         <notification condition="owner_receive_notification"
             subject="Motion scheduled: ${item.short_name}"
             from="${site.clerk_email}"
@@ -228,24 +250,28 @@
     
     <state id="adopted" title="Adopted"
         version="true"
-        like_state="admissible" 
-    >
+        like_state="admissible"
+        tags="public terminal succeed">
         <!-- groupitemassignment -->
         <deny permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
-
     </state>
     
     <state id="adopted_amendments" title="Adopted with amendments"
         version="true"
         like_state="adopted"
+        tags="public terminal succeed"
     />
     
-    <state id="adjourned" title="Debate adjourned" like_state="admissible" 
+    <state id="adjourned" title="Debate adjourned" 
+        like_state="admissible"
+        tags="public approved"
         note="a motion was debated and the debate adjourned"
     />
     
-    <state id="deferred" title="Deferred" like_state="admissible"
+    <state id="deferred" title="Deferred" 
+        like_state="admissible"
+        tags="public approved"
         note="An admissable motion that cannot be debated.">
         <notification condition="owner_receive_notification"
             subject="Motion deferred: ${item.short_name}"
@@ -255,15 +281,21 @@
         />
     </state>
     
-    <state id="elapsed" title="Elapsed" like_state="admissible" 
+    <state id="elapsed" title="Elapsed" 
+        like_state="admissible" 
+        tags="public terminal fail"
         note="A defered motion that was not debated"
     />
     
-    <state id="dropped" title="Dropped" like_state="admissible" 
+    <state id="dropped" title="Dropped" 
+        like_state="admissible" 
+        tags="public terminal fail"
         note="A motion was scheduled, but dropped e.g. becuase no show of MP."
     />
     
-    <state id="rejected" title="Rejected" like_state="admissible">
+    <state id="rejected" title="Rejected" 
+        like_state="admissible"
+        tags="public terminal fail">
         <notification condition="owner_receive_notification"
             subject="Motion rejected: ${item.short_name}"
             from="${site.speaker_email}"
@@ -272,7 +304,10 @@
         />
     </state>
     
-    <state id="withdrawn" title="Withdrawn" like_state="admissible" />
+    <state id="withdrawn" title="Withdrawn" 
+        like_state="admissible"
+        tags="public terminal fail"
+    />
     
     
     <transition title="Create Motion"

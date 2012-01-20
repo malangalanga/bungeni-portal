@@ -2,7 +2,8 @@
 <workflow title="Event Workflow"
     description="Workflow for attached files"
     domain="bungeni"
-    initial_state="">
+    initial_state=""
+    tags="public">
     
     <!-- global grants -->
     <grant permission="bungeni.event.Add" role="bungeni.Clerk" />
@@ -13,7 +14,8 @@
     <grant permission="bungeni.event.Delete" role="bungeni.Speaker" />
     
     <state id="attached" title="Event" 
-        publish="false" 
+        publish="false"
+        tags="public"
         permissions_from_parent="true" />
     
     <state id="internal" title="Published Internal">

@@ -23,6 +23,7 @@ grammar {
         attribute description { text },
         attribute domain { "bungeni.ui" },
         attribute initial_state { "" }?,
+        attribute tags { text }?, # declare any system defined tags used in workflow
         attribute note { text }?,
         
         element feature {...}*,
@@ -31,6 +32,39 @@ grammar {
         element transition {...}*,
     }
 }
+
+- workflow states may be tagged with system-provided tags and any state tag 
+used in the workflow must be declared within workflow.@tags, as a 
+space-separated-value of tag names.
+
+- the complete set of system-provided tags is as follows:
+    draft
+    private
+    public
+    tobescheduled
+    approved
+    scheduled
+    actionclerk
+    actionmp
+    terminal
+    succeed     # terminal
+    fail        # terminal
+    oral        # questions
+    written     # questions
+    published   # groupsitting
+    workspace
+    agendaprivate # groupsitting - if a sitting is in a state tagged
+        # "agendaprivate" its agenda should not be publicly available
+    
+    !+ should public/private tags be inferred via Anonymous can View or not?
+
+- the order of workflow attributes should respect:
+    title
+    description
+    domain
+    initial_state
+    tags
+    note
 
 
 Features
@@ -57,6 +91,10 @@ Currently known features,
 *enabled*; if a <feature> element is present then it is by default enabled 
 (unless @enabled is explicitly set to "false").
 
+- the order of feature attributes should respect:
+    name 
+    enabled
+
 
 States
 ------
@@ -69,6 +107,7 @@ RNC definition for <state> XML element:
         attribute version { boolean="false" }?,
         attribute publish { boolean="false" }?,
         attribute like_state {  }?,
+        attribute tags { text }?,
         attribute note { text }?,
         attribute permissions_from_parent { boolean="false" }?
         attribute obsolete { boolean="false" }?,
@@ -101,6 +140,7 @@ workflow as a single XML document.
     version=False
     publish=False
     like_state
+    tags
     note
     permissions_from_parent=False
     obsolete=False
@@ -124,28 +164,14 @@ workflow as a single XML document.
     <role id="bungeni.Authenticated" title="All authenticated users" />
     <role id="bungeni.Anonymous" title="Bungeni Visitor" />
 
-- for a motion, the MP is also the Owner.
+    !+ for a motion, the MP is also the Owner.
+    !+ denying zope.View on a Role seems to deny every other permission ??
 
-- denying zope.View on a Role seems to deny every other permission !+??
-
-- the root element id should not contain "-" (use "_" as separator).
-
-
-NOTE: to easily see the the evaluated result of all permission assigments 
-for each workflow state definition (that uses like_state) set the 
-logging level to DEBUG.
-
-!+ <state ... manual_date="true">
-    transition to a "politicocratic" destination states need to allow 
-    freedom to manually set the transition date_active, but transition 
-    to a "bureaucratic" destination states should not.
-
-
-!+ AVOID contradictory/superfluous permissions assignments:
+- AVOID contradictory/superfluous permissions assignments:
 When defining permissons on states, should avoid potentially contradictory or
 superfluous (e.g. always denied) assignments as the permission checking may 
-give incorrect results. There is logical overlap between being authenticated 
-and being an mp, clerk, etc, and the security model does not take into account.
+give incorrect results. There is logical overlap between being Authenticated 
+and being an MP, Clerk, etc, and the security model does not take into account.
 
 For example, in the case of AttachedFile, denying the "zope.View" permission 
 for "bungeni.Authenticated" and granting it for "bungeni.MP":
@@ -157,6 +183,18 @@ a) for "bungeni.Authenticated" this is superfluous as it is denied in all
 states in same workflow
 b) adding it explicitly and with the **contrary** setting alongside another 
 **authenticated** role as for "bungeni.MP" gives incorrect results!
+c) plus, to keep in mind, when a workflow state is loaded from XML, all 
+denies are executed **after** all grants.
+
+
+DEBUGGING NOTE: to easily see the the evaluated result of all permission 
+assigments for each workflow state definition (that uses like_state) set the 
+logging level to DEBUG.
+
+!+ <state ... manual_date="true">
+    transition to a "politicocratic" destination states need to allow 
+    freedom to manually set the transition date_active, but transition 
+    to a "bureaucratic" destination states should not.
 
 
 

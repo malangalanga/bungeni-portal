@@ -2,7 +2,9 @@
 <workflow title="Group Workflow"
     description="Workflow for Parliamentary Groups"
     domain="bungeni.ui"
-    initial_state="">
+    initial_state=""
+    tags="public"
+    >
     
     <state id="draft" title="Draft - Group not yet Active">
         <!-- group -->
@@ -20,7 +22,9 @@
         <grant permission="bungeni.office.ChangeType" role="bungeni.Clerk" /> 
     </state>
     
-    <state id="active" title="Active Group" publish="false" like_state="draft">
+    <state id="active" title="Active Group" publish="false" 
+        like_state="draft"
+        tags="public">
         <!-- group -->
         <grant permission="zope.View" role="bungeni.Speaker" />
         <grant permission="zope.View" role="bungeni.MP" />
@@ -35,7 +39,9 @@
         <deny permission="bungeni.office.ChangeType" role="bungeni.Clerk" />
     </state>
     
-    <state id="dissolved" title="Group is Dissolved" like_state="active">
+    <state id="dissolved" title="Group is Dissolved" 
+        like_state="active"
+        tags="public">
         <!-- groupmember -->
         <deny permission="bungeni.groupmember.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.groupmember.Add" role="bungeni.Clerk" />

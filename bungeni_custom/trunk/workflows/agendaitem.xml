@@ -3,6 +3,11 @@
     description="Agenda Item"
     domain="bungeni.ui"
     initial_state=""
+    tags="draft private public
+        approved tobescheduled scheduled
+        actionclerk actionmp
+        terminal succeed fail
+    "
     >
     
     <!-- features -->
@@ -18,8 +23,8 @@
     <!--grant permission="bungeni.agendaitem.Add" role="bungeni.MP" /-->
     <grant permission="bungeni.agendaitem.Delete" role="bungeni.Owner" />
     
-    
-    <state id="working_draft" title="Working Draft">
+
+    <state id="working_draft" title="Working Draft" tags="draft private">
         <!-- agendaitem -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <deny permission="zope.View" role="bungeni.Speaker" />
@@ -55,7 +60,8 @@
         <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
     
-    <state id="draft" title="Draft" like_state="working_draft">
+    <state id="draft" title="Draft" like_state="working_draft" 
+        tags="draft private">
         <!-- agendaitem -->
         <deny permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Owner" />
@@ -100,7 +106,8 @@
     </state>
 
     <state id="submitted" title="Submitted" version="true" 
-        like_state="submitted_signatories">
+        like_state="submitted_signatories"
+        tags="actionclerk">
         <!-- agendaitem -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Speaker" />
@@ -115,7 +122,8 @@
     </state>
 
     <state id="received" title="Received by Clerks Office"
-        like_state="submitted">
+        like_state="submitted"
+        tags="actionclerk">
         <!-- agendaitem -->
         <grant permission="bungeni.agendaitem.Edit" role="bungeni.Clerk" />
         <!-- fileattachment -->        
@@ -131,7 +139,8 @@
     
     <state id="clarification_required" title="Requires Clarification to Receive"
         version="true"
-        like_state="submitted">
+        like_state="submitted"
+        tags="actionmp">
         <!-- agendaitem -->        
         <grant permission="bungeni.agendaitem.Edit" role="bungeni.Owner" />
         <!-- fileattachment -->
@@ -160,10 +169,13 @@
     
     <state id="incomplete" title="Requires Clarification to Approve" 
         version="true"
-        like_state="received" 
+        like_state="received"
+        tags="actionclerk"
     />
     
-    <state id="inadmissible" title="Inadmissible" like_state="submitted">
+    <state id="inadmissible" title="Inadmissible" 
+        like_state="submitted"
+        tags="terminal fail">
         <notification condition="owner_receive_notification"
             subject="Agenda Item rejected: ${item.short_name}"
             from="${site.speaker_email}"
@@ -172,12 +184,16 @@
         />
     </state>
     
-    <state id="withdrawn_internal" title="Withdrawn" like_state="submitted" />
+    <state id="withdrawn_internal" title="Withdrawn" 
+        like_state="submitted"
+        tags="terminal fail"
+    />
     
     <state id="admissible" title="Admissible"
         version="true"
         publish="false" 
-        like_state="submitted">
+        like_state="submitted"
+        tags="public approved">
         <!-- agendaitem -->
         <grant permission="zope.View" role="bungeni.Anonymous" />
         <!-- groupitemassignment -->
@@ -187,10 +203,13 @@
     
     <state id="schedule_pending" title="Schedule pending" 
         like_state="admissible"
+        tags="public tobescheduled"
     >
     </state>
     
-    <state id="debated" title="Debated" like_state="admissible">
+    <state id="debated" title="Debated" 
+        like_state="admissible"
+        tags="public terminal succeed">
         <!-- groupitemassignment -->
         <deny permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
@@ -202,7 +221,8 @@
         />
     </state>
     
-    <state id="scheduled" title="Scheduled" like_state="admissible">
+    <state id="scheduled" title="Scheduled" like_state="admissible"
+        tags="public scheduled">
         <!-- groupitemassignment -->
         <grant permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
@@ -214,9 +234,14 @@
         />
     </state>
     
-    <state id="adjourned" title="Debate adjourned" like_state="admissible" />
+    <state id="adjourned" title="Debate adjourned" 
+        like_state="admissible" 
+        tags="public approved"
+    />
     
-    <state id="deferred" title="Deferred" like_state="admissible">
+    <state id="deferred" title="Deferred" 
+        like_state="admissible"
+        tags="public approved">
         <notification condition="owner_receive_notification"
             subject="Agenda Item deferred: ${item.short_name}"
             from="${site.speaker_email}"
@@ -225,11 +250,20 @@
         />
     </state>
     
-    <state id="elapsed" title="Elapsed" like_state="debated" />
+    <state id="elapsed" title="Elapsed" 
+        like_state="debated" 
+        tags="public terminal fail"
+    />
     
-    <state id="dropped" title="Dropped" like_state="debated"  />
+    <state id="dropped" title="Dropped" 
+        like_state="debated"
+        tags="public terminal fail"
+    />
     
-    <state id="withdrawn" title="Withdrawn" like_state="debated" />
+    <state id="withdrawn" title="Withdrawn" 
+        like_state="debated"
+        tags="public terminal fail"
+    />
     
     
     <transition title="Create Agenda Item"

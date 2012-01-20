@@ -3,6 +3,11 @@
     description="A bill"
     domain="bungeni.ui"
     initial_state=""
+    tags="draft private public
+        approved tobescheduled scheduled
+        actionclerk actionmp
+        terminal succeed fail
+    "
     >
     
     <!-- features -->
@@ -23,7 +28,7 @@
     <grant permission="bungeni.bill.Delete" role="bungeni.Owner" />
     
     
-    <state id="working_draft" title="Working Draft">
+    <state id="working_draft" title="Working Draft" tags="draft private">
         <!-- bill -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <deny permission="zope.View" role="bungeni.Speaker" />
@@ -51,7 +56,9 @@
         <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
 
-    <state id="draft" title="Draft Bill" like_state="working_draft">
+    <state id="draft" title="Draft Bill" 
+        like_state="working_draft" 
+        tags="draft private">
         <!-- bill -->
         <deny permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Owner" /> 
@@ -72,7 +79,7 @@
     </state>
 
     <state id="submitted_signatories" title="Submitted to Signatories"
-        version="true" like_state="draft">
+        version="true" like_state="draft" tags="actionmp">
         <!-- bill -->
         <grant permission="zope.View" role="bungeni.Signatory" />
         <deny permission="bungeni.bill.Edit" role="bungeni.Owner" />
@@ -96,7 +103,8 @@
     </state>
     
     <state id="submitted" title="Submitted to Clerk" version="true"
-        like_state="submitted_signatories">
+        like_state="submitted_signatories"
+        tags="actionclerk">
         <!-- bill -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <!-- signatory -->
@@ -104,7 +112,8 @@
     </state>
 
     <state id="received" title="received by clerk"
-        like_state="submitted">
+        like_state="submitted"
+        tags="actionclerk">
         <!-- bill -->
         <grant permission="bungeni.bill.Edit" role="bungeni.Clerk" />
         <!-- fileattachment -->
@@ -115,7 +124,8 @@
     <state id="gazetted" title="Bill Published in Gazette"
         version="true"
         publish="false"
-        like_state="received">
+        like_state="received"
+        tags="public">
         <!-- bill -->
         <grant permission="zope.View" role="bungeni.Speaker" />
         <grant permission="zope.View" role="bungeni.MP" />
@@ -128,17 +138,23 @@
 
     <state id="first_reading_pending" title="First Reading Pending" 
         like_state="gazetted"
+        tags="public tobescheduled"
     />
     
-    <state id="first_reading" title="First Reading" like_state="gazetted" />
+    <state id="first_reading" title="First Reading" 
+        like_state="gazetted"
+        tags="public scheduled"
+    />
     
     <state id="first_reading_adjourned" title="First Reading Adjourned" 
-        like_state="gazetted" 
+        like_state="gazetted"
+        tags="public approved"
     />
     
     <state id="first_committee" 
         title="Submitted to Select Committee (after 1st reading)"
-        like_state="gazetted" >
+        like_state="gazetted"
+        tags="public">
         <!-- signatory -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
@@ -148,63 +164,78 @@
     
     <state id="first_report_reading_pending" 
         title="First Report Reading Pending" 
-        like_state="first_committee"  
+        like_state="first_committee"
+        tags="public tobescheduled"
     />
     
     <state id="first_report_reading" title="First Report Reading"
         version="true"
-        like_state="first_committee" 
+        like_state="first_committee"
+        tags="public scheduled"
     />
     
     <state id="first_report_reading_adjourned" 
         title="First Report Reading Adjourned" 
         like_state="first_committee"
+        tags="public approved"
     />
     
     <state id="second_reading_pending" title="Second Reading Pending"
         like_state="first_committee"
+        tags="public tobescheduled"
     />
     
     <state id="second_reading" title="Second Reading"
         version="true"
-        like_state="first_committee" 
+        like_state="first_committee"
+        tags="public scheduled"
     />
     
     <state id="second_reading_adjourned" title="Second Reading Adjourned"
         like_state="first_committee"
+        tags="public approved"
     />
     
     <state id="whole_house_pending" title="Whole House Pending" 
         like_state="first_committee"
+        tags="public tobescheduled"
     />
     
     <state id="whole_house" title="Whole House"
         like_state="first_committee"
+        tags="public scheduled"
     />
     
     <state id="whole_house_adjourned" title="Whole House Adjourned" 
         like_state="first_committee"
+        tags="public approved"
     />
         
     <state id="second_committee" 
         title="Submitted to Select Committee (after 2nd reading)"
         like_state="first_committee"
+        tags="public"
     />
     
     <state id="third_reading_pending" title="Third Reading Pending"
         like_state="first_committee"
+        tags="public tobescheduled"
     />
     
     <state id="third_reading" title="Third Reading"
         like_state="first_committee"
+        tags="public scheduled"
     />
     
     <state id="third_reading_adjourned" like_state="first_committee"
-        title="Third Reading Adjourned" />
+        title="Third Reading Adjourned" 
+        tags="public approved"
+    />
     
     <state id="approved" title="Approved Bill" 
         publish="false"
-        like_state="first_committee">
+        like_state="first_committee"
+        tags="public terminal succeed approved">
         <!-- bill -->
         <deny permission="bungeni.bill.Edit" role="bungeni.Clerk" />
         <!-- attachedfile -->
@@ -217,11 +248,20 @@
         <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
     
-    <state id="rejected" title="Rejected Bill" like_state="approved" />
+    <state id="rejected" title="Rejected Bill" 
+        like_state="approved" 
+        tags="public terminal fail"
+    />
     
-    <state id="withdrawn" title="Bill Withdrawn" like_state="approved" />
+    <state id="withdrawn" title="Bill Withdrawn" 
+        like_state="approved" 
+        tags="public terminal fail"
+    />
     
-    <state id="withdrawn_internal" title="Withdrawn" like_state="submitted" />
+    <state id="withdrawn_internal" title="Withdrawn" 
+        like_state="submitted" 
+        tags="private terminal fail"
+    />
     
     <transition title="Create Bill"
         source=""

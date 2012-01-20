@@ -3,6 +3,7 @@
     description="Workflow for a group-sitting."
     domain="bungeni.ui"
     initial_state=""
+    tags="draft public agendaprivate workspace published"
     >
     
     <!-- features -->
@@ -19,7 +20,7 @@
     <grant permission="bungeni.sittingattendance.Delete" role="bungeni.Clerk" />
     
     
-    <state id="sitting" title="Sitting">
+    <state id="sitting" title="Sitting" tags="draft public agendaprivate">
         <!-- sitting -->
         <!-- !+zope.View(mr, jan-2012) why does this not follow conventione
             used in other workflows to always use zope.View for the 
@@ -54,7 +55,9 @@
         <deny permission="bungeni.sittingschedule.itemdiscussion.Edit" role="bungeni.Clerk" />
     </state>
     
-    <state id="draft_agenda" title="Draft Agenda" like_state="sitting">
+    <state id="draft_agenda" title="Draft Agenda" 
+        like_state="sitting"
+        tags="draft public workspace agendaprivate">
         <!-- sitting -->
         <grant permission="bungeni.sitting.View" role="bungeni.Speaker" />
         <grant permission="bungeni.sitting.View" role="bungeni.MP" />
@@ -71,7 +74,8 @@
     
     <state id="published_agenda" title="Published Agenda" 
         publish="false" 
-        like_state="draft_agenda">
+        like_state="draft_agenda"
+        tags="public published workspace">
         <!-- sitting -->
         <grant permission="bungeni.sitting.View" role="bungeni.Speaker" />
         <grant permission="bungeni.sitting.View" role="bungeni.Owner" />
@@ -91,7 +95,9 @@
         <deny permission="bungeni.sittingschedule.Edit" role="bungeni.Clerk" />
     </state>
     
-    <state id="draft_minutes" title="Draft Minutes" like_state="published_agenda">
+    <state id="draft_minutes" title="Draft Minutes" 
+        like_state="published_agenda"
+        tags="draft public workspace">
         <!-- sitting -->
         <grant permission="bungeni.sitting.Edit" role="bungeni.Clerk" />
         <!-- sittingschedule -->
@@ -106,7 +112,9 @@
         <grant permission="bungeni.sittingschedule.itemdiscussion.Edit" role="bungeni.Clerk" />
     </state>
     
-    <state id="published_minutes" title="Published Minutes" like_state="draft_minutes">
+    <state id="published_minutes" title="Published Minutes" 
+        like_state="draft_minutes"
+        tags="public published">
         <!-- sitting -->
         <deny permission="bungeni.sitting.Edit" role="bungeni.Clerk" />
         <!-- sittingschedule -->

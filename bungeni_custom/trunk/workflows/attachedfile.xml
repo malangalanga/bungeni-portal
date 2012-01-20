@@ -3,6 +3,7 @@
     description="Workflow for attached files"
     domain="bungeni"
     initial_state=""
+    tags="public"
     >
     
     <!-- features -->
@@ -15,18 +16,10 @@
     <!-- global grants -->
     <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
     
-    <state id="attached" title="Attached file" permissions_from_parent="true" />
-        <!-- !+retain_temporarily(mr, aug-2011) for debugging convenience, 
-            until permissions_from_parent matures
-        
-        <deny permission="zope.View" role="bungeni.Clerk" />
-        <deny permission="zope.View" role="bungeni.Speaker" />
-        <grant permission="zope.View" role="bungeni.Owner"/>
-        <deny permission="zope.View" role="bungeni.Signatory" /> 
-        <deny permission="zope.View" role="bungeni.Authenticated" /> 
-        <deny permission="zope.View" role="bungeni.Anonymous" />
-    </state>
-        -->
+    <state id="attached" title="Attached file" 
+        tags="public"
+        permissions_from_parent="true" 
+    />
     
     <state id="internal" title="Published Internal">
         <!-- attachedfile -->

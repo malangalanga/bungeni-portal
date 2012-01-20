@@ -4,10 +4,13 @@
     domain="bungeni"
     initial_state=""
     note="Used for both bungeni.models types: UserAddress, GroupAddress"
+    tags="public"
     >
     
     <state id="attached" title="Address" publish="false" 
-        permissions_from_parent="true" />
+        tags="public"
+        permissions_from_parent="true" 
+    />
     
     <state id="internal" title="Published Internal"
         note="Visible to bungeni users"

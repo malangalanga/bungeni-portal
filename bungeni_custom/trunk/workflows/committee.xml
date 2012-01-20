@@ -2,7 +2,9 @@
 <workflow title="Committee Workflow"
     description="Workflow for Committees"
     domain="bungeni.ui"
-    initial_state="">
+    initial_state=""
+    tags="public"
+    >
     
     <!-- global grants -->
     <grant permission="bungeni.committee.Edit" role="bungeni.Clerk" />
@@ -24,7 +26,9 @@
         <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
 
-    <state id="active" title="Active Committee" like_state="draft">
+    <state id="active" title="Active Committee" 
+        like_state="draft" 
+        tags="public">
         <!-- committee -->
         <grant permission="zope.View" role="bungeni.Speaker" />
         <grant permission="zope.View" role="bungeni.MP" />
@@ -37,7 +41,9 @@
         <grant permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
   
-    <state id="dissolved" title="Committee is Dissolved" like_state="active">
+    <state id="dissolved" title="Committee is Dissolved" 
+        like_state="active"
+        tags="public">
         <!-- agendaitem -->
         <deny permission="bungeni.agendaitem.Add" role="bungeni.CommitteeMember" />
         <!-- groupitemassignment -->

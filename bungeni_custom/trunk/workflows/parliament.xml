@@ -2,7 +2,9 @@
 <workflow title="Parliament Workflow"
     description="Workflow for parliaments"
     domain="bungeni.ui"
-    initial_state="">
+    initial_state=""
+    tags="public"
+    >
     
     <!-- global grants -->
     <grant permission="bungeni.parliament.Add" role="bungeni.Clerk" />
@@ -26,7 +28,9 @@
         <deny permission="bungeni.groupmember.Delete" role="bungeni.Clerk" />
     </state>
     
-    <state id="active" title="Active Parliament" like_state="draft">
+    <state id="active" title="Active Parliament" 
+        like_state="draft"
+        tags="public">
         <!-- parliament -->
         <grant permission="zope.View" role="bungeni.Speaker" />
         <grant permission="zope.View" role="bungeni.Owner" />
@@ -41,7 +45,9 @@
         <grant permission="bungeni.groupmember.Delete" role="bungeni.Clerk" />
     </state>
     
-    <state id="dissolved" title="Parliament is Dissolved" like_state="active">
+    <state id="dissolved" title="Parliament is Dissolved" 
+        like_state="active"
+        tags="public">
         <!-- groupmember -->
         <deny permission="bungeni.groupmember.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.groupmember.Add" role="bungeni.Clerk" />

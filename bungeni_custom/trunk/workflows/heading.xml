@@ -2,7 +2,9 @@
 <workflow title="Heading Workflow"
     description="Workflow for headings"
     domain="bungeni.ui"
-    initial_state="">
+    initial_state=""
+    tags="public"
+    >
     
     <!-- global grants -->
     <grant permission="bungeni.heading.Edit" role="bungeni.Clerk" />
@@ -22,7 +24,9 @@
         <deny permission="zope.View" role="bungeni.Anonymous" /> 
     </state>
     
-    <state id="public" title="Public" publish="false" like_state="inactive">
+    <state id="public" title="Public" publish="false" 
+        like_state="inactive"
+        tags="public">
         <!-- heading -->
         <grant permission="zope.View" role="bungeni.Owner" />
         <grant permission="zope.View" role="bungeni.Signatory" />
