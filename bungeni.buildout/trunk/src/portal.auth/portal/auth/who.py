@@ -1,7 +1,7 @@
 """
 ``repoze.who`` authenticator plugins against a relational database
 """
-log = __import__("logging").getLogger("bungeni.portal.auth")
+log = __import__("logging").getLogger("portal.auth.who")
 
 from zope import interface
 from zope.app.security.principalregistry import principalRegistry
