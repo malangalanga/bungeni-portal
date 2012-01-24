@@ -498,6 +498,11 @@
         class=".container.ContainerJSONListing"
     />
     <browser:page name="jsonlisting"
+        for="bungeni.models.interfaces.IItemScheduleContainer"
+        permission="zope.Public"
+        class=".container.ContainerJSONPermsListing"
+    />
+    <browser:page name="jsonlisting"
         for="bungeni.alchemist.interfaces.IAlchemistContainer"
         permission="zope.Public"
         class=".container.PublicStatesContainerJSONListing"

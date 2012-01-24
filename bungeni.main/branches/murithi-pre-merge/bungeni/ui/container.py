@@ -389,6 +389,24 @@ class ContainerJSONListing(ContainerJSONBrowserView):
         return self.json_batch(start, limit, lang)
 
 
+class ContainerJSONPermsListing(ContainerJSONListing):
+    def local_permissions(self):
+        return dict(EDIT=checkPermission("bungeni.sitting.Edit", self.context))
+
+    def json_batch(self, start, limit, lang):
+        batch = self.getBatch(start, limit, lang)
+        data = dict(
+            length=self.set_size,  # total result set length, set in getBatch()
+            start=start,
+            recordsReturned=len(batch),  # batch length
+            sort=self.sort_on,
+            dir=self.sort_dir,
+            nodes=batch,
+            localPermissions=self.local_permissions()
+        )
+        return simplejson.dumps(data)
+
+
 class PublicStatesContainerJSONListing(ContainerJSONListing):
     """JSON Listing based on public workflow states.
 

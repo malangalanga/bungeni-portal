@@ -18,6 +18,7 @@
     var saveDialog = null;
     var savingDialog = null;
     var deleteDialog = null;
+    var localPermissions = null;
     var ITEM_SELECT_ROW_COLUMN = "item_select_row"
     var ITEM_TYPE_COLUMN = "item_type";
     var ITEM_MOVER_COLUMN = "item_mover"
@@ -141,7 +142,9 @@
      */
     var addTextToSchedule = function(event, item_type){
         var currentItem = schedulerActions.currentItem;
-        var new_record_index = itemsDataTable.getTrIndex(currentItem) + 1;
+        var new_record_index = (
+            (currentItem && itemsDataTable.getTrIndex(currentItem) + 1) || 0
+        );
         itemsDataTable.addRow(
             { 
                 item_title: scheduler_globals.initial_editor_text, 
@@ -263,6 +266,29 @@
             Dom.addClass(this.getTrEl(oArgs.record), HIGHLIGHT_TYPES_CSS_CLASS);
         }
     }
+    
+    /**
+     *@method initShowSchedulerControls
+     * @description show scheduler controls if initial recordset is empty
+     **/
+     var initShowSchedulerControls = function(oArgs){
+         if (this.getRecordSet().getLength() == 0){
+             showSchedulerControls({record:null, el:this.getTheadEl()});
+         }
+     }
+    /**
+
+     *@method hideSchedulerControls
+     * @description hide scheduler controls after adding of first item
+     **/
+     var hideSchedulerControls = function(oArgs){
+         if (this.getRecordSet().getLength() == 1 && 
+            schedulerActions.currentItem == null
+         ){
+             schedulerActions.hide();
+         }
+     }
+     
 
     /**
      * @method showSchedulerControls
@@ -623,6 +649,7 @@
         itemsDataSource.responseSchema = {
             resultsList: "nodes",
             fields: ["item_id", "item_title", "item_type", "object_id", ITEM_MOVER_COLUMN],
+            metaFields: { localPermissions: "localPermissions" },
         };
         
         var scheduler_container = document.createElement("div");
@@ -644,11 +671,18 @@
         itemsDataTable.subscribe("rowSelectEvent", showSchedulerControls);
         itemsDataTable.subscribe("initEvent", renderAvailableItems);
         itemsDataTable.subscribe("initEvent", highlightTypedRows);
+        itemsDataTable.subscribe("initEvent", initShowSchedulerControls);
+        itemsDataTable.subscribe("rowDeleteEvent", initShowSchedulerControls);
         itemsDataTable.subscribe("rowAddEvent", highlightTypedRows);
+        itemsDataTable.subscribe("rowAddEvent", hideSchedulerControls);
         itemsDataTable.subscribe("postRenderEvent", function(){
             this.getHdTableEl().width = "100%";
             this.getBdTableEl().width = "100%";
         });
+        itemsDataTable.doBeforeLoadData = function(oRequest, oResponse, oPayload){
+            localPermissions = oResponse.meta.localPermissions;
+            return oPayload;
+        }
         
         return {
             oDS: itemsDataSource,
@@ -798,8 +832,10 @@
                         item_type: targetData.item_type,
                         item_mover: targetData.item_mover,
                     }
-                    selected_index = itemsDataTable.getSelectedRows()[0];
-                    var new_record_index = itemsDataTable.getTrIndex(selected_index)+1;
+                    ctx_index = itemsDataTable.getSelectedRows()[0];
+                    var new_record_index = (
+                        (ctx_index && itemsDataTable.getTrIndex(ctx_index)+1) || 0
+                    );
                     itemsDataTable.addRow(new_record_data, new_record_index);
                 }
             }else{

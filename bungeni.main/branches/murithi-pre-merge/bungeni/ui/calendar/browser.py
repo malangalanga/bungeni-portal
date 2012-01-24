@@ -52,7 +52,7 @@ from bungeni.ui.browser import BungeniBrowserView
 from bungeni.ui.calendar import utils, config, interfaces, data
 from bungeni.ui.tagged import get_states
 from bungeni.ui.i18n import _
-from bungeni.ui.utils import misc, url, debug
+from bungeni.ui.utils import misc, url, debug, date
 from bungeni.ui.menu import get_actions
 from bungeni.ui.interfaces import IBusinessSectionLayer
 from bungeni.ui.widgets import LanguageLookupWidget
@@ -61,6 +61,9 @@ from bungeni.models import domain
 from bungeni.alchemist.container import stringKey
 from bungeni.alchemist import Session
 #from bungeni.ui import vocabulary
+
+# Filter key names prefix - for available items listings
+FILTER_PREFIX = "filter_"
 
 class TIME_SPAN:
     daily = _(u"Daily")
@@ -306,6 +309,7 @@ class CalendarView(BungeniBrowserView):
         need("dhtmlxscheduler-recurring")
         need("dhtmlxscheduler-year-view")
         need("dhtmlxscheduler-agenda-view")
+        need("dhtmlxscheduler-week-agenda-view")
         need("dhtmlxscheduler-expand")
         need("bungeni-calendar-extensions")
         need("dhtmlxscheduler-timeline")

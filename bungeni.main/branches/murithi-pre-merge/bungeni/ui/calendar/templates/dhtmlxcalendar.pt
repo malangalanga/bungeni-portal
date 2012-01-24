@@ -132,6 +132,9 @@
                     parent.location = '<span tal:replace="structure view/url"/>' + "/sittings/obj-"+event_id+"/schedule";
                 });
                 scheduler.attachEvent("onEventSave", event_save_handler);
+                scheduler.attachEvent("onEventCollision", 
+                    event_collission_handler
+                );
                 var dp = new dataProcessor(location.href+"/dhtmlxcalendaredit");
                 dp.init(scheduler);
             }
@@ -184,7 +187,7 @@
                     <div class="dhx_cal_tab" name="week_tab" id="week_tab"></div>
                     <div class="dhx_cal_tab" name="month_tab" id="month_tab"></div>
                     <div class="dhx_cal_tab" name="year_tab" id="year_tab"></div>
-                    <div class="dhx_cal_tab" name="agenda_tab" id="agenda_tab"></div>
+                    <div class="dhx_cal_tab" name="week_agenda_tab" id="agenda_tab"></div>
                     <div class="dhx_cal_tab" name="venues_tab" id="venues_tab"></div>
                 </div>
                 <div class="dhx_cal_header">
