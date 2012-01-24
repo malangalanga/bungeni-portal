@@ -53,6 +53,11 @@
     height: 20px;
     line-height: 20px;
 }
+.template-portal #top-layer ul#portal-personaltools li:last-child {
+    margin-right:0px;
+    float:right;
+    clear:both;
+}
 #top-layer #demoWarning {
     width: 150px;
     height: 18px;
@@ -110,7 +115,7 @@ div.main-column h2.reportdate {
 div.main-column h1.reportheading {
     padding:0.1em 10% 0.1em 10% !important;
     width:50% !important;
-    margin:1em auto 2em auto;
+    margin:3em auto 0em auto;
 }
 div.main-column h2.reporttitle {
     margin-left:0em;
@@ -444,7 +449,7 @@ div#region-content div#content > div:first-child {
     float: none;
     width: auto;
     position: absolute;
-    z-index: 10051;
+    z-index: 86;
     height:auto;
 }
 .section-bungeni-archive #portal-column-one {
@@ -461,6 +466,7 @@ div#region-content div#content > div:first-child {
 #portal-column-one .portlet .portletItem.even,
 #portal-column-one .portlet .portletItem {
     overflow: hidden;
+    margin-top:-1.7em !important;
 }
 #portal-column-one .portlet .portletItem a img {
     margin: 1px 0;
@@ -849,6 +855,16 @@ dl.portalMessage dd {
     line-height: 20px;
     margin: 0;
 }
+.formPanel #description .content-left-column,
+.formPanel #body_text .content-left-column {
+    display:none;
+    width:0;
+}
+.formPanel #description .content-right-column,
+.formPanel #body_text .content-right-column {
+    padding-top:5px;
+    width: 100%;
+}
 .formPanel .field .content-right-column div,
 .formPanel .field .content-right-column.widget {
     margin: 0;
@@ -1163,18 +1179,18 @@ div.main-column #collage h2 {
     margin: 0 auto;
     width:100%;
     text-align:center;
-    height:133px;
+    height:113px;
 }
 .template-portal #header-in-left {
     margin: 0;
     width:20%;
-    height:133px;
+    height:113px;
     float:left;
 }
 .template-portal #header-in-right {
     margin: 0;
     width:20%;
-    height:133px;
+    height:113px;
     float:right;
 }
 .template-portal #top-layer {
@@ -1205,14 +1221,14 @@ div.main-column #collage h2 {
     margin-left:auto;
     margin-right:auto;
     width:960px;    
-    height:115px;
+    height:105px;
     position:relative;
 }
 .template-portal #portal-logo {
     display: block;
     margin: .5em 0 0 0;
     width:960px;
-    height: 115px;
+    height: 105px;
 }
 .template-portal a#portal-logo img.ws-left,.template-portal a#portal-logo img.ws-right {
 	display:none;
@@ -1320,6 +1336,36 @@ div.main-column #collage h2 {
 }
  dl.portalMessage {
     margin-top:.3em;
+}
+
+/*
+ * login-form
+ */
+.template-portal #login-form,
+.template-portal #login-forgotten-password {
+    margin-left:auto;
+    margin-right:auto;
+    width:330px;
+}
+.template-portal #login-form .field {
+    margin-bottom:5px;
+    clear:both;
+}
+.template-portal #login-form .formControls {
+    margin-top:10px;
+    clear:both;
+}
+.template-portal #login-form .formControls input {
+    border:1px solid #f79f10 !important;
+}
+.template-portal #login-form .field input {
+    float:right;
+}
+.template-portal #login-form .field label {
+    padding-top:10px !important;
+    text-align:left;
+    vertical-align:bottom;
+    float:left;
 }
 
 /*********************************************************************************************************/
@@ -1613,6 +1659,31 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
     height:15px;
     clear:both;
     width:99.5%;
+}
+.template-workspace.section-bungeni-admin dl.portalMessage {
+    margin-top:-25px !important;
+    margin-bottom:25px !important;
+    float:left;
+    margin-left:0.2%;
+    height:15px;
+    clear:both;
+    width:85%;
+}
+.template-workspace.section-bungeni-workspace dl.portalMessage {
+    margin:0 auto;
+    margin-bottom:25px !important;
+    height:15px;
+    clear:both;
+    width:85%;
+}
+.template-workspace.section-bungeni-business dl.portalMessage {
+    margin:0 auto;
+    margin-top:-30px;
+    margin-bottom:25px !important;
+    height:15px;
+    clear:both;
+    width:85%;
+
 }
 .template-workspace .formPanel  #display_form_spacer {
     width: 95%;
