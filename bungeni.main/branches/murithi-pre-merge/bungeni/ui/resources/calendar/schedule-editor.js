@@ -17,6 +17,7 @@
     var available_items_loaded = false;
     var saveDialog = null;
     var savingDialog = null;
+    var textItemsDialog = null;
     var deleteDialog = null;
     var localPermissions = null;
     var ITEM_SELECT_ROW_COLUMN = "item_select_row"
@@ -131,6 +132,10 @@
 
     var itemDeleteFormatter = function(el, record, column, data){
         el.innerHTML = "<span><strong>X</strong></span>";
+    }
+
+    var addTextRecordToSchedule = function(event){
+        textItemsDialog.show();
     }
 
     // scheduler handlers for various events
@@ -272,7 +277,7 @@
      * @description show scheduler controls if initial recordset is empty
      **/
      var initShowSchedulerControls = function(oArgs){
-         if (this.getRecordSet().getLength() == 0){
+         if ((this.getRecordSet().getLength() == 0) && localPermissions.EDIT){
              showSchedulerControls({record:null, el:this.getTheadEl()});
          }
      }
@@ -297,6 +302,7 @@
      * the selected row.
      */
     var showSchedulerControls = function(args){
+        if(!localPermissions.EDIT){ return; }
         schedulerActions.currentItem = args.record;
         schedulerActions.cfg.setProperty("context",
             [args.el.id, "tl", "bl"]
@@ -378,6 +384,14 @@
      * @description renders available items as tabs
      */
     var renderAvailableItems = function(args){
+        var schedulePanel = schedulerLayout.getUnitByPosition("left");
+        var itemsPanel = schedulerLayout.getUnitByPosition("center");
+        if(!localPermissions.EDIT){
+            itemsPanel.body.innerHTML = wrapText(
+                scheduler_globals.message_no_add_rights
+            );
+            return;
+        }
         if (available_items_loaded){ return; }
         available_items_loaded = true;
         var existing_record_keys = new Array();
@@ -436,7 +450,6 @@
         }
         
         var availableItems = new YAHOO.widget.TabView();
-        var itemsPanel = schedulerLayout.getUnitByPosition("center");
         for (type_index in scheduler_globals.schedulable_types){
             (function(){
                 var typedef = scheduler_globals.schedulable_types[type_index];
@@ -597,13 +610,14 @@
                         });
 
                     }
-                    schedulerLayout.on("resize", function(){
-                        itemsDataTable.setAttributes({
-                            "width": this.getUnitByPosition("left").body.clientWidth + "px"
-                        }, true);
-                        tabDataTable.setAttributes({
-                            "width": this.getUnitByPosition("center").body.clientWidth + "px"
-                        }, true);
+                    schedulePanel.on("resize", function(){
+                        itemsDataTable.setAttributes(
+                            { "width": this.body.clientWidth + "px" }, true
+                        );
+                        tabDataTable.setAttributes(
+                            { "width": itemsPanel.body.clientWidth + "px" }, 
+                            true
+                        );
                     });
                 });
             })();
@@ -617,7 +631,7 @@
      * @method renderSchedule
      * @description renders the schedule to the provided container element
      **/
-     var renderSchedule = function(container){
+     var renderSchedule = function(container, controls_container){
         var columnDefinitions = [
             {
                 key:"item_type", 
@@ -627,7 +641,7 @@
             {
                 key:"item_title", 
                 label: scheduler_globals.column_title,
-                editor: new YAHOO.widget.TextboxCellEditor(),
+                editor: new YAHOO.widget.TextareaCellEditor(),
                 formatter: itemTitleFormatter
             },
             {
@@ -683,6 +697,9 @@
             localPermissions = oResponse.meta.localPermissions;
             return oPayload;
         }
+        itemsDataTable.subscribe("initEvent", function(){
+            renderScheduleButtons(controls_container);
+        });
         
         return {
             oDS: itemsDataSource,
@@ -786,6 +803,7 @@
      * @description Renders action buttons inside provided container element
      **/
     var renderScheduleButtons = function(container){
+        if(!localPermissions.EDIT){ return; }
         container.style.lineHeight = container.clientHeight;
         container.style.padding = "5px";
         var saveButton = new YAHOO.widget.Button(
@@ -909,7 +927,7 @@
             }
         );
         scheduleTextButton.appendTo(schedulerActions.body);
-        scheduleTextButton.on("click", addTextToSchedule);
+        scheduleTextButton.on("click", addTextRecordToSchedule);
         scheduleHeadingButton.appendTo(schedulerActions.body);
         scheduleHeadingButton.on("click", addHeadingToSchedule);
         scheduleRemoveButton.appendTo(schedulerActions.body);
@@ -987,6 +1005,19 @@
         );
         savingDialog.render(document.body);
         
+        //render schedule text items dialog
+        textItemsDialog  = new YAHOO.widget.SimpleDialog("scheduler-text-dialog",
+            DIALOG_CONFIG
+        );
+        textItemsDialog.cfg.queueProperty("width", "500px");
+        textItemsDialog.setBody("<textarea id='text-record-input'></textarea>");
+        textItemsDialog.setHeader(scheduler_globals.text_items_dialog_header);
+        textItemsDialog.renderEvent.subscribe(function(){
+            var rteEditor = new YAHOO.widget.Editor("text-record-input");
+            rteEditor.render();
+        });
+        textItemsDialog.render(document.body);
+        
         //create layout
         schedulerLayout = new YAHOO.widget.Layout("scheduler-layout",
             {
@@ -1007,6 +1038,7 @@
                         header: scheduler_globals.available_items_title,
                         gutter: "5 5",
                         height: 400,
+                        collapse: true
                     },
                 ]
             }
@@ -1035,8 +1067,9 @@
                 }
             );
             innerLayout.on("render", function(){
-                renderSchedule(this.getUnitByPosition("center").body);
-                renderScheduleButtons(this.getUnitByPosition("bottom").body);
+                renderSchedule(this.getUnitByPosition("center").body,
+                    this.getUnitByPosition("bottom").body
+                );
             });
             innerLayout.render();
         });

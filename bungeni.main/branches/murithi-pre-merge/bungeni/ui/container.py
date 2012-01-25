@@ -391,7 +391,7 @@ class ContainerJSONListing(ContainerJSONBrowserView):
 
 class ContainerJSONPermsListing(ContainerJSONListing):
     def local_permissions(self):
-        return dict(EDIT=checkPermission("bungeni.sitting.Edit", self.context))
+        return dict(EDIT=checkPermission("bungeni.sittingschedule.item.Add", self.context))
 
     def json_batch(self, start, limit, lang):
         batch = self.getBatch(start, limit, lang)

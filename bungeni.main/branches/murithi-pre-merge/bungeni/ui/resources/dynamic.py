@@ -88,6 +88,12 @@ def get_globals(group_name, **kwargs):
              ],
             "filter_config": data.get_filter_config(),
             "filter_apply_label": i18n(_(u"apply filters"), language),
+            "message_no_add_rights": i18n(_(u"this schedule is read only"), 
+                language
+            ),
+            "text_items_dialog_header": i18n(_(u"add text to schedule"),
+                language
+            )
         }
     }
     return globals_map.get(group_name, {})
