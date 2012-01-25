@@ -502,7 +502,9 @@ div#portal-globalnav ul.level0 li a {
     border: 1px solid #444444;
     border-bottom: 1px solid #444444;
     border-top-left-radius: 5px;
+    -moz-border-radius-topleft: 5px;    
     border-top-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
     font-family: tahoma,verdana,sans-serif;
     font-size: 12px;
 }
@@ -1109,9 +1111,11 @@ background: #F8FFFF;
 }
 .template-portal #top-layer ul#portal-personaltools li a {
     color: #fff;
+    font-size:1.1em !important;
 }
 .template-portal #top-layer ul#portal-languageselector li a {
     color: #fff;
+    font-size:1.1em !important;    
 }
 .template-portal #top-layer ul#portal-languageselector li.selected a {
     color: #000000;
