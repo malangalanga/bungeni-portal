@@ -18,6 +18,7 @@ NO = _(u"No")
 OKAY = _(u"Okay")
 NOTICE = _(u"Notice")
 WORKING = _(u"Working")
+CANCEL = _(u"Cancel")
 
 def get_globals(group_name, **kwargs):
     language = kwargs.get("language", "en")
@@ -93,7 +94,9 @@ def get_globals(group_name, **kwargs):
             ),
             "text_items_dialog_header": i18n(_(u"add text to schedule"),
                 language
-            )
+            ),
+            "text_dialog_confirm_action": i18n(OKAY, language),
+            "text_dialog_cancel_action": i18n(CANCEL, language),
         }
     }
     return globals_map.get(group_name, {})

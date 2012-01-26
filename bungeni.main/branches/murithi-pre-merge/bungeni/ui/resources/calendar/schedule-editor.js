@@ -138,6 +138,45 @@
         textItemsDialog.show();
     }
 
+    var insertTextRecord = function(event){
+        var tabs = this.tabViewControl;
+        var activeTab = tabs.getTab(tabs.get("activeIndex"));
+        var recordData = activeTab.getRecordValue();
+        if(recordData.value){
+            var currentItem = schedulerActions.currentItem;
+            var new_record_index = (
+                (currentItem && itemsDataTable.getTrIndex(currentItem) + 1) || 0
+            );
+            itemsDataTable.addRow(
+                { 
+                    item_title: recorData.value, 
+                    item_type: recorData.type
+                }, 
+                new_record_index
+            );
+            
+            var new_record = itemsDataTable.getRecord(
+                itemsDataTable.getTrEl(new_record_index)
+            );
+            var target_columns = [
+                itemsDataTable.getColumn(ITEM_MOVE_UP_COLUMN),
+                itemsDataTable.getColumn(ITEM_MOVE_DOWN_COLUMN),
+            ]
+            itemsDataTable.unselectAllRows();
+            itemsDataTable.selectRow(new_record);
+            var updated_record = itemsDataTable.getRecord(
+                (new_record_index - 1)
+            );
+            for (col_index=0; col_index<=(target_columns.length); col_index++){
+                itemsDataTable.updateCell(updated_record, 
+                    target_columns[col_index],
+                    updated_record.getData()
+                );
+            }
+            this.hide();
+        }
+    }
+    
     // scheduler handlers for various events
     /**
      * @function addTextToSchedule
@@ -894,14 +933,11 @@
         }
     }
 
-
     /**
-     * @method anonymous
-     * @description Renders the panel UI and builds up schedule data table.
-     * Also binds various events to handlers on the data table.
-     * Schedule control actions are also built into the DOM
+     * @method renderSchedulerItemControls
+     * @description scheduler item ui controls used in schedulers edit mode
      **/
-    Event.onDOMReady(function(){
+     var renderSchedulerItemControls = function(){
         //create scheduler actions panel
         schedulerActions = new YAHOO.widget.Panel("scheduled-item-controls",
             {   
@@ -1009,16 +1045,72 @@
         textItemsDialog  = new YAHOO.widget.SimpleDialog("scheduler-text-dialog",
             DIALOG_CONFIG
         );
+        var textDialogButtons = [
+            {
+                text: scheduler_globals.text_dialog_confirm_action,
+                handler: insertTextRecord
+            },
+            {
+                text: scheduler_globals.text_dialog_cancel_action,
+                handler: function(){ this.hide(); }
+            },
+        ]
         textItemsDialog.cfg.queueProperty("width", "500px");
-        textItemsDialog.setBody("<textarea id='text-record-input'></textarea>");
+        textItemsDialog.cfg.queueProperty("height", "400px");
+        textItemsDialog.cfg.queueProperty("buttons", textDialogButtons);
+        textItemsDialog.setBody("");
         textItemsDialog.setHeader(scheduler_globals.text_items_dialog_header);
         textItemsDialog.renderEvent.subscribe(function(){
-            var rteEditor = new YAHOO.widget.Editor("text-record-input");
-            rteEditor.render();
+            //var rteEditor = new YAHOO.widget.Editor("text-record-input");
+            //rteEditor.render();
+            var textRecordTabs = new YAHOO.widget.TabView();
+            var headingTab = new YAHOO.widget.Tab(
+                { 
+                    label:"heading",
+                    content: "<div id='add-heading-record'><input id='heading-record-value' name='heading-record-value' type='text'/></div>" 
+                }
+            );
+            headingTab.getRecordValue = function(){
+                var contentEl = this.get("contentEl");
+                return { 
+                    type:"heading",
+                    value: Y$.query("input", contentEl).value
+                }
+            }
+            var textTab = new YAHOO.widget.Tab(
+                { 
+                    label:"text",
+                    content: "<div id='add-text-record'><textarea id='text-record-value' name='text-record-value'></textarea></div>" 
+                }
+            );
+            var rteEditor = null;
+            textTab.getRecordValue = function(){
+                return {
+                    type: "text",
+                    value: rteEditor.cleanHTML(rteEditor.getEditorHTML())
+                }
+            }
+            textRecordTabs.addTab(headingTab);
+            textRecordTabs.addTab(textTab);
+            Event.onAvailable("add-text-record", function(event){
+                rteEditor = new YAHOO.widget.Editor("text-record-value",
+                    { width: "100%", autoHeight: true }
+                );
+                rteEditor.render();
+            });
+            textRecordTabs.appendTo(textItemsDialog.body);
+            textItemsDialog.tabViewControl = textRecordTabs;
+            textRecordTabs.selectTab(0);
+            
         });
         textItemsDialog.render(document.body);
-        
-        //create layout
+     }
+     
+     /**
+      * @method renderSchedulerLayout
+      * @description render scheduler UI layout
+      **/
+      var renderSchedulerLayout = function(){
         schedulerLayout = new YAHOO.widget.Layout("scheduler-layout",
             {
                 height:500,
@@ -1044,8 +1136,6 @@
             }
         );
         
-        var schedulerInnerLayout = null;
-        
         //render inner scheduler layout
         schedulerLayout.on("render", function(){
             var left_el = schedulerLayout.getUnitByPosition("left").get("wrap");
@@ -1067,14 +1157,24 @@
                 }
             );
             innerLayout.on("render", function(){
-                renderSchedule(this.getUnitByPosition("center").body,
+                renderSchedule(
+                    this.getUnitByPosition("center").body,
                     this.getUnitByPosition("bottom").body
                 );
             });
             innerLayout.render();
         });
-        
-        //render available items tabs
         schedulerLayout.render();
+      }
+
+    /**
+     * @method anonymous
+     * @description Renders the panel UI and builds up schedule data table.
+     * Also binds various events to handlers on the data table.
+     * Schedule control actions are also built into the DOM
+     **/
+    Event.onDOMReady(function(){
+        renderSchedulerItemControls();
+        renderSchedulerLayout();
     });
 })();
