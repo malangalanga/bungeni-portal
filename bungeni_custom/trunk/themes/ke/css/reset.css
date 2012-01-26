@@ -53,6 +53,11 @@
     height: 20px;
     line-height: 20px;
 }
+.template-portal #top-layer ul#portal-personaltools li:last-child {
+    margin-right:0px;
+    float:right;
+    clear:both;
+}
 #top-layer #demoWarning {
     width: 150px;
     height: 18px;
@@ -110,7 +115,7 @@ div.main-column h2.reportdate {
 div.main-column h1.reportheading {
     padding:0.1em 10% 0.1em 10% !important;
     width:50% !important;
-    margin:1em auto 2em auto;
+    margin:3em auto 0em auto;
 }
 div.main-column h2.reporttitle {
     margin-left:0em;
@@ -313,6 +318,9 @@ div#region-content div#content > div:first-child {
 .section-bungeni-archive div#region-content div#content > div:first-child  {
    margin-top:15px;
 }
+#content a:target {
+background-color: #FE0000 !important;
+}
 /*
  * documentContent
  */
@@ -444,7 +452,7 @@ div#region-content div#content > div:first-child {
     float: none;
     width: auto;
     position: absolute;
-    z-index: 10051;
+    z-index: 86;
     height:auto;
 }
 .section-bungeni-archive #portal-column-one {
@@ -461,6 +469,7 @@ div#region-content div#content > div:first-child {
 #portal-column-one .portlet .portletItem.even,
 #portal-column-one .portlet .portletItem {
     overflow: hidden;
+    margin-top:-1.7em !important;
 }
 #portal-column-one .portlet .portletItem a img {
     margin: 1px 0;
@@ -848,6 +857,16 @@ dl.portalMessage dd {
     padding: .15em;
     line-height: 20px;
     margin: 0;
+}
+.formPanel #description .content-left-column,
+.formPanel #body_text .content-left-column {
+    display:none;
+    width:0;
+}
+.formPanel #description .content-right-column,
+.formPanel #body_text .content-right-column {
+    padding-top:5px;
+    width: 100%;
 }
 .formPanel .field .content-right-column div,
 .formPanel .field .content-right-column.widget {
