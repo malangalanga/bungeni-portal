@@ -9,7 +9,7 @@
     <grant permission="bungeni.reports.Edit" role="bungeni.Speaker" /> 
     
     
-    <state id="published" title="Published" publish="false">
+    <state id="published" title="Published" publish="true">
         <grant permission="zope.View" role="bungeni.Authenticated" /> 
         <grant permission="zope.View" role="bungeni.Anonymous" />
         <deny permission="bungeni.report.Edit" role="bungeni.Authenticated" />
