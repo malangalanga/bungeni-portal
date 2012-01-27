@@ -37,7 +37,12 @@
     }
     var HIGHLIGHT_TYPES = ["heading", "text"];
     var HIGHLIGHT_TYPES_CSS_CLASS = "schedule-text-item";
+    var AVAILABLE_ITEMS_SCHEMA = {
+        resultsList: "items",
+        fields: ["item_id", "item_type", "item_title", "status", "status_date", "registry_number", "mover"]
+    }
 
+    
     /*utilities*/
     /**
      * @function wrapText
@@ -46,6 +51,15 @@
     var wrapText = function(text, el){
         var _el = el || "em";
         return "<" + _el + ">" + text + "</" + _el + ">";
+    }
+
+    /**
+     * @function fixDataTableSize
+     * @description sets data table size to 100% of its container
+     */
+    var fixDataTableSize = function(){
+            this.getHdTableEl().width = "100%";
+            this.getBdTableEl().width = "100%";
     }
 
     /**
@@ -149,8 +163,8 @@
             );
             itemsDataTable.addRow(
                 { 
-                    item_title: recorData.value, 
-                    item_type: recorData.type
+                    item_title: recordData.value, 
+                    item_type: recordData.type
                 }, 
                 new_record_index
             );
@@ -173,6 +187,8 @@
                     updated_record.getData()
                 );
             }
+            this.hide();
+        }else{
             this.hide();
         }
     }
@@ -286,8 +302,6 @@
      * a dialog to confirm intention before deleting item
      * */
     var removeSelectedRow = function(args){
-        var target_row = itemsDataTable.getSelectedRows()[0];
-        var target_index = itemsDataTable.getTrIndex(itemsDataTable.getTrEl(target_row));
         deleteDialog.show();
         deleteDialog.bringToTop();
     }
@@ -311,28 +325,7 @@
         }
     }
     
-    /**
-     *@method initShowSchedulerControls
-     * @description show scheduler controls if initial recordset is empty
-     **/
-     var initShowSchedulerControls = function(oArgs){
-         if ((this.getRecordSet().getLength() == 0) && localPermissions.EDIT){
-             showSchedulerControls({record:null, el:this.getTheadEl()});
-         }
-     }
-    /**
 
-     *@method hideSchedulerControls
-     * @description hide scheduler controls after adding of first item
-     **/
-     var hideSchedulerControls = function(oArgs){
-         if (this.getRecordSet().getLength() == 1 && 
-            schedulerActions.currentItem == null
-         ){
-             schedulerActions.hide();
-         }
-     }
-     
 
     /**
      * @method showSchedulerControls
@@ -350,6 +343,29 @@
         schedulerActions.show();
     }
 
+
+    /**
+     *@method initShowSchedulerControls
+     * @description show scheduler controls if initial recordset is empty
+     **/
+     var initShowSchedulerControls = function(oArgs){
+         if ((this.getRecordSet().getLength() == 0) && localPermissions.EDIT){
+             showSchedulerControls({record:null, el:this.getTheadEl()});
+         }
+     }
+
+
+    /**
+     *@method hideSchedulerControls
+     * @description hide scheduler controls after adding of first item
+     **/
+     var hideSchedulerControls = function(oArgs){
+         if (this.getRecordSet().getLength() == 1 && 
+            schedulerActions.currentItem == null
+         ){
+             schedulerActions.hide();
+         }
+     }
 
     /**
      * @method setFilterMenuSelection
@@ -483,11 +499,6 @@
             },
         ]
         
-        var availableItemsSchema = {
-            resultsList: "items",
-            fields: ["item_id", "item_type", "item_title", "status", "status_date", "registry_number", "mover"]
-        }
-        
         var availableItems = new YAHOO.widget.TabView();
         for (type_index in scheduler_globals.schedulable_types){
             (function(){
@@ -506,7 +517,7 @@
                         scheduler_globals.schedulable_items_json_url + "?type="+ type
                     );
                     tabDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
-                    tabDataSource.responseSchema = availableItemsSchema;
+                    tabDataSource.responseSchema = AVAILABLE_ITEMS_SCHEMA;
                     var tabDataTable = new YAHOO.widget.DataTable(container_id,
                         availableItemsColumns, tabDataSource, 
                         { 
@@ -519,10 +530,7 @@
                     tabDataTable.subscribe("cellClickEvent", addItemToSchedule);
                     tabDataTable.subscribe("theadCellClickEvent", checkRows);
                     tabDataTable.subscribe("cellSelectEvent", addItemToSchedule);
-                    tabDataTable.subscribe("postRenderEvent", function(){
-                        this.getHdTableEl().width = "100%";
-                        this.getBdTableEl().width = "100%";
-                    });
+                    tabDataTable.subscribe("postRenderEvent", fixDataTableSize);
                     
                     //create filter controls
                     var filter_config = scheduler_globals.filter_config[type];
@@ -667,86 +675,6 @@
 
 
     /**
-     * @method renderSchedule
-     * @description renders the schedule to the provided container element
-     **/
-     var renderSchedule = function(container, controls_container){
-        var columnDefinitions = [
-            {
-                key:"item_type", 
-                label: scheduler_globals.column_type,
-                formatter: itemTypeFormatter,
-            },
-            {
-                key:"item_title", 
-                label: scheduler_globals.column_title,
-                editor: new YAHOO.widget.TextareaCellEditor(),
-                formatter: itemTitleFormatter
-            },
-            {
-                key:ITEM_MOVE_UP_COLUMN, 
-                label:"", 
-                formatter:itemMoveUpFormatter 
-            },
-            {
-                key:ITEM_MOVE_DOWN_COLUMN, 
-                label:"", 
-                formatter:itemMoveDownFormatter
-            },
-        ];
-        
-        itemsDataSource = new YAHOO.util.DataSource(
-            scheduler_globals.json_listing_url
-        );
-        itemsDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
-        itemsDataSource.responseSchema = {
-            resultsList: "nodes",
-            fields: ["item_id", "item_title", "item_type", "object_id", ITEM_MOVER_COLUMN],
-            metaFields: { localPermissions: "localPermissions" },
-        };
-        
-        var scheduler_container = document.createElement("div");
-        container.appendChild(scheduler_container);
-
-        itemsDataTable = new YAHOO.widget.DataTable(scheduler_container,
-            columnDefinitions, itemsDataSource, 
-            { 
-                selectionMode:"single",
-                scrollable:true,
-                width:container.clientWidth + "px",
-            }
-        );
-        itemsDataTable.subscribe("rowMouseoverEvent", itemsDataTable.onEventHighlightRow);
-        itemsDataTable.subscribe("rowMouseoutEvent", itemsDataTable.onEventUnhighlightRow);
-        itemsDataTable.subscribe("rowClickEvent", itemsDataTable.onEventSelectRow);
-        itemsDataTable.subscribe("cellDblclickEvent", showCellEditorHandler);
-        itemsDataTable.subscribe("cellClickEvent", reorderRow);
-        itemsDataTable.subscribe("rowSelectEvent", showSchedulerControls);
-        itemsDataTable.subscribe("initEvent", renderAvailableItems);
-        itemsDataTable.subscribe("initEvent", highlightTypedRows);
-        itemsDataTable.subscribe("initEvent", initShowSchedulerControls);
-        itemsDataTable.subscribe("rowDeleteEvent", initShowSchedulerControls);
-        itemsDataTable.subscribe("rowAddEvent", highlightTypedRows);
-        itemsDataTable.subscribe("rowAddEvent", hideSchedulerControls);
-        itemsDataTable.subscribe("postRenderEvent", function(){
-            this.getHdTableEl().width = "100%";
-            this.getBdTableEl().width = "100%";
-        });
-        itemsDataTable.doBeforeLoadData = function(oRequest, oResponse, oPayload){
-            localPermissions = oResponse.meta.localPermissions;
-            return oPayload;
-        }
-        itemsDataTable.subscribe("initEvent", function(){
-            renderScheduleButtons(controls_container);
-        });
-        
-        return {
-            oDS: itemsDataSource,
-            oDT: itemsDataTable,
-        }
-     }
-
-    /**
      * @method removeCheckedItems
      * @description removes checked items from the schedule
      **/
@@ -858,6 +786,29 @@
     }
 
     /**
+     * @method addSelectItemToSchedule
+     * @description adds selected item from this datatable to agenda
+     */
+    var addSelectItemToSchedule = function(args){
+        var targetRecord = this.getRecord(args.target);
+        var targetData = targetRecord.getData();
+        var new_record_data = {
+            item_id: targetData.item_id,
+            item_title: targetData.item_title,
+            item_type: targetData.item_type,
+            item_mover: targetData.item_mover,
+        }
+        ctx_index = itemsDataTable.getSelectedRows()[0];
+        var new_record_index = (
+            (ctx_index && itemsDataTable.getTrIndex(ctx_index)+1) || 0
+        );
+        itemsDataTable.addRow(new_record_data, new_record_index);
+        itemsDataTable.unselectAllRows();
+        itemsDataTable.selectRow(new_record_index);
+    }
+
+
+    /**
      * @method addItemToSchedule
      * @description adds available item to schedule
      * 
@@ -933,6 +884,115 @@
         }
     }
 
+    var initAvailableHeadings = function(e){
+        var columns = [
+            {
+                key: "item_title",
+                label: scheduler_globals.column_available_headings_title,
+            },
+        ]
+        var container = this.get("contentEl");
+        var data_container = Y$.query("div#headings-available", container)[0];
+        var dataSource = new YAHOO.util.DataSource(
+            scheduler_globals.schedulable_items_json_url + "?type=" + "heading"
+        );
+        dataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+        dataSource.responseSchema = AVAILABLE_ITEMS_SCHEMA;
+        var dataTable = new YAHOO.widget.DataTable(data_container,
+            columns, dataSource, 
+            { 
+                selectionMode:"single",
+                scrollable: true,
+                initialLoad: true,
+                width:"100%"
+            }
+        );
+        dataTable.subscribe("cellClickEvent", addSelectItemToSchedule);
+        dataTable.subscribe("postRenderEvent", fixDataTableSize);
+        dataTable.subscribe("rowMouseoverEvent", dataTable.onEventHighlightRow);
+        dataTable.subscribe("rowMouseoutEvent", dataTable.onEventUnhighlightRow);
+        return { oDs: dataSource, oDt: dataTable }
+    }
+
+
+    /**
+     * @method renderSchedule
+     * @description renders the schedule to the provided container element
+     **/
+     var renderSchedule = function(container, controls_container){
+        var columnDefinitions = [
+            {
+                key:"item_type", 
+                label: scheduler_globals.column_type,
+                formatter: itemTypeFormatter,
+            },
+            {
+                key:"item_title", 
+                label: scheduler_globals.column_title,
+                editor: new YAHOO.widget.TextareaCellEditor(),
+                formatter: itemTitleFormatter
+            },
+            {
+                key:ITEM_MOVE_UP_COLUMN, 
+                label:"", 
+                formatter:itemMoveUpFormatter 
+            },
+            {
+                key:ITEM_MOVE_DOWN_COLUMN, 
+                label:"", 
+                formatter:itemMoveDownFormatter
+            },
+        ];
+        
+        itemsDataSource = new YAHOO.util.DataSource(
+            scheduler_globals.json_listing_url
+        );
+        itemsDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+        itemsDataSource.responseSchema = {
+            resultsList: "nodes",
+            fields: ["item_id", "item_title", "item_type", "object_id", ITEM_MOVER_COLUMN],
+            metaFields: { localPermissions: "localPermissions" },
+        };
+        
+        var scheduler_container = document.createElement("div");
+        container.appendChild(scheduler_container);
+
+        itemsDataTable = new YAHOO.widget.DataTable(scheduler_container,
+            columnDefinitions, itemsDataSource, 
+            { 
+                selectionMode:"single",
+                scrollable:true,
+                width:container.clientWidth + "px",
+            }
+        );
+        itemsDataTable.subscribe("rowMouseoverEvent", itemsDataTable.onEventHighlightRow);
+        itemsDataTable.subscribe("rowMouseoutEvent", itemsDataTable.onEventUnhighlightRow);
+        itemsDataTable.subscribe("rowClickEvent", itemsDataTable.onEventSelectRow);
+        itemsDataTable.subscribe("cellDblclickEvent", showCellEditorHandler);
+        itemsDataTable.subscribe("cellClickEvent", reorderRow);
+        itemsDataTable.subscribe("rowSelectEvent", showSchedulerControls);
+        itemsDataTable.subscribe("initEvent", renderAvailableItems);
+        itemsDataTable.subscribe("initEvent", highlightTypedRows);
+        itemsDataTable.subscribe("initEvent", initShowSchedulerControls);
+        itemsDataTable.subscribe("rowDeleteEvent", initShowSchedulerControls);
+        itemsDataTable.subscribe("rowAddEvent", highlightTypedRows);
+        itemsDataTable.subscribe("rowAddEvent", hideSchedulerControls);
+        itemsDataTable.subscribe("postRenderEvent", fixDataTableSize);
+        itemsDataTable.doBeforeLoadData = function(oRequest, oResponse, oPayload){
+            localPermissions = oResponse.meta.localPermissions;
+            return oPayload
+        }
+        itemsDataTable.subscribe("initEvent", function(){
+            renderScheduleButtons(controls_container);
+        });
+        
+        return {
+            oDS: itemsDataSource,
+            oDT: itemsDataTable,
+        }
+     }
+
+
     /**
      * @method renderSchedulerItemControls
      * @description scheduler item ui controls used in schedulers edit mode
@@ -952,11 +1012,6 @@
                 label: scheduler_globals.text_button_text,
             }
         );
-        var scheduleHeadingButton = new YAHOO.widget.Button(
-            {
-                label: scheduler_globals.heading_button_text,
-            }
-        );
         var scheduleRemoveButton = new YAHOO.widget.Button(
             {
                 label: scheduler_globals.remove_button_text,
@@ -964,8 +1019,6 @@
         );
         scheduleTextButton.appendTo(schedulerActions.body);
         scheduleTextButton.on("click", addTextRecordToSchedule);
-        scheduleHeadingButton.appendTo(schedulerActions.body);
-        scheduleHeadingButton.on("click", addHeadingToSchedule);
         scheduleRemoveButton.appendTo(schedulerActions.body);
         scheduleRemoveButton.on("click", removeSelectedRow);
 
@@ -977,7 +1030,7 @@
         deleteDialog.setBody(scheduler_globals.delete_dialog_text)
         
         var handleDeleteConfirm = function(){
-            selected_record_index = itemsDataTable.getSelectedRows()[0];
+            var selected_record_index = itemsDataTable.getSelectedRows()[0];
             itemsDataTable.deleteRow(selected_record_index);
             this.hide();
             schedulerActions.hide();
@@ -1067,20 +1120,30 @@
             var headingTab = new YAHOO.widget.Tab(
                 { 
                     label:"heading",
-                    content: "<div id='add-heading-record'><input id='heading-record-value' name='heading-record-value' type='text'/></div>" 
+                    content: ("<div id='add-heading-record'>" + 
+                        "<label class='scheduler-label'" + 
+                        " for='heading-record-value'>Heading Text</label>" +
+                        "<input class='scheduler-bigtext' " + 
+                        "id='heading-record-value' name='heading-record-value' " +
+                         "type='text'/></div><div id='headings-available'></div>"
+                    )
                 }
             );
             headingTab.getRecordValue = function(){
                 var contentEl = this.get("contentEl");
                 return { 
                     type:"heading",
-                    value: Y$.query("input", contentEl).value
+                    value: Y$.query("input", contentEl)[0].value
                 }
             }
+            headingTab.on("activeChange", initAvailableHeadings);
             var textTab = new YAHOO.widget.Tab(
                 { 
                     label:"text",
-                    content: "<div id='add-text-record'><textarea id='text-record-value' name='text-record-value'></textarea></div>" 
+                    content: ("<div id='add-text-record'>" + 
+                        "<textarea id='text-record-value' " +
+                         "name='text-record-value'></textarea></div>"
+                    )
                 }
             );
             var rteEditor = null;
@@ -1094,7 +1157,7 @@
             textRecordTabs.addTab(textTab);
             Event.onAvailable("add-text-record", function(event){
                 rteEditor = new YAHOO.widget.Editor("text-record-value",
-                    { width: "100%", autoHeight: true }
+                    { width: "100%", autoHeight: false }
                 );
                 rteEditor.render();
             });

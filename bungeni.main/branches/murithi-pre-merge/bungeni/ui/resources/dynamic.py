@@ -32,13 +32,17 @@ def get_globals(group_name, **kwargs):
             "save_schedule_url": "./items/save-schedule",
             "schedulable_items_json_url" : "./schedulable-items-json",
             "column_title": i18n(_(u"Title"), language),
+            "column_available_headings_title": i18n(
+                _(u"Select existing heading"), 
+                language
+            ),
             "column_type": i18n(_(u"Type"), language),
             "column_mover": i18n(_(u"Moved by"), language),
             "column_status": i18n(_(u"Status"), language),
             "column_status_date": i18n(_(u"Date"), language),
             "column_registry_number": i18n(_(u"No."), language),
             "column_mover": i18n(_(u"Mover"), language),
-            "text_button_text": i18n(_(u"add text"), language),
+            "text_button_text": i18n(_(u"add heading or text"), language),
             "heading_button_text": i18n(_(u"add heading"), language),
             "remove_button_text": i18n(_(u"remove item"), language),
             "save_button_text": i18n(_(u"save changes"), language),

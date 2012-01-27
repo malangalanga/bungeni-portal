@@ -21,7 +21,7 @@ from bungeni.alchemist import Session
 from bungeni.ui.i18n import _
 
 #!+CALENDAR(mb, Jan-2012) This should come from capi or workflow configuration
-SCHEDULABLE_TYPES = ["bill", "question", "motion", "tableddocument", "agendaitem", "heading"]
+SCHEDULABLE_TYPES = ["bill", "question", "motion", "tableddocument", "agendaitem"]
 
 def get_schedulable_types():
     return dict([
