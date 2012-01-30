@@ -19,11 +19,17 @@ OKAY = _(u"Okay")
 NOTICE = _(u"Notice")
 WORKING = _(u"Working")
 CANCEL = _(u"Cancel")
+VIEW = _(u"View")
 
 def get_globals(group_name, **kwargs):
     language = kwargs.get("language", "en")
     globals_map = {
         "SCHEDULER_GLOBALS" : {
+            "schedulable_types": [ 
+                dict(name=name, title=i18n(title, language)) 
+                for (name, title) in 
+                sorted(data.get_schedulable_types().iteritems())
+             ],
             "types": {
                 "HEADING": "heading",
                 "TEXT": "text"
@@ -43,6 +49,8 @@ def get_globals(group_name, **kwargs):
             "column_registry_number": i18n(_(u"No."), language),
             "column_mover": i18n(_(u"Mover"), language),
             "text_button_text": i18n(_(u"add heading or text"), language),
+            "text_action_view": i18n(VIEW, language),
+            "text_moved_by": i18n(_(u"Moved By"), language),
             "heading_button_text": i18n(_(u"add heading"), language),
             "remove_button_text": i18n(_(u"remove item"), language),
             "save_button_text": i18n(_(u"save changes"), language),
@@ -87,10 +95,6 @@ def get_globals(group_name, **kwargs):
             "filters_start_date_label": i18n(_(u"start date"), language),
             "filters_end_date_label": i18n(_(u"end date"), language),
             "filters_clear_label": i18n(_(u"clear filters"), language),
-            "schedulable_types": [ 
-                dict(name=name, title=i18n(title, language)) 
-                for (name, title) in data.get_schedulable_types().iteritems()
-             ],
             "filter_config": data.get_filter_config(),
             "filter_apply_label": i18n(_(u"apply filters"), language),
             "message_no_add_rights": i18n(_(u"this schedule is read only"), 

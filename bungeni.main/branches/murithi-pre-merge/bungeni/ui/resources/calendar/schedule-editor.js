@@ -20,6 +20,7 @@
     var textItemsDialog = null;
     var deleteDialog = null;
     var localPermissions = null;
+    var headingsDataTable = null;
     var ITEM_SELECT_ROW_COLUMN = "item_select_row"
     var ITEM_TYPE_COLUMN = "item_type";
     var ITEM_MOVER_COLUMN = "item_mover"
@@ -35,11 +36,16 @@
             draggable: false,
             underlay: "none",
     }
-    var HIGHLIGHT_TYPES = ["heading", "text"];
+    var HIGHLIGHT_TYPES = [
+        scheduler_globals.types.HEADING, 
+        scheduler_globals.types.TEXT
+    ];
     var HIGHLIGHT_TYPES_CSS_CLASS = "schedule-text-item";
     var AVAILABLE_ITEMS_SCHEMA = {
         resultsList: "items",
-        fields: ["item_id", "item_type", "item_title", "status", "status_date", "registry_number", "mover"]
+        fields: ["item_id", "item_type", "item_title", "status", "status_date", 
+            "registry_number", "mover"
+        ]
     }
 
     
@@ -58,12 +64,15 @@
      * @description sets data table size to 100% of its container
      */
     var fixDataTableSize = function(){
-            this.getHdTableEl().width = "100%";
-            this.getBdTableEl().width = "100%";
+            var context_width = this.getContainerEl().clientWidth + "px";
+            this.getHdTableEl().width = context_width;
+            this.getBdTableEl().width = context_width;
+            this.unsubscribe("postRenderEvent", fixDataTableSize);
     }
 
     /**
-     * Custom method of added to data table to refresh data
+     * @method refresh
+     * @description Custom method of added to data table to refresh data
      **/
     YAHOO.widget.DataTable.prototype.refresh = function(params) {
         var dataSource = this.getDataSource();
@@ -103,11 +112,27 @@
      var itemTitleFormatter = function(el, record, column, data){
          rec_data = record.getData();
          if(rec_data.item_type == scheduler_globals.types.HEADING){
-             el.innerHTML = "<span style='text-align:center;display:block;'><strong>" + rec_data.item_title + "</strong></spam>";
+             el.innerHTML = (
+                "<span style='text-align:center;display:block;'><strong>" + 
+                rec_data.item_title + "</strong></span>"
+            );
          }else if(rec_data.item_type == scheduler_globals.types.TEXT){
              el.innerHTML = wrapText(rec_data.item_title);
          }else{
-             el.innerHTML = rec_data.item_title + "<em><span style='display:block;'>Moved by: " + rec_data.item_mover + "</span></em>";
+             if (rec_data.item_uri){
+                el.innerHTML = (rec_data.item_title + 
+                    "<em style='display:block;'><span>" +
+                    scheduler_globals.text_moved_by + " : " + 
+                    rec_data.item_mover + "</span>&nbsp;&nbsp;" +
+                    "<a href=''" + rec_data.item_uri + ">" +
+                    scheduler_globals.text_action_view + "</a></em>"
+                );
+            }else{
+                el.innerHTML = (rec_data.item_title + 
+                    "<em><span style='display:block;'>Moved by: " 
+                    + rec_data.item_mover + "</span></em>"
+                );
+            }
          }
      }
 
@@ -116,7 +141,9 @@
      * @description render item type in reduced form
      */
      var itemTypeFormatter = function(el, record, column, data){
-         el.innerHTML = "<span style='font-size:10px;'>" + record.getData()[ITEM_TYPE_COLUMN] + "</span>";
+         el.innerHTML = ("<span style='font-size:10px;'>" + 
+            record.getData()[ITEM_TYPE_COLUMN] + "</span>"
+        );
      }
 
     /**
@@ -149,6 +176,7 @@
     }
 
     var addTextRecordToSchedule = function(event){
+        headingsDataTable.unselectAllRows();
         textItemsDialog.show();
     }
 
@@ -156,36 +184,44 @@
         var tabs = this.tabViewControl;
         var activeTab = tabs.getTab(tabs.get("activeIndex"));
         var recordData = activeTab.getRecordValue();
-        if(recordData.value){
+        if(recordData.value.length){
             var currentItem = schedulerActions.currentItem;
             var new_record_index = (
                 (currentItem && itemsDataTable.getTrIndex(currentItem) + 1) || 0
             );
-            itemsDataTable.addRow(
-                { 
-                    item_title: recordData.value, 
-                    item_type: recordData.type
-                }, 
-                new_record_index
-            );
             
-            var new_record = itemsDataTable.getRecord(
-                itemsDataTable.getTrEl(new_record_index)
-            );
-            var target_columns = [
-                itemsDataTable.getColumn(ITEM_MOVE_UP_COLUMN),
-                itemsDataTable.getColumn(ITEM_MOVE_DOWN_COLUMN),
-            ]
-            itemsDataTable.unselectAllRows();
-            itemsDataTable.selectRow(new_record);
-            var updated_record = itemsDataTable.getRecord(
-                (new_record_index - 1)
-            );
-            for (col_index=0; col_index<=(target_columns.length); col_index++){
-                itemsDataTable.updateCell(updated_record, 
-                    target_columns[col_index],
-                    updated_record.getData()
+            for(idx=0; idx<recordData.value.length; idx++){
+                var rec_data = recordData.value[idx];
+                if (!rec_data){
+                    continue;
+                }
+                itemsDataTable.addRow(
+                    { 
+                        item_title: rec_data, 
+                        item_type: recordData.type
+                    }, 
+                    new_record_index
                 );
+                
+                var new_record = itemsDataTable.getRecord(
+                    itemsDataTable.getTrEl(new_record_index)
+                );
+                var target_columns = [
+                    itemsDataTable.getColumn(ITEM_MOVE_UP_COLUMN),
+                    itemsDataTable.getColumn(ITEM_MOVE_DOWN_COLUMN),
+                ]
+                itemsDataTable.unselectAllRows();
+                itemsDataTable.selectRow(new_record);
+                var updated_record = itemsDataTable.getRecord(
+                    (new_record_index - 1)
+                );
+                for (col_index=0; col_index<=(target_columns.length); col_index++){
+                    itemsDataTable.updateCell(updated_record, 
+                        target_columns[col_index],
+                        updated_record.getData()
+                    );
+                }
+                new_record_index = new_record_index + 1;
             }
             this.hide();
         }else{
@@ -326,7 +362,6 @@
     }
     
 
-
     /**
      * @method showSchedulerControls
      * @description displays a contextual popup panel when a row is selected.
@@ -462,12 +497,16 @@
          */
         var availableItemSelectFormatter = function(el, record, column, data){
             index = this.getTrIndex(record) + 1;
-            record_key = (record.getData().item_id + ":" + record.getData().item_type).toString()
+            record_key = ((record.getData().item_id + ":" + 
+                record.getData().item_type).toString()
+            );
             checked = "";
             if(existing_record_keys.indexOf(record_key)>=0){
                 checked = "checked='checked'";
             }
-            el.innerHTML = "<input type='checkbox' name='rec-sel-" + index +"' " + checked + "/>"
+            el.innerHTML = ("<input type='checkbox' name='rec-sel-" + 
+                index +"' " + checked + "/>"
+            );
         }
 
         var availableItemsColumns = [
@@ -509,12 +548,17 @@
                 availableItems.addTab(new YAHOO.widget.Tab(
                     {
                         label: typedef.title,
-                        content: "<div id='" + container_id_filters + "' class='schedule-available-item-filters'></div>" + "<div id='" + container_id + "'/>",
+                        content: ("<div id='" + container_id_filters + 
+                            "' class='schedule-available-item-filters'></div>" 
+                            + "<div id='" + container_id + "'/>"
+                        ),
                     }
                 ));
                 Event.onAvailable(container_id, function(event){
                     var tabDataSource = new YAHOO.util.DataSource(
-                        scheduler_globals.schedulable_items_json_url + "?type="+ type
+                        (scheduler_globals.schedulable_items_json_url 
+                            + "?type="+ type
+                        )
                     );
                     tabDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
                     tabDataSource.responseSchema = AVAILABLE_ITEMS_SCHEMA;
@@ -630,8 +674,12 @@
                             if (Object.keys(data_filters).length > 0){
                                 tabDataTable.refresh(data_filters);
                             }else{
-                                saveDialog.setHeader(scheduler_globals.filters_no_filters_header);
-                                saveDialog.setBody(scheduler_globals.filters_no_filters_message);
+                                saveDialog.setHeader(
+                                    scheduler_globals.filters_no_filters_header
+                                );
+                                saveDialog.setBody(
+                                    scheduler_globals.filters_no_filters_message
+                                );
                                 saveDialog.show();
                                 saveDialog.bringToTop();
                             }
@@ -785,28 +833,6 @@
         discardButton.appendTo(container);
     }
 
-    /**
-     * @method addSelectItemToSchedule
-     * @description adds selected item from this datatable to agenda
-     */
-    var addSelectItemToSchedule = function(args){
-        var targetRecord = this.getRecord(args.target);
-        var targetData = targetRecord.getData();
-        var new_record_data = {
-            item_id: targetData.item_id,
-            item_title: targetData.item_title,
-            item_type: targetData.item_type,
-            item_mover: targetData.item_mover,
-        }
-        ctx_index = itemsDataTable.getSelectedRows()[0];
-        var new_record_index = (
-            (ctx_index && itemsDataTable.getTrIndex(ctx_index)+1) || 0
-        );
-        itemsDataTable.addRow(new_record_data, new_record_index);
-        itemsDataTable.unselectAllRows();
-        itemsDataTable.selectRow(new_record_index);
-    }
-
 
     /**
      * @method addItemToSchedule
@@ -898,20 +924,20 @@
         );
         dataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
         dataSource.responseSchema = AVAILABLE_ITEMS_SCHEMA;
-        var dataTable = new YAHOO.widget.DataTable(data_container,
+        headingsDataTable = new YAHOO.widget.DataTable(data_container,
             columns, dataSource, 
             { 
-                selectionMode:"single",
+                selectionMode:"standard",
                 scrollable: true,
                 initialLoad: true,
                 width:"100%"
             }
         );
-        dataTable.subscribe("cellClickEvent", addSelectItemToSchedule);
-        dataTable.subscribe("postRenderEvent", fixDataTableSize);
-        dataTable.subscribe("rowMouseoverEvent", dataTable.onEventHighlightRow);
-        dataTable.subscribe("rowMouseoutEvent", dataTable.onEventUnhighlightRow);
-        return { oDs: dataSource, oDt: dataTable }
+        headingsDataTable.subscribe("rowMouseoverEvent", headingsDataTable.onEventHighlightRow);
+        headingsDataTable.subscribe("rowMouseoutEvent", headingsDataTable.onEventUnhighlightRow);
+        headingsDataTable.subscribe("rowClickEvent", headingsDataTable.onEventSelectRow);
+        headingsDataTable.subscribe("postRenderEvent", fixDataTableSize);
+        return { oDs: dataSource, oDt: headingsDataTable }
     }
 
 
@@ -950,7 +976,9 @@
         itemsDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
         itemsDataSource.responseSchema = {
             resultsList: "nodes",
-            fields: ["item_id", "item_title", "item_type", "object_id", ITEM_MOVER_COLUMN],
+            fields: ["item_id", "item_title", "item_type", "object_id", 
+                ITEM_MOVER_COLUMN, "item_uri"
+            ],
             metaFields: { localPermissions: "localPermissions" },
         };
         
@@ -965,8 +993,12 @@
                 width:container.clientWidth + "px",
             }
         );
-        itemsDataTable.subscribe("rowMouseoverEvent", itemsDataTable.onEventHighlightRow);
-        itemsDataTable.subscribe("rowMouseoutEvent", itemsDataTable.onEventUnhighlightRow);
+        itemsDataTable.subscribe("rowMouseoverEvent", 
+            itemsDataTable.onEventHighlightRow
+        );
+        itemsDataTable.subscribe("rowMouseoutEvent", 
+            itemsDataTable.onEventUnhighlightRow
+        );
         itemsDataTable.subscribe("rowClickEvent", itemsDataTable.onEventSelectRow);
         itemsDataTable.subscribe("cellDblclickEvent", showCellEditorHandler);
         itemsDataTable.subscribe("cellClickEvent", reorderRow);
@@ -977,14 +1009,16 @@
         itemsDataTable.subscribe("rowDeleteEvent", initShowSchedulerControls);
         itemsDataTable.subscribe("rowAddEvent", highlightTypedRows);
         itemsDataTable.subscribe("rowAddEvent", hideSchedulerControls);
-        itemsDataTable.subscribe("postRenderEvent", fixDataTableSize);
+        //itemsDataTable.subscribe("postRenderEvent", fixDataTableSize);
         itemsDataTable.doBeforeLoadData = function(oRequest, oResponse, oPayload){
             localPermissions = oResponse.meta.localPermissions;
-            return oPayload
+            return true;
         }
-        itemsDataTable.subscribe("initEvent", function(){
+        var _renderScheduleButtons = function(){
             renderScheduleButtons(controls_container);
-        });
+            this.unsubscribe("initEvent", _renderScheduleButtons);
+        }
+        itemsDataTable.subscribe("initEvent", _renderScheduleButtons);
         
         return {
             oDS: itemsDataSource,
@@ -1131,9 +1165,19 @@
             );
             headingTab.getRecordValue = function(){
                 var contentEl = this.get("contentEl");
+                var heading_value = Y$.query("input", contentEl)[0].value;
+                var selected_rows = headingsDataTable.getSelectedRows();
+                var heading_values = new Array();
+                heading_values.push(heading_value);
+                for(row_id=0; row_id<selected_rows.length; row_id++){
+                    var data = headingsDataTable.getRecord(
+                        selected_rows[row_id]
+                    ).getData();
+                    heading_values.push(data.item_title);
+                }
                 return { 
-                    type:"heading",
-                    value: Y$.query("input", contentEl)[0].value
+                    type:scheduler_globals.types.HEADING,
+                    value: heading_values
                 }
             }
             headingTab.on("activeChange", initAvailableHeadings);
@@ -1149,8 +1193,8 @@
             var rteEditor = null;
             textTab.getRecordValue = function(){
                 return {
-                    type: "text",
-                    value: rteEditor.cleanHTML(rteEditor.getEditorHTML())
+                    type: scheduler_globals.types.TEXT,
+                    value: [ rteEditor.cleanHTML(rteEditor.getEditorHTML()) ]
                 }
             }
             textRecordTabs.addTab(headingTab);

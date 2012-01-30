@@ -347,7 +347,7 @@ def ministry_column(name, title, default=""):
         return obj.short_name
     return column.GetterColumn(title, getter)
 
-def scheduled_item_column(name, title):
+def scheduled_item_title_column(name, title):
     def getter(item, formatter):
         return IDCDescriptiveProperties(item.item).title
     return column.GetterColumn(title, getter)
@@ -358,6 +358,12 @@ def scheduled_item_mover_column(name, title):
             return IDCDescriptiveProperties(item.item.owner).title
         return ""
     return column.GetterColumn(title, getter)
+
+def scheduled_item_uri_column(name, title):
+    def getter(item, formatter):
+        return IDCDescriptiveProperties(item.item).uri
+    return column.GetterColumn(title, getter)
+
 
 ''' !+TYPES_CUSTOM
 def enumeration_column(name, title,
@@ -3328,7 +3334,7 @@ class ItemScheduleDescriptor(ModelDescriptor):
                 show("view listing")
             ],
             property=schema.TextLine(title=_("Title"), required=False),
-            listing_column = scheduled_item_column("title", _(u"Title"))
+            listing_column = scheduled_item_title_column("title", _(u"Title"))
         ),
         Field(name="item_mover", # [derived]
             modes="view listing",
@@ -3345,6 +3351,15 @@ class ItemScheduleDescriptor(ModelDescriptor):
             ],
             property=schema.TextLine(title=_("Item Type")),
         ),
+        Field(name="item_uri", # [derived]
+            modes="view listing",
+            localizable=[
+                show("view listing"),
+            ],
+            property=schema.TextLine(title=_("uri"), required=False),
+            listing_column=scheduled_item_uri_column("uri", _(u"Item URI"))
+        ),
+
     ]
 
 class ScheduleTextDescriptor(ModelDescriptor):
