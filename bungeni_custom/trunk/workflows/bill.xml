@@ -16,12 +16,12 @@
     <feature name="attachment" enabled="true" />
     
     <!-- global grants -->
-    <grant permission="bungeni.bill.View" role="bungeni.Clerk" />  
-    <grant permission="bungeni.bill.View" role="bungeni.Speaker" /> 
+    <grant permission="bungeni.bill.View" role="bungeni.Clerk" />
+    <grant permission="bungeni.bill.View" role="bungeni.Speaker" />
     <grant permission="bungeni.bill.View" role="bungeni.Owner" />
     <grant permission="bungeni.bill.View" role="bungeni.Signatory" />
-    <grant permission="bungeni.bill.Edit" role="bungeni.Clerk" />    
-    <grant permission="bungeni.bill.Edit" role="bungeni.Speaker" /> 
+    <grant permission="bungeni.bill.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.bill.Edit" role="bungeni.Speaker" />
     <grant permission="bungeni.bill.Edit" role="bungeni.Owner" />
     <grant permission="bungeni.bill.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.bill.Add" role="bungeni.MP" />
@@ -32,7 +32,7 @@
         <!-- bill -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <deny permission="zope.View" role="bungeni.Speaker" />
-        <deny permission="zope.View" role="bungeni.Owner" /> 
+        <deny permission="zope.View" role="bungeni.Owner" />
         <deny permission="zope.View" role="bungeni.Signatory" />
         <deny permission="zope.View" role="bungeni.MP" />
         <deny permission="zope.View" role="bungeni.Minister" />
