@@ -19,7 +19,6 @@
     var savingDialog = null;
     var textItemsDialog = null;
     var deleteDialog = null;
-    var localPermissions = null;
     var headingsDataTable = null;
     var ITEM_SELECT_ROW_COLUMN = "item_select_row"
     var ITEM_TYPE_COLUMN = "item_type";
@@ -169,10 +168,6 @@
     }
     var itemMoveDownFormatter = function(el, record, column, data){
         itemMoveFormatter(el, record, column, data, "down", this);
-    }
-
-    var itemDeleteFormatter = function(el, record, column, data){
-        el.innerHTML = "<span><strong>X</strong></span>";
     }
 
     var addTextRecordToSchedule = function(event){
@@ -369,7 +364,6 @@
      * the selected row.
      */
     var showSchedulerControls = function(args){
-        if(!localPermissions.EDIT){ return; }
         schedulerActions.currentItem = args.record;
         schedulerActions.cfg.setProperty("context",
             [args.el.id, "tl", "bl"]
@@ -384,7 +378,7 @@
      * @description show scheduler controls if initial recordset is empty
      **/
      var initShowSchedulerControls = function(oArgs){
-         if ((this.getRecordSet().getLength() == 0) && localPermissions.EDIT){
+         if (this.getRecordSet().getLength() == 0){
              showSchedulerControls({record:null, el:this.getTheadEl()});
          }
      }
@@ -476,12 +470,6 @@
     var renderAvailableItems = function(args){
         var schedulePanel = schedulerLayout.getUnitByPosition("left");
         var itemsPanel = schedulerLayout.getUnitByPosition("center");
-        if(!localPermissions.EDIT){
-            itemsPanel.body.innerHTML = wrapText(
-                scheduler_globals.message_no_add_rights
-            );
-            return;
-        }
         if (available_items_loaded){ return; }
         available_items_loaded = true;
         var existing_record_keys = new Array();
@@ -818,7 +806,6 @@
      * @description Renders action buttons inside provided container element
      **/
     var renderScheduleButtons = function(container){
-        if(!localPermissions.EDIT){ return; }
         container.style.lineHeight = container.clientHeight;
         container.style.padding = "5px";
         var saveButton = new YAHOO.widget.Button(
@@ -979,7 +966,6 @@
             fields: ["item_id", "item_title", "item_type", "object_id", 
                 ITEM_MOVER_COLUMN, "item_uri"
             ],
-            metaFields: { localPermissions: "localPermissions" },
         };
         
         var scheduler_container = document.createElement("div");
@@ -1010,10 +996,6 @@
         itemsDataTable.subscribe("rowAddEvent", highlightTypedRows);
         itemsDataTable.subscribe("rowAddEvent", hideSchedulerControls);
         //itemsDataTable.subscribe("postRenderEvent", fixDataTableSize);
-        itemsDataTable.doBeforeLoadData = function(oRequest, oResponse, oPayload){
-            localPermissions = oResponse.meta.localPermissions;
-            return true;
-        }
         var _renderScheduleButtons = function(){
             renderScheduleButtons(controls_container);
             this.unsubscribe("initEvent", _renderScheduleButtons);

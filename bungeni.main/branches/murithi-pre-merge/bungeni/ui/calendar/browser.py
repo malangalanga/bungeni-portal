@@ -490,6 +490,12 @@ class ItemScheduleOrder(BrowserView):
 #
 # Group Scheduler New YUI based Stack UI
 #
+RESOURCE_PERMISSION_MAP = (
+    ("bungeni-schedule-discussions", 
+        "bungeni.sittingschedule.itemdiscussion.Edit"
+    ),
+    ("bungeni-schedule-editor", "bungeni.sittingschedule.item.Add"),
+)
 class GroupSittingScheduleViewNext(BrowserView):
     
     template = ViewPageTemplateFile("templates/scheduler.pt")
@@ -527,8 +533,23 @@ class GroupSittingScheduleViewNext(BrowserView):
     def __call__(self):
         return self.render()
     
+    def needed_resources(self):
+        """Permission aware resource dependency generation.
+        Determines what user interface is rendered for the sitting.
+        See resource definitions in `bungeni.ui.resources` inside 
+        `configure.zcml`.
+        """
+        needed = None
+        for resource, permission in RESOURCE_PERMISSION_MAP:
+            if checkPermission(permission, self.context):
+                needed = resource
+                break
+        return needed
+    
     def render(self):
-        need("bungeni-schedule-editor")
+        _need = self.needed_resources()
+        if _need:
+            need(self.needed_resources())
         return self.template()
 
 class SchedulableItemsJSON(BrowserView):

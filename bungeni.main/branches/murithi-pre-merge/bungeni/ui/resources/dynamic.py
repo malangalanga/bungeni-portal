@@ -36,6 +36,7 @@ def get_globals(group_name, **kwargs):
             },
             "json_listing_url" : "./items/jsonlisting?sort=sort_planned_order&dir=asc",
             "save_schedule_url": "./items/save-schedule",
+            "discussion_items_json_url" : "/discussions/jsonlisting",
             "schedulable_items_json_url" : "./schedulable-items-json",
             "column_title": i18n(_(u"Title"), language),
             "column_available_headings_title": i18n(
