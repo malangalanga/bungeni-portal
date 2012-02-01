@@ -3395,9 +3395,9 @@ class ItemScheduleDiscussionDescriptor(ModelDescriptor):
     fields = [
         LanguageField("language"),
         Field(name="body_text", label=_("Minutes"), # [rtf]
-            modes="view edit add",
+            modes="view edit add listing",
             localizable=[
-                show("view edit"),
+                show("view edit listing"),
             ],
             property=schema.Text(title=_("Minutes")),
             view_widget=widgets.HTMLDisplay,

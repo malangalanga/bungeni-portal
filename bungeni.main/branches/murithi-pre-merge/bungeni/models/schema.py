@@ -856,9 +856,9 @@ schedule_text = rdb.Table("schedule_text", metadata,
 # capture the discussion on this item
 
 item_schedule_discussions = rdb.Table("item_schedule_discussions", metadata,
+    rdb.Column("discussion_id", rdb.Integer, primary_key=True),
     rdb.Column("schedule_id", rdb.Integer,
-        rdb.ForeignKey("item_schedules.schedule_id"),
-        primary_key=True),
+        rdb.ForeignKey("item_schedules.schedule_id"),),
     rdb.Column("body_text", rdb.UnicodeText),
     rdb.Column("group_sitting_time", rdb.Time(timezone=False)),
     rdb.Column("language", rdb.String(5),

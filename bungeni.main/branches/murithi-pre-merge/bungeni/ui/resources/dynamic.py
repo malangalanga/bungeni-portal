@@ -20,6 +20,7 @@ NOTICE = _(u"Notice")
 WORKING = _(u"Working")
 CANCEL = _(u"Cancel")
 VIEW = _(u"View")
+EDIT = _(u"Edit")
 
 def get_globals(group_name, **kwargs):
     language = kwargs.get("language", "en")
@@ -34,11 +35,19 @@ def get_globals(group_name, **kwargs):
                 "HEADING": "heading",
                 "TEXT": "text"
             },
+            "current_schedule_title": i18n(_(u"Agenda"), language),
+            "available_items_title": i18n(_(u"Available Items"), language),
+            "schedule_discussions_title": i18n(_(u"Discussions"), language),
             "json_listing_url" : "./items/jsonlisting?sort=sort_planned_order&dir=asc",
             "save_schedule_url": "./items/save-schedule",
-            "discussion_items_json_url" : "/discussions/jsonlisting",
+            "discussion_items_json_url" : "discussions/jsonlisting",
             "schedulable_items_json_url" : "./schedulable-items-json",
             "column_title": i18n(_(u"Title"), language),
+            "column_discussion_text": i18n(_(u"discussion text"), language),
+            "column_discussion_text_missing": i18n(_(u"NO TEXT RECORD FOUND"), 
+                language
+            ),
+            "column_discussion_edit_button": i18n(EDIT, language),
             "column_available_headings_title": i18n(
                 _(u"Select existing heading"), 
                 language
@@ -56,8 +65,6 @@ def get_globals(group_name, **kwargs):
             "remove_button_text": i18n(_(u"remove item"), language),
             "save_button_text": i18n(_(u"save changes"), language),
             "discard_button_text": i18n(_(u"discard changes"), language),
-            "current_schedule_title": i18n(_(u"Agenda"), language),
-            "available_items_title": i18n(_(u"Available Items"), language),
             "initial_editor_text": i18n(
                 _(u"change this text"), language
             ),

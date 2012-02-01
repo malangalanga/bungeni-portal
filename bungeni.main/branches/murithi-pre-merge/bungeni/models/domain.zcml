@@ -620,9 +620,27 @@
         />
     </class>
     
+    <class class=".domain.ScheduleText">
+        <require permission="zope.View"
+            attributes="
+                schedule_text_id
+                text
+                group_id
+            "
+        />
+        <require permission="bungeni.sittingschedule.Edit"
+            set_attributes="
+            schedule_text_id
+            text
+            group_id
+            "
+        />
+    </class>
+    
     <class class=".domain.ItemScheduleDiscussion">
         <require permission="zope.View"
             attributes="
+                discussion_id
                 schedule_id
                 body_text sitting_time
             "
