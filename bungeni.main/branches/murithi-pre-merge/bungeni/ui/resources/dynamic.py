@@ -65,6 +65,8 @@ def get_globals(group_name, **kwargs):
             "remove_button_text": i18n(_(u"remove item"), language),
             "save_button_text": i18n(_(u"save changes"), language),
             "discard_button_text": i18n(_(u"discard changes"), language),
+            "add_discussion_button_text": i18n(_(u"add discussion"), language),
+            "save_discussion_button_text": i18n(_(u"add discussion"), language),
             "initial_editor_text": i18n(
                 _(u"change this text"), language
             ),

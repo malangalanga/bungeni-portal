@@ -11,6 +11,7 @@ var MOVE_DOWN_COLUMN = "item_move_down";
 var MOVER_COLUMN = "item_mover";
 var URI_COLUMN = "item_uri";
 var BODY_TEXT_COLUMN = "body_text";
+var DISCUSSION_EDIT_COLUMN = "edit_discussion";
 var DIALOG_CONFIG = {
         width: "auto",
         fixedcenter: true,
@@ -19,6 +20,8 @@ var DIALOG_CONFIG = {
         draggable: false,
         underlay: "none",
 }
+var MODE_ADD = "MODE_ADD";
+var MODE_EDIT = "MODE_EDIT";
 
 YAHOO.bungeni.Utils = function(){
     /**
@@ -116,11 +119,13 @@ YAHOO.bungeni.formatters = function(){
     }
 
     var editButtonFormatter = function(el, record, column, data){
-        var button = new YAHOO.widget.Button({
-            label: scheduler_globals.column_discussion_edit_button,
-            id: el.id + ""
-        });
-        button.appendTo(el);
+        if (!el.innerHTML){
+            var button = new YAHOO.widget.Button({
+                label: scheduler_globals.column_discussion_edit_button,
+                id: el.id + "-edit-button"
+            });
+            button.appendTo(el);
+        }
     }
 
     return {
@@ -137,6 +142,77 @@ YAHOO.bungeni.formatters = function(){
 YAHOO.bungeni.scheduling = function(){
     var Event = YAHOO.util.Event;
     var BungeniUtils = YAHOO.bungeni.Utils;
+    
+    var discussionEditor = function(){
+        init = function(){
+           this.dialog = new YAHOO.widget.SimpleDialog("discussion-editor",
+                DIALOG_CONFIG
+            );
+            this.dialog._parent = this
+            var dialogButtons = [
+                {
+                    text: scheduler_globals.save_discussion_button_text,
+                    handler: function(){
+                        var text = this._parent.getText();
+                        var mode = this._parent.mode;
+                        var cDt = this._parent.dataTable;
+                        if (text){
+                            if (mode == MODE_ADD){
+                                var new_record = {};
+                                new_record[BODY_TEXT_COLUMN] = text;
+                                cDt.addRow(new_record);
+                            }else{
+                                var index = cDt.getSelectedRows()[0];
+                                if(index){
+                                    var record = cDt.getRecord(index);
+                                    var data = record.getData();
+                                    data[BODY_TEXT_COLUMN] = text;
+                                    cDt.updateRow(index, data);
+                                }
+                            }
+                            this.hide();
+                        }
+                    }
+                },
+                {
+                    text: scheduler_globals.text_dialog_cancel_action,
+                    handler: function(){ this.hide(); }
+                },
+            ]
+            this.dialog.cfg.queueProperty("width", "500px");
+            this.dialog.cfg.queueProperty("height", "400px");
+            this.dialog.cfg.queueProperty("buttons", dialogButtons);
+            this.dialog.setBody("<div><textarea name='discussiontext' id='discussiontext'></textarea></div>");
+            this.dialog.setHeader(scheduler_globals.schedule_discussions_title);
+            this.dialog.render(document.body);
+            Event.onAvailable("discussiontext", function(e){
+                var editor = new YAHOO.widget.Editor("discussiontext",
+                    { width:"100%", height:"150px" ,autoHeight: false }
+                );
+                editor.render();
+                YAHOO.bungeni.scheduling.discussionEditor.getText = function(){
+                    return editor.cleanHTML(editor.getEditorHTML())
+                }
+                YAHOO.bungeni.scheduling.discussionEditor.setText = function(text){
+                    editor.setEditorHTML(text);
+                }
+            });
+        }
+        render = function(dataTable, mode){
+            this.dataTable = dataTable;
+            this.mode = mode || MODE_ADD;
+            this.mode
+            if (!this.dialog){
+                this.init();
+            }
+            this.dialog.show();
+        }
+        return {
+            init: init,
+            render: render
+        }
+    }();
+    
     var handlers = function(){
         var renderDiscussionsTable = function(){
             var dataTable = YAHOO.bungeni.schedule.oDt;
@@ -145,22 +221,17 @@ YAHOO.bungeni.scheduling = function(){
             var discussions_url = ("./items/" + 
                 oData.object_id + scheduler_globals.discussion_items_json_url
             );
-            //render editor
-            var editorContainer = document.createElement("div");
-            var editorTextArea = document.createElement("textarea");
-            editorTextArea.id = "discussion-editor-rte";
-            editorContainer.appendChild(editorTextArea);
-            Event.onAvailable("discussion-editor-rte", function(event){
-                var editor = new YAHOO.widget.Editor("discussion-editor-rte",
-                    { width:"100%", autoHeight: false }
-                );
-                editor.render();
-            });
-            this.body.appendChild(editorContainer);
-            
+                        
             //render discussions data table
             var dataSource = YAHOO.util.DataSource(discussions_url);
             dataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+            var button_container = document.createElement("div");
+            button_container.style.marginBottom = "1em";
+            this.body.appendChild(button_container);
+            var add_button = new YAHOO.widget.Button({
+                label: scheduler_globals.add_discussion_button_text
+            });
+            add_button.appendTo(button_container);
             var container = document.createElement("div");
             this.body.appendChild(container);
             dataSource.responseSchema = {
@@ -179,7 +250,7 @@ YAHOO.bungeni.scheduling = function(){
                     formatter: YAHOO.bungeni.formatters.longTextFormatter
                 },
                 {
-                    key: "edit_discussion",
+                    key: DISCUSSION_EDIT_COLUMN,
                     label: "",
                     formatter: YAHOO.bungeni.formatters.editButtonFormatter
                 }
@@ -194,6 +265,13 @@ YAHOO.bungeni.scheduling = function(){
             dDt.subscribe("rowClickEvent", dDt.onEventSelectRow);
             dDt.subscribe("rowMouseoverEvent", dDt.onEventHighlightRow);
             dDt.subscribe("rowMouseoutEvent", dDt.onEventUnhighlightRow);
+            dDt.subscribe("cellClickEvent", 
+                YAHOO.bungeni.scheduling.handlers.editDiscussion
+            );
+            var _dialog = this;
+            add_button.on("click", function(){
+                YAHOO.bungeni.scheduling.discussionEditor.render(dDt);
+            });
         }
         var showDiscussions = function(args){
             var dlg_id = "dlg-" + args.el.id;
@@ -202,7 +280,7 @@ YAHOO.bungeni.scheduling = function(){
             );
             var dialogButtons = [
                 {
-                    text: scheduler_globals.text_dialog_confirm_action,
+                    text: scheduler_globals.save_button_text,
                     handler: null
                 },
                 {
@@ -220,8 +298,21 @@ YAHOO.bungeni.scheduling = function(){
             dialog.show();
             dialog.bringToTop();
         };
+        var editDiscussion = function(args){
+            var column = this.getColumn(args.target);
+            if(column.field == DISCUSSION_EDIT_COLUMN){
+                Event.stopEvent(args.event);
+                YAHOO.bungeni.scheduling.discussionEditor.render(this, MODE_EDIT);
+                YAHOO.bungeni.scheduling.discussionEditor.setText(
+                    this.getRecord(args.target).getData()[BODY_TEXT_COLUMN] ||
+                    ""
+                );
+
+            }
+        }
         return {
-            showDiscussions: showDiscussions
+            showDiscussions: showDiscussions,
+            editDiscussion: editDiscussion
         }
     }();
     Event.onDOMReady(function(){
@@ -317,6 +408,7 @@ YAHOO.bungeni.scheduling = function(){
         layout.render();
     });
     return {
-        handlers: handlers
+        handlers: handlers,
+        discussionEditor: discussionEditor
     }
 }();
