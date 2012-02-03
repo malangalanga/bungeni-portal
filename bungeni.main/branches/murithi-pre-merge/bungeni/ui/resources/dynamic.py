@@ -21,6 +21,7 @@ WORKING = _(u"Working")
 CANCEL = _(u"Cancel")
 VIEW = _(u"View")
 EDIT = _(u"Edit")
+DELETE = _(u"Delete")
 
 def get_globals(group_name, **kwargs):
     language = kwargs.get("language", "en")
@@ -40,6 +41,7 @@ def get_globals(group_name, **kwargs):
             "schedule_discussions_title": i18n(_(u"Discussions"), language),
             "json_listing_url" : "./items/jsonlisting?sort=sort_planned_order&dir=asc",
             "save_schedule_url": "./items/save-schedule",
+            "discussions_save_url": "discussions/save-discussions",
             "discussion_items_json_url" : "discussions/jsonlisting",
             "schedulable_items_json_url" : "./schedulable-items-json",
             "column_title": i18n(_(u"Title"), language),
@@ -85,6 +87,10 @@ def get_globals(group_name, **kwargs):
             "save_dialog_confirm": i18n(OKAY, language),
             "saving_dialog_header": i18n(WORKING, language),
             "saving_dialog_text": i18n(_(u"saving changes to schedule..."), 
+                language
+            ),
+            "saving_discussions_text": i18n(
+                _(u"saving changes to discussions..."), 
                 language
             ),
             "saving_dialog_refreshing": i18n(

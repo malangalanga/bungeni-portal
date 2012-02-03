@@ -750,7 +750,7 @@
             savingDialog.setBody(scheduler_globals.saving_dialog_exception);
             setTimeout(function(){
                     savingDialog.setBody("");
-                    savingDialog.hide("");
+                    savingDialog.hide();
                 },
                 2000
             );

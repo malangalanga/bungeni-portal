@@ -12,6 +12,7 @@ var MOVER_COLUMN = "item_mover";
 var URI_COLUMN = "item_uri";
 var BODY_TEXT_COLUMN = "body_text";
 var DISCUSSION_EDIT_COLUMN = "edit_discussion";
+var DISCUSSION_DELETE_COLUMN = "delete_discussion";
 var DIALOG_CONFIG = {
         width: "auto",
         fixedcenter: true,
@@ -128,6 +129,16 @@ YAHOO.bungeni.formatters = function(){
         }
     }
 
+    var deleteButtonFormatter = function(el, record, column, data){
+        if (!el.innerHTML){
+            var button = new YAHOO.widget.Button({
+                label: scheduler_globals.column_discussion_delete_button,
+                id: el.id + "-delete-button"
+            });
+            button.appendTo(el);
+        }
+    }
+
     return {
      titleFormatter: itemTitleFormatter,
      typeFormatter: itemTypeFormatter,
@@ -135,13 +146,93 @@ YAHOO.bungeni.formatters = function(){
      moveDownFormatter: itemMoveDownFormatter,
      countFormatter: countFormatter,
      longTextFormatter: longTextFormatter,
-     editButtonFormatter: editButtonFormatter
+     editButtonFormatter: editButtonFormatter,
+     deleteButtonFormatter: deleteButtonFormatter
     }
 }();
 
 YAHOO.bungeni.scheduling = function(){
     var Event = YAHOO.util.Event;
+    var YJSON = YAHOO.lang.JSON;
+    var YCM = YAHOO.util.Connect;
     var BungeniUtils = YAHOO.bungeni.Utils;
+    
+    var dialogs = function(){
+        var blocking = {
+            init: function(){
+                this.dialog = new YAHOO.widget.SimpleDialog(
+                    "scheduling-blocking", DIALOG_CONFIG
+                );
+                this.dialog.setHeader(scheduler_globals.saving_dialog_header);
+                this.dialog.setBody("");
+                this.dialog.cfg.queueProperty("width", "200px");
+                this.dialog.cfg.queueProperty("close", false);
+                this.dialog.cfg.queueProperty("icon",
+                    YAHOO.widget.SimpleDialog.ICON_BLOCK
+                );
+                this.dialog.render(document.body);
+            },
+            show: function(message){
+                if(!this.dialog){
+                    this.init();
+                }
+                this.dialog.setBody(message);
+                this.dialog.show();
+                this.dialog.bringToTop();
+            },
+            hide: function(){
+                this.dialog.hide();
+            }
+        }
+        var confirm = {
+            init: function(){
+                var buttons = [
+                    {
+                        text: scheduler_globals.delete_dialog_confirm,
+                        handler: function(){ 
+                            this._parent.confirm_callback();
+                            this._parent.confirm_callback = null;
+                            this.hide();
+                        }
+                    },
+                    {
+                        text: scheduler_globals.delete_dialog_cancel,
+                        handler: function(){ 
+                            this._parent.confirm_callback = null;
+                            this.hide(); 
+                        },
+                        default: true
+                    },
+                ];
+                this.dialog = new YAHOO.widget.SimpleDialog(
+                    "scheduling-confirm", DIALOG_CONFIG
+                );
+                this.dialog._parent = this;
+                this.dialog.setHeader(scheduler_globals.confirm_dialog_title);
+                this.dialog.setBody("");
+                this.dialog.cfg.queueProperty("width", "200px");
+                this.dialog.cfg.queueProperty("buttons", buttons);
+                this.dialog.render(document.body);
+            },
+            show: function(message, confirm_callback){
+                if(!this.dialog){
+                    this.init();
+                }
+                this.confirm_callback = confirm_callback;
+                this.dialog.setBody(message);
+                this.dialog.show();
+                this.dialog.bringToTop();
+            },
+            hide: function(){
+                this.callback = null;
+                this.dialog.hide();
+            }
+        }
+        return {
+            blocking: blocking,
+            confirm: confirm
+        }
+    }();
     
     var discussionEditor = function(){
         init = function(){
@@ -207,9 +298,38 @@ YAHOO.bungeni.scheduling = function(){
             }
             this.dialog.show();
         }
+        var RequestObject = {
+            handleSuccess: function(o){
+                YAHOO.bungeni.scheduling.dialogs.blocking.hide();
+            },
+            handleFailure: function(o){
+            },
+            startRequest: function(data){
+                var scheduled_item_id = YAHOO.bungeni.schedule.oDt.getRecord(
+                    YAHOO.bungeni.schedule.oDt.getSelectedRows()[0]
+                ).getData()[OBJECT_ID_COLUMN];
+                var save_url = ("./items/" + scheduled_item_id + 
+                    scheduler_globals.discussions_save_url
+                );
+                Event.stopEvent(window.event);
+                YAHOO.bungeni.scheduling.dialogs.blocking.show(
+                    scheduler_globals.saving_discussions_text
+                );
+                YCM.asyncRequest("POST", save_url, callback, data);
+                    
+            }
+        }
+        
+        var callback = {
+            success: RequestObject.handleSuccess,
+            failure: RequestObject.handleFailure,
+            scope: RequestObject
+        }
+
         return {
             init: init,
-            render: render
+            render: render,
+            SaveRequest: RequestObject
         }
     }();
     
@@ -253,6 +373,11 @@ YAHOO.bungeni.scheduling = function(){
                     key: DISCUSSION_EDIT_COLUMN,
                     label: "",
                     formatter: YAHOO.bungeni.formatters.editButtonFormatter
+                },
+                {
+                    key: DISCUSSION_DELETE_COLUMN,
+                    label: "",
+                    formatter: YAHOO.bungeni.formatters.deleteButtonFormatter
                 }
             ]
             var dDt = new YAHOO.widget.DataTable(container, columns,
@@ -268,10 +393,15 @@ YAHOO.bungeni.scheduling = function(){
             dDt.subscribe("cellClickEvent", 
                 YAHOO.bungeni.scheduling.handlers.editDiscussion
             );
-            var _dialog = this;
+            dDt.subscribe("cellClickEvent", 
+                YAHOO.bungeni.scheduling.handlers.deleteDiscussion
+            );
             add_button.on("click", function(){
                 YAHOO.bungeni.scheduling.discussionEditor.render(dDt);
             });
+            YAHOO.bungeni.schedule.getDiscussionsDataTable = function(){
+                return dDt;
+            }
         }
         var showDiscussions = function(args){
             var dlg_id = "dlg-" + args.el.id;
@@ -281,7 +411,7 @@ YAHOO.bungeni.scheduling = function(){
             var dialogButtons = [
                 {
                     text: scheduler_globals.save_button_text,
-                    handler: null
+                    handler: YAHOO.bungeni.scheduling.handlers.saveDiscussions
                 },
                 {
                     text: scheduler_globals.text_dialog_cancel_action,
@@ -310,9 +440,41 @@ YAHOO.bungeni.scheduling = function(){
 
             }
         }
+        var deleteDiscussion = function(args){
+            var contextDt = this;
+            var delete_callback = function(){
+                contextDt.deleteRow(
+                    contextDt.getRecord(args.target)
+                );
+            }
+            YAHOO.bungeni.scheduling.dialogs.confirm.show(
+                scheduler_globals.confirm_message_delete_discussion,
+                delete_callback
+            );
+        }
+        var saveDiscussions = function(args){
+            var dataTable = YAHOO.bungeni.schedule.getDiscussionsDataTable();
+            var record_set = dataTable.getRecordSet();
+            var records = record_set.getRecords();
+            if (record_set.getLength()){
+                var item_data = new Array();
+                for (index in records){
+                    var record_data = records[index].getData();
+                    var save_data = {
+                        object_id: record_data.object_id,
+                        body_text: record_data.body_text,
+                    }
+                    item_data.push(save_data);
+                }
+                var post_data = "data=" + YJSON.stringify(item_data);
+                YAHOO.bungeni.scheduling.discussionEditor.SaveRequest.startRequest(post_data);
+            }
+        }
         return {
             showDiscussions: showDiscussions,
-            editDiscussion: editDiscussion
+            editDiscussion: editDiscussion,
+            deleteDiscussion: deleteDiscussion,
+            saveDiscussions: saveDiscussions
         }
     }();
     Event.onDOMReady(function(){
@@ -409,6 +571,7 @@ YAHOO.bungeni.scheduling = function(){
     });
     return {
         handlers: handlers,
-        discussionEditor: discussionEditor
+        discussionEditor: discussionEditor,
+        dialogs: dialogs
     }
 }();

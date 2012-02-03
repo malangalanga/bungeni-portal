@@ -498,18 +498,17 @@ mapper(domain.AttachedFile, schema.attached_files)
 
 mapper(domain.ItemSchedule, schema.item_schedules,
     properties={
-        "discussion": relation(
-            domain.ItemScheduleDiscussion,
-            uselist=False,
-            cascade="all, delete-orphan"
-        ),
         "sitting": relation(domain.GroupSitting, uselist=False),
     }
 )
 
 mapper(domain.ScheduleText, schema.schedule_text)
 
-mapper(domain.ItemScheduleDiscussion, schema.item_schedule_discussions)
+mapper(domain.ItemScheduleDiscussion, schema.item_schedule_discussions,
+    properties={
+        "scheduled_item": relation(domain.ItemSchedule, uselist=False),
+    }
+)
 
 # items scheduled for a sitting
 # expressed as a join between item and schedule

@@ -895,10 +895,11 @@ class ScheduleAddView(BrowserView):
     """Custom view to persist schedule items modified client side
     """
     RECORD_KEY = "%s:%d"
+    messages = []
     def __init__(self, context, request):
         super(ScheduleAddView, self).__init__(context, request)
         self.sitting = self.context.__parent__
-        self.data = json.loads(self.request.form.get("data", "{}"))
+        self.data = json.loads(self.request.form.get("data", "[]"))
 
     def saveSchedule(self):
         session = Session()
@@ -989,5 +990,50 @@ class ScheduleAddView(BrowserView):
     def __call__(self):
         self.request.response.setHeader("Content-type", "application/json")
         self.saveSchedule()
-        return json.dumps(self.data)
-        
+        return json.dumps(dict(messages=self.messages))
+
+class DiscussionAddView(BrowserView):
+    messages = []
+    def __init__(self, context, request):
+        super(DiscussionAddView, self).__init__(context, request)
+        self.data = json.loads(self.request.form.get("data", "[]"))
+    
+    def saveDiscussions(self):
+        session = Session()
+        new_record_keys = []
+        domain_model = removeSecurityProxy(self.context.domain_model)
+        for record in self.data:
+            discussion_text = record.get("body_text", "")
+            object_id = record.get("object_id", None)
+            if object_id:
+                current_record = removeSecurityProxy(
+                    self.context.get(getItemKey(object_id))
+                )
+                current_record.body_text = discussion_text
+                session.add(current_record)
+                session.flush()
+                notify(ObjectModifiedEvent(current_record))
+                new_record_keys.append(stringKey(current_record))
+            else:
+                new_record = domain_model(
+                    body_text = discussion_text,
+                    language = get_default_language()
+                )
+                new_record.scheduled_item = self.context.__parent__
+                session.add(new_record)
+                session.flush()
+                notify(ObjectCreatedEvent(new_record))
+                new_record_keys.append(stringKey(new_record))
+        records_to_delete = [
+            removeSecurityProxy(self.context.get(key))
+            for key in self.context.keys() if key not in new_record_keys
+        ]
+        map(session.delete, records_to_delete)
+        map(lambda deleted:notify(ObjectRemovedEvent(deleted)),
+            records_to_delete
+        )
+    
+    def __call__(self):
+        self.request.response.setHeader("Content-type", "application/json")
+        self.saveDiscussions()
+        return json.dumps(dict(messages=self.messages))
