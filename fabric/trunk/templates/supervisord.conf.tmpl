@@ -75,3 +75,11 @@ stdout_logfile= %(user_logs)s/openoffice.log
 priority = 70
 redirect_stderr = true
 autostart = false
+
+[program:rabbitmq]
+command = %(user_bungeni)s/parts/rabbitmq/sbin/rabbitmq-server
+environment = RABBITMQ_LOG_BASE=%(user_logs)s/, RABBITMQ_MNESIA_BASE=%(user_bungeni)s/parts/rabbitmq/mensia
+stdout_logfile= %(user_logs)s/rabbitmq.log
+priority = 80
+redirect_stderr = true
+autostart = false
