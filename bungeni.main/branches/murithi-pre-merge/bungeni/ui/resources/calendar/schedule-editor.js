@@ -207,14 +207,17 @@
                 ]
                 itemsDataTable.unselectAllRows();
                 itemsDataTable.selectRow(new_record);
-                var updated_record = itemsDataTable.getRecord(
-                    (new_record_index - 1)
-                );
-                for (col_index=0; col_index<=(target_columns.length); col_index++){
-                    itemsDataTable.updateCell(updated_record, 
-                        target_columns[col_index],
-                        updated_record.getData()
+                if (new_record_index > 0){
+                    var updated_record = itemsDataTable.getRecord(
+                        (new_record_index - 1)
                     );
+                    for (idx=0; idx<=(target_columns.length); idx++){
+                        itemsDataTable.updateCell(
+                            updated_record, 
+                            target_columns[idx],
+                            updated_record.getData()
+                        );
+                    }
                 }
                 new_record_index = new_record_index + 1;
             }
@@ -907,7 +910,7 @@
         var container = this.get("contentEl");
         var data_container = Y$.query("div#headings-available", container)[0];
         var dataSource = new YAHOO.util.DataSource(
-            scheduler_globals.schedulable_items_json_url + "?type=" + "heading"
+            scheduler_globals.schedulable_items_json_url + "?type=heading"
         );
         dataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
         dataSource.responseSchema = AVAILABLE_ITEMS_SCHEMA;
@@ -924,6 +927,7 @@
         headingsDataTable.subscribe("rowMouseoutEvent", headingsDataTable.onEventUnhighlightRow);
         headingsDataTable.subscribe("rowClickEvent", headingsDataTable.onEventSelectRow);
         headingsDataTable.subscribe("postRenderEvent", fixDataTableSize);
+        this.unsubscribe("activeChange", initAvailableHeadings);
         return { oDs: dataSource, oDt: headingsDataTable }
     }
 
@@ -1022,6 +1026,9 @@
             }
         );
         schedulerActions.currentItem = null;
+        schedulerActions.setHeader(
+            scheduler_globals.scheduled_item_context_menu_header
+        );
         
         var scheduleTextButton = new YAHOO.widget.Button(
             {

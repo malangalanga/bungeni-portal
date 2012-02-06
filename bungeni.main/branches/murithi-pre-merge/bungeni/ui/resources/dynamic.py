@@ -39,6 +39,9 @@ def get_globals(group_name, **kwargs):
             "current_schedule_title": i18n(_(u"Agenda"), language),
             "available_items_title": i18n(_(u"Available Items"), language),
             "schedule_discussions_title": i18n(_(u"Discussions"), language),
+            "scheduled_item_context_menu_header": i18n(_(u"Modify Item"), 
+                language
+            ),
             "json_listing_url" : "./items/jsonlisting?sort=sort_planned_order&dir=asc",
             "save_schedule_url": "./items/save-schedule",
             "discussions_save_url": "discussions/save-discussions",
@@ -50,6 +53,7 @@ def get_globals(group_name, **kwargs):
                 language
             ),
             "column_discussion_edit_button": i18n(EDIT, language),
+            "column_discussion_delete_button": i18n(DELETE, language),
             "column_available_headings_title": i18n(
                 _(u"Select existing heading"), 
                 language
@@ -121,6 +125,10 @@ def get_globals(group_name, **kwargs):
             ),
             "text_dialog_confirm_action": i18n(OKAY, language),
             "text_dialog_cancel_action": i18n(CANCEL, language),
+            "confirm_dialog_title": i18n(_(u"Confirmation Required"), language),
+            "confirm_message_delete_discussion": i18n(
+                _(u"Really remove this discussion?"), language
+            ),
         }
     }
     return globals_map.get(group_name, {})

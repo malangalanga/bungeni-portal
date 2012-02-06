@@ -495,6 +495,7 @@ RESOURCE_PERMISSION_MAP = (
         "bungeni.sittingschedule.itemdiscussion.Edit"
     ),
     ("bungeni-schedule-editor", "bungeni.sittingschedule.item.Add"),
+    ("bungeni-schedule-preview", "bungeni.sitting.View"),
 )
 class GroupSittingScheduleViewNext(BrowserView):
     
@@ -547,9 +548,9 @@ class GroupSittingScheduleViewNext(BrowserView):
         return needed
     
     def render(self):
-        _need = self.needed_resources()
-        if _need:
-            need(self.needed_resources())
+        _needed = self.needed_resources()
+        if _needed:
+            need(_needed)
         return self.template()
 
 class SchedulableItemsJSON(BrowserView):
