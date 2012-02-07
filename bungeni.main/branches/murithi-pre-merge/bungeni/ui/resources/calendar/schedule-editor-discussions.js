@@ -12,141 +12,13 @@ var DIALOG_CONFIG = {
 var MODE_ADD = "MODE_ADD";
 var MODE_EDIT = "MODE_EDIT";
 
-YAHOO.bungeni.Utils = function(){
-    /**
-     * @function wrapText
-     * @description returns text as html wrapped in el tags
-     */
-    var wrapText = function(text, el){
-        var _el = el || "em";
-        return "<" + _el + ">" + text + "</" + _el + ">";
-    }
-    return {
-        wrapText: wrapText
-    }
-}();
-
-YAHOO.bungeni.formatters = function(){
-    /**
-     * @method itemTypeFormatter
-     * @description render item type in reduced form
-     */
-     var BungeniUtils = YAHOO.bungeni.Utils;
-     var Columns = YAHOO.bungeni.config.scheduling.columns;
-     var itemTypeFormatter = function(el, record, column, data){
-         el.innerHTML = ("<span style='font-size:10px;'>" + 
-            record.getData()[Columns.TYPE_COLUMN] + 
-            "</span>"
-        );
-     }
-
-
-    /**
-     * @method itemTitleFormatter
-     * @description renders title, emphasized text for titles and italicized
-     * text for text records
-     */
-     var itemTitleFormatter = function(el, record, column, data){
-         rec_data = record.getData();
-         if(rec_data.item_type == scheduler_globals.types.HEADING){
-             el.innerHTML = (
-                "<span style='text-align:center;display:block;'><strong>" + 
-                rec_data.item_title + "</strong></span>"
-            );
-         }else if(rec_data.item_type == scheduler_globals.types.TEXT){
-             el.innerHTML = BungeniUtils.wrapText(rec_data.item_title);
-         }else{
-             if (rec_data.item_uri){
-                el.innerHTML = (rec_data.item_title + 
-                    "<em style='display:block;'><span>" +
-                    scheduler_globals.text_moved_by + " : " + 
-                    rec_data.item_mover + "</span>&nbsp;&nbsp;" +
-                    "<a href='" + rec_data.item_uri + "'>" + 
-                    scheduler_globals.text_action_view + "</a>"
-                );
-            }else{
-                el.innerHTML = (rec_data.item_title + 
-                    "<em><span style='display:block;'>Moved by: " 
-                    + rec_data.item_mover + "</span></em>"
-                );
-            }
-         }
-     }
-     
-    /**
-     * @method itemMoveFormatter
-     * @description renders controls to move scheduled items up/down the
-     * schedule depending on direction
-     */
-    var itemMoveFormatter = function(el, record, column, data, dir, table){
-        var move_markup = "";
-        var index = table.getTrIndex(record) + 1;
-        var last_row = table.getRecordSet().getLength();
-        var dir_char = (dir=="up")?"&uarr;":"&darr;"
-
-        if (!(((index == 1) && (dir=="up")) || 
-            ((index == last_row) && (dir=="down"))
-        )){
-            move_markup = "<span id='up'>" + dir_char + "</span>";
-        }
-        el.innerHTML = move_markup;
-    }
-    var itemMoveUpFormatter = function(el, record, column, data){
-        itemMoveFormatter(el, record, column, data, "up", this);
-    }
-    var itemMoveDownFormatter = function(el, record, column, data){
-        itemMoveFormatter(el, record, column, data, "down", this);
-    }
-    
-    var countFormatter = function(el, record, column, data){
-        el.innerHTML = this.getTrIndex(record)+1;
-    }
-    
-    var longTextFormatter = function(el, record, column, data){
-        var text = (record.getData()[column.key] || 
-            scheduler_globals.column_discussion_text_missing
-        );
-        el.innerHTML = BungeniUtils.wrapText(text);
-    }
-
-    var editButtonFormatter = function(el, record, column, data){
-        if (!el.innerHTML){
-            var button = new YAHOO.widget.Button({
-                label: scheduler_globals.column_discussion_edit_button,
-                id: el.id + "-edit-button"
-            });
-            button.appendTo(el);
-        }
-    }
-
-    var deleteButtonFormatter = function(el, record, column, data){
-        if (!el.innerHTML){
-            var button = new YAHOO.widget.Button({
-                label: scheduler_globals.column_discussion_delete_button,
-                id: el.id + "-delete-button"
-            });
-            button.appendTo(el);
-        }
-    }
-
-    return {
-     titleFormatter: itemTitleFormatter,
-     typeFormatter: itemTypeFormatter,
-     moveUpFormatter: itemMoveUpFormatter,
-     moveDownFormatter: itemMoveDownFormatter,
-     countFormatter: countFormatter,
-     longTextFormatter: longTextFormatter,
-     editButtonFormatter: editButtonFormatter,
-     deleteButtonFormatter: deleteButtonFormatter
-    }
-}();
-
 YAHOO.bungeni.scheduling = function(){
     var Event = YAHOO.util.Event;
     var YJSON = YAHOO.lang.JSON;
     var YCM = YAHOO.util.Connect;
     var BungeniUtils = YAHOO.bungeni.Utils;
     var Columns = YAHOO.bungeni.config.scheduling.columns;
+    var formatters = YAHOO.bungeni.config.scheduling.formatters;
     
     var dialogs = function(){
         var blocking = {
@@ -241,14 +113,14 @@ YAHOO.bungeni.scheduling = function(){
                         if (text){
                             if (mode == MODE_ADD){
                                 var new_record = {};
-                                new_record[Columns.BODY_TEXT_COLUMN] = text;
+                                new_record[Columns.BODY_TEXT] = text;
                                 cDt.addRow(new_record);
                             }else{
                                 var index = cDt.getSelectedRows()[0];
                                 if(index){
                                     var record = cDt.getRecord(index);
                                     var data = record.getData();
-                                    data[Columns.BODY_TEXT_COLUMN] = text;
+                                    data[Columns.BODY_TEXT] = text;
                                     cDt.updateRow(index, data);
                                 }
                             }
@@ -298,7 +170,7 @@ YAHOO.bungeni.scheduling = function(){
             startRequest: function(data){
                 var scheduled_item_id = YAHOO.bungeni.schedule.oDt.getRecord(
                     YAHOO.bungeni.schedule.oDt.getSelectedRows()[0]
-                ).getData()[Columns.OBJECT_ID_COLUMN];
+                ).getData()[Columns.OBJECT_ID];
                 var save_url = ("./items/" + scheduled_item_id + 
                     scheduler_globals.discussions_save_url
                 );
@@ -336,6 +208,32 @@ YAHOO.bungeni.scheduling = function(){
             //render discussions data table
             var dataSource = YAHOO.util.DataSource(discussions_url);
             dataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+            dataSource.responseSchema = {
+                resultsList: "nodes",
+                fields: [ Columns.OBJECT_ID, Columns.BODY_TEXT ]
+            }
+            var columns = [
+                {
+                    key: Columns.NUMBER,
+                    label: "",
+                    formatter: formatters.counter
+                },
+                {
+                    key: Columns.BODY_TEXT,
+                    label: scheduler_globals.column_discussion_text,
+                    formatter: formatters.longText
+                },
+                {
+                    key: Columns.DISCUSSION_EDIT,
+                    label: "",
+                    formatter: formatters.editButton
+                },
+                {
+                    key: Columns.DISCUSSION_DELETE,
+                    label: "",
+                    formatter: formatters.deleteButton
+                }
+            ]
             var button_container = document.createElement("div");
             button_container.style.marginBottom = "1em";
             this.body.appendChild(button_container);
@@ -345,32 +243,6 @@ YAHOO.bungeni.scheduling = function(){
             add_button.appendTo(button_container);
             var container = document.createElement("div");
             this.body.appendChild(container);
-            dataSource.responseSchema = {
-                resultsList: "nodes",
-                fields: [ Columns.OBJECT_ID_COLUMN, Columns.BODY_TEXT_COLUMN ]
-            }
-            var columns = [
-                {
-                    key: "number",
-                    label: "",
-                    formatter: YAHOO.bungeni.formatters.countFormatter
-                },
-                {
-                    key: Columns.BODY_TEXT_COLUMN,
-                    label: scheduler_globals.column_discussion_text,
-                    formatter: YAHOO.bungeni.formatters.longTextFormatter
-                },
-                {
-                    key: Columns.DISCUSSION_EDIT_COLUMN,
-                    label: "",
-                    formatter: YAHOO.bungeni.formatters.editButtonFormatter
-                },
-                {
-                    key: Columns.DISCUSSION_DELETE_COLUMN,
-                    label: "",
-                    formatter: YAHOO.bungeni.formatters.deleteButtonFormatter
-                }
-            ]
             var dDt = new YAHOO.widget.DataTable(container, columns,
                 dataSource,
                 {
@@ -422,11 +294,11 @@ YAHOO.bungeni.scheduling = function(){
         };
         var editDiscussion = function(args){
             var column = this.getColumn(args.target);
-            if(column.field == Columns.DISCUSSION_EDIT_COLUMN){
+            if(column.field == Columns.DISCUSSION_EDIT){
                 Event.stopEvent(args.event);
                 YAHOO.bungeni.scheduling.discussionEditor.render(this, MODE_EDIT);
                 YAHOO.bungeni.scheduling.discussionEditor.setText(
-                    this.getRecord(args.target).getData()[Columns.BODY_TEXT_COLUMN] ||
+                    this.getRecord(args.target).getData()[Columns.BODY_TEXT] ||
                     ""
                 );
 
@@ -434,7 +306,7 @@ YAHOO.bungeni.scheduling = function(){
         }
         var deleteDiscussion = function(args){
             var column = this.getColumn(args.target);
-            if(column.field == Columns.DISCUSSION_DELETE_COLUMN){
+            if(column.field == Columns.DISCUSSION_DELETE){
                 var contextDt = this;
                 var delete_callback = function(){
                     contextDt.deleteRow(
@@ -497,24 +369,22 @@ YAHOO.bungeni.scheduling = function(){
             YAHOO.bungeni.schedule = function(){
                 var columns = [
                     {
-                        key:Columns.TYPE_COLUMN, 
+                        key:Columns.TYPE, 
                         label: scheduler_globals.column_type,
-                        formatter: YAHOO.bungeni.formatters.typeFormatter,
+                        formatter: formatters.type,
                     },
                     {
-                        key:Columns.TITLE_COLUMN, 
+                        key:Columns.TITLE, 
                         label: scheduler_globals.column_title,
-                        formatter: YAHOO.bungeni.formatters.titleFormatter
                     },
                     {
-                        key:Columns.MOVE_UP_COLUMN, 
-                        label:"", 
-                        formatter:YAHOO.bungeni.formatters.moveUpFormatter
+                        key:Columns.MOVER, 
+                        label:scheduler_globals.column_mover, 
                     },
                     {
-                        key:Columns.MOVE_DOWN_COLUMN, 
+                        key:Columns.URI, 
                         label:"", 
-                        formatter:YAHOO.bungeni.formatters.moveDownFormatter
+                        formatter:formatters.link
                     },
                 ];
                 var dataSource = new YAHOO.util.DataSource(
@@ -524,12 +394,12 @@ YAHOO.bungeni.scheduling = function(){
                 dataSource.responseSchema = {
                     resultsList: "nodes",
                     fields: [
-                        Columns.ID_COLUMN, 
-                        Columns.TITLE_COLUMN, 
-                        Columns.TYPE_COLUMN, 
-                        Columns.OBJECT_ID_COLUMN, 
-                        Columns.MOVER_COLUMN, 
-                        Columns.URI_COLUMN
+                        Columns.ID, 
+                        Columns.TITLE, 
+                        Columns.TYPE, 
+                        Columns.OBJECT_ID, 
+                        Columns.MOVER, 
+                        Columns.URI
                     ],
                 };
                 var tableContainer = document.createElement("div");

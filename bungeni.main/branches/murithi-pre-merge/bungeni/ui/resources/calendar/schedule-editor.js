@@ -20,43 +20,24 @@
     var textItemsDialog = null;
     var deleteDialog = null;
     var headingsDataTable = null;
-    var ITEM_SELECT_ROW_COLUMN = "item_select_row"
-    var ITEM_TYPE_COLUMN = "item_type";
-    var ITEM_MOVER_COLUMN = "item_mover"
-    var ITEM_MOVE_UP_COLUMN = "item_move_up";
-    var ITEM_MOVE_DOWN_COLUMN = "item_move_down";
-    var ITEM_DELETE_COLUMN = "item_delete";
     var CHECK_BOX_SELECTOR = "input[type=checkbox]"
-    var DIALOG_CONFIG = {
-            width: "auto",
-            fixedcenter: true,
-            modal: true,
-            visible: false,
-            draggable: false,
-            underlay: "none",
-    }
+    var DIALOG_CONFIG = YAHOO.bungeni.config.dialogs.default;
+    var Utils = YAHOO.bungeni.Utils;
+    var Columns = YAHOO.bungeni.config.scheduling.columns;
+    var Formatters = YAHOO.bungeni.config.scheduling.formatters; 
     var HIGHLIGHT_TYPES = [
         scheduler_globals.types.HEADING, 
         scheduler_globals.types.TEXT
     ];
     var HIGHLIGHT_TYPES_CSS_CLASS = "schedule-text-item";
     var AVAILABLE_ITEMS_SCHEMA = {
-        resultsList: "items",
-        fields: ["item_id", "item_type", "item_title", "status", "status_date", 
-            "registry_number", "mover"
+        resultsList : "items",
+        fields : [Columns.ID, Columns.TYPE, Columns.TITLE, Columns.STATUS,
+            Columns.STATUS_DATE, Columns.REGISTRY_NO, Columns.MOVER
         ]
     }
-
     
-    /*utilities*/
-    /**
-     * @function wrapText
-     * @description returns text as html wrapped in el tags
-     */
-    var wrapText = function(text, el){
-        var _el = el || "em";
-        return "<" + _el + ">" + text + "</" + _el + ">";
-    }
+    YAHOO.bungeni.scheduled_item_keys = new Array();
 
     /**
      * @function fixDataTableSize
@@ -67,107 +48,6 @@
             this.getHdTableEl().width = context_width;
             this.getBdTableEl().width = context_width;
             this.unsubscribe("postRenderEvent", fixDataTableSize);
-    }
-
-    /**
-     * @method refresh
-     * @description Custom method of added to data table to refresh data
-     **/
-    YAHOO.widget.DataTable.prototype.refresh = function(params) {
-        var dataSource = this.getDataSource();
-        var data_url = null;
-        if (params != undefined){
-            var data_params = new Array()
-            for (filter in params){
-                data_params.push([filter, params[filter]].join("="));
-            }
-            data_url = "&" + data_params.join("&");
-        }
-        dataSource.sendRequest(
-                data_url,
-                {
-                    success: this.onDataReturnInitializeTable,
-                    failure: this.onDataReturnInitializeTable,
-                    scope: this
-                }
-        );
-    };
-
-    // custom column formatters
-    /**
-     * @method itemSelectorFormatter
-     * @description renders checkboxes to select items on the schedule
-     */
-    var itemSelectFormatter = function(el, record, column, data){
-        index = this.getTrIndex(record) + 1;
-        el.innerHTML = "<input type='checkbox' name='rec-sel-" + index + "'/>"
-    }
-
-    /**
-     * @method itemTitleFormatter
-     * @description renders title, emphasized text for titles and italicized
-     * text for text records
-     */
-     var itemTitleFormatter = function(el, record, column, data){
-         rec_data = record.getData();
-         if(rec_data.item_type == scheduler_globals.types.HEADING){
-             el.innerHTML = (
-                "<span style='text-align:center;display:block;'><strong>" + 
-                rec_data.item_title + "</strong></span>"
-            );
-         }else if(rec_data.item_type == scheduler_globals.types.TEXT){
-             el.innerHTML = wrapText(rec_data.item_title);
-         }else{
-             if (rec_data.item_uri){
-                el.innerHTML = (rec_data.item_title + 
-                    "<em style='display:block;'><span>" +
-                    scheduler_globals.text_moved_by + " : " + 
-                    rec_data.item_mover + "</span>&nbsp;&nbsp;" +
-                    "<a href=''" + rec_data.item_uri + ">" +
-                    scheduler_globals.text_action_view + "</a></em>"
-                );
-            }else{
-                el.innerHTML = (rec_data.item_title + 
-                    "<em><span style='display:block;'>Moved by: " 
-                    + rec_data.item_mover + "</span></em>"
-                );
-            }
-         }
-     }
-
-    /**
-     * @method itemTypeFormatter
-     * @description render item type in reduced form
-     */
-     var itemTypeFormatter = function(el, record, column, data){
-         el.innerHTML = ("<span style='font-size:10px;'>" + 
-            record.getData()[ITEM_TYPE_COLUMN] + "</span>"
-        );
-     }
-
-    /**
-     * @method itemMoveFormatter
-     * @description renders controls to move scheduled items up/down the
-     * schedule depending on direction
-     */
-    var itemMoveFormatter = function(el, record, column, data, dir, table){
-        var move_markup = "";
-        var index = table.getTrIndex(record) + 1;
-        var last_row = table.getRecordSet().getLength();
-        var dir_char = (dir=="up")?"&uarr;":"&darr;"
-
-        if (!(((index == 1) && (dir=="up")) || 
-            ((index == last_row) && (dir=="down"))
-        )){
-            move_markup = "<span id='up'>" + dir_char + "</span>";
-        }
-        el.innerHTML = move_markup;
-    }
-    var itemMoveUpFormatter = function(el, record, column, data){
-        itemMoveFormatter(el, record, column, data, "up", this);
-    }
-    var itemMoveDownFormatter = function(el, record, column, data){
-        itemMoveFormatter(el, record, column, data, "down", this);
     }
 
     var addTextRecordToSchedule = function(event){
@@ -202,8 +82,8 @@
                     itemsDataTable.getTrEl(new_record_index)
                 );
                 var target_columns = [
-                    itemsDataTable.getColumn(ITEM_MOVE_UP_COLUMN),
-                    itemsDataTable.getColumn(ITEM_MOVE_DOWN_COLUMN),
+                    itemsDataTable.getColumn(Columns.MOVE_UP),
+                    itemsDataTable.getColumn(Columns.MOVE_DOWN),
                 ]
                 itemsDataTable.unselectAllRows();
                 itemsDataTable.selectRow(new_record);
@@ -250,8 +130,8 @@
             itemsDataTable.getTrEl(new_record_index)
         );
         var target_columns = [
-            itemsDataTable.getColumn(ITEM_MOVE_UP_COLUMN),
-            itemsDataTable.getColumn(ITEM_MOVE_DOWN_COLUMN),
+            itemsDataTable.getColumn(Columns.MOVE_UP),
+            itemsDataTable.getColumn(Columns.MOVE_DOWN),
         ]
         itemsDataTable.unselectAllRows();
         itemsDataTable.selectRow(new_record);
@@ -269,7 +149,7 @@
         selected_index = itemsDataTable.getSelectedRows()[0];
         selected_row = itemsDataTable.getTrEl(selected_index);
         oRecord = itemsDataTable.getRecord(selected_index);
-        oColumn = itemsDataTable.getColumn("item_title");
+        oColumn = itemsDataTable.getColumn(Columns.TITLE);
         Event.stopEvent(event);
         itemsDataTable.showCellEditor(
             itemsDataTable.getCell({ record: oRecord, column: oColumn })
@@ -303,7 +183,7 @@
      */
     var reorderRow = function(args){
         var target_column = this.getColumn(args.target);
-        if ([ITEM_MOVE_UP_COLUMN, ITEM_MOVE_DOWN_COLUMN].indexOf(
+        if ([Columns.MOVE_UP, Columns.MOVE_DOWN].indexOf(
                 target_column.field
             ) >= 0
         ){
@@ -311,7 +191,7 @@
             var target_index = this.getTrIndex(target_record);
             var record_count = this.getRecordSet().getLength();
             var swap_rows = [];
-            if (target_column.field == ITEM_MOVE_UP_COLUMN){
+            if (target_column.field == Columns.MOVE_UP){
                 if (target_index!=0){
                     swap_rows = [target_index, (target_index - 1)]
                 }
@@ -409,7 +289,7 @@
          }
          var menuItem = event.newValue;
          var selectionLabel = (
-            (menuItem && wrapText(menuItem.cfg.getProperty("text")))
+            (menuItem && Utils.wrapText(menuItem.cfg.getProperty("text")))
             || this.original_label
         );
          this.set("label", selectionLabel);
@@ -445,7 +325,7 @@
             }
             if(oArgs){
                 var sDate = oArgs[0][0];
-                button.set("label", wrapText(sDate.join("-")));
+                button.set("label", Utils.wrapText(sDate.join("-")));
             }
             menu.hide();
         });
@@ -475,55 +355,38 @@
         var itemsPanel = schedulerLayout.getUnitByPosition("center");
         if (available_items_loaded){ return; }
         available_items_loaded = true;
-        var existing_record_keys = new Array();
         var record_set = itemsDataTable.getRecordSet().getRecords();
         for(index in record_set){
             data = record_set[index].getData();
-            existing_record_keys.push(data.item_id + ":" + data.item_type);
-        }
-
-        /**
-         * @method itemSelectorFormatter
-         * @description renders checkboxes to select items on the schedule
-         */
-        var availableItemSelectFormatter = function(el, record, column, data){
-            index = this.getTrIndex(record) + 1;
-            record_key = ((record.getData().item_id + ":" + 
-                record.getData().item_type).toString()
-            );
-            checked = "";
-            if(existing_record_keys.indexOf(record_key)>=0){
-                checked = "checked='checked'";
-            }
-            el.innerHTML = ("<input type='checkbox' name='rec-sel-" + 
-                index +"' " + checked + "/>"
+            YAHOO.bungeni.scheduled_item_keys.push(
+                data.item_id + ":" + data.item_type
             );
         }
 
         var availableItemsColumns = [
             {
-                key: ITEM_SELECT_ROW_COLUMN, 
+                key: Columns.SELECT_ROW, 
                 label: "<input type='checkbox' name='rec-sel-all'/>", 
-                formatter: availableItemSelectFormatter
+                formatter: Formatters.availableItemSelect
             },
             {
-                key: "item_title",
+                key: Columns.TITLE,
                 label: scheduler_globals.column_title,
             },
             {
-                key: "registry_number",
+                key: Columns.REGISTRY_NO,
                 label: scheduler_globals.column_registry_number,
             },
             {
-                key: ITEM_MOVER_COLUMN,
+                key: Columns.MOVER,
                 label: scheduler_globals.column_mover,
             },
             {
-                key: "status",
+                key: Columns.STATUS,
                 label: scheduler_globals.column_status,
             },
             {
-                key: "status_date",
+                key: Columns.STATUS_DATE,
                 label: scheduler_globals.column_status_date,
                 formatter: "date"
             },
@@ -573,7 +436,7 @@
                         var statusFilterButton = new YAHOO.widget.Button(
                             {
                                 type: "menu",
-                                label: wrapText(filter_config.label),
+                                label: Utils.wrapText(filter_config.label),
                                 id: "filter_status_" + type,
                                 name: "filter_status_" + type,
                                 menu: filter_config.menu,
@@ -590,7 +453,7 @@
                         var dateStartButton = new YAHOO.widget.Button(
                             {
                                 type: "menu",
-                                label: wrapText(
+                                label: Utils.wrapText(
                                     scheduler_globals.filters_start_date_label
                                 ),
                                 id: "filter_start_date_" + type,
@@ -614,7 +477,7 @@
                         var dateEndButton = new YAHOO.widget.Button(
                             {
                                 type: "menu",
-                                label: wrapText(
+                                label: Utils.wrapText(
                                     scheduler_globals.filters_end_date_label
                                 ),
                                 id: "filter_end_date_" + type,
@@ -641,7 +504,7 @@
                         var filterApplyButton = new YAHOO.widget.Button(
                             {
                                 type: "button",
-                                label: wrapText(
+                                label: Utils.wrapText(
                                     scheduler_globals.filter_apply_label
                                 ),
                                 id: "filter_apply_" + type,
@@ -679,7 +542,7 @@
                         var clearFiltersButton = new YAHOO.widget.Button(
                             {
                                 type: "button",
-                                label: wrapText(
+                                label: Utils.wrapText(
                                     scheduler_globals.filters_clear_label
                                 ),
                                 id: "filter_clear_" + type,
@@ -832,7 +695,7 @@
     var addItemToSchedule = function(args){
         var target = args.target || args.el;
         var target_column = this.getColumn(target);
-        if(target_column.field == ITEM_SELECT_ROW_COLUMN){
+        if(target_column.field == Columns.SELECT_ROW){
             var targetRecord = this.getRecord(target);
             var targetData = targetRecord.getData()
             if (Y$.query(CHECK_BOX_SELECTOR, target, true).checked){
@@ -884,7 +747,7 @@
      */
     var checkRows = function(args){
         var target_column = this.getColumn(args.target);
-        if(target_column.field == ITEM_SELECT_ROW_COLUMN){
+        if(target_column.field == Columns.SELECT_ROW){
             var record_set = this.getRecordSet().getRecords();
             var checked = false;
             if (Y$.query(CHECK_BOX_SELECTOR, args.target, true).checked){
@@ -903,7 +766,7 @@
     var initAvailableHeadings = function(e){
         var columns = [
             {
-                key: "item_title",
+                key: Columns.TITLE,
                 label: scheduler_globals.column_available_headings_title,
             },
         ]
@@ -939,25 +802,25 @@
      var renderSchedule = function(container, controls_container){
         var columnDefinitions = [
             {
-                key:"item_type", 
-                label: scheduler_globals.column_type,
-                formatter: itemTypeFormatter,
+                key : Columns.TYPE, 
+                label : scheduler_globals.column_type,
+                formatter : Formatters.type,
             },
             {
-                key:"item_title", 
-                label: scheduler_globals.column_title,
-                editor: new YAHOO.widget.TextareaCellEditor(),
-                formatter: itemTitleFormatter
+                key : Columns.TITLE, 
+                label : scheduler_globals.column_title,
+                editor : new YAHOO.widget.TextareaCellEditor(),
+                formatter : Formatters.title
             },
             {
-                key:ITEM_MOVE_UP_COLUMN, 
+                key : Columns.MOVE_UP, 
+                label : "", 
+                formatter : Formatters.moveUp 
+            },
+            {
+                key:Columns.MOVE_DOWN, 
                 label:"", 
-                formatter:itemMoveUpFormatter 
-            },
-            {
-                key:ITEM_MOVE_DOWN_COLUMN, 
-                label:"", 
-                formatter:itemMoveDownFormatter
+                formatter : Formatters.moveDown
             },
         ];
         
@@ -967,8 +830,9 @@
         itemsDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
         itemsDataSource.responseSchema = {
             resultsList: "nodes",
-            fields: ["item_id", "item_title", "item_type", "object_id", 
-                ITEM_MOVER_COLUMN, "item_uri"
+            fields: [Columns.ID, Columns.TITLE, 
+                Columns.TYPE, Columns.OBJECT_ID, 
+                Columns.MOVER, Columns.URI
             ],
         };
         
