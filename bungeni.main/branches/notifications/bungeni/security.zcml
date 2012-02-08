@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="bungeni">
+    
+    <!-- AppServer Security Settings -->
+    <include package="zope.securitypolicy" file="meta.zcml" />
+    <securityPolicy component="bungeni.BungeniSecurityPolicy" />
+    
+    <unauthenticatedPrincipal id="zope.anybody" title="Unauthenticated User" />
+    <unauthenticatedGroup id="zope.Anybody" title="Unauthenticated Users" />
+    <authenticatedGroup id="zope.Authenticated" title="Authenticated Users" />
+    <everybodyGroup id="zope.Everybody" title="All Users" />
+    
+    <include package="bungeni.models" file="auth.zcml"/>
+    <include package="bungeni.models" file="roles.zcml" />
+    <include package="bungeni.models" file="permissions.zcml" />
+    <include package="bungeni.core.workflows" file="permissions.zcml" />
+    
+    <!-- Administrator account; we do not authenticate against this
+       principal which is why the password is intentionally left blank -->
+    <!-- principal id="zope.manager"
+             title="Manager"
+             login="admin"
+             password_manager="Plain Text"
+             password=""
+             /-->
+    
+    <!-- manager grants -->
+    <grantAll role="zope.Manager" />
+    <grant role="zope.Manager" principal="zope.manager" />
+    
+    <!-- authenticated users are members -->
+    <grant role="zope.Member" principal="zope.Authenticated" />
+    <grant role="bungeni.Authenticated" principal="zope.Authenticated" />
+    
+    <!-- Anonymous grants -->
+    <grant role="bungeni.Anonymous" principal="zope.anybody" />
+    
+    <!-- generic view permission grants -->
+    <!--
+    <grant permission="zope.View" role="bungeni.Clerk" />
+    <grant permission="zope.View" role="bungeni.Speaker" />
+    <grant permission="zope.View" role="bungeni.Owner" />
+    <grant permission="zope.View" role="bungeni.Signatory" />
+    <grant permission="zope.View" role="bungeni.MP" />
+    <grant permission="zope.View" role="bungeni.Minister" />
+    -->
+    
+    <grant permission="bungeni.auditlog.View" role="bungeni.Authenticated" />
+    
+    <!-- Only logged in users get a workspace -->
+    <grant permission="bungeni.workspace.View" role="bungeni.Authenticated"/> 
+    
+    <!-- content roles -->
+    <include package="bungeni_custom.sys.acl" file="parliamentary_meta.zcml" />
+    <include package="bungeni_custom.sys.acl" file="parliamentary_content.zcml" />
+    <include package="bungeni_custom.sys.acl" file="translation.zcml" /> 
+
+</configure>
