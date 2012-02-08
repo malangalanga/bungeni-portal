@@ -5,6 +5,8 @@
     xmlns:xapian="http://namespaces.objectrealms.net/xapian"
     xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:i18n="http://namespaces.zope.org/i18n"
+    
+    xmlns:bungeni="http://namespaces.bungeni.org/zope"
     i18n_domain="bungeni.core">
     
     <include package="alchemist.catalyst" />
@@ -17,7 +19,21 @@
     <include package="plone.transforms" />
     
     <include package="bungeni.models" />
-    <include package="bungeni.portal" />
+    <include package="bungeni.alchemist" file="meta.zcml" />
+    <include package="bungeni.core" file="meta.zcml"  />
+    
+    <!-- Setup file storage -->
+    <bungeni:fs fs_path="fs" />
+    
+    <!-- Setup Database Connection -->
+    <!-- load from bungeni_custom -->
+    <include package="bungeni_custom.sys" file="db.zcml" />
+    <!-- Bind Application Model to Database -->
+    <db:bind engine="bungeni-db" metadata="bungeni.models.schema.metadata" />
+    <!-- Bind Security Model to Database (role, permission maps) -->
+    <db:bind engine="bungeni-db" 
+        metadata="bungeni.alchemist.security.metadata" 
+    />
     
     
     <!-- Application to publish -->
@@ -176,7 +192,11 @@
             ore.wsgiapp.interfaces.IWSGIApplicationCreatedEvent"
         handler=".workspace.load_workspaces"
     />
-    
+    <!--Load Notifications configuration-->
+    <subscriber for="bungeni.models.interfaces.IBungeniApplication
+            ore.wsgiapp.interfaces.IWSGIApplicationCreatedEvent"
+        handler=".notifications.load_notifications"
+    />
     <!--Traverser for workspace containers-->
     <adapter for="bungeni.models.interfaces.IWorkspaceContainer
             zope.publisher.interfaces.IPublisherRequest"
@@ -324,6 +344,6 @@
     
     <include file="uri.zcml" />
     <utility factory="bungeni.core.workspace.WorkspaceTabsUtility" />
-    
+    <utility factory="bungeni.core.notifications.NotificationsUtility" />
 </configure>
 

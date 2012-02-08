@@ -227,3 +227,12 @@ class IWorkspaceTabsUtility(interface.Interface):
         """Returns the tab an object should be in, given its domain class,
         status and role
         """
+class INotificationsUtility(interface.Interface):
+    def set_transition_based_notification(domain_class, state, roles):
+        """Set the roles to be notified when a document reaches a certain
+        state
+        """
+    def set_time_based_notification(domain_class, state, roles, time):
+        """Set the roles to be notified after a certain amount of time has
+        elapsed since state was reached
+        """    
