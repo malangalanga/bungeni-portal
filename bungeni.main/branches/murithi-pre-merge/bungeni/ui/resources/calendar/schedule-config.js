@@ -117,7 +117,7 @@ YAHOO.bungeni.config = function(){
                             "<em style='display:block;'><span>" +
                             scheduler_globals.text_moved_by + " : " + 
                             rec_data.item_mover + "</span>&nbsp;&nbsp;" +
-                            "<a href='" + rec_data.item_uri + "'>" + 
+                            "<a href='" + rec_data.item_uri + "' target='blank'>" + 
                             scheduler_globals.text_action_view + "</a>"
                         );
                     }else{

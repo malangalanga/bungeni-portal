@@ -33,7 +33,8 @@
     var AVAILABLE_ITEMS_SCHEMA = {
         resultsList : "items",
         fields : [Columns.ID, Columns.TYPE, Columns.TITLE, Columns.STATUS,
-            Columns.STATUS_DATE, Columns.REGISTRY_NO, Columns.MOVER
+            Columns.STATUS_DATE, Columns.REGISTRY_NO, Columns.MOVER,
+            Columns.URI
         ]
     }
     
@@ -44,7 +45,7 @@
      * @description sets data table size to 100% of its container
      */
     var fixDataTableSize = function(){
-            var context_width = this.getContainerEl().clientWidth + "px";
+            var context_width = (this.getContainerEl().clientWidth-20) + "px";
             this.getHdTableEl().width = context_width;
             this.getBdTableEl().width = context_width;
             this.unsubscribe("postRenderEvent", fixDataTableSize);
@@ -429,6 +430,9 @@
                     tabDataTable.subscribe("theadCellClickEvent", checkRows);
                     tabDataTable.subscribe("cellSelectEvent", addItemToSchedule);
                     tabDataTable.subscribe("postRenderEvent", fixDataTableSize);
+                    itemsDataTable.subscribe("rowDeleteEvent", function(args){
+                        uncheckRemovedRows(args, tabDataTable, type);
+                    });
                     
                     //create filter controls
                     var filter_config = scheduler_globals.filter_config[type];
@@ -713,17 +717,11 @@
                     }
                 }
                 if (!item_in_schedule){
-                    var new_record_data = {
-                        item_id: targetData.item_id,
-                        item_title: targetData.item_title,
-                        item_type: targetData.item_type,
-                        item_mover: targetData.item_mover,
-                    }
                     ctx_index = itemsDataTable.getSelectedRows()[0];
                     var new_record_index = (
                         (ctx_index && itemsDataTable.getTrIndex(ctx_index)+1) || 0
                     );
-                    itemsDataTable.addRow(new_record_data, new_record_index);
+                    itemsDataTable.addRow(targetData, new_record_index);
                 }
             }else{
                 var record_set = itemsDataTable.getRecordSet().getRecords();
@@ -763,8 +761,37 @@
         }
     }
 
+    /**
+     * @method uncheckRemovedRows
+     * @description unchecks records cleared from schedule from available 
+     * items data table
+     */
+     var uncheckRemovedRows = function(args, oDt, type){
+         var del_data = args.oldData;
+         if (del_data[Columns.TYPE] == type){
+             var target_column = oDt.getColumnById(Columns.SELECT_ROW);
+             var record_set = oDt.getRecordSet().getRecords();
+             for(idx in record_set){
+                 var record = record_set[idx];
+                 var rec_data = record.getData();
+                 if((rec_data[Columns.ID]==del_data[Columns.ID]) &&
+                    (rec_data[Columns.TYPE]==rec_data[Columns.TYPE])
+                 ){
+                     var td = oDt.getFirstTdEl(oDt.getTrEl(record));
+                     Y$.query(CHECK_BOX_SELECTOR, td, true).checked = false;
+                     break;
+                 }
+             }
+         }
+     }
+
     var initAvailableHeadings = function(e){
         var columns = [
+            {
+                key:Columns.NUMBER,
+                label:"",
+                formatter:Formatters.counter
+            },
             {
                 key: Columns.TITLE,
                 label: scheduler_globals.column_available_headings_title,
@@ -783,7 +810,8 @@
                 selectionMode:"standard",
                 scrollable: true,
                 initialLoad: true,
-                width:"100%"
+                width:"100%",
+                height: "190px",
             }
         );
         headingsDataTable.subscribe("rowMouseoverEvent", headingsDataTable.onEventHighlightRow);

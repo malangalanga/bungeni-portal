@@ -134,9 +134,10 @@ class SchedulableItemsGetter(object):
                     registry_number = ( item.registry_number if
                         hasattr(item, "registry_number") else None
                     ),
-                    mover = ( IDCDescriptiveProperties(item.owner).title if
+                    item_mover = ( IDCDescriptiveProperties(item.owner).title if
                         hasattr(item, "owner") else None
-                    )
+                    ),
+                    item_uri = IDCDescriptiveProperties(item).uri
                 )
                 for item in self.query()
             ]

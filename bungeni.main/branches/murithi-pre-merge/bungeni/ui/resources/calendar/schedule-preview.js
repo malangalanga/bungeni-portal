@@ -125,4 +125,5 @@ YAHOO.bungeni.schedulingpreview = function(){
         });
         YAHOO.bungeni.schedulingpreview.layout.render();
     });
+    return {}
 }();
