@@ -1,14 +1,6 @@
 /**
  * This module renders UI components that hadle editing of minutes.
 **/
-var DIALOG_CONFIG = {
-        width: "auto",
-        fixedcenter: true,
-        modal: true,
-        visible: false,
-        draggable: false,
-        underlay: "none",
-}
 var MODE_ADD = "MODE_ADD";
 var MODE_EDIT = "MODE_EDIT";
 
@@ -18,13 +10,14 @@ YAHOO.bungeni.scheduling = function(){
     var YCM = YAHOO.util.Connect;
     var BungeniUtils = YAHOO.bungeni.Utils;
     var Columns = YAHOO.bungeni.config.scheduling.columns;
+    var DialogConfig = YAHOO.bungeni.config.dialogs;
     var formatters = YAHOO.bungeni.config.scheduling.formatters;
-    
+        
     var dialogs = function(){
         var blocking = {
             init: function(){
                 this.dialog = new YAHOO.widget.SimpleDialog(
-                    "scheduling-blocking", DIALOG_CONFIG
+                    "scheduling-blocking", DialogConfig.default
                 );
                 this.dialog.setHeader(scheduler_globals.saving_dialog_header);
                 this.dialog.setBody("");
@@ -42,6 +35,36 @@ YAHOO.bungeni.scheduling = function(){
                 this.dialog.setBody(message);
                 this.dialog.show();
                 this.dialog.bringToTop();
+            },
+            hide: function(){
+                this.dialog.hide();
+            }
+        }
+        var notification = {
+            init: function(){
+                this.dialog = new YAHOO.widget.SimpleDialog(
+                    "scheduling-notification", DialogConfig.default
+                );
+                this.dialog.setHeader(scheduler_globals.text_warning);
+                this.dialog.setBody("");
+                this.dialog.cfg.queueProperty("width", "200px");
+                this.dialog.cfg.queueProperty("close", false);
+                this.dialog.cfg.queueProperty("icon",
+                    YAHOO.widget.SimpleDialog.ICON_WARN
+                );
+                this.dialog.render(document.body);
+            },
+            show: function(message){
+                if(!this.dialog){
+                    this.init();
+                }
+                this.dialog.setBody(message);
+                this.dialog.show();
+                this.dialog.bringToTop();
+                window.setTimeout(function(){
+                        YAHOO.bungeni.scheduling.dialogs.notification.hide();
+                    }, 1000
+                );
             },
             hide: function(){
                 this.dialog.hide();
@@ -68,7 +91,7 @@ YAHOO.bungeni.scheduling = function(){
                     },
                 ];
                 this.dialog = new YAHOO.widget.SimpleDialog(
-                    "scheduling-confirm", DIALOG_CONFIG
+                    "scheduling-confirm", DialogConfig.default
                 );
                 this.dialog._parent = this;
                 this.dialog.setHeader(scheduler_globals.confirm_dialog_title);
@@ -87,20 +110,21 @@ YAHOO.bungeni.scheduling = function(){
                 this.dialog.bringToTop();
             },
             hide: function(){
-                this.callback = null;
+                this.confirm_callback = null;
                 this.dialog.hide();
             }
         }
         return {
             blocking: blocking,
-            confirm: confirm
+            confirm: confirm,
+            notification: notification
         }
     }();
     
     var discussionEditor = function(){
         init = function(){
            this.dialog = new YAHOO.widget.SimpleDialog("discussion-editor",
-                DIALOG_CONFIG
+                DialogConfig.default
             );
             this.dialog._parent = this
             var dialogButtons = [
@@ -201,6 +225,13 @@ YAHOO.bungeni.scheduling = function(){
             var dataTable = YAHOO.bungeni.schedule.oDt;
             var index = dataTable.getSelectedRows()[0];
             var oData = dataTable.getRecord(index).getData();
+            if(oData.object_id == undefined){
+                this.hide();
+                YAHOO.bungeni.scheduling.dialogs.notification.show(
+                    scheduler_globals.message_item_not_saved
+                );
+                return;
+            }
             var discussions_url = ("./items/" + 
                 oData.object_id + scheduler_globals.discussion_items_json_url
             );
@@ -270,7 +301,7 @@ YAHOO.bungeni.scheduling = function(){
         var showDiscussions = function(args){
             var dlg_id = "dlg-" + args.el.id;
             var dialog = new YAHOO.widget.SimpleDialog(dlg_id,
-                DIALOG_CONFIG
+                DialogConfig.default
             );
             var dialogButtons = [
                 {
@@ -344,8 +375,10 @@ YAHOO.bungeni.scheduling = function(){
             saveDiscussions: saveDiscussions
         }
     }();
+    var Layout = { layout:null }
     Event.onDOMReady(function(){
-        var layout = new YAHOO.widget.Layout("scheduler-layout",
+        var layout = new YAHOO.widget.Layout(
+            "scheduler-layout",
             {
                 height: 600,
                 units: [
@@ -356,6 +389,12 @@ YAHOO.bungeni.scheduling = function(){
                         ),
                         gutter: "2 2",
                         height: 42
+                    },
+                    {
+                        position:'left',
+                        body: '',
+                        width: "600",
+                        gutter: "2 2",
                     },
                     {
                         position:'center',
@@ -403,7 +442,7 @@ YAHOO.bungeni.scheduling = function(){
                     ],
                 };
                 var tableContainer = document.createElement("div");
-                layout.getUnitByPosition("center").body.appendChild(tableContainer);
+                layout.getUnitByPosition("left").body.appendChild(tableContainer);
                 var dataTable = new YAHOO.widget.DataTable(
                     tableContainer,
                     columns, dataSource,
@@ -424,7 +463,10 @@ YAHOO.bungeni.scheduling = function(){
                 );
                 dataTable.subscribe("rowSelectEvent",
                     YAHOO.bungeni.scheduling.handlers.showDiscussions
-                )
+                );
+                dataTable.subscribe("initEvent", function(){
+                    YAHOO.bungeni.Events.scheduleAvailable.fire();
+                });
                 
                 return {
                     oDs: dataSource,
@@ -432,11 +474,17 @@ YAHOO.bungeni.scheduling = function(){
                 }
             }();
         });
+        Layout.layout = layout
         layout.render();
     });
+    var getScheduleTable = function(){
+        return YAHOO.bungeni.schedule.oDt;
+    }
     return {
         handlers: handlers,
+        Layout: Layout,
         discussionEditor: discussionEditor,
-        dialogs: dialogs
+        dialogs: dialogs,
+        getScheduleTable: getScheduleTable
     }
 }();

@@ -491,11 +491,11 @@ class ItemScheduleOrder(BrowserView):
 # Group Scheduler New YUI based Stack UI
 #
 RESOURCE_PERMISSION_MAP = (
-    ("bungeni-schedule-discussions", 
+    (["bungeni-schedule-discussions", "bungeni-schedule-available-items"], 
         "bungeni.sittingschedule.itemdiscussion.Edit"
     ),
-    ("bungeni-schedule-editor", "bungeni.sittingschedule.item.Add"),
-    ("bungeni-schedule-preview", "bungeni.sitting.View"),
+    (["bungeni-schedule-editor"], "bungeni.sittingschedule.item.Add"),
+    (["bungeni-schedule-preview"], "bungeni.sitting.View"),
 )
 class GroupSittingScheduleViewNext(BrowserView):
     
@@ -549,8 +549,8 @@ class GroupSittingScheduleViewNext(BrowserView):
     
     def render(self):
         _needed = self.needed_resources()
-        if _needed:
-            need(_needed)
+        if len(_needed):
+            map(need, _needed)
         return self.template()
 
 class SchedulableItemsJSON(BrowserView):
@@ -1020,7 +1020,9 @@ class DiscussionAddView(BrowserView):
                     body_text = discussion_text,
                     language = get_default_language()
                 )
-                new_record.scheduled_item = self.context.__parent__
+                new_record.scheduled_item = removeSecurityProxy(
+                    self.context.__parent__
+                )
                 session.add(new_record)
                 session.flush()
                 notify(ObjectCreatedEvent(new_record))

@@ -19,6 +19,14 @@ YAHOO.bungeni.Utils = function(){
     }
 }();
 
+/**
+ * Custom bungeni events fired during scheduling
+ */
+YAHOO.bungeni.Events = function(){
+    return {
+        scheduleAvailable : new YAHOO.util.CustomEvent("onAvailable")
+    }
+}();
 
 /**
  * @method refresh
@@ -79,6 +87,9 @@ YAHOO.bungeni.config = function(){
             default: default_config
         }
     }();
+    var element_selectors = {
+        "checkbox": "input[type=checkbox]"
+    };
     var scheduling_configs = {
         columns : scheduling_columns,
         formatters : function(){
@@ -208,12 +219,15 @@ YAHOO.bungeni.config = function(){
                     record.getData().item_type).toString()
                 );
                 checked = "";
-                if(YAHOO.bungeni.scheduled_item_keys.indexOf(record_key)>=0){
-                    checked = "checked='checked'";
+                if (YAHOO.bungeni.scheduled_item_keys != undefined){
+                    if(YAHOO.bungeni.scheduled_item_keys.indexOf(record_key)>=0){
+                        checked = "checked='checked'";
+                    }
+                }else{
+                    el.innerHTML = ("<input type='checkbox' name='rec-sel-" + 
+                        index +"' " + checked + "/>"
+                    );
                 }
-                el.innerHTML = ("<input type='checkbox' name='rec-sel-" + 
-                    index +"' " + checked + "/>"
-                );
             }
 
 
@@ -233,6 +247,7 @@ YAHOO.bungeni.config = function(){
     }
     return {
         scheduling: scheduling_configs,
-        dialogs: dialog_config
+        dialogs: dialog_config,
+        selectors: element_selectors
     }
 }();

@@ -22,6 +22,7 @@ CANCEL = _(u"Cancel")
 VIEW = _(u"View")
 EDIT = _(u"Edit")
 DELETE = _(u"Delete")
+WARNING = _(u"Warning")
 
 def get_globals(group_name, **kwargs):
     language = kwargs.get("language", "en")
@@ -120,6 +121,7 @@ def get_globals(group_name, **kwargs):
             "message_no_add_rights": i18n(_(u"this schedule is read only"), 
                 language
             ),
+            "text_warning": i18n(WARNING, language),
             "text_items_dialog_header": i18n(_(u"add text to schedule"),
                 language
             ),
@@ -129,6 +131,12 @@ def get_globals(group_name, **kwargs):
             "confirm_message_delete_discussion": i18n(
                 _(u"Really remove this discussion?"), language
             ),
+            "message_item_not_saved": i18n(
+                _(u"You need to save the schedule before adding discussions " 
+                    u"to this item."
+                ),
+                language
+            )
         }
     }
     return globals_map.get(group_name, {})

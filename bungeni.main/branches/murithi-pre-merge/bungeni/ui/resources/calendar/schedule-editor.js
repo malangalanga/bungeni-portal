@@ -20,11 +20,11 @@
     var textItemsDialog = null;
     var deleteDialog = null;
     var headingsDataTable = null;
-    var CHECK_BOX_SELECTOR = "input[type=checkbox]"
     var DIALOG_CONFIG = YAHOO.bungeni.config.dialogs.default;
     var Utils = YAHOO.bungeni.Utils;
     var Columns = YAHOO.bungeni.config.scheduling.columns;
     var Formatters = YAHOO.bungeni.config.scheduling.formatters; 
+    var Selectors = YAHOO.bungeni.config.selectors;
     var HIGHLIGHT_TYPES = [
         scheduler_globals.types.HEADING, 
         scheduler_globals.types.TEXT
@@ -335,7 +335,7 @@
     }
 
 
-    /*
+    /**
      * @method getDummyCalendarDate
      * @description returns a blank string as selected calendar date associated
      * with a filter button.
@@ -590,7 +590,7 @@
         for (record_index in record_set){
             var row = itemsDataTable.getTrEl(record_set[record_index]);
             var select_td = itemsDataTable.getFirstTdEl(row);
-            if(Y$.query(CHECK_BOX_SELECTOR, select_td, true).checked){
+            if(Y$.query(Selectors.checkbox, select_td, true).checked){
                 checked_ids.push(record_index);
             }
         }
@@ -702,7 +702,7 @@
         if(target_column.field == Columns.SELECT_ROW){
             var targetRecord = this.getRecord(target);
             var targetData = targetRecord.getData()
-            if (Y$.query(CHECK_BOX_SELECTOR, target, true).checked){
+            if (Y$.query(Selectors.checkbox, target, true).checked){
                 //check if item is already scheduled
                 var record_set = itemsDataTable.getRecordSet().getRecords();
                 var item_in_schedule = false;
@@ -748,13 +748,13 @@
         if(target_column.field == Columns.SELECT_ROW){
             var record_set = this.getRecordSet().getRecords();
             var checked = false;
-            if (Y$.query(CHECK_BOX_SELECTOR, args.target, true).checked){
+            if (Y$.query(Selectors.checkbox, args.target, true).checked){
                 checked = true;
             }
             for (record_index in record_set){
                 var row = this.getTrEl(record_set[record_index]);
                 var select_td = this.getFirstTdEl(row);
-                Y$.query(CHECK_BOX_SELECTOR, select_td, true).checked = checked;
+                Y$.query(Selectors.checkbox, select_td, true).checked = checked;
                 this.unselectAllCells();
                 this.selectCell(select_td);
             }
@@ -778,7 +778,7 @@
                     (rec_data[Columns.TYPE]==rec_data[Columns.TYPE])
                  ){
                      var td = oDt.getFirstTdEl(oDt.getTrEl(record));
-                     Y$.query(CHECK_BOX_SELECTOR, td, true).checked = false;
+                     Y$.query(Selectors.checkbox, td, true).checked = false;
                      break;
                  }
              }
