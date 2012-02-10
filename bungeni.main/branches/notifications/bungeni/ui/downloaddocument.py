@@ -30,7 +30,7 @@ from zope.publisher.browser import BrowserView
 from zope.schema.interfaces import IVocabularyFactory
 from zope.app.component.hooks import getSite
 
-from interfaces import IOpenOfficeConfig
+from bungeni.core.interfaces import IOpenOfficeConfig
 from bungeni.alchemist import Session
 from bungeni.models import domain, interfaces
 from appy.pod.renderer import Renderer

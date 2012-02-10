@@ -68,9 +68,9 @@
     <include package="bungeni.ui" />
     
     <!-- Open office configuration for PDF generation -->
-    <include package="bungeni.ui" file="meta.zcml" />
     <include package="bungeni_custom.sys" file="openoffice.zcml" />
-    
+    <!-- Message queue configuration -->
+    <include package="bungeni_custom.notifications" file="notifications.zcml" />
     <!-- Alchemist UI -->
     <include package="alchemist.ui" />
     

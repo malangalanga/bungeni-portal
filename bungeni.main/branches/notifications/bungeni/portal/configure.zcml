@@ -10,17 +10,17 @@
     <include package="bungeni.core" file="meta.zcml"  />
     
     <!-- Setup file storage -->
-    <bungeni:fs fs_path="fs" />
+    <!--bungeni:fs fs_path="fs" /-->
     
     <!-- Setup Database Connection -->
     <!-- load from bungeni_custom -->
     <include package="bungeni_custom.sys" file="db.zcml" />
     <!-- Bind Application Model to Database -->
-    <db:bind engine="bungeni-db" metadata="bungeni.models.schema.metadata" />
+    <!--db:bind engine="bungeni-db" metadata="bungeni.models.schema.metadata" /-->
     <!-- Bind Security Model to Database (role, permission maps) -->
-    <db:bind engine="bungeni-db" 
+    <!--db:bind engine="bungeni-db" 
         metadata="bungeni.alchemist.security.metadata" 
-    />
+    /-->
     
     <!-- The ``bungeni.portal`` package is shared between Bungeni (z3)
         and Plone; part of the configuration is platform-dependent -->

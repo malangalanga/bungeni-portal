@@ -1,14 +1,41 @@
 import os
+import pika
+import simplejson
 from lxml import etree
 from zope.interface import implements
-from bungeni.core.interfaces import INotificationsUtility
 from zope.component import getUtility
 from zope.publisher.interfaces import NotFound
-from zope.component import queryMultiAdapter
+from zope.component import queryMultiAdapter, provideHandler, provideSubscriptionAdapter
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from bungeni.utils.capi import capi
-from bungeni.core.interfaces import INotificationsUtility
 from bungeni.models import domain
+from bungeni.core.interfaces import INotificationsUtility, IMessageQueueConfig
+from bungeni.core.workflow.interfaces import IWorkflowTransitionEvent
 
+
+def queue_transition_based_notification(document, event):
+    mq_utility = getUtility(IMessageQueueConfig)
+    credentials = pika.PlainCredentials(str(mq_utility.get_username()), 
+        str(mq_utility.get_password()))
+    connection_parameters = pika.ConnectionParameters(
+        host = str(mq_utility.get_host()),
+        port = mq_utility.get_port(),
+        virtual_host = str(mq_utility.get_virtual_host()),
+        credentials = credentials,
+        channel_max = mq_utility.get_channel_max(),
+        frame_max = mq_utility.get_frame_max(),
+        heartbeat = mq_utility.get_heartbeat(),
+    )
+    connection = pika.BlockingConnection(parameters=connection_parameters)
+    channel = connection.channel()
+    channel.exchange_declare(exchange=str(mq_utility.get_exchange()), type="direct", durable=True)
+    # Send a message
+    channel.basic_publish(exchange=str(mq_utility.get_exchange()),
+                      routing_key="test",
+                      body="xxx",
+                      properties=pika.BasicProperties(content_type="text/plain",
+                                                 delivery_mode=1))          
+                                                                     
 class NotificationsUtility(object):
     implements(INotificationsUtility)
     time_based = {}
@@ -52,6 +79,9 @@ def load_notification_config(file_name, domain_class):
                         domain_class, state, roles, time)
         else:
             raise ValueError("Please specify either onstate or afterstate")
+    # Register subscriber for domain class
+    provideHandler(queue_transition_based_notification,
+        adapts=(domain_class, IObjectModifiedEvent))
 
 
 def load_notifications(application, event):

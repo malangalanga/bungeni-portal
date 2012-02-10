@@ -91,33 +91,6 @@ class IWorkspaceSchedulingSectionLayer(IWorkspaceOrAdminSectionLayer):
     """Requests for an object within the scheduling section."""
 class IFeedViewletManager(IViewletManager):
     """Viewlet manager for feed links"""
-    
-class IOpenOfficeConfig(interface.Interface):
-    def getPath():
-        "Path to the Openoffice Python binary"
-    def getPort():
-        "Port on which Openoffice is running"
-    def getMaxConnections():
-        "Maximum number of simultaneous connections"
-        
-class IOpenOfficeConfigSchema(interface.Interface):
-    path = fields.Path(
-        title=u"UNO Python Path",
-        description=u"This is the path to UNO enabled Python",
-        required=True
-        )
-    port = schema.Int(
-        title=u"OpenOffice.org Port",
-        description=u"Port on which OpenOffice is running",
-        required=True,
-        default=2002
-        )
-    maxConnections = schema.Int(
-        title=u"Max Connectiond",
-        description=u"Maximum number of simultaneous connections to OpenOffice",
-        required=True,
-        default=5
-        )
 
 class IGenenerateVocabularyDefault(interface.Interface):
     """Generate default value for vocabulary"""

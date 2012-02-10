@@ -5,7 +5,7 @@ from zope.container.interfaces import IContainer
 from zope.container.interfaces import IContentContainer
 from zope.dublincore.interfaces import IDCDescriptiveProperties
 from zope.container.interfaces import IReadContainer
-
+from zope.configuration import fields
 from bungeni.models.interfaces import IVersion
 
 class INavigationProxy(IReadContainer):
@@ -235,4 +235,104 @@ class INotificationsUtility(interface.Interface):
     def set_time_based_notification(domain_class, state, roles, time):
         """Set the roles to be notified after a certain amount of time has
         elapsed since state was reached
-        """    
+        """  
+        
+class IOpenOfficeConfig(interface.Interface):
+    def getPath():
+        "Path to the Openoffice Python binary"
+    def getPort():
+        "Port on which Openoffice is running"
+    def getMaxConnections():
+        "Maximum number of simultaneous connections"
+        
+class IOpenOfficeConfigSchema(interface.Interface):
+    path = fields.Path(
+        title=u"UNO Python Path",
+        description=u"This is the path to UNO enabled Python",
+        required=True
+        )
+    port = schema.Int(
+        title=u"OpenOffice.org Port",
+        description=u"Port on which OpenOffice is running",
+        required=True,
+        default=2002
+        )
+    maxConnections = schema.Int(
+        title=u"Max Connectiond",
+        description=u"Maximum number of simultaneous connections to OpenOffice",
+        required=True,
+        default=5
+        )
+        
+class IMessageQueueConfig(interface.Interface):
+    def get_username():
+        "Username to be used to connect to the AMQP server"
+    def get_password():
+        "Password to be used to connect to the AMQP server"
+    def get_host():
+        "AMQP server host"
+    def get_port():
+        "AMQP server port"
+    def get_virtual_host():
+        "AMQP virtual host"
+    def get_channel_max():
+        "Maximum number of channels to allow"
+    def get_frame_max():
+        "Max frame size"
+    def get_heartbeat():
+        "Turn heartbeat checking on or off"
+        
+class IMessageQueueConfigSchema(interface.Interface):
+    exchange=schema.Text(
+        title=u"Exchange",
+        description=u"Direct Exchange name to be used",
+        required=True,
+        )
+    username=schema.Text(
+        title=u"Username",
+        description=u"Username to be used to connect to the AMQP server",
+        required=True,
+        default=u"guest"
+        )
+    password=schema.Text(
+        title=u"Password",
+        description=u"Password to be used to connect to the AMQP server",
+        required=True,
+        default=u"guest"
+        )
+    host=schema.Text(
+        title=u"Host",
+        description=u"AMQP Server Host",
+        required=True,
+        default=u"localhost"
+        )
+    port=schema.Int(
+        title=u"Port",
+        description=u"AMQP Server Port Number",
+        required=True,
+        default=5672
+        )
+    virtual_host=schema.Text(
+        title=u"Virtual Host",
+        description=u"Virtual host to use",
+        required=True,
+        default=u"/"
+        )
+    channel_max=schema.Int(
+        title=u"Channel Max",
+        description=u"Maximum number of channels to allow",
+        required=True,
+        default=0
+        )
+    frame_max=schema.Int(
+        title=u"Max frame size",
+        description=u"The maximum byte size for an AMQP Frame",
+        required=True,
+        default=131072
+        )
+    heartbeat=fields.Bool(
+        title=u"Heartbeat",
+        description=u"Turn heartbeat checking on or off",
+        required=True,
+        default=False
+        )
