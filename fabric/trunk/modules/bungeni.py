@@ -492,7 +492,7 @@ class Presetup:
                    flags = ("CPPFLAGS=-I/usr/include/openssl:/usr/include/%(arch)s "
                        "LDFLAGS=-L/usr/lib/ssl:/usr/lib/%(arch)s:/lib/%(arch)s "
                        "CFLAGS=-I/usr/lib/%(arch)s " % {"arch":arch})
-                   run(flags + "./configure --prefix=%(python_home)s USE=sqlite " 
+                   run(flags + "./configure --prefix=%(python_home)s USE=sqlite --enable-unicode=ucs4" 
                          % {"python_home":self.cfg.user_python26_home})
                    run(flags + " make")
                    run("make install")
@@ -502,7 +502,7 @@ class Presetup:
                    #
                    run("CPPFLAGS=-I/usr/include/openssl "
                        "LDFLAGS=-L/usr/lib/ssl "
-                       "./configure --prefix=%(python_home)s USE=sqlite"
+                       "./configure --prefix=%(python_home)s USE=sqlite --enable-unicode=ucs4"
                         % {"python_home":self.cfg.user_python26_home})
                    run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
                    run("make install")
