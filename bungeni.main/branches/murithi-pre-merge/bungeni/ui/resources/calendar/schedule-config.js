@@ -186,6 +186,16 @@ YAHOO.bungeni.config = function(){
                 }
             }
 
+            var editDiscussionsFormatter = function(el, record, column, data){
+                if (!el.innerHTML){
+                    var button = new YAHOO.widget.Button({
+                        label: scheduler_globals.column_discussions_edit_button,
+                        id: el.id + "-edit-button"
+                    });
+                    button.appendTo(el);
+                }
+            }
+
             var deleteButtonFormatter = function(el, record, column, data){
                 if (!el.innerHTML){
                     var button = new YAHOO.widget.Button({
@@ -223,11 +233,11 @@ YAHOO.bungeni.config = function(){
                     if(YAHOO.bungeni.scheduled_item_keys.indexOf(record_key)>=0){
                         checked = "checked='checked'";
                     }
-                }else{
-                    el.innerHTML = ("<input type='checkbox' name='rec-sel-" + 
-                        index +"' " + checked + "/>"
-                    );
                 }
+                el.innerHTML = ("<input type='checkbox' name='rec-sel-" + 
+                    index +"' " + checked + "/>"
+                );
+                
             }
 
 
@@ -241,7 +251,8 @@ YAHOO.bungeni.config = function(){
                 editButton: editButtonFormatter,
                 deleteButton: deleteButtonFormatter,
                 link: linkFormatter,
-                availableItemSelect: availableItemSelectFormatter
+                availableItemSelect: availableItemSelectFormatter,
+                editDiscussions: editDiscussionsFormatter
             }
         }()
     }

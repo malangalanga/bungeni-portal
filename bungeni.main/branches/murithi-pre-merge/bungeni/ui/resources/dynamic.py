@@ -54,6 +54,7 @@ def get_globals(group_name, **kwargs):
                 language
             ),
             "column_discussion_edit_button": i18n(EDIT, language),
+            "column_discussions_edit_button": i18n(_(u"Minutes"), language),
             "column_discussion_delete_button": i18n(DELETE, language),
             "column_available_headings_title": i18n(
                 _(u"Select existing heading"), 
@@ -91,7 +92,7 @@ def get_globals(group_name, **kwargs):
             ),
             "save_dialog_confirm": i18n(OKAY, language),
             "saving_dialog_header": i18n(WORKING, language),
-            "saving_dialog_text": i18n(_(u"saving changes to schedule..."), 
+            "saving_schedule_text": i18n(_(u"saving changes to schedule..."), 
                 language
             ),
             "saving_discussions_text": i18n(
@@ -141,7 +142,7 @@ def get_globals(group_name, **kwargs):
     }
     return globals_map.get(group_name, {})
 
-class DynamicDirectoryFactory:
+class DynamicDirectoryFactory(object):
     """Allows generation of static resources whose content is contextual.
     
     For example, we want some system parameters to be available to certain

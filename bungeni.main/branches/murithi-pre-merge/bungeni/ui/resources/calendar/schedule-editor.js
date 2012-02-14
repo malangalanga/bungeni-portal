@@ -626,7 +626,7 @@
             );
         },
         startRequest: function(data){
-            savingDialog.setBody(scheduler_globals.saving_dialog_text);
+            savingDialog.setBody(scheduler_globals.saving_schedule_text);
             savingDialog.show();
             savingDialog.bringToTop();
             YCM.asyncRequest("POST", 
