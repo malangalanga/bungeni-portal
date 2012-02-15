@@ -47,6 +47,11 @@ ${ xml(view.provide(provider_name="feed-manager")) }
 <link rel="stylesheet" href="/@@/portal/jquery-ui-1.8.7.custom.css" type="text/css" />
 <!-- /common -->
 
+$if{is_rtl()}
+<link rel="stylesheet" href="/@@/portal/rtl.css" type="text/css" />
+$fi
+
+
 #[
 approaching valid html: validator.w3.org:
     this view with zpt layout:      30 Errors, 32 warning(s) 
@@ -86,7 +91,8 @@ ${ xml(view.provide(provider_name="plone-js")) }
 
   </head>
   #[ !+section-bungeni(mr, aug-2010) shouldn't this be bungeni-section? ]#
-  <body class="yui-skin-sam section-bungeni-${get_section_name()}">
+  <body class="yui-skin-sam section-bungeni-${get_section_name()}" 
+    dir="${get_base_direction()}">
     <div id="visual-portal-wrapper">
       <div id="portal-top">
       ${ xml(view.provide(provider_name="plone.portalheader")) }

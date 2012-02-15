@@ -19,8 +19,6 @@ from zope.app.schema.vocabulary import IVocabularyFactory
 from zope.interface import implements
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
-from zope.security.management import getInteraction
-from zope.publisher.interfaces import IRequest
 from zope.publisher.interfaces.http import IHTTPRequest
 from zope.i18n import translate as ztranslate
 
@@ -44,8 +42,7 @@ ALLOWED_LANGUAGES = capi.zope_i18n_allowed_languages
 from bungeni.alchemist import Session
 from bungeni.models.interfaces import IVersion, ITranslatable
 from bungeni.models import domain
-from bungeni.core.i18n import _
-from bungeni.ui.utils import common
+from bungeni.ui.utils import common # !+CORE_UI_DEPENDENCY(mr, dec-2011)
 
 
 class BrowserFormLanguages(BrowserLanguages):
@@ -60,13 +57,28 @@ class BrowserFormLanguages(BrowserLanguages):
 
 
 class LanguageVocabulary(object):
+    """This is a simple vocabulary of available languages.
+    The generated terms are composed of the language code and the localized
+    name for that language if there is a a request object.
+    """
     implements(IVocabularyFactory)
 
     def __call__(self, context):
+        request = common.get_request()
+        def get_locale_lang(code):
+            if hasattr(request, "locale"):
+                return request.locale.displayNames.languages.get(code)
+            return None
         languages = get_all_languages()
-        items = [(l, languages[l].get('name', l)) for l in languages]
+        items = [ 
+            (
+                lang, 
+                (request and get_locale_lang(lang) or languages[lang]['name'])
+            )
+            for lang in languages.keys()
+        ]
         items.sort(key=lambda language: language[1])
-        items = [SimpleTerm(i[0], i[0], i[1]) for i in items]
+        items = [ SimpleTerm(i[0], i[0], i[1]) for i in items ]
         return SimpleVocabulary(items)
 
 language_vocabulary_factory = LanguageVocabulary()
@@ -99,13 +111,17 @@ def get_all_languages(filter=None):
     # TypeError if filter is not iterable
     return dict([ (name, _languages[name]) for name in filter ])
 
-def get_request_language():
-    request = common.get_request()
+def get_request_language(request=None, default=capi.default_language):
+    """Get current request's language; if no request use specified default.
+    
+    If the request instance is handy, it may be passed in as a parameter thus
+    avoidng the need to call for it.
+    """
+    if request is None:
+        request = common.get_request()
     if IHTTPRequest.providedBy(request):
-        lang = request.locale.getLocaleID()
-    else:
-        lang = capi.default_language
-    return lang
+        return request.locale.getLocaleID()
+    return default
 
 
 def get_translation_for(context, lang):

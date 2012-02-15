@@ -9,6 +9,7 @@ from zope.security.proxy import removeSecurityProxy
 from sqlalchemy.orm import RelationshipProperty, class_mapper
 
 from bungeni.core.workflow.states import get_object_state_rpm, get_head_object_state_rpm
+from bungeni.core.workflow.interfaces import IWorkflow, IStateController
 from bungeni.models.schema import singular
 from bungeni.alchemist.container import stringKey
 from bungeni.models.interfaces import IAuditable, IVersionable, IAttachmentable
@@ -41,24 +42,17 @@ def get_permissions_dict(permissions):
     results= []
     for x in permissions:
         # !+XML pls read the styleguide
-        results.append({"role":x[2], 
-                        "permission":x[1], 
-                        "setting":x[0] and "Allow" or "Deny"})
+        results.append({"role": x[2], 
+            "permission": x[1], 
+            "setting": x[0] and "Allow" or "Deny"})
     return results
 
 
-# !+XML include optional parameter here is useless
-# !+XML type should be inferred to from context either via IWorkflow(context).name
-# or via something like context.__class__.__name__.lowercase()
-# !+XML publish_to_xml should follow the generic action signature (including the 
-# return value --see workflows/_actions.py.
-def publish_to_xml(context, type="", include=None):
+def publish_to_xml(context):
     """Generates XML for object and saves it to the file. If object contains
     attachments - XML is saved in zip archive with all attached files. 
     """
-    
-    if include is None:
-        include = []
+    include = []
     
     context = removeSecurityProxy(context)
     
@@ -71,16 +65,24 @@ def publish_to_xml(context, type="", include=None):
         parent=None,
         include=include,
         exclude=["file_data", "image", "logo_data", "event_item", 
-            "attached_files"]
+            "attached_files","changes"]
     )
-    if type=="":
-        type = getattr(context, "type", None)
-        # !+XML why is this inside this if block? 
-        permissions = get_object_state_rpm(context).permissions
-        data["permissions"]= get_permissions_dict(permissions)
+
+    type = IWorkflow(context).name
     
-    assert type, "%s has no 'type' field. Use 'type' function parameter." % (
-        context.__class__)
+    tags = IStateController(context).get_state().tags
+    if tags:
+        data["tags"] = tags
+    
+    permissions = get_object_state_rpm(context).permissions
+    data["permissions"]= get_permissions_dict(permissions)
+    
+    data["changes"] = []
+    for change in getattr(context, "changes", []):
+        change_dict = obj2dict(change, 0, parent=context)
+        change_permissions = get_head_object_state_rpm(change).permissions
+        change_dict["permissions"] = get_permissions_dict(change_permissions)
+        data["changes"].append(change_dict)
     
     # list of files to zip
     files = []
@@ -92,9 +94,11 @@ def publish_to_xml(context, type="", include=None):
     # xml file path
     file_path = os.path.join(path, stringKey(context)) 
     
+    has_attachments = False
     if IAttachmentable.implementedBy(context.__class__):
         attached_files = getattr(context, "attached_files", None)
         if attached_files:
+            has_attachments = True
             # add xml file to list of files to zip
             files.append("%s.xml" % (file_path))
             data["attached_files"] = []
@@ -103,6 +107,9 @@ def publish_to_xml(context, type="", include=None):
                 attachment_dict = obj2dict(attachment, 1,
                     parent=context,
                     exclude=["file_data", "event_item", "versions", "changes"])
+                permissions = get_object_state_rpm(attachment).permissions
+                attachment_dict["permissions"] = \
+                    get_permissions_dict(permissions)
                 # saving attachment to tmp
                 with tmp(delete=False) as f:
                     f.write(attachment.file_data)
@@ -117,7 +124,7 @@ def publish_to_xml(context, type="", include=None):
     
     # zipping xml and attached files 
     # unzipped files are removed
-    if attached_files:
+    if has_attachments:
         zip = ZipFile("%s.zip" % (file_path), "w")
         for f in files:
             zip.write(f, os.path.split(f)[-1])

@@ -17,16 +17,6 @@
     See: http://wiki.zope.org/zope3/LocalComponentManagementSimplification
     -->
     
-    <class class=".files.LibraryViewlet">
-        <require permission="zope.View" attributes="render" />
-    </class>
-    <class class=".viewlets.AddressesViewlet">
-        <require permission="zope.View" attributes="render" />
-    </class>
-    <class class=".viewlets.RssLinkViewlet">
-        <require permission="zope.View" attributes="render" />
-    </class>
-
   <!-- /++apidoc++/... but does not work:
 
     xmlns:apidoc="http://namespaces.zope.org/apidoc"
@@ -200,6 +190,7 @@
      weight="10"
      />
 -->
+
 
   <!-- GroupSitting -->
 
@@ -434,30 +425,6 @@
      />
 
 
-  <!--
-  <browser:viewlet
-     name="bungeni.viewlet.initialquestion"
-     manager=".interfaces.ISubFormViewletManager"
-     class=".viewlets.InitialQuestionsViewlet"
-     for="bungeni.models.interfaces.IQuestion"
-     permission="bungeni.question.View"
-     weight="5"
-     /-->
-
-    <browser:viewlet name="bungeni.viewlet.question-timeline"
-        manager=".interfaces.ISubFormViewletManager"
-        class=".viewlets.QuestionTimeLineViewlet"
-        for="bungeni.models.interfaces.IQuestion"
-        permission="zope.View"
-        weight="20"
-    />
-    <browser:viewlet name="bungeni.viewlet.tableddocument-timeline"
-        manager=".interfaces.ISubFormViewletManager"
-        class=".viewlets.TableddocumentTimeLineViewlet"
-        for="bungeni.models.interfaces.ITabledDocument"
-        permission="zope.View"
-        weight="20"
-    />
     <browser:viewlet name="bungeni.viewlet.committees"
         manager="bungeni.alchemist.interfaces.IContentViewManager"
         class=".viewlets.CommitteesViewlet"
@@ -544,38 +511,12 @@
         weight="10"
     />
 
-    <!-- bills -->
-    <browser:viewlet name="bungeni.viewlet.bill-timeline"
-        manager=".interfaces.ISubFormViewletManager"
-        class=".viewlets.BillTimeLineViewlet"
-        for="bungeni.models.interfaces.IBill"
-        permission="zope.View"
-        weight="20"
-    />
     <browser:viewlet name="bungeni.viewlet.item-assignments"
         manager=".interfaces.ISubFormViewletManager"
         class=".viewlets.AssignedGroupsViewlet"
         for="bungeni.models.interfaces.IBungeniParliamentaryContent"
         permission="zope.View"
         weight="30"
-    />
-
-    <!-- Motion -->
-    <browser:viewlet name="bungeni.viewlet.motion-timeline"
-        manager=".interfaces.ISubFormViewletManager"
-        class=".viewlets.MotionTimeLineViewlet"
-        for="bungeni.models.interfaces.IMotion"
-        permission="zope.View"
-        weight="20"
-    />
-
-    <!-- AgendaItem -->
-    <browser:viewlet name="bungeni.viewlet.agendaitem-timeline"
-        manager=".interfaces.ISubFormViewletManager"
-        class=".viewlets.AgendaItemTimeLineViewlet"
-        for="bungeni.models.interfaces.IAgendaItem"
-        permission="zope.View"
-        weight="20"
     />
 
   <!--browser:page

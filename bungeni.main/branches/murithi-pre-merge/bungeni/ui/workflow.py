@@ -17,7 +17,7 @@ import zope.interface
 from zope.schema.vocabulary import SimpleTerm, SimpleVocabulary
 from zope.security.proxy import removeSecurityProxy
 from zope.app.schema.vocabulary import IVocabularyFactory
-from zope.app.form.browser.textwidgets import TextAreaWidget
+from zope.formlib.widgets import TextAreaWidget
 from zc.table import column
 from zope.dublincore.interfaces import IDCDescriptiveProperties
 from zope.i18n import translate
@@ -25,11 +25,9 @@ from zope.i18n import translate
 from bungeni.alchemist import Session
 from bungeni.alchemist.interfaces import IAlchemistContainer
 from bungeni.alchemist.interfaces import IAlchemistContent
-from bungeni.core import audit
 from bungeni.core import globalsettings
 from bungeni.core.workflow import interfaces
 from bungeni.core.workflows.utils import get_mask
-from bungeni.core.audit import CHANGE_ACTIONS
 from bungeni.models.interfaces import IAuditable, IWorkspaceContainer, \
     IBungeniParliamentaryContent
 from bungeni.models.domain import ParliamentaryItem, get_changes
@@ -39,7 +37,6 @@ from bungeni.ui.forms.common import BaseForm
 from bungeni.ui.widgets import TextDateTimeWidget
 from bungeni.ui.table import TableFormatter
 from bungeni.ui.menu import get_actions
-from bungeni.ui.tagged import get_states
 from bungeni.ui.utils import date
 from bungeni.ui import browser
 from bungeni.ui import z3evoque
@@ -124,11 +121,6 @@ class WorkflowHistoryViewlet(viewlet.ViewletBase):
         formatter.updateBatching()
         return formatter()
     
-    @property
-    def _change_class(self):
-        auditor = audit.get_auditor(self.context)
-        return auditor.change_class
-    
     def get_feed_entries(self):
         return get_changes(removeSecurityProxy(self.context), "workflow")
 
@@ -166,14 +158,16 @@ class WorkflowActionViewlet(browser.BungeniBrowserView,
     def get_min_date_active(self):
         """Determine the min_date_active to validate against.
         """
+        
         def is_workflowed_and_draft(instance):
-            """is item workflowed, and is so is it in a logical draft state?
+            """is item workflowed, and if so is it in a logical draft state?
             """
             if interfaces.IWorkflowed.providedBy(instance):
-                tagged_key = instance.__class__.__name__.lower()
-                draft_states = get_states(tagged_key, tagged=["draft"])
-                return instance.status in draft_states
+                wf = interfaces.IWorkflow(instance)
+                return instance.status in wf.get_state_ids(tagged=["draft"],
+                    restrict=False)
             return False
+        
         min_date_active = None
         if IAuditable.providedBy(self.context):
             instance = removeSecurityProxy(self.context)
@@ -218,7 +212,9 @@ class WorkflowActionViewlet(browser.BungeniBrowserView,
             reg_number = data.get("registry_number")
             if reg_number:
                 session = Session()
-                num = session.query(ParliamentaryItem).filter(ParliamentaryItem.registry_number==reg_number).count()
+                num = session.query(ParliamentaryItem
+                    ).filter(ParliamentaryItem.registry_number==reg_number
+                    ).count()
                 if num != 0:
                     errors.append(zope.interface.Invalid(
                         "This registry number is already taken."))
@@ -291,7 +287,8 @@ class WorkflowActionViewlet(browser.BungeniBrowserView,
         self.actions = bindTransitions(self, transition_ids, wfc.workflow)
 
 
-@register.view(interfaces.IWorkflowed, name="workflow")
+@register.view(interfaces.IWorkflowed, name="workflow", 
+    protect=register.PROTECT_VIEW_PUBLIC)
 class WorkflowView(browser.BungeniBrowserView):
     """This view is linked to by the "workflow" context action and dislays the 
     workflow history and the action viewlet with all possible transitions

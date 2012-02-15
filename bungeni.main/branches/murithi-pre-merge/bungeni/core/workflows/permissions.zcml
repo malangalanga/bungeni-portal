@@ -307,6 +307,7 @@ See the Bungeni Source Code Style Guide for further details.
 
 
 <!-- groupsitting -->
+<grant permission="bungeni.sitting.View" role="bungeni.Clerk" />
 <grant permission="bungeni.sitting.Edit" role="bungeni.Clerk" />
 <grant permission="bungeni.sitting.Add" role="bungeni.Clerk" />
 <grant permission="bungeni.sittingschedule.View" role="bungeni.Clerk" />
@@ -337,6 +338,17 @@ See the Bungeni Source Code Style Guide for further details.
 <permission id="bungeni.groupsitting.wf.published_minutes.draft_minutes" title="Redraft Minutes" />
 <grant permission="bungeni.groupsitting.wf.published_minutes.draft_minutes" role="bungeni.Clerk" />
 <grant permission="bungeni.groupsitting.wf.published_minutes.draft_minutes" role="bungeni.Speaker" />
+
+
+<!-- membership -->
+
+<permission id="bungeni.membership.wf.attached.internal" title="Publish Internal" />
+<grant permission="bungeni.membership.wf.attached.internal" role="bungeni.Clerk" />
+<grant permission="bungeni.membership.wf.attached.internal" role="bungeni.Owner" />
+
+<permission id="bungeni.membership.wf.internal.attached" title="Re-publish" />
+<grant permission="bungeni.membership.wf.internal.attached" role="bungeni.Clerk" />
+<grant permission="bungeni.membership.wf.internal.attached" role="bungeni.Owner" />
 
 
 <!-- heading -->
@@ -658,8 +670,6 @@ See the Bungeni Source Code Style Guide for further details.
 <grant permission="bungeni.signatory.View" role="bungeni.Owner" />
 <grant permission="bungeni.signatory.View" role="bungeni.MP" />
 <grant permission="bungeni.signatory.View" role="bungeni.Minister" />
-<grant permission="bungeni.signatory.View" role="bungeni.Authenticated" />
-<grant permission="bungeni.signatory.View" role="bungeni.Anonymous" />
 <grant permission="bungeni.signatory.Edit" role="bungeni.Clerk" />
 <grant permission="bungeni.signatory.Edit" role="bungeni.Owner" />
 <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />

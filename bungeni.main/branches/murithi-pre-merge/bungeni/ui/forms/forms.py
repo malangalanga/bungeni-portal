@@ -27,11 +27,11 @@ from bungeni.ui.forms.common import AddForm
 from bungeni.ui.forms.common import EditForm
 from bungeni.ui.forms.common import DeleteForm
 from bungeni.ui.forms.common import DisplayForm
-from zope.app.form.browser.textwidgets import PasswordWidget
+from zope.formlib.widgets import PasswordWidget
 
 from interfaces import Modified
 from zope import component
-from zope.app.form.interfaces import IDisplayWidget
+from zope.formlib.interfaces import IDisplayWidget
 from zope.schema.interfaces import IText, ITextLine
 from bungeni.ui.widgets import IDiffDisplayWidget
 from bungeni.ui.diff import textDiff
@@ -292,3 +292,9 @@ class DiffEditForm(EditForm):
                 display_widget.name = widget.name + ".diff.display"
                 # Add display - input widgets pair to list of diff widgets
                 self.diff_widgets.append((widget, display_widget))
+
+class UserAddressDisplayForm(DisplayForm):
+    
+    @property
+    def page_title(self):
+        return "%s address" % self.context.logical_address_type.title()

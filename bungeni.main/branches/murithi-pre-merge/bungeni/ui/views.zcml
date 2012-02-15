@@ -29,7 +29,7 @@
 
     <browser:page name=""
         for="bungeni.models.interfaces.IBungeniApplication"
-        class="zope.app.publisher.browser.resources.Resources"
+        class="zope.browserresource.resources.Resources"
         permission="zope.Public"
         allowed_interface="zope.publisher.interfaces.browser.IBrowserPublisher"
     />
@@ -431,11 +431,14 @@
         class=".versions.VersionLogView"
         layer="bungeni.ui.interfaces.IBungeniSkin"
         permission="zope.Public"
-    />
+    /><!-- 
+    !+VersionLogView(mr, nov-2011) above zcml page view directive masks the 
+    "generic" AjaxContainerListing listing view, and breaks the connection 
+    from the corresponding ui descriptor.
+    !+AuditLogView(mr, nov-2011)
+    -->
 
-
-  <!-- business -->
-
+    <!-- business -->
     <browser:page name="business-index"
         for="*"
         layer="bungeni.ui.interfaces.IBungeniSkin"
@@ -496,41 +499,6 @@
         permission="zope.ManageSite"
     />
 
-    <!-- json view of containers-->
-    <browser:page name="jsonlisting"
-        for="bungeni.alchemist.interfaces.IAlchemistContainer"
-        permission="zope.Public"
-        class=".container.ContainerJSONListing"
-    />
-    <browser:page name="jsonlisting"
-        for="bungeni.alchemist.interfaces.IAlchemistContainer"
-        permission="zope.Public"
-        class=".container.PublicStatesContainerJSONListing"
-        layer=".interfaces.IBusinessSectionLayer"
-    />
-    <browser:page name="jsonlisting"
-        for="bungeni.alchemist.interfaces.IAlchemistContainer"
-        permission="zope.Public"
-        class=".container.PublicStatesContainerJSONListing"
-        layer=".interfaces.IMembersSectionLayer"
-    />
-    <browser:page name="jsonlisting"
-        for="bungeni.alchemist.interfaces.IAlchemistContainer"
-        permission="zope.Public"
-        class=".container.PublicStatesContainerJSONListing"
-        layer=".interfaces.IArchiveSectionLayer"
-    />
-    <browser:page name="jsontableheaders"
-        for="bungeni.alchemist.interfaces.IAlchemistContainer"
-        permission="zope.Public"
-        class=".container.ContainerJSONTableHeaders"
-    />
-    <browser:page name="jsonlisting"
-        for="bungeni.models.interfaces.IWorkspaceContainer"
-        permission="bungeni.workspace.View"
-        class=".workspace.WorkspaceContainerJSONListing"
-    />
-   
     <!-- container UI -->
     <browser:page name="index"
         for="bungeni.alchemist.interfaces.IAlchemistContainer"
@@ -931,5 +899,12 @@
       factory=".widgets.HTMLDisplay"
       permission="zope.Public"
       />
-       
+      
+   <browser:view
+     for="*"
+     name="bungeni-ui-calendar"
+     class=".macros.BungeniCalendarMacros"
+     layer=".interfaces.IBungeniSkin"
+     permission="zope.View"
+     />    
 </configure>

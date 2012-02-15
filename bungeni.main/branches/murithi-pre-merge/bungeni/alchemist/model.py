@@ -10,6 +10,21 @@ $Id$
 """
 log = __import__("logging").getLogger("bungeni.alchemist")
 
+
+# used directly in bungeni
+__all__ = [
+    "queryModelInterface",      # redefn -> ore.alchemist.model
+    "queryModelDescriptor",     # redefn -> ore.alchemist.model
+    "ModelDescriptor",          # redefn -> ore.alchemist.model
+    "IModelDescriptorField",    # redefn -> ore.alchemist.interfaces
+    
+    "Field",
+    "show",
+    "hide",
+    "norm_sorted", 
+]
+
+
 from zope import component, interface, schema
 from zope.interface.interfaces import IInterface
 
@@ -250,10 +265,10 @@ class Field(object):
     
     listing_column = None   # zc.table.interfaces.IColumn
     
-    view_widget = None      # zope.app.form.interaces.IDisplayWidget
-    edit_widget = None      # zope.app.form.interfaces.IInputWidget
-    add_widget = None       # zope.app.form.interfaces.IInputWidget
-    search_widget = None    # zope.app.form.interfaces.IInputWidget
+    view_widget = None      # zope.formlib.interaces.IDisplayWidget
+    edit_widget = None      # zope.formlib.interfaces.IInputWidget
+    add_widget = None       # zope.formlib.interfaces.IInputWidget
+    search_widget = None    # zope.formlib.interfaces.IInputWidget
     
     # /INIT Parameter Defaults
     
@@ -526,8 +541,11 @@ class ModelDescriptor(object):
         return [ field for field in self.__class__.fields 
             if field.is_displayable(mode, request_context_roles) ]
     
+    # !+_mode_fields(mr, jan-2012)
+    # !+listing_field_names(mr, jan-2012) !
+    
     @property
-    def listing_columns(self): # !+listing_column_NAMES(mr, nov-2010) !
+    def listing_columns(self):
         return [ f.name for f in self._mode_columns("listing") ]
     @property
     def search_columns(self): 

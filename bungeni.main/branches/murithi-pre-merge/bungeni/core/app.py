@@ -15,7 +15,6 @@ from zope.interface.declarations import alsoProvides
 
 from zope.app.appsetup.appsetup import getConfigContext
 from zope.app.component import site
-from zope.app.container.sample import SampleContainer
 from zope.location.interfaces import ILocation
 
 from ore.wsgiapp.app import Application
@@ -25,6 +24,7 @@ from bungeni.models import interfaces as model_interfaces
 
 from bungeni.core import interfaces
 from bungeni.core import location
+from bungeni.core import language
 from bungeni.core.content import Section, AdminSection, AkomaNtosoSection, \
     WorkspaceSection
 from bungeni.core.content import QueryContent
@@ -34,20 +34,18 @@ from bungeni.models.utils import container_getter
 from bungeni.ui.utils import url, common
 from bungeni.models.workspace import WorkspaceContainer
 
+
 def onWSGIApplicationCreatedEvent(application, event):
-    """Subscriber to the ore.wsgiapp.interfaces.IWSGIApplicationCreatedEvent."""
+    """Subscriber to the ore.wsgiapp.interfaces.IWSGIApplicationCreatedEvent.
+    """
     initializer = model_interfaces.IBungeniSetup(application)
     initializer.setUp()
     log.debug("onWSGIApplicationCreatedEvent: _features: %s" % (
-                                        getConfigContext()._features))
+        getConfigContext()._features))
+
 
 class BungeniApp(Application):
     implements(model_interfaces.IBungeniApplication)
-
-#!CRUFT (miano, nov-2010) possible cruft
-#class BungeniAdmin(SampleContainer):
-#    implements(model_interfaces.IBungeniAdmin )
-
 
 
 class AppSetup(object):
@@ -92,7 +90,10 @@ class AppSetup(object):
         z3evoque.domain.set_on_globals("devmode", common.has_feature("devmode"))
         z3evoque.domain.set_on_globals("absoluteURL", url.absoluteURL)
         z3evoque.domain.set_on_globals("get_section_name", url.get_section_name)
-        
+        z3evoque.domain.set_on_globals("get_base_direction", 
+            language.get_base_direction)
+        z3evoque.domain.set_on_globals("is_rtl", language.is_rtl)            
+            
         # !+ where is the view name for the app root (slash) set?
         
         # CONVENTION: the action of each site top-section is made to point 

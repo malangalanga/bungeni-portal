@@ -17,6 +17,7 @@ from zope.i18nmessageid import Message
 from bungeni.core.workflow import interfaces
 from bungeni.core.workflow.states import GRANT, DENY
 from bungeni.core.workflow.states import Feature, State, Transition, Workflow
+from bungeni.core.workflow.states import assert_roles_mix_limitations
 from bungeni.core.workflow.notification import Notification
 from bungeni.utils.capi import capi, bungeni_custom_errors
 from bungeni.ui.utils import debug
@@ -38,8 +39,8 @@ ID_RE = re.compile("^[\w\d_]+$")
 
 FEATURE_ATTRS = ("name", "enabled", "note")
 
-STATE_ATTRS = ("id", "title", "version", "publish", "like_state", "note",
-    "permissions_from_parent", "obsolete")
+STATE_ATTRS = ("id", "title", "version", "publish", "like_state", "tags", 
+    "note", "permissions_from_parent", "obsolete")
 
 TRANS_ATTRS_REQUIREDS = ("title", "source", "destination")
 TRANS_ATTRS_OPTIONALS = ("grouping_unique_sources", "condition", "trigger", 
@@ -155,12 +156,14 @@ def load(path_custom_workflows, name):
 def _load(workflow, name):
     """ (workflow:etree_doc, name:str) -> Workflow
     """
+    # !+ @title, @description
     transitions = []
     states = []
     domain = strip_none(workflow.get("domain")) 
     # !+domain(mr, jul-2011) needed?
     wuids = set() # unique IDs in this XML workflow file
     note = strip_none(workflow.get("note"))
+    allowed_tags = (strip_none(workflow.get("tags")) or "").split()
     
     # initial_state, in XML this must be ""
     assert workflow.get("initial_state") == "", "Workflow [%s] initial_state " \
@@ -195,7 +198,7 @@ def _load(workflow, name):
     def check_add_permission(permissions, like_permissions, assignment, p, r):
         for perm in [(GRANT, p, r), (DENY, p, r)]:
             assert perm not in permissions, "Workflow [%s] state [%s] " \
-                "conflicting state permission: (%s, %s, %s)" % (
+                "duplicated or conflicting state permission: (%s, %s, %s)" % (
                     name, state_id, assignment, p, r)
             if perm in like_permissions:
                 like_permissions.remove(perm)
@@ -236,14 +239,21 @@ def _load(workflow, name):
                 note=strip_none(f.get("note"))))
     
     # global grants
+    _permission_role_mixes = {}
     for p in workflow.iterchildren("grant"):
         pid = strip_none(p.get("permission"))
         role = strip_none(p.get("role"))
+        # for each global permission, build list of roles it is set to
+        _permission_role_mixes.setdefault(pid, []).append(role)
         #+!assertRegisteredPermission(permission)
         assert pid and role, "Global grant must specify valid permission/role" 
         ZCML_LINES.append(
             '%s<grant permission="%s" role="%s" />' % (ZCML_INDENT, pid, role))
-    
+    for perm, roles in _permission_role_mixes.items():
+        # assert roles mix limitations for state permissions
+        assert_roles_mix_limitations(perm, roles, name, "global grants")
+
+
     # states
     for s in workflow.iterchildren("state"):
         assert_valid_attr_names(s, STATE_ATTRS)
@@ -275,7 +285,8 @@ def _load(workflow, name):
                     '[publish="%s"]' % s.get("publish"))
             if do_pub:
                 actions.append(ACTIONS_MODULE.publish_to_xml)
-        
+        # @tags
+        tags = (strip_none(s.get("tags")) or "").split()
         # @like_state, permissions
         permissions = [] # [ tuple(bool:int, permission:str, role:str) ]
         # state.@like_state : to reduce repetition and enhance maintainibility
@@ -317,7 +328,7 @@ def _load(workflow, name):
         states.append(
             State(state_id, Message(strip_none(s.get("title")), domain),
                 strip_none(s.get("note")),
-                actions, permissions, notifications,
+                actions, permissions, notifications, tags,
                 as_bool(strip_none(s.get("permissions_from_parent")) or "false"),
                 as_bool(strip_none(s.get("obsolete")) or "false")
             )
@@ -403,8 +414,10 @@ def _load(workflow, name):
             pid = "bungeni.%s.wf.%s" % (name, tid)
             if not ZCML_PROCESSED:
                 # use "bungeni.Clerk" as default list of roles
-                roles = roles or "bungeni.Clerk"
-                zcml_transition_permission(pid, title, roles.split())
+                roles = (roles or "bungeni.Clerk").split()
+                zcml_transition_permission(pid, title, roles)
+                # remember list of roles from xml
+                kw["_roles"] = roles
             kw["permission"] = pid
         # python resolvables
         if "condition" in kw:
@@ -428,5 +441,5 @@ def _load(workflow, name):
             log.debug("[%s] adding transition [%s-%s] [%s]" % (
                 name, source or "", destination, kw))
     
-    return Workflow(name, features, states, transitions, note)
+    return Workflow(name, features, allowed_tags, states, transitions, note)
 

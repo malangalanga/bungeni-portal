@@ -10,21 +10,24 @@ from ore import yuiwidget
 
 from zope.security import proxy
 from zope.security import checkPermission
-from zope.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserPage
 from zc.resourcelibrary import need
 from bungeni.alchemist import model
 from bungeni.alchemist import container
+from bungeni.alchemist.interfaces import IAlchemistContainer 
 
 from bungeni.models import interfaces as mfaces
 from bungeni.models import domain
 
 from bungeni.core import translation
+from bungeni.core.workflows.adapters import get_workflow
 
 from bungeni.ui import interfaces as ufaces
 from bungeni.ui.utils import url, date, debug
 from bungeni.ui import cookies
 from bungeni.ui import browser
 from bungeni.ui import z3evoque
+from bungeni.utils import register
 from bungeni.utils.capi import capi
 
 
@@ -123,7 +126,7 @@ class AjaxContainerListing(
         return formatter
 
 
-class ContainerJSONBrowserView(BrowserView):
+class ContainerJSONBrowserView(BrowserPage):
     """Base BrowserView Container listing as a JSON AJAX callback.
     """
     permission = None
@@ -140,9 +143,8 @@ class ContainerJSONBrowserView(BrowserView):
         # table keys
         self.table = orm.class_mapper(self.domain_model).mapped_table
         self.utk = dict(
-            [(column.key, column) for column in self.table.columns
-             ]
-            )
+            [ (column.key, column) for column in self.table.columns ])
+        
         # sort_on defaults: [str]
         self.defaults_sort_on = getattr(self.domain_model, "sort_on", None)
         # sort_on parameter name: str
@@ -160,6 +162,7 @@ class ContainerJSONBrowserView(BrowserView):
         self.sort_dir = self.request.get("dir")
 
 
+@register.view(IAlchemistContainer, name="jsontableheaders")
 class ContainerJSONTableHeaders(ContainerJSONBrowserView):
     def __call__(self):
         return simplejson.dumps([
@@ -168,6 +171,7 @@ class ContainerJSONTableHeaders(ContainerJSONBrowserView):
         ])
 
 
+@register.view(IAlchemistContainer, name="jsonlisting")
 class ContainerJSONListing(ContainerJSONBrowserView):
     """Paging, batching, sorting, json contents of a container.
     """
@@ -258,8 +262,8 @@ class ContainerJSONListing(ContainerJSONBrowserView):
         if sort_on:
             sort_on = sort_on[5:]
             # in the domain model you may replace the sort with another column
-            sort_replace = getattr(self.domain_model,
-                                   "sort_replace", None)  # dict
+            sort_replace = getattr(
+                self.domain_model, "sort_replace", None) # dict
             if sort_replace and (sort_on in sort_replace):
                 sort_on_keys.extend(sort_replace[sort_on])
             elif sort_on in utk:
@@ -274,8 +278,10 @@ class ContainerJSONListing(ContainerJSONBrowserView):
                     sort_on_expressions.append(sort_dir_func(dso))
         return sort_on_expressions
 
-    def getOffsets(self, default_start=0,
-        default_limit=capi.default_number_of_listing_items):
+    def get_offsets(self, 
+            default_start=0,
+            default_limit=capi.default_number_of_listing_items
+        ):
         start = self.request.get("start", default_start)
         limit = self.request.get("limit", default_limit)
         try:
@@ -287,12 +293,13 @@ class ContainerJSONListing(ContainerJSONBrowserView):
         except ValueError:
             start, limit = default_start, default_limit
         return start, limit
-
+    
     def translate_objects(self, nodes, lang=None):
         """ (nodes:[ITranslatable]) -> [nodes]
         """
+        # !+ lang should always be valid here... make not optional, assert?
         if lang is None:
-            lang = translation.get_request_language()
+            lang = translation.get_request_language(request=self.request)
         t_nodes = []
         for node in nodes:
             try:
@@ -305,7 +312,7 @@ class ContainerJSONListing(ContainerJSONBrowserView):
                 return nodes
         return t_nodes
 
-    def _jsonValues(self, nodes, fields):
+    def _json_values(self, nodes):
         """
         filter values from the nodes to respresent in json, currently
         that means some footwork around, probably better as another
@@ -323,7 +330,7 @@ class ContainerJSONListing(ContainerJSONBrowserView):
         values = []
         for node in nodes:
             d = {}
-            for field in fields:
+            for field in self.fields:
                 fn = field.__name__
                 d[fn] = listing_column_getters[fn](node, field)
                 # !+i18n_DATE(mr, sep-2010) two problems with the isinstance
@@ -342,11 +349,13 @@ class ContainerJSONListing(ContainerJSONBrowserView):
     # !+BATCH(mr, sep-2010) this method (plus other support methods here)
     # replaces the combined logic in:
     #   - alchemist.ui.container.ContainerJSONListing.getBatch()
-    #   - ore.alchemist.container.AlchemistContainer.batch()
-    def getBatch(self, start=0, limit=20, lang=None):
+    #   - bungeni.alchemist.container.AlchemistContainer.batch()
+    def get_batch(self, start, limit):
+        """Get the data instances for this batch.
+        """
         context = proxy.removeSecurityProxy(self.context)
         query = context._query
-
+        
         # date_range filter (try from: model, then cookie, then request)
         query = query_filter_date_range(context, self.request, query,
             self.domain_model)
@@ -361,21 +370,21 @@ class ContainerJSONListing(ContainerJSONBrowserView):
         self.set_size = query.count()
         # offset and limit
         query = query.offset(start).limit(limit)
-        # ore.alchemist.container.AlchemistContainer.batch()
+        # bungeni.alchemist.container.AlchemistContainer.batch()
         # nodes: [<bungeni.models.domain.Question]
-        nodes = [container.contained(ob, self, container.stringKey(ob))
-                  for ob in
-                  query_iterator(query, self.context, self.permission)]
-        nodes = self.translate_objects(nodes, lang)
-        batch = self._jsonValues(nodes, self.fields)
-        return batch
-
+        return [ 
+            container.contained(ob, self, container.stringKey(ob))
+            for ob in query_iterator(query, self.context, self.permission)
+        ]
+    
     def json_batch(self, start, limit, lang):
-        batch = self.getBatch(start, limit, lang)
+        batch = self.get_batch(start, limit) 
+        batch = self.translate_objects(batch, lang) # translate
+        batch = self._json_values(batch) # serialize to json
         data = dict(
-            length=self.set_size,  # total result set length, set in getBatch()
+            length=self.set_size, # total result set length, set in get_batch()
             start=start,
-            recordsReturned=len(batch),  # batch length
+            recordsReturned=len(batch), # batch length
             sort=self.sort_on,
             dir=self.sort_dir,
             nodes=batch
@@ -384,10 +393,16 @@ class ContainerJSONListing(ContainerJSONBrowserView):
 
     def __call__(self):
         # prepare required parameters
-        start, limit = self.getOffsets()  # ? start=0&limit=25
-        lang = self.request.locale.getLocaleID()  # get_request_language()
+        start, limit = self.get_offsets()  # ? start=0&limit=25
+        lang = translation.get_request_language(request=self.request)
         return self.json_batch(start, limit, lang)
 
+#@register.view(IAlchemistContainer, 
+#    layer=ufaces.IMembersSectionLayer, name="jsonlisting") 
+#@register.view(IAlchemistContainer, 
+#    layer=ufaces.IArchiveSectionLayer, name="jsonlisting")
+@register.view(IAlchemistContainer, 
+    layer=ufaces.IBusinessSectionLayer, name="jsonlisting")
 class PublicStatesContainerJSONListing(ContainerJSONListing):
     """JSON Listing based on public workflow states.
 
@@ -399,17 +414,25 @@ class PublicStatesContainerJSONListing(ContainerJSONListing):
     IBusinessSectionLayer, IMembersSectionLayer, IArchiveSectionLayer
     """
     permission = None
-
+    
     def query_add_filters(self, query, *filter_strings):
-        """Add filtering on public_wfstates
+        """Add filtering on public workflow states
         """
-        public_wfstates = getattr(self.domain_annotation, "public_wfstates",
-            None)
-        if public_wfstates:
-            query = query.filter(self.domain_model.status.in_(public_wfstates))
+        try:
+            workflow = get_workflow(self.context.domain_model.__name__.lower())
+            public_wfstates = workflow.get_state_ids(tagged=["public"], 
+                restrict=False)
+            if public_wfstates:
+                query = query.filter(
+                    self.domain_model.status.in_(public_wfstates))
+        except KeyError, e:
+            # not workflowed...
+            log.warn("PublicStatesContainerJSONListing / get_workflow "
+                "for %s ERROR: %s: %s:" % (
+                    self.context.domain_model, e.__class__.__name__, e))
         return super(PublicStatesContainerJSONListing, self
             ).query_add_filters(query, *filter_strings)
-
+    
     def get_cache_key(self, context, lang, start, limit, sort_direction):
         r = self.request
         jslc = JSLCaches[context.__name__]  # raises KeyError
@@ -423,8 +446,8 @@ class PublicStatesContainerJSONListing(ContainerJSONListing):
     
     def __call__(self):
         # prepare required parameters
-        start, limit = self.getOffsets()
-        lang = self.request.locale.getLocaleID() # get_request_language()
+        start, limit = self.get_offsets()
+        lang = translation.get_request_language(request=self.request)
         context = proxy.removeSecurityProxy(self.context)
         # there may not be a cache defined for this context type
         try:

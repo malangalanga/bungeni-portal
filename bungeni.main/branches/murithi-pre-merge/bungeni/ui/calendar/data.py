@@ -14,8 +14,8 @@ from bungeni.alchemist import model
 from bungeni.models import domain
 from bungeni.core.dc import IDCDescriptiveProperties
 from bungeni.core.workflow.interfaces import IWorkflow
+from bungeni.core.workflow.adapters import get_workflow
 from bungeni.core.translation import translate_i18n
-from bungeni.ui.tagged import get_states
 from bungeni.ui.utils import date, common
 from bungeni.alchemist import Session
 from bungeni.ui.i18n import _
@@ -42,7 +42,7 @@ def get_filter_config(tag="tobescheduled"):
                         "text": IWorkflow(domain.DOMAIN_CLASSES[item_type]()).get_state(status).title, 
                         "value": status 
                     } 
-                    for status in get_states(item_type, tagged=[tag])
+                    for status in get_workflow(item_type).get_state_ids(tagged=[tag])
                 ]
             }
            ) 
@@ -61,7 +61,9 @@ class SchedulableItemsGetter(object):
     ):
         self.context = context
         self.item_type = item_type
-        self.filter_states = filter_states or get_states(item_type, 
+        self.filter_states = filter_states or get_workflow(
+            item_type
+        ).get_state_ids(
             tagged=["tobescheduled"]
         )
         self.group_filter = group_filter

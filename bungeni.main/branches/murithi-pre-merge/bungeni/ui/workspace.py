@@ -1,7 +1,7 @@
 import time
 import simplejson
 from zope import component
-from zope.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserPage
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.security.proxy import removeSecurityProxy
 from zope.formlib import form
@@ -9,9 +9,8 @@ from zope.i18n import translate
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent
 from zope.security import proxy, checkPermission
-from z3c.pt.texttemplate import ViewTextTemplateFile
 from zc.resourcelibrary import need
-from ore.alchemist import container
+from bungeni.alchemist.container import contained
 from alchemist.ui import generic
 from bungeni.models import workspace
 from bungeni.core import translation
@@ -27,6 +26,7 @@ from bungeni.models.workspace import OBJECT_ROLES
 from bungeni.core.workflow.interfaces import IWorkflow
 from bungeni.alchemist.model import queryModelDescriptor
 from bungeni.ui.utils import debug
+from bungeni.utils import register
 from bungeni.utils.capi import capi
 
 
@@ -48,7 +48,11 @@ workspace_fields = [
     ]
 
 
-class WorkspaceContainerJSONListing(BrowserView):
+from bungeni.models.interfaces import IWorkspaceContainer # !+NOT_MODELS(mr, dec-2011)
+@register.view(IWorkspaceContainer, name="jsonlisting",
+    protect={"bungeni.workspace.View":
+        dict(attributes=["browserDefault", "__call__"])})
+class WorkspaceContainerJSONListing(BrowserPage):
     """Paging, batching, json contents of a workspace container.
     """
     permission = "zope.View"
@@ -118,7 +122,7 @@ class WorkspaceContainerJSONListing(BrowserView):
         """ (nodes:[ITranslatable]) -> [nodes]
         """
         if lang is None:
-            lang = translation.get_request_language()
+            lang = translation.get_request_language(request=self.request)
         t_nodes = []
         for node in nodes:
             try:
@@ -151,9 +155,9 @@ class WorkspaceContainerJSONListing(BrowserView):
             sort_dir=self.sort_dir,
             start=start,
             limit=limit,
-            )
-        results = [container.contained(ob, self, workspace.stringKey(ob))
-                 for ob in results]
+        )
+        results = [ contained(ob, self, workspace.stringKey(ob))
+            for ob in results ]
         results = self.check_permission(results)
         nodes = results[start:start + limit]
         nodes = self.translate_objects(nodes, lang)
@@ -168,7 +172,7 @@ class WorkspaceContainerJSONListing(BrowserView):
 
 class WorkspaceDataTableFormatter(table.ContextDataTableFormatter):
     data_view = "/jsonlisting"
-    script = ViewTextTemplateFile("templates/datatable-workspace.pt")
+    script = ViewPageTemplateFile("templates/datatable-workspace.pt")
     
     def get_item_types(self):
         workspace_config = component.getUtility(IWorkspaceTabsUtility)
@@ -254,7 +258,7 @@ class WorkspaceDataTableFormatter(table.ContextDataTableFormatter):
         return ",".join(column_model), ",".join(field_model)
 
 
-class WorkspaceContainerListing(BrowserView):
+class WorkspaceContainerListing(BrowserPage):
     template = ViewPageTemplateFile("templates/workspace-listing.pt")
     formatter_factory = WorkspaceDataTableFormatter
     columns = []

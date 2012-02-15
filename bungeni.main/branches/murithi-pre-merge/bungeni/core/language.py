@@ -21,6 +21,8 @@ from bungeni.core.interfaces import ILanguageProvider
 from bungeni.utils.capi import capi
 from bungeni.core.translation import get_request_language
 from bungeni.ui.utils.common import get_request
+from bungeni.utils import register
+from ploned.ui.interfaces import ITextDirection
 
 
 class TranslateUtility(object):
@@ -105,4 +107,27 @@ def get_default_language():
                         _language, name)
             break
     return default_language
-
+    
+def get_base_direction():
+    request = get_request()
+    ui_lang = request.getCookies().get("I18N_LANGUAGE")
+    if ui_lang is not None:
+        language = ui_lang
+    else:
+        language = capi.default_language
+    if language[:2] in capi.right_to_left_languages:
+        return "rtl"
+    else:
+        return "ltr"
+        
+def is_rtl():
+    if get_base_direction() == "rtl":
+        return True
+    else:
+        return False
+        
+             
+@register.utility(provides=ITextDirection)
+class TextDirection(object):
+    def get_text_direction(self):
+        return get_base_direction()

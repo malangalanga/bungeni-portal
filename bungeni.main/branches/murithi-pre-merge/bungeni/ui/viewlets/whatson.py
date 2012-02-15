@@ -1,6 +1,5 @@
 #
 import datetime
-from zope import interface
 from zope.publisher.browser import BrowserView
 from zope.app.pagetemplate import ViewPageTemplateFile
 
@@ -10,12 +9,15 @@ from sqlalchemy.orm import eagerload, lazyload
 import sqlalchemy.sql.expression as sql
 
 from bungeni.models import domain, schema
+from bungeni.models.settings import BungeniSettings
 from bungeni.core.globalsettings import getCurrentParliamentId
 from bungeni.core.dc import IDCDescriptiveProperties
+from bungeni.core.workflows.adapters import get_workflow
 
-from bungeni.ui.utils import misc, url, debug
+from bungeni.ui.i18n import _
+from bungeni.ui.utils import common, misc, url
 from bungeni.ui.cookies import get_date_range
-from bungeni.ui.tagged import get_states
+
 
 class WhatsOnBrowserView(BrowserView):
     __call__ = ViewPageTemplateFile("templates/whatson.pt")
@@ -35,26 +37,30 @@ class WhatsOnBrowserView(BrowserView):
         else:
             self.start_date = start_date
         if type(end_date) != datetime.date:
-            end_date = datetime.date.today() + datetime.timedelta(10)
-            self.end_date = datetime.datetime(end_date.year, end_date.month, 
-                end_date.day, 23, 59)
+            self.end_date = None
         else:
             self.end_date = datetime.datetime(end_date.year, end_date.month, 
                 end_date.day, 23, 59)
         self.get_items()
     
-    def get_end_date(self): 
-        formatter = self.request.locale.dates.getFormatter('date', 'full') 
+    def get_end_date(self):
+        if not self.end_date:
+            return _(u"N/A")
+        formatter = self.request.locale.dates.getFormatter("date", "full") 
         return formatter.format(self.end_date)
 
-
     def get_start_date(self):
-        formatter = self.request.locale.dates.getFormatter('date', 'full') 
+        formatter = self.request.locale.dates.getFormatter("date", "full") 
         return formatter.format(self.start_date)
+    
+    @property
+    def _agenda_private_state_ids(self):
+        return get_workflow(
+            "groupsitting").get_state_ids(tagged=["agendaprivate"])
         
     def get_sitting_items(self, sitting):
         s_list = []
-        if sitting.status in get_states('groupsitting',tagged=['agendaprivate']):
+        if sitting.status in self._agenda_private_state_ids:
             return s_list
         else:
             for schedule in sitting.item_schedule:
@@ -71,23 +77,41 @@ class WhatsOnBrowserView(BrowserView):
                     ),
                 })
             return s_list
-        
+
+    @property
+    def group_sittings_filter(self):
+        if self.end_date:
+            date_filter_expression = sql.between(
+                schema.group_sittings.c.start_date,
+                self.start_date,
+                self.end_date
+            )
+        else:
+            date_filter_expression = (
+                schema.group_sittings.c.start_date >= self.start_date
+            )
+        return sql.and_(
+            schema.group_sittings.c.status.in_(self._agenda_private_state_ids),
+            date_filter_expression
+        )
+
+
     def get_sittings(self):
+        #!+QUERIES(mb, nov-2011) to review the extra queries in `get_items`
         formatter = self.request.locale.dates.getFormatter('date', 'full') 
         session = Session()
         query = session.query(domain.GroupSitting).filter(
-            sql.and_(
-                schema.group_sittings.c.status.in_(get_states('groupsitting',
-                    tagged=['public'])
-                ),
-                sql.between(
-                    schema.group_sittings.c.start_date,
-                    self.start_date,
-                    self.end_date))).order_by(
-                        schema.group_sittings.c.start_date).options(
-                        eagerload('group'), 
-                        #eagerload('sitting_type'),
-                        eagerload('item_schedule')
+            self.group_sittings_filter
+        ).order_by(schema.group_sittings.c.start_date).options(
+            eagerload('group'), 
+            #eagerload('sitting_type'),
+            eagerload('item_schedule')
+        )
+        if not self.end_date:
+            query = query.limit(
+                BungeniSettings(
+                    common.get_application()
+                ).max_sittings_in_business
             )
         sittings = query.all()
         day = u''
@@ -127,29 +151,22 @@ class WhatsOnBrowserView(BrowserView):
 
     def get_items(self):
         session = Session()
-        where_clause = sql.and_(
-                schema.group_sittings.c.status.in_(get_states(
-                                    "groupsitting", tagged=["public"], 
-                                    not_tagged=["agendaprivate"], 
-                                    conjunction="AND")),
-                sql.between(
-                    schema.group_sittings.c.start_date,
-                    self.start_date,
-                    self.end_date))
-            
         query = session.query(domain.ItemSchedule).join(
             domain.GroupSitting
-            ).filter( 
-            where_clause).order_by(schema.group_sittings.c.start_date).options(
-                    eagerload('sitting'))
-                    #eagerload('sitting.sitting_type'),
+        ).filter(
+            self.group_sittings_filter
+        ).order_by(
+            schema.group_sittings.c.start_date
+        ).options(
+            eagerload('sitting')
+        )
         self.itemschedules = query.all()
-                
+
     def get_items_by_type(self, item_type):
-        day = u''
+        day = u""
         day_list = []
         s_dict = {}
-        formatter = self.request.locale.dates.getFormatter('date', 'full') 
+        formatter = self.request.locale.dates.getFormatter("date", "full") 
         for schedule in self.itemschedules:
             if type(schedule.item) == item_type:
                 sday = formatter.format(schedule.sitting.start_date)
@@ -160,16 +177,16 @@ class WhatsOnBrowserView(BrowserView):
                         day_list.append(s_dict)
                     s_dict = {}
                 s_list.append({
-                    'name': IDCDescriptiveProperties(schedule.item).title,
-                    'status' : str(misc.get_wf_state(schedule.item)),
-                    'url' : url.set_url_context("/business/%ss/obj-%s" % (
+                    "name": IDCDescriptiveProperties(schedule.item).title,
+                    "status" : str(misc.get_wf_state(schedule.item)),
+                    "url" : url.set_url_context("/business/%ss/obj-%s" % (
                                         schedule.item.type,
                                         schedule.item.parliamentary_item_id)),
-                    'group_type': schedule.sitting.group.type,
-                    'group_name' : schedule.sitting.group.short_name
+                    "group_type": schedule.sitting.group.type,
+                    "group_name" : schedule.sitting.group.short_name
                      })
-                s_dict['day'] = day
-                s_dict['items'] = s_list
+                s_dict["day"] = day
+                s_dict["items"] = s_list
         if s_dict:
             day_list.append(s_dict)
         return day_list

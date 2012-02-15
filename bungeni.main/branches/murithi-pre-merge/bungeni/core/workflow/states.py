@@ -62,7 +62,7 @@ class State(object):
     zope.interface.implements(zope.securitypolicy.interfaces.IRolePermissionMap)
     
     def __init__(self, id, title, note, actions, permissions, notifications,
-            permissions_from_parent=False, obsolete=False
+            tags, permissions_from_parent=False, obsolete=False
         ):
         self.id = id # status
         self.title = title
@@ -70,8 +70,9 @@ class State(object):
         self.actions = actions # [callable]
         self.permissions = permissions
         self.notifications = notifications
-        self.permissions_from_parent = permissions_from_parent
-        self.obsolete = obsolete
+        self.tags = tags # [str]
+        self.permissions_from_parent = permissions_from_parent # bool
+        self.obsolete = obsolete # bool
     
     @error.exceptions_as(interfaces.WorkflowStateActionError)
     def execute_actions(self, context):
@@ -203,7 +204,7 @@ class StateController(object):
         state = self.get_state()
         assert state is not None, "May not have a None state" # !+NEEDED?
         state.execute_actions(self.context)
-    
+
 
 def get_object_state(context):
     """Utility to look up the workflow.states.State singleton instance that 
@@ -214,8 +215,34 @@ def get_object_state(context):
     performance-aware adapter -- there is no creation of any adapter instance, 
     just lookup of the object's Workflow instance off which to retrieve 
     existing State instances.
+    
+    Raises interfaces.InvalidStateError.
     """
     return interfaces.IWorkflow(context).get_state(context.status)
+
+
+class _NoneStateRPM(State):
+    """A dummy State, as fallback IRolePermissionMap, for when Workflow does 
+    not define one for a given status; to easier handle error/edge cases of 
+    State as IRolePermissionMap, and only methods for defined by this
+    interface, e.g. getRolesForPermission(permission), should ever be called!
+    """
+    # As a minimal concession, we assume it is OK to only grant View access 
+    # to the user who actually owns the target instance.
+    # !+ROLES(mr, jan-2012) retrieve list of roles dynamically
+    permissions = [
+        (0, "zope.View", "bungeni.Clerk"),
+        (0, "zope.View", "bungeni.Speaker"),
+        (1, "zope.View", "bungeni.Owner"),
+        (0, "zope.View", "bungeni.Signatory"),
+        (0, "zope.View", "bungeni.MP"),
+        (0, "zope.View", "bungeni.Minister"),
+        (0, "zope.View", "bungeni.Authenticated"),
+        (0, "zope.View", "bungeni.Anonymous"),
+    ]
+    def __init__(self):
+        pass
+NONE_STATE_RPM = _NoneStateRPM()
 
 def get_object_state_rpm(context):
     """IRolePermissionMap(context) adapter factory. 
@@ -226,12 +253,18 @@ def get_object_state_rpm(context):
     Lighweight and high-performance wrapper on get_object_state(context), 
     to *lookup* (note: no creation of any instance) the workflow.states.State 
     singleton instance.
+
+    On lookup error, returns NONE_STATE_RPM, instead of what would be a 
+    zope.component.ComponentLookupError.
     """
-    state = get_object_state(context)
+    try:
+        state = get_object_state(context)
+    except interfaces.InvalidStateError, e:
+        return NONE_STATE_RPM
     if state.permissions_from_parent:
         # this state delegates permissions to parent, 
         # so just recurse passing parent item instead
-        return get_object_state_rpm(context.item)
+        return get_object_state_rpm(context.head)
     return state
 
 def get_head_object_state_rpm(sub_context):
@@ -242,10 +275,38 @@ def get_head_object_state_rpm(sub_context):
     singleton instance for the sub context's head's status.
     
     Note that sub context is NOT workflowed.
+    
+    On lookup error, returns NONE_STATE_RPM, instead of what would be a 
+    zope.component.ComponentLookupError.
     """
     # !+HEAD_DOCUMENT_ITEM(mr, sep-2011) standardize name, "head", "document" 
     # or "item"?
-    return interfaces.IWorkflow(sub_context.head).get_state(sub_context.status)
+    try:
+        return interfaces.IWorkflow(sub_context.head).get_state(sub_context.status)
+    except interfaces.InvalidStateError, e:
+        return NONE_STATE_RPM
+    # !+SUBITEM_CHANGES_PERMISSIONS(mr, jan-2012)
+
+def assert_roles_mix_limitations(perm, roles, wf_name, obj_key, obj_id=""):
+    """ Validation utility.
+            perm:str, roles:[str]
+        for error message:
+            wf_name:str, obj_key:either("state", "transition"), obj_id:str
+    """
+    ROLE_MIX_LIMITATIONS = {
+        "bungeni.Authenticated": ["bungeni.Anonymous"],
+    }
+    for mix_limited_role in ROLE_MIX_LIMITATIONS:
+        if mix_limited_role in roles:
+            _mixed_roles = roles[:]
+            _mixed_roles.remove(mix_limited_role)
+            for ok_role in ROLE_MIX_LIMITATIONS[mix_limited_role]:
+                if ok_role in _mixed_roles:
+                    _mixed_roles.remove(ok_role)
+            assert not bool(_mixed_roles), "Workflow [%s] %s [%s] " \
+                "mixes disallowed roles %s with role [%s] for " \
+                "permission [%s]" % (
+                    wf_name, obj_key, obj_id, roles, mix_limited_role, perm)
 
 
 class Workflow(object):
@@ -257,9 +318,10 @@ class Workflow(object):
     
     initial_state = None
     
-    def __init__(self, name, features, states, transitions, note=None):
+    def __init__(self, name, features, tags, states, transitions, note=None):
         self.name = name
         self.features = features
+        self.tags = tags # [str]
         self.note = note
         self._states_by_id = {} # {id: State}
         self._transitions_by_id = {} # {id: Transition}
@@ -300,6 +362,10 @@ class Workflow(object):
     
     @error.exceptions_as(interfaces.InvalidWorkflow, False)
     def validate(self):
+        
+        assert len(self.tags) == len(set(self.tags)), \
+            "Workflow [%s] duplicates tags: %s" % (self.name, self.tags)
+        
         states = self._states_by_id.values()
         # at least one state
         assert len(states), "Workflow [%s] defines no states" % (self.name)
@@ -311,7 +377,7 @@ class Workflow(object):
         for s in states:
             if s.permissions_from_parent:
                 assert not len(s.permissions), "Workflow state [%s -> %s] " \
-                    "with permissions_from_parent must not specify any own " \
+                    "with permissions_from_parent may not specify any own " \
                     "permissions" % (self.name, s.id)
                 continue
             assert len(s.permissions) == num_prs, \
@@ -321,10 +387,36 @@ class Workflow(object):
                     "\n  ".join([str(p) for p in s.permissions]),
                     "\n  ".join([str(p) for p in states[0].permissions])
                 )
+            _permission_role_mixes = {}
             for p in s.permissions:
-                assert (p[1], p[2]) in prs, \
+                perm, role = p[1], p[2]
+                # for each perm, build list of roles it is set to
+                _permission_role_mixes.setdefault(perm, []).append(role)
+                assert (perm, role) in prs, \
                     "Workflow state [%s -> %s] defines an unexpected " \
                     "permission: %s" % (self.name, s.id, p)
+            for perm, roles in _permission_role_mixes.items():
+                # ensure no duplicates (also checked when reading xml)
+                assert len(roles) == len(set(roles)), "Workflow [%s] " \
+                    "state [%s] duplicates role [%s] assignment for " \
+                    " permission [%s]" % (
+                        self.name, s.id, roles, perm)
+                # assert roles mix limitations for state permissions
+                assert_roles_mix_limitations(perm, roles, self.name, "state", s.id)
+            # tags
+            _undeclared_tags = [ tag for tag in s.tags if tag not in self.tags ]
+            assert not _undeclared_tags, \
+                "Workflow [%s] State [%s] uses undeclared tags: %s" % (
+                    self.name, s.id, _undeclared_tags)
+            assert len(s.tags) == len(set(s.tags)), \
+                "Workflow [%s] State [%s] duplicates tags: %s" % (
+                    self.name, s.id, s.tags)
+        
+        # assert roles mix limitations for transitions
+        for t in self._transitions_by_id.values():
+            roles = t.user_data.get("_roles", [])
+            assert_roles_mix_limitations(t.permission, roles, self.name, "transition", t.id)
+        
         # ensure that every active state is reachable, 
         # and that every obsolete state is NOT reachable
         tbyd = self._transitions_by_destination
@@ -364,9 +456,72 @@ class Workflow(object):
             "use Workflow.get_state(status) instead" % (self.name))
         return self._states_by_id
     
-    @error.exceptions_as(interfaces.InvalidStateError)
     def get_state(self, state_id):
-        return self._states_by_id[state_id]
+        """Get State instance for state_id.
+        Must raise interfaces.InvalidStateError if no such State.
+        """
+        try:
+            return self._states_by_id[state_id]
+        except KeyError:
+            raise interfaces.InvalidStateError(
+                "Workflow [%s] has no such State [%s]" % (self.name, state_id))
+    
+    def get_state_ids(self, tagged=[], not_tagged=[], keys=[], conjunction="OR",
+            restrict=True, # workflow must define all specified tags/keys
+            _EMPTY_SET=set() # re-usable empty set value
+        ):
+        """Get the list of matching state ids in workflow.
+        
+        tagged: matches all states tagged with ANY tag in in this list
+        not_tagged: matches all states tagged with NONE of these tags
+        keys: matches all states explictly named by key here; only keys for
+            which a state is actually defined are retained
+        conjunction:
+            "OR": matches any state that is matched by ANY criteria above
+            "AND": matches any state that is matched by ALL criteria above
+        restrict: when True (default) all states and keys specified MUST 
+            actually be used by the workflow.
+        """
+        _tagged = _not_tagged = _keys = _EMPTY_SET # matching state ids
+        if tagged:
+            wf_tagged = [ t for t in tagged if t in self.tags ]
+            if restrict:
+                assert wf_tagged==tagged
+            # for tagged, we only need to consider known tags
+            _tagged = set()
+            if wf_tagged:
+                for state in self._states_by_id.values():
+                    for t in wf_tagged:
+                        if t in state.tags:
+                            _tagged.add(state.id)
+                            break
+        elif not_tagged:
+            if restrict:
+                wf_not_tagged = [ t for t in not_tagged if t in self.tags ]
+                assert wf_not_tagged==not_tagged
+            # for not_tagged, we must also consider all unknown tags
+            _not_tagged = set(self._states_by_id.keys())
+            for state in self._states_by_id.values():
+                for t in not_tagged:
+                    if t in state.tags:
+                        _not_tagged.remove(state.id)
+                        break
+        elif keys: # state_ids
+            wf_keys = [ k for k in keys if k in self._states_by_id ]
+            if restrict:
+                assert wf_keys==keys
+            # we may only return valid state ids
+            _keys = set(wf_keys)
+        else:
+            # make case of get_state_ids(conjunction="OR") return all state ids
+            _not_tagged = set(self._states_by_id.keys())
+        # combine
+        assert conjunction in ("OR", "AND"), "Not supported."
+        if conjunction=="OR":
+            return list(_tagged.union(_not_tagged).union(_keys))
+        elif conjunction=="AND":
+            return list(_tagged.intersection(_not_tagged).union(_keys))
+    
     
     @error.exceptions_as(interfaces.InvalidTransitionError)
     def get_transition(self, transition_id):

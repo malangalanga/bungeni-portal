@@ -16,7 +16,7 @@ from bungeni.core.workflow import xmlimport
 from bungeni.core.workflow.interfaces import IWorkflow, IWorkflowed, \
     IStateController, IWorkflowController
 from bungeni.core.workflow.states import StateController, WorkflowController, \
-    get_object_state_rpm , get_head_object_state_rpm
+    get_object_state_rpm, get_head_object_state_rpm
 import bungeni.core.audit
 import bungeni.core.version
 import bungeni.core.interfaces
@@ -39,6 +39,7 @@ WORKFLOW_REG = [ # !+bungeni_custom
     ("event", interfaces.IEventItem),
     ("group", interfaces.IBungeniGroup),
     ("groupsitting", interfaces.IGroupSitting),
+    ("membership", interfaces.IBungeniGroupMembership),
     ("heading", interfaces.IHeading),
     ("motion", interfaces.IMotion),
     ("parliament", interfaces.IParliament),
@@ -119,9 +120,10 @@ def apply_customization_workflow(name):
         "address": "address", # !+ use common base cls for User & Group addresses
         "agendaitem": "agenda_item",
         "attachedfile": "attached_file",
+        "tableddocument": "tabled_document",
         "event": "event_item",
         "groupsitting": "group_sitting",
-        "tableddocument": "tabled_document",
+        "membership": "group_membership",
     }
     # get the domain class
     kls = get_domain_kls(name)

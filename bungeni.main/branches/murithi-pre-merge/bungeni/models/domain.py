@@ -31,13 +31,57 @@ def object_hierarchy_type(object):
         return "item"
     return ""
 
+
+CHANGE_ACTIONS = ("add", "modify", "workflow", "remove", "version", "reversion")
+
+def assert_valid_change_action(action):
+    assert action in CHANGE_ACTIONS, \
+        "Invalid audit action: %s. Must be one of: %s" % (
+            action, CHANGE_ACTIONS)
+
 def get_changes(auditable, *actions):
-    """Get changelog for auditable context, filtered for action.
+    """Get changelog for auditable context, filtered for actions.
     """
-    # !+ assert *actions in CHANGE_ACTIONS
+    for action in actions:
+        assert_valid_change_action(action)
     return [ c for c in auditable.changes if c.action in actions ]
 
 #
+
+class HeadParentedMixin(object):
+    """For sub-objects of a "head" object.
+    
+    Changes the behaviour of __parent__ to by default return the head object 
+    UNLESS a non-None __parent__ is hard-set explicitly set on the sub-instance
+    (e.g. as within an alchemist container listing, alchemist sets the 
+    __parent__ to the container).
+    
+    This default behaviour is needed as the roles a user has via a 
+    sub-object may not include all the same roles the user has on its 
+    head object, that may result in an incorrect permission decision,
+    in particular as permission checking on sub-objects is often bound
+    to permissions on the head object.
+    """
+    # remember if __parent__ has been explicitly set
+    _explicit_parent = None
+    # implement as a "clean" property, using the namespace containment of a 
+    # "temporary" function, that returns a dict to be later used as keyword
+    # args to define a same-named property.
+    def __parent__():
+        doc = "Returns the Zope 3 canonical location of the instance " \
+            "i.e. the __parent__ object, usually needed to lookup security " \
+            "settings on the instance."
+        def fget(self):
+            if self._explicit_parent is None:
+                return self.head
+            return self._explicit_parent
+        def fset(self, parent):
+            self._explicit_parent = parent
+        def fdel(self):
+            self._explicit_parent = None
+        return locals()
+    __parent__ = property(**__parent__())
+
 
 class Entity(object):
     interface.implements(location.ILocation)
@@ -76,7 +120,7 @@ class Entity(object):
 
 #############
 
-class ItemChanges(object):
+class ItemChanges(HeadParentedMixin, object):
     """An audit changelog of events in the lifecycle of a parliamentary content.
     """
     @classmethod
@@ -93,7 +137,8 @@ class ItemChanges(object):
         self.notes = dictionary and repr(dictionary) or None
     extras = property(_get_extras, _set_extras)
 
-class ItemVersions(Entity):
+
+class ItemVersions(HeadParentedMixin, Entity):
     """A collection of the versions of a parliamentary content object.
     """
     @classmethod
@@ -103,8 +148,6 @@ class ItemVersions(Entity):
         # !+IITEMVersion
         #interface.classImplements(factory, getattr(interfaces, "I%s" % (name)))
         return factory
-
-    #files = one2many("files", "bungeni.models.domain.AttachedFileContainer", "file_version_id")
 
 
 # !+PARAMETRIZABLE_DOCTYPES(mr, jun-2011) the quality of a domain type to
@@ -314,7 +357,7 @@ class Group(Entity):
             return True
 
 
-class GroupMembership(Entity):
+class GroupMembership(HeadParentedMixin, Entity):
     """A user's membership in a group-abstract basis for 
     ministers, committeemembers, etc.
     """
@@ -324,6 +367,7 @@ class GroupMembership(Entity):
     sort_on = ["last_name", "first_name", "middle_name"]
     sort_replace = {"user_id": ["last_name", "first_name"]}
     sort_dir = "asc"
+    
     @property
     def image(self):
         return self.user.image
@@ -543,7 +587,7 @@ class OfficeMember(GroupMembership):
 #    Debates
 #    """
 
-class Address(Entity):
+class Address(HeadParentedMixin, Entity):
     """Address base class
     """
     __dynamic_features__ = False
@@ -626,7 +670,7 @@ class AttachedFileType(object):
 '''
 
 # versionable (by default), but not a ParliamentaryItem
-class AttachedFile(Entity):
+class AttachedFile(HeadParentedMixin, Entity):
     """Files attached to a parliamentary item.
     """
     __dynamic_features__ = True # !+ should be False?
@@ -634,11 +678,11 @@ class AttachedFile(Entity):
     # the owner of the "owning" item !+HEAD_DOCUMENT_ITEM
     @property
     def owner_id(self):
-        return self.item.owner_id
+        return self.head.owner_id
     
     @property
     def owner(self):
-        return self.item.owner
+        return self.head.owner
 
 class Heading(Entity):
     """A heading in a report.
@@ -814,7 +858,7 @@ class DocumentSource(object):
 '''
 
 # !+EventItem(mr, sep-2011) why is this a ParlaimentaryItem?
-class EventItem(ParliamentaryItem):
+class EventItem(HeadParentedMixin, ParliamentaryItem):
     """Bill events with dates and possiblity to upload files.
 
     bill events have a title, description and may be related to a sitting 

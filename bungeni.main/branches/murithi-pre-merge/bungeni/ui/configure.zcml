@@ -50,64 +50,19 @@
 
   <!-- Site Viewlets -->
   <include package=".viewlets" />
-    
-    <!-- Audit UI-->
-    <class class=".audit.ChangeLog">
-        <require permission="bungeni.auditlog.View" 
-            attributes="__call__ browserDefault" />
-    </class>
-    
-    <!-- Attachments UI-->
-    <class class=".file.FileListingView">
-        <require permission="zope.Public" 
-            attributes="__call__ browserDefault" />
-    </class>
 
-    
+
   <!-- Include Views -->
-    <class class=".workflow.WorkflowView">
-        <require permission="zope.Public" attributes="browserDefault __call__" />
-    </class>
-    <class class=".workflow.WorkflowChangeStateView">
-        <require permission="zope.View" attributes="browserDefault __call__" />
-    </class>
   <include file="views.zcml" />
-
-    <!-- Admin UI -->
-    <class class=".admin.Settings">
-        <require permission="zope.ManageSite" 
-            attributes="__call__ browserDefault" />
-    </class>
-    <class class=".admin.EmailSettings">
-        <require permission="zope.ManageSite" 
-            attributes="__call__ browserDefault" />
-    </class>
-    <class class=".admin.XapianSettings">
-        <require permission="zope.ManageSite" 
-            attributes="__call__ browserDefault" />
-    </class>
-    <class class=".admin.RegistrySettings">
-        <require permission="zope.ManageSite" 
-            attributes="__call__ browserDefault" />
-    </class>
-    <class class=".admin.ReportDocumentation">
-        <require permission="zope.ManageSite" 
-            attributes="__call__ browserDefault" />
-    </class>
-
-    <!-- Custom profile traverser -->    
-    <class class = ".traversal.ProfileTraverser">
-        <require permission = "bungeni.user.Edit" 
-        		 interface = "zope.publisher.interfaces.IPublishTraverse" />
-        <require permission = "bungeni.user.Edit" 
-        		 attributes = "browserDefault" />
-    </class>
-
+    
   <!-- Custom absolute_url -->
   <include file="absoluteurl.zcml" />
 
-  <!-- Custom forms -->
-  <include package=".forms"/>
+    <!-- Custom forms -->
+    <include package=".forms"/>
+
+    <!-- Admin UI -->
+    <include package=".admin"/>
 
   <!-- Javascript -->
   <include package="ore.yui"/>
@@ -237,43 +192,6 @@
 
     -->
 
-     <!-- Adapters to provide values for RSS views -->
-
-   <adapter
-       for="*"
-     provides="bungeni.core.interfaces.IRSSValues"
-     factory=".adaptors.RSSValues"
-    />
-
-    <adapter
-       for="bungeni.models.interfaces.IBill"
-     provides="bungeni.core.interfaces.IRSSValues"
-     factory=".adaptors.TimelineRSSValues"
-    />
-
-    <adapter
-         for="bungeni.models.interfaces.IQuestion"
-         provides="bungeni.core.interfaces.IRSSValues"
-         factory=".adaptors.TimelineRSSValues"
-      />
-
-    <adapter
-         for="bungeni.models.interfaces.IMotion"
-         provides="bungeni.core.interfaces.IRSSValues"
-         factory=".adaptors.TimelineRSSValues"
-      />
-
-    <adapter
-         for="bungeni.models.interfaces.ITabledDocument"
-         provides="bungeni.core.interfaces.IRSSValues"
-         factory=".adaptors.TimelineRSSValues"
-      />
-
-    <adapter
-         for="bungeni.models.interfaces.IAgendaItem"
-         provides="bungeni.core.interfaces.IRSSValues"
-         factory=".adaptors.TimelineRSSValues"
-      />
       <subscriber
         for="bungeni.models.interfaces.IGroupSitting
           zope.lifecycleevent.interfaces.IObjectModifiedEvent"

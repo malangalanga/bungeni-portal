@@ -22,6 +22,7 @@ from zope.security.proxy import removeSecurityProxy
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema.interfaces import IChoice
+from zope.cachedescriptors import property as cached_property
 
 from zope.location.interfaces import ILocation
 from zope.dublincore.interfaces import IDCDescriptiveProperties
@@ -32,7 +33,7 @@ import sqlalchemy as rdb
 #from bungeni.alchemist.container import stringKey
 #from bungeni.core.workflow.interfaces import IWorkflowController
 #from bungeni.alchemist.ui import handle_edit_action
-from zope.app.form.interfaces import IDisplayWidget
+from zope.formlib.interfaces import IDisplayWidget
 
 # !+sqlalchemy.exc(mr, jul-2010) why this try/except ?
 try:
@@ -44,6 +45,7 @@ from bungeni.alchemist import Session
 from bungeni.alchemist import catalyst
 from bungeni.alchemist import ui
 from bungeni.alchemist.model import queryModelDescriptor
+from bungeni.alchemist.interfaces import IAlchemistContainer, IAlchemistContent
 from bungeni.core.translation import get_language_by_name
 from bungeni.core.language import get_default_language
 from bungeni.core.translation import is_translation
@@ -57,7 +59,7 @@ from bungeni.ui.interfaces import IFormEditLayer, IGenenerateVocabularyDefault
 from bungeni.ui.i18n import _
 from bungeni.ui import browser
 from bungeni.ui import z3evoque
-from bungeni.ui.utils import url, debug
+from bungeni.ui.utils import url
 from bungeni.ui.container import invalidate_caches_for
 
 TRUE_VALS = "true", "1"
@@ -214,6 +216,7 @@ class BaseForm(formlib.form.FormBase):
             if isinstance(error, interface.Invalid):
                 errors.append(error)
         return errors
+
     @property
     def invariantMessages(self):
         """ () -> [message:str]
@@ -221,6 +224,22 @@ class BaseForm(formlib.form.FormBase):
         """
         return filter(None,
                 [ error.message for error in self.invariantErrors ])
+
+    @cached_property.cachedIn("__cached_descriptor__")
+    def model_descriptor(self):
+        return queryModelDescriptor(self.domain_model)
+
+    @cached_property.cachedIn("__cached_domain__")
+    def domain_model(self):
+        unproxied = removeSecurityProxy(self.context)
+        if IAlchemistContainer.providedBy(unproxied):
+            return unproxied.domain_model
+        elif IAlchemistContent.providedBy(unproxied):
+            return unproxied.__class__
+        else:
+            raise AttributeError("Could not find domain model for context: %s",
+                unproxied
+            )
 
 # !+PageForm(mr, jul-2010) converge usage of formlib.form.PageForm to PageForm
 # !+NamedTemplate(mr, jul-2010) converge all views to not use anymore
@@ -260,8 +279,7 @@ class AddForm(BaseForm, catalyst.AddForm):
     def validate(self, action, data):
         errors = super(AddForm, self).validate(action, data)
         errors += self.validateUnique(action, data)
-        descriptor = queryModelDescriptor(self.domain_model)
-        for validator in getattr(descriptor, "custom_validators", ()):
+        for validator in getattr(self.model_descriptor, "custom_validators", ()):
             errors += validator(action, data, None, self.context)
         return errors
 
@@ -318,18 +336,13 @@ class AddForm(BaseForm, catalyst.AddForm):
                     )
 
     @property
-    def domain_model(self):
-        return removeSecurityProxy(self.context).domain_model
-
-    @property
     def context_class(self):
         return self.domain_model
 
     @property
     def type_name(self):
-        descriptor = queryModelDescriptor(self.domain_model)
-        if descriptor:
-            name = getattr(descriptor, "display_name", None)
+        if self.model_descriptor:
+            name = getattr(self.model_descriptor, "display_name", None)
         if not name:
             name = getattr(self.domain_model, "__name__", None)
         return name
@@ -370,7 +383,6 @@ class AddForm(BaseForm, catalyst.AddForm):
     @formlib.form.action(_(u"Cancel"), validator=ui.null_validator)
     def handle_cancel(self, action, data):
         """Cancelling redirects to the listing."""
-        session = Session()
         if not self._next_url:
             self._next_url = url.absoluteURL(self.__parent__, self.request)
         self.request.response.redirect(self._next_url)
@@ -423,7 +435,8 @@ class EditForm(BaseForm, catalyst.EditForm):
     def form_name(self):
         if IVersion.providedBy(self.context):
             context = self.context.head
-
+        else:
+            context = self.context
         props = IDCDescriptiveProperties.providedBy(context) \
                 and context or IDCDescriptiveProperties(context)
 
@@ -455,8 +468,7 @@ class EditForm(BaseForm, catalyst.EditForm):
     def validate(self, action, data):
         errors = super(EditForm, self).validate(action, data)
 
-        descriptor = queryModelDescriptor(self.context.__class__)
-        for validator in getattr(descriptor, "custom_validators", ()):
+        for validator in getattr(self.model_descriptor, "custom_validators", ()):
             errors += validator(action, data, self.context, self.context.__parent__)
 
         return errors
@@ -520,7 +532,6 @@ class EditForm(BaseForm, catalyst.EditForm):
     @formlib.form.action(_(u"Cancel"), validator=ui.null_validator)
     def handle_edit_cancel(self, action, data):
         """Cancelling redirects to the listing."""
-        session = Session()
         if not self._next_url:
             self._next_url = url.absoluteURL(self.context, self.request)
         self.request.response.redirect(self._next_url)
@@ -545,20 +556,19 @@ class TranslateForm(AddForm):
         self.language = self.request.get("language", get_default_language())
 
     def translatable_field_names(self):
-        trusted = removeSecurityProxy(self.context)
-        table = rdb.orm.object_mapper(trusted).mapped_table
         names = ["language"]
-        for column in table.columns:
-            if type(column.type) in [rdb.Unicode, rdb.UnicodeText]:
-                names.append(column.name)
+        for field in self.model_descriptor.edit_columns:
+            if field.property._type == unicode:
+                names.append(field.name)
         return names
 
     def set_untranslatable_fields_for_display(self):
-        md = queryModelDescriptor(self.context.__class__)
         for field in self.form_fields:
             if field.__name__ not in self.translatable_field_names():
                 field.for_display = True
-                field.custom_widget = md.get(field.__name__).view_widget
+                field.custom_widget = self.model_descriptor.get(
+                    field.__name__
+                ).view_widget
 
     def validate(self, action, data):
         return formlib.form.getWidgetsData(self.widgets, self.prefix, data)
@@ -853,7 +863,6 @@ class DeleteForm(PageForm):
     @formlib.form.action(_(u"Cancel"), validator=ui.null_validator)
     def delete_cancel(self, action, data):
         """Cancelling redirects to the listing."""
-        session = Session()
         if not self._next_url:
             self._next_url = url.absoluteURL(self.context, self.request)
         self.request.response.redirect(self._next_url)

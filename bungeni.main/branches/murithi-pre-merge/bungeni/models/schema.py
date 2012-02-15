@@ -11,7 +11,7 @@ log = __import__("logging").getLogger("bungeni.models.schema")
 import re
 import sqlalchemy as rdb
 from fields import FSBlob
-from sqlalchemy.sql import text, functions
+from sqlalchemy.sql import text #, functions #!+CATALYSE(mr, nov-2010)
 from datetime import datetime
 
 import domain
@@ -99,14 +99,18 @@ def make_changes_table(table, metadata):
         rdb.Column("action", rdb.Unicode(16)),
         # audit date, exclusively managed by the system
         rdb.Column("date_audit", rdb.DateTime(timezone=False),
-            default=functions.current_timestamp(),
+            #!+CATALYSE(mr, nov-2010) fails descriptor catalisation
+            #default=functions.current_timestamp(),
+            server_default=(text("now()")),
             nullable=False
         ),
         # user-modifiable effective date, defaults to same value as audit date;
         # this is the date to be used for all intents and purposes other than 
         # for data auditing
         rdb.Column("date_active", rdb.DateTime(timezone=False),
-            default=functions.current_timestamp(),
+            #!+CATALYSE(mr, nov-2010)
+            #default=functions.current_timestamp(),
+            server_default=(text("now()")),
             nullable=False
         ),
         rdb.Column("description", rdb.UnicodeText),
@@ -395,7 +399,8 @@ groups = rdb.Table("groups", metadata,
     rdb.Column("short_name", rdb.Unicode(512), nullable=False), #!+ACRONYM
     rdb.Column("full_name", rdb.Unicode(1024)), #!+NAME
     rdb.Column("description", rdb.UnicodeText),
-    rdb.Column("status", rdb.Unicode(32)), # workflow for groups
+    # Workflow State
+    rdb.Column("status", rdb.Unicode(32)),
     rdb.Column("status_date", rdb.DateTime(timezone=False),
         server_default=(text("now()")),
         nullable=False
@@ -523,6 +528,12 @@ user_group_memberships = rdb.Table("user_group_memberships", metadata,
     ),
     rdb.Column("group_id", rdb.Integer,
         rdb.ForeignKey("groups.group_id"),
+        nullable=False
+    ),
+    # Workflow State
+    rdb.Column("status", rdb.Unicode(32)),
+    rdb.Column("status_date", rdb.DateTime(timezone=False),
+        server_default=(text("now()")),
         nullable=False
     ),
     rdb.Column("start_date", rdb.Date,

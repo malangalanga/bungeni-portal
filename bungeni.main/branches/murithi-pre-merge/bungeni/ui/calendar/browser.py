@@ -28,7 +28,7 @@ from zope.location.interfaces import ILocation
 from zope.dublincore.interfaces import IDCDescriptiveProperties
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.browser import BrowserView
-from zope.app.publisher.interfaces.browser import IBrowserMenu
+from zope.browsermenu.interfaces import IBrowserMenu
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.app.component.hooks import getSite
 from zope.security.proxy import removeSecurityProxy
@@ -42,15 +42,14 @@ from zc.resourcelibrary import need
 from bungeni.core.location import location_wrapped
 from bungeni.core.interfaces import ISchedulingContext
 from bungeni.core.schedule import SittingContainerSchedulingContext
-from bungeni.core.workflow.interfaces import IWorkflowController
+from bungeni.core.workflow.interfaces import IWorkflow
 from bungeni.core.translation import get_request_language
 from bungeni.core.language import get_default_language
-
+from bungeni.core.translation import translate_i18n
 
 from ploned.ui.interfaces import IStructuralView
 from bungeni.ui.browser import BungeniBrowserView
 from bungeni.ui.calendar import utils, config, interfaces, data
-from bungeni.ui.tagged import get_states
 from bungeni.ui.i18n import _
 from bungeni.ui.utils import misc, url, debug, date
 from bungeni.ui.menu import get_actions
@@ -107,13 +106,14 @@ def get_workflow_actions(context, request):
 
 def get_sitting_items(sitting, request, include_actions=False):
     items = []
-
-    if sitting.status in get_states("groupsitting", 
-                                keys=["draft_agenda", "published_agenda"]):
+    
+    if (sitting.status in IWorkflow(sitting).get_state_ids(
+            keys=["draft_agenda", "published_agenda"])
+        ):
         order = "planned_order"
     else:
         order = "real_order"
-
+    
     schedulings = map(
         removeSecurityProxy,
         sitting.items.batch(order_by=order, limit=None))
@@ -138,8 +138,7 @@ def get_sitting_items(sitting, request, include_actions=False):
                 truncated_discussion = t_discussion[0:index2] + "..."
             except ValueError:
                 truncated_discussion = t_discussion + "..."
-        wfc = IWorkflowController(item, None)
-        state_title = wfc.workflow.get_state(item.status).title
+        state_title = IWorkflow(item).get_state(item.status).title
         item = removeSecurityProxy(item)
         record = {
             'title': props.title,
@@ -147,8 +146,8 @@ def get_sitting_items(sitting, request, include_actions=False):
             'name': stringKey(scheduling),
             'status': item.status,
             'type': item.type.capitalize,
-            't':item.type,
             'state_title': state_title,
+            'heading': True if item.type == "heading" else False,
             #'category_id': scheduling.category_id,
             #'category': scheduling.category,
             'discussion': discussion,
@@ -277,19 +276,38 @@ class CalendarView(BungeniBrowserView):
         return form
 
     @property
-    def venues_as_json(self):
+    def venues_data(self):
         venues_vocabulary = component.queryUtility(
             schema.interfaces.IVocabularyFactory, "bungeni.vocabulary.Venues"
         )
         venue_list = [ {"key": venue.value, "label": venue.title}
             for venue in venues_vocabulary()
         ]
-        return json.dumps(venue_list)
+        return venue_list
 
     @property
     def ical_url(self):
         return u"/".join(
             [url.absoluteURL(self.context, self.request), "dhtmlxcalendar.ics"]
+        )
+
+    @property
+    def calendar_js_globals(self):
+        cal_globals = dict(
+            ical_url=self.ical_url,
+            view_url=self.url,
+            venues_view_title=translate_i18n(_(u"Venues")),
+            text_group=translate_i18n(_(u"Group")),
+            text_start_date=translate_i18n(_(u"Start Date")),
+            text_end_date=translate_i18n(_(u"End Date")),
+            text_venue=translate_i18n(_(u"Venue")),
+            text_activity_type=translate_i18n(_(u"Activity Type")),
+            text_meeting_type=translate_i18n(_(u"Meeting Type")),
+            text_convocation_type=translate_i18n(_(u"Convocation Type")),
+            text_sitting=translate_i18n(_(u"Sitting")),
+        )
+        return """var cal_globals = %s;var venues_data=%s;""" %(
+            json.dumps(cal_globals), json.dumps(self.venues_data)
         )
 
     def other_calendars(self):

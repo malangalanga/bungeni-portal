@@ -16,10 +16,9 @@ from zope.security import checkPermission
 from bungeni.alchemist import Session
 from bungeni.models.interfaces import IAuditable, ISignatoriesValidator
 from bungeni.models import domain
-from bungeni.models import utils as model_utils, delegation
+from bungeni.models import utils as model_utils
 from bungeni.core import globalsettings as prefs
 from bungeni.core.workflows import utils
-from bungeni.core.audit import CHANGE_ACTIONS
 from bungeni.ui.interfaces import IFormEditLayer
 from bungeni.ui.utils import common
 
@@ -34,24 +33,20 @@ def user_is_not_context_owner(context):
 
 def user_is_context_owner(context):
     """Test if current user is the context owner e.g. to check if someone 
-        manipulating the context object is other than the owner of the object.
+    manipulating the context object is other than the owner of the object.
         
-        A delegate is considered to be an owner of the object
+    A delegate is considered to be an owner of the object
     """
-    user = model_utils.get_db_user()
-    owner_login = utils.get_owner_login_pi(context)
-    if user.login == owner_login:
-        return True
-    delegations = delegation.get_user_delegations(user.user_id)
-    users = [delegate.login for delegate in delegations]
-    return owner_login in users
+    owner = utils.get_owner_pi(context)
+    return model_utils.is_current_or_delegated_user(owner)
+
 
 def user_may_edit_context_parent(context):
     """Does user have edit permission on the context's parent?
     For a context that is a workflowed sub-object, such as an Attachment or 
-    an Event; context must define an "item" proeprty that returns the parent.
+    an Event; context must define a "head" property that returns the parent.
     """
-    parent = context.item
+    parent = context.head
     permission = "bungeni.%s.Edit" % (parent.__class__.__name__.lower())
     return checkPermission(permission, parent)
 
@@ -204,13 +199,14 @@ def user_is_state_creator(context):
     if IAuditable.providedBy(context):
         current_user = model_utils.get_db_user()
         if current_user:
-            for _object_change in reversed(context.changes):
-                if _object_change.action == CHANGE_ACTIONS["workflow"]:
-                    extras = _object_change.extras
-                    if extras and (extras.get("destination") == context.status):
-                        if _object_change.user.login == current_user.login:
-                            is_state_creator = True
-                    break
+            for _object_change in reversed(
+                    domain.get_changes(context.changes, "workflow")
+                ):
+                extras = _object_change.extras
+                if extras and (extras.get("destination") == context.status):
+                    if _object_change.user.login == current_user.login:
+                        is_state_creator = True
+                break
     return is_state_creator
 
 def user_is_state_creator_and_owner(context):

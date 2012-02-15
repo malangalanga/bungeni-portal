@@ -51,6 +51,16 @@ class UserListing(BrowserView):
     pass
 
 
+''' !+UNUSED_BROKEN(mr, nov-2011) admin/groups, with security declarations
+below, gives:
+'AdminSection' object has no attribute 'domain_model'
+> /home/undesa/cinst/bungeni/src/alchemist.ui/alchemist/ui/container.py(47)update()
+
+    <class class=".admin.GroupListing">
+        <require permission="zope.ManageSite" 
+            attributes="__call__ browserDefault" />
+    </class>
+
 #permission="zope.ManageSite"
 @register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="groups")
 class GroupListing(container.AjaxContainerListing):
@@ -63,8 +73,11 @@ class GroupListing(container.AjaxContainerListing):
             return self.fields
     
     formatter_factory = GroupFormatter
+'''
 
 
+''' !+UNUSED(mr, nov-2011) admin/query-users gives NotFound.
+ZCA registration moved to in-place in r8754.
 #permission="zope.ManageSite"
 @register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="query-users")
 class UserQueryJSON(search.ConstraintQueryJSON):
@@ -82,7 +95,8 @@ class UserQueryJSON(search.ConstraintQueryJSON):
                 object_type=i.data.get("object_type", ("",))[0]
             ))
         return r
-        
+'''
+
 ''' !+UNUSED(mr, nov-2011)
 class GroupQueryJSON(search.ConstraintQueryJSON):
     def getConstraintQuery(self):
@@ -90,7 +104,8 @@ class GroupQueryJSON(search.ConstraintQueryJSON):
 '''
 
 
-@register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="settings")
+@register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="settings",
+    protect={"zope.ManageSite": dict(attributes=["browserDefault", "__call__"])})
 class Settings(catalyst.EditForm):
 
     form_fields = form.Fields(interfaces.IBungeniSettings)
@@ -120,7 +135,8 @@ class Settings(catalyst.EditForm):
 ##         return widget()
 
 
-@register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="email-settings")
+@register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="email-settings",
+    like_class=Settings)
 class EmailSettings(catalyst.EditForm):
     
     form_fields = form.Fields(interfaces.IBungeniEmailSettings)
@@ -138,7 +154,6 @@ class UserGroups(BrowserView):
         pass
 
 
-#permission="zope.Public"
 @register.view(None, IBungeniSkin, name="user-settings")
 class UserSettings(catalyst.EditForm):
 
@@ -221,8 +236,9 @@ def generate_doc_for(domain_class, title=None, color=0):
     return doc
 
 
-#permission="zope.ManageSite"
-@register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="report-documentation")
+@register.view(interfaces.IBungeniAdmin, IBungeniSkin, 
+    name="report-documentation", 
+    like_class=Settings)
 class ReportDocumentation(browser.BungeniBrowserView):
     
     render = ViewPageTemplateFile("templates/report-documentation.pt")
@@ -245,7 +261,8 @@ class ReportDocumentation(browser.BungeniBrowserView):
         return self.render()
 
 
-@register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="xapian-settings")
+@register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="xapian-settings",
+    like_class=Settings)
 class XapianSettings(browser.BungeniBrowserView):
     
     render = ViewPageTemplateFile("templates/xapian-settings.pt")
@@ -259,31 +276,37 @@ class XapianSettings(browser.BungeniBrowserView):
         return self.render()
     
 
-@register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="registry-settings")
+@register.view(interfaces.IBungeniAdmin, IBungeniSkin, name="registry-settings",
+    like_class=Settings)
 class RegistrySettings(catalyst.EditForm):
     
     form_fields = form.Fields(interfaces.IBungeniRegistrySettings)
     
     def update(self):
         if self.request.method == "POST":
+            # !+NUMBER_GENERATION (ah, nov-2011) - Reset the number sequence here.
+            # Added the 'false' parameter at the end, otherwise setval() automatically
+            # increments the sequence when called.
+            # NOTE: this is a direct PG call, there is no SQLAlchemy way of resetting
+            # a sequence, perhaps they should be dropped and recreated in SQLALchemy
             if self.request.get("form.questions_number") == "on":
-                execute_sql("SELECT setval('question_registry_sequence', 1);")
+                execute_sql("SELECT setval('question_registry_sequence', 1, false);")
             if self.request.get("form.motions_number") == "on":
-                execute_sql("SELECT setval('motion_registry_sequence', 1);")
+                execute_sql("SELECT setval('motion_registry_sequence', 1, false);")
             if self.request.get("form.agendaitems_number") == "on":
-                execute_sql("SELECT setval('agendaitem_registry_sequence', 1);")
+                execute_sql("SELECT setval('agendaitem_registry_sequence', 1, false);")
             if self.request.get("form.bills_number") == "on":
-                execute_sql("SELECT setval('bill_registry_sequence', 1);")
+                execute_sql("SELECT setval('bill_registry_sequence', 1, false);")
             if self.request.get("form.reports_number") == "on":
-                execute_sql("SELECT setval('report_registry_sequence', 1);")
+                execute_sql("SELECT setval('report_registry_sequence', 1, false);")
             if self.request.get("form.tableddocuments_number") == "on":
-                execute_sql("SELECT setval('tableddocument_registry_sequence', 1);")
+                execute_sql("SELECT setval('tableddocument_registry_sequence', 1, false);")
             if self.request.get("form.global_number") == "on":
-                execute_sql("SELECT setval('registry_number_sequence', 1);")
+                execute_sql("SELECT setval('registry_number_sequence', 1, false);")
 
         settings = \
             component.getUtility(interfaces.IBungeniRegistrySettings)()
         self.adapters = {interfaces.IBungeniRegistrySettings : settings}
-        super(RegistrySettings, self).update()
+
 
 

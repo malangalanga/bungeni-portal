@@ -13,10 +13,9 @@ from zope import schema, interface
 
 from zope.security.management import getInteraction
 from zope.publisher.interfaces import IRequest
-import zope.app.form.browser
+import zope.formlib
 from zope.i18n import translate
 from zc.table import column
-from zope.dublincore.interfaces import IDCDescriptiveProperties
 
 from bungeni.alchemist import Session
 from bungeni.alchemist.model import ModelDescriptor, Field, show, hide
@@ -39,12 +38,7 @@ from bungeni.ui.forms import validations
 from bungeni.ui.i18n import _
 from bungeni.ui.utils import common, date, misc, debug
 from bungeni.ui import vocabulary
-from bungeni.ui.tagged import get_states
 from bungeni.ui.interfaces import IBusinessSectionLayer
-
-from bungeni.core.workflows.adapters import get_workflow
-def get_workflow_state(workflow_name, status):
-    return  get_workflow(workflow_name).get_state(status)
 
 
 ###
@@ -157,7 +151,7 @@ def linked_mp_name_column(name, title, attr):
     def getter(item_user, formatter):
         item_user = _get_related_user(item_user, attr)
         mp = get_member_of_parliament(item_user.user_id)
-        return zope.app.form.browser.widget.renderElement("a",
+        return zope.formlib.widget.renderElement("a",
             contents=item_user.fullname, # User.fullname derived property
             href="/members/current/obj-%s/" % (mp.membership_id)
         )
@@ -230,7 +224,7 @@ def linked_assignment_column(title, assigned_kind="item"):
             # the related PI's public "home view".
             # The absolute URL path is of the form:
             # /business/{ASSIGNED.TYPE}s/obj-{ASSIGNED.ID}/
-            return zope.app.form.browser.widget.renderElement("a",
+            return zope.formlib.widget.renderElement("a",
                 contents=link_label,
                 href="/business/%ss/obj-%s/" % (
                     assigned.type, getattr(assigned, assigned_id_attr_name))
@@ -253,7 +247,7 @@ def linked_assignment_column(title, assigned_kind="item"):
             if r:
                 url = r.getURL()
                 url_path = url[0: url.index(acn) + acn_len]
-            return zope.app.form.browser.widget.renderElement("a",
+            return zope.formlib.widget.renderElement("a",
                 contents=link_label,
                 href="%s/obj-%s/" % (url_path, assignment.assignment_id)
             )
@@ -405,6 +399,7 @@ are not picked up with _("Office") or equivalent... why?
 '''
 
 ''' !+TYPES_CUSTOM
+from zope.dublincore.interfaces import IDCDescriptiveProperties
 def dc_getter(name, title, item_attribute, default=_(u"None")):
     def getter(item, formatter):
         obj = getattr(item, item_attribute)
@@ -495,7 +490,6 @@ def DeathBeforeLife(User):
             "date_of_death",
             "date_of_birth"
         )
-
 
 ####
 # Fields
@@ -772,7 +766,7 @@ class UserDescriptor(ModelDescriptor):
         ),
     ]
     schema_invariants = [DeathBeforeLife]
-    custom_validators = []
+    custom_validators = [validations.email_validator]
 
 
 class UserDelegationDescriptor(ModelDescriptor):
@@ -856,6 +850,24 @@ class GroupMembershipDescriptor(ModelDescriptor):
                 source=SubstitutionSource,
                 required=False
             ),
+        ),
+        Field(name="status", label=_("Status"), # [sys]
+            modes="view listing",
+            localizable=[
+                show("view listing"),
+            ],
+            property=schema.Choice(title=_("Status"),
+                vocabulary="bungeni.vocabulary.workflow",
+            ),
+            listing_column=workflow_column("status", "Workflow status"),
+        ),
+        Field(name="status_date", label=_("Status date"), # [sys]
+            modes="view listing",
+            localizable=[
+                show("view listing"),
+            ],
+            property=schema.Date(title=_("Status Date"), required=True),
+            listing_column=day_column("status_date", _("Status date")),
         ),
         #Field(name="membership_id",
         #    label=_("Roles/Titles"),
@@ -1187,10 +1199,6 @@ class GroupDescriptor(ModelDescriptor):
     ]
     schema_invariants = [EndAfterStart]
     custom_validators = [validations.validate_date_range_within_parent]
-    public_wfstates = [
-        get_workflow_state("group", "active").id,
-        get_workflow_state("group", "dissolved").id
-    ]
 
 
 class ParliamentDescriptor(GroupDescriptor):
@@ -1267,10 +1275,7 @@ class ParliamentDescriptor(GroupDescriptor):
         ElectionAfterStart
     ]
     custom_validators = [validations.validate_parliament_dates]
-    public_wfstates = [
-        get_workflow_state("parliament", "active").id,
-        get_workflow_state("parliament", "dissolved").id
-    ]
+
 
 ''' !+TYPES_CUSTOM
 class CommitteeTypeStatusDescriptor(ModelDescriptor):
@@ -1432,10 +1437,6 @@ class CommitteeDescriptor(GroupDescriptor):
         #DissolutionAfterReinstatement
     ]
     custom_validators = [validations.validate_date_range_within_parent]
-    public_wfstates = [
-        get_workflow_state("committee", "active").id,
-        get_workflow_state("committee", "dissolved").id
-    ]
 
 
 class CommitteeMemberDescriptor(GroupMembershipDescriptor):
@@ -1533,8 +1534,8 @@ class AddressDescriptor(ModelDescriptor):
                 hide("listing"),
             ],
             property=schema.Text(title=_("Street"), required=True),
-            edit_widget=zope.app.form.browser.TextAreaWidget,
-            add_widget=zope.app.form.browser.TextAreaWidget,
+            edit_widget=zope.formlib.widgets.TextAreaWidget,
+            add_widget=zope.formlib.widgets.TextAreaWidget,
         ),
         Field(name="city", # [user-req]
             modes="view edit add listing",
@@ -1573,9 +1574,9 @@ class AddressDescriptor(ModelDescriptor):
                 description=_("Enter one phone number per line"),
                 required=False
             ),
-            edit_widget=zope.app.form.browser.TextAreaWidget,
-            add_widget=zope.app.form.browser.TextAreaWidget,
-            #view_widget=zope.app.form.browser.ListDisplayWidget,
+            edit_widget=zope.formlib.widgets.TextAreaWidget,
+            add_widget=zope.formlib.widgets.TextAreaWidget,
+            #view_widget=zope.formlib.widgets.ListDisplayWidget,
         ),
         Field(name="fax", # [user-req]
             modes="view edit add listing",
@@ -1586,8 +1587,8 @@ class AddressDescriptor(ModelDescriptor):
                 description=_("Enter one fax number per line"),
                 required=False
             ),
-            edit_widget=zope.app.form.browser.TextAreaWidget,
-            add_widget=zope.app.form.browser.TextAreaWidget,
+            edit_widget=zope.formlib.widgets.TextAreaWidget,
+            add_widget=zope.formlib.widgets.TextAreaWidget,
         ),
         Field(name="email", # [user-req]
             modes="view edit add listing",
@@ -1607,7 +1608,6 @@ class AddressDescriptor(ModelDescriptor):
         #    )
         #), !+IM(mr, oct-2010) morph to some "extra_info" on User
     ]
-    public_wfstates = [get_workflow_state("address", "attached").id]
 
 class GroupAddressDescriptor(AddressDescriptor):
     localizable = True
@@ -2109,14 +2109,21 @@ class AttachedFileDescriptor(ModelDescriptor):
             listing_column=day_column("status_date", _("Status date")),
         ),
     ]
-    public_wfstates = [get_workflow_state("attachedfile", "attached").id]
 
 
 class AttachedFileVersionDescriptor(ModelDescriptor):
     localizable = True
     display_name = _("Attached file version")
     container_name = _("Versions")
+    
     fields = deepcopy(AttachedFileDescriptor.fields)
+    fields[fields.index(get_field(fields, "status"))] = Field(
+        name="status", label=_("Status"), # [user-req]
+        modes="view listing",
+        localizable=[
+            show("view listing"),
+        ],
+    )
 
 
 class ParliamentaryItemDescriptor(ModelDescriptor):
@@ -2243,6 +2250,49 @@ class ParliamentaryItemDescriptor(ModelDescriptor):
     ]
 
 
+''' !+AuditLogView(mr, nov-2011) change listings do not respect this
+class ChangeDescriptor(ModelDescriptor):
+    localizable = False
+    fields = [
+        Field(name="change_id", # [sys]
+            modes="view listing",
+            localizable=[ hide("view listing"), ],
+        ),
+        Field(name="action",
+            modes="view edit add listing",
+            localizable=[
+                show("view listing"),
+            ],
+        ),
+        Field(name="date_audit", # [sys]
+            modes="view add listing",
+            localizable=[ 
+                hide("view listing"), 
+            ],
+            property=schema.Date(title=u"Audit Date", required=True),
+            edit_widget=widgets.DateWidget,
+            add_widget=widgets.DateWidget,
+            listing_column=datetime_column("date_audit", "Date Audit"),
+        ),
+        Field(name="date_active", # [user]
+            modes="view add edit listing",
+            localizable=[ 
+                show("view add edit listing"), 
+            ],
+            property=schema.Date(title=u"Active Date", required=True),
+            edit_widget=widgets.DateWidget,
+            add_widget=widgets.DateWidget,
+            listing_column=datetime_column("date_active", "Date Active"),
+        ),
+        Field(name="content_id"), 
+        Field(name="description"),
+        Field(name="notes"),
+        Field(name="user_id"),
+        Field(name="status"),
+    ]
+'''
+
+# !+VERSION_LISTING(mr, nov-2011) version listings do not respect this
 class VersionDescriptor(ModelDescriptor):
     localizable = False
 
@@ -2306,7 +2356,6 @@ class HeadingDescriptor(ParliamentaryItemDescriptor):
         ),
         LanguageField("language"), # [user-req]
     ]
-    public_wfstates = [get_workflow_state("heading", "public").id]
 
 
 class AgendaItemDescriptor(ParliamentaryItemDescriptor):
@@ -2342,8 +2391,6 @@ class AgendaItemDescriptor(ParliamentaryItemDescriptor):
         "receive_notification",
         "admissible_date"
     ]
-    public_wfstates = get_states("agendaitem", tagged=["public"])
-
 
 class AgendaItemVersionDescriptor(VersionDescriptor):
     localizable = True
@@ -2411,14 +2458,20 @@ class MotionDescriptor(ParliamentaryItemDescriptor):
 			"notice_date",
 			"registry_number",
     ]
-    public_wfstates = get_states("motion", tagged=["public"])
-
 
 class MotionVersionDescriptor(VersionDescriptor):
     localizable = True
     display_name = _("Motion version")
     container_name = _("Versions")
     fields = deepcopy(VersionDescriptor.fields)
+
+''' !+AuditLogView(mr, nov-2011)
+class MotionChangeDescriptor(ChangeDescriptor):
+    localizable = True
+    display_name = "Changes changes"
+    container_name = "Changes"
+    fields = deepcopy(ChangeDescriptor.fields)
+'''
 
 ''' !+TYPES_CUSTOM
 class BillTypeDescriptor(ModelDescriptor):
@@ -2496,9 +2549,7 @@ class BillDescriptor(ParliamentaryItemDescriptor):
             property=schema.Date(title=_("Publication Date"), required=False),
             edit_widget=widgets.DateWidget,
             add_widget=widgets.DateWidget ,
-            listing_column=day_column("publication_date",
-                _("Publication Date")
-            ),
+            listing_column=day_column("publication_date", "Publication Date"),
         ),
     ])
     
@@ -2520,8 +2571,6 @@ class BillDescriptor(ParliamentaryItemDescriptor):
         "publication_date",
         "registry_number",
     ]
-
-    public_wfstates = get_states("bill", not_tagged=["private"])
 
 class BillVersionDescriptor(VersionDescriptor):
     localizable = True
@@ -2684,7 +2733,6 @@ class QuestionDescriptor(ParliamentaryItemDescriptor):
         "registry_number",
     ]
     custom_validators = []
-    public_wfstates = get_states("question", tagged=["public"])
 
 class QuestionVersionDescriptor(VersionDescriptor):
     localizable = True
@@ -2745,7 +2793,6 @@ class EventItemDescriptor(ParliamentaryItemDescriptor):
             add_widget=widgets.DateTimeWidget,
         ),
     ]
-    public_wfstates = [get_workflow_state("event", "attached").id]
 
 
 class TabledDocumentDescriptor(ParliamentaryItemDescriptor):
@@ -2790,8 +2837,6 @@ class TabledDocumentDescriptor(ParliamentaryItemDescriptor):
         "admissible_date",
         "registry_number",
     ]
-    public_wfstates = get_states("tableddocument", tagged=["public"])
-
 
 class TabledDocumentVersionDescriptor(VersionDescriptor):
     localizable = True
@@ -2942,7 +2987,6 @@ class SittingDescriptor(ModelDescriptor):
         validations.validate_venues,
         #validations.validate_non_overlapping_sitting
     ]
-    public_wfstates = get_states("groupsitting", tagged=["public"])
 
 
 class GroupSittingTypeDescriptor(ModelDescriptor):
@@ -3125,7 +3169,6 @@ class SignatoryDescriptor(ModelDescriptor):
             listing_column = workflow_column("status", "Signature Status"),
         ),
     ]
-    public_wfstates = get_states("signatory", tagged=["public"])
 
 
 class ConstituencyDescriptor(ModelDescriptor):
