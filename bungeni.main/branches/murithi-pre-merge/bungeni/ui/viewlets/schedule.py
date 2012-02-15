@@ -17,10 +17,8 @@ import sqlalchemy.sql.expression as sql
 from bungeni.core.workflows.adapters import get_workflow
 from bungeni.models import domain
 from bungeni.models.interfaces import IBungeniApplication, IBungeniGroup, ICommittee
-from bungeni.core.interfaces import ISchedulingContext
 
 from bungeni.alchemist import Session
-from bungeni.alchemist.container import contained
 from bungeni.core.workflow.interfaces import IWorkflow
 
 from bungeni.ui import browser
@@ -35,31 +33,6 @@ from interfaces import ISchedulingManager
 
 class SchedulingManager(WeightOrderedViewletManager):
     interface.implements(ISchedulingManager)
-
-
-class SchedulablesViewlet(browser.BungeniItemsViewlet):
-    """Renders a portlet which calls upon the scheduling viewlet
-    manager to render a list of schedulable items."""
-    
-    view_title = _(u"Scheduling")
-
-    # the instance of the ViewProvideViewletManager
-    provide = z3evoque.ViewProvideViewletManager()
-
-    # evoque
-    render = z3evoque.ViewTemplateFile("scheduling.html#main")
-    # zpt
-    #render = ViewPageTemplateFile("templates/scheduling.pt")
-
-    for_display = True
-    
-    def __init__(self, context, request, view, manager):
-        while not ISchedulingContext.providedBy(context):
-            context = ISchedulingContext(context, context.__parent__)
-            if context is None:
-                raise RuntimeError("Unable to locate a scheduling context.")
-        super(SchedulablesViewlet, self).__init__(
-            context, request, view, manager)
 
 
 # !+BungeniViewlet(mr, oct-2010) standardize visible<->for_display ?

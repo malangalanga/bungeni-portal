@@ -423,7 +423,8 @@
                             selectionMode:"single",
                             scrollable: true,
                             initialLoad: true,
-                            width: itemsPanel.body.clientWidth + "px",
+                            width: (itemsPanel.body.clientWidth - 15) + "px",
+                            height: (itemsPanel.body.clientHeight - 50) + "px"
                         }
                     );
                     tabDataTable.subscribe("cellClickEvent", addItemToSchedule);
@@ -872,7 +873,8 @@
             { 
                 selectionMode:"single",
                 scrollable:true,
-                width:container.clientWidth + "px",
+                width:(container.clientWidth-15) + "px",
+                height: (container.clientHeight - 50) + "px"
             }
         );
         itemsDataTable.subscribe("rowMouseoverEvent", 

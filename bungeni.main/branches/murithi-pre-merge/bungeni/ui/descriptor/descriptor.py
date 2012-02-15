@@ -16,6 +16,7 @@ from zope.publisher.interfaces import IRequest
 import zope.formlib
 from zope.i18n import translate
 from zc.table import column
+from zope.dublincore.interfaces import IDCDescriptiveProperties
 
 from bungeni.alchemist import Session
 from bungeni.alchemist.model import ModelDescriptor, Field, show, hide

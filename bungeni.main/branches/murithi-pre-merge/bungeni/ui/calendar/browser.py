@@ -30,7 +30,6 @@ from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.browser import BrowserView
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.app.pagetemplate import ViewPageTemplateFile
-from zope.app.component.hooks import getSite
 from zope.security.proxy import removeSecurityProxy
 from zope.security.proxy import ProxyFactory
 from zope.security import checkPermission
@@ -43,7 +42,6 @@ from bungeni.core.location import location_wrapped
 from bungeni.core.interfaces import ISchedulingContext
 from bungeni.core.schedule import SittingContainerSchedulingContext
 from bungeni.core.workflow.interfaces import IWorkflow
-from bungeni.core.translation import get_request_language
 from bungeni.core.language import get_default_language
 from bungeni.core.translation import translate_i18n
 
@@ -117,7 +115,6 @@ def get_sitting_items(sitting, request, include_actions=False):
     schedulings = map(
         removeSecurityProxy,
         sitting.items.batch(order_by=order, limit=None))
-    site_url = url.absoluteURL(getSite(), request)
     for scheduling in schedulings:
         item = ProxyFactory(location_wrapped(scheduling.item, sitting))
        
@@ -385,111 +382,6 @@ class DailyCalendarView(CalendarView):
             sittings_map = create_sittings_map(sittings, self.request),
             )
 
-class GroupSittingScheduleView(BrowserView):
-    """Group-sitting scheduling view.
-
-    This view presents a sitting and provides a user interface to
-    manage the agenda.
-    """
-
-    template = ViewPageTemplateFile("templates/main.pt")
-    ajax = ViewPageTemplateFile("templates/ajax.pt")
-    
-    _macros = ViewPageTemplateFile("templates/macros.pt")
-    def __init__(self, context, request):
-        super(GroupSittingScheduleView, self).__init__(context, request)
-        self.__parent__ = context
-
-    def __call__(self, timestamp=None):
-        #session = Session()
-        if timestamp is None:
-            # start the week on the first weekday (e.g. Monday)
-            date = utils.datetimedict.fromdate(datetime.date.today())
-        else:
-            try:
-                timestamp = float(timestamp)
-            except:
-                raise TypeError(
-                    "Timestamp must be floating-point (got %s)" % timestamp)
-            date = utils.datetimedict.fromtimestamp(timestamp)
-        #if misc.is_ajax_request(self.request):
-        if self.request.get('headless') == 'true':
-            rendered = self.render(date, template=self.ajax)
-        else:    
-            rendered = self.render(date)
-        # !+SESSION_CLOSE(taras.sterch, july-2011) there is no need to close the 
-        # session. Transaction manager will take care of this. Hope it does not 
-        # brake anything.
-        #session.close()
-        return rendered
-        
-    def reorder_field(self):
-        if self.context.status=="draft_agenda":
-            return 'planned_order'
-        elif self.context.status=="draft_minutes": 
-            return 'real_order'
-        else:
-            return None
-            
-    def render(self, date, template=None):
-        #need('yui-editor')
-        need('yui-connection')
-        need('yui-rte')
-        need('yui-resize')
-        need('yui-button')
-        
-        if template is None:
-            template = self.template
-
-        container = self.context.__parent__
-        #schedule_url = self.request.getURL()
-        container_url = url.absoluteURL(container, self.request)
-        
-        # determine position in container
-        key = stringKey(self.context)
-        keys = list(container.keys())
-        pos = keys.index(key)
-
-        links = {}
-        if pos > 0:
-            links['previous'] = "%s/%s/%s" % (
-                container_url, keys[pos-1], self.__name__)
-        if pos < len(keys) - 1:
-            links['next'] = "%s/%s/%s" % (
-                container_url, keys[pos+1], self.__name__)
-
-        #start_date = utils.datetimedict.fromdatetime(self.context.start_date)
-        #end_date = utils.datetimedict.fromdatetime(self.context.end_date)
-        
-
-        site_url = url.absoluteURL(getSite(), self.request)
-        reorder = "reorder" if self.context.status in \
-                                ["draft_agenda", "draft_minutes"] \
-                            else "dont-reorder"
-        return template(
-            display="sitting",
-            #title=_(u"$A $e, $B $Y", mapping=start_date),
-            title = "%s: %s - %s" % (self.context.group.short_name, 
-                self.context.start_date.strftime('%Y-%m-%d %H:%M'), 
-                self.context.end_date.strftime('%H:%M')),
-            description=_(u"Sitting Info"),
-#            title = u"",
-#            description = u"",
-#
-            links=links,
-            actions=get_sitting_actions(self.context, self.request),
-            items=get_sitting_items(
-                self.context, self.request, include_actions=True),
-            #categories=vocabulary.ItemScheduleCategories(self.context),
-            new_category_url="%s/admin/content/categories/add?next_url=..." % site_url,
-            status=self.context.status,
-            reorder=reorder,
-            )
-            
-    @property
-    def macros(self):
-        return self._macros.macros
-
 class ItemScheduleOrder(BrowserView):
     "Stores new order of schedule items"
     def __call__(self):
@@ -515,12 +407,12 @@ RESOURCE_PERMISSION_MAP = (
     (["bungeni-schedule-editor"], "bungeni.sittingschedule.item.Add"),
     (["bungeni-schedule-preview"], "bungeni.sitting.View"),
 )
-class GroupSittingScheduleViewNext(BrowserView):
+class GroupSittingScheduleView(BrowserView):
     
     template = ViewPageTemplateFile("templates/scheduler.pt")
     
     def __init__(self, context, request):
-        super(GroupSittingScheduleViewNext, self).__init__(context, request)
+        super(GroupSittingScheduleView, self).__init__(context, request)
     
     def sitting_dates(self):
         date_formatter = date.getLocaleFormatter(self.request)

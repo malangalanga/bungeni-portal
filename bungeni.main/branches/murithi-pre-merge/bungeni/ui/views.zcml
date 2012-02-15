@@ -382,11 +382,6 @@
         permission="bungeni.sittingschedule.View"
         class=".calendar.browser.GroupSittingScheduleView"
     />
-    <browser:page name="schedule-next"
-        for="bungeni.models.interfaces.IGroupSitting"
-        permission="bungeni.sittingschedule.View"
-        class=".calendar.browser.GroupSittingScheduleViewNext"
-    />
     <browser:page name="save-schedule"
         for="bungeni.models.interfaces.IItemScheduleContainer"
         permission="bungeni.sittingschedule.Edit"
