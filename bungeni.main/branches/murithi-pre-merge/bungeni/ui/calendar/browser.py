@@ -404,7 +404,7 @@ RESOURCE_PERMISSION_MAP = (
     (["bungeni-schedule-discussions", "bungeni-schedule-available-items"], 
         "bungeni.sittingschedule.itemdiscussion.Edit"
     ),
-    (["bungeni-schedule-editor"], "bungeni.sittingschedule.item.Add"),
+    (["bungeni-schedule-editor"], "bungeni.sittingschedule.Edit"),
     (["bungeni-schedule-preview"], "bungeni.sitting.View"),
 )
 class GroupSittingScheduleView(BrowserView):
