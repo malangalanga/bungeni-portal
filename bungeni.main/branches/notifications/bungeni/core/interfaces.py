@@ -263,7 +263,8 @@ class IOpenOfficeConfigSchema(interface.Interface):
         required=True,
         default=5
         )
-        
+
+
 class IMessageQueueConfig(interface.Interface):
     def get_username():
         "Username to be used to connect to the AMQP server"
@@ -281,7 +282,8 @@ class IMessageQueueConfig(interface.Interface):
         "Max frame size"
     def get_heartbeat():
         "Turn heartbeat checking on or off"
-        
+
+
 class IMessageQueueConfigSchema(interface.Interface):
     exchange=schema.Text(
         title=u"Exchange",
@@ -335,4 +337,16 @@ class IMessageQueueConfigSchema(interface.Interface):
         description=u"Turn heartbeat checking on or off",
         required=True,
         default=False
+        )
+    number_of_workers=schema.Int(
+        title=u"Number of worker processes",
+        description=u"Number of worker daemon processes",
+        required=True,
+        default=5
+        )
+    task_queue=schema.Text(
+        title=u"Task queue name",
+        description=u"Task queue name",
+        required=True,
+        default=u"task_queue"
         )
