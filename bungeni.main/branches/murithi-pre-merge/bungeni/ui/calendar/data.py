@@ -14,8 +14,7 @@ from bungeni.alchemist import model
 from bungeni.models import domain
 from bungeni.core.dc import IDCDescriptiveProperties
 from bungeni.core.workflow.interfaces import IWorkflow
-from bungeni.core.workflow.adapters import get_workflow
-from bungeni.core.translation import translate_i18n
+from bungeni.core.workflows.adapters import get_workflow
 from bungeni.ui.utils import date, common
 from bungeni.alchemist import Session
 from bungeni.ui.i18n import _
