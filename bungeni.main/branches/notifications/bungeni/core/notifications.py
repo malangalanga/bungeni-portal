@@ -1,19 +1,26 @@
 import os
 import pika
 import simplejson
+import datetime
 from lxml import etree
+from threading import Thread
 from sqlalchemy import orm
 from zope.interface import implements
 from zope.component import getUtility
 from zope.publisher.interfaces import NotFound
 from zope.component import queryMultiAdapter, provideHandler
+from zope import security
 from zope.security.proxy import removeSecurityProxy
 from zope.securitypolicy.interfaces import IPrincipalRoleMap
+from zope.app.security.settings import Allow
 from bungeni.utils.capi import capi
 from bungeni.models import domain
 from bungeni.core.interfaces import INotificationsUtility, IMessageQueueConfig
 from bungeni.core.workflow.interfaces import IWorkflowTransitionEvent
-from threading import Thread
+from bungeni.core.serialize import obj2dict
+from bungeni.alchemist import Session
+from bungeni.alchemist.container import contained
+from bungeni.models.utils import get_current_parliament
 
 
 def get_mq_parameters():
@@ -60,25 +67,39 @@ def worker():
     channel = connection.channel()
 
     def callback(channel, method, properties, body):
-        notifications_utility = get_utility(INotificationsUtility)
-        message = simplejson.load(body)
-        domain_class = notifications_utility.get_domain(message.document_type)
-        roles = notifications_utility.get_transtion_based_roles(
-            domain_class, message.destination
+        notifications_utility = getUtility(INotificationsUtility)
+        message = simplejson.loads(body)
+        domain_class = notifications_utility.get_domain(
+            message["document_type"])
+        roles = notifications_utility.get_transition_based_roles(
+            domain_class, message["destination"]
             )
         session = Session()
-        document = session.query(domain_class).get(message.document_id)
+        document = session.query(domain_class).get(message["document_id"])
         principal_ids = set()
         if document:
-            prm = IPrincipalRoleMap(document)
+            prm = IPrincipalRoleMap(contained(
+                    document, get_current_parliament()))
             for role in roles:
-                principals = prm.getPrincipalForRole(role)
+                principals = prm.getPrincipalsForRole(role)
                 for principal in principals:
-                    principal_ids.add(principal.id)
+                    principal_ids.add(principal[0])
         else:
             pass
+        exchange = str(mq_utility.get_exchange())
         for principal_id in principal_ids:
             # create message and add send to exchange
+            # TODO: create obj2dict that checks principals permissions to
+            # access attributes
+            mes = obj2dict(document, 0)
+            dthandler = lambda obj: obj.isoformat() if isinstance(obj,
+                                                    datetime.datetime) else obj
+            channel.basic_publish(exchange=exchange,
+                                  routing_key=principal_id,
+                                  body=simplejson.dumps(mes, default=dthandler),
+                                  properties=pika.BasicProperties(
+                    content_type="text/plain",
+                    delivery_mode=1))
         channel.basic_ack(delivery_tag=method.delivery_tag)
 
     channel.basic_qos(prefetch_count=1)
@@ -115,20 +136,20 @@ class NotificationsUtility(object):
     transition_based = {}
     domain_type = {}
 
-    def set_transition_based_notification(domain_class, state, roles):
-        if domain_class not in transition_based:
-            transition_based[domain_class] = {}
-        if state not in transition_based[domain_class]:
-            transition_based[domain_class][state] = []
-        transition_based[domain_class][state].extend(roles)
+    def set_transition_based_notification(self, domain_class, state, roles):
+        if domain_class not in self.transition_based:
+            self.transition_based[domain_class] = {}
+        if state not in self.transition_based[domain_class]:
+            self.transition_based[domain_class][state] = []
+        self.transition_based[domain_class][state].extend(roles)
 
-    def get_transition_based_roles(domain_class, state):
-        if domain_class in transition_based:
-            if state in transition_based[domain_class]:
-                return transition_based[domain_class][state]
-        return None
+    def get_transition_based_roles(self, domain_class, state):
+        if domain_class in self.transition_based:
+            if state in self.transition_based[domain_class]:
+                return self.transition_based[domain_class][state]
+        return []
 
-    def set_time_based_notification(domain_class, state, roles, time):
+    def set_time_based_notification(self, domain_class, state, roles, time):
         if domain_class not in transition_based:
             time_based[domain_class] = {}
         if state not in transition_based[domain_class]:
@@ -137,7 +158,7 @@ class NotificationsUtility(object):
             time_based[domain_class][state][time] = []
         time_based[domain_class][state][time].extend(roles)
 
-    #!+NOTIFICATIONS(miano, feb 2012) Similar bungeni.core.workspace.
+    #!+NOTIFICATIONS(miano, feb 2012) Similar bungeni.core.workspace.WorkspaceUtility
     # TODO - make more generic
     def register_item_type(self, domain_class, item_type):
         """ Stores domain_class -> item_type and vice versa in a dictionary eg.
@@ -173,7 +194,7 @@ def load_notification_config(file_name, domain_class):
     item_type = file_name.split(".")[0]
     notifications_utility.register_item_type(domain_class, item_type)
     notification_xml = etree.fromstring(open(file_path).read())
-    for notify in notification_xml.iterchildren("notifications"):
+    for notify in notification_xml.iterchildren("notify"):
         roles = notify.get("roles").split()
         if notify.get("onstate"):
             states = notify.get("onstate").split()
