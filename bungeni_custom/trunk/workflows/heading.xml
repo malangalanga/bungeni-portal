@@ -3,7 +3,7 @@
     description="Workflow for headings"
     domain="bungeni.ui"
     initial_state=""
-    tags="public"
+    tags="public tobescheduled"
     >
     
     <!-- global grants -->
@@ -26,7 +26,7 @@
     
     <state id="public" title="Public" publish="true" 
         like_state="inactive"
-        tags="public">
+        tags="public tobescheduled">
         <!-- heading -->
         <grant permission="zope.View" role="bungeni.Owner" />
         <grant permission="zope.View" role="bungeni.Signatory" />
