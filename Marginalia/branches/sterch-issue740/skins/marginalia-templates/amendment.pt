@@ -1,0 +1,132 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+  <body>
+    
+    <metal:main fill-slot="main"
+	        tal:define="absoluteUrl string:${here/absolute_url};
+	                    annotatedUrl python:view.getAnnotatedUrl(absoluteUrl);
+                            isadmin python:context.portal_annotations.isAdmin(context);">
+      
+      <head>
+        <tal:js metal:fill-slot="javascript_head_slot" tal:omit-tag="">
+          <script type="text/javascript"
+                  tal:attributes="src string:${context/portal_url}/amendment-utils.js"
+                  src="">
+          </script>
+        </tal:js>     
+        
+        <div metal:fill-slot="css_slot" tal:omit-tag="">     
+          <link type="text/css" rel="stylesheet"
+                tal:attributes="href string:${context/portal_url}/amendment-utils.css"/>
+        </div>                         
+        
+      </head>      
+      
+      <tal:main-macro metal:define-macro="main"
+                      tal:define="text python: here.CookedBody(stx_level=2)">
+        
+        
+        <div metal:use-macro="here/document_actions/macros/document_actions">
+          Document actions (print, sendto etc)
+        </div>
+        
+        <div class="searchfields" tal:define="member_names python:context.portal_annotations.getOwnerList(request);
+                                              group_names python:context.portal_annotations.getPortalGroups();">
+          <a href="javascript:toggle_visibility('fields');"><p class="plink" i18n:translate="filter-help">Filter amendments by owner, group, type or query string. (show/hide)</p></a>
+          <p class="plink" i18n:translate="search-text">Search text can include wildcard chartecters like '?' and '*'</p>
+          <a id="togglevisibility" name="hide" href="javascript:hideAnnotations(this);"><p class="plink" i18n:translate="toggle-text">Toggle hide/display amendments</p></a>
+          <p id="noresults" class="plink" style="display:none;" i18n:translate="search-results">No Amendments Found</p>
+          
+          <div id="fields" style="display:block;">                     
+            <select class="select_field" name="filter_owner" size="4" multiple="multiple" language="javascript" onChange="filterAnnotations(this);">
+              <tal:se tal:condition="isadmin">
+                <option value="" tal:attributes="value user/getUserName">Myself</option>
+                <option value="select_all" select="selected">All</option>
+              </tal:se> 
+              <tal:se tal:condition="not: isadmin">
+                <option value="" tal:attributes="value user/getUserName" select="selected">Myself</option>
+                <option value="select_all">All</option>
+              </tal:se> 
+              <optgroup LABEL="Filter by User ">
+                <span tal:repeat="name member_names" tal:omit-tag="">
+                  <span tal:condition="python:name!=user.getUserName()" tal:omit-tag="">
+                    <option value="" tal:attributes="value name" tal:content="name">Second</option>
+                  </span>
+                </span>
+              </optgroup> 
+            </select>
+            <select class="select_field" name="filter_group" size="4" multiple="multiple" language="javascript" onChange="filterAnnotations(this);">
+              <option value="select_all" select="selected">All</option>
+              <optgroup LABEL="Filter by Group ">
+                <span tal:repeat="group group_names" tal:omit-tag="">
+                  <option value="" tal:attributes="value python:group[0]" tal:content="python:group[1]">Managers</option>
+                </span>
+              </optgroup> 
+            </select>
+            <select class="select_field" name="filter_type" size="4" multiple="multiple" language="javascript" onChange="filterAnnotations(this);">
+              <option value="select_all" select="selected">All</option>
+              <option value="comment">Comment</option>
+              <option value="insert">Insert</option>
+              <option value="replace">Replace</option>
+              <option value="delete">Delete</option>
+            </select>
+            <input class="input_field" type="text" name="annotation_search" value="" onChange="filterAnnotations(this);" onkeypress="return onEnterKey(this, event);"/>
+            <input class="input_field" type="button" id="search" value="Search" onClick="filterAnnotations(this);" />        
+            <input class="input_field" type="button" id="clear" value="Clear Search" onClick="clearSearch(this);" />        
+            <span id="loader" style="display:none;">
+              <img title="Loader" alt="" src="loader.gif" />
+            </span>
+          </div>
+          
+        </div>
+        <div class="marginalia-usage" i18n:translate="marginalia-usage">To add an amendment, hightlight the text in the document and then click on the blue
+          bar and select the amendment option you wish to use.</div>
+        
+        <h3 tal:content="object_title" class="documentFirstHeading">
+          Title or id
+        </h3>
+        
+        <!-- Marginalia .. -->
+        <ul id="debug" style="display:none">
+          <li></li>
+        </ul>
+        
+        <div class="visualClear"><!-- --></div>
+        <div class="stx"
+             tal:condition="text"
+             tal:attributes="class python:here.Format() in ('text/structured', 'text/x-rst', ) and 'stx' or 'plain'">
+          <div class="hentry" id="m1">
+            <table style="width: 100%">
+              <tr>
+	        <td>
+	          <div id="markers" class="markers"></div>
+	        </td>
+                <td>
+                  <div class="entry-content" tal:content="structure text" />
+                  <a rel="bookmark" tal:attributes="href annotatedUrl"
+                     href="http://www.geof.net/code/annotation/demo/#m1">#</a>
+                </td>
+                <td>
+                  <div class="notes">
+                    <button i18n:translate="menu-bar" class="createAnnotation" onclick="bungeniClickCreateAnnotation(event,'m1')" title="Click here to create an annotation">M e n u &nbsp; B a r</button>
+                    <ol><li></li></ol>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        
+        <div metal:use-macro="here/document_relateditems/macros/relatedItems">
+          show related items if they exist
+        </div>
+        
+      </tal:main-macro>
+    </metal:main>
+    
+  </body>
+</html>
+

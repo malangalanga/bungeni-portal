@@ -1,0 +1,34 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:five="http://namespaces.zope.org/five"
+           xmlns:browser="http://namespaces.zope.org/browser">
+
+   <five:implements
+      class="Products.Marginalia.content.AnnotatableDocument.AnnotatableDocument"
+      interface=".interfaces.IAnnotatable.IAnnotatable"/>
+
+   <five:traversable
+      class="Products.Marginalia.content.AnnotatableDocument.AnnotatableDocument"/>
+   
+   <browser:page
+      for=".interfaces.IAnnotatable.IAnnotatable"
+      name="annotate"
+      template="skins/marginalia-templates/annotate.pt"
+      class=".content.AnnotationAdaptorAndView.AnnotationView"      
+      permission="zope2.View"
+      />
+
+   <browser:page
+      for=".interfaces.IAnnotatable.IAnnotatable"
+      name="amendment"
+      template="skins/marginalia-templates/amendment.pt"
+      class=".content.AnnotationAdaptorAndView.AnnotationView"      
+      permission="zope2.View"
+      />
+
+   <adapter
+       for=".interfaces.IAnnotatable.IAnnotatable"
+       provides=".interfaces.IAnnotatable.IAnnotatableAdaptor"
+       factory=".content.AnnotationAdaptorAndView.AnnotationAdaptor"
+       />
+                         
+</configure>

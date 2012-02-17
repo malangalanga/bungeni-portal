@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"
+     xmlns:tal="http://xml.zope.org/namespaces/tal"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/"
+     xmlns:bungeni="http://bungeni.org/rss/1.0/modules/bungeni/"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:metal="http://xml.zope.org/namespaces/metal" >
+
+     <!-- Used by qRSS2Syndication if it's installed to present
+     Annotation instances in an RSS2 feed.
+     -->
+<metal:block define-macro="item">
+  <bungeni:from>
+  <!--
+    <rdf:bag>
+      <rdf:li tal:define="creator res/Creator; principal python:here.portal_membership.getMemberById(creator)">
+      -->
+    <!-- TODO: we assume the principal is a site member .. rethink this. -->
+        <bungeni:principal metal:define-macro="principal">
+          <bungeni:name tal:content="principal/getFullname | string:Missing name">John Smith</bungeni:name>
+          <bungeni:identifier tal:content="principal/UID | string:Missing UID">265d3a4f2164e4d9a3ad5545d8135c3c</bungeni:identifier>
+          <bungeni:uri tal:condition="principal/getURI | nothing" tal:content="principal/getURI"></bungeni:uri>
+          <bungeni:type tal:content="principal/portal_type | string:Missing portal_type">MemberOfParliament</bungeni:type>
+        </bungeni:principal>
+        <!--
+      </rdf:li>
+    </rdf:bag>
+    -->
+  </bungeni:from>
+  <bungeni:range>
+    <bungeni:marginalia tal:content="res/getRange | string:Missing range"></bungeni:marginalia>
+    <bungeni:closest_id tal:content="res/getClosest_id | string:Missing closest_id"></bungeni:closest_id>
+    <bungeni:range_from_closest_id tal:content="res/getRange_from_closest_id | string:Missing range from closest_id"></bungeni:range_from_closest_id>
+    <bungeni:quote tal:content="res/getQuote | string:Missing quote"></bungeni:quote>
+  </bungeni:range>
+   <content:encoded>
+     <tal:x replace="structure python:'&lt;![CDATA['+res.getNote()+']]&gt;'"/>
+   </content:encoded>
+ </metal:block>
+</rss>

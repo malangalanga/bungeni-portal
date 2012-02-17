@@ -1,0 +1,45 @@
+<tal:block tal:define="
+    dummy python:context.REQUEST.RESPONSE.setHeader('Content-Type', 'application/xml');
+    global plone_view context/@@plone;
+    foo plone_view/globalize;
+    "/><?xml version="1.0" encoding="utf-8"?><!--
+
+    Parameters on REQUEST
+    =====================
+
+    format=blocks   .. This template can only return a custom XML format
+    block           .. return only annotations whose ranges impinge on a given block
+    user            .. Only return annotations for this user.
+    url             .. Only return annotations for this URL.
+    -->
+<range-infos
+    xml:base=""
+    xml:lang="en"
+    xmlns:ptr="http://www.geof.net/code/annotation/"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    tal:define="
+    q_format request/format;
+    q_user request/user | nothing;
+    q_url request/url;
+    q_type request/filter_type | nothing;
+    feed nocall:context;
+    results python:feed.getRangeInfos(q_user, q_url, q_type);"
+    tal:attributes="xml:base feed/getBaseURL"
+    i18n:domain="marginalia"
+    ptr:annotation-version='0.4'
+    >
+	
+	<tal:repeat repeat="rangeinfo results">
+		<range-info url="" tal:attributes="url rangeinfo/url">
+			<range format="sequence" tal:content="rangeinfo/sequenceRange"/>
+			<range format="xpath" tal:content="rangeinfo/xpathRange"/>
+			<tal:repeat repeat="userinfo rangeinfo/getUsers">
+				<user notes="" edits=""
+					tal:attributes="notes userinfo/notes; edits userinfo/edits"
+					tal:content="userinfo/username"/>
+			</tal:repeat>
+		</range-info>
+	</tal:repeat>
+</range-infos>
+

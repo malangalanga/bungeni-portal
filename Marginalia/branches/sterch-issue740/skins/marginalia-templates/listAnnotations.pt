@@ -1,0 +1,131 @@
+<tal:block tal:define="
+    dummy python:context.REQUEST.RESPONSE.setHeader('Content-Type', 'application/atom+xml');
+    global plone_view context/@@plone;
+    foo plone_view/globalize;
+    "/><?xml version="1.0" encoding="utf-8"?><!--
+
+    Parameters on REQUEST
+    =====================
+
+    format=atom      .. This template can only return atom
+    block            .. TODO: return annotations whose ranges impinge on a given block
+    user             .. Only return annotations for this user.
+    url              .. Only return annotations for this URL.
+    -->
+<feed xmlns="http://www.w3.org/2005/Atom"
+      xmlns:atom="http://www.w3.org/2005/Atom"
+      xmlns:ptr="http://www.geof.net/code/annotation/"
+      xml:base=""
+      xml:lang="en"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      tal:define="
+      q_format request/format | nothing;
+      q_block request/block | nothing;
+      q_user request/user | nothing;
+      q_name request/filter_name | nothing;
+      q_group request/filter_group | nothing;
+      q_type request/filter_type | nothing;
+      q_search request/search_string | nothing;
+      q_url request/url;
+      feed nocall:context;
+      results python:feed.getSortedFeedEntries(q_user, q_url, q_block, q_name, q_group, q_type, q_search);"
+      tal:attributes="xml:base feed/getBaseURL"
+      i18n:domain="marginalia"
+      ptr:annotation-version='0.5'
+      >
+  <link rel="self"
+        href=""
+        tal:attributes="href string:${feed/absolute_url}/atom.xml" />
+
+    <updated tal:content="python:toLocalizedTime(feed.ModificationDate(),long_format=1)">2002-10-02T10:00:00-05:00</updated>
+
+  <title type="html" tal:content="feed/Title"> Annotations </title>
+
+  <id tal:content="string:urn:syndication:${feed/getFeedUID}">
+    Really unique id
+  </id>
+
+  <subtitle tal:content="feed/Description">
+    Longer subtitle about the greatness of this magnificent epos.
+  </subtitle>
+
+  <tal:repeat repeat="feedentry results">
+
+    <entry tal:define="
+		action feedentry/getAction;
+		note feedentry/getNote;
+		quote feedentry/getQuote">
+    <ptr:range format="sequence" tal:content="feedentry/getSequenceRange">/2/15.0;/2/17.7</ptr:range>
+    <ptr:range format="xpath" tal:content="feedentry/getXPathRange">p[2]/word(15)/char(0);p[2]/word(17)/char(7)</ptr:range>
+    <ptr:access tal:content="feedentry/getAccess">private</ptr:access>
+    <ptr:status tal:content="feedentry/getStatus">pending</ptr:status>
+	<ptr:action tal:content="action">edit</ptr:action>
+
+      <title tal:content="feedentry/Title">
+        The Netherlands wins the world cup
+      </title>
+
+      <link rel="self" 
+      type="application/xml"
+      tal:attributes="href feedentry/absolute_url" />
+
+      <link rel="alternate" 
+            type="text/html"
+            href=""
+            title="Plone marginalia"
+            tal:attributes="href feedentry/getUrl" />
+
+	<link rel='related' type='text/html' title="" href=""
+		tal:attributes="title feedentry/getLink_title;
+						 href feedentry/getLink"/>
+
+	<id tal:content="feedentry/UID">
+        tag:localhost:12345678
+      </id>
+
+      <updated tal:content="python:toLocalizedTime(feedentry.ModificationDate(),long_format=1)">2002-10-02T10:00:00-05:00</updated>
+
+      <summary tal:condition="feedentry/getQuote"
+               tal:content="feedentry/getQuote"/>
+
+      <author>
+        <name tal:content="feedentry/getUserName">username</name>
+        <contributor tal:content="feedentry/getQuote_author">
+        source of commented text
+        </contributor>
+      </author>
+	  
+      <content type="xhtml">
+        <div xmlns='http://www.w3.org/1999/xhtml' class='annotation'>
+            <p class="quote">
+				<del tal:condition="python:action=='edit'"><q tal:content="quote">strikethrough text</q></del>
+				<q tal:condition="python:action!='edit'" tal:content="quote">quoted text</q>
+				&#x2015; <span class="quoteAuthor" tal:content="feedentry/getQuote_author">author</span>,
+				<cite><a href="cited-url" tal:attributes="href feedentry/getUrl" tal:content="feedentry/getQuote_title">
+					title of annotated document
+				</a></cite>
+			</p>
+			
+			<p class="note" tal:condition="note">
+				<ins tal:condition="python:action=='edit'" tal:content="note">insertion text</ins>
+				<span tal:condition="python:action!='edit'" tal:replace="note">margin note</span>
+			</p>
+			
+			<p class="see-also" tal:condition="feedentry/getLink">
+				<cite>
+                                        <span tal:condition="python:hasattr(feedentry.getLink(),'UID')" tal:omit-tag="">
+					<a href="" tal:attributes="href python:feedentry.getLink().UID()" tal:content="feedentry/getLink_title">link</a>
+                                        </span>
+                                        <span tal:condition="python:not hasattr(feedentry.getLink(),'UID')" tal:omit-tag="">
+					<a href="" tal:attributes="href python:feedentry.getLink()" tal:content="feedentry/getLink_title">link</a>
+                                        </span>
+				</cite>
+			</p>			
+        </div>
+      </content>
+    </entry>
+
+  </tal:repeat>
+
+</feed>
