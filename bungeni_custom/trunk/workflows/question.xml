@@ -62,9 +62,6 @@
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
         <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
         <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
-        <!-- groupitemassignment -->
-        <deny permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
     
     <state id="draft" title="Draft" like_state="working_draft" 
@@ -176,9 +173,6 @@
         <grant permission="zope.View" role="bungeni.MP" />
         <grant permission="zope.View" role="bungeni.Minister" />
         <grant permission="zope.View" role="bungeni.Anonymous" />
-        <!-- groupitemassignment -->
-        <grant permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
     
     <state id="inadmissible" title="Inadmissible" 
@@ -293,8 +287,6 @@
     <state id="debated" title="Debated" 
         like_state="admissible"
         tags="public terminal succeed">
-        <deny permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
         <notification condition="owner_receive_notification"
             subject="Question debated: ${item.short_name}"
             from="${site.clerk_email}"

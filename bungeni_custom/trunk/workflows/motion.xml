@@ -71,9 +71,6 @@
         <deny permission="bungeni.fileattachment.Add" role="bungeni.MP" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Minister" />
         <deny permission="bungeni.fileattachment.Add" role="bungeni.Anonymous" />
-        <!-- groupitemassignment -->
-        <deny permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
     
     <state id="draft" title="Draft" 
@@ -227,9 +224,6 @@
         <grant permission="zope.View" role="bungeni.MP" />
         <grant permission="zope.View" role="bungeni.Minister" />
         <grant permission="zope.View" role="bungeni.Anonymous" />
-        <!-- groupitemassignment -->
-        <grant permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
     
     <state id="schedule_pending" title="Schedule pending"
@@ -252,9 +246,6 @@
         version="true"
         like_state="admissible"
         tags="public terminal succeed">
-        <!-- groupitemassignment -->
-        <deny permission="bungeni.groupitemassignment.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.groupitemassignment.Add" role="bungeni.Clerk" />
     </state>
     
     <state id="adopted_amendments" title="Adopted with amendments"
