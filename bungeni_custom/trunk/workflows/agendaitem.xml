@@ -23,7 +23,7 @@
     <!--grant permission="bungeni.agendaitem.Add" role="bungeni.MP" /-->
     <grant permission="bungeni.agendaitem.Delete" role="bungeni.Owner" />
     
-
+    
     <state id="working_draft" title="Working Draft" tags="draft private">
         <!-- agendaitem -->
         <grant permission="zope.View" role="bungeni.Clerk" />
@@ -80,7 +80,7 @@
         <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
         <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
     </state>
-
+    
     <state id="submitted_signatories" title="Submitted to Signatories" 
         version="true" like_state="draft">
         <!-- agendaitem -->
@@ -93,18 +93,18 @@
         <!-- signatories -->
         <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
     </state>
-
+    
     <state id="redraft" title="Redraft" version="true" like_state="draft"
         note="document under review before resubmission">
         <deny permission="bungeni.agendaitem.Delete" role="bungeni.Owner"/>
     </state>
-
+    
     <state id="withdrawn_signatory" title="Dropped"  
         like_state="submitted_signatories">
         <!-- signatories -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
     </state>
-
+    
     <state id="submitted" title="Submitted" version="true" 
         like_state="submitted_signatories"
         tags="actionclerk">
