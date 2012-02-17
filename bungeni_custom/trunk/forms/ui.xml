@@ -383,27 +383,6 @@
         </field>
     </descriptor>
 
-    <descriptor name="EventItem">
-        <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="owner_id" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="edit" />
-            <hide modes="listing" />
-            <hide modes="view" roles="bungeni.Anonymous" />
-        </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
-            <hide modes="listing" />
-        </field>
-        <field name="body_text" displayable="view edit add" localizable="view edit">
-            <show modes="view edit" />
-        </field>
-        <field name="event_date" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-    </descriptor>
-
     <descriptor name="Government">
         <field name="short_name" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
