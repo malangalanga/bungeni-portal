@@ -1,7 +1,7 @@
 STYLESHEETS = (
         {'id': 'marginalia.css', 'expression': 'here/@@annotate/isAnnotatable|nothing'},
-        {'id': 'annotation-utils.css', 'expression': ''},
-        {'id': 'amendment-utils.css', 'expression': ''},
+        #{'id': 'annotation-utils.css', 'expression': ''},
+        #{'id': 'amendment-utils.css', 'expression': ''},
         )
 
 JAVASCRIPTS = (
@@ -40,6 +40,6 @@ JAVASCRIPTS = (
         {'id': 'marginalia-strings.js', 'expression': 'here/@@annotate/isAnnotatable|nothing', 'compression': 'none'},
         {'id': 'bungeni-annotate.js', 'expression': 'here/@@annotate/isAnnotatable|nothing', 'compression': 'none'},
         {'id': 'referencebrowser.js', 'expression': 'here/@@annotate/isAnnotatable|nothing', 'compression': 'none'},
-        {'id': 'annotation-utils.js', 'expression': '', 'compression': 'none'},
-        {'id': 'amendment-utils.js', 'expression': '', 'compression': 'none'},        
+        #{'id': 'annotation-utils.js', 'expression': '', 'compression': 'none'},
+        #{'id': 'amendment-utils.js', 'expression': '', 'compression': 'none'},        
         )

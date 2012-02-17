@@ -5,9 +5,6 @@
    <five:implements
       class="Products.Marginalia.content.AnnotatableDocument.AnnotatableDocument"
       interface=".interfaces.IAnnotatable.IAnnotatable"/>
-
-   <five:traversable
-      class="Products.Marginalia.content.AnnotatableDocument.AnnotatableDocument"/>
    
    <browser:page
       for=".interfaces.IAnnotatable.IAnnotatable"
@@ -22,6 +19,13 @@
       name="amendment"
       template="skins/marginalia-templates/amendment.pt"
       class=".content.AnnotationAdaptorAndView.AnnotationView"      
+      permission="zope2.View"
+      />
+      
+   <browser:page
+      for=".interfaces.IAnnotatable.IAnnotatable"
+      name="finish"
+      class=".content.AnnotationAdaptorAndView.CommitChanges"      
       permission="zope2.View"
       />
 

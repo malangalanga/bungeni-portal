@@ -5,14 +5,14 @@ function load() {
 
 function show_annotations_on_load()
 {
-  var serviceRoot = '${request/base}/${utool/getPortalPath}/portal_annotations';
-  var username = '${user/getUserName}';
-  var isadmin = '${isadmin}';
+  var serviceRoot = portal_url+'/portal_annotations';
+  //var username = '${user/getUserName}';
+  //var isadmin = '${isadmin}';
   var superuser = false;
   if (isadmin == 'True') {
             superuser = true;
   }
-  var url = '${annotatedUrl}';
+  var url = annotatedUrl;
   var restService = '/amendment';
   bungeniMarginaliaInit( username, superuser, url, serviceRoot, restService );
   setTimeout( 'load();', 500);

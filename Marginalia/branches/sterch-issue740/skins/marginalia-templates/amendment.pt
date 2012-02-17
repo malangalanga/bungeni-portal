@@ -3,15 +3,16 @@
       lang="en"
       metal:use-macro="here/main_template/macros/master"
       i18n:domain="plone">
-  <body>
-    
-    <metal:main fill-slot="main"
-	        tal:define="absoluteUrl string:${here/absolute_url};
-	                    annotatedUrl python:view.getAnnotatedUrl(absoluteUrl);
-                            isadmin python:context.portal_annotations.isAdmin(context);">
       
-      <head>
-        <tal:js metal:fill-slot="javascript_head_slot" tal:omit-tag="">
+  <head>
+        <tal:js metal:fill-slot="javascript_head_slot" tal:omit-tag=""
+        	    tal:define="absoluteUrl string:${here/absolute_url};
+	                        annotatedUrl python:view.getAnnotatedUrl(absoluteUrl);
+                            isadmin python:context.portal_annotations.isAdmin(context);">
+          <script type="text/javascript"
+          	tal:content="string: var username = '${user/getUserName}';
+						 var isadmin = '${isadmin}';
+				         var annotatedUrl = '${annotatedUrl}';"/>
           <script type="text/javascript"
                   tal:attributes="src string:${context/portal_url}/amendment-utils.js"
                   src="">
@@ -23,15 +24,22 @@
                 tal:attributes="href string:${context/portal_url}/amendment-utils.css"/>
         </div>                         
         
-      </head>      
+  </head>
+      
+  <body>
+    
+    <metal:main fill-slot="main"
+	        tal:define="absoluteUrl string:${here/absolute_url};
+	                    annotatedUrl python:view.getAnnotatedUrl(absoluteUrl);
+                            isadmin python:context.portal_annotations.isAdmin(context);">      
       
       <tal:main-macro metal:define-macro="main"
                       tal:define="text python: here.CookedBody(stx_level=2)">
         
         
-        <div metal:use-macro="here/document_actions/macros/document_actions">
+        <!--<div metal:use-macro="here/document_actions/macros/document_actions">
           Document actions (print, sendto etc)
-        </div>
+        </div>-->
         
         <div class="searchfields" tal:define="member_names python:context.portal_annotations.getOwnerList(request);
                                               group_names python:context.portal_annotations.getPortalGroups();">
@@ -85,7 +93,7 @@
         <div class="marginalia-usage" i18n:translate="marginalia-usage">To add an amendment, hightlight the text in the document and then click on the blue
           bar and select the amendment option you wish to use.</div>
         
-        <h3 tal:content="object_title" class="documentFirstHeading">
+        <h3 tal:content="context/@@plone_context_state/object_title" class="documentFirstHeading">
           Title or id
         </h3>
         

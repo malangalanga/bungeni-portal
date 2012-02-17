@@ -396,6 +396,8 @@ class Annotations(UniqueObject, BaseBTreeFolder):
         plone = getToolByName(self, 'portal_url').getPortalObject()
         obj_id = plone.generateUniqueId('Annotation')
         
+        print "UNIQUE ID", obj_id
+        
         #new_id = self.invokeFactory('Annotation', id=obj_id, **params)
         new_id = self.invokeFactory('Annotation', id=obj_id)        
         annotation = getattr(self, new_id)

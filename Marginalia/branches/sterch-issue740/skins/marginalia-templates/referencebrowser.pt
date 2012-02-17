@@ -178,16 +178,7 @@
               </ul>
               </div>
           </tal:multi>
-          <div style="clear: both"
-               tal:define="startup_directory python:here.referencebrowser_startupDirectory (widget.startup_directory);
-                           global at_url at_url|python:'/'.join(here.getPhysicalPath())">
-              <input type="button"
-                     class="searchButton"
-                     value="Browse..."
-                     onClick=""
-                     i18n:attributes="value label_add;"
-                     tal:attributes="onClick string:javascript:referencebrowser_openBrowser('${startup_directory}','${fieldName}', '${at_url}', '${fieldRealName}')" />
-          </div>
+          <h3>search was here</h3>
           <!-- Todo? -->
           <metal:addable metal:use-macro="here/widgets/addable_support/macros/addable"/>
     </metal:reference_edit>

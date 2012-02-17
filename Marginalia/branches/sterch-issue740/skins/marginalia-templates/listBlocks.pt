@@ -1,7 +1,6 @@
 <tal:block tal:define="
     dummy python:context.REQUEST.RESPONSE.setHeader('Content-Type', 'application/xml');
     global plone_view context/@@plone;
-    foo plone_view/globalize;
     "/><?xml version="1.0" encoding="utf-8"?><!--
 
     Parameters on REQUEST

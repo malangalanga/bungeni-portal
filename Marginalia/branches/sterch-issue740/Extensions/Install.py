@@ -47,7 +47,7 @@ from Products.Marginalia.config import product_globals as GLOBALS
 
 def install(self, reinstall=False):
     """ External Method to install Marginalia """
-    out = StringIO()
+    """    out = StringIO()
     print >> out, "Installation log of %s:" % PROJECTNAME
 
     # If the config contains a list of dependencies, try to install
@@ -207,7 +207,8 @@ def install(self, reinstall=False):
             print >>out,'no output'
     else:
         print >>out,'no custom install'
-    return out.getvalue()
+    return out.getvalue()"""
+    return
 
 def uninstall(self, reinstall=False):
     out = StringIO()
@@ -216,6 +217,8 @@ def uninstall(self, reinstall=False):
     catalog = getToolByName(self, "portal_catalog")
     if 'getAccess' in catalog.indexes():
         catalog.manage_delIndex(['getAccess',])
+    if 'getEditType' in catalog.indexes():
+        catalog.manage_delIndex(['getEditType',])
 
     # unhide tools in the search form
     portalProperties = getToolByName(self, 'portal_properties', None)

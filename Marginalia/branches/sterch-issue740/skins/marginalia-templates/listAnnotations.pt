@@ -1,7 +1,6 @@
 <tal:block tal:define="
     dummy python:context.REQUEST.RESPONSE.setHeader('Content-Type', 'application/atom+xml');
     global plone_view context/@@plone;
-    foo plone_view/globalize;
     "/><?xml version="1.0" encoding="utf-8"?><!--
 
     Parameters on REQUEST
@@ -38,7 +37,7 @@
         href=""
         tal:attributes="href string:${feed/absolute_url}/atom.xml" />
 
-    <updated tal:content="python:toLocalizedTime(feed.ModificationDate(),long_format=1)">2002-10-02T10:00:00-05:00</updated>
+    <updated tal:content="python:feed.ModificationDate()">2002-10-02T10:00:00-05:00</updated>
 
   <title type="html" tal:content="feed/Title"> Annotations </title>
 
@@ -84,7 +83,7 @@
         tag:localhost:12345678
       </id>
 
-      <updated tal:content="python:toLocalizedTime(feedentry.ModificationDate(),long_format=1)">2002-10-02T10:00:00-05:00</updated>
+      <updated tal:content="python:feedentry.ModificationDate()">2002-10-02T10:00:00-05:00</updated>
 
       <summary tal:condition="feedentry/getQuote"
                tal:content="feedentry/getQuote"/>

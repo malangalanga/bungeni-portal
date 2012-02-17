@@ -232,6 +232,7 @@ RestAnnotationService.prototype.createAnnotation = function( annotation, f )
 		+ '&link=' + encodeURIParameter( annotation.getLink() )
 		+ '&userid=' + encodeURIParameter( annotation.getUserId() )
 		+ '&edit_type=' + encodeURIParameter( edit_type );
+	
 
 	// userid shouldn't be trusted by the server of course, except for demo applications for
 	// which it can be useful.

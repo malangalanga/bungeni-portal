@@ -13,4 +13,14 @@
   <dependency step="componentregistry"/>
     Import actions tool's action providers and their actions.
  </import-step>
+ 
+ <import-step 
+    id="CompoundField-postInstall" 
+    handler="Products.Marginalia.setuphandlers.postInstall"
+    title="manual coded post-install for Marginalia"
+    version="2012-02-12T22:15">
+   <dependency step="Marginalia-QI-dependencies"/>
+   manual coded post-install for Marginalia
+ </import-step>
+ 
 </import-steps>

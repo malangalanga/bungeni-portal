@@ -1,8 +1,8 @@
 function show_annotations_on_load() 
 {
-	var serviceRoot = '${request/base}/${utool/getPortalPath}/portal_annotations';
-	var username = '${user/getUserName}';
-	var url = '${annotatedUrl}';
+	var serviceRoot = portal_url+'/portal_annotations';
+	//var username = '${user/getUserName}';
+	var url = annotatedUrl;
 	bungeniMarginaliaInit( username, url, serviceRoot );
 }
 addEventHandler(window, 'load', show_annotations_on_load, window);
@@ -14,6 +14,6 @@ addEventHandler(window, 'load', show_annotations_on_load, window);
  * 2. BungeniNoteEditor - create a simple margin note
  */
 function bungeniClickCreateAnnotation( event, id )
-{
+{	
 	clickCreateAnnotation( event, id, new SelectActionNoteEditor( ) );
 }
