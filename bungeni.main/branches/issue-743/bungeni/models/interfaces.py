@@ -152,8 +152,9 @@ class IVersionContainer(IBungeniContainer):
 class IHeading(IBungeniContent):
     pass
 
-class IEventItem(IBungeniContent):
+class IEvent(IBungeniContent):
     pass
+
 
 # !+IITEMVersion(mr, sep-2011): should IITEMVersion exist at all? if so, 
 # should it inherit from IITEM, or from IVersion? Note that 
@@ -398,41 +399,6 @@ class IBungeniEmailSettings(interface.Interface):
         default = False,
     )
 
-
-class IAssignment(IAlchemistContent):
-
-    content = schema.Object(IAlchemistContent)
-    context = schema.Object(IAlchemistContent)
-    title = schema.TextLine(
-        title=_(u"Title of document assignment to group or committee")
-    )
-    start_date = schema.Date(title=_(u"Start date of document assignment"))
-    end_date = schema.Date(title=_(u"End date of document assignment"))
-    type = schema.TextLine(title=_(u"Document assignment type"), readonly=True)
-    status = schema.TextLine(title=_(u"Status"), readonly=True)
-    notes = schema.Text(title=_(u"Notes"), description=_(u"Notes"))
-
-class IContentAssignments(interface.Interface):
-    """Assignments of this content to different contexts.
-    """
-    def __iter__():
-        """Iterate over assignments for this context.
-        """
-
-class IContextAssignments(interface.Interface):
-    """Content assignments for the given context/group.
-    """
-    def __iter__():
-        """Iterate over assignments for this context.
-        """
-
-class IAssignmentFactory(interface.Interface):
-    """Assignment factory.
-    """
-    def new(**kw):
-        """Create a new assignment.
-        """
-
 class IAttachedFile(IOwned): pass
 #class IAttachedFileVersion(IVersion): pass
 # !+IITEMVersion !+IAttachedFileVersion(mr, sep-2011): IAttachedFileVersion end 
@@ -554,16 +520,6 @@ class IGroupAddress(_IAddress):
 class IUserAddress(_IAddress):
     """Marker interface addresses of a user.
     """
-
-
-class IGroupItemAssignment(interface.Interface):
-    pass
-
-class IGroupGroupItemAssignment(IGroupItemAssignment):
-    pass
-
-class IItemGroupItemAssignment(IGroupItemAssignment):
-    pass
 
 class IReport(IBungeniContent):
     pass

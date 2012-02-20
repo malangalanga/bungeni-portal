@@ -40,57 +40,6 @@ from bungeni.ui.interfaces import IBungeniAuthenticatedSkin, IAdminSectionLayer
 from bungeni.utils import register
 
 
-''' XXX-INFO-FOR-PLONE - MR - 2010-05-03
-class GroupIdViewlet(browser.BungeniViewlet):
-    """ display the group and parent group
-    principal id """
-    parent_group_principal_id = None
-    my_group_principal_id = None
-    
-    def __init__(self,  context, request, view, manager):
-        self.context = context
-        self.request = request
-        self.__parent__= context
-        self.manager = manager
-        
-    def update(self):
-        session = Session()
-        trusted = removeSecurityProxy(self.context)
-        if interfaces.IParliament.providedBy(trusted):
-            self.parent_group_principal_id = trusted.group_principal_id
-        else:
-            self.parent_group_principal_id = getattr(
-                trusted.parent_group, 'group_principal_id', "")
-        self.my_group_principal_id = trusted.group_principal_id
-        #session.close()
-        
-    render = ViewPageTemplateFile('templates/group_id.pt')
-'''
-''' XXX-INFO-FOR-PLONE - MR - 2010-05-03
-class UserIdViewlet(browser.BungeniViewlet):
-    """ display the users
-    principal id """
-    principal_id = None
-    
-    def __init__(self,  context, request, view, manager):
-
-        self.context = context
-        self.request = request
-        self.__parent__= context
-        self.manager = manager
-        
-    def update(self):
-        session = Session()
-        trusted = removeSecurityProxy(self.context)
-        session.merge(trusted)
-        try:
-            self.principal_id = trusted.user.login
-        except:
-            pass
-        
-    render = ViewPageTemplateFile('templates/user_id.pt')
-'''
-
 def load_formatted_container_items(container, out_format={}, extra_params={}):
     """Load container items and return as a list of formatted dictionary
     items.
@@ -230,12 +179,6 @@ class QuestionsViewlet(SubformViewlet):
 
 class AgendaItemsViewlet(SubformViewlet):
     sub_attr_name = "agendaitems"
-
-class AssignedItemsViewlet(SubformViewlet):
-    sub_attr_name = "assigneditems"
-
-class AssignedGroupsViewlet(SubformViewlet):
-    sub_attr_name = "assignedgroups"
 
 class MinistriesViewlet(SubformViewlet):
     sub_attr_name = "ministries"

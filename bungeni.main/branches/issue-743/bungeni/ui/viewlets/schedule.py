@@ -16,7 +16,8 @@ import sqlalchemy.sql.expression as sql
 
 from bungeni.core.workflows.adapters import get_workflow
 from bungeni.models import domain
-from bungeni.models.interfaces import IBungeniApplication, IBungeniGroup, ICommittee
+from bungeni.models.interfaces import (IBungeniApplication,
+                                       IBungeniGroup, ICommittee)
 
 from bungeni.alchemist import Session
 from bungeni.core.workflow.interfaces import IWorkflow
