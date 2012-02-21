@@ -155,7 +155,7 @@
     <transition title="Finalize Agenda"
         source="draft_agenda"
         destination="published_agenda"
-        condition="has_venue"
+        condition="has_agenda"
         trigger="manual"
         roles="bungeni.Clerk bungeni.Speaker"
         require_confirmation="false"
