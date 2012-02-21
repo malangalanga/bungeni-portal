@@ -5,6 +5,7 @@
       lang="en"
       i18n:domain="plone">
   <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
     <metal:block define-slot="title">
       <title tal:content="string:bungeni">Z3 UI</title>
     </metal:block>
@@ -45,8 +46,7 @@
     <tal:block metal:define-slot="header">
     </tal:block>
 
-    <meta http-equiv="Content-Type"
-          content="text/html;charset=utf-8" />
+    
   </head>
 
 <body tal:attributes="class context/@@plone/body_css_class; dir context/@@plone/text_direction">
