@@ -1,0 +1,108 @@
+table {
+    font: 11px/24px Verdana, Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 94%;
+}
+th {
+    padding: 0 0.5em;
+    text-align: left;
+}
+tr.yellow td th {
+    border-top: 1px solid #FB7A31;
+    border-bottom: 1px solid #FB7A31;
+    background: #FFC;
+}
+td {
+    border-bottom: 1px solid #CCC;
+    padding: 0 0.5em;
+    vertical-align:top;
+}
+td:first-child {
+    width: 190px;
+}
+td+td {
+    border-left: 1px solid #CCC;
+    text-align: center;
+}
+tr.m0 {
+    background-color: #ffffcc;
+}
+tr.m1 {
+    background-color: #ffffff;
+}
+tr.s0 {
+    background-color: #eee;
+     
+}
+tr.s1 {
+    background-color: #fff;
+     
+}
+div.ident {
+    font-style:normal;
+    color:gray;
+     
+}
+div.trig {
+    color:dark-gray;
+}
+/* * for table of content * */
+#menu li {
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+}
+#menu li a {
+    font-size:0.9em;
+}
+.linkbar a {
+    font-size: 0.7em;
+}
+.toc-links a {
+    font-size:0.7em;
+}
+.note {
+    font-size:0.9em;
+    font-style:italics;
+    font-family:helvetica;
+    color:gray;
+}
+h1 {
+    font-family:Helvetica;
+    font-style:bold;
+    font-size:1.3em;
+}
+h2 {
+    font-family:Helvetica;
+    font-style:bold;
+    font-size:1.1em;
+}
+h3 {
+    font-family:Helvetica;
+    font-style:bold;
+    font-size:0.9em;
+}
+h1.main {
+    color:orange;
+}
+h1.index {
+    color:gray;
+}
+h2.index {
+    color:gray;
+}
+div.tag-container{
+    border:1px solid #943A1D;
+    background-color:#ECDCD8;
+}
+span.state-tag{
+    margin-right:0.5em;
+    font-size:14px;
+    padding:0.1em;
+}
+span.block-tag{
+    display:block;
+    border-bottom:1px solid #ccc;
+    background-color:#fff;
+    padding:0.1em;
+}

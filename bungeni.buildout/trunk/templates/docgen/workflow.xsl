@@ -28,100 +28,7 @@
                 <title>
                     <xsl:value-of select="@title"/>
                 </title>
-                <style type="text/css">
-                    table {
-                        font: 11px/24px Verdana, Arial, Helvetica, sans-serif;
-                        border-collapse: collapse;
-                        width: 94%;
-                    }
-                    th {
-                        padding: 0 0.5em;
-                        text-align: left;
-                    }
-                    tr.yellow td th {
-                        border-top: 1px solid #FB7A31;
-                        border-bottom: 1px solid #FB7A31;
-                        background: #FFC;
-                    }
-                    td {
-                        border-bottom: 1px solid #CCC;
-                        padding: 0 0.5em;
-                        vertical-align:top;
-                    }
-                    td:first-child {
-                        width: 190px;
-                    }
-                    td+td {
-                        border-left: 1px solid #CCC;
-                        text-align: center;
-                    }
-                    tr.m0 {
-                        background-color: #ffffcc;
-                    }
-                    tr.m1 {
-                        background-color: #ffffff;
-                    }
-                    tr.s0 {
-                        background-color: #eee;
-                         
-                    }
-                    tr.s1 {
-                        background-color: #fff;
-                         
-                    }
-                    div.ident {
-                        font-style:normal;
-                        color:gray;
-                         
-                    }
-                    div.trig {
-                        color:dark-gray;
-                    }
-                    /* * for table of content * */
-                    #menu li {
-                        display: inline;
-                        list-style-type: none;
-                        padding-right: 20px;
-                    }
-                    #menu li a {
-                        font-size:0.9em;
-                    }
-                    .linkbar a {
-                        font-size: 0.7em;
-                    }
-                    .toc-links a {
-                        font-size:0.7em;
-                    }
-                    .note {
-                        font-size:0.9em;
-                        font-style:italics;
-                        font-family:helvetica;
-                        color:gray;
-                    }
-                    h1 {
-                        font-family:Helvetica;
-                        font-style:bold;
-                        font-size:1.3em;
-                    }
-                    h2 {
-                        font-family:Helvetica;
-                        font-style:bold;
-                        font-size:1.1em;
-                    }
-                    h3 {
-                        font-family:Helvetica;
-                        font-style:bold;
-                        font-size:0.9em;
-                    }
-                    h1.main {
-                        color:orange;
-                    }
-                    h1.index {
-                        color:gray;
-                    }
-                    h2.index {
-                        color:gray;
-                    }</style>
+                <link rel="stylesheet" href="docs.css" type="text/css" />
             </head>
             <body>
                 <h1 class="main">
@@ -193,6 +100,18 @@
                     <xsl:text>,</xsl:text>
                     <xsl:call-template name="diagram"/>
                 </div>
+               
+                <xsl:if test="@tags">
+                    <div class="tag-container">
+                        <p>
+                            <h3><xsl:value-of select="$wf-content-type"/>:State Tags</h3>
+                            <xsl:call-template name="render-tags">
+                                <xsl:with-param name="tags" select="@tags"/>
+                                <xsl:with-param name="class">state-tag</xsl:with-param>
+                            </xsl:call-template>
+                        </p>
+                    </div>
+                </xsl:if>
                 
                 <h4>Global Grants</h4>
                 <table border="1">
@@ -200,7 +119,7 @@
                        <xsl:with-param name="grant-or-denies" select="./grant" />
                     </xsl:call-template>
                 </table>
-                
+                                
                 <h4>State Grants</h4>
                 
                 <table border="1">
@@ -245,6 +164,17 @@
                             <!-- Query the state key using the id value in like_state and return the title -->
                             <xsl:value-of select="key('query_state',@like_state)/@title" />
                         </a>
+                    </div>
+                </xsl:if>
+                <xsl:if test="@tags">
+                    <div class="tag-container">
+                        <p>
+                            <strong>Tags:</strong>
+                            <xsl:call-template name="render-tags">
+                                <xsl:with-param name="tags" select="@tags"/>
+                                <xsl:with-param name="class">block-tag</xsl:with-param>
+                            </xsl:call-template>
+                        </p>
                     </div>
                 </xsl:if>
                 <xsl:if test="@version">
@@ -370,6 +300,24 @@
             </td>
 
         </tr>
+    </xsl:template>
+
+    <!-- List the tags applicable to this content type -->
+    <xsl:template name="render-tags">
+        <xsl:param name="tags">
+            <!-- A list of space separated tags selected from workflow XML -->
+        </xsl:param>
+        <xsl:param name="class">
+            <!-- The class to apply to tags -->
+        </xsl:param>
+        <xsl:for-each select="tokenize(normalize-space($tags), ' ')">
+            <span>
+                <xsl:attribute name="class">
+                    <xsl:value-of select="$class"/>
+                </xsl:attribute>
+                <xsl:value-of select="."/>
+            </span>
+        </xsl:for-each>
     </xsl:template>
 
     <!-- This template matches grant or deny elements -->
