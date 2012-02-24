@@ -252,10 +252,10 @@ class PageForm(BaseForm, formlib.form.PageForm, browser.BungeniBrowserView):
 class DisplayForm(catalyst.DisplayForm, browser.BungeniBrowserView):
 
     # evoque
-    template = z3evoque.PageViewTemplateFile("content.html#view")
+    #template = z3evoque.PageViewTemplateFile("content.html#view")
 
     # zpt
-    #template = ViewPageTemplateFile("templates/content-view.pt")
+    template = ViewPageTemplateFile("templates/content_view.pt")
 
     form_name = _("View")
 

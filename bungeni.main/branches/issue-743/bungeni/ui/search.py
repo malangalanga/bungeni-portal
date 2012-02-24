@@ -442,7 +442,7 @@ class Pager(object):
 
 
 class PagedSearch(Pager, Search):
-  template = ViewPageTemplateFile('templates/pagedsearch.pt')
+  template = ViewPageTemplateFile('templates/paged-search.pt')
 
 
 def get_users_vocabulary():
@@ -467,7 +467,7 @@ def get_users_vocabulary():
 
 
 class AdvancedPagedSearch(PagedSearch):
-    template = ViewPageTemplateFile('templates/advanced-pagedsearch.pt')
+    template = ViewPageTemplateFile('templates/advanced-paged-search.pt')
     form_fields = form.Fields(IAdvancedSearch)
     form_fields["status_date"].custom_widget = SelectDateWidget
 
@@ -724,7 +724,7 @@ class Similar(BrowserView, ResultListing):
 
 class SearchResultItem(object):
 
-    template = ViewPageTemplateFile('templates/searchresult.pt')
+    template = ViewPageTemplateFile('templates/search-result.pt')
 
     @property
     def language(self):

@@ -45,12 +45,8 @@ class SchedulableItemsViewlet(browser.BungeniItemsViewlet):
     Must subclass.
     """
     model = states = container = view_title = None
-    
-    # evoque
-    render = z3evoque.ViewTemplateFile("scheduling.html#items")
-    # zpt
-    #render = ViewPageTemplateFile("templates/schedulable_items.pt")
-    
+    render = ViewPageTemplateFile("templates/schedulable-items.pt")
+
     @property
     def app(self):
         parent = self.context.__parent__
@@ -222,7 +218,7 @@ class AgendaPreview(object):
     """
     
     available = True
-    render = ViewPageTemplateFile("templates/agenda_preview.pt")
+    render = ViewPageTemplateFile("templates/agenda-preview.pt")
 
     def generatePreview(self):
         vocabulary = component.queryUtility(IVocabularyFactory, 

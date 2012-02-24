@@ -4,7 +4,7 @@ from zope import interface
 from zope import schema
 from zope import formlib
 
-#from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.security.proxy import removeSecurityProxy
 from zope.security import checkPermission, canWrite
 from zope.security.interfaces import ForbiddenAttribute
@@ -18,7 +18,6 @@ from bungeni.ui.i18n import MessageFactory as _
 from bungeni.ui.utils import date, url
 from bungeni.ui.diff import textDiff
 from bungeni.ui import browser
-from bungeni.ui import z3evoque
 from bungeni.ui import forms
 
 from bungeni.core.interfaces import IVersioned
@@ -67,11 +66,8 @@ class VersionLogView(browser.BungeniBrowserView, forms.common.BaseForm):
     
     form_fields = formlib.form.Fields(IVersionEntry)
     formatter_factory = table.SortingFormatter
-    
-    # evoque
-    render = z3evoque.PageViewTemplateFile("version.html")
-    # zpt
-    #render = ViewPageTemplateFile("templates/version.pt")
+
+    render = ViewPageTemplateFile("templates/version.pt")
     
     diff_view = None
     

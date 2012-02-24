@@ -52,11 +52,8 @@ class BungeniAttributeDisplay(DynamicFields, form.SubPageDisplayForm,
     ):
     """bungeni.subform.manager
     """
-    
-    # evoque
-    render = z3evoque.ViewTemplateFile("form.html#display")
-    # zpt
-    #render = ViewPageTemplateFile("templates/display_form.pt")
+
+    render = ViewPageTemplateFile("templates/display-form.pt")
 
     # the instance of the ViewProvideViewletManager
     provide = z3evoque.ViewProvideViewletManager(
