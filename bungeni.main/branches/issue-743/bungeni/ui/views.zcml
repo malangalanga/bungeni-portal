@@ -809,14 +809,14 @@
       name="index"
       permission="zope.Public"
       class=".errors.SystemError"
-      template="templates/errorpage.pt"
+      template="templates/error-page.pt"
       />
   <browser:page
       for="zope.security.interfaces.IUnauthorized"
       name="index"
       permission="zope.Public"
       class=".errors.Unauthorized"
-      template="templates/errorpage.pt"
+      template="templates/error-page.pt"
       />
     <browser:defaultView
         for="zope.security.interfaces.IUnauthorized"

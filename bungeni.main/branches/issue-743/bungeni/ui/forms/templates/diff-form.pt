@@ -83,7 +83,7 @@
                       i18n:translate="">
                 Form name
               </legend>
-              <metal:block define-macro="fieldset"> 
+              <metal:block define-macro="fields"> 
                 <input type="hidden" name="came_from"
                        tal:condition="view/came_from|nothing"
                        tal:attributes="value view/came_from" />

@@ -259,14 +259,14 @@ class WorkspaceDataTableFormatter(table.ContextDataTableFormatter):
 
 
 class WorkspaceContainerListing(BrowserPage):
-    template = ViewPageTemplateFile("templates/workspace-listing.pt")
+    render = ViewPageTemplateFile("templates/workspace-listing.pt")
     formatter_factory = WorkspaceDataTableFormatter
     columns = []
 
     def __call__(self):
         need("yui-datatable")
         self.context = removeSecurityProxy(self.context)
-        return self.template()
+        return self.render()
 
     def update(self):
         for field in workspace_fields:
@@ -279,9 +279,8 @@ class WorkspaceContainerListing(BrowserPage):
 
     @property
     def formatter(self):
-        context = removeSecurityProxy(self.context)
         formatter = self.formatter_factory(
-            context,
+            self.context,
             self.request,
             (),
             prefix="workspace",

@@ -6,7 +6,7 @@ from zope import security
 from zope import interface
 from zope.formlib import form
 from zope.i18n import translate
-
+from zope.app.pagetemplate import ViewPageTemplateFile
 from bungeni.core.workflow import interfaces
 from bungeni.alchemist.ui import DynamicFields
 

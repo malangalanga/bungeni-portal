@@ -471,7 +471,7 @@ class GroupSittingsViewlet(browser.BungeniItemsViewlet):
     objects.
     """
 
-    render = ViewPageTemplateFile("tempates/group-sittings-viewlet.pt")
+    render = ViewPageTemplateFile("templates/group-sittings-viewlet.pt")
 
     def _get_items(self):
         def _format_from_to(item):

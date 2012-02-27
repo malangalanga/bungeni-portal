@@ -23,16 +23,11 @@ from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema.interfaces import IChoice
 from zope.cachedescriptors import property as cached_property
-
+from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.location.interfaces import ILocation
 from zope.dublincore.interfaces import IDCDescriptiveProperties
-#from zope.formlib.namedtemplate import NamedTemplate
 from zope.container.contained import ObjectRemovedEvent
-#from zope.app.pagetemplate import ViewPageTemplateFile
 import sqlalchemy as rdb
-#from bungeni.alchemist.container import stringKey
-#from bungeni.core.workflow.interfaces import IWorkflowController
-#from bungeni.alchemist.ui import handle_edit_action
 from zope.formlib.interfaces import IDisplayWidget
 
 # !+sqlalchemy.exc(mr, jul-2010) why this try/except ?
@@ -255,7 +250,7 @@ class DisplayForm(catalyst.DisplayForm, browser.BungeniBrowserView):
     #template = z3evoque.PageViewTemplateFile("content.html#view")
 
     # zpt
-    template = ViewPageTemplateFile("templates/content_view.pt")
+    template = ViewPageTemplateFile("templates/content-view.pt")
 
     form_name = _("View")
 

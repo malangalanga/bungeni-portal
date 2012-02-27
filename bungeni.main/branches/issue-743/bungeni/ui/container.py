@@ -95,8 +95,7 @@ class AjaxContainerListing(
 
     # evoque
     template = z3evoque.PageViewTemplateFile("container.html#generic")
-    
-    template = 
+    #template = 
 
     def __call__(self):
         need("yui-datatable")

@@ -316,7 +316,7 @@ class WorkflowChangeStateView(WorkflowView):
     b) when clicking Add of an object (automatic transitions).
     """
 
-    ajax_template = ViewPageTemplateFile("templates/workflow_ajax.pt")
+    ajax_template = ViewPageTemplateFile("templates/workflow-ajax.pt")
 
     def __init__(self, context, request):
         self.context = context

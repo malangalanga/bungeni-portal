@@ -17,6 +17,7 @@ from bungeni.alchemist.ui import getSelected
 from bungeni.ui.i18n import MessageFactory as _
 from bungeni.ui.utils import date, url
 from bungeni.ui.diff import textDiff
+from bungeni.ui import z3evoque
 from bungeni.ui import browser
 from bungeni.ui import forms
 

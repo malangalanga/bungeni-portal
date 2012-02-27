@@ -1,21 +1,17 @@
-<dt id="fieldsetlegend-generic-sub-container"
-    tal:attributes="id string:${default}-${python: id(context)}"
+<dt tal:attributes="id string:fieldsetlegend-generic-sub-container-${view/view_name}"
     i18n:translate=""
     tal:content="view/form_name">
   Container Listing
 </dt>
-
-<dd id="fieldset-generic-sub-container"
-    tal:attributes="id string:${default}-${python: id(context)}"> 
+<dd tal:define="item_id python: id(context)"
+    tal:attributes="id string:fieldset-generic-sub-container-${view/view_name}"> 
   <form action="."
         tal:attributes="action context/@@absolute_url" method="post"
         class="edit-form" enctype="multipart/form-data"
         id="alchemist.container.listing">
-    
     <div tal:content="structure view/listing">
       contents 
     </div>
-    
     <!--div id="actionsView">
 	<span class="actionButtons"
 	tal:condition="view/availableActions">
@@ -29,6 +25,5 @@
 	</tal:loop>						
 	</span>
 	</div-->
-    
   </form>
 </dd>
