@@ -23,7 +23,6 @@ from bungeni.alchemist import Session
 from bungeni.core.workflow.interfaces import IWorkflow
 
 from bungeni.ui import browser
-from bungeni.ui import z3evoque
 from bungeni.ui.i18n import _
 from bungeni.ui.utils import url
 #from bungeni.ui.calendar.utils import datetimedict

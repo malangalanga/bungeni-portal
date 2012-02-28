@@ -34,7 +34,6 @@ from bungeni.core import location
 from bungeni.ui.utils import url, debug
 from bungeni.ui import interfaces
 from bungeni.ui import browser
-from bungeni.ui import z3evoque
 
 
 def _get_context_chain(context):

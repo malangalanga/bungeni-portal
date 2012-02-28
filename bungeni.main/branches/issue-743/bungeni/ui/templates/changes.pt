@@ -3,16 +3,16 @@
       metal:use-macro="context/@@standard_macros/page">
   <body>
     <title metal:fill-slot="title"
-	   i18n:translate=""
-	   tal:content="string:${view/form_name} ${context/short_name|nothing}"/>
+	   tal:content="view/page_title"/>
     <div metal:fill-slot="body">
       <h2 class="title"
-	  tal:content="string: ${view/form_name} ${context/short_name|nothing}"> </h2>
-      <form action="" method="GET"> 
-	<div tal:content="structure view/listing">
+	  tal:content="view/page_title"> </h2>
+	<div tal:content="structure view/listing"
+             tal:condition="view/has_data">
 	  Changes
+          <p tal:content="view/message_no_data"
+             tal:condition="not view/has_data"/>
 	</div>
-      </form>
     </div>
   </body>
 </html>

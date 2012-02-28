@@ -29,7 +29,7 @@ from zope.dublincore.interfaces import IDCDescriptiveProperties
 from zope.container.contained import ObjectRemovedEvent
 import sqlalchemy as rdb
 from zope.formlib.interfaces import IDisplayWidget
-
+from zope.formlib.namedtemplate import NamedTemplate
 # !+sqlalchemy.exc(mr, jul-2010) why this try/except ?
 try:
     from sqlalchemy.exceptions import IntegrityError
@@ -53,7 +53,6 @@ from bungeni.ui.forms.fields import filterFields
 from bungeni.ui.interfaces import IFormEditLayer, IGenenerateVocabularyDefault
 from bungeni.ui.i18n import _
 from bungeni.ui import browser
-from bungeni.ui import z3evoque
 from bungeni.ui.utils import url
 from bungeni.ui.container import invalidate_caches_for
 
@@ -240,16 +239,11 @@ class BaseForm(formlib.form.FormBase):
 # !+NamedTemplate(mr, jul-2010) converge all views to not use anymore
 # !+alchemist.form(mr, jul-2010) converge all form views to not use anymore
 class PageForm(BaseForm, formlib.form.PageForm, browser.BungeniBrowserView):
-    #template = NamedTemplate("alchemist.form")
-    template = z3evoque.PageViewTemplateFile("form.html#page")
+    template = NamedTemplate("alchemist.form")
 
 
 class DisplayForm(catalyst.DisplayForm, browser.BungeniBrowserView):
 
-    # evoque
-    #template = z3evoque.PageViewTemplateFile("content.html#view")
-
-    # zpt
     template = ViewPageTemplateFile("templates/content-view.pt")
 
     form_name = _("View")
@@ -744,10 +738,7 @@ class ReorderForm(PageForm):
             title=u"Ordering",
             value_type=schema.TextLine())
 
-    # evoque
-    template = z3evoque.PageViewTemplateFile("form.html#page")
-    # zpt
-    #template = NamedTemplate("alchemist.form")
+    template = NamedTemplate("alchemist.form")
     form_name = _(u"Item reordering")
     form_fields = formlib.form.Fields(IReorderForm, render_context=True)
 
@@ -786,14 +777,11 @@ class DeleteForm(PageForm):
 
     Will redirect back to the container on success.
     """
-    # evoque
-    template = z3evoque.PageViewTemplateFile("delete.html")
-
     # zpt
     # !+form_template(mr, jul-2010) this is unused here, but needed by
     # some adapter of this "object delete" view
-    #form_template = NamedTemplate("alchemist.form")
-    #template = ViewPageTemplateFile("templates/delete.pt")
+    form_template = NamedTemplate("alchemist.form")
+    template = ViewPageTemplateFile("templates/delete.pt")
 
     _next_url = None
     form_fields = formlib.form.Fields()

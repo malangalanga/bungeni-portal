@@ -1,0 +1,11 @@
+<dt id="fieldsetlegend-timeline">
+  <span tal:content="view/view_title"></span>
+</dt>
+<dd id="fieldset-timeline">
+  <div tal:condition="view/has_data"
+       tal:content="structure view/listing">
+    Changes
+  </div>
+  <p tal:condition="not:view/has_data"
+     tal:content="view/message_no_data" />
+</dd>
