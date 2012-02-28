@@ -1,101 +1,94 @@
 <metal:block define-macro="page">
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xml:lang="en"
-      lang="en"
-      i18n:domain="plone">
-  <head>
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
-    <metal:block define-slot="title">
-      <title tal:content="string:bungeni">Z3 UI</title>
-    </metal:block>
-    <link rel="shortcut icon" href="/@@/images/favicon.ico"/>
-
-    <!--tal:block tal:replace="structure provider:plone-css">
-      CS Includes, Dynamically Included by Context 
-    </tal:block -->
-    <!-- TODO move this to a content provider -->
-    <link rel="stylesheet" href="/@@/portal/10-base.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/20-public.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/30-columns.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/40-authoring.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/50-portlets.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/60-controlpanel.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/70-print.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/80-navtree.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/85-invisibles.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/90-forms.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/95-plonekss.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/A0-bungeni.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/A2-scheduling.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/A3-clockpick.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/A4-plainTable.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/A5-report.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/A8-calendar.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/A9-myinterests.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/B0-globalnav.css" type="text/css" />
-    <link rel="stylesheet" href="/@@/portal/jquery-ui-1.8.7.custom.css" type="text/css" />
-    
-    <link rel="stylesheet" href="/@@/portal/rtl.css" type="text/css"
-        tal:condition="context/@@plone/is_rtl"/>
-       
-    <tal:block tal:replace="structure provider:plone-js">
-      JS Includes, Dynamically Included by Context 
-    </tal:block>
-
-    <tal:block metal:define-slot="header">
-    </tal:block>
-
-    
-  </head>
-
-<body tal:attributes="class context/@@plone/body_css_class; dir context/@@plone/text_direction">
-  <div id="visual-portal-wrapper">
-    <div id="portal-top">
-      <tal:block replace="structure provider:plone.portalheader" />
-      <tal:block replace="structure provider:plone.portaltools" />
-    </div>
-    <div class="visualClear" id="clear-space-before-wrapper-table"><!-- --></div>
-    <div id="portal-columns">
-        <div id="portal-column-one">
-          <div class="visualPadding">
-             <tal:block replace="structure provider:plone.leftcolumn" />
-                &nbsp;
-              </div>
-        </div>
-        <div id="portal-column-content" 
-            tal:define="plone context/@@plone;
-                      sl python: plone.have_viewlets(view, 'plone.leftcolumn');"
-            tal:attributes="class python:(sl and 'sl')">
-          <div>
-            <tal:block replace="structure provider:plone.contentviews" />
-            <div id="region-content" class="documentContent">
-              <span id="contentTopLeft"></span>
-              <span id="contentTopRight"></span>
-              <a name="documentContent"></a>
-              <div id="viewlet-above-content" tal:content="structure provider:plone.abovecontent" />
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml"
+	xml:lang="en"
+	lang="en"
+	i18n:domain="plone">
+    <head>
+      <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
+      <metal:block define-slot="title">
+      <title tal:content="string:bungeni">Z3 UI</title></metal:block>
+      <link rel="shortcut icon" href="/@@/images/favicon.ico"/>
+      <!-- zc.resourcelibrary -->
+      <!--tal:block tal:replace="structure provider:plone-css">
+	  CS Includes, Dynamically Included by Context 
+	  </tal:block -->
+      <!-- TODO move this to a content provider -->
+      <link rel="stylesheet" href="/@@/portal/10-base.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/20-public.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/30-columns.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/40-authoring.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/50-portlets.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/60-controlpanel.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/70-print.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/80-navtree.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/85-invisibles.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/90-forms.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/95-plonekss.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/A0-bungeni.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/A2-scheduling.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/A3-clockpick.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/A4-plainTable.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/A5-report.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/A8-calendar.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/A9-myinterests.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/B0-globalnav.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/jquery-ui-1.8.7.custom.css" type="text/css" />
+      <link rel="stylesheet" href="/@@/portal/rtl.css" type="text/css"
+	    tal:condition="context/@@plone/is_rtl"/>
+      <tal:block tal:replace="structure provider:plone-js">
+	JS Includes, Dynamically Included by Context 
+      </tal:block>
+      <tal:block metal:define-slot="header">
+      </tal:block>
+    </head>
+    <body tal:attributes="class context/@@plone/body_css_class; dir context/@@plone/text_direction">
+      <div id="visual-portal-wrapper">
+	<div id="portal-top">
+	  <tal:block replace="structure provider:plone.portalheader" />
+	  <tal:block replace="structure provider:plone.portaltools" />
+	</div>
+	<div class="visualClear" id="clear-space-before-wrapper-table"><!-- --></div>
+	<div id="portal-columns">
+	  <div id="portal-column-one">
+	    <div class="visualPadding">
+	      <tal:block replace="structure provider:plone.leftcolumn" />
+	      &nbsp;
+	    </div>
+	  </div>
+	  <div id="portal-column-content" 
+	       tal:define="plone context/@@plone;
+			   sl python: plone.have_viewlets(view, 'plone.leftcolumn');"
+	       tal:attributes="class python:(sl and 'sl')">
+	    <div>
+	      <tal:block replace="structure provider:plone.contentviews" />
+	      <div id="region-content" class="documentContent">
+		<span id="contentTopLeft"></span>
+		<span id="contentTopRight"></span>
+		<a name="documentContent"></a>
+		<div id="viewlet-above-content" tal:content="structure provider:plone.abovecontent" />
                 <metal:slot metal:define-slot="body" />
-              <div tal:replace="structure provider:plone.belowcontent"/>
-              <span id="contentBottomLeft"></span>
-              <span id="contentBottomRight"></span>
-            </div>
-          </div>
-          <div id="portal-column-two">
-            <div class="visualPadding">
-              <tal:block replace="structure provider:plone.rightcolumn" />
-                    &nbsp;
-            </div>
-          </div>
-        </div>
-        <div class="visualClear" id="clear-space-before-footer"><!-- --></div>
-        <div id="portal-footer">
-          <div tal:replace="structure provider:plone.portalfooter" />
-        </div>
-        <div class="visualClear"><!-- --></div>
-      </div>
-      <div id="kss-spinner">
-        <img src="/@@/portal/spinner.gif" alt="" />
-      </div>
-    </body>
-  </html>
-</metal:block>
+		<div tal:replace="structure provider:plone.belowcontent"/>
+		<span id="contentBottomLeft"></span>
+		<span id="contentBottomRight"></span>
+	      </div>
+	    </div>
+	    <div id="portal-column-two">
+	      <div class="visualPadding">
+		<tal:block replace="structure provider:plone.rightcolumn" />
+		&nbsp;
+	      </div>
+	    </div>
+	  </div>
+	  <div class="visualClear" id="clear-space-before-footer"><!-- --></div>
+	  <div id="portal-footer">
+	    <div tal:replace="structure provider:plone.portalfooter" />
+	  </div>
+	  <div class="visualClear"><!-- --></div>
+	</div>
+	<div id="kss-spinner">
+	  <img src="/@@/portal/spinner.gif" alt="" />
+	</div>
+      </body>
+    </html>
+  </metal:block>
