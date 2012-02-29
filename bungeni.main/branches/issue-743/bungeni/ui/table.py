@@ -55,14 +55,6 @@ class TableFormatter(batching.Formatter):
 
 class ContextDataTableFormatter(yuiwidget.table.BaseDataTableFormatter):
 
-    # evoque
-    #script = z3evoque.PageViewTemplateFile("container.html#datatable")
-    # !+NEED_ZC_RESOURCE_LIBRARIES(mr, sep-2010)
-    # Evoque rendering needs to take into account any zc.resourcelibrary
-    # declared additional libs, declared with need() below, see:
-    # zc.resourcelibrary.publication.Response._addDependencies
-
-    # zpt
     script = ViewPageTemplateFile("templates/datatable.pt")
 
     data_view = "/jsonlisting"

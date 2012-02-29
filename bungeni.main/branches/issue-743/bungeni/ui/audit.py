@@ -329,7 +329,7 @@ class AuditLogView(AuditLogMixin, browser.BungeniBrowserView):
     """Change Log View for an object
     """
 
-    __call__ = ViewPageTemplateFile("templates/changes.pt")
+    __call__ = ViewPageTemplateFile("templates/listing-view.pt")
 
     _page_title = "Change Log"
 
@@ -355,7 +355,7 @@ class TimeLineViewlet(AuditLogMixin, browser.BungeniItemsViewlet):
     view_id = "timeline"
     weight = 20
     
-    render = ViewPageTemplateFile("templates/timeline-viewlet.pt")
+    render = ViewPageTemplateFile("templates/listing-viewlet.pt")
     
     visible_column_names = ["action date", "description", "user"]
     include_change_types =  [ t for t in CHANGE_TYPES ]

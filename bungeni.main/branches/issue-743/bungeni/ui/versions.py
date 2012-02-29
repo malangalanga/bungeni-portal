@@ -8,6 +8,7 @@ from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.security.proxy import removeSecurityProxy
 from zope.security import checkPermission, canWrite
 from zope.security.interfaces import ForbiddenAttribute
+from zope.app.pagetemplate import ViewPageTemplateFile
 
 from sqlalchemy import orm
 
@@ -17,7 +18,6 @@ from bungeni.alchemist.ui import getSelected
 from bungeni.ui.i18n import MessageFactory as _
 from bungeni.ui.utils import date, url
 from bungeni.ui.diff import textDiff
-from bungeni.ui import z3evoque
 from bungeni.ui import browser
 from bungeni.ui import forms
 
@@ -229,15 +229,13 @@ class VersionLogView(browser.BungeniBrowserView, forms.common.BaseForm):
 #   it is all much simpler -- note that z3c.schemadiff.schema.diff() was 
 #   anayway shortcutting any and all adapter genericity (for IFieldDiff) by 
 #   hard-wiring explicit checks on whether not to call IFieldDiff.html_diff()!
-# - the template is an evoque template in the default "bungeni.ui" collection.
 # 
 # This implementation also removes all dependencies on the z3c.schemadiff
 # package, that may therefore be removed.
 # 
 class DiffView(object):
 
-    # evoque
-    template = z3evoque.ViewTemplateFile("diff.html")
+    template = ViewPageTemplateFile("templates/diff.pt")
     context = None
     
     def __init__(self, source, target, request):

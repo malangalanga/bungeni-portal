@@ -9,7 +9,8 @@ $Id$
 log = __import__("logging").getLogger("bungeni.ui.forms.viewlets")
 
 from dateutil import relativedelta
-import datetime, calendar
+import datetime
+import calendar
 from zope import interface
 from zope.viewlet import manager, viewlet
 from zope.app.pagetemplate import ViewPageTemplateFile

@@ -1,7 +1,7 @@
-<dt id="fieldsetlegend-timeline">
+<dt tal:attributes="id string:fieldsetlegend-${view/view_id}">
   <span tal:content="view/view_title"></span>
 </dt>
-<dd id="fieldset-timeline">
+<dd tal:attributes="id string:fieldset-${view/view_id}">
   <div tal:condition="view/has_data"
        tal:content="structure view/listing">
     Changes
