@@ -276,7 +276,7 @@ class HighlightMixin(object):
             return """$("#search-results").highlight("%s", true);""" % x
         words = "\n".join(map(highliightword, words))
         return """
-               <script language="JavaScript" type="text/javascript">
+               <script type="text/javascript">
                  var ch = document.getElementById("%s");
                  function highlightwords(){
                    $("#search-results").removeHighlight();

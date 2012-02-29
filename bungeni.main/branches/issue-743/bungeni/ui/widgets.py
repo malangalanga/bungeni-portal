@@ -281,7 +281,7 @@ class RichTextEditor(TextAreaWidget):
 
         # attach behavior to default input widget, disable titlebar
         input_widget_js = u"""
-        <script language="javascript">
+        <script type="text/javascript">
             options={ height:'300px',
                       width:'100%%',
                       dompath:true,
@@ -662,6 +662,10 @@ class TextDateWidget(SelectDateWidget):
         else:
             value = self._data
         return self._toFormValue(value)
+    
+    @property
+    def date_name(self):
+        return self.name
 
 DateWidget = TextDateWidget
 

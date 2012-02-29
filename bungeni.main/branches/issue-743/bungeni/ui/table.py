@@ -87,7 +87,7 @@ class ContextDataTableFormatter(yuiwidget.table.BaseDataTableFormatter):
                     )
             field_model.append('{key:"%s"}' % (key))
         return ",".join(column_model), ",".join(field_model)
-
+    
     def getDataTableConfig(self):
         config = {}
         config["columns"], config["fields"] = self.getFieldColumns()
@@ -100,10 +100,8 @@ class ContextDataTableFormatter(yuiwidget.table.BaseDataTableFormatter):
 
     def __call__(self):
         need("yui-paginator")
-        return '<div id="%s">\n<table %s>\n%s</table>\n%s</div>' % (
+        return '<div id="%s">\n%s</div>' % (
             self.prefix,
-            self._getCSSClass("table"),
-            self.renderContents(),
             self.script(**self.getDataTableConfig()))
 
 
