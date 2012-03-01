@@ -11,7 +11,6 @@
 	<p class="documentDescription"
            i18n:translate=""
            tal:content="view/form_description|nothing" />
-
         <form action=""
               method="post"
               tal:define="kls nocall: view/context_class | python: context.__class__;
@@ -21,7 +20,6 @@
                               method view/action_method|string:post"
               id="alchemist-form"
               enctype="multipart/form-data">
-
           <dl class="portalMessage info"
               tal:condition="view/status"
               tal:define="mtype string:info"
@@ -35,7 +33,6 @@
               The status message.
             </dd>
           </dl>
-          
           <div class="invariant-errors"
                tal:define="errors view/invariantErrors|python:();
                            messages python: [error.message for error in errors];
@@ -45,57 +42,45 @@
               <li tal:repeat="message messages" tal:content="message" />
             </ul>
           </div>
-
           <metal:block define-macro="form-body">
             <metal:block define-slot="pre-fieldset">
             </metal:block>
             <fieldset tal:define="fieldset_name view/fieldset_name|nothing;
                                   side_by_side view/side_by_side|nothing"
                       tal:omit-tag="not:fieldset_name">
-
               <legend tal:condition="fieldset_name"
                       tal:content="fieldset_name"
                       i18n:translate="">
                 Form name
               </legend>
-
               <metal:block define-macro="fieldset"> 
-
-                <input type="hidden" name="came_from"
-                       tal:condition="view/came_from|nothing"
-                       tal:attributes="value view/came_from" />
-
-                <input type="hidden" name="next_url"
-                       tal:condition="view/next_url|nothing"
-                       tal:attributes="value view/next_url" />
-
+                <p>
+                  <input type="hidden" name="came_from"
+                         tal:condition="view/came_from|nothing"
+                         tal:attributes="value view/came_from" />
+                  <input type="hidden" name="next_url"
+                         tal:condition="view/next_url|nothing"
+                         tal:attributes="value view/next_url" />
+                </p>
                 <metal:block define-slot="top-fieldset">
                 </metal:block>
-
                 <table class="listing side-by-side" style="table-layout: fixed"  tal:omit-tag="not:side_by_side">
-
                   <tal:groups define="fallback python: dict(fallback=view.widgets);
                                       groups view/widget_groups|fallback;
                                       legends view/legends|nothing"
                               repeat="name groups">
-                    
                     <fieldset tal:define="legend python: legends and legends.get(name)"
                               tal:omit-tag="not: legend">
-
                       <legend tal:condition="legend"
                               tal:content="legend"
                               i18n:translate="" />
-                      
                       <tal:block define="widgets python: groups.get(name)"
                                  repeat="widget widgets">
-
 			<tal:field define="description widget/hint;
 					   error widget/error;
 					   odd repeat/widget/odd;
 					   changed widget/changed | nothing"
 				   condition="widget/visible">
-
-
 			  <tal:standard condition="not: side_by_side">
 			    <div
 				tal:define="name python: widget.__class__.__name__.lower(); fieldid widget/name"
@@ -114,7 +99,6 @@
 				   tal:content="description"
 				   tal:condition="description"
 				   >field description</div>
-			      
 			      <div tal:attributes="class python:'widget'+(error and ' error' or '') + (changed and ' changed' or '')">
 				<div class="widget" tal:content="structure widget"  >
 				  <input type="text" />
@@ -125,7 +109,6 @@
 			      </div>
 			    </div>
 			  </tal:standard>
-			  
 			  <tal:side-by-side condition="side_by_side">
 			    <tr tal:attributes="class python:'field'+(error and ' error' or '') + (odd and ' odd' or ' even')">
 			      <th colspan="2">
@@ -145,7 +128,6 @@
 				     >field description</div>
 			      </th>
 			    </tr>
-			    
 			    <tr>
 			      <td valign="top" width="30%" style="overflow: auto">
 				<div tal:content="structure widget/render_original" />
@@ -155,7 +137,6 @@
 			      </td>
 			    </tr>
 			  </tal:side-by-side>
-
 			</tal:field>
 		      </tal:block>
                     </fieldset>

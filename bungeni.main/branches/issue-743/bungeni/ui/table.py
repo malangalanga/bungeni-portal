@@ -41,15 +41,20 @@ class TableFormatter(batching.Formatter):
     !+ Currently being used by the Actions workflow, versions, attendace ui.
     """
     table_css_class = "listing grid"
-    
+    #!+zc.table(miano, March 2012) This template overrides the base
+    # zc.table batching template to remove an invalid lang attibute from script
+    # tag in batching.pt. This workaround should be removed once this bug 
+    # is fixed in zc.table
+    batching_template = ViewPageTemplateFile("templates/batching.pt")
+
     def __call__(self):
         return ("""
             <div>
-                <table class="%s" name="%s">
+                <table class="%s">
                  %s
                 </table>
                 %s
-            </div>""" % (self.table_css_class, self.prefix,
+            </div>""" % (self.table_css_class,
                 self.renderContents(), self.renderExtra()))
 
 

@@ -60,6 +60,12 @@ class VersionsView(BrowserView):
         
         return view()
 '''
+#!+zc.table the selection column below overrides the base class
+# that generates id's using base64 resulting in invalid HTML ids
+# eg. they contain = sign.
+class CustomSelectionColumn(column.SelectionColumn):
+    def makeId(self, item):
+        return ''.join(self.idgetter(item).split())
 
 class VersionLogView(browser.BungeniBrowserView, forms.common.BaseForm):
     class IVersionEntry(interface.Interface):
@@ -80,7 +86,7 @@ class VersionLogView(browser.BungeniBrowserView, forms.common.BaseForm):
         # formatting dates, for all locales, as date.strftime("%Y-%m-%d %H:%M")
         # that, when sorted as a string, gives correct results.
         self.columns = [
-            column.SelectionColumn(
+            CustomSelectionColumn(
                     lambda item:str(item.version_id), name="selection"),
             column.GetterColumn(title=_(u"version"),
                     getter=lambda i,f:"%s" % (i.version_id),
