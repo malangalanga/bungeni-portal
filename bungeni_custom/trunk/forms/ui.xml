@@ -218,6 +218,10 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="combined_name" displayable="listing" localizable="listing">
             <show modes="listing" />
         </field>
@@ -236,7 +240,10 @@
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="group_type" displayable="view edit add listing" localizable="view edit listing">
+        <field name="identifier" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
+        </field>
+        <field name="sub_type" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
         <field name="group_continuity" displayable="view edit add listing" localizable="view edit listing">
@@ -440,17 +447,20 @@
     </descriptor>
 
     <descriptor name="Government">
-        <field name="short_name" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+        <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
         </field>
-        <field name="full_name" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+        <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
         </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+        <field name="acronym" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
         </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+        <field name="combined_name" displayable="listing" localizable="listing">
+            <show modes="listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -458,6 +468,15 @@
         </field>
         <field name="description" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
+        </field>
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="identifier" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
         </field>
     </descriptor>
 
@@ -498,6 +517,10 @@
             <hide modes="listing" />
         </field>
         <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
@@ -617,6 +640,10 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="combined_name" displayable="listing" localizable="listing">
             <show modes="listing" />
         </field>
@@ -632,6 +659,9 @@
         </field>
         <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
+        </field>
+        <field name="identifier" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
         </field>
     </descriptor>
 
@@ -772,6 +802,9 @@
     </descriptor>
 
     <descriptor name="Office">
+        <field name="identifier" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
+        </field>
         <field name="office_role" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -780,6 +813,10 @@
             <hide modes="listing" />
         </field>
         <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
@@ -843,6 +880,9 @@
         <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
+        <field name="identifier" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
+        </field>
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
@@ -903,6 +943,10 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
         <field name="combined_name" displayable="listing" localizable="listing">
             <show modes="listing" />
         </field>
@@ -918,6 +962,9 @@
         </field>
         <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
+        </field>
+        <field name="identifier" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
         </field>
         <field name="logo_data" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
