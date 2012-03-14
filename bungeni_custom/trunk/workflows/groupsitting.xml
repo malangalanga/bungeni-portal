@@ -23,12 +23,12 @@
     
     <state id="sitting" title="Sitting" tags="draft public agendaprivate">
         <!-- sitting -->
-        <deny permission="zope.View" role="bungeni.Speaker" />
-        <deny permission="zope.View" role="bungeni.Owner" />
-        <deny permission="zope.View" role="bungeni.Signatory" />
-        <deny permission="zope.View" role="bungeni.MP" />
-        <deny permission="zope.View" role="bungeni.Minister" />
-        <deny permission="zope.View" role="bungeni.Anonymous" />
+        <grant permission="zope.View" role="bungeni.Speaker" />
+        <grant permission="zope.View" role="bungeni.Owner" />
+        <grant permission="zope.View" role="bungeni.Signatory" />
+        <grant permission="zope.View" role="bungeni.MP" />
+        <grant permission="zope.View" role="bungeni.Minister" />
+        <grant permission="zope.View" role="bungeni.Anonymous" />
         <grant permission="bungeni.sitting.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.sitting.Delete" role="bungeni.Clerk" />
         <!-- sittingschedule -->
@@ -56,10 +56,6 @@
     <state id="draft_agenda" title="Draft Agenda" 
         like_state="sitting"
         tags="draft public workspace agendaprivate">
-        <!-- sitting -->
-        <grant permission="zope.View" role="bungeni.Speaker" />
-        <grant permission="zope.View" role="bungeni.MP" />
-        <grant permission="zope.View" role="bungeni.Minister" />
         <!-- sittingschedule -->
         <grant permission="bungeni.sittingschedule.Edit" role="bungeni.Clerk" />
         <!-- sittingschedule.item -->
@@ -75,12 +71,6 @@
         like_state="draft_agenda"
         tags="public published workspace">
         <!-- sitting -->
-        <grant permission="zope.View" role="bungeni.Speaker" />
-        <grant permission="zope.View" role="bungeni.Owner" />
-        <grant permission="zope.View" role="bungeni.Signatory" />
-        <grant permission="zope.View" role="bungeni.MP" />
-        <grant permission="zope.View" role="bungeni.Minister" />
-        <grant permission="zope.View" role="bungeni.Anonymous" />
         <deny permission="bungeni.sitting.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.sitting.Delete" role="bungeni.Clerk" />
         <!-- sittingschedule -->
@@ -92,6 +82,14 @@
         <grant permission="bungeni.sittingschedule.View" role="bungeni.Anonymous" />
         <deny permission="bungeni.sittingschedule.Edit" role="bungeni.Clerk" />
     </state>
+
+    <state id="published_agenda_internal" title="Published Agenda Internal" 
+        publish="true" 
+        like_state="published_agenda"
+        tags="public published agendaprivate workspace">
+        <!-- sittingschedule -->
+        <deny permission="bungeni.sittingschedule.View" role="bungeni.Anonymous" />
+    </state>
     
     <state id="draft_minutes" title="Draft Minutes" 
         like_state="published_agenda"
@@ -99,30 +97,14 @@
         <!-- sitting -->
         <grant permission="bungeni.sitting.Edit" role="bungeni.Clerk" />
         <!-- sittingschedule -->
-        <deny permission="bungeni.sittingschedule.View" role="bungeni.Speaker" />
-        <deny permission="bungeni.sittingschedule.View" role="bungeni.Owner" />
-        <deny permission="bungeni.sittingschedule.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.sittingschedule.View" role="bungeni.MP" />
-        <deny permission="bungeni.sittingschedule.View" role="bungeni.Minister" />
-        <deny permission="bungeni.sittingschedule.View" role="bungeni.Anonymous" />
         <grant permission="bungeni.sittingschedule.Edit" role="bungeni.Clerk" />
         <!-- sittingschedule.itemdiscussion -->
         <grant permission="bungeni.sittingschedule.itemdiscussion.Edit" role="bungeni.Clerk" />
     </state>
     
     <state id="published_minutes" title="Published Minutes" 
-        like_state="draft_minutes"
+        like_state="published_agenda"
         tags="public published">
-        <!-- sitting -->
-        <deny permission="bungeni.sitting.Edit" role="bungeni.Clerk" />
-        <!-- sittingschedule -->
-        <grant permission="bungeni.sittingschedule.View" role="bungeni.Speaker" />
-        <grant permission="bungeni.sittingschedule.View" role="bungeni.Owner" />
-        <grant permission="bungeni.sittingschedule.View" role="bungeni.Signatory" />
-        <grant permission="bungeni.sittingschedule.View" role="bungeni.MP" />
-        <grant permission="bungeni.sittingschedule.View" role="bungeni.Minister" />
-        <grant permission="bungeni.sittingschedule.View" role="bungeni.Anonymous" />
-        <deny permission="bungeni.sittingschedule.Edit" role="bungeni.Clerk" />
         <!-- sittingschedule.item -->
         <deny permission="bungeni.sittingschedule.item.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.sittingschedule.item.Delete" role="bungeni.Clerk" />
@@ -135,7 +117,13 @@
         <grant permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Anonymous" />
         <deny permission="bungeni.sittingschedule.itemdiscussion.Edit" role="bungeni.Clerk" />
     </state>
-    
+
+    <state id="published_minutes_internal" title="Published Minutes Internal" 
+        like_state="published_minutes"
+        tags="public published">
+        <!-- sittingschedule.itemdiscussion -->
+        <deny permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Anonymous" />
+    </state>
     
     <transition title="Create Sitting"
         source=""
@@ -153,16 +141,25 @@
     />
     
     <transition title="Finalize Agenda"
-        source="draft_agenda"
+        source="draft_agenda published_agenda_internal"
         destination="published_agenda"
         condition="has_agenda"
         trigger="manual"
         roles="bungeni.Clerk bungeni.Speaker"
         require_confirmation="false"
     />
-    
+
+    <transition title="Publish Internal Agenda"
+        source="draft_agenda published_agenda"
+        destination="published_agenda_internal"
+        condition="has_agenda"
+        trigger="manual"
+        roles="bungeni.Clerk bungeni.Speaker"
+        require_confirmation="false"
+    />
+
     <transition title="Redraft Agenda"
-        source="published_agenda"
+        source="published_agenda published_agenda_internal"
         destination="draft_agenda"
         condition=""
         trigger="manual"
@@ -171,7 +168,7 @@
     />
     
     <transition title="Draft Minutes"
-        source="published_agenda"
+        source="published_agenda published_agenda_internal"
         destination="draft_minutes"
         condition=""
         trigger="manual"
@@ -180,16 +177,25 @@
     />
     
     <transition title="Publish Minutes"
-        source="draft_minutes"
+        source="draft_minutes published_minutes_internal"
         destination="published_minutes"
-        condition=""
+        condition="agenda_finalized"
+        trigger="manual"
+        roles="bungeni.Clerk bungeni.Speaker"
+        require_confirmation="false"
+    />
+
+    <transition title="Publish Minutes Internal"
+        source="draft_minutes published_minutes"
+        destination="published_minutes_internal"
+        condition="agenda_finalized"
         trigger="manual"
         roles="bungeni.Clerk bungeni.Speaker"
         require_confirmation="false"
     />
     
     <transition title="Redraft Minutes"
-        source="published_minutes"
+        source="published_minutes published_minutes_internal"
         destination="draft_minutes"
         condition=""
         trigger="manual"

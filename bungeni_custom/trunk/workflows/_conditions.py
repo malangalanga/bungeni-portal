@@ -42,6 +42,7 @@ from bungeni.core.workflows._conditions import (
     # groupsitting
     has_venue,
     has_agenda,
+    agenda_finalized,
     
     # question
     is_written_response,
