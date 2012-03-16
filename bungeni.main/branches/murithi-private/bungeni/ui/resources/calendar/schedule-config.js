@@ -24,9 +24,10 @@ YAHOO.bungeni.Utils = function(){
      * @function wrapText
      * @description returns text as html wrapped in el tags
      */
-    var wrapText = function(text, el){
+    var wrapText = function(text, el, attrs){
         var _el = el || "em";
-        return "<" + _el + ">" + text + "</" + _el + ">";
+        var _attrs = attrs || "";
+        return "<" + _el + " " + _attrs + ">" + text + "</" + _el + ">";
     }
 
     return {
@@ -70,7 +71,9 @@ YAHOO.widget.DataTable.prototype.refresh = function(params) {
 
 YAHOO.bungeni.config = function(){
     var lang = YAHOO.lang;
+    var Event = YAHOO.util.Event;
     var Y$ = YAHOO.util.Selector;
+    var MINUTES_CACHE_PREFIX = "mDS_";
 
     var scheduling_columns = {
         SELECT_ROW : "item_select_row",
@@ -246,6 +249,21 @@ YAHOO.bungeni.config = function(){
                                 new_index = (sDt.getRecordIndex(selected[0])+1);
                             }
                             if(recordData.value.length){
+                                if(recordData.type == SGlobals.types.MINUTE){
+                                    var tRecord = sDt.getRecord(new_index-1);
+                                    var tData = tRecord.getData();
+                                    var tCol = sDt.getColumn(Columns.TITLE);
+                                    var cKey = (
+                                        MINUTES_CACHE_PREFIX + 
+                                        tData[Columns.OBJECT_ID]
+                                    );
+                                    var mCache = YAHOO.bungeni.scheduling.minutesCache.add(cKey,
+                                        { body_text: recordData.value[0] }
+                                    );
+                                    sDt.updateCell(tRecord, tCol, tData); 
+                                    this.hide();
+                                    return;
+                                }
                                 var new_data_entries = new Array();
                                 for(idx=0; idx<(recordData.value.length); idx++){
                                     new_data_entries.push({
@@ -372,6 +390,108 @@ YAHOO.bungeni.config = function(){
                     }
                  }
              }
+             
+             /**
+              * @method itemTitleMinutesFormatter
+              * @method render item title and minutes where applicable
+              */
+              var itemTitleMinutesFormatter = function(el, record, column, data){
+                  var data = record.getData();
+                  if (SGlobals.discussable_types.indexOf(
+                        data[Columns.TYPE]
+                    )<0
+                  ){
+                      el.innerHTML = data[Columns.TITLE];
+                  } else {
+                      var cHTML = BungeniUtils.wrapText(data[Columns.TITLE]) +
+                      BungeniUtils.wrapText(SGlobals.minutes_header,
+                        "span", "class='minutes-header'"
+                      );
+                      var mAttrs = "class='minute-record'";
+                      var eAttrs = "class='minute-record-error'";
+                      var obj_id = data[Columns.OBJECT_ID];
+                      if (obj_id!=undefined){
+                          var ds_id = MINUTES_CACHE_PREFIX + obj_id;
+                          var attrs = "id='"+ ds_id +"' " + mAttrs;
+                          cHTML = cHTML + BungeniUtils.wrapText(
+                            BungeniUtils.wrapText(SGlobals.minutes_loading,
+                                "span", attrs
+                            ), "div"
+                          );
+                          Event.onAvailable(ds_id, function(){
+                            var minutesContainer = this;
+                            var ds_url = ("./items/" + 
+                                data[Columns.OBJECT_ID] +
+                                SGlobals.discussion_items_json_url
+                            );
+                            var oDs = YAHOO.util.DataSource(ds_url);
+                            oDs.responseType = YAHOO.util.DataSource.TYPE_JSON;
+                            oDs.responseSchema = {
+                                resultsList: "nodes",
+                                fields: [ Columns.OBJECT_ID, Columns.BODY_TEXT ]
+                            }
+                            var render_minutes = function(items){
+                                var nHTML = "";
+                                for (idx=0; idx<items.length; idx++){
+                                    data = items[idx];
+                                    idAttr = "rel='rec-"+ idx +"'";
+                                    nHTML = nHTML + BungeniUtils.wrapText(
+                                        data[Columns.BODY_TEXT], 
+                                        "span", mAttrs + " " + idAttr
+                                    );
+                                }
+                                minutesContainer.innerHTML = nHTML;
+                            }
+                            callback = {
+                                success: function(request, response, payload){
+                                    var nHTML = "";
+                                    YAHOO.bungeni.scheduling.minutesCache.set(
+                                        ds_id, response.results
+                                    );
+                                    if(response.results.length){
+                                        results = response.results;
+                                        for (idx=0; idx<results.length; idx++){
+                                            data = results[idx];
+                                            idAttr = "rel='rec-"+ idx +"'";
+                                            nHTML = nHTML + BungeniUtils.wrapText(
+                                                data[Columns.BODY_TEXT], 
+                                                "span", mAttrs + " " + idAttr
+                                            );
+                                        }
+                                    }else{
+                                        nHTML = nHTML + BungeniUtils.wrapText(
+                                            SGlobals.minutes_no_records,
+                                            "span", eAttrs
+                                        );
+                                    }
+                                    minutesContainer.innerHTML = nHTML;
+                                },
+                                failure: function(req, resp, payload){
+                                    nHTML = oHTML + BungeniUtils.wrapText(
+                                        SGlobals.minutes_loading_error,
+                                        "span", eAttrs
+                                    );
+                                    el.innerHTML = nHTML;
+                                },
+                            }
+                            var cached_items = YAHOO.bungeni.scheduling.minutesCache.get(ds_id);
+                            if(cached_items){
+                                render_minutes(cached_items);
+                            }else{
+                                oDs.sendRequest(null, callback, this);
+                            }
+
+                          });
+                      }else{
+                          cHTML = cHTML + BungeniUtils.wrapText(
+                            BungeniUtils.wrapText(
+                                SGlobals.minutes_unsaved_agenda
+                            ), "span", mAttrs
+                          );
+                      }
+                      el.innerHTML = cHTML;
+                  }
+              }
              
             /**
              * @method itemMoveFormatter
@@ -529,6 +649,12 @@ YAHOO.bungeni.config = function(){
              * @description renders button to add text records to schedule
              */
             var addTextRecordFormatter = function(el, record, column, data){
+                if (SGlobals.discussable_types.indexOf(
+                        record.getData()[Columns.TYPE]
+                    )<0
+                ){
+                    return;
+                }
                 if (!el.innerHTML){
                     var button = new YAHOO.widget.Button({
                         type: "menu",
@@ -542,6 +668,10 @@ YAHOO.bungeni.config = function(){
                             {
                                 text: SGlobals.text_button_text,
                                 value: SGlobals.types.TEXT
+                            },
+                            {
+                                text: SGlobals.minute_button_text,
+                                value: SGlobals.types.MINUTE
                             },
                         ]
                     });
@@ -560,6 +690,7 @@ YAHOO.bungeni.config = function(){
 
             return {
                 title: itemTitleFormatter,
+                title_with_minutes: itemTitleMinutesFormatter,
                 type: itemTypeFormatter,
                 moveUp: itemMoveUpFormatter,
                 moveDown: itemMoveDownFormatter,
@@ -611,7 +742,7 @@ YAHOO.bungeni.config = function(){
                     return;
                 }
                 var record = this.getRecord(args.target);
-                if (record.getData().item_type == "text"){
+                if (SGlobals.editable_types.indexOf(record.getData().item_type)>=0){
                     this.onEventShowCellEditor(args);
                 }
             }

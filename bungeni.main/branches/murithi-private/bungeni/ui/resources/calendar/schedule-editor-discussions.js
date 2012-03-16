@@ -462,7 +462,8 @@ YAHOO.bungeni.scheduling = function(){
                         key: Columns.TITLE, 
                         label: scheduler_globals.column_title,
                         editor:editor,
-                        width: 150
+                        width: 150,
+                        formatter: Formatters.title_with_minutes
                     },
                     {
                         key: Columns.URI, 
@@ -479,11 +480,11 @@ YAHOO.bungeni.scheduling = function(){
                         label: "", 
                         formatter: Formatters.moveDown
                     },
-                    {
+                    /*{
                         key: Columns.DISCUSSION_EDIT,
                         label: "",
                         formatter: Formatters.editDiscussions
-                    },
+                    },*/
                     {
                         key: Columns.WORKFLOW_ACTIONS,
                         label: "",
@@ -566,10 +567,47 @@ YAHOO.bungeni.scheduling = function(){
     var getScheduleTable = function(){
         return YAHOO.bungeni.schedule.oDt;
     }
+    
+    var minutesDSCache = function(){
+        var _cache = {};
+
+        var _get_cache = function(){
+            return _cache;
+        }
+
+        var _get = function(key){
+            return _cache[key] || undefined;
+        }
+        
+        var _set = function(key, data){
+            _cache[key] = data;
+        }
+        
+        var _update = function(key, index, data){
+            this.get(key)[index] = data;
+        }
+        
+        var _add = function(key, data){
+            if (this.get(key)==undefined){
+                this.set(key, new Array());
+            }
+            this.get(key).push(data);
+        }
+        
+        return {
+            get_cache: _get_cache,
+            get: _get,
+            set: _set,
+            update: _update,
+            add: _add
+        }
+    }();
+    
     return {
         handlers: handlers,
         Layout: Layout,
         discussionEditor: discussionEditor,
-        getScheduleTable: getScheduleTable
+        getScheduleTable: getScheduleTable,
+        minutesCache: minutesDSCache
     }
 }();
