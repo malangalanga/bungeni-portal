@@ -10,12 +10,6 @@
 
   <resourceLibrary name="jquery">
     <directory
-      zcml:condition="not-have devmode"
-      source="jquery"
-      include="jquery.js"
-    />
-    <directory
-      zcml:condition="have devmode"
       source="jquery"
       include="jquery.js"
     />
