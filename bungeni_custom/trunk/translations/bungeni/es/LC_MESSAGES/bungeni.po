@@ -3,19 +3,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: Fri Nov 25 16:53:38 2011\n"
-"PO-Revision-Date: 2011-09-22 13:41+0300\n"
-"Last-Translator: Murithi <bungeni.translator@gmail.com>\n"
+"PO-Revision-Date: 2012-03-20 01:27+0300\n"
+"Last-Translator: Patricio <palvarez@senado.cl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.4\n"
 "Domain: DOMAIN\n"
-"Language: es\n"
 "Language-Code: es\n"
 "Language-Name: Espanol\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"X-Generator: Pootle 2.0.4\n"
 
 #: src/bungeni.main/bungeni/core/app.py:100
 msgid "Bungeni"
@@ -304,12 +304,10 @@ msgid "manage search index settings"
 msgstr "administrar la configuración de índice de búsqueda"
 
 #: src/bungeni.main/bungeni/core/app.py:360
-#, fuzzy
 msgid "registry settings"
 msgstr "la configuración del Registro"
 
 #: src/bungeni.main/bungeni/core/app.py:361
-#, fuzzy
 msgid "manage registry settings"
 msgstr "gestión de la configuración del Registro"
 
@@ -382,7 +380,6 @@ msgstr "Última modificación"
 
 #. Default: "Member of Parliament for ${constituency} (${member})"
 #: src/bungeni.main/bungeni/core/dc.py:302
-#, fuzzy
 msgid "member_title_with_constituency"
 msgstr "Miembro del Parlamento por ${constituency} (${member})"
 
@@ -398,9 +395,8 @@ msgid "Address"
 msgstr "Dirección"
 
 #: src/bungeni.main/bungeni/core/dc.py:522
-#, fuzzy
 msgid "Covers"
-msgstr "Cubre"
+msgstr "Cubiertas"
 
 #. Default: ""
 #: src/bungeni.main/bungeni/core/schedule.py:170
@@ -416,8 +412,8 @@ msgstr "Grupo de usuarios desconocidos"
 msgid "title_html_fragment_odf_transform"
 msgstr "Fragmento de HTML para el formato OpenDocument"
 
-#. Default: ""
 # reverted to previous version $version
+#. Default: ""
 #: src/bungeni.main/bungeni/core/version.py:112
 msgid "Reverted to previous version $version"
 msgstr "Miniatura de la versión anterior $version"
@@ -688,7 +684,7 @@ msgstr "Rechazar"
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:410
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:418
 msgid "Publish Internal"
-msgstr "Publicar interna"
+msgstr "Publicar internamente"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:260
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:296
@@ -719,7 +715,6 @@ msgstr "Disolver"
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:262
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:407
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:415
-#, fuzzy
 msgid "Re-publish"
 msgstr "Volver a publicar"
 
@@ -727,12 +722,12 @@ msgstr "Volver a publicar"
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:229
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:235
 msgid "Draft Agenda"
-msgstr "Proyecto de orden del día"
+msgstr "Propuesta de orden del día"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:321
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:239
 msgid "Finalize Agenda"
-msgstr "Finalizar el programa"
+msgstr "Finalizar el orden del día"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:325
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:238
@@ -743,17 +738,17 @@ msgstr "Nueva redacción del orden del día"
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:230
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:234
 msgid "Draft Minutes"
-msgstr "Proyecto de Acta"
+msgstr "Acta preliminar"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:333
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:240
 msgid "Publish Minutes"
-msgstr "Publicar Minutos"
+msgstr "Publicar Acta"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:337
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:237
 msgid "Redraft Minutes"
-msgstr "Minutos volviera a redactar"
+msgstr "Nueva redacción del Acta"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:34
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:50
@@ -794,33 +789,33 @@ msgstr "Reactivar"
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:290
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:319
 msgid "Make available for scheduling"
-msgstr "Poner a disposición para la programación"
+msgstr "Poner disponible para agendarlo"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:416
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:220
 msgid "Re-schedule"
-msgstr "Re-programación"
+msgstr "Re-agendar"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:428
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:195
 msgid "Adopt"
-msgstr "Adoptar"
+msgstr "Aprobar"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:431
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:222
 msgid "Adopt with amendments"
-msgstr "Adoptar las enmiendas"
+msgstr "Aprobar con modificaciones"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:434
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:205
 msgid "Reject a scheduled motion"
-msgstr "Rechazar una moción programado"
+msgstr "Rechazar una moción"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:520
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:128
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:133
 msgid "Send to Ministry"
-msgstr "Enviar a Ministerio"
+msgstr "Enviar al Ministerio"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:523
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:134
@@ -835,7 +830,7 @@ msgstr "Nueva redacción de respuesta"
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:529
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:136
 msgid "Complete Response"
-msgstr "Respuesta Completa"
+msgstr "Completar respuesta"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:541
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:104
@@ -843,19 +838,19 @@ msgstr "Respuesta Completa"
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:176
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:341
 msgid "Debate adjourned"
-msgstr "El debate aplazado"
+msgstr "Debate sospendido"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:544
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:113
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:154
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:332
 msgid "Debated"
-msgstr "Debate"
+msgstr "Debatido"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:602
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:283
 msgid "Needs Recomplete to Approve"
-msgstr "Necesidades Recomplete para aprobar"
+msgstr "Necesita clarificación"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:62
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:65
@@ -888,7 +883,7 @@ msgstr "Necesidades Recomplete para aprobar"
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:372
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:380
 msgid "Submit"
-msgstr "Presentar"
+msgstr "Presentar al Secretario"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:620
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:282
@@ -901,31 +896,30 @@ msgstr "Suspender"
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:296
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:313
 msgid "Table"
-msgstr "Mesa"
+msgstr "Bufete directivo"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:648
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:247
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:249
 msgid "Move to Deceased"
-msgstr "Mover a la Difunta"
+msgstr "Perimido"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:651
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:248
 msgid "Move from Deceased"
-msgstr "Pasar de Difuntos"
+msgstr "Reintroducir de perimido"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:669
 msgid "consent"
-msgstr "consentimiento"
+msgstr "consentir"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:672
 msgid "reject"
 msgstr "rechazar"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:675
-#, fuzzy
 msgid "withdraw signature"
-msgstr "retirar la firma"
+msgstr "Retirar la firma"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:68
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:155
@@ -943,7 +937,7 @@ msgstr "retirar la firma"
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:363
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:364
 msgid "Submit to Signatories"
-msgstr "Presentar a los Signatarios"
+msgstr "Someter a signatarios"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:71
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:158
@@ -1013,7 +1007,7 @@ msgstr "Recibir"
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:352
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:379
 msgid "Require Clarification to Receive"
-msgstr "Es necesario aclarar, para recibir"
+msgstr "Necesita clarficiación para recibir"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:83
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:386
@@ -1024,7 +1018,7 @@ msgstr "Es necesario aclarar, para recibir"
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:285
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:348
 msgid "Complete"
-msgstr "Completar"
+msgstr "Completo"
 
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:86
 #: src/bungeni.main/bungeni/core/workflows/permissions.zcml:245
@@ -1166,7 +1160,6 @@ msgstr "Es necesario aclarar, para aprobar"
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:186
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:305
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:342
-#, fuzzy
 msgid "Redraft (Automatic)"
 msgstr "Nueva redacción (Automático)"
 
@@ -1326,9 +1319,8 @@ msgid "Draft - Group not yet Active"
 msgstr "Proyecto - Grupo aún no está activo"
 
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:258
-#, fuzzy
 msgid "Inactive address"
-msgstr "Dirección inactivo"
+msgstr "Dirección inactiva"
 
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:259
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:404
@@ -1425,7 +1417,6 @@ msgid "Inactive file"
 msgstr "Archivo inactivo"
 
 #: src/bungeni.main/bungeni/core/workflows/wfi18n.pt:405
-#, fuzzy
 msgid "Attached file"
 msgstr "Archivo adjunto"
 
@@ -1637,43 +1628,36 @@ msgid "Maximum consented signatories for a tabled document"
 msgstr "Máximo consentido firmantes de un documento presentado"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:330
-#, fuzzy
 msgid "Reset global registry number"
-msgstr "Restablecer el número de registro mundial"
+msgstr "Restablecer el número de registro global"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:334
-#, fuzzy
 msgid "Reset questions registry number"
-msgstr "Restablecer las preguntas número de registro"
+msgstr "Restablecer número de registro de las preguntas"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:338
-#, fuzzy
 msgid "Reset motions registry number"
-msgstr "Restablecer número de registro de movimientos"
+msgstr "Restablecer número de registro de mociones"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:342
-#, fuzzy
 msgid "Reset agenda items registry number"
-msgstr "Restablecer número de registro del programa de puntos"
+msgstr "Restablecer número de registro de puntos del orden del día"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:346
-#, fuzzy
 msgid "Reset bills registry number"
-msgstr "Restablecer las facturas el número de registro"
+msgstr "Restablecer lel número de registro de las iniciativas"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:350
-#, fuzzy
 msgid "Reset reports registry number"
-msgstr "Restablecer número de informes de registro"
+msgstr "Restablecer número de registro de informes"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:354
-#, fuzzy
 msgid "Reset tabled documents registry number"
-msgstr "Restablecer presentado varios documentos de registro"
+msgstr "Restablecer el número de registro de los documentos presentados"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:364
 msgid "Email Notifications Enabled?"
-msgstr "Notificaciones por correo electrónico habilitado?"
+msgstr "Notificaciones por correo electrónico habilitadas?"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:370
 msgid "Email server hostname or IP address"
@@ -2416,7 +2400,6 @@ msgid "Daily"
 msgstr "Diario"
 
 #: src/bungeni.main/bungeni/ui/calendar/browser.py:637
-#, fuzzy
 msgid "Error Updating Sitting"
 msgstr "Error de actualización de sesión"
 
@@ -2432,7 +2415,6 @@ msgstr "elegir ${event_field_title}"
 
 #: src/bungeni.main/bungeni/ui/calendar/interfaces.py:21
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2835
-#, fuzzy
 msgid "Name of activity"
 msgstr "Nombre de la actividad"
 
@@ -2455,21 +2437,18 @@ msgstr "Lengua"
 
 #: src/bungeni.main/bungeni/ui/calendar/interfaces.py:30
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2908
-#, fuzzy
 msgid "Activity Type"
 msgstr "Tipo de actividad"
 
 #: src/bungeni.main/bungeni/ui/calendar/interfaces.py:33
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2919
-#, fuzzy
 msgid "Meeting Type"
-msgstr "Reunión Tipo"
+msgstr "Tipo de reunión "
 
 #: src/bungeni.main/bungeni/ui/calendar/interfaces.py:36
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2930
-#, fuzzy
 msgid "Convocation Type"
-msgstr "Convocatoria Tipo"
+msgstr "Tipo de convocatoria"
 
 #: src/bungeni.main/bungeni/ui/calendar/interfaces.py:49
 msgid "Start date and time of sitting"
@@ -2628,9 +2607,8 @@ msgid "Committee Type"
 msgstr "Comité Tipo"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1330
-#, fuzzy
 msgid "Committee Status Type"
-msgstr "Comité Tipo Estado"
+msgstr "Tipo de estado del Comisión"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1344
 msgid "Number of members"
@@ -2675,7 +2653,6 @@ msgid "Address Type"
 msgstr "Tipo de dirección"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1501
-#, fuzzy
 msgid "Postal Address Type"
 msgstr "Tipo de dirección postal"
 
@@ -2911,7 +2888,6 @@ msgid "Upload a file"
 msgstr "Subir un archivo"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2051
-#, fuzzy
 msgid "File Type"
 msgstr "Tipo de Archivo"
 
@@ -3201,19 +3177,16 @@ msgid "End"
 msgstr "Final"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2909
-#, fuzzy
 msgid "Sitting Activity Type"
-msgstr "Actividad Sentado Tipo"
+msgstr "Tipo de actividad de sesión"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2920
-#, fuzzy
 msgid "Sitting Meeting Type"
-msgstr "Reunión Sentado Tipo"
+msgstr "Tipo de reunión de la sesión"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2931
-#, fuzzy
 msgid "Sitting Convocation Type"
-msgstr "Convocatoria Sentado Tipo"
+msgstr "Tipo de convocatoria de la sesión"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2949
 #: src/bungeni.main/bungeni/ui/reports.py:111
@@ -4104,21 +4077,18 @@ msgid "Your login is: "
 msgstr "Su nombre de usuario es:"
 
 #: src/bungeni.main/bungeni/ui/login.py:109
-#, fuzzy
 msgid "Bungeni login restoration"
-msgstr "Bungeni de inicio de sesión de restauración"
+msgstr "Restauración de la sesión de Bungeni"
 
 #: src/bungeni.main/bungeni/ui/login.py:112
 msgid "Your login was sent to you email."
 msgstr "Su nombre de usuario se le envió de correo electrónico."
 
 #: src/bungeni.main/bungeni/ui/login.py:114
-#, fuzzy
 msgid "Wrong email address."
 msgstr "Dirección de correo electrónico incorrecta."
 
 #: src/bungeni.main/bungeni/ui/login.py:124
-#, fuzzy
 msgid "Restore Password"
 msgstr "Restaurar Contraseña"
 
@@ -4139,7 +4109,6 @@ msgid "Bungeni password restoration"
 msgstr "Bungeni contraseña de la restauración"
 
 #: src/bungeni.main/bungeni/ui/login.py:188
-#, fuzzy
 msgid "Email was sent!"
 msgstr "El correo electrónico fue enviado!"
 
@@ -4148,12 +4117,10 @@ msgid "User not found!"
 msgstr "Usuario no encontrado!"
 
 #: src/bungeni.main/bungeni/ui/login.py:195
-#, fuzzy
 msgid "Confirm Password"
-msgstr "Confirm Password"
+msgstr "Confirmar contraseña"
 
 #: src/bungeni.main/bungeni/ui/login.py:202
-#, fuzzy
 msgid "Reset Password"
 msgstr "Restablecer contraseña"
 
@@ -4166,9 +4133,8 @@ msgid "Key expired!"
 msgstr "Clave vencido!"
 
 #: src/bungeni.main/bungeni/ui/login.py:220
-#, fuzzy
 msgid "Reset"
-msgstr "Reajustar"
+msgstr "Reestablecer"
 
 #: src/bungeni.main/bungeni/ui/login.py:228
 msgid "Password confirmation failed!"
@@ -4179,17 +4145,14 @@ msgid "Password successfully reset!"
 msgstr "Contraseña restablecido correctamente!"
 
 #: src/bungeni.main/bungeni/ui/login.py:247
-#, fuzzy
 msgid "First name"
-msgstr "Nombre de pila"
+msgstr "Primer Nombre"
 
 #: src/bungeni.main/bungeni/ui/login.py:248
-#, fuzzy
 msgid "Last name"
 msgstr "Apellido"
 
 #: src/bungeni.main/bungeni/ui/login.py:249
-#, fuzzy
 msgid "Middle name"
 msgstr "Segundo nombre"
 
@@ -4202,7 +4165,6 @@ msgid "Profile data updated"
 msgstr "Perfil información actualizada"
 
 #: src/bungeni.main/bungeni/ui/login.py:367
-#, fuzzy
 msgid "Confirm password"
 msgstr "Confirme su contraseña"
 
@@ -4213,7 +4175,6 @@ msgstr "Nombre de usuario"
 
 #: src/bungeni.main/bungeni/ui/login.py:374
 #: src/bungeni.main/bungeni/ui/login.py:394
-#, fuzzy
 msgid "Change password"
 msgstr "Cambiar la contraseña"
 
@@ -4228,7 +4189,6 @@ msgid "Password confirmation failed"
 msgstr "Confirmación de la contraseña no"
 
 #: src/bungeni.main/bungeni/ui/login.py:405
-#, fuzzy
 msgid "Password changed"
 msgstr "Contraseña cambiada"
 
@@ -4246,7 +4206,6 @@ msgstr "Restaurar sesión"
 
 #: src/bungeni.main/bungeni/ui/login.py:93
 #: src/bungeni.main/bungeni/ui/login.py:137
-#, fuzzy
 msgid "Restore"
 msgstr "Restaurar"
 
@@ -4440,7 +4399,6 @@ msgid "download odt"
 msgstr "odt descarga"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:1838
-#, fuzzy
 msgid "publish reports"
 msgstr "publicar informes"
 
@@ -4807,7 +4765,6 @@ msgid "Add User Address..."
 msgstr "Dirección del usuario ..."
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:994
-#, fuzzy
 msgid "change password"
 msgstr "cambiar la contraseña"
 
@@ -4817,12 +4774,10 @@ msgid "report-template-missing"
 msgstr "Informe del archivo de plantilla no existe en ${path}"
 
 #: src/bungeni.main/bungeni/ui/reporting/generators.py:215
-#, fuzzy
 msgid "No items found"
-msgstr "No se han encontrado"
+msgstr "Item no encontrado"
 
 #: src/bungeni.main/bungeni/ui/reports.py:134
-#, fuzzy
 msgid "Report Type"
 msgstr "Tipo de informe"
 
@@ -4831,21 +4786,18 @@ msgid "Choose template to use in generating Report"
 msgstr "Elige una plantilla para usar en la generación de Informe"
 
 #: src/bungeni.main/bungeni/ui/reports.py:139
-#, fuzzy
 msgid "Start date for this Report"
 msgstr "Fecha de inicio de este Informe"
 
 #: src/bungeni.main/bungeni/ui/reports.py:141
-#, fuzzy
 msgid "Publication Number"
-msgstr "Publicación Número"
+msgstr "Número Publicación"
 
 #: src/bungeni.main/bungeni/ui/reports.py:142
 msgid "Optional publication number for this Report"
 msgstr "Número de publicación opcional para este Informe"
 
 #: src/bungeni.main/bungeni/ui/reports.py:190
-#, fuzzy
 msgid "Report Title"
 msgstr "Título del informe"
 
@@ -4901,9 +4853,8 @@ msgstr "Un parlamento debe estar activo en el período"
 
 #: src/bungeni.main/bungeni/ui/reports.py:466
 #: src/bungeni.main/bungeni/ui/reports.py:651
-#, fuzzy
 msgid "Sitting Agenda"
-msgstr "Sentado orden del día"
+msgstr "Orden del día de la sesión"
 
 #: src/bungeni.main/bungeni/ui/reports.py:500
 msgid "Choose an end date for this report"
@@ -4919,9 +4870,8 @@ msgid "Agenda Items"
 msgstr "Los temas del programa"
 
 #: src/bungeni.main/bungeni/ui/reports.py:655
-#, fuzzy
 msgid "Sitting Votes and Proceedings"
-msgstr "Votos que hay y Actas"
+msgstr "Actas y votaciones de la sesión"
 
 #: src/bungeni.main/bungeni/ui/reports.py:67
 msgid "Tabled Documents"
@@ -5021,7 +4971,6 @@ msgid "Sitting attendance record"
 msgstr "Sentado récord de asistencia"
 
 #: src/bungeni.main/bungeni/ui/templates/bungenicontent.pt:14
-#, fuzzy
 msgid "View in Bungeni"
 msgstr "Ver en Bungeni"
 
@@ -5084,24 +5033,20 @@ msgid "title_required"
 msgstr "Necesario"
 
 #: src/bungeni.main/bungeni/ui/templates/report-documentation.pt:6
-#, fuzzy
 msgid "Report Documentation"
-msgstr "Documentación Informe"
+msgstr "Documentación del Informe"
 
 #: src/bungeni.main/bungeni/ui/templates/report_error.pt:6
-#, fuzzy
 msgid "An error occurred during generation of the document"
 msgstr "Se produjo un error durante la generación del documento"
 
 #: src/bungeni.main/bungeni/ui/templates/reports.pt:157
-#, fuzzy
 msgid "Agenda Item"
-msgstr "Tema"
+msgstr "Punto del orden del día"
 
 #: src/bungeni.main/bungeni/ui/templates/reports.pt:185
-#, fuzzy
 msgid "Tabled Document"
-msgstr "Presentado el documento"
+msgstr "Documento conocido"
 
 #: src/bungeni.main/bungeni/ui/templates/search.pt:19
 #: src/bungeni.main/bungeni/ui/templates/advanced-pagedsearch.pt:20
