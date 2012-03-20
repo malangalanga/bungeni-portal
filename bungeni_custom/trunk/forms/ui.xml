@@ -122,6 +122,37 @@
         </field>
     </descriptor>
 
+    <descriptor name="Attachment">
+        <field name="type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="title" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="data" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
+        </field>
+        <field name="name" displayable="view edit add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="mimetype" displayable="view edit add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+    </descriptor>
+
     <descriptor name="Attendance">
         <field name="member_id" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
