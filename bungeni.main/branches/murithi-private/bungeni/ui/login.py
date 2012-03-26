@@ -53,8 +53,7 @@ class Login(form.FormBase):
                         ui_utils.url.absoluteURL(workspace, self.request))
         return super(Login, self).__call__()
             
-    @form.action(_(u"Login"),
-                 name="login")
+    @form.action(_(u"Login"), name="login")
     def handle_login(self, action, data):
         if IUnauthenticatedPrincipal.providedBy(self.request.principal):
             self.status = _(u"Invalid account credentials")
@@ -91,8 +90,7 @@ class RestoreLogin(form.FormBase):
         
         return super(RestoreLogin, self).__call__()
             
-    @form.action(_(u"Restore"),
-                 name="restore")
+    @form.action(_(u"Restore"), name="restore")
     def handle_restore(self, action, data):
         email = data.get("email", "")
         if email:
@@ -420,8 +418,7 @@ class ChangePasswordForm(BaseForm):
                         )
         return super(ChangePasswordForm, self).__call__()
     
-    @form.action(_(u"Change password"),
-                 name="change_password")
+    @form.action(_(u"Change password"), name="change_password")
     def save_password(self, action, data):
         password = data.get("pswd","")
         confirm_password= data.get("confirm_password","")

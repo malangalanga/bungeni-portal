@@ -55,11 +55,24 @@ span.minute-record{
     text-overflow:ellipsis;
     -o-text-overflow:ellipsis;
     white-space:nowrap;
+    position:relative;
 }
-
 span.minute-record-error{
     display:block;
     font-size:10px;
-    background-color:#D0A5A7;
+    background-color:#B1BD6B;
     color:#5A5A5A;
 }
+span.edit-minute-control{
+    position:absolute;
+    right:0;
+    padding:1px;
+    background-color:#fff;
+    border:1px solid #CCC dotted;
+    color:#545450;
+    width:16px;
+    height:16px;
+    background:url("/@@/portal/images/page_white_edit.png") right center no-repeat;
+}
+
+

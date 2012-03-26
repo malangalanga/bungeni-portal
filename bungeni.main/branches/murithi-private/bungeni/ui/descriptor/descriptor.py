@@ -19,7 +19,8 @@ from zc.table import column
 from zope.dublincore.interfaces import IDCDescriptiveProperties
 
 from bungeni.alchemist import Session
-from bungeni.alchemist.model import ModelDescriptor, Field, show, hide
+from bungeni.alchemist.model import ModelDescriptor, Field, show, hide, \
+    queryModelInterface
 
 from bungeni.models import domain
 from bungeni.models.utils import get_db_user_id
@@ -1951,6 +1952,103 @@ class GovernmentDescriptor(GroupDescriptor):
     schema_invariants = [EndAfterStart]
     custom_validators = [validations.validate_government_dates]
 
+class AttachmentDescriptor(ModelDescriptor):
+    localizable = True
+    display_name = _("Attachment")
+    container_name = _("Attachments")
+    default_field_order = [
+        #"attachment_id",
+        #"head_id",
+        "type",
+        "title",
+        "description",
+        "data",
+        "name",
+        "mimetype",
+        "status",
+        "status_date",
+        "language",
+    ]
+    fields = [
+        Field(name="type", # [user-req]
+            modes="view edit add listing",
+            localizable=[
+                show("view edit listing"),
+            ],
+            property=schema.Choice(title=_("Attachment Type"),
+                source=vocabulary.attachment_type,
+            ),
+            listing_column=vocabulary_column("type", 
+                "File Type",
+                vocabulary.attachment_type,
+            ),
+        ),
+        Field(name="title", # [user-req]
+            modes="view edit add listing",
+            localizable=[
+                show("view edit listing"),
+            ],
+            property=schema.TextLine(title=_("Title")),
+            edit_widget=widgets.TextWidget,
+            add_widget=widgets.TextWidget,
+        ),
+        Field(name="description", # [rtf]
+            modes="view edit add",
+            localizable=[
+                show("view edit add"),
+            ],
+            property=schema.Text(title=_("Description"), required=False),
+            view_widget=widgets.HTMLDisplay,
+            edit_widget=widgets.RichTextEditor,
+            add_widget=widgets.RichTextEditor,
+        ),
+        Field(name="data", # [file]
+            modes="view edit add",
+            localizable=[
+                show("view edit"),
+            ],
+            property=schema.Bytes(title=_("File")),
+            description=_("Upload a file"),
+            edit_widget=widgets.FileEditWidget,
+            add_widget=widgets.FileAddWidget,
+            view_widget=widgets.FileDisplayWidget,
+        ),
+        Field(name="name", label="", # [user-req]
+            modes="view edit add listing",
+            localizable=[
+                show("view listing"),
+            ],
+            edit_widget=widgets.NoInputWidget,
+            add_widget=widgets.NoInputWidget,
+        ),
+        Field(name="mimetype", label="", # [user-req]
+            modes="view edit add listing",
+            localizable=[
+                show("view listing"),
+            ],
+            edit_widget=widgets.NoInputWidget,
+            add_widget=widgets.NoInputWidget,
+        ),
+        Field(name="status", label=_("Status"), # [user-req]
+            modes="view edit listing",
+            localizable=[
+                show("view edit listing"),
+            ],
+            property=schema.Choice(title=_("Status"),
+                vocabulary="bungeni.vocabulary.workflow",
+            ),
+            listing_column=workflow_column("status", "Workflow status"),
+        ),
+        Field(name="status_date", label=_("Status date"), # [sys]
+            modes="view listing",
+            localizable=[
+                show("view listing"),
+            ],
+            property=schema.Date(title=_("Status date"), required=False),
+            listing_column=day_column("status_date", _("Status date")),
+        ),
+        LanguageField("language"), # [user-req]
+    ]
 
 class AttachedFileDescriptor(ModelDescriptor):
     localizable = True
@@ -3637,6 +3735,8 @@ def catalyse_descriptors():
             yield cls
     
     from bungeni.alchemist.catalyst import catalyst
+    from bungeni.models.schema import un_camel
+    from bungeni.core.workflows import adapters
     for descriptor in descriptor_classes():
         descriptor_name = descriptor.__name__
         assert descriptor_name.endswith("Descriptor")
@@ -3644,11 +3744,29 @@ def catalyse_descriptors():
         kls_name = non_conventional.get(desc_prefix, desc_prefix)
         try:
             kls = getattr(domain, kls_name)
+            # !+ mv out of try/except
             catalyst(None, kls, descriptor, echo=True)
         except (Exception,):
             # no corresponding domain class, ignore 
             # e.g. Address, Model, Version
             debug.log_exc(sys.exc_info(), log_handler=log.warn)
+            continue
+        # TYPE_REGISTRY, add descriptor
+        type_key = un_camel(kls_name)
+        ti = adapters.get_type_info(type_key, None)
+        if ti is None:
+            ti = adapters.TI(None, None)
+            ti.domain_model = kls
+            ti.interface = queryModelInterface(kls) # !+
+            adapters.TYPE_REGISTRY.append((type_key, ti))
+        else:
+            assert ti.domain_model is kls
+        ti.descriptor = descriptor
+    
+    m = ("Done all workflow/descriptor related setup... running with:\n"
+        "\n    ".join([ "    %s: %s" % (name, ti)
+            for name, ti in adapters.TYPE_REGISTRY ]))
+    log.debug(m)
 
 # !+catalyse_descriptors(mr, jul-2011), fails when this is called here 
 #catalyse_descriptors()

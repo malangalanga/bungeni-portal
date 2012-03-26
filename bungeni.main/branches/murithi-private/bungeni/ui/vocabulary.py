@@ -71,8 +71,8 @@ days = [ _('day_%d' % index, default=default) for (index, default) in
 
 def assignable_state_ids():
     _sids = set()
-    for name, iface in adapters.WORKFLOW_REG:
-        wf = adapters.get_workflow(name)
+    for name, ti in adapters.TYPE_REGISTRY:
+        wf = ti.workflow
         _sids.update(wf.get_state_ids(
                 not_tagged=["private", "fail", "terminal"], restrict=False))
     return _sids
@@ -186,7 +186,7 @@ postal_address_type = vocabulary.SimpleVocabulary([
     vocabulary.SimpleTerm("military", title="Military"),
     vocabulary.SimpleTerm("unknown", title="Undefined/Unknown"),
 ])
-attached_file_type = vocabulary.SimpleVocabulary([
+attachment_type = vocabulary.SimpleVocabulary([
     vocabulary.SimpleTerm("image", title="Image"),
     vocabulary.SimpleTerm("annex", title="Annex"),
     vocabulary.SimpleTerm("document", title="Document"),
@@ -196,6 +196,7 @@ attached_file_type = vocabulary.SimpleVocabulary([
     # option in the UI?
     #vocabulary.SimpleTerm("system", title="System"),
 ])
+attached_file_type = attachment_type # !+DOCUMENT
 attendance_type = vocabulary.SimpleVocabulary([
     vocabulary.SimpleTerm("present", title="Present"),
     vocabulary.SimpleTerm("absence_justified", title="Absence justified"),
