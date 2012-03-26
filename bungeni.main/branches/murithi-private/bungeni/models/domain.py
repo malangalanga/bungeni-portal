@@ -267,6 +267,12 @@ def enable_attachment(kls):
     return kls
 configurable_domain.feature_decorators["attachment"] = enable_attachment
 
+def enable_schedulable(kls):
+    """Decorator for schedulable types
+    """
+    return kls
+configurable_domain.feature_decorators["schedulable"] = enable_schedulable
+
 # !+/PARAMETRIZABLE_DOCTYPES
 
 class User(Entity):

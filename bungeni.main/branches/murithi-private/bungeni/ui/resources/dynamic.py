@@ -30,8 +30,8 @@ def get_globals(group_name, **kwargs):
     globals_map = {
         "SCHEDULER_GLOBALS" : {
             "schedulable_types": [ 
-                dict(name=name, title=i18n(title, language)) 
-                for (name, title) in 
+                dict(name=name, title=i18n(info.get("title"), language)) 
+                for (name, info) in 
                 sorted(data.get_schedulable_types().iteritems())
              ],
             "discussable_types": [k for k in data.get_schedulable_types()],
