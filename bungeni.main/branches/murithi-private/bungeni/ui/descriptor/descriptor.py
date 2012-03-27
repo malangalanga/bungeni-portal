@@ -34,14 +34,12 @@ from bungeni.core import translation
 
 from bungeni.ui import widgets
 from bungeni.ui.fields import VocabularyTextField
-
 from bungeni.ui import constraints
 from bungeni.ui.forms import validations
 from bungeni.ui.i18n import _
 from bungeni.ui.utils import common, date, misc, debug
 from bungeni.ui import vocabulary
-from bungeni.ui.interfaces import IBusinessSectionLayer
-
+from bungeni.utils.capi import capi
 
 ###
 # Listing Columns
@@ -3586,12 +3584,12 @@ class ItemScheduleDescriptor(ModelDescriptor):
         ),
     ]
 
-class ScheduleTextDescriptor(ModelDescriptor):
+class EditorialNoteDescriptor(ModelDescriptor):
     localizable = True
-    display_name = _("Scheduling Texts")
-    container_name = "Scheduling Texts"
+    display_name = _("Editorial Note")
+    container_name = "Editorial Notes"
     fields = [
-        Field(name="schedule_text_id",
+        Field(name="editorial_note_id",
             modes="view edit add listing",
             localizable=[
                 show("view listing")
@@ -3753,11 +3751,11 @@ def catalyse_descriptors():
             continue
         # TYPE_REGISTRY, add descriptor
         type_key = un_camel(kls_name)
-        ti = adapters.get_type_info(type_key, None)
+        ti = capi.get_type_info(type_key, None)
         if ti is None:
-            ti = adapters.TI(None, None)
+            # non-workflowed type, add TI entry
+            ti = adapters.TI(None, queryModelInterface(kls))
             ti.domain_model = kls
-            ti.interface = queryModelInterface(kls) # !+
             adapters.TYPE_REGISTRY.append((type_key, ti))
         else:
             assert ti.domain_model is kls

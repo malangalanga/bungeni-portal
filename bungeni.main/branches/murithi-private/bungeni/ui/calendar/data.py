@@ -14,10 +14,12 @@ from bungeni.alchemist import model
 from bungeni.models import domain
 from bungeni.core.dc import IDCDescriptiveProperties
 from bungeni.core.workflow.interfaces import IWorkflow
-from bungeni.core.workflows.adapters import get_workflow, get_type_info, TYPE_REGISTRY
+from bungeni.core.workflows.adapters import get_workflow
 from bungeni.ui.utils import date, common
 from bungeni.alchemist import Session
 from bungeni.ui.i18n import _
+
+from bungeni.utils.capi import capi
 
 #!+CALENDAR(mb, Jan-2012) This should come from capi or workflow configuration
 #!+SCHEDULE(mr, feb-2012) this can already be added as a feature on each 
@@ -27,7 +29,7 @@ from bungeni.ui.i18n import _
 def get_schedulable_types():
     schedulable_types = filter(
         lambda ti:(ti[1].workflow and ti[1].workflow.has_feature("schedulable")), 
-        TYPE_REGISTRY
+        capi.iter_type_info()
     )
     return dict([
         (type_info.workflow.name, dict(
@@ -83,7 +85,7 @@ class SchedulableItemsGetter(object):
             )
         except KeyError:
             try:
-                self.domain_class = get_type_info(item_type).domain_model
+                self.domain_class = capi.get_type_info(item_type).domain_model
             except KeyError:
                 raise KeyError("Unable to locate domain class for type %s" %
                     item_type
