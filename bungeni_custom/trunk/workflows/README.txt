@@ -21,7 +21,7 @@ grammar {
     element workflow {
         attribute title { text },
         attribute description { text },
-        attribute domain { "bungeni.ui" },
+        attribute domain { "bungeni" },
         attribute initial_state { "" }?,
         attribute tags { text }?, # declare any system defined tags used in workflow
         attribute note { text }?,
@@ -85,7 +85,7 @@ Currently known features,
     for archetype "document":
         audit
         version # implies "audit"
-        attachement
+        attachment
 
 - if no <feature> element present for a named feature, then that feature is not
 *enabled*; if a <feature> element is present then it is by default enabled 

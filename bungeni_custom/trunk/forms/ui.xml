@@ -185,9 +185,15 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
+        <field name="body_text" displayable="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
         <field name="submission_date" displayable="view listing" localizable="view listing">
             <show modes="view" />
             <hide modes="listing" />
+        </field>
+        <field name="note" displayable="edit add" localizable="edit add">
+            <show modes="edit add" />
         </field>
         <field name="receive_notification" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -214,12 +220,6 @@
         <field name="timestamp" displayable="edit" localizable="edit">
             <show modes="edit" />
         </field>
-        <field name="body_text" displayable="view edit add" localizable="view">
-            <show modes="view" />
-        </field>
-        <field name="note" displayable="edit add" localizable="edit add">
-            <show modes="edit add" />
-        </field>
     </descriptor>
 
     <descriptor name="BillVersion">
@@ -242,21 +242,26 @@
 
     <descriptor name="Committee">
         <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+            <show modes="view edit" />
+            <hide modes="listing" />
         </field>
         <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
         <field name="acronym" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+            <show modes="view edit" />
+            <hide modes="listing" />
         </field>
         <field name="combined_name" displayable="listing" localizable="listing">
-            <hide modes="listing" />
+            <show modes="listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
+        </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
         </field>
         <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -302,9 +307,6 @@
         <field name="reinstatement_date" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add" />
             <hide modes="listing" />
-        </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
-            <show modes="view edit add" />
         </field>
     </descriptor>
 
@@ -419,6 +421,19 @@
         </field>
     </descriptor>
 
+    <descriptor name="EditorialNote">
+        <field name="editorial_note_id" displayable="view edit add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="text" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+    </descriptor>
+
     <descriptor name="Event">
         <field name="short_title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
@@ -427,6 +442,7 @@
             <show modes="view edit add" />
         </field>
         <field name="acronym" displayable="view edit add listing" />
+        <field name="description" displayable="view edit add listing" />
         <field name="body" displayable="view edit add" localizable="view">
             <show modes="view" />
         </field>
@@ -472,7 +488,6 @@
         <field name="timestamp" displayable="edit" localizable="edit">
             <show modes="edit" />
         </field>
-        <field name="description" displayable="view edit add listing" />
     </descriptor>
 
     <descriptor name="Government">
@@ -495,6 +510,9 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
         <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -503,9 +521,6 @@
         </field>
         <field name="identifier" displayable="view edit add" localizable="view edit">
             <show modes="view edit" />
-        </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
-            <show modes="view edit add" />
         </field>
     </descriptor>
 
@@ -560,14 +575,14 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
         <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
         <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
-        </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
-            <show modes="view edit add" />
         </field>
     </descriptor>
 
@@ -680,6 +695,9 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
         <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -688,9 +706,6 @@
         </field>
         <field name="identifier" displayable="view edit add" localizable="view edit">
             <show modes="view edit" />
-        </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
-            <show modes="view edit add" />
         </field>
     </descriptor>
 
@@ -706,7 +721,7 @@
         </field>
         <field name="motion_number" displayable="view listing" localizable="view listing">
             <show modes="view" />
-            <show modes="listing" />
+            <hide modes="listing" />
         </field>
         <field name="owner_id" displayable="view edit add listing" localizable="view listing">
             <show modes="view listing" />
@@ -721,9 +736,15 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
+        <field name="body_text" displayable="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
         <field name="submission_date" displayable="view listing" localizable="view listing">
             <show modes="view" />
             <hide modes="listing" />
+        </field>
+        <field name="note" displayable="edit add" localizable="edit add">
+            <show modes="edit add" />
         </field>
         <field name="receive_notification" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -734,8 +755,7 @@
             <hide modes="listing" />
         </field>
         <field name="notice_date" displayable="view listing" localizable="view listing">
-            <show modes="view" />
-            <hide modes="listing" />
+            <show modes="view listing" />
         </field>
         <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
             <show modes="view" />
@@ -743,12 +763,6 @@
         </field>
         <field name="timestamp" displayable="edit" localizable="edit">
             <show modes="edit" />
-        </field>
-        <field name="body_text" displayable="view edit add" localizable="view">
-            <show modes="view" />
-        </field>
-        <field name="note" displayable="edit add" localizable="edit add">
-            <show modes="edit add" />
         </field>
     </descriptor>
 
@@ -803,12 +817,10 @@
             <hide modes="view edit listing" />
         </field>
         <field name="status" displayable="view listing" localizable="view listing">
-            <show modes="view" />
-            <hide modes="listing" />
+            <show modes="view listing" />
         </field>
         <field name="status_date" displayable="view listing" localizable="view listing">
-            <show modes="view" />
-            <hide modes="listing" />
+            <show modes="view listing" />
         </field>
         <field name="constituency_id" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
@@ -859,14 +871,14 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
         <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
         <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
-        </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
-            <show modes="view edit add" />
         </field>
     </descriptor>
 
@@ -919,15 +931,15 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
         <field name="election_date" displayable="view edit add listing" />
         <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
         <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
-        </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
-            <show modes="view edit add" />
         </field>
     </descriptor>
 
@@ -969,7 +981,7 @@
     <descriptor name="PoliticalGroup">
         <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
-            <show modes="listing" />
+            <hide modes="listing" />
         </field>
         <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -977,14 +989,17 @@
         </field>
         <field name="acronym" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
-            <show modes="listing" />
+            <hide modes="listing" />
         </field>
         <field name="combined_name" displayable="listing" localizable="listing">
-            <hide modes="listing" />
+            <show modes="listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
+        </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
         </field>
         <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
@@ -996,9 +1011,6 @@
             <show modes="view edit" />
         </field>
         <field name="logo_data" displayable="view edit add" localizable="view edit add">
-            <show modes="view edit add" />
-        </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
     </descriptor>
@@ -1047,9 +1059,14 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="submission_date" displayable="view listing" localizable="view listing">
+        <field name="body_text" displayable="view edit add" localizable="view">
             <show modes="view" />
-            <hide modes="listing" />
+        </field>
+        <field name="submission_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="note" displayable="edit add" localizable="edit add">
+            <show modes="edit add" />
         </field>
         <field name="receive_notification" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -1066,23 +1083,16 @@
             <show modes="view" />
             <hide modes="listing" />
         </field>
+        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
         <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
             <show modes="view" />
             <hide modes="edit listing" />
         </field>
         <field name="timestamp" displayable="edit" localizable="edit">
             <show modes="edit" />
-        </field>
-        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view" />
-            <show modes="add edit" roles="bungeni.Admin bungeni.Clerk bungeni.Speaker" />
-            <hide modes="listing" />
-        </field>
-        <field name="body_text" displayable="view edit add" localizable="view">
-            <show modes="view" />
-        </field>
-        <field name="note" displayable="edit add" localizable="edit add">
-            <show modes="edit add" />
         </field>
     </descriptor>
 
@@ -1128,11 +1138,11 @@
         <field name="status_date" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
-        <field name="body_text" displayable="view edit add" localizable="view edit">
-            <show modes="view edit" />
-        </field>
         <field name="note" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
+        </field>
+        <field name="body_text" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
         </field>
     </descriptor>
 
@@ -1150,24 +1160,11 @@
         <field name="status_date" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
-        <field name="body_text" displayable="view edit add" localizable="view edit">
-            <show modes="view edit" />
-        </field>
         <field name="note" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
         </field>
-    </descriptor>
-
-    <descriptor name="ScheduleText">
-        <field name="schedule_text_id" displayable="view edit add listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="text" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+        <field name="body_text" displayable="view edit add" localizable="view edit">
             <show modes="view edit" />
-            <hide modes="listing" />
         </field>
     </descriptor>
 
@@ -1261,9 +1258,15 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
+        <field name="body_text" displayable="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
         <field name="submission_date" displayable="view listing" localizable="view listing">
             <show modes="view" />
             <hide modes="listing" />
+        </field>
+        <field name="note" displayable="edit add" localizable="edit add">
+            <show modes="edit add" />
         </field>
         <field name="receive_notification" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -1279,12 +1282,6 @@
         </field>
         <field name="timestamp" displayable="edit" localizable="edit">
             <show modes="edit" />
-        </field>
-        <field name="body_text" displayable="view edit add" localizable="view">
-            <show modes="view" />
-        </field>
-        <field name="note" displayable="edit add" localizable="edit add">
-            <show modes="edit add" />
         </field>
     </descriptor>
 
@@ -1414,10 +1411,10 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="image" displayable="view edit add" localizable="view edit add">
+        <field name="description" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
+        <field name="image" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
     </descriptor>

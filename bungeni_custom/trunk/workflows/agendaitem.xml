@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <workflow title="Agenda Item Workflow"
     description="Agenda Item"
-    domain="bungeni.ui"
+    domain="bungeni"
     initial_state=""
     tags="draft private public
         approved tobescheduled scheduled
@@ -13,7 +13,8 @@
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
-    <feature name="attachment" enabled="true" /><!-- !+? -->
+    <feature name="attachment" enabled="true" />
+    <feature name="schedulable" enabled="true" />
     
     <!-- global grants -->
     <grant permission="bungeni.agendaitem.View" role="bungeni.Owner" />
