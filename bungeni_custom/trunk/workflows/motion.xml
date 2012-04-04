@@ -59,19 +59,19 @@
         <deny permission="bungeni.signatory.Delete" role="bungeni.MP" />
         <deny permission="bungeni.signatory.Delete" role="bungeni.Minister" />
         <deny permission="bungeni.signatory.Delete" role="bungeni.Anonymous" />
-        <!-- fileattachment -->
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Speaker" />
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.MP" />
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Minister" />
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Anonymous" />
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Speaker" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.MP" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Minister" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Anonymous" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.MP" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Minister" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Anonymous" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.MP" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Minister" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Anonymous" />
     </state>
     
     <state id="draft" title="Draft" 
@@ -89,11 +89,11 @@
         <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
         <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
         <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
-        <!-- fileattachment -->
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Clerk" />
     </state>
 
     <state id="submitted_signatories" title="Submitted to Signatories"
@@ -106,9 +106,9 @@
         <deny permission="bungeni.motion.Delete" role="bungeni.Owner" />
         <!-- signatory -->
         <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
-        <!-- fileattachment -->
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <!-- attachment -->
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
     </state>
 
     <state id="redraft" title="Redraft" like_state="draft"
@@ -147,9 +147,9 @@
         <grant permission="bungeni.motion.Edit" role="bungeni.Clerk" />
         <!-- signatory -->
         <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
-        <!-- fileattachment -->
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />        
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />        
+        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <notification condition="owner_receive_notification"
             subject="Motion received: ${item.short_name}"
             from="${site.clerk_email}"
@@ -167,9 +167,9 @@
         <!-- signatory -->
         <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
         <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
-        <!-- fileattachment -->
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
         <notification condition="owner_receive_notification"
             subject="Motion needs clarification: ${item.short_name}"
             from="${site.clerk_email}"
@@ -185,9 +185,9 @@
         <grant permission="bungeni.motion.Edit" role="bungeni.Speaker" />
         <!-- signatory -->
         <grant permission="bungeni.signatory.Delete" role="bungeni.Speaker" />
-        <!-- fileattachment -->
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Speaker" />
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Speaker" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Speaker" />
     </state>
     
     <state id="incomplete" title="Requires Clarification to Approve"

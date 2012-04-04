@@ -68,63 +68,10 @@
         <field name="note" displayable="edit add" />
     </descriptor>
 
-    <descriptor name="AttachedFile">
-        <field name="language" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
-            <hide modes="listing" />
-        </field>
-        <field name="file_title" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="file_description" displayable="view edit add" localizable="view edit add">
-            <show modes="view edit add" />
-        </field>
-        <field name="file_data" displayable="view edit add" localizable="view edit">
-            <show modes="view edit" />
-        </field>
-        <field name="attached_file_type" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="file_name" displayable="edit add" />
-        <field name="file_mimetype" displayable="edit add" />
-        <field name="status" displayable="view edit listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-    </descriptor>
-
     <descriptor name="AttachedFileVersion">
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
-        </field>
-        <field name="file_title" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="file_description" displayable="view edit add" localizable="view edit add">
-            <show modes="view edit add" />
-        </field>
-        <field name="file_data" displayable="view edit add" localizable="view edit">
-            <show modes="view edit" />
-        </field>
-        <field name="attached_file_type" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="file_name" displayable="edit add" />
-        <field name="file_mimetype" displayable="edit add" />
-        <field name="status" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-    </descriptor>
-
-    <descriptor name="Attachment">
-        <field name="type" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
         </field>
         <field name="title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
@@ -135,21 +82,43 @@
         <field name="data" displayable="view edit add" localizable="view edit">
             <show modes="view edit" />
         </field>
-        <field name="name" displayable="view edit add listing" localizable="view listing">
+        <field name="type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="name" displayable="edit add" />
+        <field name="mimetype" displayable="edit add" />
+        <field name="status" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
         </field>
-        <field name="mimetype" displayable="view edit add listing" localizable="view listing">
+        <field name="status_date" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
         </field>
+    </descriptor>
+
+    <descriptor name="Attachment">
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="title" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="data" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
+        </field>
+        <field name="type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="name" displayable="edit add" />
+        <field name="mimetype" displayable="edit add" />
         <field name="status" displayable="view edit listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
         <field name="status_date" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
-        </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
-            <hide modes="listing" />
         </field>
     </descriptor>
 

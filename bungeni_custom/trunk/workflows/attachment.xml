@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<workflow title="Attached File Workflow"
-    description="Workflow for attached files"
+<workflow title="Attachment Workflow"
+    description="Workflow for attachments"
     domain="bungeni"
     initial_state=""
     tags="public"
@@ -14,7 +14,7 @@
     <feature name="attachment" enabled="false" /><!-- !+MUST be disabled -->
     
     <!-- global grants -->
-    <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+    <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
     
     <state id="attached" title="Attached file" 
         tags="public"
@@ -22,7 +22,7 @@
     />
     
     <state id="internal" title="Published Internal">
-        <!-- attachedfile -->
+        <!-- attachment -->
         <grant permission="zope.View" role="bungeni.Authenticated" />
         <deny permission="zope.View" role="bungeni.Anonymous" />
     </state>
@@ -33,7 +33,7 @@
     -->
     <state id="inactive" title="Inactive file" like_state="internal" />
     
-    <!-- !+IDENTICAL_TRANSITIONS(mr, sep-2011) attachedfile, address, event -->
+    <!-- !+IDENTICAL_TRANSITIONS(mr, sep-2011) attachment, address, event -->
     <transition title="Create"
         source=""
         destination="attached"

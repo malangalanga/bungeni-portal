@@ -40,13 +40,13 @@
         <grant permission="bungeni.agendaitem.Delete" role="bungeni.Clerk" />
         <deny permission="bungeni.agendaitem.Delete" role="bungeni.Speaker" />
         <deny permission="bungeni.agendaitem.Delete" role="bungeni.Owner" />
-        <!-- fileattachment -->
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Speaker" />
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Speaker" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
         <!-- signatories -->
         <grant permission="bungeni.signatory.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.signatory.Add" role="bungeni.Speaker" />
@@ -67,11 +67,11 @@
         <grant permission="bungeni.agendaitem.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.agendaitem.Delete" role="bungeni.Clerk" />
         <grant permission="bungeni.agendaitem.Delete" role="bungeni.Owner" />
-        <!-- fileattachment -->        
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <!-- attachment -->        
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
         <!-- signatories -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
@@ -85,9 +85,9 @@
         <grant permission="zope.View" role="bungeni.Signatory" />
         <deny permission="bungeni.agendaitem.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.agendaitem.Delete" role="bungeni.Owner" />
-        <!-- fileattachment -->        
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <!-- attachment -->        
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
         <!-- signatories -->
         <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
     </state>
@@ -124,9 +124,9 @@
         tags="actionclerk">
         <!-- agendaitem -->
         <grant permission="bungeni.agendaitem.Edit" role="bungeni.Clerk" />
-        <!-- fileattachment -->        
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
+        <!-- attachment -->        
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <notification condition="owner_receive_notification"
             subject="Agenda Item received: ${item.short_name}"
             from="${site.clerk_email}"
@@ -141,9 +141,9 @@
         tags="actionmp">
         <!-- agendaitem -->        
         <grant permission="bungeni.agendaitem.Edit" role="bungeni.Owner" />
-        <!-- fileattachment -->
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
         <notification condition="owner_receive_notification"
             subject="Agenda Item needs clarification: ${item.short_name}"
             from="${site.clerk_email}"
@@ -158,11 +158,11 @@
         <!-- agendaitem -->
         <deny permission="bungeni.agendaitem.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.agendaitem.Edit" role="bungeni.Speaker" />
-        <!-- fileattachment -->
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Speaker" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Speaker" /> 
+        <!-- attachment -->
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Speaker" /> 
     </state>
     
     <state id="incomplete" title="Requires Clarification to Approve" 

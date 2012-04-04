@@ -41,13 +41,13 @@
         <grant permission="bungeni.question.Delete" role="bungeni.Clerk" />
         <deny permission="bungeni.question.Delete" role="bungeni.Speaker" />
         <deny permission="bungeni.question.Delete" role="bungeni.Owner" />
-        <!-- fileattachment -->
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Speaker" />
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Speaker" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
         <!-- response -->
         <deny permission="bungeni.response.View" role="bungeni.Clerk" />
         <deny permission="bungeni.response.View" role="bungeni.Speaker" />
@@ -74,11 +74,11 @@
         <grant permission="bungeni.question.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.question.Delete" role="bungeni.Clerk" />
         <grant permission="bungeni.question.Delete" role="bungeni.Owner" />
-        <!-- fileattachment -->
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <!-- attachment -->
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
         <!-- signatories -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.signatory.Add" role="bungeni.Owner"/>
@@ -92,9 +92,9 @@
         <grant permission="zope.View" role="bungeni.Signatory" />
         <deny permission="bungeni.question.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.question.Delete" role="bungeni.Owner" />
-        <!-- fileattachment -->
-        <deny permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <!-- attachment -->
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
         <!-- signatory -->
         <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
     </state>
@@ -130,9 +130,9 @@
         like_state="submitted" tags="actionclerk">
         <!-- question -->
         <grant permission="bungeni.question.Edit" role="bungeni.Clerk" />
-        <!-- fileattachment -->
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Clerk" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <notification condition="owner_receive_notification"
             subject="Question received: ${item.short_name}"
             from="${site.clerk_email}"
@@ -146,9 +146,9 @@
         like_state="submitted">
         <!-- question -->
         <grant permission="bungeni.question.Edit" role="bungeni.Speaker" />
-        <!-- fileattachment -->
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Speaker" />
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Speaker" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Speaker" />
         <notification condition="owner_receive_notification"
             subject="Question forwarded to Speaker's Office: ${item.short_name}"
             from="${site.clerk_email}"
@@ -193,9 +193,9 @@
         tags="actionmp">
         <!-- question -->
         <grant permission="bungeni.question.Edit" role="bungeni.Owner" />
-        <!-- fileattachment -->
-        <grant permission="bungeni.fileattachment.Edit" role="bungeni.Owner" />
-        <grant permission="bungeni.fileattachment.Add" role="bungeni.Owner" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
         <notification condition="owner_receive_notification"
             subject="Question needs clarification: ${item.short_name}"
             from="${site.clerk_email}"

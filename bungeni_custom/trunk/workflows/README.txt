@@ -173,7 +173,7 @@ superfluous (e.g. always denied) assignments as the permission checking may
 give incorrect results. There is logical overlap between being Authenticated 
 and being an MP, Clerk, etc, and the security model does not take into account.
 
-For example, in the case of AttachedFile, denying the "zope.View" permission 
+For example, in the case of Attachment, denying the "zope.View" permission 
 for "bungeni.Authenticated" and granting it for "bungeni.MP":
 
     <grant permission="zope.View" role="bungeni.MP" />
