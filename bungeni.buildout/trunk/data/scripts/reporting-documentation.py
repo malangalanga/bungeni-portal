@@ -17,14 +17,11 @@ log = __import__("logging").getLogger("bungeni.reports")
 
 import sys
 from lxml import etree
+from sqlalchemy.orm import class_mapper, Mapper
 
 from zope.dublincore.interfaces import IDCDescriptiveProperties
 
-from alchemist.traversal.interfaces import IManagedContainer
 from bungeni.models import domain
-
-from bungeni.core.workflows import adapters
-from bungeni.ui import descriptor
 
 from bungeni.utils.capi import capi
 
@@ -85,27 +82,35 @@ def add_sub_element(parent, tag, text=None, **kw):
         _element.text = str(text)
     return _element
 
-GROUP_SITTING_EXTRAS = dict()
+GROUP_SITTING_EXTRAS = []
+
+class ExtendedProperty(object):
+    def __init__(self, key, class_):
+        self.key = key
+        self.mapper = class_
+        self.uselist = True
 
 for type_key, type_info in capi.iter_type_info():
     if type_info.workflow and type_info.workflow.has_feature("schedule"):
-        GROUP_SITTING_EXTRAS["%ss" % type_key] = type_info.domain_model.__name__
+        GROUP_SITTING_EXTRAS.append(
+            ExtendedProperty("%ss" % type_key, type_info.domain_model)
+        )
 
-def generate_doc_for(domain_class, title=None):
+PROCESSED_PROPS = {}
+
+def generate_doc_for(domain_class, title=None, expand=True):
     doc = etree.fromstring(SIMPLE_LIST)
     if title:
-        add_sub_element(doc, "li", title)    
-    proxy_dict = domain_class.__dict__
-    class_dict = {}
-    class_dict.update(proxy_dict)
-    if domain_class is domain.GroupSitting:
-        class_dict.update(GROUP_SITTING_EXTRAS)
-    sort_key = lambda kv: str(IManagedContainer.providedBy(kv[1]) or kv[0] in GROUP_SITTING_EXTRAS.keys()) + "-" + kv[0]
-    class_keys = sorted([ kv for kv in class_dict.iteritems() ],
-        key = sort_key
-    )
-    
-    dc_adapter = IDCDescriptiveProperties(domain_class(), None)
+        add_sub_element(doc, "li", title)
+    if not isinstance(domain_class, Mapper):
+        dc_adapter = IDCDescriptiveProperties(domain_class(), None)
+        mapped = class_mapper(domain_class)
+    else:
+        mapped = domain_class
+        try:
+            dc_adapter = IDCDescriptiveProperties(mapped.class_(), None)
+        except:
+            dc_adapter= None
     if dc_adapter:
         dc_keys = {}
         dc_keys.update(dc_adapter.__class__.__dict__)
@@ -115,31 +120,33 @@ def generate_doc_for(domain_class, title=None):
                 elx.text = "dc:%s" % key
                 elx.set("class", "item dcitem")
 
-    for (key, value) in class_keys:
-        if (not key.startswith("_")) and (not hasattr(value, "__call__")):
-            elx = add_sub_element(doc, "li")
-            if (key in GROUP_SITTING_EXTRAS.keys() or
-                IManagedContainer.providedBy(value)
-            ):
-                _title = " + %s (list)" % key
-                elx.attrib["style"] = "border-left:1px solid #444;"
-                add_sub_element(elx, "span", _title, css_class="sec_title", 
-                    onclick="toggleBullet(this)"
-                )
-                if key in GROUP_SITTING_EXTRAS.keys():
-                    container_name = value
-                else:
-                    container_name = value.container
-                cls_name = container_name.split(".").pop().replace("Container", 
-                    ""
-                )
-                the_model = getattr(domain, cls_name)
-                elx.append(generate_doc_for(the_model, title))
+    props = [ prop for prop in mapped.iterate_properties ]
+    if domain_class == domain.GroupSitting:
+        props.extend(GROUP_SITTING_EXTRAS)
+    for prop in sorted(props, key=lambda p:str(int(hasattr(p, "mapper")))+p.key):
+        sub_el = add_sub_element(doc, "li")
+        if hasattr(prop, "mapper") and expand:
+            if prop.key in PROCESSED_PROPS.get(mapped.class_.__name__, []):
                 continue
-            elx.text = key
-            elx.set("class", "item")
+            else:
+                try:
+                    PROCESSED_PROPS[mapped.class_.__name__].add(prop.key)
+                except KeyError:
+                    PROCESSED_PROPS[mapped.class_.__name__] = set([prop.key])
+            sub_el = add_sub_element(doc, "li")
+            if prop.uselist:
+                sub_title = "+ %s (list)" % (prop.key)
+            else:
+                sub_title = "+ %s" % prop.key
+            add_sub_element(sub_el, "span", sub_title, css_class="sec_title",
+                onclick="toggleBullet(this)"
+            )
+            sub_el.append(generate_doc_for(prop.mapper, title, prop.uselist))
+        else:
+            sub_el.text = prop.key
+            sub_el.set("class", "item")
+            
     return doc
-
 
 def generate_documentation():
     document = etree.fromstring(SIMPLE_LIST)
@@ -182,6 +189,6 @@ if __name__ == "__main__":
         </html
         """ % doc_args
     )
-    log.info("Reporting documentation was generated and writted to %s", 
+    log.info("Reporting documentation was generated and written to %s", 
         doc_file_name
     )
