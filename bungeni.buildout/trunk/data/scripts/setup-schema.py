@@ -19,7 +19,7 @@ schema.metadata.create_all()
 # the unbound sequences and indexes wont get created so we have to
 # create them maunually
 schema.QuestionSequence.create(db)
-schema.MotionSequence.create(db)
+#!+schema.MotionSequence.create(db)
 schema.RegistrySequence.create(db)
 schema.tabled_documentSequence.create(db)
 #schema.translation_lookup_index.create(db)
