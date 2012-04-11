@@ -16,18 +16,36 @@ YAHOO.bungeni.scheduling = function(){
     var Handlers = YAHOO.bungeni.config.scheduling.handlers;
     var AgendaConfig = YAHOO.bungeni.agendaconfig;
     YAHOO.bungeni.unsavedChanges = false;
+    YAHOO.bungeni.reloadView = false;
     YAHOO.bungeni.scheduled_item_keys = new Array();
+    YAHOO.bungeni.processed_minute_records = 0;
 
     var RequestObject = {
         handleSuccess: function(o){
             var sDt = YAHOO.bungeni.scheduling.getScheduleTable();
-            Dialogs.blocking.hide();
+            var row_count = sDt.getRecordSet().getLength();
             YAHOO.bungeni.unsavedChanges = false;
+            if((!this.post_op) && AgendaConfig.minuteEditor){
+                YAHOO.bungeni.processed_minute_records+=1;
+                if (YAHOO.bungeni.processed_minute_records==row_count){
+                    YAHOO.bungeni.reloadView=true;
+                }
+            }
             if(this.post_op){
-                for(idx=0;idx<(sDt.getRecordSet().getLength());idx++){
+                for(idx=0;idx<row_count;idx++){
                     YAHOO.bungeni.agendaconfig.handlers.saveMinutes(idx);
                 }
-                sDt.refresh();
+            }else{
+                //reload schedule reflect changes to workflow actions - if any
+                if (YAHOO.bungeni.reloadView){
+                    Dialogs.blocking.show(SGlobals.saving_dialog_refreshing);
+                    window.location.reload();
+                }else{
+                    if(AgendaConfig.minuteEditor==undefined){
+                        Dialogs.blocking.hide();
+                        sDt.refresh();
+                    }
+                }
             }
         },
         handleFailure: function(o){
@@ -111,6 +129,7 @@ YAHOO.bungeni.scheduling = function(){
 
         var populateScheduledKeys = function(request, response, payload){
             YAHOO.bungeni.scheduled_item_keys = new Array();
+            YAHOO.bungeni.reloadView = !Boolean(response.results.length);
             for(idx in response.results){
                 var record = response.results[idx];
                 YAHOO.bungeni.scheduled_item_keys.push(

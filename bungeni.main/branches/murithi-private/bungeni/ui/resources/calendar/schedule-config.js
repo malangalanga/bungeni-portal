@@ -30,8 +30,18 @@ YAHOO.bungeni.Utils = function(){
         return "<" + _el + " " + _attrs + ">" + text + "</" + _el + ">";
     }
 
+    /**
+     * @function slugify
+     * @description generate string with just alphanumeric values, hyphens 
+     * and underscores
+     **/
+     var _slugify = function(string){
+         return string.replace( /[^0-9a-zA-Z\-_]/g, "-");
+     }
+
     return {
-        wrapText: wrapText
+        wrapText: wrapText,
+        slugify: _slugify
     }
 }();
 
@@ -256,17 +266,18 @@ YAHOO.bungeni.config = function(){
                             if(recordData.value.length){
                                 if(recordData.type == SGlobals.types.MINUTE){
                                     YAHOO.bungeni.agendaconfig.minutesCache.add(
-                                        sel_data[Columns.OBJECT_ID],
-                                        { body_text: recordData.value[0] }
+                                        YAHOO.bungeni.Utils.slugify(
+                                            sel_data[Columns.OBJECT_ID]
+                                        ),
+                                        recordData.value[0]
                                     );
                                     sDt.updateRow((new_index-1), sel_data);
                                 }else{
                                     var new_data_entries = new Array();
                                     for(idx=0; idx<(recordData.value.length); idx++){
-                                        new_data_entries.push({
-                                            item_title: recordData.value[idx],
-                                            item_type: recordData.type
-                                        });
+                                        var entry = recordData.value[idx];
+                                        entry[Columns.TYPE] = recordData.type;
+                                        new_data_entries.push(entry);
                                     }
                                     sDt.addRows(new_data_entries, new_index);
                                     var refresh_columns = [
@@ -416,7 +427,7 @@ YAHOO.bungeni.config = function(){
                       var eAttrs = "class='minute-record-error'";
                       var obj_id = data[Columns.OBJECT_ID];
                       if (obj_id!=undefined){
-                          var ds_id = obj_id;
+                          var ds_id = YAHOO.bungeni.Utils.slugify(obj_id);
                           var attrs = "id='"+ ds_id +"' " + mAttrs;
                           cHTML = cHTML + BungeniUtils.wrapText(
                             BungeniUtils.wrapText(SGlobals.minutes_loading,
