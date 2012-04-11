@@ -844,12 +844,31 @@ YAHOO.bungeni.config = function(){
                 );
             }
              
+             /**
+              * @method _resizeDataTable
+              * @description resizes datatable to the size of the parent panel
+              **/
+              var _resizeDataTable = function(datatable, target_width){
+                    var colset = datatable.getColumnSet();
+                    var sum_widths = 0;
+                    for(index in colset.keys){
+                        sum_widths+=colset.keys[index].width;
+                    }
+                    for(index in colset.keys){
+                        var column = colset.keys[index];
+                        datatable.setColumnWidth(column,
+                            (column.width/sum_widths)*target_width
+                        )
+                    }
+              }
+             
              return {
                  renderRTECellEditor: _renderRTECellEditor,
                  showCellEditor: _showCellEditor,
                  moveRecord: _moveRecord,
                  addTextRecord: _addTextRecord,
-                 attachContextMenu: _attachContextMenu
+                 attachContextMenu: _attachContextMenu,
+                 resizeDataTable: _resizeDataTable
              }
         }(),
     }

@@ -143,44 +143,50 @@ YAHOO.bungeni.agendaconfig = function(){
         }
     }();
 
-    var _getColumns = function(){
+    var _getColumns = function(cols_width){
         return [
             {
                 key: Columns.ADD_TEXT_RECORD, 
                 label: "",
                 formatter: Formatters.addTextRecord,
+                width: (0.1*cols_width)
             },
             {
                 key: Columns.TYPE, 
                 label: SGlobals.column_type,
                 formatter: Formatters.type,
+                width: (0.1*cols_width)
             },
             {
                 key: Columns.TITLE, 
                 label: SGlobals.column_title,
                 editor: this.editor,
-                width: 150,
-                formatter: Formatters.title_with_minutes
+                formatter: Formatters.title_with_minutes,
+                width: (0.4*cols_width)
             },
             {
                 key: Columns.URI, 
                 label: "", 
-                formatter: Formatters.link
+                formatter: Formatters.link,
+                width: (0.1*cols_width)
             },
             {
                 key: Columns.MOVE_UP, 
                 label: "", 
-                formatter: Formatters.moveUp
+                formatter: Formatters.moveUp,
+                width: (0.05*cols_width)
             },
             {
                 key: Columns.MOVE_DOWN, 
                 label: "", 
-                formatter: Formatters.moveDown
+                formatter: Formatters.moveDown,
+                width: (0.05*cols_width)
             },
             {
                 key: Columns.WORKFLOW_ACTIONS,
                 label: "",
-                formatter: Formatters.workflowActions
+                formatter: Formatters.workflowActions,
+                width: (0.2*cols_width)
             }
         ];
     }

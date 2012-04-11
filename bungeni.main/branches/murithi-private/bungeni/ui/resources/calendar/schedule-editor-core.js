@@ -184,25 +184,27 @@ YAHOO.bungeni.scheduling = function(){
         layout.on("render", function(){
             YAHOO.bungeni.schedule = function(){
                 var editor = new YAHOO.widget.TextareaCellEditor();
+                var container = layout.getUnitByPosition("left");
+                var resizable_panel = layout.getUnitByPosition("center");
+                var init_width = container.body.clientWidth-100;
                 editor.subscribe("showEvent", Handlers.renderRTECellEditor);
                 AgendaConfig.setEditor(editor);
-                var columns = AgendaConfig.getColumns();
+                var columns = AgendaConfig.getColumns(init_width);
                 var dataSource = new YAHOO.util.DataSource(
                     AgendaConfig.AGENDA_DATASOURCE_URL
                 );
                 dataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
                 dataSource.responseSchema = AgendaConfig.AGENDA_SCHEMA;
                 var tableContainer = document.createElement("div");
-                layout.getUnitByPosition("left").body.appendChild(tableContainer);
+                tableContainer.style.width = init_width + "px";
+                container.body.appendChild(tableContainer);
                 var dataTable = new YAHOO.widget.DataTable(
                     tableContainer,
                     columns, dataSource,
                     {
-                        caption: "hold down CONTROL key to select multiple items",
-                        summary: "hold down CONTROL key to select multiple items",
                         selectionMode:"single",
                         scrollable:true,
-                        width:"100%",
+                        width:init_width+"px",
                         height:"450px",
                     }
                 );
@@ -226,7 +228,7 @@ YAHOO.bungeni.scheduling = function(){
                 dataTable.subscribe("initEvent", 
                     YAHOO.bungeni.agendaconfig.afterDTRender
                 );
-                dataTable.subscribe("initEvent", Handlers.attachContextMenu);
+                //dataTable.subscribe("initEvent", Handlers.attachContextMenu);
                 dataTable.doBeforeLoadData  = YAHOO.bungeni.scheduling.handlers.populateScheduledKeys;
                 dataTable.subscribe("rowAddEvent", 
                     YAHOO.bungeni.scheduling.handlers.setUnsavedChanges
@@ -237,6 +239,11 @@ YAHOO.bungeni.scheduling = function(){
                 dataTable.subscribe("rowUpdateEvent", 
                     YAHOO.bungeni.scheduling.handlers.setUnsavedChanges
                 );
+                resizable_panel.on("endResize", function(){
+                    Handlers.resizeDataTable(dataTable,
+                        container.body.clientWidth-15
+                    );
+                });
                 
                 return {
                     oDs: dataSource,
