@@ -17,9 +17,13 @@
               tal:attributes="class string:actionMenuHeader label-${state_class}"
               tal:omit-tag="menuItem/extra/hideChildren | nothing">
             <a href="#"
+               tal:define="hideChildren menuItem/extra/hideChildren | nothing;
+                           id menuItem/extra/id | nothing;
+                           link_id python:hideChildren and id or ''"
                tal:omit-tag="not:menuItem/action"
                tal:attributes="href menuItem/url|menuItem/action;
-                               title menuItem/description"
+                               title menuItem/description;
+                               id link_id"
                i18n:attributes="title;">
                 <img width="16"
                      height="16"
