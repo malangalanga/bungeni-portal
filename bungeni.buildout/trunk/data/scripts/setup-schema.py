@@ -20,17 +20,8 @@ schema.metadata.create_all()
 # create them maunually
 schema.QuestionSequence.create(db)
 #!+schema.MotionSequence.create(db)
-schema.RegistrySequence.create(db)
 schema.tabled_documentSequence.create(db)
 #schema.translation_lookup_index.create(db)
-
-#additional sequences for registry numbers
-schema.AgendaItemRegistrySequence.create(db)
-schema.QuestionRegistrySequence.create(db)
-schema.MotionRegistrySequence.create(db)
-schema.BillRegistrySequence.create(db)
-schema.TabledDocumentRegistrySequence.create(db)
-schema.ReportRegistrySequence.create(db)
 
 security.metadata.bind = db
 security.metadata.drop_all() 
