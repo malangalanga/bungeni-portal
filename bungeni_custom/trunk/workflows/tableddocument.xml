@@ -113,7 +113,7 @@
         <!-- signatories -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
         <notification condition="clerk_receive_notification"
-            subject="Tabled document submitted: ${item.short_name}"
+            subject="Tabled document submitted: ${item.short_title}"
             from="${item.owner_email}"
             to="${site.clerk_email}"
             body="notification_email_to_clerk_upon_submit_of_tabled_document"
@@ -129,7 +129,7 @@
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <notification condition="owner_receive_notification"
-            subject="Tabled document received: ${item.short_name}"
+            subject="Tabled document received: ${item.short_title}"
             from="${site.clerk_email}"
             to="${item.owner_email}"
             body="notification_email_to_member_upon_receipt_of_tabled_document"
@@ -166,7 +166,7 @@
         like_state="submitted"
         tags="terminal fail">
         <notification condition="owner_receive_notification"
-            subject="Tabled document rejected: ${item.short_name}"
+            subject="Tabled document rejected: ${item.short_title}"
             from="${site.clerk_email}"
             to="${item.owner_email}"
             body="notification_email_to_member_upon_rejection_of_tabled_document"
@@ -189,7 +189,7 @@
         <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
         <notification condition="owner_receive_notification"
-            subject="Tabled document needs clarification: ${item.short_name}"
+            subject="Tabled document needs clarification: ${item.short_title}"
             from="${site.clerk_email}"
             to="${item.owner_email}"
             body="notification_email_to_member_upon_need_clarification_of_tabled_document"
@@ -200,7 +200,7 @@
         like_state="admissible"
         tags="public scheduled">
         <notification condition="owner_receive_notification"
-            subject="Tabled document scheduled: ${item.short_name}"
+            subject="Tabled document scheduled: ${item.short_title}"
             from="${site.clerk_email}"
             to="${item.owner_email}"
             body="notification_email_to_member_upon_schedule_of_tabled_document"
@@ -211,7 +211,7 @@
         like_state="admissible"
         tags="public approved">
         <notification condition="owner_receive_notification"
-            subject="Tabled document adjourned: ${item.short_name}"
+            subject="Tabled document adjourned: ${item.short_title}"
             from="${site.clerk_email}"
             to="${item.owner_email}"
             body="notification_email_to_member_upon_postpone_of_tabled_document"

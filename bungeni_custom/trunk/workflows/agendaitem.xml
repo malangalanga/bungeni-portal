@@ -112,7 +112,7 @@
         <!-- signatories -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
         <notification condition="clerk_receive_notification"
-            subject="Agenda Item submitted: ${item.short_name}"
+            subject="Agenda Item submitted: ${item.short_title}"
             from="${site.clerk_email}"
             to="${item.owner_email}"
             body="notification_email_to_clerk_upon_submit_of_agenda_item"
@@ -128,7 +128,7 @@
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <notification condition="owner_receive_notification"
-            subject="Agenda Item received: ${item.short_name}"
+            subject="Agenda Item received: ${item.short_title}"
             from="${site.clerk_email}"
             to="${item.owner_email}"
             body="notification_email_to_member_upon_receipt_of_agenda_item"
@@ -145,7 +145,7 @@
         <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
         <notification condition="owner_receive_notification"
-            subject="Agenda Item needs clarification: ${item.short_name}"
+            subject="Agenda Item needs clarification: ${item.short_title}"
             from="${site.clerk_email}"
             to="${item.owner_email}"
             body="notification_email_to_member_upon_need_clarification_of_agenda_item"
@@ -175,7 +175,7 @@
         like_state="submitted"
         tags="terminal fail">
         <notification condition="owner_receive_notification"
-            subject="Agenda Item rejected: ${item.short_name}"
+            subject="Agenda Item rejected: ${item.short_title}"
             from="${site.speaker_email}"
             to="${item.owner_email}"
             body="notification_email_to_member_upon_rejection_of_agenda_item"
@@ -206,7 +206,7 @@
         like_state="admissible"
         tags="public terminal succeed">
         <notification condition="owner_receive_notification"
-            subject="Agenda Item was debated: ${item.short_name}"
+            subject="Agenda Item was debated: ${item.short_title}"
             from="${site.clerk_email}"
             to="${item.owner_email}"
             body="notification_email_to_member_upon_debate_of_agenda_item"
@@ -216,7 +216,7 @@
     <state id="scheduled" title="Scheduled" like_state="admissible"
         tags="public scheduled">
         <notification condition="owner_receive_notification"
-            subject="Agenda Item scheduled: ${item.short_name}"
+            subject="Agenda Item scheduled: ${item.short_title}"
             from="${site.clerk_email}"
             to="${item.owner_email}"
             body="notification_email_to_member_upon_schedule_of_agenda_item"
@@ -232,7 +232,7 @@
         like_state="admissible"
         tags="public approved">
         <notification condition="owner_receive_notification"
-            subject="Agenda Item deferred: ${item.short_name}"
+            subject="Agenda Item deferred: ${item.short_title}"
             from="${site.speaker_email}"
             to="${item.owner_email}"
             body="notification_email_to_member_upon_defer_of_agenda_item"
