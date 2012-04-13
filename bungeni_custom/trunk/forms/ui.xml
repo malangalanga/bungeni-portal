@@ -51,9 +51,6 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="group_id" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
         <field name="timestamp" displayable="edit" localizable="edit">
             <show modes="edit" />
         </field>
@@ -447,9 +444,6 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="group_id" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
         <field name="status" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
         </field>
@@ -461,6 +455,9 @@
         </field>
         <field name="timestamp" displayable="edit" localizable="edit">
             <show modes="edit" />
+        </field>
+        <field name="group_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
         </field>
     </descriptor>
 
@@ -736,9 +733,6 @@
         <field name="uri" displayable="view edit listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
-        </field>
-        <field name="group_id" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
         </field>
         <field name="timestamp" displayable="edit" localizable="edit">
             <show modes="edit" />
@@ -1255,9 +1249,6 @@
         <field name="uri" displayable="view edit listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
-        </field>
-        <field name="group_id" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
         </field>
         <field name="timestamp" displayable="edit" localizable="edit">
             <show modes="edit" />
