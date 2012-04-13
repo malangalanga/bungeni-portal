@@ -655,51 +655,59 @@ YAHOO.bungeni.config = function(){
              * @description renders button to add text records to schedule
              */
             var addTextRecordFormatter = function(el, record, column, data){
-                if (SGlobals.discussable_types.indexOf(
-                        record.getData()[Columns.TYPE]
-                    )<0
-                ){
-                    if(el.innerHTML){
-                        el.innerHTML="";
-                    }
-                    return;
-                }
+                var rdata = record.getData()
                 if (!el.innerHTML){
-                    var menu = [
-                        {
-                            text: SGlobals.heading_button_text,
-                            value: SGlobals.types.HEADING
-                        },
-                        {
-                            text: SGlobals.text_button_text,
-                            value: SGlobals.types.EDITORIAL_NOTE
-                        },
-                    ]
-                    if(YAHOO.bungeni.agendaconfig.minuteEditor!=undefined){
-                        menu.push(
+                    var type_el = document.createElement("div");
+                    type_el.className = "yui-dt-label";
+                    type_el.textContent = SGlobals.type_names[rdata[Columns.TYPE].toUpperCase()];
+                    el.appendChild(type_el);
+                    if (SGlobals.discussable_types.indexOf(rdata[Columns.TYPE])>=0){
+                        var menu = [
                             {
-                                text: SGlobals.minute_button_text,
-                                value: SGlobals.types.MINUTE
-                            }
-                        );
-                    }
-
-                    var button = new YAHOO.widget.Button({
-                        type: "menu",
-                        label: "+",
-                        id: el.id + "-add-text-record-button",
-                        menu: menu
-                    });
-                    var clickHandler = function(type, args){
-                        menuItem = args[1];
-                        if (menuItem){
-                            YAHOO.bungeni.config.dialogs.textrecords.show(
-                                menuItem.value
+                                text: SGlobals.heading_button_text,
+                                value: SGlobals.types.HEADING
+                            },
+                            {
+                                text: SGlobals.text_button_text,
+                                value: SGlobals.types.EDITORIAL_NOTE
+                            },
+                        ]
+                        if(YAHOO.bungeni.agendaconfig.minuteEditor!=undefined){
+                            menu.push(
+                                {
+                                    text: SGlobals.minute_button_text,
+                                    value: SGlobals.types.MINUTE
+                                }
                             );
                         }
+
+                        var button = new YAHOO.widget.Button({
+                            type: "menu",
+                            label: "+",
+                            id: el.id + "-add-text-record-button",
+                            menu: menu
+                        });
+                        var clickHandler = function(type, args){
+                            menuItem = args[1];
+                            if (menuItem){
+                                YAHOO.bungeni.config.dialogs.textrecords.show(
+                                    menuItem.value
+                                );
+                            }
+                        }
+                        button.getMenu().subscribe("click", clickHandler);
+                        button.appendTo(el);
                     }
-                    button.getMenu().subscribe("click", clickHandler);
-                    button.appendTo(el);
+                    var rec_index = this.getRecordIndex(record);
+                    var rec_size = this.getRecordSet().getLength();
+                    var orderButtons = new YAHOO.widget.ButtonGroup({});
+                    if(rec_index>0){
+                        orderButtons.addButton({ label: "&uarr;", value: "UP" });
+                    }
+                    if(rec_index<(rec_size-1)){
+                        orderButtons.addButton({ label: "&darr;", value: "DOWN" });
+                    }
+                    orderButtons.appendTo(el);
                 }
             }
 
