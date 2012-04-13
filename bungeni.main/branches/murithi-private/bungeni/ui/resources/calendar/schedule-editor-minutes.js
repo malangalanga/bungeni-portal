@@ -1,6 +1,7 @@
 /**
  * Schedule editor configuration for use in 'draft minutes' mode.
 **/
+YAHOO.bungeni.processed_minute_records = 0;
 YAHOO.bungeni.agendaconfig = function(){
     var Event = YAHOO.util.Event;
     var YJSON = YAHOO.lang.JSON;
@@ -114,10 +115,15 @@ YAHOO.bungeni.agendaconfig = function(){
             if(SGlobals.discussable_types.indexOf(sData[Columns.TYPE])<0){
                 return;
             }
-            var cKey = YAHOO.bungeni.Utils.slugify(sData[Columns.OBJECT_ID]);
+            var obj_id = sData[Columns.OBJECT_ID];
+            if(obj_id==undefined){
+                return;
+            }
+            var cKey = YAHOO.bungeni.Utils.slugify(obj_id);
             if (cKey){
                 var mcache = YAHOO.bungeni.agendaconfig.minutesCache.get(cKey);
                 if (mcache.length){
+                    YAHOO.bungeni.processed_minute_records+=1;
                     var item_data = new Array();
                     for (index in mcache){
                         var minute_data = mcache[index];
@@ -155,20 +161,20 @@ YAHOO.bungeni.agendaconfig = function(){
                 key: Columns.TYPE, 
                 label: SGlobals.column_type,
                 formatter: Formatters.type,
-                width: (0.1*cols_width)
+                width: (0.07*cols_width)
             },
             {
                 key: Columns.TITLE, 
                 label: SGlobals.column_title,
                 editor: this.editor,
                 formatter: Formatters.title_with_minutes,
-                width: (0.4*cols_width)
+                width: (0.2*cols_width)
             },
             {
                 key: Columns.URI, 
                 label: "", 
                 formatter: Formatters.link,
-                width: (0.1*cols_width)
+                width: (0.05*cols_width)
             },
             {
                 key: Columns.MOVE_UP, 
@@ -212,6 +218,15 @@ YAHOO.bungeni.agendaconfig = function(){
             return _cache;
         }
 
+        var _get_minutes_count = function(){
+            var mcount = 0;
+            var mcache = this.get_cache()
+            for (key in mcache){
+                mcount+=mcache[key].length;
+            }
+            return mcount
+        }
+
         var _get = function(key){
             return _cache[key] || undefined;
         }
@@ -230,13 +245,14 @@ YAHOO.bungeni.agendaconfig = function(){
             }
             this.get(key).push(data);
         }
-        
+                
         return {
             get_cache: _get_cache,
+            get_minutes_count: _get_minutes_count,
             get: _get,
             set: _set,
             update: _update,
-            add: _add
+            add: _add,
         }
     }();
 
@@ -251,6 +267,7 @@ YAHOO.bungeni.agendaconfig = function(){
         AGENDA_DATASOURCE_URL: SGlobals.json_listing_url_meta,
         TITLE_AGENDA: SGlobals.current_schedule_items,
         TITLE_AVAILABLE_ITEMS: SGlobals.available_items_title,
-        minutesCache: minutesDSCache
+        minutesCache: minutesDSCache,
+        EMPTY_AGENDA_MESSAGE: SGlobals.empty_agenda_message
     }
 }();

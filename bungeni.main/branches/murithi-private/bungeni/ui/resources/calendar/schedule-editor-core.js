@@ -18,7 +18,7 @@ YAHOO.bungeni.scheduling = function(){
     YAHOO.bungeni.unsavedChanges = false;
     YAHOO.bungeni.reloadView = false;
     YAHOO.bungeni.scheduled_item_keys = new Array();
-    YAHOO.bungeni.processed_minute_records = 0;
+    YAHOO.bungeni.processed_agenda_records = 0;
 
     var RequestObject = {
         handleSuccess: function(o){
@@ -26,25 +26,30 @@ YAHOO.bungeni.scheduling = function(){
             var row_count = sDt.getRecordSet().getLength();
             YAHOO.bungeni.unsavedChanges = false;
             if((!this.post_op) && AgendaConfig.minuteEditor){
-                YAHOO.bungeni.processed_minute_records+=1;
-                if (YAHOO.bungeni.processed_minute_records==row_count){
+                YAHOO.bungeni.processed_agenda_records+=1;
+                if (YAHOO.bungeni.processed_agenda_records==
+                    YAHOO.bungeni.processed_minute_records
+                ){
                     YAHOO.bungeni.reloadView=true;
                 }
             }
             if(this.post_op){
-                for(idx=0;idx<row_count;idx++){
-                    YAHOO.bungeni.agendaconfig.handlers.saveMinutes(idx);
-                }
-            }else{
-                //reload schedule reflect changes to workflow actions - if any
-                if (YAHOO.bungeni.reloadView){
-                    Dialogs.blocking.show(SGlobals.saving_dialog_refreshing);
-                    window.location.reload();
+                if(AgendaConfig.minutesCache.get_minutes_count()==0){
+                    YAHOO.bungeni.reloadView = true;
                 }else{
-                    if(AgendaConfig.minuteEditor==undefined){
-                        Dialogs.blocking.hide();
-                        sDt.refresh();
+                    for(idx=0;idx<row_count;idx++){
+                        YAHOO.bungeni.agendaconfig.handlers.saveMinutes(idx);
                     }
+                }
+            }
+            //reload schedule reflect changes to workflow actions - if any
+            if (YAHOO.bungeni.reloadView){
+                Dialogs.blocking.show(SGlobals.saving_dialog_refreshing);
+                window.location.reload();
+            }else{
+                if(AgendaConfig.minuteEditor==undefined){
+                    Dialogs.blocking.hide();
+                    sDt.refresh();
                 }
             }
         },
@@ -161,7 +166,6 @@ YAHOO.bungeni.scheduling = function(){
                         width: "600",
                         gutter: "2 2",
                         resize: true,
-                        collapse: true,
                     },
                     {
                         position:'center',
@@ -185,8 +189,8 @@ YAHOO.bungeni.scheduling = function(){
             YAHOO.bungeni.schedule = function(){
                 var editor = new YAHOO.widget.TextareaCellEditor();
                 var container = layout.getUnitByPosition("left");
-                var resizable_panel = layout.getUnitByPosition("center");
-                var init_width = container.body.clientWidth-100;
+                var resizable_panel = layout.getUnitByPosition("left");
+                var init_width = container.body.clientWidth-15;
                 editor.subscribe("showEvent", Handlers.renderRTECellEditor);
                 AgendaConfig.setEditor(editor);
                 var columns = AgendaConfig.getColumns(init_width);
@@ -202,10 +206,11 @@ YAHOO.bungeni.scheduling = function(){
                     tableContainer,
                     columns, dataSource,
                     {
-                        selectionMode:"single",
-                        scrollable:true,
-                        width:init_width+"px",
-                        height:"450px",
+                        selectionMode: "single",
+                        scrollable: true,
+                        width: "100%",
+                        height: (container.body.clientHeight-30) + "px",
+                        MSG_EMPTY: AgendaConfig.EMPTY_AGENDA_MESSAGE
                     }
                 );
                 dataTable.subscribe("rowMouseoverEvent", 
@@ -228,9 +233,12 @@ YAHOO.bungeni.scheduling = function(){
                 dataTable.subscribe("initEvent", 
                     YAHOO.bungeni.agendaconfig.afterDTRender
                 );
-                //dataTable.subscribe("initEvent", Handlers.attachContextMenu);
+                dataTable.subscribe("initEvent", Handlers.attachContextMenu);
                 dataTable.doBeforeLoadData  = YAHOO.bungeni.scheduling.handlers.populateScheduledKeys;
                 dataTable.subscribe("rowAddEvent", 
+                    YAHOO.bungeni.scheduling.handlers.setUnsavedChanges
+                );
+                dataTable.subscribe("rowsAddEvent", 
                     YAHOO.bungeni.scheduling.handlers.setUnsavedChanges
                 );
                 dataTable.subscribe("rowDeleteEvent", 
