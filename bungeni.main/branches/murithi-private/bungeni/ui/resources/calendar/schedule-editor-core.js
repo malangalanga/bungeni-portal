@@ -9,7 +9,6 @@ YAHOO.bungeni.scheduling = function(){
     var SGlobals = scheduler_globals;
     var BungeniUtils = YAHOO.bungeni.Utils;
     var Columns = YAHOO.bungeni.config.scheduling.columns;
-    var MOVE_COLUMNS = YAHOO.bungeni.config.scheduling.columns.move_columns;
     var DialogConfig = YAHOO.bungeni.config.dialogs.config;
     var Dialogs = YAHOO.bungeni.config.dialogs;
     var Formatters = YAHOO.bungeni.config.scheduling.formatters;
@@ -82,9 +81,6 @@ YAHOO.bungeni.scheduling = function(){
 
         var customSelectRow = function(args){
             var target_column = this.getColumn(args.target);
-            if (MOVE_COLUMNS.indexOf(target_column.field)>=0){
-                return;
-            }
             this.unselectAllRows();
             this.selectRow(this.getRecord(args.target));
         }
@@ -223,7 +219,6 @@ YAHOO.bungeni.scheduling = function(){
                 dataTable.subscribe("cellClickEvent",
                     YAHOO.bungeni.scheduling.handlers.customSelectRow
                 );
-                dataTable.subscribe("cellClickEvent", Handlers.moveRecord);
                 dataTable.subscribe("initEvent", function(){
                     YAHOO.bungeni.Events.scheduleAvailable.fire();
                 });

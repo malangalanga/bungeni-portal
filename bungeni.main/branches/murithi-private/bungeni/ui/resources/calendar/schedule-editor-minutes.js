@@ -152,9 +152,9 @@ YAHOO.bungeni.agendaconfig = function(){
     var _getColumns = function(cols_width){
         return [
             {
-                key: Columns.ADD_TEXT_RECORD, 
+                key: Columns.ROW_CONTROLS, 
                 label: "",
-                formatter: Formatters.addTextRecord,
+                formatter: Formatters.rowControls,
                 width: (0.2*cols_width)
             },
             {
