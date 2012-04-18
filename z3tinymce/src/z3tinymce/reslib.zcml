@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   xmlns:zcml="http://namespaces.zope.org/zcml">
+  <include package="zc.resourcelibrary" file="meta.zcml"/>
+  <include package="zc.resourcelibrary" />
+  <resourceLibrary name="tiny-mce">
+    <directory 
+      zcml:condition="not-have devmode"
+      source="resources"
+      include="tiny_mce.js default_config.js"/>
+    <directory 
+      zcml:condition="have devmode"
+      source="resources"
+      include="tiny_mce_src.js default_config.js"/>
+  </resourceLibrary>
+</configure>
