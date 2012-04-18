@@ -1348,9 +1348,12 @@ class BungeniTasks:
     def load_min_data(self):
         with cd(self.cfg.user_bungeni):
             min_dump = self.__dump_update(self.min_dump_file)
-            run("./bin/psql bungeni < %s" % min_dump)
-
-
+            out = run("./bin/psql bungeni < %s" % min_dump)
+            # may have out.failed=False/succeeded=True/return_code=0, so all 
+            # OK -- but may still have a stderr! If such is the case, for 
+            # load_min_data, we want to fail and correct the issue:
+            assert not out.stderr, "load_min_data: %s" % (result.stderr)
+    
     def load_large_data(self):
         with cd(self.cfg.user_bungeni + "/testdatadmp"):
              run("if [ -f %(large_dump)s ]; then rm %(large_dump)s ; fi" % {"large_dump":self.large_dump_file})
