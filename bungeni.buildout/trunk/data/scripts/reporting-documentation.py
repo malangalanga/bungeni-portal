@@ -82,7 +82,7 @@ def add_sub_element(parent, tag, text=None, **kw):
         _element.text = str(text)
     return _element
 
-GROUP_SITTING_EXTRAS = []
+SITTING_EXTRAS = []
 
 class ExtendedProperty(object):
     def __init__(self, key, class_):
@@ -92,7 +92,7 @@ class ExtendedProperty(object):
 
 for type_key, type_info in capi.iter_type_info():
     if type_info.workflow and type_info.workflow.has_feature("schedule"):
-        GROUP_SITTING_EXTRAS.append(
+        SITTING_EXTRAS.append(
             ExtendedProperty("%ss" % type_key, type_info.domain_model)
         )
 
@@ -121,8 +121,8 @@ def generate_doc_for(domain_class, title=None, expand=True):
                 elx.set("class", "item dcitem")
 
     props = [ prop for prop in mapped.iterate_properties ]
-    if domain_class == domain.GroupSitting:
-        props.extend(GROUP_SITTING_EXTRAS)
+    if domain_class == domain.Sitting:
+        props.extend(SITTING_EXTRAS)
     for prop in sorted(props, key=lambda p:str(int(hasattr(p, "mapper")))+p.key):
         sub_el = add_sub_element(doc, "li")
         if hasattr(prop, "mapper") and expand:
@@ -157,7 +157,7 @@ def generate_documentation():
         css_class="sec_title",
         onclick="toggleBullet(this)"
     ) 
-    st_tr.append(generate_doc_for(domain.GroupSitting, 0))
+    st_tr.append(generate_doc_for(domain.Sitting, 0))
     return etree.tostring(document)
 
 if __name__ == "__main__":
