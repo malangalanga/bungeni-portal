@@ -3,7 +3,7 @@
     description="Workflow for a group sitting."
     domain="bungeni"
     initial_state=""
-    tags="draft public agendaprivate workspace published"
+    tags="draft public agendaprivate workspace published publishedminutes"
     >
     
     <!-- features -->
@@ -86,7 +86,7 @@
     <state id="published_agenda_internal" title="Published Agenda Internal" 
         publish="true" 
         like_state="published_agenda"
-        tags="public published agendaprivate workspace">
+        tags="public agendaprivate workspace">
         <!-- sittingschedule -->
         <deny permission="bungeni.sittingschedule.View" role="bungeni.Anonymous" />
     </state>
@@ -104,7 +104,7 @@
     
     <state id="published_minutes" title="Published Minutes" 
         like_state="published_agenda"
-        tags="public published">
+        tags="public published publishedminutes">
         <!-- sittingschedule.item -->
         <deny permission="bungeni.sittingschedule.item.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.sittingschedule.item.Delete" role="bungeni.Clerk" />
@@ -120,7 +120,7 @@
 
     <state id="published_minutes_internal" title="Published Minutes Internal" 
         like_state="published_minutes"
-        tags="public published">
+        tags="public">
         <!-- sittingschedule.itemdiscussion -->
         <deny permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Anonymous" />
     </state>
@@ -202,7 +202,5 @@
         roles="bungeni.Clerk bungeni.Speaker"
         require_confirmation="true"
     />
-
-
 </workflow>
 
