@@ -9,10 +9,10 @@
     <directory 
       zcml:condition="not-have devmode"
       source="resources"
-      include="tiny_mce.js default_config.js"/>
+      include="tiny_mce.js"/>
     <directory 
       zcml:condition="have devmode"
       source="resources"
-      include="tiny_mce_src.js default_config.js"/>
+      include="tiny_mce_src.js"/>
   </resourceLibrary>
 </configure>
