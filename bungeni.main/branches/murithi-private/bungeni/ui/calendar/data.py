@@ -10,11 +10,8 @@ log = __import__("logging").getLogger("bungeni.ui.calendar.data")
 
 import json
 from sqlalchemy import orm, sql
-from bungeni.alchemist import model
-from bungeni.models import domain
 from bungeni.core.dc import IDCDescriptiveProperties
 from bungeni.core.workflow.interfaces import IWorkflow
-from bungeni.core.workflows.adapters import get_workflow
 from bungeni.ui.utils import date, common
 from bungeni.alchemist import Session
 from bungeni.ui.i18n import _
@@ -27,17 +24,17 @@ from bungeni.utils.capi import capi
 # can be tested for with: workflow.has_feature"schedule")
 
 def get_schedulable_types():
-    schedulable_types = filter(
-        lambda ti:(ti[1].workflow and ti[1].workflow.has_feature("schedulable")), 
-        capi.iter_type_info()
-    )
+    schedulable_types = []
+    for (key, type_info) in capi.iter_type_info():
+        if type_info.workflow and type_info.workflow.has_feature("schedule"):
+            schedulable_types.append((key, type_info))
     return dict([
-        (type_info.workflow.name, dict(
+        (type_key, dict(
             title=type_info.descriptor.container_name,
             domain_model=type_info.domain_model,
             workflow=type_info.workflow
         ))
-        for (type_name, type_info) in schedulable_types
+        for (type_key, type_info) in schedulable_types
     ])
 
 
@@ -68,24 +65,26 @@ class SchedulableItemsGetter(object):
     group_filter = False
     domain_class = None
     
+    #!+(SCHEDULING, April-2012) There still needs to be a way to filter 
+    # documents per group - at least for documents that may be created
+    # in various group contexts e.g. AgendaItems, Headings e.t.c
     def __init__(self, context, item_type, filter_states=None, 
-        group_filter=True, item_filters={}
-    ):
+            group_filter=False, item_filters={}
+        ):
         self.context = context
         self.item_type = item_type
-        self.filter_states = filter_states or get_workflow(
-            item_type
-        ).get_state_ids(
-            tagged=["tobescheduled"]
+        type_info = capi.get_type_info(item_type)
+        self.filter_states = (filter_states or 
+            type_info.workflow.get_state_ids(tagged=["tobescheduled"])
         )
         self.group_filter = group_filter
         try:
             self.domain_class = get_schedulable_types()[item_type].get(
-                "domain_model"
-            )
+                "domain_model")
         except KeyError:
+            # !+try/except not necessary?
             try:
-                self.domain_class = capi.get_type_info(item_type).domain_model
+                self.domain_class = type_info.domain_model
             except KeyError:
                 raise KeyError("Unable to locate domain class for type %s" %
                     item_type
@@ -94,7 +93,7 @@ class SchedulableItemsGetter(object):
     
     @property
     def group_id(self):
-        parent=self.context
+        parent = self.context
         while parent is not None:
             group_id = getattr(parent, "group_id", None)
             if group_id:
@@ -119,7 +118,7 @@ class SchedulableItemsGetter(object):
                         elif start:
                             expression = (column>=value)
                         elif end:
-                            expression= (column<=value)
+                            expression = (column<=value)
                         else:
                             continue
                     else:
@@ -133,8 +132,7 @@ class SchedulableItemsGetter(object):
                     self.domain_class.group_id==self.group_id
                 )
         return tuple(items_query)
-
-
+    
     def as_json(self):
         date_formatter = date.getLocaleFormatter(common.get_request(), "date",
             "medium"
@@ -201,3 +199,4 @@ class ExpandedSitting(object):
                 )
                 self.grouped[item_group] = []
             self.grouped[item_group].append(scheduled.item)
+

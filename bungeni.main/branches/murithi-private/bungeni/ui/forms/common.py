@@ -42,14 +42,15 @@ from bungeni.core.language import get_default_language
 from bungeni.core.translation import is_translation
 from bungeni.core.translation import get_translation_for
 from bungeni.core.translation import CurrentLanguageVocabulary
-#from bungeni.core.interfaces import IVersioned
-from bungeni.models.interfaces import IVersion, IBungeniContent
+from bungeni.models.interfaces import IVersion, IBungeniContent, \
+    ISittingContainer
 from bungeni.models import domain
 from bungeni.ui.forms.fields import filterFields
 from bungeni.ui.interfaces import IBungeniSkin, IFormEditLayer, \
     IGenenerateVocabularyDefault
 from bungeni.ui.i18n import _
 from bungeni.ui import browser
+from bungeni.ui import z3evoque
 from bungeni.ui.utils import url
 from bungeni.ui.container import invalidate_caches_for
 from bungeni.utils import register
@@ -233,16 +234,18 @@ class BaseForm(formlib.form.FormBase):
                 unproxied
             )
 
+
 # !+PageForm(mr, jul-2010) converge usage of formlib.form.PageForm to PageForm
 # !+NamedTemplate(mr, jul-2010) converge all views to not use anymore
 # !+alchemist.form(mr, jul-2010) converge all form views to not use anymore
 class PageForm(BaseForm, formlib.form.PageForm, browser.BungeniBrowserView):
-    template = NamedTemplate("alchemist.form")
-
+    template = z3evoque.PageViewTemplateFile("form.html#page")
+    #template = NamedTemplate("alchemist.form")
 
 class DisplayForm(catalyst.DisplayForm, browser.BungeniBrowserView):
-
-    template = ViewPageTemplateFile("templates/content-view.pt")
+    
+    template = z3evoque.PageViewTemplateFile("content.html#view")
+    #template = ViewPageTemplateFile("templates/content-view.pt")
 
     form_name = _("View")
 
@@ -251,9 +254,9 @@ class DisplayForm(catalyst.DisplayForm, browser.BungeniBrowserView):
 
 
 @register.view(domain.AttachmentContainer, layer=IBungeniSkin, name="add",
-    protect={"bungeni.fileattachment.Add": register.VIEW_DEFAULT_ATTRS})
-@register.view(domain.AttachedFileContainer, layer=IBungeniSkin, name="add",
-    like_class=domain.AttachmentContainer) #!+DOCUMENT
+    protect={"bungeni.attachment.Add": register.VIEW_DEFAULT_ATTRS})
+#@register.view(ISittingContainer, layer=IBungeniSkin, name="add",
+#    protect={"bungeni.sitting.Add": register.VIEW_DEFAULT_ATTRS})
 class AddForm(BaseForm, catalyst.AddForm):
     """Custom add-form for Bungeni content.
 
@@ -360,7 +363,7 @@ class AddForm(BaseForm, catalyst.AddForm):
     def createAndAdd(self, data):
         added_obj = super(AddForm, self).createAndAdd(data)
         return added_obj
-
+    
     @formlib.form.action(
         _(u"Save and view"),
         name="save_and_view",
@@ -404,8 +407,10 @@ class AddForm(BaseForm, catalyst.AddForm):
             self._next_url = url.absoluteURL(self.context, self.request) + \
                              "/add?portal_status_message=%s Added" % name
 
-@register.view(domain.AttachedFile, layer=IBungeniSkin, name="edit",
-    protect={"bungeni.fileattachment.Edit": register.VIEW_DEFAULT_ATTRS})
+@register.view(domain.Attachment, layer=IBungeniSkin, name="edit",
+    protect={"bungeni.attachment.Edit": register.VIEW_DEFAULT_ATTRS})
+#@register.view(domain.Sitting, layer=IBungeniSkin, name="edit",
+#    protect={"bungeni.sitting.Edit": register.VIEW_DEFAULT_ATTRS})
 class EditForm(BaseForm, catalyst.EditForm):
     """Custom edit-form for Bungeni content.
     """
@@ -703,28 +708,11 @@ class TranslateForm(AddForm):
             translation.field_text = data[form_field]
             session.add(translation)
         session.flush()
-        # !+SESSION_CLOSE(taras.sterch, july-2011) there is no need to close the 
-        # session. Transaction manager will take care of this. Hope it does not 
-        # brake anything.
-        #session.commit()
-        #session.close()
         
         # !+EVENT_DRIVEN_CACHE_INVALIDATION(mr, mar-2011) no translate event
         # invalidate caches for this domain object type
         invalidate_caches_for(trusted.__class__.__name__, "translate")
-
-        #versions = IVersioned(self.context)
-        #version = versions.create("'%s' translation added" % language)
-
-        # reset workflow state
-        #version.status = None
-        #IWorkflowController(version).fireTransition("-draft_translation")
-        # redefine form context and proceed with edit action
-        #self.setUpAdapters(version)
-
-        # commit version such that it gets a version id
-        #transaction.commit()
-
+        
         #if not self._next_url:
         #    self._next_url = ( \
         #        "%s/versions/%s" % (url, stringKey(version)) + \
@@ -771,8 +759,10 @@ class ReorderForm(PageForm):
 
 
 
-@register.view(domain.AttachedFile, layer=IBungeniSkin, name="delete",
-    protect={"bungeni.fileattachment.Delete": register.VIEW_DEFAULT_ATTRS})
+@register.view(domain.Attachment, layer=IBungeniSkin, name="delete",
+    protect={"bungeni.attachment.Delete": register.VIEW_DEFAULT_ATTRS})
+#@register.view(domain.Sitting, layer=IBungeniSkin, name="delete",
+#    protect={"bungeni.sitting.Delete": register.VIEW_DEFAULT_ATTRS})
 class DeleteForm(PageForm):
     """Delete-form for Bungeni content.
 

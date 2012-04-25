@@ -1,6 +1,8 @@
 
 # db specific utilities to retrive values, restriction etc
 # from the db implementation
+
+from zope.security.proxy import removeSecurityProxy
 import sqlalchemy as rdb
 from sqlalchemy.orm import mapper
 from bungeni.alchemist import Session
@@ -12,6 +14,34 @@ import bungeni.models.interfaces as interfaces
 def get_user(user_id):
     assert user_id, "Must have valid user_id"
     return Session().query(domain.User).get(user_id)
+
+def get_max_type_number(domain_model):
+    """Get the current maximum numeric value for this domain_model's type_number.
+    If None (no existing instance as yet defines one) return 0.
+    !+RESETTABLE per parliamentary session
+    """
+    session = Session()
+    return session.query(rdb.func.max(domain_model.type_number)).scalar() or 0
+
+def get_registry_counts(specific_model):
+    """ kls -> (registry_count_general, registry_count_specific)
+    Returns the general (all docs) and specific (for the type) counts of how
+    many docs have been "registered" (received by parliament) to date.
+
+    !+REGISTRY(mr, apr-2011) should probably have dedicated columns for such 
+    information i.e. seq_received, seq_received_type, seq_approved
+    !+RESETTABLE per parliamentary session
+    !+manually set out-of-sequence numbers may result in non-uniqueness
+    """
+    session = Session()
+    registry_count_general = session.query(
+        rdb.func.count(domain.Doc.registry_number)).filter(
+            domain.Doc.registry_number != None).scalar() or 0
+    specific_model = removeSecurityProxy(specific_model)
+    registry_count_specific = session.query(
+        rdb.func.count(specific_model.registry_number)).filter(
+            specific_model.registry_number != None).scalar() or 0
+    return registry_count_general, registry_count_specific
 
 
 ''' !+UNUSED(mr, mar-2011)
@@ -57,65 +87,38 @@ def removeQuestionFromItemSchedule(question_id):
     results = item_schedule.all()
     if (len(results)==1):
         results[0].active = False
-    
-'''
-def set_pi_registry_number(item):
-    session = Session()
-    connection = session.connection(domain.ParliamentaryItem)
-    sequence = rdb.Sequence("registry_number_sequence")
-    item.registry_number = connection.execute(sequence)
-'''
 
-def set_pi_registry_number(item, registry_number):
-    session = Session()
-    connection = session.connection(domain.ParliamentaryItem)
-    item.registry_number = registry_number
-    
+'''
+# !+REGISTRY(mr, apr-2011) rework handling of registry and progessive numbers
+# should store these counts (per type) in a generic table
+# !+RESETTABLE per parliamentary session
 def get_next_reg():
     session = Session()
     sequence = rdb.Sequence("registry_number_sequence")
     connection = session.connection(domain.ParliamentaryItem)
     return connection.execute(sequence)
-
 def get_next_prog(context):
     session = Session()
     sequence = rdb.Sequence("%s_registry_sequence" % context.type)
     connection = session.connection(context.__class__)
     return connection.execute(sequence)
-    
-def setTabledDocumentSerialNumber(tabled_document):
-    session = Session()
-    connection = session.connection(domain.TabledDocument)
-    sequence = rdb.Sequence("tabled_document_number_sequence")
-    tabled_document.tabled_document_number = connection.execute(sequence)
-    
-def setQuestionSerialNumber(question):
-    """
-     Approved questions are given a serial number enabling the clerks office
-     to record the order in which questions are received and hence enforce 
-     a first come first served policy in placing the questions on the order
-     paper. The serial number is re-initialized at the start of each session
-    """
-    session = Session()
-    connection = session.connection(domain.Question)
-    sequence = rdb.Sequence("question_number_sequence")
-    question.question_number = connection.execute(sequence)
+'''
 
-def is_pi_scheduled(parliamentary_item_id):
-    return len(getActiveItemSchedule(parliamentary_item_id)) >= 1
+def is_pi_scheduled(doc_id):
+    return len(getActiveItemSchedule(doc_id)) >= 1
     
-def getActiveItemSchedule(parliamentary_item_id):
+def getActiveItemSchedule(doc_id):
     """Get active itemSchedule instances for parliamentary item.
     
     Use may also be to get scheduled dates e.g.
-    for item_schedule in getActiveItemSchedule(parliamentary_item_id)
+    for item_schedule in getActiveItemSchedule(doc_id)
         # item_schedule.item_status, item_schedule.item
         s = item_schedule.sitting
         s.start_date, s.end_date, s.status
     """
     session = Session()
     active_filter = rdb.and_(
-        schema.item_schedules.c.item_id == parliamentary_item_id,
+        schema.item_schedules.c.item_id == doc_id,
         schema.item_schedules.c.active == True
     )
     item_schedule = session.query(domain.ItemSchedule).filter(active_filter)
@@ -125,16 +128,15 @@ def getActiveItemSchedule(parliamentary_item_id):
     sorted_results.reverse()
     return [ r for (d, r) in sorted_results ]
 
-def setMotionSerialNumber(motion):
+
+def set_doc_type_number(doc):
+    """Sets the number that indicates the order in which docs of this type
+    have been approved by the Speaker to be the current maximum + 1.
+    
+    The number is reset at the start of each new parliamentary session with the 
+    first doc of this type being assigned the number 1.
     """
-     Number that indicate the order in which motions have been approved 
-     by the Speaker. The Number is reset at the start of each new session
-     with the first motion assigned the number 1
-    """
-    session = Session()
-    connection = session.connection(domain.Motion)
-    sequence = rdb.Sequence("motion_number_sequence")
-    motion.motion_number = connection.execute(sequence)
+    doc.type_number = get_max_type_number(doc.__class__) + 1
 
 #
 

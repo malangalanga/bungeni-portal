@@ -2,9 +2,10 @@
 # Copyright (C) 2010 - Africa i-Parliaments - http://www.parliaments.info/
 # Licensed under GNU GPL v2 - http://www.gnu.org/licenses/gpl-2.0.txt
 
-"""Vocabulary definitions
-"""
+"""UI Vocabulary handling.
 
+$Id$
+"""
 log = __import__("logging").getLogger("bungeni.ui.vocabulary")
 
 import os
@@ -160,8 +161,14 @@ YesNoSource = vocabulary.SimpleVocabulary([
 
 # !+TYPES_CUSTOM - enum sources to move out to bungeni custom
 
-bill_type = vocabulary.SimpleVocabulary([
+doc_type = vocabulary.SimpleVocabulary([
     vocabulary.SimpleTerm("government", title="Government Initiative"),
+    vocabulary.SimpleTerm("member", title="Member Initiative"),
+])
+bill_type = doc_type
+event_type = vocabulary.SimpleVocabulary([
+    vocabulary.SimpleTerm("government", title="Government Initiative"),
+    vocabulary.SimpleTerm("committee", title="Committee Initiative"),
     vocabulary.SimpleTerm("member", title="Member Initiative"),
 ])
 committee_type = vocabulary.SimpleVocabulary([
@@ -196,7 +203,6 @@ attachment_type = vocabulary.SimpleVocabulary([
     # option in the UI?
     #vocabulary.SimpleTerm("system", title="System"),
 ])
-attached_file_type = attachment_type # !+DOCUMENT
 attendance_type = vocabulary.SimpleVocabulary([
     vocabulary.SimpleTerm("present", title="Present"),
     vocabulary.SimpleTerm("absence_justified", title="Absence justified"),
@@ -215,6 +221,10 @@ response_type = vocabulary.SimpleVocabulary([
     vocabulary.SimpleTerm("oral", title="Oral"),
     vocabulary.SimpleTerm("written", title="Written"),
 ])
+change_procedure = vocabulary.SimpleVocabulary([
+    vocabulary.SimpleTerm("a", title="Automatic"),
+    vocabulary.SimpleTerm("m", title="Manual"),
+])
 
 
 class OfficeRoles(object):
@@ -225,15 +235,16 @@ class OfficeRoles(object):
         roles = getUtilitiesFor(IRole, app)
         for name, role in roles:
             #Roles that must not be assigned to users in an office
-            if name not in ["bungeni.Anonymous",
-                            "bungeni.Authenticated",
-                            "bungeni.Owner",
-                            "zope.Manager",
-                            "zope.Member",
-                            "bungeni.MP",
-                            "bungeni.Minister",
-                            "bungeni.Admin",
-                            ]:
+            if name in ["bungeni.Anonymous",
+                        "bungeni.Authenticated",
+                        "bungeni.Owner",
+                        "zope.Manager",
+                        "zope.Member",
+                        "bungeni.MP",
+                        "bungeni.Minister",
+                        "bungeni.Admin"]:
+                continue
+            if not ISubRoleAnnotations(role).is_sub_role:
                 terms.append(vocabulary.SimpleTerm(name, name, name))
         return vocabulary.SimpleVocabulary(terms)
 
@@ -258,6 +269,9 @@ group_sub_roles = GroupSubRoles()
         
 class DatabaseSource(bungeni.alchemist.vocabulary.DatabaseSource):
     
+    #def __init__(self, domain_model, token_field, value_field, 
+    #    title_field=None, title_getter=None, order_by=None):
+
     def __call__(self, context=None):
         query = self.constructQuery(context)
         results = query.all()
@@ -338,30 +352,6 @@ class Venues(object):
 
 venues_factory = Venues()
 
-class SittingTypes(SpecializedSource):
-    #domain.SittingType, "group_sitting_type", "group_sitting_type_id",
-    #title_getter=lambda ob: "%s (%s-%s)" % (
-    #    ob.group_sitting_type.capitalize(), ob.start_time, ob.end_time))
-
-    def constructQuery(self, context):
-        session= Session()
-        return session.query(domain.GroupSittingType)
-
-    def __call__(self, context=None):
-        query = self.constructQuery(context)
-        results = query.all()
-        terms = []
-        for ob in results:
-            obj = translate_obj(ob)
-            terms.append(vocabulary.SimpleTerm(
-                    value = obj.group_sitting_type_id, 
-                    token = obj.group_sitting_type,
-                    title = "%s (%s-%s)" % (
-                        obj.group_sitting_type, 
-                        obj.start_time, 
-                        obj.end_time),
-                ))
-        return vocabulary.SimpleVocabulary(terms)
 
 class TitleTypes(SpecializedSource):
     def __init__(self):
@@ -391,14 +381,6 @@ class TitleTypes(SpecializedSource):
 
 
         
-#XXX
-#SittingTypeOnly = DatabaseSource(
-#    domain.SittingType, 
-#    title_field="group_sitting_type",
-#    token_field="group_sitting_type_id",
-#    value_field="group_sitting_type_id")
-
-
 class MemberOfParliament(object):
     """ Member of Parliament = user join group membership join parliament"""
     
@@ -680,6 +662,16 @@ class MinistrySource(SpecializedSource):
         return vocabulary.SimpleVocabulary(terms)'''
 
 
+class LoggedInUserSource(SpecializedSource):
+    """Current (list of 1 item) logged in user.
+    """
+    def constructQuery(self, context):
+        # !+get_db_user(mr, apr-2012) repeat of [utils.get_db_user()], 
+        # but here we must return a query...
+        principal_id = utils.get_principal_id()
+        return Session().query(domain.User).filter(
+            domain.User.login == principal_id)
+
 class UserSource(SpecializedSource):
     """ All active users """
     def constructQuery(self, context):
@@ -792,13 +784,13 @@ class SittingAttendanceSource(SpecializedSource):
         else:
             sitting = trusted.__parent__
             group_id = sitting.group_id
-            group_sitting_id = sitting.group_sitting_id
+            sitting_id = sitting.sitting_id
             all_member_ids = sql.select([schema.user_group_memberships.c.user_id], 
                     sql.and_(
                         schema.user_group_memberships.c.group_id == group_id,
                         schema.user_group_memberships.c.active_p == True))
-            attended_ids = sql.select([schema.group_sitting_attendance.c.member_id],
-                     schema.group_sitting_attendance.c.group_sitting_id == group_sitting_id)
+            attended_ids = sql.select([schema.sitting_attendance.c.member_id],
+                     schema.sitting_attendance.c.sitting_id == sitting_id)
             query = session.query(domain.User).filter(
                 sql.and_(domain.User.user_id.in_(all_member_ids),
                     ~ domain.User.user_id.in_(attended_ids))).order_by(
@@ -913,22 +905,14 @@ class PIAssignmentSource(SpecializedSource):
         trusted = removeSecurityProxy(context)
         existing_item_ids = [assn.item_id for assn in trusted.values()]
         if item_id:
-            query = session.query(domain.ParliamentaryItem).filter(
-                domain.ParliamentaryItem.parliamentary_item_id ==
-                item_id)
+            query = session.query(domain.Doc).filter(
+                domain.Doc.doc_id == item_id)
         else:
-            query = session.query(domain.ParliamentaryItem).filter(
+            query = session.query(domain.Doc).filter(
                     sql.and_(
-                        sql.not_(domain.ParliamentaryItem.status.in_(
-                                _assignable_state_ids
-                            )
-                        ),
-                        sql.not_(
-                            domain.ParliamentaryItem.parliamentary_item_id.in_(
-                                existing_item_ids
-                            )
-                        ),
-                        domain.ParliamentaryItem.parliament_id == parliament_id
+                        sql.not_(domain.Doc.status.in_(_assignable_state_ids)),
+                        sql.not_(domain.Doc.doc_id.in_(existing_item_ids)),
+                        domain.Doc.parliament_id == parliament_id
                     )
                 )
         return query
@@ -1124,6 +1108,8 @@ subject_terms_vocabulary = BaseVDEXVocabulary("subject-terms.vdex")
 #
 # Sitting flat VDEX based vocabularies
 #
+# !+SITTING_VOCABULARIES_XML(mr, apr-2012) term identifiers (what is stored in db)
+# should follow convention i.e. lowercase, no spaces, underscore-separated words!
 sitting_activity_types = FlatVDEXVocabulary("sitting-activity-types.vdex")
 sitting_meeting_types = FlatVDEXVocabulary("sitting-meeting-types.vdex")
 sitting_convocation_types = FlatVDEXVocabulary("sitting-convocation-types.vdex")

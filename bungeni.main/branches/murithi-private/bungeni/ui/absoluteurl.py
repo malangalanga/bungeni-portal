@@ -1,3 +1,5 @@
+# !+ CLEAN UP THIS FILE, MINIMALLY AT LEAST THE SRC CODE FORMATTING !
+
 from sqlalchemy import orm
 from zope.traversing.browser import absoluteURL
 from zope.traversing.browser.absoluteurl import AbsoluteURL
@@ -8,7 +10,7 @@ from zope.component import getUtility
 import bungeni.ui.utils as ui_utils
 from bungeni.alchemist.container import stringKey
 from bungeni.alchemist import Session
-from bungeni.models.domain import ParliamentaryItem
+from bungeni.models.domain import Doc
 from bungeni.models import workspace
 from bungeni.models.utils import get_principal
 from bungeni.ui.utils.common import get_workspace_roles
@@ -59,13 +61,13 @@ class BusinessAbsoluteURLView(CustomAbsoluteURL):
     """
     section = "business"
 
-class AttachedFileBusinessAbsoluteURLView(BusinessAbsoluteURLView):
+class AttachmentBusinessAbsoluteURLView(BusinessAbsoluteURLView):
     
     def __str__(self):
         item_id = self.context.item_id
         base_url = ui_utils.url.absoluteURL(getSite(), self.request)
         session = Session()
-        item = session.query(ParliamentaryItem).filter(ParliamentaryItem.parliamentary_item_id==item_id).first()
+        item = session.query(Doc).filter(Doc.doc_id==item_id).first()
         return '%s/business/%ss/obj-%s/files/%s/' % (base_url, item.type,\
                                                    item_id, stringKey(self.context))
     

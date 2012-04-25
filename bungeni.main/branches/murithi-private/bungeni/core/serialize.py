@@ -3,15 +3,20 @@
 # Licensed under GNU GPL v2 - http://www.gnu.org/licenses/gpl-2.0.txt
 
 """ Utilities to serialize objects to XML
+
+$Id$
 """
+log = __import__("logging").getLogger("bungeni.core.serialize")
 
 from zope.security.proxy import removeSecurityProxy
 from sqlalchemy.orm import RelationshipProperty, class_mapper
 
+from bungeni.alchemist import Session
+from bungeni.alchemist.container import stringKey
+from bungeni.alchemist.interfaces import IAlchemistContainer
 from bungeni.core.workflow.states import get_object_state_rpm, get_head_object_state_rpm
 from bungeni.core.workflow.interfaces import IWorkflow, IStateController
 from bungeni.models.schema import singular
-from bungeni.alchemist.container import stringKey
 from bungeni.models.interfaces import IAuditable, IVersionable, IAttachmentable
 
 import os
@@ -56,26 +61,30 @@ def publish_to_xml(context):
     
     context = removeSecurityProxy(context)
     
+    # !+zope idioms need convolution no further: IVersionable.providedBy(context)
     if IVersionable.implementedBy(context.__class__):
         include.append("versions")
+    # !+zope idioms need convolution no further: IAuditable.providedBy(context)
     if IAuditable.implementedBy(context.__class__):
         include.append("event")
     
     data = obj2dict(context, 1, 
         parent=None,
         include=include,
-        exclude=["file_data", "image", "logo_data", "event", 
-            "attached_files","changes"]
+        exclude=["data", "image", "logo_data", "event", "attachments", 
+            "changes"]
     )
-
+    
+    # !+please do not use python builtin names as variable names
     type = IWorkflow(context).name
     
+    # !+IWorkflow(context).get_state(context.status).tags
     tags = IStateController(context).get_state().tags
     if tags:
         data["tags"] = tags
     
     permissions = get_object_state_rpm(context).permissions
-    data["permissions"]= get_permissions_dict(permissions)
+    data["permissions"] = get_permissions_dict(permissions)
     
     data["changes"] = []
     for change in getattr(context, "changes", []):
@@ -96,27 +105,27 @@ def publish_to_xml(context):
     
     has_attachments = False
     if IAttachmentable.implementedBy(context.__class__):
-        attached_files = getattr(context, "attached_files", None)
-        if attached_files:
+        attachments = getattr(context, "attachments", None)
+        if attachments:
             has_attachments = True
             # add xml file to list of files to zip
             files.append("%s.xml" % (file_path))
-            data["attached_files"] = []
-            for attachment in attached_files:
+            data["attachments"] = []
+            for attachment in attachments:
                 # serializing attachment
                 attachment_dict = obj2dict(attachment, 1,
                     parent=context,
-                    exclude=["file_data", "event", "versions", "changes"])
+                    exclude=["data", "event", "versions", "changes"])
                 permissions = get_object_state_rpm(attachment).permissions
                 attachment_dict["permissions"] = \
                     get_permissions_dict(permissions)
                 # saving attachment to tmp
                 with tmp(delete=False) as f:
-                    f.write(attachment.file_data)
+                    f.write(attachment.data)
                     files.append(f.name)
                     attachment_dict["saved_file"] = \
                         os.path.split(f.name)[-1]  
-                data["attached_files"].append(attachment_dict)
+                data["attachments"].append(attachment_dict)
     
     # saving xml file
     with open("%s.xml" % (file_path), "w") as file:
@@ -184,7 +193,10 @@ def obj2dict(obj, depth, parent=None, include=[], exclude=[]):
             name += "s"
         if isinstance(value, collections.Iterable):
             res = []
-            for item in value.values():
+            # !+ allowance for non-container-api-conformant alchemist containers
+            if IAlchemistContainer.providedBy(value):
+                value = value.values()
+            for item in value:
                 i = obj2dict(item, 0)
                 if name == "versions":
                     permissions = get_head_object_state_rpm(item).permissions
@@ -193,7 +205,7 @@ def obj2dict(obj, depth, parent=None, include=[], exclude=[]):
             result[name] = res
         else:
             result[name] = value
-            
+    
     # Get mapped attributes
     for property in class_mapper(obj.__class__).iterate_properties:
         if property.key in exclude:
@@ -203,7 +215,7 @@ def obj2dict(obj, depth, parent=None, include=[], exclude=[]):
             continue
         if value is None:
             continue
-    
+        
         if isinstance(property, RelationshipProperty) and depth > 0:
             if isinstance(value, collections.Iterable):
                 result[property.key] = []

@@ -28,7 +28,7 @@ from bungeni.ui.utils import date, debug
 from bungeni.ui import browser
 from bungeni.utils import register
 
-CHANGE_TYPES = ("head", "signatory", "attachedfile", "event")
+CHANGE_TYPES = ("head", "signatory", "attachment", "event")
 CHANGE_ACTIONS = domain.CHANGE_ACTIONS
 # ("add", "modify", "workflow", "remove", "version", "reversion")
 
@@ -74,10 +74,10 @@ class ChangeDataProvider(object):
                     append_visible_changes_on_item(s)
             
             # changes on item attachments
-            if ("attachedfile" in self.include_change_types 
+            if ("attachment" in self.include_change_types 
                     and hwf.has_feature("attachment") #!+IAttachmentable?
                 ):
-                attachments = [ f for f in self.head.attached_files
+                attachments = [ f for f in self.head.attachments
                     if interaction.checkPermission("zope.View", f)
                 ]
                 for f in attachments:
@@ -89,7 +89,7 @@ class ChangeDataProvider(object):
                     # at least no recursion, on events on events...
                     and not interfaces.IEvent.providedBy(self.head)
                 ):
-                events = [ e for e in self.head.events
+                events = [ e for e in self.head.sa_events
                     if interaction.checkPermission("zope.View", e)
                 ]
                 for e in events:
@@ -103,15 +103,12 @@ class ChangeDataProvider(object):
         print "==== !+AUDITLOG add optional inclusion of auditing " \
             "of sub-objects for:", head
         # attached files:
-        print "---- !+ATTACHED_FILES", head.attached_files, head.files, [
+        print "---- !+ATTACHMENTS", head.attachments, head.files, [
             f for f in head.files ]
-        print "---- !+ATTACHED_FILES", list(head.files.values()), head.files.values()
+        print "---- !+ATTACHMENTS", list(head.files.values()), head.files.values()
         # events:
-        print "---- !+EVENT", head.events, head.event, [ 
-            e for e in head.event ]
-        # !+ why the two attributes item.events (Event instances), 
-        #   item.event (Managed bungeni.models.domain.EventContainer)
-        # !+ why is event (container) singular?
+        print "---- !+EVENT", head.sa_events, head.events, [ 
+            e for e in head.events ]
         # signatories:
         print "---- !+AUDITLOG SIGNATORIES", head.itemsignatories, \
             [ s.user_id for s in head.itemsignatories ], \
@@ -126,7 +123,7 @@ class ChangeDataProvider(object):
         # convention for attributes for the real data list or for attributes 
         # to Alchemist Managed Container of string ids, e.g:
         #   signatories:[Signatory], amc_signatories:Managed(str)
-        #   attached_files, (files->) amc_attached_files
+        #   attachments, (files->) amc_attachments
         #   (events->) events, (event->) amc_events
         # or, adopt pattern: @xxx -> amc_xxx.values()
         '''
@@ -145,42 +142,35 @@ def _eval_as_dict(s):
         debug.log_exc(sys.exc_info(), log_handler=log.info)
         return {}
 
-def _DOCUMENT_audit(change): #!+
-    try:
-        return change.audit
-    except AttributeError:
-        return change
-    
-def _get_type_name(change):
+def _get_type_name(audit):
     """Get document type name.
     """
-    audit = _DOCUMENT_audit(change)
     #return change.head.type # !+ not all heads define such a type attr 
     type_name = audit.__class__.__name__
-    if type_name.endswith("Change"): #!+DOCUMENT
-        return type_name[:-6].lower()
     if type_name.endswith("Audit"):
         return type_name[:-5].lower()
     return type_name.lower()
 
 def _format_description_workflow(change):
-    # !+ workflow transition change log stores the (unlocalized) 
-    # human title for the transition's destination workflow state 
-    extras = _eval_as_dict(getattr(change, "notes", 
-        "{'source':'TBD', 'destination':'TBD'}")) # !+AUDIT_PREVIOUS
-    return ('%s <span class="workflow_info">%s</span> '
+    # !+change.audit.status(mr, apr-2012) use the workflow state's title instead? 
+    # !+workflow_change_action(mr, apr-2012) get previous "from" status?
+    prev_change, prev_status = change.get_seq_previous(), None
+    if prev_change:
+        prev_status = prev_change.audit.status
+    return (
+        '%s <span class="workflow_info">%s</span> '
         '%s <span class="workflow_info">%s</span>' % (
             translate("from"),
-            translate(extras.get("source", None)),
+            translate(prev_status),
             translate("to"),
-            translate(extras.get("destination", None)) ))
+            translate(change.audit.status)))
 
 def _format_description(change):
     """Build the (localized) description for display, for each change, per 
     change type and action.
     """
-    audit_type_name = _get_type_name(change)
-    audit = _DOCUMENT_audit(change)
+    audit = change.audit
+    audit_type_name = _get_type_name(audit)
     
     def _label(audit):
         try:
@@ -196,18 +186,20 @@ def _format_description(change):
         if note:
             return "(%s)" % (translate(note))
         return ""
+    def _notes(change):
+        return _eval_as_dict(getattr(change, "notes", "{}"))
     
     # !+AUDIT_DESCRIPTIONS... to be redone, dynamic. Note also that current
     # links within descriptions for audit logs of a sub object are all broken!
     if audit_type_name == "event":
         # description for (event, *)
-        return """<a href="event/obj-%s">%s</a> %s""" % (
+        return """<a href="events/obj-%s">%s</a> %s""" % (
             audit.audit_head_id, _label(audit), _note(audit))
-    elif audit_type_name == "attachedfile":
-        file_title = "%s" % (audit.head.file_title)
-        # !+ _(change.head.attached_file_type), change.head.file_name)
+    elif audit_type_name == "attachment":
+        file_title = "%s" % (audit.audit_head.title)
+        # !+ _(change.head.type), change.head.name)
         if change.action == "version":
-            version_id = _eval_as_dict(change.notes).get("version_id", None)
+            version_id = _notes(change).get("version_id", None)
             if version_id:
                 _url = "files/obj-%s/versions/obj-%s" % (
                     change.content_id, version_id)
@@ -221,7 +213,7 @@ def _format_description(change):
             return "%s: %s %s" % (file_title, _label(audit), _note(audit))
     else:
         if change.action == "version":
-            version_id = _eval_as_dict(change.notes).get("version_id", None)
+            version_id = _notes(change).get("version_id", None)
             if version_id:
                 _url = "versions/obj-%s" % (version_id)
                 return """<a href="%s">%s</a> %s""" % (
@@ -249,13 +241,14 @@ class ChangeDataDescriptor(object):
         self.date_formatter = date.getLocaleFormatter(self.request, 
             "dateTime", "short")
     
+    # !+bungeni_custom
     def columns(self):
         return [
             descriptor.user_name_column("user_id", _("user"), "user"),
             column.GetterColumn(title="action date",
                 getter=lambda i,f: self.date_formatter.format(i.date_active)),
             column.GetterColumn(title="action", 
-                getter=lambda i,f: "%s / %s" % (_get_type_name(i), i.action)),
+                getter=lambda i,f: "%s / %s" % (_get_type_name(i.audit), i.action)),
             GetterColumn(title="description", 
                 getter=lambda i,f: _format_description(i)),
             column.GetterColumn(title="audit date",
@@ -275,33 +268,27 @@ class TableFormatter(
 # !+AuditLogView(mr, nov-2011) should inherit from forms.common.BaseForm, 
 # as for VersionLogView?
 class AuditLogMixin(object):
-    """Base view for audit change log for a context.
+    """Base handling of audit change log listing for a context.
     """
     formatter_factory = TableFormatter
     prefix = "container_contents_changes"
     
-    # !+listing bind to declarations in UI configuration (descriptor)
+    # !+bungeni_custom listing bind to UI configuration (descriptor)
     visible_column_names = []
     # !+ParametrizedAuditLog(mr, dec-2011) bungeni_custom parameters:
     # change types X change actions
     include_change_types = []
     include_change_actions = []
     
-    def __init__(self):
-        self._data_items = None # cache
-    
     def columns(self):
         return ChangeDataDescriptor(self.context, self.request).columns()
     
-    _message_no_data = "No Change Data"
+    _message_no_data = _("No Change Data")
     @property
     def message_no_data(self):
-        return _(self.__class__._message_no_data)
+        return translate(self.__class__._message_no_data)
     
-    @property
-    def has_data(self):
-        return bool(self.change_data_items)
-    
+    _data_items = None
     def change_data_items(self):
         if self._data_items is None:
             self._data_items = ChangeDataProvider(self.context, 
@@ -309,6 +296,10 @@ class AuditLogMixin(object):
                     self.include_change_actions
                 ).change_data_items()
         return self._data_items
+    
+    @property
+    def has_data(self):
+        return bool(self.change_data_items)
     
     def listing(self):
         # !+FormatterFactoryAPI(mr, jan-2012) the various formatter factories 
@@ -361,9 +352,9 @@ class AuditLogView(AuditLogMixin, browser.BungeniBrowserView):
     def __init__(self, context, request):
         browser.BungeniBrowserView.__init__(self, context, request)
         AuditLogMixin.__init__(self)
-        if hasattr(self.context, "short_name"):
+        if hasattr(self.context, "short_title"):
             self._page_title = "%s: %s" % (
-                _(self._page_title), _(self.context.short_name))
+                _(self._page_title), _(self.context.short_title))
         else:
             self._page_title = _(self.__class__._page_title)
 

@@ -37,29 +37,23 @@ __all__ = ["get_auditor", "set_auditor"]
 
 
 from datetime import datetime
-from types import StringTypes
 
 from zope.lifecycleevent import IObjectModifiedEvent, IObjectCreatedEvent, \
     IObjectRemovedEvent
-    
+
 from zope.annotation.interfaces import IAnnotations
 from zope.security.proxy import removeSecurityProxy
-from zope import lifecycleevent
 
-from sqlalchemy import orm
+import sqlalchemy as rdb
 from bungeni.alchemist import Session
-from bungeni.alchemist.interfaces import IRelationChange
 
 from bungeni.models.utils import get_db_user_id
-from bungeni.models.interfaces import IAuditable, IDocument, IEvent
+from bungeni.models.interfaces import IAuditable
 from bungeni.models import schema
 from bungeni.models import domain
 from bungeni.core.workflow.interfaces import IWorkflow, IWorkflowTransitionEvent
-from bungeni.core.interfaces import IVersionCreated, IVersionReverted
 from bungeni.ui.utils import common
 from bungeni.utils import register
-
-from bungeni.core.i18n import _
 
 
 def _trace_audit_handler(ah):
@@ -79,10 +73,7 @@ def _trace_audit_handler(ah):
 @_trace_audit_handler
 def _object_add(ob, event):
     auditor = get_auditor(ob)
-    if IDocument.providedBy(ob): # !+DOCUMENT
-        auditor.DOCUMENT_object_add(removeSecurityProxy(ob), event)
-    else:
-        auditor.object_add(removeSecurityProxy(ob), event)
+    auditor.object_add(removeSecurityProxy(ob), event)
 
 @register.handler(adapts=(IAuditable, IObjectModifiedEvent))
 @_trace_audit_handler
@@ -94,10 +85,7 @@ def _object_modify(ob, event):
             event, orginator))
         return
     auditor = get_auditor(ob)
-    if IDocument.providedBy(ob): # !+DOCUMENT
-        auditor.DOCUMENT_object_modify(removeSecurityProxy(ob), event)
-    else:
-        auditor.object_modify(removeSecurityProxy(ob), event)
+    auditor.object_modify(removeSecurityProxy(ob), event)
 
 @register.handler(adapts=(IAuditable, IObjectRemovedEvent))
 @_trace_audit_handler
@@ -109,12 +97,12 @@ def _object_remove(ob, event):
 @_trace_audit_handler
 def _object_workflow(ob, event):
     auditor = get_auditor(ob)
-    if IDocument.providedBy(ob): # !+DOCUMENT
-        change_id = auditor.DOCUMENT_object_workflow(removeSecurityProxy(ob), event)
-    else:
-        change_id = auditor.object_workflow(removeSecurityProxy(ob), event)
+    change_id = auditor.object_workflow(removeSecurityProxy(ob), event)
     event.change_id = change_id
 
+''' !+OBSOLETE_VERSIONING versioning of an object is no longer event-based
+
+from bungeni.core.interfaces import IVersionCreated, IVersionReverted
 
 @register.handler(adapts=(IAuditable, IVersionCreated))
 @_trace_audit_handler
@@ -141,6 +129,7 @@ def _object_reversion(ob, event):
     auditor = get_auditor(ob)
     change_id = auditor.object_reversion(removeSecurityProxy(ob), event)
     event.change_id = change_id
+'''
 
 
 # internal utilities
@@ -164,37 +153,10 @@ class _AuditorFactory(object):
     
     def object_add(self, ob, event):
         return self._object_changed("add", ob)
-    def DOCUMENT_object_add(self, ob, event):
-        return self._DOCUMENT_object_changed("add", ob)
     
     def object_modify(self, ob, event):
-        attrset = []
-        for attr in event.descriptions:
-            if lifecycleevent.IAttributes.providedBy(attr):
-                attrset.extend(
-                    [ attr.interface[a].title for a in attr.attributes ]
-                )
-            elif IRelationChange.providedBy(attr):
-                if attr.description:
-                    attrset.append(attr.description)
-        attrset.append(getattr(ob, "note", "")) #!+??
-        str_attrset = []
-        for a in attrset:
-            if type(a) in StringTypes:
-                str_attrset.append(a)
-        description = u", ".join(str_attrset)
         change_data = self._get_change_data()
-        if change_data["note"]:
-            extras = {"comment": change_data["note"]}
-        else:
-            extras = None
         return self._object_changed("modify", ob, 
-                        description=description,
-                        extras=extras,
-                        date_active=change_data["date_active"])
-    def DOCUMENT_object_modify(self, ob, event):
-        change_data = self._get_change_data()
-        return self._DOCUMENT_object_changed("modify", ob, 
                 date_active=change_data["date_active"])
     
     def object_remove(self, ob, event):
@@ -211,41 +173,6 @@ class _AuditorFactory(object):
         log.warn("!+AUDIT_REMOVE not auditing deletion of [%s]" % (ob))
     
     def object_workflow(self, ob, event):
-        """
-        ob: origin domain workflowed object 
-        event: bungeni.core.workflow.states.WorkflowTransitionEvent
-            .object # origin domain workflowed object 
-            .source # source state
-            .destination # destination state
-            .transition # transition
-            .comment #
-        """
-        change_data = self._get_change_data()
-        # if note, attach it on object (if object supports such an attribute)
-        if change_data["note"]:
-            if hasattr(ob, "note"):
-                ob.note = change_data["note"]
-        # update object's workflow status date (if supported by object)
-        if hasattr(ob, "status_date"):
-            ob.status_date = change_data["date_active"] or datetime.now()
-        # as a "base" description, use human readable workflow state title
-        wf = IWorkflow(ob) # !+ adapters.get_workflow(ob)
-        description = wf.get_state(event.destination).title # misc.get_wf_state
-        # !+description is not being used by auditlog/timline views
-        # extras, that may be used e.g. to elaborate description at runtime
-        extras = {
-            "source": event.source, 
-            "destination": event.destination,
-            "transition": event.transition.id,
-            "comment": change_data["note"]
-        }
-        return self._object_changed("workflow", ob, 
-                        description=description,
-                        extras=extras,
-                        date_active=change_data["date_active"])
-        # description field is a "building block" for a UI description;
-        # extras/notes field becomes interpolation data
-    def DOCUMENT_object_workflow(self, ob, event):
         change_data = self._get_change_data()
         # update object's workflow status date (if supported by object)
         if hasattr(ob, "status_date"):
@@ -253,126 +180,50 @@ class _AuditorFactory(object):
         # as a "base" description, use human readable workflow state title
         #wf = IWorkflow(ob) # !+ adapters.get_workflow(ob)
         #description = wf.get_state(event.destination).title # misc.get_wf_state
-        return self._DOCUMENT_object_changed("workflow", ob, 
+        return self._object_changed("workflow", ob, 
                 date_active=change_data["date_active"],
                 note=change_data.get("note", None))
     
     
-    def object_version(self, ob, event):
+    def object_version(self, ob, root=False):
+        """ () -> domain.Version
+        NOTE: versioning of an object is not event based.
         """
-        ob: origin domain workflowed object 
-        event: bungeni.core.interfaces.VersionCreated
-            .object # origin domain workflowed object 
-            .message # title of the version object
-            .version # bungeni.models.domain.*Version
-            .versioned # bungeni.core.version.Versioned
-        """
-        session = Session()
-        # !+version_id At this point, new version instance (at event.version) is not yet 
-        # persisted to the db (or added to the session!) so its version_id is
-        # still None. We force the issue, by adding it to session and flushing.
-        session.add(event.version)
-        session.flush()
-        # as base description, record a the version object's title
-        description = event.message
-        # extras, that may be used e.g. to elaborate description at runtime        
-        extras = {
-            "version_id": event.version.version_id # !+version_id
-        }
-        return self._object_changed("version", ob, description, extras)
-        #vkls = getattr(domain, "%sVersion" % (ob.__class__.__name__))
-        #versions = session.query(vkls
-        #            ).filter(vkls.content_id==event.version.content_id
-        #            ).order_by(vkls.status_date).all()
-    
-    def object_reversion(self, ob, event):
-        return self._object_changed("reversion", ob,
-            description=event.message)
+        # action: ("version", "reversion")
+        change_data = self._get_change_data()
+        
+        if root:
+            note = change_data.get("note")
+            procedure = change_data.get("procedure", "m")
+        else:
+            # root version note is repeated for non-root-versions !+?
+            note = change_data.get("note")
+            # procedure="a" for non-root versions
+            procedure = "a"
+        # !+polymorphic_identity_multi REVERSION action MUST be same as "version"
+        return self._object_changed("version", ob,
+                date_active=change_data.get("date_active"),
+                note=note,
+                procedure=procedure)
     
     #
     
     def _object_changed(self, action, ob, 
-            description="", extras=None, date_active=None):
+            date_active=None,
+            note=None,
+            procedure="a",
+        ):
         """
-        description: 
-            this is a non-localized string as base description of the log item,
-            offers a (building block) for the description of this log item. 
-            UI components may use this in any of the following ways:
-            - AS IS, optionally localized
-            - as a building block for an elaborated description e.g. for 
-              generating descriptions that are hyperlinks to an event or 
-              version objects
-            - ignore it entirely, and generate a custom description via other
-              means e.g. from the "notes" extras dict.
-        
-        extras: !+CHANGE_EXTRAS(mr, dec-2010)
-            a python dict, containing "extra" information about the log item, 
-            with the "key/value" entries depending on the change "action"; 
-
-            Specific examples, for actions: 
-                workflow: self.object_workflow()
-                    source
-                    destination
-                    transition
-                    comment
-                version: self.object_version()
-                    version_id
-                modify: self.object_modify()
-                    comment
-            
-            For now, this dict is serialized (using repr(), values are assumed 
-            to be simple strings or numbers) as the value of the notes column, 
-            for storing in the db--but if and when the big picture of these 
-            extra keys is understood clearly then the changes table may be 
-            remodeled with dedicated table columns.
-        
         date_active:
             the UI for some changes allow the user to manually set the 
             date_active -- this is what should be used as the *effective* date 
             i.e. the date to be used for all intents and purposes other than 
             for data auditing. When not user-modified, the value should be equal 
-            to date_audit. 
-        """
-        domain.assert_valid_change_action(action)
-        oid, otype = self._getKey(ob)
-        user_id = get_db_user_id()
-        assert user_id is not None, "Audit error. No user logged in."
-        session = Session()
-        change = self.audit_class()
-        change.action = action
-        change.date_audit = datetime.now()
-        if date_active:
-            change.date_active = date_active
-        else:
-            change.date_active = change.date_audit
-        change.user_id = user_id
-        change.description = description
-        change.extras = extras
-        change.content_type = otype #!+ ?!
-        change.head = ob # attach change to parent object
-        change.status = ob.status # remember parent's status at time of change
-        # !+SUBITEM_CHANGES_PERMISSIONS(mr, jan-2012) permission on change 
-        # records for something like item[@draft]->file[@attached]->fileversion 
-        # need to remember also the root item's state, else when item later 
-        # becomes visible to clerk and others, the file itself will also become 
-        # visible to the clerk (CORRECT) but so will ALL changes on the file 
-        # while that file itself was @attached (WRONG!). May best be addressed
-        # when change persistence is reworked along with single document table.
-        session.add(change)
-        session.flush()
-        log.debug("AUDITED [%s] %s" % (action, change.__dict__))
-        return change.change_id
-    
-    def _DOCUMENT_object_changed(self, action, ob, 
-            date_active=None,
-            note=None
-        ):
-        """
+            to date_audit.
         """
         domain.assert_valid_change_action(action)
         user_id = get_db_user_id()
         assert user_id is not None, "Audit error. No user logged in."
-        
         # carry over a snapshot of head values
         def get_field_names_to_audit(kls):
             names_to_audit = []
@@ -392,22 +243,33 @@ class _AuditorFactory(object):
                 names_to_audit.append(vp_name)
             return names_to_audit
         
-        def copy_field_values(source, dest):
-            for name in get_field_names_to_audit(source.__class__):
+        def copy_field_values(head_cls, source, dest):
+            for name in get_field_names_to_audit(head_cls):
                 setattr(dest, name, getattr(source, name))
+        
+        # ensure real head object, in case we are dealing with reversioning 
+        # off an Audit instance
+        head_ob = ob
+        if action == "version" and issubclass(ob.__class__, domain.Audit):
+            # ob is an Audit instance, so need its head_ob
+            head_ob = ob.audit_head
         
         # audit snapshot - done first, to ensure a valid audit_id...
         au = self.audit_class()
-        au.audit_head = ob # attach audit log item to parent object
-        copy_field_values(ob, au)
+        au.audit_head = head_ob # attach audit log item to parent object
+        copy_field_values(head_ob.__class__, ob, au)
         session = Session()
         session.add(au)
         
-        # audit record meta data
+        # change/audit record
+        # !+version Version instances are created as Change instances!
         ch = domain.Change()
+        ch.seq = 0 # !+ reset below, to avoid sqlalchemy violates not-null constraint
         ch.audit = au # ensures ch.audit_id, ch.note.object_id
         ch.user_id = user_id
         ch.action = action
+        ch.seq = self._get_seq(ch)
+        ch.procedure = procedure
         ch.date_audit = datetime.now()
         if date_active:
             ch.date_active = date_active
@@ -416,15 +278,58 @@ class _AuditorFactory(object):
         if note:
             ch.note = note
         
+        # !+SUBITEM_CHANGES_PERMISSIONS(mr, jan-2012) permission on change 
+        # records for something like item[@draft]->file[@attached]->fileversion 
+        # need to remember also the root item's state, else when item later 
+        # becomes visible to clerk and others, the file itself will also become 
+        # visible to the clerk (CORRECT) but so will ALL changes on the file 
+        # while that file itself was @attached (WRONG!). May best be addressed
+        # when change persistence is reworked along with single document table.
+        
         session.flush()
         log.debug("AUDIT [%s] %s" % (au, au.__dict__))
         log.debug("CHANGE [%s] %s" % (action, ch.__dict__))
-        return au.audit_id
+        return ch
     
     #
     
+    def _get_seq(self, ch):
+        """Determine and return a next seq number for this (head, action).
+        """
+        ''' !+ALTERNATE_QUERY_CHANGE_SEQ_MAX, a little faster than head.changes?
+        from time import time
+        t0 = time() # via query using rdb.func.max
+        head_id_column_name = ch.audit.head_id_column_name
+        audit_tbl = rdb.orm.object_mapper(ch.audit).local_table
+        max_seq_alt = Session().query(rdb.func.max(domain.Change.seq)
+            ).join(
+                (audit_tbl, domain.Change.audit_id == audit_tbl.c.audit_id)
+            ).filter(
+                rdb.sql.expression.and_(
+                    domain.Change.action == ch.action,
+                    audit_tbl.c[head_id_column_name] == 
+                        getattr(ch.audit, head_id_column_name)
+                )).scalar() or 0
+        t1 = time() # via head.changes
+        '''
+        head = ch.audit.audit_head # ch.head
+        seqs_for_action_to_date = [ c.seq for c in head.changes 
+            if c.action == ch.action and c.seq is not None] or [0]
+        max_seq = max(seqs_for_action_to_date)
+        ''' !+ALTERNATE_QUERY_CHANGE_SEQ_MAX
+        t2 = time()
+        print "TIME to determine CHANGE SEQ MAX for (%s=%s, %s)" % (
+            head_id_column_name, getattr(ch.audit, head_id_column_name), ch.action)
+        print "    via RDB.FUNC.MAX = %s" % (t1 - t0)
+        print "    via HEAD.CHANGES = %s" % (t2 - t1)
+        assert max_seq == max_seq_alt, \
+            "Results form alternate ways to get seq are different: %s, %s" % (
+                max_seq_alt, max_seq)
+        '''
+        return max_seq + 1
+    
     def _getKey(self, ob):
-        mapper = orm.object_mapper(ob)
+        mapper = rdb.orm.object_mapper(ob)
         primary_key = mapper.primary_key_from_instance(ob)[0]
         return primary_key, unicode(ob.__class__.__name__)
     
@@ -460,13 +365,8 @@ def set_auditor(kls):
     name = kls.__name__
     auditor_name = "%sAuditor" % (name)
     log.debug("Setting AUDITOR %s [for type %s]" % (auditor_name, name))
-    
-    if IDocument.implementedBy(kls): # !+DOCUMENT
-        audit_kls = getattr(domain, "%sAudit" % (name))
-        audit_tbl = getattr(schema, domain.get_audit_table_name(kls))
-    else:
-        audit_kls = getattr(domain, "%sChange" % (name))
-        audit_tbl = getattr(schema, "%s_changes" % (schema.un_camel(name)))
+    audit_kls = getattr(domain, "%sAudit" % (name))
+    audit_tbl = getattr(schema, domain.get_audit_table_name(kls))
     globals()[auditor_name] = _AuditorFactory(audit_tbl, audit_kls)
 
 for kls in domain.CUSTOM_DECORATED["auditable"]:

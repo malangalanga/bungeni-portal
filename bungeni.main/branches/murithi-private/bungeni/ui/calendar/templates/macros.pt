@@ -90,7 +90,7 @@
 	    <tr tal:repeat="item options/items" tal:attributes="id item/name">
 	      <td class="item"
 		  tal:define="discussion_action item/discussion_action;
-			      body_text item/discussion/body_text">
+			      body_text item/discussion/body">
 		<span tal:condition="not:item/heading" tal:content="item/type" />
 		<tal:block tal:condition="not:item/heading">:</tal:block>
 		<a rel="item" tal:attributes="name item/name;
@@ -226,7 +226,7 @@
                                 today_class python: options['day']['today'] and 'today' or None"
                     tal:attributes="rowspan sitting/span|nothing;
                                     class string:${sitting/class|string:} ${today_class};
-                                    id string:sitting-${sitting/record/group_sitting_id}|nothing"
+                                    id string:sitting-${sitting/record/sitting_id}|nothing"
                     tal:condition="python: sitting is not None">
                   <tal:sitting condition="sitting">
                     <div class="header">
@@ -322,7 +322,7 @@
                                 today_class python: options['days'][day]['today'] and 'today' or None"
                     tal:attributes="rowspan sitting/span|nothing;
                                     class string:${sitting/class|string:} ${today_class};
-                                    id string:sitting-${sitting/record/group_sitting_id}|nothing"
+                                    id string:sitting-${sitting/record/sitting_id}|nothing"
                     tal:condition="python: sitting is not None">
                   <tal:sitting condition="sitting">
                     <div class="header">

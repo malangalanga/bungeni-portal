@@ -59,44 +59,40 @@ def setup_db():
     schema.metadata.drop_all()
     schema.metadata.create_all()
     schema.metadata.reflect()
-    schema.QuestionSequence.create(db) 
-    schema.MotionSequence.create(db)
-    schema.RegistrySequence.create(db)
-    
-    schema.AgendaItemRegistrySequence.create(db)
-    schema.QuestionRegistrySequence.create(db)
-    schema.MotionRegistrySequence.create(db)
-    schema.BillRegistrySequence.create(db)
-    schema.TabledDocumentRegistrySequence.create(db)
-    schema.ReportRegistrySequence.create(db)
-    
-    schema.tabled_documentSequence.create(db)
     security.metadata.bind = db
     security.metadata.drop_all()
     security.metadata.create_all()
     return db
 
+# !+SITTING_VOCABULARIES_XML (mr, apr-2012) whoever added the vdex vocabs that 
+# obsoleted this should update this, and enhancing it for added sitting columns 
+# activity_type  | meeting_type | convocation_type !! Tests broken...
 def create_sitting(group_id=1, language="en"):
     """Sitting to schedule content."""
     
     session = Session()
     
-    st = domain.GroupSittingType()
-    st.group_sitting_type = u"morning"
+    st = domain.SittingType()
+    st.sitting_type = u"morning"
     st.start_time = datetime.time(8,30)
     st.end_time = datetime.time(12,30)
     st.language = language
     session.add(st)
     session.flush()
-
-    sitting = domain.GroupSitting()
+    
+    sitting = domain.Sitting()
     sitting.start_date = datetime.datetime.now()
     sitting.end_date = datetime.datetime.now()
-    sitting.group_sitting_type_id = st.group_sitting_type_id
+    sitting.sitting_type_id = st.sitting_type_id
     sitting.group_id = group_id
     sitting.language = language
     session.add(sitting)
     session.flush()
     
     return sitting
+
+def get_audit_count_for_type(type_key):
+    session = Session()
+    return len([ au for au in session.query(domain.Audit).filter(
+            domain.Audit.audit_type==type_key) ])
 

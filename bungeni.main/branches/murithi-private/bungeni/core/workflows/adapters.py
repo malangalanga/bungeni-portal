@@ -26,15 +26,22 @@ __all__ = ["get_workflow"]
 
 
 class TI(object):
-    """Type Info, associates together the following attributes for a given type:
-            workflow_key
-            dedicated interface
-            workflow
-            domain type (model)
+    """TypeInfo, associates together the following attributes for a given type:
+            workflow_key 
+                the workflow file name, should be same as type_key
+                is None for non-workflowed types
+            workflow 
+                same workflow insatnce may be used by multiple types
+                is None for non-workflowed types
+            interface
+                the dedicated interface for the type
+            domain_model
+                the domain class
             descriptor
+                the descriptor for UI views for the type
     """
     def __init__(self, workflow_key, iface):
-        self.workflow_key = workflow_key # workflow file name
+        self.workflow_key = workflow_key
         self.interface = iface
         self.workflow = self.domain_model = self.descriptor = None
     def __str__(self):
@@ -44,28 +51,31 @@ class TI(object):
 - association of type key and dedicated interface are hard-wired here
 - ti.workflow/ti.domain_model/ti.descriptor are added dynamically when 
   loading workflows and descriptors
-Other Notes:
-- a workflow instance may be used by multiple types
-- some support types are not workflowed--but relevant info for these (type_key, 
-  ti.interface, ti.domain_model, ti.descriptor) are also dynamically added to 
-  this registry (but with None values for ti.workflow_key & ti.workflow)
+- ti.workflow_key AND orm polymorphic_identity value SHOULD be == type_key!
+
+Usage:
+    from bungeni.utils.capi import capi
+    capi.get_type_info(key) -> TypeInfo
+    capi.iter_type_info() -> iterator of all registered (key, TypeInfo)
 '''
 TYPE_REGISTRY = [
-    # (key, ti), order is important
-    # key is unique for each type, typically lower case of domain class name
+    # (key, ti)
+    # - order is relevant (dictates workflow loading order)
+    # - the type key, unique for each type, is the underscore-separated 
+    #   lowercase name of the domain_model (the domain class)
+    # - 
     ("user_address", TI("address", interfaces.IUserAddress)),
     ("group_address", TI("address", interfaces.IGroupAddress)),
-    # !+AttachedFile (mr, jul-2011)
+    # !+Attachment (mr, jul-2011)
     # a) must be loaded before any other type that *may* support attachments!
     # b) MUST support versions
-    ("attached_file", TI("attachedfile", interfaces.IAttachedFile)), #!+DOCUMENT attachment
-    ("attachment", TI("attachedfile", interfaces.IAttachedFile)),
+    ("attachment", TI("attachment", interfaces.IAttachment)),
     ("agenda_item", TI("agendaitem", interfaces.IAgendaItem)),
     ("bill", TI("bill", interfaces.IBill)),
     ("committee", TI("committee", interfaces.ICommittee)),
     ("event", TI("event", interfaces.IEvent)),
     ("group", TI("group", interfaces.IBungeniGroup)),
-    ("group_sitting", TI("groupsitting", interfaces.IGroupSitting)),
+    ("sitting", TI("sitting", interfaces.ISitting)),
     ("group_membership", TI("membership", interfaces.IBungeniGroupMembership)),
     ("heading", TI("heading", interfaces.IHeading)),
     ("motion", TI("motion", interfaces.IMotion)),
@@ -76,15 +86,6 @@ TYPE_REGISTRY = [
     ("user", TI("user", interfaces.IBungeniUser)),
     ("signatory", TI("signatory", interfaces.ISignatory)),
 ]
-def get_type_info(key, exception=KeyError):
-    """Get the TI instance for key. If not found raise exception (if not None).
-    where key:str is the domain type key, underscore-separated lowercase name.
-    """
-    for type_key, ti in TYPE_REGISTRY:
-        if type_key == key:
-            return ti
-    if exception is not None:
-        raise exception("TYPE_REGISTRY has no type registered for key: %s" % (key))
 
 # !+ dedicated interfaces for archetype incantations should be auto-generated, 
 # from specific workflow name/attr... e.g. via:
@@ -141,7 +142,7 @@ def apply_customization_workflow(name, ti):
         """Convert an underscore-separated word to CamelCase.
         """
         return "".join([ s.capitalize() for s in name.split("_") ])
-    from bungeni.models import domain, schema, orm
+    from bungeni.models import domain, orm
     def get_domain_kls(name):
         """Infer the target domain kls from the type key, following underscore 
         naming to camel case convention.
@@ -159,15 +160,8 @@ def apply_customization_workflow(name, ti):
     wf = ti.workflow
     def _apply_customization_workflow(kls):
         # decorate/modify domain/schema/mapping as needed
-        
-        # !+DOCUMENT same doc table, so no need to create changes/versions/etc...
-        if interfaces.IDocument.implementedBy(kls):
-            domain.DOCUMENT_configurable_domain(kls, wf)
-            orm.DOCUMENT_configurable_mappings(kls)
-        else:
-            kls = domain.configurable_domain(kls, wf)
-            schema.configurable_schema(kls)
-            orm.configurable_mappings(kls)
+        kls = domain.configurable_domain(kls, wf)
+        orm.configurable_mappings(kls)
         
         # !+ ok to call set_auditor(kls) more than once?
         # !+ following should be part of the domain.auditable(kls) logic
@@ -222,10 +216,6 @@ def register_workflow_adapters():
     # IWorkflowController
     component.provideAdapter(
         WorkflowController, (IWorkflowed,), IWorkflowController)
-    # IVersioned
-    component.provideAdapter(bungeni.core.version.ContextVersioned,
-        (interfaces.IVersionable,),
-        bungeni.core.interfaces.IVersioned)
     
     # Specific adapters, a specific iface per workflow.
     
@@ -237,7 +227,6 @@ def register_workflow_adapters():
 def _setup_all():
     """Do all workflow related setup.
     """
-
     load_workflows()
     # !+zcml_check_regenerate(mr, sep-2011) should be only done *once* and 
     # when *all* workflows are loaded i.e. only first time (on module import).

@@ -64,7 +64,7 @@ def formatted_user_email(user):
 
 def get_owner_pi(context):
     """Get the user who has been previously set as the owner of this item 
-    (must support IOwned i.e. ParliamentaryItem or AttachedFile).
+    (must support IOwned i.e. Doc or Attachment).
     """
     assert interfaces.IOwned.providedBy(context), \
         "Not an Owned (parliamentary) Item: %s" % (context)
@@ -81,7 +81,7 @@ def assign_owner_role(context, login):
     IPrincipalRoleMap(context).assignRoleToPrincipal("bungeni.Owner", login)
 
 def assign_owner_role_pi(context):
-    """Assign bungeni.Owner role to the ParliamentaryItem.
+    """Assign bungeni.Owner role to the Doc.
     """
     current_user_login = get_principal_id()
     owner_login = get_owner_login_pi(context)
@@ -96,10 +96,10 @@ def create_version(context):
     """Create a new version of an object and return it.
     Note: context.status is already updated to destination state.
     """
+    return bungeni.core.version.create_version(context)
     # !+capi.template_message_version_transition
-    message_template = "New version on workflow transition to: %(status)s"
-    message = message_template % context.__dict__
-    return bungeni.core.version.create_version(context, message, manual=False)
+    #message_template = "New version on workflow transition to: %(status)s"
+    #message = message_template % context.__dict__
 
 
 @bungeni_custom_errors
@@ -119,29 +119,45 @@ def get_mask(context):
         return None
 
 
-def set_pi_registry_number(context):
-    """A parliamentary_item's registry_number should be set on the item being 
+# !+REGISTRY(mr, apr-2012) this utility MUST ALWAYS be executed whenever a doc 
+# reaches a state that semantically implies "receive" !!
+def set_doc_registry_number(doc):
+    """A doc's registry_number should be set on the item being 
     submitted to parliament.
     """
-    mask = get_mask(context)
+    # never overwrite a previously set registry_number
+    if doc.registry_number is not None:
+        log.warn("Ignoring attempt to reset doc [%s] registry_number [%s]" % (
+            doc, doc.registry_number))
+        return
+    
+    mask = get_mask(doc)
     if mask == "manual" or mask is None:
         return
     
-    items = re.findall(r"\{(\w+)\}", mask)
+    # ensure that sequences are updated -- independently of whether these are 
+    # used by the mask string templates!
+    #registry_number_general = dbutils.get_next_reg() # all docs
+    #registry_number_specific = dbutils.get_next_prog(doc) # per doc type
+    registry_count_general, registry_count_specific = \
+        dbutils.get_registry_counts(doc.__class__)
+    registry_number_general = 1 + registry_count_general
+    registry_number_specific = 1 + registry_count_specific
+    type_key = doc.type
     
+    # !+ why not just use string.Template ?!
+    items = re.findall(r"\{(\w+)\}", mask)
     for name in items:
         if name == "registry_number":
-            mask = mask.replace("{%s}" % name, str(dbutils.get_next_reg()))
-            continue
+            mask = mask.replace("{%s}" % name, str(registry_number_general))
         if name == "progressive_number":
-            mask = mask.replace("{%s}" % name, 
-                                         str(dbutils.get_next_prog(context)))
-            continue
-        value = getattr(context, name)
-        mask = mask.replace("{%s}" % name, value)
+            mask = mask.replace("{%s}" % name, str(registry_number_specific))
+        if name == "type":
+            mask = mask.replace("{%s}" % name, type_key)
     
-    if context.registry_number == None:
-        dbutils.set_pi_registry_number(context, mask)
+    doc.registry_number = mask
+    
+
 
 is_pi_scheduled = dbutils.is_pi_scheduled
 
@@ -179,11 +195,6 @@ def getMotionSchedule(context):
 def getQuestionSubmissionAllowed(context):
     return prefs.getQuestionSubmissionAllowed()
 '''
-
-# bill
-def setBillPublicationDate(context):
-    if context.publication_date == None:
-        context.publication_date = datetime.date.today()
 
 '''
 # question, motion, bill, agendaitem, tableddocument
@@ -240,7 +251,7 @@ def dissolveChildGroups(groups, context):
         IWorkflowController(group).fireTransition("active-dissolved", 
             check_security=False)
         
-# groupsitting
+# sitting
 def schedule_sitting_items(context):
     
     # !+fireTransitionToward(mr, dec-2010) sequence of fireTransitionToward 
@@ -332,7 +343,7 @@ def pi_unset_signatory_roles(context, all=False):
                     owner_login = get_owner_login_pi(signatory)
                     log.debug("Removing signatory role for [%s] on "
                         "document: [%s]", 
-                        owner_login, signatory.item
+                        owner_login, signatory.head
                     )
                     assign_signatory_role(context, owner_login, unset=True)
             else:

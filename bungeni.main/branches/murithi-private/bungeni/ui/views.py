@@ -4,6 +4,9 @@ from bungeni.models.utils import get_db_user_id
 from datetime import datetime, timedelta
 from zope.publisher.browser import BrowserView
 
+# !+ register version views
+import bungeni.ui.versions
+
 
 class StoreNowEditView(BrowserView):
     """View that is periodically called
@@ -30,7 +33,7 @@ class StoreNowEditView(BrowserView):
             session.add(currently_editing_document)
 
         # Assigning current document id
-        document_id = self.context.parliamentary_item_id
+        document_id = self.context.doc_id
         currently_editing_document.currently_editing_id = document_id
 
         # And the current date and time

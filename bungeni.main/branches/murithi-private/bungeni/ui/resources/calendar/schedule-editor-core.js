@@ -75,16 +75,31 @@ YAHOO.bungeni.scheduling = function(){
     }
 
     var handlers = function(){
+        /**
+         * @method setUnsavedChanges
+         * @description Sets a flag to indicate unsaved changes.
+         * Flag used to warn user of unsaved changes when navigating away from
+         * scheduler page.
+         **/
         var setUnsavedChanges = function(args){
             YAHOO.bungeni.unsavedChanges = true;
         }
 
+        /**
+         * @method customSelectRow
+         * @description conditional selection of rows on agenda datatable
+         **/
         var customSelectRow = function(args){
             var target_column = this.getColumn(args.target);
             this.unselectAllRows();
             this.selectRow(this.getRecord(args.target));
         }
         
+        /**
+         * @method renderSchedulerControls
+         * @description Renders buttons at bottom of agenda datatable to 
+         * perform global actions on the agenda
+         **/
         var renderScheduleControls = function(args){
             var container = YAHOO.bungeni.scheduling.Layout.layout.getUnitByPosition("bottom").body;
             var save_button = new YAHOO.widget.Button({
@@ -96,6 +111,11 @@ YAHOO.bungeni.scheduling = function(){
             });
             this.unsubscribe("initEvent", renderScheduleControls);
         }
+        
+        /**
+         * @method saveSchedule
+         * @description Saves the agenda to bungeni remote database
+         **/
         var saveSchedule = function(args){
             var itemsDataTable = YAHOO.bungeni.schedule.oDt;
             var record_set = itemsDataTable.getRecordSet();
@@ -128,6 +148,10 @@ YAHOO.bungeni.scheduling = function(){
             }
         }
 
+        /**
+         * @method populateScheduledKeys
+         * @description Generates a cache of keys from items already on agenda
+         **/
         var populateScheduledKeys = function(request, response, payload){
             YAHOO.bungeni.scheduled_item_keys = new Array();
             YAHOO.bungeni.reloadView = !Boolean(response.results.length);
@@ -140,12 +164,63 @@ YAHOO.bungeni.scheduling = function(){
             return true;
         }
 
+
+        /**
+         * @method refreshCells
+         * @description Re-renders cells whose markup should change when a new
+         * item is added to the agenda.
+         **/
+        var refreshCells = function(index, next, deleted){
+            var sDt = YAHOO.bungeni.scheduling.getScheduleTable();
+            var sSize = sDt.getRecordSet().getLength();
+            if(deleted){
+                var update_index = (index==sSize)?(index-1):index;
+            }else if(next){
+                var update_index = index?(index+1):1;
+            }else{
+                var update_index = index?(index-1):0;
+            }
+            record = sDt.getRecord(update_index);
+            if(record){
+                window.setTimeout(function(){
+                        sDt.updateCell(record, 
+                            sDt.getColumn(Columns.ROW_CONTROLS)
+                        );
+                    }, 100
+                );
+            }
+        }
+
+        /**
+         * @method refreshRows
+         * @description Refreshes all rows on datatable to reflect cell changes.
+         * This is a workaround around timing issues with addRow(s) events
+         */
+         var refreshRows = function(){
+            var sDt = YAHOO.bungeni.scheduling.getScheduleTable();
+            var sSize = sDt.getRecordSet().getLength();
+            for (index=0; index<sSize; index++){
+                sDt.updateRow(index, sDt.getRecord(index).getData());
+            }
+         }
+
+        /**
+         * @method refreshDeleted
+         * @description Fire off cell refresh operation after row deletion
+         **/
+        var refreshDeleted = function(args){
+            YAHOO.bungeni.scheduling.handlers.refreshCells(args.recordIndex, false, true);
+        }
+
         return {
             setUnsavedChanges: setUnsavedChanges,
             customSelectRow: customSelectRow,
             renderScheduleControls: renderScheduleControls,
             saveSchedule: saveSchedule,
             populateScheduledKeys: populateScheduledKeys,
+            refreshCells: refreshCells,
+            refreshRows: refreshRows,
+            refreshDeleted: refreshDeleted,
         }
     }();
     var Layout = { layout:null }
@@ -228,7 +303,6 @@ YAHOO.bungeni.scheduling = function(){
                 dataTable.subscribe("initEvent", 
                     YAHOO.bungeni.agendaconfig.afterDTRender
                 );
-                dataTable.subscribe("initEvent", Handlers.attachContextMenu);
                 dataTable.doBeforeLoadData  = YAHOO.bungeni.scheduling.handlers.populateScheduledKeys;
                 dataTable.subscribe("rowAddEvent", 
                     YAHOO.bungeni.scheduling.handlers.setUnsavedChanges
@@ -236,10 +310,13 @@ YAHOO.bungeni.scheduling = function(){
                 dataTable.subscribe("rowsAddEvent", 
                     YAHOO.bungeni.scheduling.handlers.setUnsavedChanges
                 );
-                dataTable.subscribe("rowDeleteEvent", 
+                dataTable.subscribe("rowDeleteEvent",
                     YAHOO.bungeni.scheduling.handlers.setUnsavedChanges
                 );
-                dataTable.subscribe("rowUpdateEvent", 
+                dataTable.subscribe("rowDeleteEvent",
+                    YAHOO.bungeni.scheduling.handlers.refreshDeleted
+                );
+                dataTable.subscribe("rowUpdateEvent",
                     YAHOO.bungeni.scheduling.handlers.setUnsavedChanges
                 );
                 resizable_panel.on("endResize", function(){

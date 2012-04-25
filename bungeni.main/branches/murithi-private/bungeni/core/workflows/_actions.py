@@ -55,16 +55,13 @@ def __pi_create(context):
 def __pi_submit(context):
     if len(context.signatories) > 0:
         __make_owner_signatory(context)
-    # !+NUMBER_GENERATION(ah, nov-2011) registry number is generated on receive, 
-    # not submit. This needs to be eventually factored into configuration
-    #utils.set_pi_registry_number(context)
     utils.pi_update_signatories(context)
     utils.pi_unset_signatory_roles(context)
 
 # !+NUMBER_GENERATION(ah, nov-2011) - used for parliamentary item transitions
-# to recieved state 
+# to recieved state
 def __pi_received(context):
-    utils.set_pi_registry_number(context)
+    utils.set_doc_registry_number(context)
 
 def __pi_redraft(context):
     """Signatory operations on redraft - Unsetting signatures e.t.c
@@ -111,8 +108,6 @@ _bill_draft = _bill_working_draft = __pi_create
 _bill_redraft = __pi_redraft
 _bill_submitted = __pi_submit
 
-def _bill_gazetted(context):
-    utils.setBillPublicationDate(context)
 
 # group
 
@@ -153,12 +148,12 @@ _parliament_active = _group_active
 _parliament_dissolved = _group_dissolved
 
 
-# groupsitting
+# sitting
 
-def _groupsitting_draft_agenda(context):
+def _sitting_draft_agenda(context):
     dbutils.set_real_order(context)
         
-def _groupsitting_published_agenda(context):
+def _sitting_published_agenda(context):
     utils.schedule_sitting_items(context)
 
 
@@ -168,8 +163,8 @@ _motion_draft = _motion_working_draft = __pi_create
 _motion_submitted = __pi_submit
 _motion_redraft = __pi_redraft
 
-def _motion_admissible(context):
-    dbutils.setMotionSerialNumber(context)
+def _motion_admissible(motion):
+    dbutils.set_doc_type_number(motion)
 
 
 # question
@@ -195,11 +190,11 @@ def _question_response_pending(context):
     """
     utils.setMinistrySubmissionDate(context)
 
-def _question_admissible(context):
+def _question_admissible(question):
     """The question is admissible and can be send to ministry,
     or is available for scheduling in a sitting.
     """
-    dbutils.setQuestionSerialNumber(context)
+    dbutils.set_doc_type_number(question)
 
 
 # tableddocument
@@ -211,9 +206,8 @@ _tableddocument_redraft = __pi_redraft
 def _tableddocument_adjourned(context):
     utils.setTabledDocumentHistory(context)
 
-def _tableddocument_admissible(context):
-    dbutils.setTabledDocumentSerialNumber(context)
-
+def _tableddocument_admissible(tabled_document):
+    dbutils.set_doc_type_number(tabled_document)
 
 # user
 
@@ -234,8 +228,8 @@ def __make_owner_signatory(context):
     if context.owner_id not in [sgn.user_id for sgn in signatories._query]:
         session = Session()
         signatory = signatories._class()
-        signatory.user_id = context.owner_id,
-        signatory.item_id = context.parliamentary_item_id
+        signatory.user_id = context.owner_id
+        signatory.head_id = context.doc_id
         session.add(signatory)
         session.flush()
         zope.event.notify(zope.lifecycleevent.ObjectCreatedEvent(signatory))
@@ -259,16 +253,16 @@ def _signatory_awaiting_consent(context):
     """Done when parent object is already in submitted_signatories stage.
     Otherwise roles assignment is handled by `__pi_assign_signatory_roles`
     """
-    if context.item.status == u"submitted_signatories":
+    if context.head.status == u"submitted_signatories":
         owner_login = utils.get_owner_login_pi(context)
         utils.assign_owner_role(context, owner_login)
-        utils.assign_signatory_role(context.item, owner_login)
+        utils.assign_signatory_role(context.head, owner_login)
 
 def _signatory_rejected(context):
     #!+SIGNATORIES(mb, aug-2011) Unsetting of roles now handled when
     # document is submitted or redrafted. Deprecate this action if not needed.
     #owner_login = utils.get_owner_login_pi(context)
-    #utils.assign_signatory_role(context.item, owner_login, unset=True)
+    #utils.assign_signatory_role(context.head, owner_login, unset=True)
     return
 
 _signatory_withdrawn = _signatory_rejected

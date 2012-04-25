@@ -68,6 +68,7 @@
   <include package="ore.yui"/>
   <include package="ore.yuiwidget"/>
   <include package="zdhtmlxscheduler"/>
+  <include package="z3tinymce"/>
   <!-- Transcripts -->
   <!--include package="bungeni.transcripts"/ -->
   <browser:defaultView
@@ -107,7 +108,7 @@
        factory="bungeni.ui.adaptors.BillAnnotationAdaptor"
        /-->
     <!-- Experimental transcripts support -->
-   <!--class class="bungeni.models.domain.GroupSitting">
+   <!--class class="bungeni.models.domain.Sitting">
     <implements
        interface="bungeni.transcripts.interfaces.ITranscribable"
        />

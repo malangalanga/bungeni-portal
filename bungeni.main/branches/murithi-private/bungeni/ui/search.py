@@ -37,10 +37,12 @@ Supported xapian query operators
  |  OP_XOR = 3
  |
 """
+# !+ CLEAN UP THIS FILE, MINIMALLY AT LEAST THE SRC CODE FORMATTING !
 
 import time
 import urllib
 import xapian as _xapian
+from urlparse import urljoin
 
 from zope import interface, schema, component
 from zope.publisher.browser import BrowserView
@@ -70,19 +72,21 @@ from bungeni.core import index
 from bungeni.alchemist import Session
 from bungeni.ui import forms
 from bungeni.core.translation import translate_obj
-from bungeni.ui.utils.url import get_section_name
+from bungeni.ui.utils.url import get_section_name, absoluteURL
 from bungeni.models import domain
+
+from ore.alchemist.interfaces import IAlchemistContainer
 
 MINIMAL_PARTIAL_QUERY = 4
 
 ALLOWED_TYPES = {'workspace': ('Question', 'Motion', 'TabledDocument',\
                                'Bill', 'AgendaItem'),\
                  'business': ('Question', 'Motion', 'Committee', 'Bill', \
-                              'TabledDocument', 'AgendaItem', 'AttachedFile'),
+                              'TabledDocument', 'AgendaItem', 'Attachment'),
                  'archive': ('Question', 'Motion', 'Committee', \
                              'Bill', 'TabledDocument', 'AgendaItem', \
                              'Parliament', 'PoliticalGroup',
-                             'MemberOfParliament', "AttachedFile"),
+                             'MemberOfParliament', "Attachment"),
                  'members': ('MemberOfParliament', 'PoliticalGroup'),
                  'admin': ('Question', 'Motion', 'Committee', 'Bill', \
                            'TabledDocument', 'AgendaItem', 'Parliament', \
@@ -116,27 +120,29 @@ class ISearch(interface.Interface):
 
 class IAdvancedSearch(ISearch):
 
-    language = schema.Choice(title=_("Language"),
-                             values=("en", "fr", "pt", "sw", "it", "en-ke"),
-                             required=False)
-    content_type = schema.Choice(title=_("Content type"),
-                                 values=("Question",
-                                         "MemberOfParliament",
-                                         "Motion",
-                                         "Committee",
-                                         "User",
-                                         "Parliament",
-                                         "AgendaItem",
-                                         "TabledDocument",
-                                         "PoliticalParty",
-                                         "Goverment",
-                                         "Ministry",
-                                         "Report",
-                                         "AttachedFile",
-                                         "Bill",
-                                         "GroupSitting",
-                                         "PoliticalGroup"), required=False)
-
+    language = schema.Choice(
+        title=_("Language"),
+        values=("en", "fr", "pt", "sw", "it", "en-ke"),
+        required=False)
+    content_type = schema.Choice(
+        title=_("Content type"),
+        values=("Question",
+            "MemberOfParliament",
+            "Motion",
+            "Committee",
+            "User",
+            "Parliament",
+            "AgendaItem",
+            "TabledDocument",
+            "PoliticalParty",
+            "Goverment",
+            "Ministry",
+            "Report",
+            "Attachment",
+            "Bill",
+            "Sitting",
+            "PoliticalGroup"),
+        required=False)
     status_date = schema.Date(title=_("Status date"), required=False)
 
 
@@ -187,25 +193,25 @@ class ParliamentaryItemToSearchResult(object):
 
     @property
     def title(self):
-        return self.context.short_name
+        return self.context.short_title
 
     @property
     def annotation(self):
-        return self.context.body_text
+        return self.context.body
 
 
-class AttachedFileToSearchResult(object):
+class AttachmentToSearchResult(object):
 
     def __init__(self, context):
         self.context = context
 
     @property
     def title(self):
-        return self.context.file_title
+        return self.context.title
 
     @property
     def annotation(self):
-        return self.context.file_description
+        return self.context.description
 
 
 class GroupToSearchResult(object):
@@ -325,14 +331,14 @@ class Search(forms.common.BaseForm, ResultListing, HighlightMixin):
     def get_title(self, item):
         return "%s %s" % (
             translate_obj(item.head,
-                          self.request.locale.id.language).short_name,
+                          self.request.locale.id.language).short_title,
             _(u"changes from"))
 
     def get_url(self, item):
         site = getSite()
         base_url = absoluteURL(site, self.request)
         return "%s/business/%ss/obj-%s" % (
-            base_url, item.head.type, item.head.parliamentary_item_id)
+            base_url, item.head.type, item.head.doc_id)
 
     def get_user_subscriptions(self):
         """ Getting user subscribed items
@@ -346,13 +352,24 @@ class Search(forms.common.BaseForm, ResultListing, HighlightMixin):
     def _searchresults(self):
         section = get_section_name()
         subqueries = []
-
-        # Filter items allowed in current section
-        for tq in ALLOWED_TYPES[section]:
-            subqueries.append(self.searcher.query_field('object_type', tq))
-
-        type_query = self.searcher.query_composite(self.searcher.OP_OR,
-                                                   subqueries)
+        
+        type_filter = ""
+        
+        if IAlchemistContainer.providedBy(self.context):
+            for t in ALLOWED_TYPES["business"]:
+                iface = resolve.resolve("bungeni.models.interfaces.I%sContainer"%t)
+                if iface.providedBy(self.context):
+                    type_filter = t
+                    break
+        
+        if type_filter:
+            type_query = self.searcher.query_field('object_type', type_filter)
+        else:
+            # Filter items allowed in current section
+            for tq in ALLOWED_TYPES[section]:
+                subqueries.append(self.searcher.query_field('object_type', tq))
+                type_query = self.searcher.query_composite(self.searcher.OP_OR, 
+                                                           subqueries)
 
         self.query = self.searcher.query_composite(self.searcher.OP_AND,
                                                    (self.query, type_query,))
@@ -374,8 +391,8 @@ class Search(forms.common.BaseForm, ResultListing, HighlightMixin):
     @form.action(label=_(u"Search"), name="search")
     def handle_search(self, action, data):
         self.searcher = component.getUtility(interfaces.IIndexSearch)()
-        search_term = data['full_text']
-
+        search_term = data["full_text"]
+        
         if not search_term:
             self.status = _(u"Invalid Query")
             return
@@ -440,7 +457,12 @@ class Pager(object):
 
 class PagedSearch(Pager, Search):
     template = ViewPageTemplateFile('templates/paged-search.pt')
-
+    
+    @property
+    def advanced_search_url(self):
+        base_url = absoluteURL(getSite(), self.request)
+        section = get_section_name()
+        return urljoin(base_url, section) + "/advanced-search"
 
 def get_users_vocabulary():
     session = Session()

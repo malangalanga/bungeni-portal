@@ -16,11 +16,11 @@
                 amc_signatories
                 amc_attachments
                 amc_events
-                    assignedgroups
                     submission_date
                     admissible_date
                                     
                 owner
+                files
                 signatories
                 attachments
                 events
@@ -90,178 +90,112 @@
     </class>
     
     
-    
-    <!-- parliamentary items -->
-
-    <class class=".domain.ParliamentaryItem">
-        <!-- domain / orm / schema -->
-        <require permission="zope.View"
-            attributes="
-                files
-                signatories
-                event
-                submission_date
-                admissible_date
-                
-                owner
-                itemsignatories
-                attached_files
-                
-                parliamentary_item_id
-                parliament_id
-                owner_id
-                language
-                short_name
-                full_name
-                body_text
-                description
-                subject
-                coverage
-                status
-                status_date
-                registry_number
-                uri
-                receive_notification
-                type
-                geolocation
-                timestamp
-                custom1
-                custom2
-                custom3
-                custom4
-            "
-        />
-        <require permission="zope.ManageContent"
-            attributes="note"
-        />
-        <require permission="zope.View"
-            set_attributes="timestamp"
-        /><!-- !+TIMESTAMP(mr, jul-2011) granting edit on timestamp to anyone 
-        with view privilege, as an item, while not essentuially being editable 
-        may still be affected by the user's action e.g transited to another 
-        state without "any modifications". Previous to circa r8460, this was 
-        not an issue, and the user was being allowed to set timestamp even if
-        no edit permission on the item.
-        -->
-    </class>
-    
     <class class=".domain.Bill">
-        <require like_class=".domain.ParliamentaryItem" />
+        <require like_class=".domain.Doc" />
         <require permission="zope.View"
             attributes="
                 bill_id
                 doc_type
                 ministry_id
-                identifier
                 publication_date
             "
         />
         <require permission="bungeni.bill.Edit"
-            attributes="note" 
-        />
-        <require permission="bungeni.bill.Edit"
             set_attributes="
-                short_name
+                short_title
                 language
-                body_text
+                body
                 doc_type
                 summary
                 ministry_id
-                full_name
-                receive_notification
+                long_title
                 owner_id
-                note
             "
         />
     </class>
     
+    
     <class class=".domain.Question">
-        <require like_class=".domain.ParliamentaryItem" />
+        <require like_class=".domain.Doc" />
         <require permission="zope.View"
             attributes="
                 ministry
-                question_type
+                doc_type
                 response_type
                 
                 question_id
-                question_number
+                type_number
                 ministry_submit_date
-                supplement_parent_id
                 sitting_time
                 ministry_id
             "
-        />
-        <require permission="bungeni.question.Edit"
-            attributes="note" 
         />
         <require permission="bungeni.response.View"
             attributes="response_text"
         />
         <require permission="bungeni.question.Edit"
             set_attributes="
-                short_name
+                short_title
                 language
-                body_text
+                body
                 ministry_id
                 response_type
-                full_name
-                question_type
-                receive_notification
+                long_title
+                doc_type
                 owner_id
-                note
                 subject
             "
         />
         <!-- !+WORKFLOW_TRANSITION(ah, jan-2011) to be reviewed for now we 
             use the permission used for running transition  -->
-        <require permission="bungeni.question.wf.completed.admissible"
-            set_attributes="question_number"
-        />
+        <!--require permission="bungeni.question.wf.completed.admissible"
+            set_attributes="type_number"
+        /-->
         <require permission="bungeni.response.Edit"
             set_attributes="response_text" 
         />
     </class>
     
     <class class=".domain.Motion">
-        <require like_class=".domain.ParliamentaryItem" />
+        <require like_class=".domain.Doc" />
         <require permission="zope.View"
             attributes="
                 notice_date
-                motion_id
-                motion_number
-                public
-                seconder_id
-                party_id
             "
         />
         <require permission="bungeni.motion.Edit"
-            attributes="note"
-        />
-        <require permission="bungeni.motion.Edit"
             set_attributes="
-                parliamentary_item_id 
-                motion_id
                 owner_id
+                type
+                doc_type
+                doc_procedure
+                type_number
+                registry_number
+                uri
+                acronym
+                short_title
+                long_title
+                description
                 language
-                short_name
-                full_name
-                body_text
-                note
-                receive_notification
-                public
-                seconder_id
-                party_id
+                body
+                status
+                status_date
+                group_id
+                subject
+                coverage
+                geolocation
+                head_id
             "
         />
         <!-- !+WORKFLOW_TRANSITION(ah, jan-2011) was bungeni.historical.Edit 
             we use instead the permission used in the "approve" transition -->
-        <require permission="bungeni.motion.wf.completed.admissible"
-            set_attributes="motion_number"
-        />
+        <!--require permission="bungeni.motion.wf.completed.admissible"
+            set_attributes="type_number"
+        /-->
     </class>
     
     <class class=".domain.AgendaItem">
-        <require like_class=".domain.ParliamentaryItem" />
+        <require like_class=".domain.Doc" />
         <require permission="zope.View"
             attributes="
                 group
@@ -270,46 +204,33 @@
             "
         />
         <require permission="bungeni.agendaitem.Edit"
-            attributes="note"
-        />
-        <require permission="bungeni.agendaitem.Edit"
              set_attributes="
-                parliamentary_item_id 
+                doc_id 
                 owner_id
                 language
-                short_name
-                full_name
-                body_text
-                note
-                receive_notification
+                short_title
+                long_title
+                body
                 group_id
             "
         />
     </class>
     
     <class class=".domain.TabledDocument">
-        <require like_class=".domain.ParliamentaryItem" />
+        <require like_class=".domain.Doc" />
         <require permission="zope.View"
             attributes="
                 tabled_document_id
-                link
-                tabled_document_number
             "
         />
         <require permission="bungeni.tableddocument.Edit"
-            attributes="note"
-        />
-        <require permission="bungeni.tableddocument.Edit"
             set_attributes="
-                parliamentary_item_id 
+                doc_id 
                 owner_id
                 language
-                short_name
-                full_name
-                body_text
-                note
-                receive_notification
-                link
+                short_title
+                long_title
+                body
             "
         />
         <!-- !+WORKFLOW_TRANSITION(ah, jan-2011) was bungeni.historical.Edit 
@@ -389,7 +310,7 @@
                 bills
                 questions
                 motions
-                group_sittings
+                sittings
                 agendaitems
                 tableddocuments
                 preports
@@ -486,7 +407,7 @@
                 committeemembers
                 committeestaff
                 agendaitems
-                group_sittings
+                sittings
                 assigneditems
                 title_types
                 
@@ -650,15 +571,14 @@
     
     
     <!-- other -->
-    <class class=".domain.GroupSitting">
+    <class class=".domain.Sitting">
         <require permission="zope.View"
             attributes="
-                group_sitting_id
+                sitting_id
                 group_id
                 short_name
                 short_date
                 end_date
-                group_sitting_type_id
                 recurring_id
                 status
                 status_date
@@ -671,12 +591,11 @@
         />
         <require permission="bungeni.sitting.Edit"
             set_attributes="
-                group_sitting_id
+                sitting_id
                 group_id
                 short_name
                 short_date
                 end_date
-                group_sitting_type_id
                 recurring_id
                 status
                 status_date
@@ -689,17 +608,17 @@
         />
     </class>
     
-    <class class=".domain.GroupSittingAttendance">
+    <class class=".domain.SittingAttendance">
         <require permission="zope.View"
             attributes="
-                group_sitting_id
+                sitting_id
                 member_id
                 attendance_type_id
             "
         />
         <require permission="bungeni.sittingattendance.Edit"
             set_attributes="
-                group_sitting_id
+                sitting_id
                 member_id
                 attendance_type_id
             "
@@ -712,7 +631,7 @@
                 schedule_id
                 item_id
                 item_type
-                group_sitting_id
+                sitting_id
                 category_id
                 planned_order
                 real_order
@@ -725,7 +644,7 @@
             set_attributes="
                 item_id
                 item_type
-                group_sitting_id
+                sitting_id
                 category_id
                 planned_order
                 real_order
@@ -757,14 +676,14 @@
             attributes="
                 discussion_id
                 schedule_id
-                body_text sitting_time
+                body sitting_time
                 language
             "
         />
         <require permission="bungeni.sittingschedule.itemdiscussion.Edit"
             set_attributes="
                 item_id
-                body_text 
+                body
                 sitting_time
                 language
             "
@@ -809,35 +728,6 @@
         />
     </class>
     
-    <class class=".domain.AttachedFile">
-        <require permission="zope.View"
-            attributes="
-                attached_file_id
-                item_id
-                file_version_id
-                file_title
-                file_description
-                file_data
-                file_name
-                file_mimetype
-                status
-                status_date
-            "
-        />
-        <require permission="bungeni.fileattachment.Edit"
-            set_attributes="
-                attached_file_id
-                item_id
-                file_version_id
-                file_title
-                file_description
-                file_data
-                file_name
-                file_mimetype
-            "
-        />
-    </class>
-	
     <class class=".domain.User">
         <require permission="zope.View"
             attributes="

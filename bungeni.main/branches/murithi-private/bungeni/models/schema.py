@@ -35,6 +35,7 @@ def un_camel(name):
 un_camel.first_cap_re = re.compile("(.)([A-Z][a-z]+)")
 un_camel.all_cap_re = re.compile("([a-z0-9])([A-Z])")
 
+# !+ singular/plural still needed?
 def singular(pname):
     """Get the english singular of (plural) name.
     """
@@ -52,35 +53,7 @@ def plural(sname):
 plural.custom = {
     "user_address": "user_addresses",
     "group_address": "group_addresses",
-    "signatory": "signatories",
 }
-
-def configurable_schema(kls):
-    """Add tables, as per configured features for a domain type.
-    
-    Executed on adapters.load_workflow()
-    """
-    # assign interface (changes property added downstream)
-    entity_name = un_camel(kls.__name__)
-    tbl = globals()[plural(entity_name)]
-    # auditable
-    if interfaces.IAuditable.implementedBy(kls):
-        change_tbl_name = "%s_changes" % (entity_name)
-        globals()[change_tbl_name] = make_changes_table(tbl, metadata)
-    # versionable
-    if interfaces.IVersionable.implementedBy(kls):
-        assert change_tbl_name, "May not be IVersionable and not IAuditable"
-        version_tbl_name = "%s_versions" % (entity_name)
-        secondary_table = None
-        if interfaces.IBungeniParliamentaryContent.implementedBy(kls):
-            secondary_table = parliamentary_items
-        globals()[version_tbl_name] = make_versions_table(
-            tbl, metadata, secondary_table)
-    # attachmentable
-    if interfaces.IAttachmentable.implementedBy(kls):
-        # !+ current constrain
-        assert change_tbl_name, "May not be IAttachmentable and not IVersionable"
-
 
 # vertical properties
 
@@ -104,19 +77,21 @@ vp_translated_text = rdb.Table("vp_translated_text", metadata,
 # generic change information
 change = rdb.Table("change", metadata,
     rdb.Column("audit_id", rdb.Integer, 
-        rdb.ForeignKey("audit.audit_id"), 
+        rdb.ForeignKey("audit.audit_id"),
         primary_key=True),
-    rdb.Column("user_id", rdb.Integer, rdb.ForeignKey("users.user_id")),
-    rdb.Column("action", rdb.Unicode(16)),
-    # accumulative count, per (audit_head_id, action) e.g (head=123, "version")=1
-    rdb.Column("seq", rdb.Integer),
-    # !+procedure ? enum: manual/auto/...
+    rdb.Column("user_id", rdb.Integer, rdb.ForeignKey("users.user_id"), 
+        nullable=False),
+    rdb.Column("action", rdb.Unicode(16), nullable=False),
+    # accumulative count, per (change.audit.audit_head_id, change.action) 
+    # e.g default: 1 + max(seq(head, "version")), see ui.audit _get_seq()
+    rdb.Column("seq", rdb.Integer, nullable=False),
+    rdb.Column("procedure", rdb.String(1), default="a", nullable=False),
     # audit datetime, exclusively managed by the system, real datetime of 
     # when change was actually affected
     rdb.Column("date_audit", rdb.DateTime(timezone=False),
         #!+CATALYSE(mr, nov-2010) fails descriptor catalisation
         #default=functions.current_timestamp(),
-        server_default=(text("now()")),
+        server_default=text("now()"),
         nullable=False
     ),
     # user-modifiable effective datetime (defaults to audit_time);
@@ -125,7 +100,7 @@ change = rdb.Table("change", metadata,
     rdb.Column("date_active", rdb.DateTime(timezone=False),
         #!+CATALYSE(mr, nov-2010)
         #default=functions.current_timestamp(),
-        server_default=(text("now()")),
+        server_default=text("now()"),
         nullable=False
     ),
     
@@ -144,7 +119,23 @@ change = rdb.Table("change", metadata,
     
     #rdb.Column("root_status", rdb.Unicode(48)),
 )
-
+# tree to relate change actions across parent and child objects 
+# e.g. to snapshot a version tree of an object and its sub-objects. 
+# Constraint: all related changes must be of same "action".
+change_tree = rdb.Table("change_tree", metadata,
+    rdb.Column("parent_id", rdb.Integer, 
+        rdb.ForeignKey("change.audit_id"), 
+        primary_key=True,
+    ),
+    rdb.Column("child_id", rdb.Integer, 
+        rdb.ForeignKey("change.audit_id"), 
+        primary_key=True,
+    ),
+    rdb.CheckConstraint("""parent_id != child_id""", 
+        name="change_tree_check_not_same",
+    ),
+    #!+rdb.CheckConstraint(parent.change.action == child.change.action),
+)
 
 audit_sequence = rdb.Sequence("audit_sequence")
 audit = rdb.Table("audit", metadata,
@@ -196,7 +187,7 @@ def make_audit_table(table, metadata):
     )
     return audit_tbl
 
-
+''' !+DEC
 def make_changes_table(table, metadata):
     """Create an object log table for an object.
     """
@@ -217,7 +208,7 @@ def make_changes_table(table, metadata):
         rdb.Column("date_audit", rdb.DateTime(timezone=False),
             #!+CATALYSE(mr, nov-2010) fails descriptor catalisation
             #default=functions.current_timestamp(),
-            server_default=(text("now()")),
+            server_default=text("now()"),
             nullable=False
         ),
         # user-modifiable effective date, defaults to same value as audit date;
@@ -226,7 +217,7 @@ def make_changes_table(table, metadata):
         rdb.Column("date_active", rdb.DateTime(timezone=False),
             #!+CATALYSE(mr, nov-2010)
             #default=functions.current_timestamp(),
-            server_default=(text("now()")),
+            server_default=text("now()"),
             nullable=False
         ),
         rdb.Column("description", rdb.UnicodeText),
@@ -287,10 +278,10 @@ def make_versions_table(table, metadata, secondary_table=None):
         useexisting=False
     )
     return versions_table
-
+'''
 # !+/PARAMETRIZABLE_DOCTYPES
 
-
+'''
 def make_vocabulary_table(vocabulary_prefix, metadata, table_suffix="_types",
         column_suffix="_type"
     ):
@@ -305,15 +296,7 @@ def make_vocabulary_table(vocabulary_prefix, metadata, table_suffix="_types",
         ),
         rdb.Column("language", rdb.String(5), nullable=False),
     )
-
-
-# Progressive number sequences for each parliamentary item type.
-AgendaItemRegistrySequence = rdb.Sequence("agendaitem_registry_sequence", metadata=metadata)
-QuestionRegistrySequence = rdb.Sequence("question_registry_sequence", metadata=metadata)
-MotionRegistrySequence = rdb.Sequence("motion_registry_sequence", metadata=metadata)
-BillRegistrySequence = rdb.Sequence("bill_registry_sequence", metadata=metadata)
-TabledDocumentRegistrySequence = rdb.Sequence("tableddocument_registry_sequence", metadata=metadata)
-ReportRegistrySequence = rdb.Sequence("report_registry_sequence", metadata=metadata)
+'''
 
 #######################
 # Users 
@@ -373,14 +356,13 @@ admin_users = rdb.Table("admin_users", metadata,
     )
 )
 
-# associations table for many-to-many relation between user and 
-# parliamentary item
-users_parliamentary_items = rdb.Table("users_parliamentary_items", metadata,
+# associations table for many-to-many relation between user and doc
+user_doc = rdb.Table("user_doc", metadata,
     rdb.Column("users_id", rdb.Integer,
         rdb.ForeignKey("users.user_id")
     ),
-    rdb.Column("parliamentary_items_id", rdb.Integer,
-        rdb.ForeignKey("parliamentary_items.parliamentary_item_id")
+    rdb.Column("doc_id", rdb.Integer,
+        rdb.ForeignKey("doc.doc_id")
     )
 )
 
@@ -400,14 +382,14 @@ user_delegations = rdb.Table("user_delegations", metadata,
 currently_editing_document = rdb.Table("currently_editing_document", metadata,
     rdb.Column("user_id", rdb.Integer,
         rdb.ForeignKey("users.user_id"),
-        primary_key=True
+        primary_key=True # !+ so, a user can only edit only ONE document at a TIME ?!?!?!?!?
     ),
     rdb.Column("currently_editing_id", rdb.Integer,
-        rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
-        nullable=False
+        rdb.ForeignKey("doc.doc_id"),
+        nullable=False,
     ),
     rdb.Column("editing_date", rdb.DateTime(timezone=False)) 
-) 
+)
 
 #!+TYPES_CUSTOM member_election_types = make_vocabulary_table("member_election", metadata)
 
@@ -520,7 +502,7 @@ groups = rdb.Table("groups", metadata,
     # Workflow State
     rdb.Column("status", rdb.Unicode(32)),
     rdb.Column("status_date", rdb.DateTime(timezone=False),
-        server_default=(text("now()")),
+        server_default=text("now()"),
         nullable=False
     ),
     rdb.Column("start_date", rdb.Date, nullable=False),
@@ -647,7 +629,7 @@ user_group_memberships = rdb.Table("user_group_memberships", metadata,
     # Workflow State
     rdb.Column("status", rdb.Unicode(32)),
     rdb.Column("status_date", rdb.DateTime(timezone=False),
-        server_default=(text("now()")),
+        server_default=text("now()"),
         nullable=False
     ),
     rdb.Column("start_date", rdb.Date,
@@ -745,7 +727,7 @@ def _make_address_table(metadata, fk_key="user"):
         # Workflow State -> determins visibility
         rdb.Column("status", rdb.Unicode(16)),
         rdb.Column("status_date", rdb.DateTime(timezone=False),
-            server_default=(text("now()")),
+            server_default=text("now()"),
             nullable=False
         ),
     )
@@ -771,26 +753,23 @@ parliament_sessions = rdb.Table("sessions", metadata,
     rdb.Column("language", rdb.String(5), nullable=False),
 )
 
-group_sittings = rdb.Table("group_sittings", metadata,
-    rdb.Column("group_sitting_id", rdb.Integer, primary_key=True),
+sitting = rdb.Table("sitting", metadata,
+    rdb.Column("sitting_id", rdb.Integer, primary_key=True),
     rdb.Column("group_id", rdb.Integer,
         rdb.ForeignKey("groups.group_id"),
         nullable=False
     ),
-    rdb.Column("short_name", rdb.Unicode(512)), #!+ACRONYM
+    rdb.Column("short_name", rdb.Unicode(512), nullable=True),
     rdb.Column("start_date", rdb.DateTime(timezone=False), nullable=False),
     rdb.Column("end_date", rdb.DateTime(timezone=False), nullable=False),
-    rdb.Column("group_sitting_type_id", rdb.Integer,
-        rdb.ForeignKey("group_sitting_types.group_sitting_type_id")
-    ),
     # if a sitting is recurring this is the id of the original sitting
     # there is no foreign key to the original sitting
-    # like rdb.ForeignKey("group_sittings.group_sitting_id")
+    # like rdb.ForeignKey("sitting.sitting_id")
     # to make it possible to delete the original sitting
     rdb.Column("recurring_id", rdb.Integer),
     rdb.Column("status", rdb.Unicode(48)),
     rdb.Column("status_date", rdb.DateTime(timezone=False),
-        server_default=(text("now()")),
+        server_default=text("now()"),
         nullable=False
     ),
     # venues for sittings
@@ -803,17 +782,9 @@ group_sittings = rdb.Table("group_sittings", metadata,
 )
 
 
-group_sitting_types = rdb.Table("group_sitting_types", metadata,
-    rdb.Column("group_sitting_type_id", rdb.Integer, primary_key=True),
-    rdb.Column("group_sitting_type", rdb.Unicode(40)),
-    rdb.Column("start_time", rdb.Time, nullable=False),
-    rdb.Column("end_time", rdb.Time, nullable=False),
-    rdb.Column("language", rdb.String(5), nullable=False),
-)
-
-group_sitting_attendance = rdb.Table("group_sitting_attendance", metadata,
-    rdb.Column("group_sitting_id", rdb.Integer,
-        rdb.ForeignKey("group_sittings.group_sitting_id"),
+sitting_attendance = rdb.Table("sitting_attendance", metadata,
+    rdb.Column("sitting_id", rdb.Integer,
+        rdb.ForeignKey("sitting.sitting_id"),
         primary_key=True
     ),
     rdb.Column("member_id", rdb.Integer,
@@ -879,8 +850,8 @@ resourcebookings = rdb.Table("resourcebookings", metadata,
         rdb.ForeignKey("resources.resource_id"),
         primary_key=True
     ),
-    rdb.Column("group_sitting_id", rdb.Integer,
-        rdb.ForeignKey("group_sittings.group_sitting_id"),
+    rdb.Column("sitting_id", rdb.Integer,
+        rdb.ForeignKey("sitting.sitting_id"),
         primary_key=True
     ),
 )
@@ -889,12 +860,11 @@ resourcebookings = rdb.Table("resourcebookings", metadata,
 #######################
 # Parliament
 #######################
-# Parliamentary Items
 
 item_votes = rdb.Table("item_votes", metadata,
     rdb.Column("vote_id", rdb.Integer, primary_key=True),
-    rdb.Column("item_id", rdb.Integer,
-        rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
+    rdb.Column("item_id", rdb.Integer, # !+RENAME doc_id
+        rdb.ForeignKey("doc.doc_id"),
         nullable=False
     ),
     rdb.Column("date", rdb.Date),
@@ -922,8 +892,8 @@ item_schedules = rdb.Table("item_schedules", metadata,
     rdb.Column("schedule_id", rdb.Integer, primary_key=True),
     rdb.Column("item_id", rdb.Integer, nullable=False),
     rdb.Column("item_type", rdb.String(30), nullable=False),
-    rdb.Column("group_sitting_id", rdb.Integer,
-        rdb.ForeignKey("group_sittings.group_sitting_id"),
+    rdb.Column("sitting_id", rdb.Integer,
+        rdb.ForeignKey("sitting.sitting_id"),
         nullable=False
     ),
     rdb.Column("planned_order", rdb.Integer,
@@ -953,30 +923,20 @@ item_schedule_discussions = rdb.Table("item_schedule_discussions", metadata,
     rdb.Column("discussion_id", rdb.Integer, primary_key=True),
     rdb.Column("schedule_id", rdb.Integer,
         rdb.ForeignKey("item_schedules.schedule_id"),),
-    rdb.Column("body_text", rdb.UnicodeText),
-    rdb.Column("group_sitting_time", rdb.Time(timezone=False)),
+    rdb.Column("body", rdb.UnicodeText),
+    rdb.Column("sitting_time", rdb.Time(timezone=False)),
     rdb.Column("language", rdb.String(5),
         nullable=False,
         default="en"
     ),
 )
 
-reports = rdb.Table("reports", metadata,
-    rdb.Column("report_id", rdb.Integer,
-        rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
-        primary_key=True
-    ),
-    rdb.Column("group_id", rdb.Integer, rdb.ForeignKey("groups.group_id")),
-    rdb.Column("start_date", rdb.Date, nullable=False),
-    rdb.Column("end_date", rdb.Date)
-)
-
 sitting_reports = rdb.Table("sitting_reports", metadata,
     rdb.Column("report_id", rdb.Integer,
-        rdb.ForeignKey("reports.report_id"), primary_key=True
+        rdb.ForeignKey("doc.doc_id"), primary_key=True
     ),
-    rdb.Column("group_sitting_id", rdb.Integer,
-        rdb.ForeignKey("group_sittings.group_sitting_id"), primary_key=True
+    rdb.Column("sitting_id", rdb.Integer,
+        rdb.ForeignKey("sitting.sitting_id"), primary_key=True
     ),
 )
 
@@ -1019,7 +979,7 @@ attachment = rdb.Table("attachment", metadata,
     # Workflow State
     rdb.Column("status", rdb.Unicode(48)),
     rdb.Column("status_date", rdb.DateTime(timezone=False),
-        server_default=(text("now()")),
+        server_default=text("now()"),
         nullable=False
     ),
     rdb.Column("language", rdb.String(5), nullable=False),
@@ -1028,51 +988,6 @@ attachment_index = rdb.Index("attachment_head_id_idx", attachment.c["head_id"])
 
 # attachment_audit
 attachment_audit = make_audit_table(attachment, metadata)
-
-
-''' !+TYPES_CUSTOM 
-attached_file_types = rdb.Table("attached_file_types", metadata,
-    rdb.Column("attached_file_type_id", rdb.Integer, primary_key=True),
-    rdb.Column("attached_file_type_name", rdb.Unicode(40)),
-    rdb.Column("language", rdb.String(5), nullable=False),
-)
-'''
-attached_files = rdb.Table("attached_files", metadata,
-    rdb.Column("attached_file_id", rdb.Integer, primary_key=True),
-    # the id of the "owning" item !+HEAD_DOCUMENT_ITEM
-    rdb.Column("item_id", rdb.Integer,
-        rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
-        nullable=False
-    ),
-    rdb.Column("dhead_id", rdb.Integer, #!+DHEAD
-        rdb.ForeignKey("doc.doc_id"),
-        nullable=True # !+False, when head_id replaces item_id
-    ),
-    # attached_file is NOT a parliamentary_item
-    rdb.Column("attached_file_type",
-        rdb.Unicode(128),
-        default="document",
-        nullable=False,
-    ),
-    rdb.Column("file_version_id", rdb.Integer), # !+ATTACHED_FILE_VERSIONS
-    rdb.Column("file_title", rdb.Unicode(255), nullable=False),
-    rdb.Column("file_description", rdb.UnicodeText),
-    rdb.Column("file_data", FSBlob(32)),
-    rdb.Column("file_name", rdb.String(200)),
-    rdb.Column("file_mimetype", rdb.String(127)),
-    # Workflow State
-    rdb.Column("status", rdb.Unicode(48)),
-    rdb.Column("status_date", rdb.DateTime(timezone=False),
-        server_default=(text("now()")),
-        nullable=False
-    ),
-    rdb.Column("language", rdb.String(5), nullable=False),
-)
-attached_files_index = rdb.Index("attfiles_itemid_idx", 
-    attached_files.c["item_id"]
-)
-
-RegistrySequence = rdb.Sequence("registry_number_sequence", metadata=metadata)
 
 
 # Document:
@@ -1087,6 +1002,13 @@ doc = rdb.Table("doc", metadata,
     # The entity responsible for making the resource available. 
     # Examples of a Publisher include a person, an organization, or a service.
     # Typically, the name of a Publisher should be used to indicate the entity.
+    # !+CONTAINER_CUSTODIAN_GROUPS(mr, apr-2011) parliament_id and group_id are
+    # conceptually distinct while still being related:
+    # - the general sense of parliament_id seems to be that of the 
+    # "root_container" group (currently this may only be a parliament) in 
+    # which the doc "exists" in
+    # - while the general sense of group_id seems to be that of a kind of
+    # "custodian" group, to which the doc is "assigned to" for handling.
     # !+PARLIAMENT_ID should be nullable=False, but fails on creating an Event...
     rdb.Column("parliament_id", rdb.Integer,
         rdb.ForeignKey("parliaments.parliament_id"),
@@ -1117,7 +1039,7 @@ doc = rdb.Table("doc", metadata,
     # suggested a question to an MP. See Issue 755.
     #rdb.Column("creator", rdb.Unicode(1024), nullable=True),
     # !+dc:Contributor, these are the signatories? external contributors?
-    # !+seconder clarify usage; always 1? overlap with signatories?
+    # !+seconder clarify usage (was on motion); always 1? overlapssignatories?
     #rdb.Column("seconder_id", rdb.Integer, rdb.ForeignKey("users.user_id")),
     
     # TYPE
@@ -1178,12 +1100,13 @@ doc = rdb.Table("doc", metadata,
     # WORKFLOW
     rdb.Column("status", rdb.Unicode(48)),
     rdb.Column("status_date", rdb.DateTime(timezone=False),
-        server_default=(text("now()")),
+        server_default=text("now()"),
         nullable=False
     ),
     # group responsible to "handle" this document... involves workflow: the 
     # precise meaning, and validation constraints of this is defined by each 
     # sub-type e.g. ministry for bill & question, group for agendaitem, ...
+    # !+CONTAINER_CUSTODIAN_GROUPS
     rdb.Column("group_id", rdb.Integer,
         rdb.ForeignKey("groups.group_id"),
         nullable=True
@@ -1235,9 +1158,8 @@ doc = rdb.Table("doc", metadata,
     
     # head document (for sub documents e.g. events)
     rdb.Column("head_id", rdb.Integer, 
-        rdb.ForeignKey("parliamentary_items.parliamentary_item_id"), 
-        #!+DOCUMENT: tmp, should be: rdb.ForeignKey("doc.doc_id"),
-        nullable=True
+        rdb.ForeignKey("doc.doc_id"), 
+        nullable=True,
     ),
     # (event only?) date, needed? auto derive from workflow audit log?
     #rdb.Column("date", rdb.DateTime(timezone=False),
@@ -1246,7 +1168,7 @@ doc = rdb.Table("doc", metadata,
     
     # DB timestamp of last modification
     rdb.Column("timestamp", rdb.DateTime(timezone=False),
-        server_default=(text("now()")),
+        server_default=text("now()"),
         nullable=False
     ),
 )
@@ -1256,238 +1178,15 @@ doc_index = rdb.Index("doc_status_idx", doc.c["status"])
 doc_audit = make_audit_table(doc, metadata)
 
 
-# Parliamentary Items:
-# contains the common fields for motions, questions, bills and agenda items.
-parliamentary_items = rdb.Table("parliamentary_items", metadata,
-    rdb.Column("parliamentary_item_id", rdb.Integer,
-        ItemSequence,
-        primary_key=True
-    ),
-    # parliament <=> dc:Publisher
-    # The entity responsible for making the resource available. 
-    # Examples of a Publisher include a person, an organization, or a service.
-    # Typically, the name of a Publisher should be used to indicate the entity.
-    # !+ XXX it should be nullable=False, but that crashes agendaitems add
-    rdb.Column("parliament_id", rdb.Integer,
-        rdb.ForeignKey("parliaments.parliament_id"),
-        nullable=True
-    ),
-    # owner <=> no dc equivalent
-    # The bungeni user that submits (either directly, or someone else submits 
-    # on his/her behalf) the document to Parliament. This is the "data owner" 
-    # of the item (and not necessarily the conceptual owner, that may be an 
-    # entity outside of Parliament). 
-    rdb.Column("owner_id", rdb.Integer,
-        rdb.ForeignKey("users.user_id"),
-        nullable=False
-    ),
-    rdb.Column("language", rdb.String(5), nullable=False),
-    # !+ACRONYM(mr, jan-2011) also add an acronym/label (e.g. for link text)?
-    # short_name <=> dc:Title !+DescriptiveProperties(mr, jan-2011)
-    # The name given to the resource. Typically, a Title will be a name
-    # by which the resource is formally known.
-    rdb.Column("short_name", rdb.Unicode(512), nullable=False), 
-    # full_name <=> no dc equivalent
-    rdb.Column("full_name", rdb.Unicode(1024), nullable=True),
-    rdb.Column("body_text", rdb.UnicodeText),
-    # description <=> dc:Description !+DescriptiveProperties(mr, jan-2011)
-    # An account of the content of the resource. Description may include but is
-    # not limited to: an abstract, table of contents, reference to a graphical
-    # representation of content or a free-text account of the content.
-    rdb.Column("description", rdb.UnicodeText, nullable=True),
-    # subject <=> dc:Subject
-    # The topic of the content of the resource. Typically, a Subject will be 
-    # expressed as keywords or key phrases or classification codes that describe
-    # the topic of the resource. Recommended best practice is to select a value 
-    # from a controlled vocabulary or formal classification scheme.
-    # Hierarchical Controlled Vocabulary Micro Data Format: 
-    # a triple-colon ":::" separated sequence of *key phrase paths*, each of 
-    # which is a double-colon "::" separated sequence of *key phrases*.
-    rdb.Column("subject", rdb.UnicodeText, nullable=True),
-    # coverage <=> dc:Coverage
-    # The extent or scope of the content of the resource. Coverage will 
-    # typically include spatial location (a place name or geographic co-ords), 
-    # temporal period (a period label, date, or date range) or jurisdiction 
-    # (such as a named administrative entity). Recommended best practice is to 
-    # select a value from a controlled vocabulary (for example, the Thesaurus 
-    # of Geographic Names [Getty Thesaurus of Geographic Names, 
-    # http://www.getty.edu/research/tools/vocabulary/tgn/]). Where appropriate, 
-    # named places or time periods should be used in preference to numeric 
-    # identifiers such as sets of co-ordinates or date ranges.
-    # Value uses same micro format as for "subject".
-    rdb.Column("coverage", rdb.UnicodeText, nullable=True),
-    # Workflow State
-    rdb.Column("status", rdb.Unicode(48)),
-    rdb.Column("status_date", rdb.DateTime(timezone=False),
-        server_default=(text("now()")),
-        nullable=False
-    ),
-    # registry_number <=> dc:Identifier
-    # An unambiguous reference to the resource within a given context. 
-    # Recommended best practice is to identify the resource by means of a 
-    # string or number conforming to a formal identification system. 
-    rdb.Column("registry_number", rdb.Unicode(128)),
-    # uri, Akoma Ntoso <=> dc:Source
-    # A Reference to a resource from which the present resource is derived. 
-    # The present resource may be derived from the Source resource in whole or 
-    # part.
-    rdb.Column("uri", rdb.Unicode(1024), nullable=True), 
-    # the reviewer may add a recommendation note
-    rdb.Column("note", rdb.UnicodeText),
-    # Receive  Notifications -> triggers notification on workflow change
-    rdb.Column("receive_notification", rdb.Boolean,
-        default=True
-    ),
-    # type, for polymorphic_identity <=> dc:Type
-    rdb.Column("type", rdb.String(30), nullable=False),
-    rdb.Column("geolocation", rdb.UnicodeText, nullable=True),
-    # !+DC(mr, jan-2011) consider addition of:
-    # - Creator/Author
-    # - Contributor
-    # - Format
-    # - Date, auto derive from workflow audit log
-    # - Rights
-    # - Reference, citations of other resources, implied from body content? 
-    # - Relation, e.g. assigned to a Committee
-    
-    # custom fields
-    rdb.Column("custom1", rdb.UnicodeText, nullable=True),
-    rdb.Column("custom2", rdb.UnicodeText, nullable=True),
-    rdb.Column("custom3", rdb.UnicodeText, nullable=True),
-    rdb.Column("custom4", rdb.UnicodeText, nullable=True),
-    
-    # Timestamp of last modification
-    rdb.Column("timestamp", rdb.DateTime(timezone=False),
-        server_default=(text("now()")),
-        nullable=False
-    ),
-)
-
-# Index for parliamentary_items status
-parliamentary_items_index = rdb.Index("pi_status_idx", 
-    parliamentary_items.c["status"]
-)
-
-# Agenda Items:
-# generic items to be put on the agenda for a certain group
-# they can be scheduled for a sitting
-agenda_items = rdb.Table("agenda_items", metadata,
-    rdb.Column("agenda_item_id", rdb.Integer,
-        rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
-        primary_key=True
-    ),
-    rdb.Column("group_id", rdb.Integer,
-        rdb.ForeignKey("groups.group_id"),
-        nullable=False
-    ),
-)
-
-
-QuestionSequence = rdb.Sequence("question_number_sequence", metadata=metadata)
-
-# Approved questions are given a serial number enabling the clerks office
-# to record the order in which questions are received and hence enforce 
-# a first come first served policy in placing the questions on the order
-# paper. The serial number is re-initialized at the start of each session
-
-#!+TYPES_CUSTOM question_types = make_vocabulary_table("question", metadata)
-#!+TYPES_CUSTOM response_types = make_vocabulary_table("response", metadata)
-
-questions = rdb.Table("questions", metadata,
-    rdb.Column("question_id", rdb.Integer,
-        rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
-        primary_key=True
-    ),
-    rdb.Column("question_number", rdb.Integer),
-    rdb.Column("ministry_submit_date", rdb.Date,),
-    rdb.Column("question_type", # !+doc_type
-        rdb.Unicode(128),
-        default="ordinary",
-        nullable=False,
-    ),
-    rdb.Column("response_type",
-        rdb.Unicode(128),
-        default="oral",
-        nullable=False,
-    ),
-    # if supplementary question, this is the original/previous question
-    rdb.Column("supplement_parent_id", rdb.Integer,
-        rdb.ForeignKey("questions.question_id")
-    ),
-    rdb.Column("sitting_time", rdb.DateTime(timezone=False)),
-    rdb.Column("ministry_id", rdb.Integer, rdb.ForeignKey("groups.group_id")),
-    rdb.Column("response_text", rdb.UnicodeText),
-)
-
-MotionSequence = rdb.Sequence("motion_number_sequence", metadata=metadata)
-# Number that indicate the order in which motions have been approved 
-# by the Speaker. The Number is reset at the start of each new session
-# with the first motion assigned the number 1
-#
-motions = rdb.Table("motions", metadata,
-    rdb.Column("motion_id", rdb.Integer,
-        rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
-        primary_key=True
-    ),
-    rdb.Column("motion_number", rdb.Integer),
-    # !+USAGE(mr, jan-2011) determine usage, document or remove
-    rdb.Column("public", rdb.Boolean),
-    # !+USAGE(mr, jan-2011) determine usage, document or remove 
-    # - overlap with parliamentary_items.signatories ?
-    rdb.Column("seconder_id", rdb.Integer,
-        rdb.ForeignKey("users.user_id")
-    ),
-    # !+USAGE(mr, jan-2011) determine usage, document or remove
-    # - if the motion was sponsored by a *political group* (NOT *party*) 
-    # - obsoleted by each group's "virtual user" idea?
-    rdb.Column("party_id", rdb.Integer,
-        rdb.ForeignKey("political_parties.party_id")
-    ),
-)
-
-''' !+TYPES_CUSTOM
-bill_types = rdb.Table("bill_types", metadata,
-    rdb.Column("bill_type_id", rdb.Integer, primary_key=True),
-    rdb.Column("bill_type_name", rdb.Unicode(256),
-        nullable=False,
-        unique=True
-    ),
-    rdb.Column("language", rdb.String(5), nullable=False),
-)
-'''
-bills = rdb.Table("bills", metadata,
-    rdb.Column("bill_id", rdb.Integer,
-        rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
-        primary_key=True
-    ),
-    rdb.Column("doc_type",
-        # We could use rdb.Enum("government", "member", native_enum=False) but
-        # that would imply schema change whenever the enum list changes. For
-        # validation of this field, we let upstream logic e.g. UI fields using 
-        # zope.schema.Choice combined with a vocabulary, to take responsibilty 
-        # of validating this for *this* document type.
-        rdb.Unicode(128),
-        default="government",
-        nullable=False,
-    ),
-    # !+BILL_MINISTRY(fz, oct-2011) the ministry field here logically means the 
-    # bill is presented by the Ministry and so... Ministry should be the author,
-    # not a "field" 
-    rdb.Column("ministry_id", rdb.Integer, rdb.ForeignKey("groups.group_id")),
-    rdb.Column("identifier", rdb.Integer),
-    rdb.Column("publication_date", rdb.Date),
-)
-
-
 committee_reports = ()
 
-signatories = rdb.Table("signatories", metadata,
+signatory = rdb.Table("signatory", metadata,
     rdb.Column("signatory_id", rdb.Integer,
         primary_key=True
     ),
-    # the id of the "owning" item !+HEAD_DOCUMENT_ITEM
-    rdb.Column("item_id", rdb.Integer,
-        rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
+    # the id of the "owning" head document
+    rdb.Column("head_id", rdb.Integer,
+        rdb.ForeignKey("doc.doc_id"),
         nullable=False,
     ),
     rdb.Column("user_id", rdb.Integer,
@@ -1495,8 +1194,10 @@ signatories = rdb.Table("signatories", metadata,
         nullable=False,
     ),
     rdb.Column("status", rdb.Unicode(32)),
-    rdb.UniqueConstraint("item_id", "user_id")
+    rdb.UniqueConstraint("head_id", "user_id")
 )
+# attachment_audit
+signatory_audit = make_audit_table(signatory, metadata)
 
 
 # Tabled documents:
@@ -1518,18 +1219,6 @@ signatories = rdb.Table("signatories", metadata,
 #    rdb.Column("document_source_id", rdb.Integer, primary_key=True),
 #    rdb.Column("document_source", rdb.Unicode(256)),
 #)
-
-tabled_documentSequence = rdb.Sequence("tabled_document_number_sequence",
-    metadata=metadata
-)
-tabled_documents = rdb.Table("tabled_documents", metadata,
-    rdb.Column("tabled_document_id", rdb.Integer,
-        rdb.ForeignKey("parliamentary_items.parliamentary_item_id"),
-        primary_key=True
-    ),
-    rdb.Column("link", rdb.String(2000)),
-    rdb.Column("tabled_document_number", rdb.Integer),
-)
 
 
 #######################
@@ -1572,15 +1261,6 @@ translation_lookup_index = rdb.Index("translation_lookup_index",
     translations.c.object_type,
     translations.c.lang
 )
-
-''' !+WTF(mr, oct-2010) what is this? To start, there is no .util module !
-def reset_database():
-    import util
-    mdset = util.cli_setup()
-    for m in mdset:
-        m.drop_all(checkfirst=True)
-        m.create_all(checkfirst=True)
-'''
 
 #for table_name in metadata.tables.keys():
 #    print metadata.tables[table_name].name

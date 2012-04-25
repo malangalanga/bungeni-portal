@@ -55,7 +55,7 @@ def clerk_receive_notification(context):
     return prefs.getClerksOfficeReceiveNotification()
 
 def owner_receive_notification(context):
-    return context.receive_notification
+    return False #!+NOTIFICATION_SETTINGS
 
 def ministry_receive_notification(context):
     return prefs.getMinistriesReceiveNotification() and context.ministry_id
@@ -63,10 +63,10 @@ def ministry_receive_notification(context):
 
 # parliamentary items
 
-def is_scheduled(context):
-    """Is Parliamentary Item scheduled.
+def is_scheduled(doc):
+    """Is doc scheduled?
     """
-    return utils.is_pi_scheduled(context.parliamentary_item_id)
+    return utils.is_pi_scheduled(doc.doc_id)
 
 
 # group
@@ -77,7 +77,7 @@ def has_end_date(context):
     return context.end_date != None
 
 
-# groupsitting
+# sitting
 
 def has_venue(context):
     return context.venue is not None
@@ -123,7 +123,7 @@ def not_has_date_of_death(context):
 def user_is_parent_document_owner(context):
     return (
         utils.get_owner_login_pi(context) ==
-        utils.get_owner_login_pi(context.item)
+        utils.get_owner_login_pi(context.head)
     )
 
 def signatory_auto_sign(context):
@@ -140,7 +140,7 @@ def signatory_auto_sign(context):
     # if user adding signatory is not parent document owner, then auto sign
     #!+SIGNATORIES(mb, aug-2011) this could be tricky versus checking if parent
     # document is in a 'working_draft' state
-    if user_is_not_context_owner(context.item):
+    if user_is_not_context_owner(context.head):
         return True
     return False
 
@@ -164,14 +164,14 @@ def pi_signatories_check(context):
 
 def pi_signature_period_expired(context):
     """The document has been submitted"""
-    validator = ISignatoriesValidator(context.item, None)
+    validator = ISignatoriesValidator(context.head, None)
     if validator is not None:
         return validator.expireSignatures()
     return False
 
 def pi_document_redrafted(context):
     """Parent document has been redrafted"""
-    validator = ISignatoriesValidator(context.item, None)
+    validator = ISignatoriesValidator(context.head, None)
     return validator and validator.documentInDraft()
 
 def pi_unsign_signature(context):
@@ -180,7 +180,7 @@ def pi_unsign_signature(context):
     )
 
 def pi_allow_signature(context):
-    validator = ISignatoriesValidator(context.item, None)
+    validator = ISignatoriesValidator(context.head, None)
     if validator is not None:
         return user_is_context_owner(context) and validator.allowSignature()
     return False
@@ -188,7 +188,7 @@ def pi_allow_signature(context):
 def pi_allow_signature_actions(context):
     """allow/disallow other signature actions => such as withdraw and reject
     """
-    validator = ISignatoriesValidator(context.item, None)
+    validator = ISignatoriesValidator(context.head, None)
     if validator is not None:
         return (user_is_context_owner(context) and
             validator.documentSubmitted() and
@@ -197,6 +197,7 @@ def pi_allow_signature_actions(context):
 
 # auditables
 
+''' !+AUDITABLES_UNUSED(mr, apr-2012)
 def user_is_state_creator(context):
     """Did the current user create current state - based on workflow log?
     """
@@ -219,4 +220,4 @@ def user_is_state_creator_and_owner(context):
 
 def user_is_state_creator_not_owner(context):
     return user_is_state_creator(context) and user_is_not_context_owner(context)
-
+'''

@@ -111,16 +111,16 @@ class DocumentDescriptiveProperties(DescriptiveProperties):
 @register.adapter()
 class QuestionDescriptiveProperties(DocumentDescriptiveProperties):
     component.adapts(interfaces.IQuestion)
-
+    
     @property
     def title(self):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
-        if context.question_number is None:
-            return self.translate(context, "short_name")
+        if context.type_number is None:
+            return self.translate(context, "short_title")
         return "#%d: %s" % (
-            context.question_number,
-            self.translate(context, "short_name"))
+            context.type_number,
+            self.translate(context, "short_title"))
 
     @property
     def description(self):
@@ -144,10 +144,10 @@ class BillDescriptiveProperties(DocumentDescriptiveProperties):
     def title(self):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
-        if context.identifier is None:
-            return self.translate(context, "short_name")
-        return "#%d: %s" % (context.identifier, 
-            self.translate(context, "short_name")
+        if context.type_number is None:
+            return self.translate(context, "short_title")
+        return "#%d: %s" % (context.type_number, 
+            self.translate(context, "short_title")
         )
 
     @property
@@ -165,17 +165,17 @@ class BillDescriptiveProperties(DocumentDescriptiveProperties):
 @register.adapter()
 class MotionDescriptiveProperties(DocumentDescriptiveProperties):
     component.adapts(interfaces.IMotion)
-
+    
     @property
     def title(self):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
-        if context.motion_number is None:
-            return self.translate(context, "short_name")
+        if context.type_number is None:
+            return self.translate(context, "short_title")
         return "#%d: %s" % (
-            context.motion_number,
-            self.translate(context, "short_name"))
-
+            context.type_number,
+            self.translate(context, "short_title"))
+    
     @property
     def description(self):
         session = Session()
@@ -190,7 +190,7 @@ class MotionDescriptiveProperties(DocumentDescriptiveProperties):
 
 @register.adapter()
 class SittingDescriptiveProperties(DescriptiveProperties):
-    component.adapts(interfaces.IGroupSitting)
+    component.adapts(interfaces.ISitting)
 
     @property
     def title(self):
@@ -232,7 +232,9 @@ class ItemScheduleDescriptiveProperties(DescriptiveProperties):
 
     @property
     def title(self):
-        return _(u"Item scheduling")
+        session = Session()
+        context = session.merge(removeSecurityProxy(self.context))
+        return IDCDescriptiveProperties(context.item).title
 
     @property
     def description(self):
@@ -242,6 +244,12 @@ class ItemScheduleDescriptiveProperties(DescriptiveProperties):
         return _(u"Scheduled for sitting ($start to $end)",
                  mapping={'start': sitting.start_date,
                           'end': sitting.end_date})
+
+    @property
+    def mover(self):
+        session = Session()
+        context = session.merge(removeSecurityProxy(self.context))
+        return IDCDescriptiveProperties(context.item).mover
 
 @register.adapter()
 class EditorialNoteDescriptiveProperties(DescriptiveProperties):
@@ -258,9 +266,11 @@ class VersionDescriptiveProperties(DescriptiveProperties):
     @property
     def title(self):
         if is_translation(self.context):
-            language = get_language_by_name(self.context.language)['name']
-            return "%s %s" % (language, _(u"translation"))
-        return "%s %s" % (_(u"Version"), self.context.version_id)
+            language = get_language_by_name(self.context.language)["name"]
+            return "%s %s" % (language, _("translation"))
+        if interfaces.IChange.providedBy(self.context): # !+DOCUMENT tmp
+            return "%s %s" % (_("Version"), self.context.seq)
+        return "%s %s" % (_("Version"), self.context.version_id)
     
     @property
     def description(self):
@@ -350,8 +360,8 @@ class GroupMembershipDescriptiveProperties(DescriptiveProperties):
 
 
 @register.adapter()
-class GroupSittingAttendanceDescriptiveProperties(DescriptiveProperties):
-    component.adapts(interfaces.IGroupSittingAttendance)
+class SittingAttendanceDescriptiveProperties(DescriptiveProperties):
+    component.adapts(interfaces.ISittingAttendance)
 
     @property
     def title(self):
@@ -455,15 +465,6 @@ class ItemScheduleDiscussionDescriptiveProperties(DescriptiveProperties):
 
 
 @register.adapter()
-class SittingTypeDescriptiveProperties(DescriptiveProperties):
-    component.adapts(interfaces.ISittingType)
-
-    @property
-    def title(self):
-        return self.translate(self.context, "group_sitting_type")
-
-
-@register.adapter()
 class ChangeDescriptiveProperties(DescriptiveProperties):
     component.adapts(interfaces.IChange)
     
@@ -494,7 +495,7 @@ class AgendaItemDescriptiveProperties(DocumentDescriptiveProperties):
     def title(self):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
-        return u"%s - %s" % (self.translate(context, "short_name"),
+        return u"%s - %s" % (self.translate(context, "short_title"),
             self.translate(context.group, "short_name")
         )
 
@@ -507,7 +508,7 @@ class TabledDocumentDescriptiveProperties(DocumentDescriptiveProperties):
     def title(self):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
-        return self.translate(context, "short_name")
+        return self.translate(context, "short_title")
 
 
 @register.adapter()
@@ -543,8 +544,7 @@ class ReportDescriptiveProperties(DescriptiveProperties):
     def title(self):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
-        return u'%s: %s - %s' % (self.translate(context, "short_name"),
-            context.start_date, context.end_date)
+        return u'%s' % self.translate(context, "short_title")
 
     @property
     def description(self):
@@ -594,22 +594,22 @@ class EventProperties(DescriptiveProperties):
 
 
 @register.adapter()
-class AttachedFileDescriptiveProperties(DescriptiveProperties):
-    component.adapts(interfaces.IAttachedFile)
+class AttachmentDescriptiveProperties(DescriptiveProperties):
+    component.adapts(interfaces.IAttachment)
 
     @property
     def title(self):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
-        return context.file_title
+        return context.title
 
     @property
     def description(self):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
-        return u"%s  (%s)" % (context.file_name, context.file_mimetype)
+        return u"%s  (%s)" % (context.name, context.mimetype)
 
-
+'''
 @register.adapter()
 class AttachedFileVersionDescriptiveProperties(DescriptiveProperties):
     component.adapts(interfaces.IAttachedFileVersion)
@@ -625,7 +625,7 @@ class AttachedFileVersionDescriptiveProperties(DescriptiveProperties):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
         return u"%s  (%s)" % (context.file_name, context.file_mimetype)
-
+'''
 
 @register.adapter()
 class HeadingDescriptiveProperties(DescriptiveProperties):

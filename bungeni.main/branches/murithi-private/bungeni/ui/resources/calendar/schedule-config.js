@@ -97,11 +97,12 @@ YAHOO.bungeni.config = function(){
         STATUS_DATE : "status_date",
         NUMBER : "number",
         BODY_TEXT : "body_text",
+        BODY : "body",
         DISCUSSION_EDIT : "edit_discussion",
         DISCUSSION_DELETE : "delete_discussion",
         WORKFLOW_STATE : "wf_state",
         WORKFLOW_ACTIONS : "wf_actions",
-        ROW_CONTROLS : "add_text_record",
+        ROW_CONTROLS : "row_controls",
     }
 
     var _schemas = {
@@ -276,22 +277,6 @@ YAHOO.bungeni.config = function(){
                                         new_data_entries.push(entry);
                                     }
                                     sDt.addRows(new_data_entries, new_index);
-                                    var refresh_columns = [
-                                        sDt.getColumn(Columns.ROW_CONTROLS),
-                                    ]
-                                    if(new_index > 0){
-                                        var updated_record = sDt.getRecord(
-                                            (new_index - 1)
-                                        );
-                                        var record_data = updated_record.getData();
-                                        for (idx=0; idx<=(refresh_columns.length); idx++){
-                                            sDt.updateCell(
-                                                updated_record, 
-                                                refresh_columns[idx],
-                                                record_data
-                                            );
-                                        }
-                                    }
                                 }
                                 this.hide();
                             }else{
@@ -350,18 +335,6 @@ YAHOO.bungeni.config = function(){
         formatters : function(){
              var BungeniUtils = YAHOO.bungeni.Utils;
              var Columns = scheduling_columns;
-             
-            /**
-             * @method itemTypeFormatter
-             * @description render item type in reduced form
-             */
-             var itemTypeFormatter = function(el, record, column, data){
-                 el.innerHTML = ("<span style='font-size:10px;'>" + 
-                    record.getData()[Columns.TYPE] + 
-                    "</span>"
-                );
-             }
-
 
             /**
              * @method itemTitleFormatter
@@ -393,6 +366,34 @@ YAHOO.bungeni.config = function(){
                         );
                     }
                  }
+             }
+             
+            /**
+             * @method itemExtendedFormatter
+             * @description Renders item title plus other metadata
+             **/
+             var itemTitleExtendedFormatter = function(el, record, column, data){
+                 rec_data = record.getData();
+                 var title_parts = [
+                    rec_data[Columns.TITLE],
+                    rec_data[Columns.REGISTRY_NO],
+                    rec_data[Columns.STATUS],
+                    rec_data[Columns.MOVER],
+                    rec_data[Columns.STATUS_DATE]
+                 ];
+                 var tHTML = "";
+                 for (index in title_parts){
+                     var text = title_parts[index];
+                     if(!text){ continue }
+                     if(index>0){
+                         tHTML = tHTML + BungeniUtils.wrapText(text,
+                            "span", 'class="dt_title_unit"'
+                         );
+                      }else{
+                          tHTML = tHTML + BungeniUtils.wrapText(text, "span");
+                      }
+                 }
+                 el.innerHTML = tHTML;
              }
              
              /**
@@ -440,7 +441,7 @@ YAHOO.bungeni.config = function(){
                             oDs.responseType = YAHOO.util.DataSource.TYPE_JSON;
                             oDs.responseSchema = {
                                 resultsList: "nodes",
-                                fields: [ Columns.OBJECT_ID, Columns.BODY_TEXT ]
+                                fields: [ Columns.OBJECT_ID, Columns.BODY ]
                             }
                             var render_minutes = function(items){
                                 var nHTML = "";
@@ -454,7 +455,7 @@ YAHOO.bungeni.config = function(){
                                             "id='" + edId + "'"
                                         );
                                         nHTML = nHTML + BungeniUtils.wrapText(
-                                            (mdata[Columns.BODY_TEXT] +
+                                            (mdata[Columns.BODY] +
                                                 BungeniUtils.wrapText(
                                                     "&nbsp;",
                                                     "span", editAttrs
@@ -692,12 +693,21 @@ YAHOO.bungeni.config = function(){
                     }
                 });
                 orderButtons.appendTo(el);
+                var deleteButton = new YAHOO.widget.Button({
+                    label: "x"
+                })
+                deleteButton.on("click", function(){
+                    YAHOO.bungeni.config.scheduling.handlers.removeRow(
+                        deleteButton.get("element")
+                    );
+                });
+                deleteButton.appendTo(el);
             }
 
             return {
                 title: itemTitleFormatter,
+                title_extended: itemTitleExtendedFormatter,
                 title_with_minutes: itemTitleMinutesFormatter,
-                type: itemTypeFormatter,
                 counter: countFormatter,
                 longText: longTextFormatter,
                 editButton: editButtonFormatter,
@@ -781,43 +791,20 @@ YAHOO.bungeni.config = function(){
                 }
             }
             
-            /*
-             * @method _attachContextMenu
-             * @description context menu for each record
+            /**
+             * @method _removeRow
+             * @description removes row from schedule
              **/
-            var _attachContextMenu = function(args){
-                var container = document.createElement("div");
-                container.id = "dt-context-menu-container";
-                document.body.appendChild(container);
-                var menuClickHandler = function(type, args, dt){
-                    var menuItem = args[1];
-                    if (menuItem){
-                        var target = this.contextEventTarget;
-                        var row = dt.getTrEl(target);
-                        var _delete_callback = function(){
-                            dt.deleteRow(row);
-                        }
-                        if(row){
-                            switch(menuItem.index){
-                                case 0: 
-                                YAHOO.bungeni.config.dialogs.confirm.show(
-                                    SGlobals.delete_dialog_text,
-                                    _delete_callback
-                                )
-                            }
-                        } 
-                    }
-                }
-                var contextMenu = new YAHOO.widget.ContextMenu(
-                    "dt-context-menu", { trigger:this.getTbodyEl() }
-                );
-                contextMenu.addItem(SGlobals.remove_button_text);
-                contextMenu.render(container);
-                contextMenu.clickEvent.subscribe(menuClickHandler, this);
-                this.unsubscribe("initEvent",
-                    YAHOO.bungeni.config.scheduling.handlers.attachContextMenu
-                );
-            }
+             var _removeRow = function(target){
+                 var sDt = YAHOO.bungeni.scheduling.getScheduleTable();
+                 var record = sDt.getRecord(target);
+                 var _callback = function(){
+                     sDt.deleteRow(sDt.getRecordIndex(record));
+                 }
+                 YAHOO.bungeni.config.dialogs.confirm.show(
+                    SGlobals.delete_dialog_text, _callback
+                 );
+             }
              
              /**
               * @method _resizeDataTable
@@ -841,8 +828,8 @@ YAHOO.bungeni.config = function(){
                  renderRTECellEditor: _renderRTECellEditor,
                  showCellEditor: _showCellEditor,
                  moveRow: _moveRow,
-                 attachContextMenu: _attachContextMenu,
-                 resizeDataTable: _resizeDataTable
+                 removeRow: _removeRow,
+                 resizeDataTable: _resizeDataTable,
              }
         }(),
     }

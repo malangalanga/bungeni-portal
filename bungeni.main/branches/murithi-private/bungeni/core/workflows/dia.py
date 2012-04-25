@@ -24,11 +24,11 @@ def main(argv):
     workflow_names = [
         "address",
         "agendaitem",
-        "attachedfile",
+        "attachment",
         "bill",
         "committee",
         "event",
-        "groupsitting",
+        "sitting",
         "group",
         "heading",
         "motion",

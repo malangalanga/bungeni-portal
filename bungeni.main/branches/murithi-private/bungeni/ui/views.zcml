@@ -51,7 +51,7 @@
     />
 
   <browser:view
-     for="bungeni.models.interfaces.IAttachedFile"
+     for="bungeni.models.interfaces.IAttachment"
      permission="zope.View"
      name="download"
      class=".file.FileDownload"
@@ -64,8 +64,8 @@
      class=".file.FileDownload"
      />
 
-    <browser:view for="bungeni.models.interfaces.IAttachedFile"
-        permission="bungeni.attachedfile.wf.attached.inactive"
+    <browser:view for="bungeni.models.interfaces.IAttachment"
+        permission="bungeni.attachment.wf.attached.inactive"
         name="deactivate"
         class=".file.FileDeactivate"
     /><!-- !+WORKFLOW_TRANSITION(mr, feb-2011) -->
@@ -124,6 +124,12 @@
     />-->
     
     <browser:page name="search"
+        for="ore.alchemist.interfaces.IAlchemistContainer"
+        permission="zope.View"
+        class=".search.PagedSearch"
+    />
+    
+    <browser:page name="search"
         for="bungeni.core.interfaces.ISearchableSection"
         permission="zope.View"
         class=".search.PagedSearch"
@@ -132,7 +138,7 @@
 
     <!-- Advanced search form -->
     <browser:page name="advanced-search"
-        for="bungeni.core.interfaces.ISection"
+        for="bungeni.core.interfaces.ISearchableSection"
         permission="zope.View"
         class=".search.AdvancedPagedSearch"
     />
@@ -169,9 +175,9 @@
 
   <browser:page
      name="agenda"
-     for="bungeni.models.interfaces.IGroupSitting"
+     for="bungeni.models.interfaces.ISitting"
      permission="bungeni.reports.Edit"
-     class=".reports.GroupSittingContextAgendaReportView"
+     class=".reports.SittingContextAgendaReportView"
      />
   <browser:page
      name="agenda"
@@ -187,9 +193,9 @@
      />
    <browser:page
      name="votes-and-proceedings"
-     for="bungeni.models.interfaces.IGroupSitting"
+     for="bungeni.models.interfaces.ISitting"
      permission="bungeni.reports.Edit"
-     class=".reports.GroupSittingContextMinutesReportView"
+     class=".reports.SittingContextMinutesReportView"
      />
 
     <browser:page
@@ -206,7 +212,7 @@
      />
     <browser:page
      name="save-report"
-     for="bungeni.models.interfaces.IGroupSitting"
+     for="bungeni.models.interfaces.ISitting"
      permission="bungeni.reports.Edit"
      class=".reports.SaveReportView"
      />
@@ -361,7 +367,7 @@
      class=".calendar.browser.CalendarView"
     />
   <browser:page
-     for="bungeni.models.interfaces.IGroupSittingContainer"
+     for="bungeni.models.interfaces.ISittingContainer"
      permission="zope.View"
      name="index"
      class=".calendar.browser.CalendarView"
@@ -375,9 +381,9 @@
         permission="zope.View"
     />
     <browser:page name="schedule"
-        for="bungeni.models.interfaces.IGroupSitting"
+        for="bungeni.models.interfaces.ISitting"
         permission="bungeni.sittingschedule.View"
-        class=".calendar.browser.GroupSittingScheduleView"
+        class=".calendar.browser.SittingScheduleView"
     />
     <browser:page name="save-schedule"
         for="bungeni.models.interfaces.IItemScheduleContainer"
@@ -390,19 +396,19 @@
         class=".calendar.browser.DiscussionAddView"
     />
     <browser:page name="schedulable-items-json"
-        for="bungeni.models.interfaces.IGroupSitting"
+        for="bungeni.models.interfaces.ISitting"
         permission="bungeni.sittingschedule.Edit"
         class=".calendar.browser.SchedulableItemsJSON"
     />
       <browser:page
      name="schedule_order"
-     for="bungeni.models.interfaces.IGroupSitting"
+     for="bungeni.models.interfaces.ISitting"
      class=".calendar.browser.ItemScheduleOrder"
      permission="bungeni.sittingschedule.Edit"
      />
      <browser:page
      name="st-attendance"
-     for="bungeni.models.interfaces.IGroupSitting"
+     for="bungeni.models.interfaces.ISitting"
      class=".attendance.AttendanceEditor"
      permission="bungeni.sittingattendance.Edit"
      />
@@ -417,19 +423,6 @@
     />
     
     
-    <!-- versions -->
-    <browser:page name="index"
-        for="bungeni.models.interfaces.IVersionContainer"
-        class=".versions.VersionLogView"
-        layer="bungeni.ui.interfaces.IBungeniSkin"
-        permission="zope.Public"
-    /><!-- 
-    !+VersionLogView(mr, nov-2011) above zcml page view directive masks the 
-    "generic" AjaxContainerListing listing view, and breaks the connection 
-    from the corresponding ui descriptor.
-    !+AuditLogView(mr, nov-2011)
-    -->
-
     <!-- business -->
     <browser:page name="business-index"
         for="*"
@@ -579,21 +572,18 @@
     layer=".interfaces.IRSSRepresentationLayer"
      />
 
-   <browser:page
-        name="feed.rss"
+    <browser:page name="feed.rss"
         for="bungeni.models.interfaces.IAgendaItemContainer"
         class=".rss.AgendaItemRSSView"
         permission="zope.View"
-    layer=".interfaces.IRSSRepresentationLayer"
-     />
-
-   <browser:page
-        name="feed.rss"
-        for="bungeni.models.interfaces.IGroupSittingContainer"
+        layer=".interfaces.IRSSRepresentationLayer"
+    />
+    <browser:page name="feed.rss"
+        for="bungeni.models.interfaces.ISittingContainer"
         class=".rss.SittingRSSView"
         permission="zope.View"
-    layer=".interfaces.IRSSRepresentationLayer"
-     />
+        layer=".interfaces.IRSSRepresentationLayer"
+    />
 
    <browser:page
         name="feed.rss"
