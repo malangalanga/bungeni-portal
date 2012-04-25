@@ -18,6 +18,7 @@ from bungeni.models.interfaces import IVersion
 from bungeni.core.translation import get_language
 from bungeni.core.translation import get_all_languages
 from bungeni.core.translation import get_available_translations
+from bungeni.core.dc import IDCDescriptiveProperties
 from bungeni.core import schedule
 
 from bungeni.ui.i18n import  _
@@ -208,7 +209,6 @@ class TranslateMenu(BrowserMenu):
         else:
             return None
 
-
 class WorkflowSubMenuItem(BrowserSubMenuItem):
     title = _(u"label_state", default=u"State:")
     submenuId = "context_workflow"
@@ -334,7 +334,6 @@ class CalendarSubMenuItem(BrowserSubMenuItem):
     def selected(self):
         return False
 
-
 class CalendarMenu(BrowserMenu):
     """Retrieve menu actions for available calendars."""
 
@@ -420,4 +419,39 @@ class CalendarMenu(BrowserMenu):
 
         # sort on title
         results.sort(key=operator.itemgetter("title"))
+        return results
+
+class CalendarContentSubMenuItem(CalendarSubMenuItem):
+    title = _(u"label_calendar_content_manager", default=u"Manage:")
+    submenuId = "calendar_content_manager"
+    order = 10
+    
+    @property
+    def extra(self):
+        return {
+            "id": self.id,
+            "stateTitle": _("Manage Scheduling Content")
+        }
+
+class CalendarContentMenu(BrowserMenu):
+    IDCDescriptiveProperties
+    def getMenuItems(self, context, request):
+        items = context.__parent__.items()
+        results = []
+        for key, item in items:
+            dc_adapter = IDCDescriptiveProperties(item, None)
+            if dc_adapter:
+                _title = dc_adapter.title
+            else:
+                _title = getattr(item, "title", "Unknown")
+            results.append(dict(
+                title=_title,
+                description=_title,
+                action = url.absoluteURL(item, request),
+                selected=False,
+                icon=None,
+                extra={},
+                submenu=None
+                
+            ))
         return results
