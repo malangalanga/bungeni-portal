@@ -1,0 +1,13 @@
+<li
+    tal:attributes="class python:('navigation selected' if item['selected'] else 'navigation')"
+    tal:repeat="item view/items">
+<!--
+$Id$
+$URL$
+-->
+        <a tal:attributes="href item/url" 
+            i18n:domain="bungeni"
+            i18n:translate="" 
+            tal:content="item/title" 
+        />
+</li>
