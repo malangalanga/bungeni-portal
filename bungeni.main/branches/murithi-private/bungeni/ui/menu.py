@@ -6,14 +6,15 @@ from zope.app.component.hooks import getSite
 from zope.app.security.interfaces import IUnauthenticatedPrincipal
 from zope.browsermenu.interfaces import IBrowserMenu
 import zope.browsermenu
-from zope.security import checkPermission
+from zope.security import proxy, checkPermission
 from zope.i18n import translate
 import z3c.menu.ready2go.item
 
 from bungeni.core.workflow.interfaces import IWorkflow, IWorkflowController
 
+from bungeni.alchemist.interfaces import IAlchemistContainer
 from bungeni.models.utils import get_db_user_id
-from bungeni.models.interfaces import IVersion
+from bungeni.models.interfaces import IVersion, IScheduleText
 
 from bungeni.core.translation import get_language
 from bungeni.core.translation import get_all_languages
@@ -434,11 +435,19 @@ class CalendarContentSubMenuItem(CalendarSubMenuItem):
         }
 
 class CalendarContentMenu(BrowserMenu):
-    IDCDescriptiveProperties
+    """Generate menu items within scheduling to access calendar content manager.
+    
+    Allows adding of items such as headings for reuse within scheduling contexts
+    """
     def getMenuItems(self, context, request):
-        items = context.__parent__.items()
         results = []
+        try:
+            items = proxy.removeSecurityProxy(context.__parent__).items()
+        except AttributeError:
+            return results
         for key, item in items:
+            if not IAlchemistContainer.providedBy(item): continue
+            if not IScheduleText.implementedBy(item.domain_model): continue
             dc_adapter = IDCDescriptiveProperties(item, None)
             if dc_adapter:
                 _title = dc_adapter.title
