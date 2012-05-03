@@ -210,6 +210,38 @@ class TranslateMenu(BrowserMenu):
         else:
             return None
 
+class DownloadMenu(BrowserMenu):
+    def getMenuItems(self, context, request):
+        doc_formats = ["odt", "pdf"]
+        results = []
+        for doc_format in doc_formats:
+            results.append(dict(
+                title=_("Download"),
+                description="",
+                action = "doc_format",
+                selected=False,
+                icon=None,
+                extra={},
+                submenu=None
+                
+            ))
+        return results
+
+class DownloadSubMenuItem(BrowserSubMenuItem):
+    title = _(u"label_content_download", default=u"Download")
+    submenuId = "context_download"
+    order = 40
+
+    def __new__(cls, context, request):
+        return object.__new__(cls, context, request)
+
+    @property
+    def extra(self):
+        return {
+            "id": self.id,
+            "stateTitle": "ST"
+        }
+
 class WorkflowSubMenuItem(BrowserSubMenuItem):
     title = _(u"label_state", default=u"State:")
     submenuId = "context_workflow"

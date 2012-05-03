@@ -114,7 +114,16 @@
         title="Downloads Menu - provides different document download formats"
         class="ploned.ui.menu.PloneBrowserMenu"
     />
-    
+    <browser:menu id="context_download"
+        title="The 'Download' menu - allows download of document in other formats"
+        class=".menu.DownloadMenu"
+    />
+    <adapter name="plone.contentmenu.download.document"
+        for="bungeni.models.interfaces.IBungeniParliamentaryContent *"
+        factory=".menu.DownloadSubMenuItem"
+        permission="zope.View"
+        provides="ploned.ui.interfaces.IContentMenuItem" 
+    />
     <!-- CONTENT SUBMENUS -->
     <browser:subMenuItem menu="plone_contentmenu"
         for="bungeni.models.interfaces.IWorkspaceContainer"

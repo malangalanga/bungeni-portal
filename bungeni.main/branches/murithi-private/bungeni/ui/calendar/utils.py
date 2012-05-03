@@ -226,7 +226,7 @@ def generate_recurrence_dates(recurrence_start_date,
     if (count2 != "") and (day != ""):    
         byweekday = day_map[int(day)](+int(count2))
     elif (days != ""):
-        byweekday = map(int,days.split(","))
+        byweekday = [day_map.get(int(d)) for d in days.split(",")]
     if rrule_count is not None:
         if byweekday is not None:
             return list(rrule(freq, 

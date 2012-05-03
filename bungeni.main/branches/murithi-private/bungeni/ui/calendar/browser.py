@@ -550,6 +550,7 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
         #of the sitting, the code below removes the prefix and set the action to
         #be performed
         data = request.form
+        log.debug("SCHEDULER DATA: %s", data.__repr__())
         for key in request.form.keys():
             t = key.partition("_")
             request.form[t[2]] = data[key]
@@ -615,8 +616,10 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
             # convert them to naive datetimes
             recurrence_start_date = data["start_date"].replace(tzinfo=None)
             recurrence_end_date = data["end_date"].replace(tzinfo=None)
+            rec_delta = recurrence_end_date - recurrence_start_date
             length = data["event_length"]
             sitting_length = timedelta(seconds=int(length))
+            base_sitting_length = sitting_length + timedelta(seconds=3600)
             # 
             # Check the end date of the recurrence
             # The end date is set to be the end date of the current group 
@@ -635,22 +638,38 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
                 recurrence_end_date = end 
             dates = utils.generate_recurrence_dates(recurrence_start_date, 
                                             recurrence_end_date, data["rec_type"])
+            initial_sitting = None
             recurrent_sittings = []
-            for date in dates:
+            parent_id = None
+            for count, date in enumerate(dates):
                 sitting = domain.Sitting()
                 sitting.group_id = trusted.group_id
                 sitting.short_name = data.get("short_name", None)
                 sitting.start_date = date
-                sitting.end_date = date + sitting_length
                 sitting.language = data["language"]
                 sitting.venue_id = data["venue"]
                 sitting.activity_type = data.get("activity_type", None)
                 sitting.meeting_type = data.get("meeting_type", None)
                 sitting.convocation_type = data.get("convocation_type", None)
-                session.add(sitting)
-                recurrent_sittings.append(sitting)
+                if not count:
+                    sitting.end_date = dates[len(dates)-1] + base_sitting_length
+                    sitting.recurring_type = data.get("rec_type")
+                    sitting.recurring_id = 0
+                    sitting.sitting_length = length
+                    session.add(sitting)
+                    session.flush()
+                    initial_sitting = sitting
+                else:
+                    end_date = date + sitting_length
+                    sitting.end_date = end_date
+                    sitting.sitting_length = int(
+                        time.mktime(date.timetuple())
+                    )
+                    sitting.recurring_id = initial_sitting.sitting_id
+                    session.add(sitting)
+                    recurrent_sittings.append(sitting)
             session.flush()
-            for s in recurrent_sittings:    
+            for s in ([initial_sitting] + recurrent_sittings):
                 notify(ObjectCreatedEvent(s))
                 self.template_data.append({
                         "sitting_id": s.sitting_id, 
