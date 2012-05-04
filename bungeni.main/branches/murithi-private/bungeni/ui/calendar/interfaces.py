@@ -17,6 +17,10 @@ class IDhtmlxCalendarSittingsEditForm(zope.interface.Interface):
     ids = zope.schema.TextLine(title=u"ID", description=u"Sitting ID",
         required=False
     )
+    event_pid = zope.schema.TextLine(title=u"Parent ID", 
+        description=u"Sitting's Parent ID",
+        required=False
+    )
     short_name = zope.schema.TextLine(title=u"Name of Activity",
         description=u"Name of Activity", required=False
     )

@@ -37,6 +37,7 @@ from zope.formlib import form
 from zope import schema
 from zope.schema.interfaces import IChoice
 from zc.resourcelibrary import need
+from sqlalchemy.sql.expression import or_
 
 from bungeni.core.location import location_wrapped
 from bungeni.core.interfaces import ISchedulingContext
@@ -556,7 +557,12 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
             request.form[t[2]] = data[key]
         if "!nativeeditor_status" in request.form.keys():
             if request.form["!nativeeditor_status"] == "inserted":
-                request.form["actions.insert"] = "insert"
+                if "event_pid" in request.form.keys():
+                    #handle the case when the parent event is edited without
+                    #affecting existing siblings
+                    request.form["actions.update"] = "update"
+                else:
+                    request.form["actions.insert"] = "insert"
             elif request.form["!nativeeditor_status"] == "updated":
                 request.form["actions.update"] = "update"
             elif request.form["!nativeeditor_status"] == "deleted":
@@ -567,6 +573,7 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
     def setUpWidgets(self, ignore_request=False):
         class context:
             ids = None
+            event_pid = None
             short_name = None
             start_date = None
             end_date = None
@@ -602,6 +609,25 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
         self.request.response.setHeader("Content-type", "text/xml")
         return self.xml_template()
 
+    def generate_dates(self, data):
+        trusted = removeSecurityProxy(ISchedulingContext(self.context))
+        recurrence_start_date = data["start_date"].replace(tzinfo=None)
+        recurrence_end_date = data["end_date"].replace(tzinfo=None)
+        group = trusted.get_group()
+        # If group is none then there is a big problem
+        assert group is not None
+        year = timedelta(days=365)
+        now = datetime.datetime.now()                          
+        if (((group.end_date is not None) and ((now + year) < group.end_date)) 
+            or (group.end_date is None)):
+            end = now + year 
+        else:
+            end = group.end_date
+        if recurrence_end_date > end:
+            recurrence_end_date = end 
+        return utils.generate_recurrence_dates(recurrence_start_date, 
+                                        recurrence_end_date, data["rec_type"])
+
     # The form action strings below do not need to be translated because they are 
     # not visible in the UI.      
     @form.action(u"insert", failure="insert_sitting_failure_handler")
@@ -614,33 +640,12 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
             # aware datetime objects while the current database setup only 
             # supports naive objects. The lines below(and in subsequent actions)
             # convert them to naive datetimes
-            recurrence_start_date = data["start_date"].replace(tzinfo=None)
-            recurrence_end_date = data["end_date"].replace(tzinfo=None)
-            rec_delta = recurrence_end_date - recurrence_start_date
             length = data["event_length"]
             sitting_length = timedelta(seconds=int(length))
-            base_sitting_length = sitting_length + timedelta(seconds=3600)
-            # 
-            # Check the end date of the recurrence
-            # The end date is set to be the end date of the current group 
-            # or one year from the present date whichever is sooner.   
-               
-            group = trusted.get_group()
-            # If group is none then there is a big problem
-            assert group is not None    
-            year = timedelta(days=365)
-            now = datetime.datetime.now()                          
-            if ((group.end_date is not None) and ((now + year) < group.end_date)) or (group.end_date is None):
-                end = now + year 
-            else:
-                end = group.end_date
-            if recurrence_end_date > end:
-                recurrence_end_date = end 
-            dates = utils.generate_recurrence_dates(recurrence_start_date, 
-                                            recurrence_end_date, data["rec_type"])
+            base_sitting_length = sitting_length + timedelta(days=1)
             initial_sitting = None
             recurrent_sittings = []
-            parent_id = None
+            dates = self.generate_dates(data)
             for count, date in enumerate(dates):
                 sitting = domain.Sitting()
                 sitting.group_id = trusted.group_id
@@ -714,27 +719,94 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
     def handle_update(self, action, data):
         session = Session()
         self.template_data = []
-        sitting = domain.Sitting()
-        sitting = session.query(domain.Sitting).get(data["ids"])
-        sitting.start_date = data["start_date"].replace(tzinfo=None)
-        sitting.end_date = data["end_date"].replace(tzinfo=None)
-        if "language" in data.keys():
-            sitting.language = data["language"]
-        if "venue" in data.keys():
-            sitting.venue_id = data["venue"]
-        sitting.short_name = data.get("short_name", None)
-        sitting.activity_type = data.get("activity_type", None)
-        sitting.meeting_type = data.get("meeting_type", None)
-        sitting.convocation_type = data.get("convocation_type", None)
-        # set extra data needed by template
-        session.flush()
-        notify(ObjectModifiedEvent(sitting))
-        self.template_data.append({
-                "sitting_id": sitting.sitting_id, 
-                "action": "inserted",
-                "ids": data["ids"],
-            })
-        session.flush()
+        trusted = removeSecurityProxy(ISchedulingContext(self.context))
+        if ("rec_type" in data.keys()) and (data["rec_type"] is not None):
+            # updating recurring events - we assume existing events fall
+            # at the beginning of the sequence and offer in place update.
+            parent_sitting_id = int(data["ids"]) or int(data["event_pid"])
+            length = data["event_length"]
+            sitting_length = timedelta(seconds=int(length))
+            base_sitting_length = sitting_length + timedelta(hours=1)
+            siblings = session.query(domain.Sitting).filter(or_(
+                domain.Sitting.recurring_id==parent_sitting_id,
+                domain.Sitting.sitting_id==parent_sitting_id
+            )).order_by(domain.Sitting.sitting_id).all()
+            dates = self.generate_dates(data)
+            current_count = len(siblings)
+            for count, date in enumerate(dates):
+                is_new = not count < current_count
+                if is_new:
+                    sitting = domain.Sitting()
+                else:
+                    sitting = siblings[count]
+                sitting.start_date = date
+                if not count:
+                    sitting.end_date = dates[len(dates)-1] + base_sitting_length
+                    sitting.recurring_type = data.get("rec_type")
+                    sitting.recurring_id = 0
+                    sitting.sitting_length = length
+                else:
+                    end_date = date + sitting_length
+                    sitting.end_date = end_date
+                    sitting.sitting_length = int(time.mktime(date.timetuple()))
+                if is_new:
+                    sitting.group_id = trusted.group_id
+                    sitting.short_name = data.get("short_name", None)
+                    sitting.venue_id = data["venue"]
+                    sitting.language = data["language"]
+                    sitting.activity_type = data.get("activity_type", None)
+                    sitting.meeting_type = data.get("meeting_type", None)
+                    sitting.convocation_type = data.get("convocation_type", None)
+                    sitting.recurring_id = parent_sitting_id
+                    session.add(sitting)
+                    session.flush()
+                    notify(ObjectCreatedEvent(sitting))
+                else:
+                    session.flush()
+                    notify(ObjectModifiedEvent(sitting))
+                self.template_data.append({
+                        "sitting_id": sitting.sitting_id, 
+                        "action": (is_new and "inserted" or "updated"),
+                        "ids": sitting.sitting_id,
+                })
+            #delete any sittings outside recurring bounds
+            for del_sibling in siblings[len(dates):]:
+                session.delete(del_sibling)
+                del_id = del_sibling.sitting_id
+                notify(ObjectRemovedEvent(del_sibling))
+                self.template_data.append({
+                    "sitting_id": del_id,
+                    "action": "deleted",
+                    "ids": del_id
+                })
+        else:
+            sitting_id = int(data["ids"])
+            parent_id = int(data["event_pid"])
+            sitting = session.query(domain.Sitting).get(sitting_id)
+            if sitting is None:
+                sitting = session.query(domain.Sitting).get(parent_id)
+            sitting.start_date = data["start_date"].replace(tzinfo=None)
+            if sitting.recurring_type == "":
+                #disregard recurring date changes for single records
+                #data sent by dhtmlxscheduler seems erratic when editing
+                #root sittings
+                sitting.end_date = data["end_date"].replace(tzinfo=None)
+                sitting.sitting_length = int(data.get("event_length"))
+            if "language" in data.keys():
+                sitting.language = data["language"]
+            if "venue" in data.keys():
+                sitting.venue_id = data["venue"]
+            sitting.short_name = data.get("short_name", None)
+            sitting.activity_type = data.get("activity_type", None)
+            sitting.meeting_type = data.get("meeting_type", None)
+            sitting.convocation_type = data.get("convocation_type", None)
+            session.flush()
+            notify(ObjectModifiedEvent(sitting))
+            self.template_data.append({
+                    "sitting_id": sitting.sitting_id, 
+                    "action": "updated",
+                    "ids": data["ids"],
+                })
         self.request.response.setHeader("Content-type", "text/xml")
         return self.xml_template()
         
