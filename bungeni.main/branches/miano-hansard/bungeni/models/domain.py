@@ -317,12 +317,6 @@ class PasswordRestoreLink(object):
     def expired(self):
         return self.expiration_date < datetime.datetime.now() 
 
-#class HansardReporter(User):
-#    """ a reporter who reports on parliamentary procedings
-#    """
-#    rotas
-#    takes
-
 
 ######
 
@@ -408,6 +402,8 @@ class Sitting(Entity):
         "bungeni.models.domain.ItemScheduleContainer", "sitting_id")
     sreports = one2many("sreports",
         "bungeni.models.domain.Report4SittingContainer", "sitting_id")
+    hansards = one2many("hansards", 
+        "bungeni.models.domain.HansardContainer", "sitting_id")
 
 class SittingAttendance(object):
     """A record of attendance at a meeting .
@@ -1237,6 +1233,41 @@ class Report4Sitting(Report):
 class ObjectTranslation(object):
     """Get the translations for an Object.
     """
+
+class Hansard(object):
+    interface.implements(interfaces.IHansard)
+    """
+    The hansard report of a sitting
+    """   
+    agendaitems = one2many("agendaitems",
+        "bungeni.models.domain.HansardAgendaItemContainer", "hansard_id")
+    speeches = one2many("speeches", 
+        "bungeni.models.domain.SpeechContainer", "hansard_id")
+        
+class HansardItem(object):
+    """
+    An item in the hansard ie. Agenda Item or Speech
+    """
+    interface.implements(interfaces.IHansardItem)
+    
+class HansardAgendaItem(HansardItem):
+    """
+    An agenda item in the hansard
+    """
+    interface.implements(interfaces.IHansardAgendaItem)
+    
+class Speech(HansardItem):
+    """
+    A single speech made in a plenary or committee sitting
+    """
+    interface.implements(interfaces.ISpeech)
+
+class Take( Entity ):    
+    """
+    A Take - A unit of the parliamentary proceeding that is assigned to 
+    a staff member for transcription or review
+    """
+    interface.implements(interfaces.ITake)
 
 
 ''' !+TYPES_CUSTOM

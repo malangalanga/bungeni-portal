@@ -209,6 +209,26 @@ class IScheduleText(interface.Interface):
 class IItemScheduleDiscussion(interface.Interface):
     pass
 
+class IHansard(interface.Interface):
+    """Marker interface for hansards
+    """
+    
+class IHansardItem(interface.Interface):
+    """Marker interface for hansard items
+    """
+        
+class IHansardAgendaItem(interface.Interface):
+    """Marker interface for hansard agenda items
+    """
+    
+class ISpeech(interface.Interface):
+    """Marker interface for speeches in a hansard
+    """
+    
+class ITake(interface.Interface):
+    """Marker interface for takes"""
+
+
 class ITabledDocument(IBungeniContent):
     """Tabled document.
     """

@@ -3080,25 +3080,33 @@ class SessionDescriptor(ModelDescriptor):
     custom_validators = [validations.validate_date_range_within_parent]
 
 
-#class DebateDescriptor (ModelDescriptor):
-#    display_name = _("Debate")
-#    container_name = _("Debate")
-
-#    fields = [
-#        Field(name="sitting_id", modes=""),
-#        Field(name="debate_id", modes=""),
-#        Field(name="short_name",
-#                label=_("Short Name"),
-#                modes="view edit add listing",
-#                listing_column=name_column("short_name",
-#                    _("Name"))),
-#        Field(name="body_text", label=_("Transcript"),
-#              property = schema.Text(title="Transcript"),
-#              view_widget=widgets.HTMLDisplay,
-#              edit_widget=widgets.RichTextEditor,
-#              add_widget=widgets.RichTextEditor,
-#             ),
-#        ]
+class HansardDescriptor(ModelDescriptor):
+    localizable = True
+    display_name = _("Hansard")
+    container_name = _("Hansard")
+    fields = [
+        Field(name="web_optimised_video_path",
+            modes="view edit add listing",
+            localizable=[
+                show("view edit listing"),
+            ],
+            property=schema.URI(title=_("Web optimised video path"))
+        ),
+        Field(name="high_quality_video_path",
+            modes="view edit add listing",
+            localizable=[
+                show("view edit listing"),
+            ],
+            property=schema.URI(title=_("High quality video path"))
+        ),
+        Field(name="audio_only_path",
+            modes="view edit add listing",
+            localizable=[
+                show("view edit listing"),
+            ],
+            property=schema.URI(title=_("Audio only path"))
+        ),
+    ]
 
 
 class AttendanceDescriptor(ModelDescriptor):
@@ -3349,34 +3357,6 @@ class ConstituencyDetailDescriptor(ModelDescriptor):
     ]
 
 
-################
-# Hansard
-################
-
-''' !+UNUSED_Rota(mr, feb-2011)
-class RotaDescriptor(ModelDescriptor):
-    fields = [
-        # !+ Field(name="reporter_id") ??
-        Field(name="identifier",
-            modes="view edit add listing",
-        ), # !+ title=_("Rota Identifier"),
-        Field(name="start_date",
-            modes="view edit add listing",
-            label=_("Start Date"),
-            listing_column=day_column("start_date", _("Start Date")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
-        ),
-        Field(name="end_date",
-            modes="view edit add listing",
-            label=_("End Date"),
-            listing_column=day_column("end_date", _("End Date")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
-        ),
-    ]
-    schema_invariants = [EndAfterStart]
-'''
 
 ''' !+UNUSED_DocumentSource(mr, feb-2011)
 class DocumentSourceDescriptor(ModelDescriptor):

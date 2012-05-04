@@ -647,6 +647,35 @@ mapper(domain.AttachmentAudit, schema.attachment_audit,
     polymorphic_identity=polymorphic_identity(domain.Attachment) # on head class
 )
 
+mapper(domain.Hansard, schema.hansards,
+        properties = {
+            "items": relation(domain.HansardItem,
+                              order_by=schema.hansard_items.c.start_datetime,),
+            "sitting": relation(domain.Sitting, uselist=False),    
+            }
+       )
+
+mapper(domain.HansardItem, schema.hansard_items, 
+        polymorphic_on=schema.doc.c.type,
+        polymorphic_identity=polymorphic_identity(domain.HansardItem),  
+        )
+        
+mapper(domain.HansardAgendaItem, schema.hansard_agenda_items,
+        inherits=domain.HansardItem,
+        polymorphic_on=schema.hansard_items.c.type,
+        polymorphic_identity=polymorphic_identity(domain.HansardAgendaItem),
+    )
+    
+mapper(domain.Speech, schema.speeches, 
+        inherits=domain.HansardItem,
+        polymorphic_on=schema.hansard_items.c.type,
+        polymorphic_identity=polymorphic_identity(domain.Speech),
+        properties = {
+                'person': relation(domain.User),
+                } 
+        )
+
+mapper(domain.Take, schema.takes)
 
 mapper(domain.Heading, schema.headings,
     properties={

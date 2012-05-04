@@ -306,7 +306,7 @@ users = rdb.Table("users", metadata,
     rdb.Column("user_id", rdb.Integer, PrincipalSequence, primary_key=True),
     # login is our principal id
     rdb.Column("login", rdb.Unicode(80), unique=True, nullable=True),
-    rdb.Column("titles", rdb.Unicode(32)),
+    rdb.Column("titles", rdb.Unicode(80)),
     rdb.Column("first_name", rdb.Unicode(256), nullable=False),
     rdb.Column("last_name", rdb.Unicode(256), nullable=False),
     rdb.Column("middle_name", rdb.Unicode(256)),
@@ -797,6 +797,61 @@ sitting_attendance = rdb.Table("sitting_attendance", metadata,
         nullable=False,
     ),
 )
+
+hansards = rdb.Table("hansards", metadata,
+    rdb.Column("hansard_id", rdb.Integer,
+        primary_key=True
+    ),
+    #Enforce in schema that a sitting can only have one hansard related to it
+    rdb.Column("sitting_id", rdb.Integer, rdb.ForeignKey("sitting.sitting_id"),
+        unique=True,
+    ),
+    rdb.Column("web_optimised_video_path", rdb.UnicodeText, nullable=True),
+    rdb.Column("audio_only_path", rdb.UnicodeText, nullable=True),
+    rdb.Column("high_quality_video_path", rdb.UnicodeText, nullable=True), 
+)
+
+hansard_items = rdb.Table("hansard_items", metadata,
+    rdb.Column("hansard_item_id", rdb.Integer, primary_key=True),
+    rdb.Column("hansard_id", rdb.Integer,
+        rdb.ForeignKey("hansards.hansard_id")),
+    rdb.Column("start_datetime", rdb.DateTime(timezone=False), nullable=False),
+    rdb.Column("end_datetime", rdb.DateTime(timezone=False), nullable=False),
+    # type for polymorphic_identity
+    rdb.Column("type", rdb.Unicode(128), nullable=False),
+)
+
+hansard_agenda_items = rdb.Table(
+    "hansard_agenda_items",
+    metadata, 
+    rdb.Column("hansard_agenda_item_id", rdb.Integer,
+        rdb.ForeignKey("hansard_items.hansard_item_id"),
+        primary_key=True
+        ),
+    rdb.Column("agenda_item_id", rdb.Integer,
+        rdb.ForeignKey("doc.doc_id")),
+   )
+
+speeches = rdb.Table(
+    "speeches",
+    metadata, 
+    rdb.Column("speech_id", rdb.Integer,
+        rdb.ForeignKey("hansard_items.hansard_item_id"),
+        primary_key=True
+        ),
+    rdb.Column("user_id", rdb.Integer, rdb.ForeignKey("users.user_id")),
+    rdb.Column("text", rdb.UnicodeText),
+   )
+
+takes = rdb.Table(
+    "takes",
+    metadata,
+    rdb.Column('take_id', rdb.Integer, primary_key=True),
+    rdb.Column("take_name", rdb.Unicode(512), nullable=False),
+    rdb.Column('start_datetime', rdb.DateTime(timezone=False), nullable=False ),
+    rdb.Column('end_datetime', rdb.DateTime(timezone=False), nullable=False),
+    )
+    
 
 # headings
 headings = rdb.Table("headings", metadata,
