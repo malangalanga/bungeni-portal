@@ -4,6 +4,10 @@
     domain="bungeni"
     initial_state="">
     
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="true" />
+    
     <!-- global grants -->
     <grant permission="bungeni.reports.Edit" role="bungeni.Clerk" />
     <grant permission="bungeni.reports.Edit" role="bungeni.Speaker" /> 

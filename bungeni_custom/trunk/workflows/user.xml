@@ -4,6 +4,8 @@
     domain="bungeni"
     initial_state="">
     
+    <feature name="address" enabled="true" />
+    
     <state id="A" title="Active User" publish="true">
         <grant permission="bungeni.delegation.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.delegation.Add" role="bungeni.Owner" />
