@@ -31,13 +31,13 @@ zope_i18n_compile_mo_files = True
 # string, language identifier, must be one of zope_i18n_allowed_languages
 default_language = "en"
 
-#language ids for languages written right to left, as a space-separated string
-right_to_left_languages= "ar" 
+# language ids for languages written right to left, as a space-separated string
+right_to_left_languages = "ar" 
 
 # integer, minimum number of seconds to wait between checks for whether a 
 # localization file needs reloading; 0 means never check (deployment)
 check_auto_reload_localization = 5
 
-#Default number of items in listings
+# default number of items in listings
 default_number_of_listing_items = 100
 
