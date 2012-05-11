@@ -732,7 +732,7 @@ div.documentContent div h1:first-child {
 div.documentContent div#content h1.title {
     text-align:center !important;
 }
-div.documentContent div p {
+div.documentContent div p.documentDescription {
     text-align:center !important;
 }
 /*
@@ -1479,10 +1479,10 @@ div.main-column #collage h2 {
     padding: 0 !important;
 }
 .template-workspace .documentDescription {
+    text-align:center;
     font-weight: normal;
     margin-left: auto;
     margin-right: auto;
-    width:480px;
 }
 /*
  * Calendar Styles for logged out view
@@ -1715,4 +1715,9 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
 .template-workspace.section-bungeni-business .dhx_scale_holder .dhx_cal_event .dhx_body[style],
 .template-workspace.section-bungeni-business .dhx_scale_holder_now .dhx_cal_event .dhx_body[style] {
     width: 94% !important;
+}
+
+/* member section */
+#image .widget img {
+    max-height:200px;
 }
