@@ -250,31 +250,6 @@ class DownloadDocument(BrowserView):
                 return self.generateDoc()
             except DocumentGenerationError:
                 return self.error_template()
-        
-    def documentTemplates(self):
-        templates = []
-        templates_path = capi.get_path_for("reporting", "templates", 
-            "templates.xml"
-        )
-        if os.path.exists(templates_path):
-            template_config = etree.fromstring(open(templates_path).read())
-            for template in template_config.iter(tag="template"):
-                location = capi.get_path_for("reporting", "templates", 
-                    template.get("file")
-                )
-                template_file_name = template.get("file")
-                if os.path.exists(location):
-                    template_dict = dict(
-                        title = template.get("name"),
-                        language = template.get("language"),
-                        location = base64.encodestring(template_file_name)
-                    )
-                    templates.append(template_dict)
-                else:
-                    log.error("Template does noet exist. No file found at %s.", 
-                        location
-                    )
-        return templates
 
     def templateSelected(self):
         """Check if a template was provided in the request as url/form 
@@ -292,22 +267,6 @@ class DownloadDocument(BrowserView):
                 self.oo_template_file = template_path
         return template_selected
 
-class ReportODT(DownloadDocument):
-    oo_template_file = os.path.dirname(__file__) + "/templates/agenda.odt"
-    document_type = "odt"
-    
-    def bodyText(self):
-        return self.document.body
-
-    def __call__(self):
-        if self.documentTemplates():
-            if not self.templateSelected():
-                return self.document_template_select()
-        return self.documentData(cached=True)
-
-
-class ReportPDF(ReportODT):
-    document_type = "pdf"
 
 #The classes below generate ODT and PDF documents of bungeni content items
 #TODO:This implementation displays a default set of the content item's attributes

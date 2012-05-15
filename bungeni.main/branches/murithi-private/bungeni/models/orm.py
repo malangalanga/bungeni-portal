@@ -69,7 +69,6 @@ def configurable_mappings(kls):
                 
                 # get tbl PK column
                 assert len(tbl.primary_key) == 1
-                # !+ASSUMPTION_SINGLE_COLUMN_PK(mr, may-2012)
                 pk_col = [ c for c in tbl.primary_key ][0]
                 mapper_properties["changes"] = relation(domain.Change,
                     primaryjoin=rdb.and_(
@@ -810,7 +809,7 @@ mapper(domain.SittingReport, schema.sitting_report,
             uselist=False
         ),
         "report": relation(domain.Report, # !+doc.head
-            backref="sitting",
+            backref="sittings",
             lazy=True,
             uselist=False
         ),
