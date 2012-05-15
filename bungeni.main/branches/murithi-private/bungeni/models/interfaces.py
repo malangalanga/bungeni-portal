@@ -106,11 +106,11 @@ class IOfficeMember(IBungeniGroupMembership):
 class IOwned(interface.Interface):
     """Object supports having an "owner" i.e. an owner:user attribute.
     """
-    
+
 class IBungeniContent(IOwned):
     """Parliamentary content
     
-    !+IAlchemistContent(mr, nov-2011) clarify distinction, 
+    !+IBungeniContent(mr, nov-2011) clarify distinction, 
     in intention and use, between the following interfaces: 
     IBungeniParliamentaryContent -> IBungeniContent -> IAlchemistContent
     Should standardize registration on the appropriate one (or on IWorklfowed).
@@ -119,8 +119,10 @@ class IBungeniContent(IOwned):
     # status: rdb.Unicode(48)
     # status_date: rdb.DateTime(timezone=False)
 
-class IBungeniParliamentaryContent(interface.Interface):
+class IBungeniParliamentaryContent(IBungeniContent):
     """Marker interface for true bungeni parliamentary content"""
+    # !+IBungeniContent(mr, may-2012) drop either IBungeniContent or
+    # IBungeniParliamentaryContent !
 
 class IBungeniContainer(IAlchemistContainer):
     """Parliamentary container.
@@ -153,12 +155,7 @@ class IVersionContainer(IBungeniContainer):
 class IHeading(IBungeniContent):
     pass
 
-class IDocument(IBungeniContent):
-    """Marks instances of domain.Document.
-    Also marks difference between new-style and old-style parliamentary items
-    while in transitory phase.
-    """
-class IEvent(IDocument):
+class IEvent(IBungeniContent):
     pass
 
 
@@ -404,6 +401,7 @@ class IBungeniEmailSettings(interface.Interface):
     )
 
 class IAttachment(IOwned): pass
+# !+VERSION_CLASS_PER_TYPE
 class IAttachedFileVersion(interface.Interface): pass 
 # !+OBSOLETE_VERSIONING
 #class IAttachedFileVersionContainer(IVersionContainer): pass
@@ -477,27 +475,35 @@ class IProxiedDirectory(interface.Interface):
     to that point back to our parent.
     """
 
-# feature markers - apply to a domain model, to declare it implements feature
+# IFeature marker interfaces -- apply to a domain model, to declare that it 
+# implements the feature. To avoid "english language anomalies of derived names" 
+# e.g "schedule" -> ISchedulable, adopt a very KISS feature->interface naming 
+# convention: "schedule"->IFeatureSchedule
 
-class IAuditable(interface.Interface):
-    """Marker interface to apply audit feature.
+class IFeature(interface.Interface):
+    """Base feature marker interface.
     """
-class IVersionable(interface.Interface):
-    """Marker to apply version feature (requires IAuditable/audit.
+class IFeatureAudit(IFeature):
+    """Marks support for "audit" feature.
     """
-class IAttachmentable(interface.Interface):
-    """Marker to apply attachment feature.
+class IFeatureVersion(IFeature):
+    """Marks support for "version" feature (requires "audit").
     """
-class ISchedulable(interface.Interface):
-    """Marker interfaces for domain objects that are schedulable
+class IFeatureAttachment(IFeature):
+    """Marks support for "attachment" feature.
     """
-
-FEATURE_INTERFACES = {
-    "audit": IAuditable,
-    "version": IVersionable,
-    "attachment": IAttachmentable,
-    "schedule": ISchedulable,
-}
+class IFeatureEvent(IFeature):
+    """Marks support for "event" feature.
+    """
+class IFeatureSignatory(IFeature):
+    """Marks support for "signatory" feature.
+    """
+class IFeatureSchedule(IFeature):
+    """Marks support for "schedule" feature.
+    """
+class IFeatureAddress(IFeature):
+    """Marks support for "address" feature.
+    """
 
 #
 
@@ -523,13 +529,13 @@ class IMemberTitle(interface.Interface):
 class ITitleType(interface.Interface):
     """Title types"""
 
-class _IAddress(interface.Interface):
+class IAddress(interface.Interface):
     """Base marker interface for an Address
     """
-class IGroupAddress(_IAddress):
+class IGroupAddress(IAddress):
     """Marker interface addresses of a group.
     """
-class IUserAddress(_IAddress):
+class IUserAddress(IAddress):
     """Marker interface addresses of a user.
     """
 

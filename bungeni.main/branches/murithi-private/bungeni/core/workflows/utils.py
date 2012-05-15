@@ -163,10 +163,6 @@ is_pi_scheduled = dbutils.is_pi_scheduled
 
 
 # question
-def setMinistrySubmissionDate(context):
-    if context.ministry_submit_date == None:
-        context.ministry_submit_date = datetime.date.today()
-
 def assign_question_minister_role(context):
     assert interfaces.IQuestion.providedBy(context), \
         "Not a Question: %s" % (context)
@@ -176,12 +172,7 @@ def assign_question_minister_role(context):
             IPrincipalRoleMap(context).assignRoleToPrincipal("bungeni.Minister", 
                 ministry_login_id)
 
-# !+QuestionScheduleHistory(mr, mar-2011) rename appropriately e.g. "unschedule"
-# !+QuestionScheduleHistory(mr, mar-2011) only pertinent if question is 
-# transiting from a shceduled state... is this needed anyway?
-def setQuestionScheduleHistory(context):
-    question_id = context.question_id
-    dbutils.removeQuestionFromItemSchedule(question_id)
+unschedule_doc = dbutils.unschedule_doc
 
 ''' !+UNUSUED (and incorrect) :
 def getQuestionSchedule(context):
@@ -239,10 +230,10 @@ def _set_group_local_role(context, unset=False):
         prm.assignRoleToPrincipal(role, group.group_principal_id)
     else:
         prm.unsetRoleForPrincipal(role, group.group_principal_id)
-    
+
 def set_group_local_role(context):
     _set_group_local_role(context, unset=False)
-            
+
 def unset_group_local_role(context):
     _set_group_local_role(context, unset=True)
 
@@ -250,7 +241,7 @@ def dissolveChildGroups(groups, context):
     for group in groups:
         IWorkflowController(group).fireTransition("active-dissolved", 
             check_security=False)
-        
+
 # sitting
 def schedule_sitting_items(context):
     

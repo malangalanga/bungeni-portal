@@ -11,14 +11,14 @@ log = __import__("logging").getLogger("bungeni.core.version")
 from zope.security.proxy import removeSecurityProxy
 
 from bungeni.alchemist import Session
-
+import bungeni.models.interfaces
 from bungeni.models import domain
-from bungeni.models.interfaces import FEATURE_INTERFACES
 from bungeni.core import audit
 
 
-IVersionable = FEATURE_INTERFACES["version"]
-IAttachmentable = FEATURE_INTERFACES["attachment"]
+def get_feature_interface(feature_name):
+    return getattr(bungeni.models.interfaces,
+        "IFeature%s" % feature_name.capitalize())
 
 
 def version_tree(ob, root=False, reversion=False):
@@ -36,13 +36,15 @@ def version_tree(ob, root=False, reversion=False):
         is always created. Plus, parameters for other sub-calls are affected
         by whether we are daling with root instance or not.
     
-    reversion:bool -- whether this is a revert to a previous version or not
+    reversion:bool -- whether this is a revert to a previous version or not, in 
+        which case ob is the older version to revert to.
     
     --
     current root types: Doc (only Event...), Attachment 
     current child types: (only Event doc, that may not parent Events), Attachment
     """
-    assert IVersionable.providedBy(ob), "Not versionable! %s" % (ob) # !+?
+    assert get_feature_interface("version").providedBy(ob), \
+        "Not versionable! %s" % (ob) # !+reversion?
     
     # ob must be newly versioned if dirty, we always explicitly version root ob
     dirty = root or False
@@ -50,7 +52,7 @@ def version_tree(ob, root=False, reversion=False):
     child_obs = []
     child_versions = []
     # process children (determine via child-implicating features)
-    if IAttachmentable.providedBy(ob):
+    if get_feature_interface("attachment").providedBy(ob):
         child_obs.extend(ob.attachments)
     #!+event-as-feature
     if hasattr(ob, "sa_events") and ob.sa_events:

@@ -29,7 +29,7 @@ from bungeni.alchemist.interfaces import IIModelInterface
 from bungeni.alchemist.ui import getSelected
 
 from bungeni.core import version
-from bungeni.models.interfaces import IVersionable
+from bungeni.models.interfaces import IFeatureVersion
 from bungeni.ui.interfaces import IWorkspaceOrAdminSectionLayer
 from bungeni.ui.i18n import _
 from bungeni.ui.utils import url
@@ -158,7 +158,7 @@ class VersionLogMixin(object):
         formatter.cssClasses["table"] = "listing grid"
         return formatter()
 
-@register.view(IVersionable, layer=IWorkspaceOrAdminSectionLayer, 
+@register.view(IFeatureVersion, layer=IWorkspaceOrAdminSectionLayer, 
     name="version-log", 
     protect={"zope.Public": 
         dict(attributes=["publishTraverse", "browserDefault", "__call__"])})
@@ -310,10 +310,11 @@ class VersionLogView(VersionLogMixin,
 # The diff() utility is adapted from: z3c.schemadiff.schema.py
 # 
 # The DiffView here is different than the one in schemadiff.browser, as:
-# - the result of a diff is now always being obtained via .diff.textDiff(), so
-#   it is all much simpler -- note that z3c.schemadiff.schema.diff() was 
-#   anayway shortcutting any and all adapter genericity (for IFieldDiff) by 
-#   hard-wiring explicit checks on whether not to call IFieldDiff.html_diff()!
+# - the result of a diff is now always being obtained via from
+# htmldiff.htmldiff(),so it is all much simpler
+# note that z3c.schemadiff.schema.diff() was
+# anyway shortcutting any and all adapter genericity (for IFieldDiff) by
+# hard-wiring explicit checks on whether not to call IFieldDiff.html_diff()!
 # 
 # This implementation also removes all dependencies on the z3c.schemadiff
 # package, that may therefore be removed.

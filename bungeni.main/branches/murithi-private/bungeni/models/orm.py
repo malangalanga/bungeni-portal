@@ -24,7 +24,8 @@ def polymorphic_identity(cls):
     return schema.un_camel(cls.__name__)
 
 
-# !+PARAMETRIZABLE_DOCTYPES
+# Features
+
 def configurable_mappings(kls):
     """Configuration mappings for declarative-model types.
     """
@@ -32,16 +33,17 @@ def configurable_mappings(kls):
     mapper_add_relation_vertical_properties(kls)
     
     # auditable, determine properties, map audit class/table
-    if interfaces.IAuditable.implementedBy(kls):
-        # either defined manually or created dynamically in domain.auditable()
+    if interfaces.IFeatureAudit.implementedBy(kls):
+        # either defined manually or created dynamically in domain.feature_audit()
         audit_kls = getattr(domain, "%sAudit" % (name))
         # assumption: audit_kls only uses single inheritance (at least for 
-        # those created dynamically in domain.auditable())
+        # those created dynamically in domain.feature_audit())
         base_audit_kls = audit_kls.__bases__[0] 
         assert issubclass(base_audit_kls, domain.Audit), \
             "Audit class %s is not a proper subclass of %s" % (
                 audit_kls, domain.Audit)
-        if domain.CREATE_AUDIT_CLASS_FOR(kls):
+        # mapper for the audit_cls for this kls, if it was created dynamically
+        if kls in domain.feature_audit.CREATED_AUDIT_CLASS_FOR:
             mapper(audit_kls,
                 inherits=base_audit_kls,
                 polymorphic_identity=polymorphic_identity(kls)
@@ -57,7 +59,7 @@ def configurable_mappings(kls):
             """Add properties, as per configured features for a domain type.
             """
             # auditable
-            if interfaces.IAuditable.implementedBy(kls):
+            if interfaces.IFeatureAudit.implementedBy(kls):
                 # kls.changes <-> change.audit.audit_head=doc:
                 # doc[@TYPE] <-- TYPE_audit <-> audit <-> change
                 
@@ -67,6 +69,7 @@ def configurable_mappings(kls):
                 
                 # get tbl PK column
                 assert len(tbl.primary_key) == 1
+                # !+ASSUMPTION_SINGLE_COLUMN_PK(mr, may-2012)
                 pk_col = [ c for c in tbl.primary_key ][0]
                 mapper_properties["changes"] = relation(domain.Change,
                     primaryjoin=rdb.and_(
@@ -82,15 +85,15 @@ def configurable_mappings(kls):
                     passive_deletes=False, # SA default
                 )
             # versionable
-            if interfaces.IVersionable.implementedBy(kls):
+            if interfaces.IFeatureVersion.implementedBy(kls):
                 pass
             return mapper_properties
         for key, prop in configurable_properties(kls, {}).items():
             kls_mapper.add_property(key, prop)
     mapper_add_configurable_properties(kls)
 
+# /Features
 
-# !+/PARAMETRIZABLE_DOCTYPES
 
 #user address types
 #!+TYPES_CUSTOM mapper(domain.PostalAddressType, schema.postal_address_types)
@@ -528,16 +531,18 @@ mapper(domain.Change, schema.change,
 )
 mapper(domain.ChangeTree, schema.change_tree)
 
-''' !+NO_INHERIT_VERSION mapping domain.Version is actually unnecessary then
+''' !+NO_INHERIT_VERSION mapping domain.Version is actually unnecessary
 #vm = mapper(domain.Version,
 mapper(domain.Version,
     inherits=domain.Change,
     polymorphic_on=schema.change.c.action, # polymorphic discriminator
     polymorphic_identity=polymorphic_identity(domain.Version),
 )
-# !+polymorphic_identity_multi only allows a single value... but, we can tweak 
-# the version mapper's polymorphic_map to allow multiple values for 
-# polymorphic_identity (but attachment.versions does not pick up reversions):
+# !+polymorphic_identity_multi only allows a single value... e.g. if needed to 
+# add a 2nd value such as "reversion" would not be able to -- but seems we 
+# should be able to tweak the version mapper's polymorphic_map to allow 
+# multiple values for polymorphic_identity (but does not work anyway 
+# attachment.versions does not pick up reversions):
 #vm.polymorphic_map["reversion"] = vm.polymorphic_map["version"]
 #del vm
 '''
@@ -552,7 +557,7 @@ mapper(domain.DocVersion,
     # always give an empty doc.versions / attachment.versions / ... lists !
     inherits=domain.Change,
     properties={
-        # !+ only for versionable doc sub-types that are also attachmentable
+        # !+ only for versionable doc sub-types that also support "attachment"
         "attachments": relation(domain.AttachmentVersion, # !+ARCHETYPE_MAPPER
             primaryjoin=rdb.and_(
                 schema.change.c.audit_id == schema.change_tree.c.parent_id,
@@ -797,7 +802,7 @@ mapper(domain.Report,
     polymorphic_identity=polymorphic_identity(domain.Report)
 )
 
-mapper(domain.SittingReport, schema.sitting_reports, # !+?
+mapper(domain.SittingReport, schema.sitting_report,
     properties={
         "sitting": relation(domain.Sitting,
             backref="reports",
@@ -812,7 +817,7 @@ mapper(domain.SittingReport, schema.sitting_reports, # !+?
     }
 )
 
-mapper(domain.Report4Sitting, schema.sitting_reports,
+mapper(domain.Report4Sitting, schema.sitting_report,
     inherits=domain.Report
 )
 
@@ -820,7 +825,7 @@ mapper(domain.ObjectTranslation, schema.translations)
 
 
 # !+IChange-vertical-properties special case: 
-# class is NOT workflowed, and in any case __dynamic_features__ = False
+# class is NOT workflowed, and in any case has no dynamic_features
 mapper_add_relation_vertical_properties(domain.Change)
 
 

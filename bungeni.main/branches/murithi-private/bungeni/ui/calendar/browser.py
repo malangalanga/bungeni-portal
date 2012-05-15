@@ -551,18 +551,12 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
         #of the sitting, the code below removes the prefix and set the action to
         #be performed
         data = request.form
-        log.debug("SCHEDULER DATA: %s", data.__repr__())
         for key in request.form.keys():
             t = key.partition("_")
             request.form[t[2]] = data[key]
         if "!nativeeditor_status" in request.form.keys():
             if request.form["!nativeeditor_status"] == "inserted":
-                if "event_pid" in request.form.keys():
-                    #handle the case when the parent event is edited without
-                    #affecting existing siblings
-                    request.form["actions.update"] = "update"
-                else:
-                    request.form["actions.insert"] = "insert"
+                request.form["actions.insert"] = "insert"
             elif request.form["!nativeeditor_status"] == "updated":
                 request.form["actions.update"] = "update"
             elif request.form["!nativeeditor_status"] == "deleted":
@@ -635,14 +629,14 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
         session = Session()
         self.template_data = []
         trusted = removeSecurityProxy(ISchedulingContext(self.context))
-        if ("rec_type" in data.keys()) and (data["rec_type"] is not None):
+        if ("rec_type" in data.keys()) and (data["rec_type"] not in [None, "none"]):
             # !+ DATETIME(miano, dec-2010) the datetime widget above returns
             # aware datetime objects while the current database setup only 
             # supports naive objects. The lines below(and in subsequent actions)
             # convert them to naive datetimes
             length = data["event_length"]
-            sitting_length = timedelta(seconds=int(length))
-            base_sitting_length = sitting_length + timedelta(days=1)
+            sitting_length = timedelta(seconds=length)
+            base_sitting_length = sitting_length + timedelta(hours=1)
             initial_sitting = None
             recurrent_sittings = []
             dates = self.generate_dates(data)
@@ -667,9 +661,7 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
                 else:
                     end_date = date + sitting_length
                     sitting.end_date = end_date
-                    sitting.sitting_length = int(
-                        time.mktime(date.timetuple())
-                    )
+                    sitting.sitting_length = int(time.mktime(date.timetuple()))
                     sitting.recurring_id = initial_sitting.sitting_id
                     session.add(sitting)
                     recurrent_sittings.append(sitting)
@@ -688,6 +680,9 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
             sitting.short_name = data.get("short_name", None)
             sitting.start_date = data["start_date"].replace(tzinfo=None)
             sitting.end_date = data["end_date"].replace(tzinfo=None)
+            sitting.recurring_type = data["rec_type"]
+            sitting.sitting_length = data.get("event_length")
+            sitting.recurring_id = data.get("event_pid")
             sitting.group_id = trusted.group_id
             sitting.language = data["language"]
             sitting.venue_id = data["venue"]
@@ -697,9 +692,12 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
             session.add(sitting)
             session.flush()
             notify(ObjectCreatedEvent(sitting))
+            sitting_action = "inserted"
+            if data["rec_type"] == "none":
+                sitting_action = "deleted"
             self.template_data.append({
                     "sitting_id": sitting.sitting_id, 
-                    "action": "inserted",
+                    "action": sitting_action,
                     "ids": data["ids"],
                 })
             self.request.response.setHeader("Content-type", "text/xml")
@@ -723,9 +721,9 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
         if ("rec_type" in data.keys()) and (data["rec_type"] is not None):
             # updating recurring events - we assume existing events fall
             # at the beginning of the sequence and offer in place update.
-            parent_sitting_id = int(data["ids"]) or int(data["event_pid"])
+            parent_sitting_id = int(data["ids"]) or data["event_pid"]
             length = data["event_length"]
-            sitting_length = timedelta(seconds=int(length))
+            sitting_length = timedelta(seconds=length)
             base_sitting_length = sitting_length + timedelta(hours=1)
             siblings = session.query(domain.Sitting).filter(or_(
                 domain.Sitting.recurring_id==parent_sitting_id,
@@ -749,14 +747,15 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
                     end_date = date + sitting_length
                     sitting.end_date = end_date
                     sitting.sitting_length = int(time.mktime(date.timetuple()))
+                #apply changes to parent and siblings new or existing
+                sitting.short_name = data.get("short_name", None)
+                sitting.venue_id = data["venue"]
+                sitting.language = data["language"]
+                sitting.activity_type = data.get("activity_type", None)
+                sitting.meeting_type = data.get("meeting_type", None)
+                sitting.convocation_type = data.get("convocation_type", None)
                 if is_new:
                     sitting.group_id = trusted.group_id
-                    sitting.short_name = data.get("short_name", None)
-                    sitting.venue_id = data["venue"]
-                    sitting.language = data["language"]
-                    sitting.activity_type = data.get("activity_type", None)
-                    sitting.meeting_type = data.get("meeting_type", None)
-                    sitting.convocation_type = data.get("convocation_type", None)
                     sitting.recurring_id = parent_sitting_id
                     session.add(sitting)
                     session.flush()
@@ -781,17 +780,13 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
                 })
         else:
             sitting_id = int(data["ids"])
-            parent_id = int(data["event_pid"])
+            parent_id = data["event_pid"]
             sitting = session.query(domain.Sitting).get(sitting_id)
             if sitting is None:
                 sitting = session.query(domain.Sitting).get(parent_id)
             sitting.start_date = data["start_date"].replace(tzinfo=None)
-            if sitting.recurring_type == "":
-                #disregard recurring date changes for single records
-                #data sent by dhtmlxscheduler seems erratic when editing
-                #root sittings
-                sitting.end_date = data["end_date"].replace(tzinfo=None)
-                sitting.sitting_length = int(data.get("event_length"))
+            sitting.end_date = data["end_date"].replace(tzinfo=None)
+            sitting.sitting_length = data.get("event_length")
             if "language" in data.keys():
                 sitting.language = data["language"]
             if "venue" in data.keys():
@@ -837,7 +832,6 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
             session.flush()
             return self.xml_template()
 
-                          
 class DhtmlxCalendarSittings(BrowserView):
     """This view returns xml of the sittings for the week and group 
     requested in a format acceptable by DHTMLX scheduler"""

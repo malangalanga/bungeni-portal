@@ -1,5 +1,4 @@
 from datetime import datetime
-from datetime import timedelta
 from datetime import time
 from datetime import date
 from time import mktime
