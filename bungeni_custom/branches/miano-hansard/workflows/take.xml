@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<workflow title="Hansard Take Workflow"
+    description="Take"
+    domain="bungeni"
+    initial_state=""
+    >
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+
+    <!-- global grants -->
+    <grant permission="bungeni.take.View" role="bungeni.Owner" />
+
+    <state id="draft" title="Draft">
+        <grant permission="zope.View" role="bungeni.Hansard.Chief" />
+        <grant permission="bungeni.take.Edit" role="bungeni.Hansard.Chief" />
+        <grant permission="bungeni.take.Delete" role="bungeni.Hansard.Chief" />
+        <deny permission="zope.View" role="bungeni.Owner" />
+        <deny permission="zope.View" role="bungeni.Hansard.Reader" />
+    </state>
+    
+    <state id="submitted_staff" title="Submitted to staff">
+        <grant permission="zope.View" role="bungeni.Hansard.Chief" />
+        <grant permission="zope.View" role="bungeni.Owner" />
+        <deny permission="bungeni.take.Edit" role="bungeni.Hansard.Chief" />
+        <deny permission="bungeni.take.Delete" role="bungeni.Hansard.Chief" />
+        <grant permission="zope.View" role="bungeni.Hansard.Reader" />
+    </state>
+    
+    <state id="received_staff" title="Received by staff" 
+           like_state="submitted_staff">
+    </state>
+    
+    <state id="submitted_review" title="Submitted for review"  like_state="submitted_staff">
+        <grant permission="zope.View" role="bungeni.Owner" />
+        <grant permission="zope.View" role="bungeni.Hansard.Reader" />
+    
+    </state>
+    
+    <state id="clarification_required" title="Clarification required" like_state="received_staff">
+    </state>
+
+    <state id="approved" title="Approved" like_state="submitted_staff">
+    </state>
+    
+    <transition title="Create Take"
+        source=""
+        destination="draft"
+        trigger="automatic"
+    />
+
+    <transition title="Submit to staff"
+        source="draft"
+        destination="submitted_staff"
+        trigger="manual"
+        roles="bungeni.Hansard.Chief"
+    />
+
+    <transition title="Received"
+        source="submitted_staff"
+        destination="received_staff"
+        trigger="manual"
+        roles="bungeni.Owner"
+    />
+
+    <transition title="Submit for review"
+        source="received_staff"
+        destination="submitted_review"
+        roles="bungeni.Owner"
+        trigger="manual"
+    />
+    
+    <transition title="Approve"
+        source="submitted_review"
+        destination="approved"
+        roles="bungeni.Hansard.Reader"
+        trigger="manual"
+    />
+
+    <transition title="Clarification Required"
+        source="submitted_review"
+        destination="clarification_required"
+        roles="bungeni.Hansard.Reader"
+        trigger="manual"
+    />
+</workflow>
+

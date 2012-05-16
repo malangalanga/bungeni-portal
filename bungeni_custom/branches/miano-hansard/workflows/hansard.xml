@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<workflow title="Hansard Workflow"
+    description="Hansard"
+    domain="bungeni"
+    initial_state=""
+    >
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+
+    <state id="draft" title="Draft">
+        <grant permission="zope.View" role="bungeni.Hansard.Chief" />
+        <grant permission="bungeni.hansard.Edit" role="bungeni.Hansard.Chief" />
+        <grant permission="bungeni.hansard.Delete" role="bungeni.Hansard.Chief" />
+        <grant permission="bungeni.hansard.AssignStaff" role="bungeni.Hansard.Chief" />
+        <deny permission="bungeni.hansard.AssignTakes" role="bungeni.Hansard.Chief" />
+    </state>
+    
+    <state id="staff_assigned" title="Staff Assigned to Hansard">
+        <grant permission="zope.View" role="bungeni.Hansard.Chief" />
+        <deny permission="bungeni.hansard.Edit" role="bungeni.Hansard.Chief" />
+        <deny permission="bungeni.hansard.Delete" role="bungeni.Hansard.Chief" />
+        <deny permission="bungeni.hansard.AssignStaff" role="bungeni.Hansard.Chief" />
+        <grant permission="bungeni.hansard.AssignTakes" role="bungeni.Hansard.Chief" />
+    </state>
+    
+    <state id="takes_assigned" title="Takes assigned to staff"  like_state="staff_assigned">
+        <deny permission="bungeni.hansard.AssignTakes" role="bungeni.Hansard.Chief" />
+    </state>
+    
+    <state id="rota_published" title="Rota Published"  like_state="staff_assigned">
+    </state>
+
+    <state id="published" title="Published" like_state="staff_assigned">
+    </state>
+
+    <transition title="Create Take"
+        source=""
+        destination="draft"
+        trigger="automatic"
+    />
+
+    <transition title="Assign staff"
+        source="draft"
+        destination="staff_assigned"
+        trigger="manual"
+        roles="bungeni.Hansard.Chief"
+    />
+
+    <transition title="Assign takes"
+        source="staff_assigned"
+        destination="takes_assigned"
+        trigger="manual"
+        roles="bungeni.Hansard.Chief"
+    />
+
+    <transition title="Publish Rota"
+        source="takes_assigned"
+        destination="rota_published"
+        roles="bungeni.Hansard"
+        trigger="manual"
+    />
+    
+    <transition title="Publish Hansard"
+        source="rota_published"
+        destination="published"
+        roles="bungeni.Hansard.Chief"
+        trigger="manual"
+    />
+</workflow>
+

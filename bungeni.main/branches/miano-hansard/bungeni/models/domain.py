@@ -1234,7 +1234,7 @@ class ObjectTranslation(object):
     """Get the translations for an Object.
     """
 
-class Hansard(object):
+class Hansard(Entity):
     interface.implements(interfaces.IHansard)
     """
     The hansard report of a sitting
@@ -1244,7 +1244,7 @@ class Hansard(object):
     speeches = one2many("speeches", 
         "bungeni.models.domain.SpeechContainer", "hansard_id")
         
-class HansardItem(object):
+class HansardItem(Entity):
     """
     An item in the hansard ie. Agenda Item or Speech
     """
@@ -1262,7 +1262,7 @@ class Speech(HansardItem):
     """
     interface.implements(interfaces.ISpeech)
 
-class Take( Entity ):    
+class Take(Entity):    
     """
     A Take - A unit of the parliamentary proceeding that is assigned to 
     a staff member for transcription or review

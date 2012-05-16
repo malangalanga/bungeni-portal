@@ -265,6 +265,19 @@
   <!-- Permission to get a workspace -->
   <permission id="bungeni.workspace.View" title="View workspace"/>
    
+  <!-- Hansard related permissions -->
+  <permission id="bungeni.hansard.View" title="View Hansard"/>
+  <permission id="bungeni.hansard.Edit" title="Edit Hansard"/>
+  <permission id="bungeni.hansard.Add" title="Add Hansard"/>
+  <permission id="bungeni.hansard.AssignStaff" title="Assign Staff"/>
+  <permission id="bungeni.hansard.AssignTakes" title="Assign Takes"/>
+  <meta:redefinePermission from="bungeni.hansard.View" to="zope.View" />
+
+  <permission id="bungeni.take.View" title="View Hansard"/>
+  <permission id="bungeni.take.Edit" title="Edit Hansard"/>
+  <permission id="bungeni.take.Add" title="Add Hansard"/>
+  <meta:redefinePermission from="bungeni.take.View" to="zope.View" />
+
   <include package="bungeni_custom.sys.acl" file="permissions.zcml" />
    
 </configure>

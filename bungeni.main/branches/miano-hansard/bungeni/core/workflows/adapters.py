@@ -85,6 +85,8 @@ TYPE_REGISTRY = [
     ("tabled_document", TI("tableddocument", interfaces.ITabledDocument)),
     ("user", TI("user", interfaces.IBungeniUser)),
     ("signatory", TI("signatory", interfaces.ISignatory)),
+    ("hansard", TI("hansard", interfaces.IHansard)),
+    ("take", TI("take", interfaces.ITake)),
 ]
 
 # !+ dedicated interfaces for archetype incantations should be auto-generated, 

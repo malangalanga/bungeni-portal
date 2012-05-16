@@ -10,6 +10,14 @@
         title - Title that appears in the interface
         role - Parent role
     -->
-    
+    <role id="bungeni.Hansard" title="Hansard Office"/>
+    <bungeni:subrole id="bungeni.Hansard.Reporter" title="Hansard Reporter"
+    role="bungeni.Hansard"/>
+    <bungeni:subrole id="bungeni.Hansard.Reader" title="Hansard Reader"
+    role="bungeni.Hansard"/>
+    <bungeni:subrole id="bungeni.Hansard.Reviewer" title="Hansard Reviewer"
+    role="bungeni.Hansard"/>
+    <bungeni:subrole id="bungeni.Hansard.Chief" title="Hansard Chief"
+    role="bungeni.Hansard"/>
     <!--bungeni:subrole id="bungeni.Clerk.QuestionClerk" title="Question Clerk" role="bungeni.Clerk"/-->
 </configure>
