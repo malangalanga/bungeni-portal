@@ -50,6 +50,13 @@
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Speaker" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <!-- event -->
+        <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <grant permission="bungeni.event.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Add" role="bungeni.Speaker" />
+        <grant permission="bungeni.event.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Delete" role="bungeni.Speaker" />
         <!-- response -->
         <deny permission="bungeni.response.View" role="bungeni.Clerk" />
         <deny permission="bungeni.response.View" role="bungeni.Speaker" />
@@ -181,6 +188,13 @@
     <state id="inadmissible" title="Inadmissible" 
         like_state="submitted" 
         tags="terminal fail">
+        <!-- event -->
+        <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
         <notification condition="owner_receive_notification"
             subject="Question rejected: ${item.short_title}"
             from="${site.speaker_email}"
@@ -266,6 +280,13 @@
         publish="true"
         like_state="admissible"
         tags="public terminal succeed">
+        <!-- event -->
+        <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
         <!-- response -->
         <grant permission="bungeni.response.View" role="bungeni.Clerk" />
         <grant permission="bungeni.response.View" role="bungeni.Speaker" />
@@ -290,6 +311,13 @@
     <state id="debated" title="Debated" 
         like_state="admissible"
         tags="public terminal succeed">
+        <!-- event -->
+        <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
         <notification condition="owner_receive_notification"
             subject="Question debated: ${item.short_title}"
             from="${site.clerk_email}"
@@ -307,8 +335,15 @@
     />
     
     <state id="withdrawn_internal" title="Withdrawn" like_state="submitted" 
-        tags="terminal fail"
-    />
+        tags="terminal fail">
+        <!-- event -->
+        <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
+    </state>
     
     <state id="withdrawn" title="Withdrawn" like_state="debated" 
         tags="public terminal fail"

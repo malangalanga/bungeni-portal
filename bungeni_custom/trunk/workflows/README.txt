@@ -9,8 +9,8 @@ currently oriented more towards the Bungeni developer than to the site
 administartor of a Bungeni deployment.
 
 
-Workflow XML Source Style Guide
-===============================
+Guide to Workflow XML Definitions
+=================================
 
 Workflow (root element):
 
@@ -253,4 +253,35 @@ and constrain that accumulative sources are unique.
     require_confirmation=False
     note=None
 
+
+
+Guide: Manage permissions for "sub-items"
+-----------------------------------------
+
+A "head" doc may enable a feature that implies management of sub-items 
+e.g. attachment, address, event. In this cases, the reponsibility for management
+of permissions for each such sub-item is shared between 
+(a) the workflow of the parent item and (b) the workflow of the sub-item.
+
+General guidelines for how this works are below:
+
+- In either workflow, the permissions relating to the sub-item type (the 
+standard 4 CRUD permissions as well as any others) should NOT be global grants.
+
+- The parent doc workflow (supporting the feature and requiring the sub-type) 
+decides who can do what and when with the sub-item, by granting permissions
+related to the sub-item explicity in all workflow states.
+
+- The sub-item workflow explicitly manages for itself any non-Add permissions 
+in its own workflow (for all states not bound to parent via the 
+permissions_from_parent="true" declaration).
+
+- The sub-item workflow may still make use of workflow state option 
+permissions_from_parent="true" on any state in its own workflow.
+
+----
+Separate issue: workflows for sub-item types, e.g. for attachment, address, 
+event, SHOULD default newly created items into a DRAFT state that SHOULD NOT
+be bound with permissions_from_parent.
+----
 

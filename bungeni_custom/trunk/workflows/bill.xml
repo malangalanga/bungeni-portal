@@ -54,6 +54,13 @@
         <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <!-- event -->
+        <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <grant permission="bungeni.event.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Add" role="bungeni.Speaker" />
+        <grant permission="bungeni.event.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Delete" role="bungeni.Speaker" />
     </state>
 
     <state id="draft" title="Draft Bill" 
@@ -100,6 +107,13 @@
         like_state="submitted_signatories">
         <!-- signatory -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <!-- event -->
+        <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
     </state>
     
     <state id="submitted" title="Submitted to Clerk" version="true"
@@ -241,6 +255,13 @@
         <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <!-- event -->
+        <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
     </state>
     
     <state id="rejected" title="Rejected Bill" 
@@ -255,8 +276,16 @@
     
     <state id="withdrawn_internal" title="Withdrawn" 
         like_state="submitted" 
-        tags="private terminal fail"
-    />
+        tags="private terminal fail">
+        <!-- event -->
+        <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
+    </state>
+    
     
     <transition title="Create Bill"
         source=""

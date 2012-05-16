@@ -49,6 +49,13 @@
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" /> 
         <deny permission="bungeni.attachment.Add" role="bungeni.Speaker" /> 
         <deny permission="bungeni.attachment.Add" role="bungeni.Owner" /> 
+        <!-- event -->
+        <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <grant permission="bungeni.event.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Add" role="bungeni.Speaker" />
+        <grant permission="bungeni.event.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Delete" role="bungeni.Speaker" />
         <!-- signatories -->
         <grant permission="bungeni.signatory.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.signatory.Add" role="bungeni.Speaker" />
@@ -112,6 +119,13 @@
         <!-- tableddocument -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Speaker" />
+        <!-- event -->
+        <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
         <!-- signatories -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
         <notification condition="clerk_receive_notification"
@@ -130,6 +144,13 @@
         <!-- attachment -->
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
+        <!-- event -->
+        <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <grant permission="bungeni.event.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Add" role="bungeni.Speaker" />
+        <grant permission="bungeni.event.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Delete" role="bungeni.Speaker" />
         <notification condition="owner_receive_notification"
             subject="Tabled document received: ${item.short_title}"
             from="${site.clerk_email}"
@@ -145,7 +166,14 @@
         <grant permission="bungeni.tableddocument.Edit" role="bungeni.Speaker" />
         <!-- attachment -->
         <grant permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
-        <grant permission="bungeni.attachment.Add" role="bungeni.Speaker" /> 
+        <grant permission="bungeni.attachment.Add" role="bungeni.Speaker" />
+        <!-- event -->
+        <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <grant permission="bungeni.event.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Add" role="bungeni.Speaker" />
+        <grant permission="bungeni.event.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Delete" role="bungeni.Speaker" />
     </state>
     
     <state id="admissible" title="Admissible" 
@@ -157,6 +185,13 @@
         <grant permission="zope.View" role="bungeni.MP" />
         <grant permission="zope.View" role="bungeni.Minister" />
         <grant permission="zope.View" role="bungeni.Anonymous" />
+        <!-- event -->
+        <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <grant permission="bungeni.event.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Add" role="bungeni.Speaker" />
+        <grant permission="bungeni.event.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.Delete" role="bungeni.Speaker" />
     </state>
     
     <state id="schedule_pending" title="Schedule pending" 

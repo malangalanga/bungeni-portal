@@ -3,38 +3,55 @@
     description="Workflow for attached files"
     domain="bungeni"
     initial_state=""
-    tags="public">
+    tags="draft private public">
     
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
-
-    <!-- global grants -->
-    <grant permission="bungeni.event.Add" role="bungeni.Clerk" />
-    <grant permission="bungeni.event.Add" role="bungeni.Speaker" />
-    <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
-    <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
-    <grant permission="bungeni.event.Delete" role="bungeni.Clerk" />
-    <grant permission="bungeni.event.Delete" role="bungeni.Speaker" />
+    
+    <!-- NO global grants -->
+    
+    <state id="draft" title="Draft Event" tags="draft private">
+        <!-- event -->
+        <deny permission="zope.View" role="bungeni.Clerk" />
+        <deny permission="zope.View" role="bungeni.Speaker" />
+        <grant permission="zope.View" role="bungeni.Owner" />
+        <deny permission="zope.View" role="bungeni.Signatory" />
+        <deny permission="zope.View" role="bungeni.MP" />
+        <deny permission="zope.View" role="bungeni.Minister" />
+        <deny permission="zope.View" role="bungeni.Anonymous" />
+        <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <grant permission="bungeni.event.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
+        <grant permission="bungeni.event.Delete" role="bungeni.Owner" />
+    </state>
     
     <state id="attached" title="Event" 
         publish="true"
         tags="public"
-        permissions_from_parent="true" />
+        permissions_from_parent="true" 
+    />
     
-    <state id="internal" title="Published Internal">
+    <state id="internal" title="Published Internal" like_state="draft">
         <!-- event -->
-        <grant permission="zope.View" role="bungeni.Authenticated" />
-        <deny permission="zope.View" role="bungeni.Anonymous" />
+        <grant permission="zope.View" role="bungeni.Clerk" />
+        <grant permission="zope.View" role="bungeni.Speaker" />
+        <grant permission="zope.View" role="bungeni.Signatory" />
+        <grant permission="zope.View" role="bungeni.MP" />
+        <grant permission="zope.View" role="bungeni.Minister" />
         <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.event.Delete" role="bungeni.Clerk" />
         <grant permission="bungeni.event.Delete" role="bungeni.Speaker" />
+        <deny permission="bungeni.event.Delete" role="bungeni.Owner" />
     </state>
     
     <!-- !+inactive(mr, aug-2011) review usage and rename across the board
-        currently being used in attachdfile, heading, event
+        currently being used in attachment, heading, event
         consider using "dropped", "obsoleted", "removed"...
     -->
     <state id="inactive" title="Inactive event" like_state="internal">
@@ -47,8 +64,22 @@
     <!-- !+IDENTICAL_TRANSITIONS(mr, sep-2011) attachment, address, event -->
     <transition title="Create"
         source=""
-        destination="attached"
+        destination="draft"
         trigger="automatic"
+    />
+    
+    <transition title="Publish"
+        source="draft"
+        destination="attached"
+        trigger="manual"
+        roles="bungeni.Owner"
+    />
+    
+    <transition title="Publish Internal"
+        source="draft"
+        destination="internal"
+        trigger="manual"
+        roles="bungeni.Owner"
     />
     
     <transition title="Publish Internal"
