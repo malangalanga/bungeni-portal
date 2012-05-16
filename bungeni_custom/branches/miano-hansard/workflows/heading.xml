@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<workflow title="Heading Workflow"
+    description="Workflow for headings"
+    domain="bungeni"
+    initial_state=""
+    tags="public tobescheduled"
+    >
+
+    <!-- global grants -->
+    <grant permission="bungeni.heading.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.heading.Edit" role="bungeni.Speaker" />
+    <grant permission="bungeni.heading.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.heading.Add" role="bungeni.Speaker" />
+    
+    
+    <state id="inactive" title="Inactive heading obsolete">
+        <!-- heading -->
+        <grant permission="zope.View" role="bungeni.Clerk" />
+        <grant permission="zope.View" role="bungeni.Speaker" />
+        <deny permission="zope.View" role="bungeni.Owner" />
+        <deny permission="zope.View" role="bungeni.Signatory" />
+        <deny permission="zope.View" role="bungeni.MP" />
+        <deny permission="zope.View" role="bungeni.Minister" />
+        <deny permission="zope.View" role="bungeni.Anonymous" /> 
+    </state>
+    
+    <state id="public" title="Public" publish="true" 
+        like_state="inactive"
+        tags="public tobescheduled">
+        <!-- heading -->
+        <grant permission="zope.View" role="bungeni.Owner" />
+        <grant permission="zope.View" role="bungeni.Signatory" />
+        <grant permission="zope.View" role="bungeni.MP" />
+        <grant permission="zope.View" role="bungeni.Minister" />
+        <grant permission="zope.View" role="bungeni.Anonymous" />
+    </state>
+    
+    
+    <transition title="Create"
+        source=""
+        destination="public"
+        trigger="automatic"
+    />
+    
+    <transition title="Deactivate"
+        source="public"
+        destination="inactive"
+        trigger="manual"
+        roles="bungeni.Clerk bungeni.Speaker"
+        require_confirmation="true"
+    />
+    
+    <transition title="Reactivate"
+        source="inactive"
+        destination="public"
+        trigger="manual"
+        roles="bungeni.Clerk bungeni.Speaker"
+        require_confirmation="true"
+    />
+
+</workflow>

@@ -1,0 +1,1436 @@
+<ui roles="bungeni.Admin bungeni.Clerk bungeni.Speaker bungeni.Owner bungeni.MP bungeni.Signatory bungeni.Minister bungeni.Anonymous">
+
+    <descriptor name="AgendaItem">
+        <field name="parliament_id" displayable="view listing" localizable="view listing">
+            <hide modes="view listing" />
+        </field>
+        <field name="short_title" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="long_title" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view" />
+            <hide modes="edit listing" />
+        </field>
+        <field name="owner_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="edit" />
+            <hide modes="view listing" roles="bungeni.Anonymous" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="body" displayable="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="submission_date" displayable="view listing" localizable="view listing">
+            <show modes="view" />
+            <hide modes="listing" />
+        </field>
+        <field name="admissible_date" displayable="view listing" localizable="view listing">
+            <show modes="view" />
+            <hide modes="listing" />
+        </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="description" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="type_number" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="uri" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="timestamp" displayable="edit" localizable="edit">
+            <show modes="edit" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Attachment">
+        <field name="type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="title" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="data" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
+        </field>
+        <field name="name" displayable="edit add" />
+        <field name="mimetype" displayable="edit add" />
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="AttachmentVersion">
+        <field name="user_id" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="action" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="seq" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="procedure" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="date_audit" displayable="view listing" localizable="view listing">
+            <hide modes="view listing" />
+        </field>
+        <field name="date_active" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="title" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="data" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
+        </field>
+        <field name="name" displayable="edit add" />
+        <field name="mimetype" displayable="edit add" />
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="audit_id" displayable="view listing" localizable="view listing">
+            <hide modes="view listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Attendance">
+        <field name="member_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="attendance_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Bill">
+        <field name="parliament_id" displayable="view listing" localizable="view listing">
+            <hide modes="view listing" />
+        </field>
+        <field name="short_title" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="long_title" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="owner_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="edit" />
+            <hide modes="view listing" roles="bungeni.Anonymous" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="body" displayable="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="submission_date" displayable="view listing" localizable="view listing">
+            <show modes="view" />
+            <hide modes="listing" />
+        </field>
+        <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="group_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="publication_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view" />
+            <hide modes="edit listing" />
+        </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="description" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="type_number" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="uri" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="timestamp" displayable="edit" localizable="edit">
+            <show modes="edit" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Committee">
+        <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="combined_name" displayable="listing" localizable="listing">
+            <show modes="listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="identifier" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
+        </field>
+        <field name="sub_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="group_continuity" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="num_members" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="min_num_members" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="quorum" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="num_clerks" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="num_researchers" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="proportional_representation" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="reinstatement_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="CommitteeMember">
+        <field name="user_id" displayable="view add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="active_p" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="edit" />
+            <hide modes="view listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
+            <hide modes="view edit listing" />
+        </field>
+        <field name="replaced_id" displayable="view edit listing" localizable="view edit listing">
+            <hide modes="view edit listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="notes" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+    </descriptor>
+
+    <descriptor name="CommitteeStaff">
+        <field name="user_id" displayable="view add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="active_p" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="edit" />
+            <hide modes="view listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
+            <hide modes="view edit listing" />
+        </field>
+        <field name="replaced_id" displayable="view edit listing" localizable="view edit listing">
+            <hide modes="view edit listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="notes" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Constituency">
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="ConstituencyDetail">
+        <field name="date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="population" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="voters" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Country">
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="country_id" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
+        </field>
+        <field name="country_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="DocVersion">
+        <field name="user_id" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="action" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="seq" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="procedure" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="date_audit" displayable="view listing" localizable="view listing">
+            <hide modes="view listing" />
+        </field>
+        <field name="date_active" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="short_title" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="long_title" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="description" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="body" displayable="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="type_number" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="parliament_id" displayable="view listing" localizable="view listing">
+            <hide modes="view listing" />
+        </field>
+        <field name="owner_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="edit" />
+            <hide modes="view listing" roles="bungeni.Anonymous" />
+        </field>
+        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view" />
+            <hide modes="edit listing" />
+        </field>
+        <field name="uri" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="submission_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="timestamp" displayable="edit" localizable="edit">
+            <show modes="edit" />
+        </field>
+        <field name="audit_id" displayable="view listing" localizable="view listing">
+            <hide modes="view listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="EditorialNote">
+        <field name="editorial_note_id" displayable="view edit add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="text" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Event">
+        <field name="short_title" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="long_title" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="description" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="body" displayable="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="type_number" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="parliament_id" displayable="view listing" localizable="view listing">
+            <hide modes="view listing" />
+        </field>
+        <field name="owner_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="edit" />
+            <hide modes="view listing" roles="bungeni.Anonymous" />
+        </field>
+        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view" />
+            <hide modes="edit listing" />
+        </field>
+        <field name="uri" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="submission_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="timestamp" displayable="edit" localizable="edit">
+            <show modes="edit" />
+        </field>
+        <field name="group_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Government">
+        <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="combined_name" displayable="listing" localizable="listing">
+            <show modes="listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="identifier" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
+        </field>
+    </descriptor>
+
+    <descriptor name="GroupAddress">
+        <field name="logical_address_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="postal_address_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="street" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="city" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="zipcode" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="country_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="phone" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="fax" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="email" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Group">
+        <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="combined_name" displayable="listing" localizable="listing">
+            <show modes="listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Heading">
+        <field name="text" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="ItemSchedule">
+        <field name="item_id" displayable="view edit add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="item_title" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="item_mover" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="item_type" displayable="view edit add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="item_uri" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="ItemScheduleDiscussion">
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="body" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="MemberTitle">
+        <field name="title_type_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Minister">
+        <field name="user_id" displayable="view add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="active_p" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="edit" />
+            <hide modes="view listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
+            <hide modes="view edit listing" />
+        </field>
+        <field name="replaced_id" displayable="view edit listing" localizable="view edit listing">
+            <hide modes="view edit listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="notes" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Ministry">
+        <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="combined_name" displayable="listing" localizable="listing">
+            <show modes="listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="identifier" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Motion">
+        <field name="parliament_id" displayable="view listing" localizable="view listing">
+            <hide modes="view listing" />
+        </field>
+        <field name="short_title" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="long_title" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="type_number" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="owner_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="edit" />
+            <hide modes="view listing" roles="bungeni.Anonymous" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="body" displayable="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="submission_date" displayable="view listing" localizable="view listing">
+            <show modes="view" />
+            <hide modes="listing" />
+        </field>
+        <field name="admissible_date" displayable="view listing" localizable="view listing">
+            <show modes="view" />
+            <hide modes="listing" />
+        </field>
+        <field name="notice_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view" />
+            <hide modes="edit listing" />
+        </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="description" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="uri" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="timestamp" displayable="edit" localizable="edit">
+            <show modes="edit" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Mp">
+        <field name="user_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view listing" />
+            <hide modes="edit" />
+        </field>
+        <field name="member_election_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="election_nomination_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="active_p" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="edit" />
+            <hide modes="view listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
+            <hide modes="view edit listing" />
+        </field>
+        <field name="replaced_id" displayable="view edit listing" localizable="view edit listing">
+            <hide modes="view edit listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="constituency_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="province_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="region_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="party_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="leave_reason" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="notes" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Office">
+        <field name="identifier" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
+        </field>
+        <field name="office_role" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="combined_name" displayable="listing" localizable="listing">
+            <show modes="listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="OfficeMember">
+        <field name="user_id" displayable="view add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="active_p" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="edit" />
+            <hide modes="view listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
+            <hide modes="view edit listing" />
+        </field>
+        <field name="replaced_id" displayable="view edit listing" localizable="view edit listing">
+            <hide modes="view edit listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="notes" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Parliament">
+        <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="identifier" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="election_date" displayable="view edit add listing" />
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="PartyMember">
+        <field name="user_id" displayable="view add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="active_p" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="edit" />
+            <hide modes="view listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
+            <hide modes="view edit listing" />
+        </field>
+        <field name="replaced_id" displayable="view edit listing" localizable="view edit listing">
+            <hide modes="view edit listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="notes" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+    </descriptor>
+
+    <descriptor name="PoliticalGroup">
+        <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="combined_name" displayable="listing" localizable="listing">
+            <show modes="listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="identifier" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
+        </field>
+        <field name="logo_data" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Province">
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="province" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Question">
+        <field name="response_text" displayable="edit" />
+        <field name="parliament_id" displayable="view listing" localizable="view listing">
+            <hide modes="view listing" />
+        </field>
+        <field name="short_title" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="long_title" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="type_number" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="owner_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="edit" />
+            <hide modes="view listing" roles="bungeni.Anonymous" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="response_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="body" displayable="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="submission_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="group_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="admissible_date" displayable="view listing" localizable="view listing">
+            <show modes="view" />
+            <hide modes="listing" />
+        </field>
+        <field name="ministry_submit_date" displayable="view listing" localizable="view listing">
+            <show modes="view" />
+            <hide modes="listing" />
+        </field>
+        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view" />
+            <hide modes="edit listing" />
+        </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="description" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="uri" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="timestamp" displayable="edit" localizable="edit">
+            <show modes="edit" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Region">
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="region" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Report4Sitting">
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="short_title" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="status_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="body" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Report">
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="short_title" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="status_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="body" displayable="view edit add" localizable="view edit">
+            <show modes="view edit" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Session">
+        <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="notes" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Signatory">
+        <field name="signatory_id" displayable="listing" localizable="listing">
+            <show modes="listing" roles="bungeni.Owner bungeni.Signatory" />
+        </field>
+        <field name="user_id" displayable="view add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="political_party" displayable="listing" />
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" roles="bungeni.Clerk bungeni.Owner bungeni.Signatory" />
+        </field>
+    </descriptor>
+
+    <descriptor name="Sitting">
+        <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="start_date" displayable="view add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="end_date" displayable="view add listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="venue_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="activity_type" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="meeting_type" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="convocation_type" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+    </descriptor>
+
+    <descriptor name="TabledDocument">
+        <field name="parliament_id" displayable="view listing" localizable="view listing">
+            <hide modes="view listing" />
+        </field>
+        <field name="short_title" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="long_title" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="type_number" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="owner_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="edit" />
+            <hide modes="view listing" roles="bungeni.Anonymous" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="body" displayable="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="submission_date" displayable="view listing" localizable="view listing">
+            <show modes="view" />
+            <hide modes="listing" />
+        </field>
+        <field name="admissible_date" displayable="view listing" localizable="view listing">
+            <show modes="view" />
+            <hide modes="listing" />
+        </field>
+        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view" />
+            <hide modes="edit listing" />
+        </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="description" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="uri" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="timestamp" displayable="edit" localizable="edit">
+            <show modes="edit" />
+        </field>
+    </descriptor>
+
+    <descriptor name="TitleType">
+        <field name="title_name" displayable="view edit add listing" />
+        <field name="role_id" displayable="view edit add listing" />
+        <field name="user_unique" displayable="view edit add listing" />
+        <field name="sort_order" displayable="view edit add listing" />
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="UserAddress">
+        <field name="logical_address_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="postal_address_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="street" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="city" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="zipcode" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="country_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="phone" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="fax" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="email" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="UserDelegation">
+        <field name="delegation_id" displayable="view edit add listing" />
+    </descriptor>
+
+    <descriptor name="User">
+        <field name="user_id" displayable="view listing" localizable="view listing">
+            <hide modes="view" />
+            <show modes="listing" />
+        </field>
+        <field name="titles" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <show modes="listing" />
+        </field>
+        <field name="first_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="middle_name" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="last_name" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="email" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <show modes="listing" />
+        </field>
+        <field name="login" displayable="view add listing" localizable="view listing">
+            <show modes="view" />
+            <hide modes="listing" />
+        </field>
+        <field name="_password" displayable="add" />
+        <field name="national_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="gender" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <show modes="listing" />
+        </field>
+        <field name="date_of_birth" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <show modes="listing" />
+        </field>
+        <field name="birth_country" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="birth_nationality" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="current_nationality" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="date_of_death" displayable="view edit add listing" localizable="view add listing">
+            <show modes="view" />
+            <hide modes="add listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="description" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+        <field name="image" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+    </descriptor>
+
+</ui>
+

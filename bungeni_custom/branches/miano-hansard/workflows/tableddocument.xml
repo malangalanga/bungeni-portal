@@ -1,0 +1,441 @@
+<?xml version="1.0"?>
+<workflow title="Tabled Document Workflow"
+    description="A tabled document"
+    domain="bungeni"
+    initial_state=""
+    tags="draft private public
+        approved tobescheduled scheduled
+        actionclerk actionmp
+        terminal succeed fail
+    "
+    >
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="true" />
+    <feature name="attachment" enabled="true" />
+    <feature name="event" enabled="true" />
+    <feature name="signatory" enabled="true" />
+    <feature name="schedule" enabled="true" />
+    
+    <!-- global grants -->
+    <grant permission="bungeni.tableddocument.View" role="bungeni.Owner" />
+    <grant permission="bungeni.tableddocument.View" role="bungeni.Signatory" />
+    <grant permission="bungeni.tableddocument.Edit" role="bungeni.Owner" />
+    <grant permission="bungeni.tableddocument.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.tableddocument.Add" role="bungeni.MP" />
+    <grant permission="bungeni.tableddocument.Delete" role="bungeni.Owner" />
+    
+    
+    <state id="working_draft" title="Working Draft" tags="draft private">
+        <!-- tableddocument -->
+        <grant permission="zope.View" role="bungeni.Clerk" />
+        <deny permission="zope.View" role="bungeni.Speaker" />
+        <deny permission="zope.View" role="bungeni.Owner" />
+        <deny permission="zope.View" role="bungeni.Signatory" />
+        <deny permission="zope.View" role="bungeni.MP" />
+        <deny permission="zope.View" role="bungeni.Minister" />
+        <deny permission="zope.View" role="bungeni.Anonymous" />
+        <grant permission="bungeni.tableddocument.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.tableddocument.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.tableddocument.Edit" role="bungeni.Owner" />
+        <grant permission="bungeni.tableddocument.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.tableddocument.Delete" role="bungeni.Speaker" />
+        <deny permission="bungeni.tableddocument.Delete" role="bungeni.Owner" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" /> 
+        <deny permission="bungeni.attachment.Add" role="bungeni.Speaker" /> 
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner" /> 
+        <!-- signatories -->
+        <grant permission="bungeni.signatory.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.MP" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Minister" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Anonymous" />
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+    </state>
+    
+    <state id="draft" title="Draft" 
+        like_state="working_draft" 
+        tags="draft private">
+        <!-- tableddocument -->
+        <deny permission="zope.View" role="bungeni.Clerk" />
+        <grant permission="zope.View" role="bungeni.Owner" />
+        <deny permission="bungeni.tableddocument.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.tableddocument.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.tableddocument.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.tableddocument.Delete" role="bungeni.Owner" />
+        <!-- attachment -->
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Clerk" /> 
+        <grant permission="bungeni.attachment.Add" role="bungeni.Owner" /> 
+        <!-- signatories -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
+        <grant permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+    </state>
+
+    <state id="submitted_signatories" title="Submitted to Signatories" 
+        version="true" like_state="draft">
+        <!-- tableddocument -->
+        <grant permission="zope.View" role="bungeni.Signatory" />
+        <deny permission="bungeni.tableddocument.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.tableddocument.Delete" role="bungeni.Owner" />
+        <!-- attachment -->
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <!-- signatories -->
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+    </state>
+
+    <state id="redraft" title="Redraft" version="true" like_state="draft"
+        note="document under review before resubmission">
+        <deny permission="bungeni.tableddocument.Delete" role="bungeni.Owner"/>
+    </state>
+
+    <state id="withdrawn_signatory" title="Dropped" 
+        like_state="submitted_signatories">
+        <!-- signatories -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+    </state>
+    
+    <state id="submitted" title="Submitted" version="true" 
+        like_state="submitted_signatories"
+        tags="actionclerk">
+        <!-- tableddocument -->
+        <grant permission="zope.View" role="bungeni.Clerk" />
+        <grant permission="zope.View" role="bungeni.Speaker" />
+        <!-- signatories -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <notification condition="clerk_receive_notification"
+            subject="Tabled document submitted: ${item.short_title}"
+            from="${item.owner_email}"
+            to="${site.clerk_email}"
+            body="notification_email_to_clerk_upon_submit_of_tabled_document"
+        />
+    </state>
+        
+    <state id="received" title="Received by Clerks Office"
+        like_state="submitted"
+        tags="actionclerk">
+        <!-- tableddocument -->
+        <grant permission="bungeni.tableddocument.Edit" role="bungeni.Clerk" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
+        <notification condition="owner_receive_notification"
+            subject="Tabled document received: ${item.short_title}"
+            from="${site.clerk_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_receipt_of_tabled_document"
+        />
+    </state>
+    
+    <state id="completed" title="Submitted to the Speaker"
+        version="true"
+        like_state="submitted">
+        <!-- tableddocument -->
+        <grant permission="bungeni.tableddocument.Edit" role="bungeni.Speaker" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Speaker" /> 
+    </state>
+    
+    <state id="admissible" title="Admissible" 
+        version="true"
+        publish="true"
+        like_state="submitted"
+        tags="public approved">
+        <!-- tableddocument -->
+        <grant permission="zope.View" role="bungeni.MP" />
+        <grant permission="zope.View" role="bungeni.Minister" />
+        <grant permission="zope.View" role="bungeni.Anonymous" />
+    </state>
+    
+    <state id="schedule_pending" title="Schedule pending" 
+        like_state="admissible"
+        tags="public tobescheduled"
+    />
+    
+    <state id="inadmissible" title="Inadmissible" 
+        like_state="submitted"
+        tags="terminal fail">
+        <notification condition="owner_receive_notification"
+            subject="Tabled document rejected: ${item.short_title}"
+            from="${site.clerk_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_rejection_of_tabled_document"
+        />
+    </state>
+    
+    <state id="incomplete" title="Requires Clarification to Approve"
+        version="true"
+        like_state="received"
+        tags="actionclerk"
+    />
+    
+    <state id="clarification_required" title="Requires Clarification to Receive"
+        version="true"
+        like_state="submitted"
+        tags="actionmp">
+        <!-- question -->
+        <grant permission="bungeni.tableddocument.Edit" role="bungeni.Owner" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <notification condition="owner_receive_notification"
+            subject="Tabled document needs clarification: ${item.short_title}"
+            from="${site.clerk_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_need_clarification_of_tabled_document"
+        />
+    </state>
+    
+    <state id="scheduled" title="Scheduled" 
+        like_state="admissible"
+        tags="public scheduled">
+        <notification condition="owner_receive_notification"
+            subject="Tabled document scheduled: ${item.short_title}"
+            from="${site.clerk_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_schedule_of_tabled_document"
+        />
+    </state>
+    
+    <state id="adjourned" title="Adjourn" 
+        like_state="admissible"
+        tags="public approved">
+        <notification condition="owner_receive_notification"
+            subject="Tabled document adjourned: ${item.short_title}"
+            from="${site.clerk_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_postpone_of_tabled_document"
+        />
+    </state>
+    
+    <!-- only after it has been tabled does a tableddocument become public -->
+    <state id="tabled" title="Tabled" 
+        like_state="admissible"
+        tags="public terminal succeed">
+        <!-- tableddocument -->
+        <grant permission="zope.View" role="bungeni.Clerk" />
+        <grant permission="zope.View" role="bungeni.Speaker" />
+        <grant permission="zope.View" role="bungeni.Owner" />
+        <grant permission="zope.View" role="bungeni.Signatory" />
+        <grant permission="zope.View" role="bungeni.MP" />
+        <grant permission="zope.View" role="bungeni.Minister" />
+        <grant permission="zope.View" role="bungeni.Anonymous" />
+    </state>
+    
+    <state id="withdrawn" title="Withdrawn" 
+        like_state="submitted"
+        tags="terminal fail"
+    />
+    
+    
+    <transition title="Create Tabled Document"
+        source=""
+        destination="draft"
+        condition="user_is_context_owner"
+        trigger="automatic"
+    />
+    
+    <transition title="Create Tabled Document (On behalf of)"
+        source=""
+        destination="working_draft"
+        condition="user_is_not_context_owner"
+        trigger="automatic"
+    />
+    
+    <transition title="Submit"
+        source="redraft draft submitted_signatories"
+        destination="submitted"
+        condition="pi_signatories_check"
+        trigger="manual"
+        roles="bungeni.Owner"
+    />
+
+    <transition title="Submit"
+        source="working_draft"
+        destination="submitted"
+        condition="pi_signatories_check"
+        trigger="manual"
+        roles="bungeni.Clerk"
+    />
+
+    <transition title="Submit to Signatories"
+        source="draft redraft"
+        destination="submitted_signatories"
+        condition="pi_has_signatories"
+        roles="bungeni.Owner"
+        trigger="manual"
+    />
+    
+    <transition title="Redraft"
+        source="submitted_signatories"
+        destination="redraft"
+        condition="user_is_context_owner"
+        roles="bungeni.Owner"
+        trigger="manual"
+    />
+
+    <transition title="Drop"
+        source="redraft submitted_signatories"
+        destination="withdrawn_signatory"
+        condition="user_is_context_owner"
+        roles="bungeni.Owner"
+        trigger="manual"
+    />
+
+    <transition title="Receive"
+        source="submitted"
+        destination="received"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk"
+    />
+    
+    <transition title="Require Clarification to Receive"
+        source="received incomplete"
+        destination="clarification_required"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk"
+        require_confirmation="true"
+    />
+    
+    <transition title="Complete"
+        source="received"
+        destination="completed"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk"
+    />
+    
+    <transition title="Approve"
+        source="completed"
+        destination="admissible"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Speaker"
+    />
+    
+    <transition title="Make available for scheduling"
+        source="admissible adjourned"
+        destination="schedule_pending"
+        trigger="manual"
+        roles="bungeni.Clerk"
+    />
+    
+    <transition title="Disapprove"
+        source="completed scheduled"
+        destination="inadmissible"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Speaker"
+        require_confirmation="true"
+    />
+    
+    <transition title="Needs Recomplete to Approve"
+        source="completed"
+        destination="incomplete"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Speaker"
+        require_confirmation="true"
+    />
+
+    <transition title="Redraft (Automatic)"
+        source="incomplete"
+        destination="redraft"
+        condition="pi_has_signatories"
+        trigger="automatic"
+        note="incomplete document needs to be resubmitted to signatories"
+    />
+
+    <transition title="Recomplete"
+        source="incomplete"
+        destination="completed"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk"
+    />
+    
+    <transition title="Resubmit"
+        source="clarification_required"
+        destination="submitted"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Owner"
+    />
+    
+    <transition title="Revert to admissible"
+        source="schedule_pending"
+        destination="admissible"
+        trigger="manual"
+        roles="bungeni.Clerk"
+    />
+    
+    <transition title="Schedule"
+        source="schedule_pending"
+        destination="scheduled"
+        condition="is_scheduled"
+        trigger="system"
+        roles="bungeni.Clerk"
+    />
+    
+    <transition title="Reschedule"
+        source="scheduled"
+        destination="schedule_pending"
+        trigger="system"
+        roles="bungeni.Clerk"
+    />
+    
+    <transition title="Adjourn"
+        source="scheduled"
+        destination="adjourned"
+        trigger="manual"
+        roles="bungeni.Clerk"
+        condition=""
+    />
+    
+    <transition title="Table"
+        source="working_draft"
+        destination="tabled"
+        condition="pi_signatories_check"
+        trigger="manual"
+        roles="bungeni.Clerk bungeni.Speaker bungeni.MP bungeni.Minister"
+    />
+
+    <transition title="Table"
+        source="scheduled"
+        destination="tabled"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk bungeni.Speaker bungeni.MP bungeni.Minister"
+    />
+    
+    <transition title="Withdraw"
+        source="submitted
+                received
+                completed
+                clarification_required
+                admissible
+                scheduled
+                adjourned
+                schedule_pending"
+        destination="withdrawn"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk bungeni.Owner"
+        require_confirmation="true"
+    />
+
+</workflow>

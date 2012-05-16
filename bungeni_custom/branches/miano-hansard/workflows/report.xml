@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<workflow title="Report Workflow"
+    description="A report"
+    domain="bungeni"
+    initial_state="">
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="true" />
+    
+    <!-- global grants -->
+    <grant permission="bungeni.reports.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.reports.Edit" role="bungeni.Speaker" /> 
+    
+    
+    <state id="published" title="Published" publish="true">
+        <grant permission="zope.View" role="bungeni.Authenticated" /> 
+        <grant permission="zope.View" role="bungeni.Anonymous" />
+        <deny permission="bungeni.report.Edit" role="bungeni.Authenticated" />
+    </state>
+    
+    
+    <transition title="Create Report"
+        source=""
+        destination="published"
+        trigger="automatic"
+        order="0"
+    />
+
+</workflow>
+

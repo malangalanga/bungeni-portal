@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<workflow title="Signatory Workflow"
+    description="Workflow for Signatory documents"
+    domain="bungeni"
+    initial_state=""
+    tags="public workspace terminal"
+    >
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="false" />
+    <feature name="attachment" enabled="false" />
+    
+    <!-- global grants -->
+    <grant permission="bungeni.signatory.View" role="bungeni.Clerk" />
+    <grant permission="bungeni.signatory.View" role="bungeni.Speaker" />
+    <grant permission="bungeni.signatory.View" role="bungeni.Owner" />
+    <grant permission="bungeni.signatory.View" role="bungeni.MP" />
+    <grant permission="bungeni.signatory.View" role="bungeni.Minister" />
+    <grant permission="bungeni.signatory.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.signatory.Edit" role="bungeni.Owner" />
+    <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
+    <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
+    <grant permission="bungeni.signatory.Act" role="bungeni.Signatory" />
+    
+    
+    <state id="awaiting_consent" title="Awaiting Consent" tags="workspace">
+        <!-- signatory -->
+        <grant permission="zope.View" role="bungeni.Clerk" />
+        <grant permission="zope.View" role="bungeni.Speaker" />
+        <grant permission="zope.View" role="bungeni.Owner" />
+        <grant permission="zope.View" role="bungeni.Signatory" />
+        <grant permission="zope.View" role="bungeni.MP" />
+        <grant permission="zope.View" role="bungeni.Minister" />
+        <deny permission="zope.View" role="bungeni.Anonymous" />
+        <deny permission="bungeni.signatory.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
+    </state>
+
+    <state id="consented" title="Signature Consented" 
+        like_state="awaiting_consent"
+        tags="workspace public">
+        <grant permission="zope.View" role="bungeni.Anonymous" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
+    </state>
+
+    <state id="rejected" title="Signature Rejected" 
+        like_state="consented"
+        tags="terminal">
+        <deny permission="zope.View" role="bungeni.Speaker" />
+        <deny permission="zope.View" role="bungeni.Clerk" />
+        <deny permission="zope.View" role="bungeni.Signatory" />
+        <deny permission="zope.View" role="bungeni.MP" />
+        <deny permission="zope.View" role="bungeni.Minister" />
+        <deny permission="zope.View" role="bungeni.Anonymous" />
+    </state>
+
+    <state id="withdrawn" title="Signature Withdrawn" 
+        like_state="rejected"
+        tags="terminal"
+    />
+    
+    <transition title="Create"
+        source=""
+        condition="signatory_manual_sign"
+        destination="awaiting_consent"
+        trigger="automatic"
+    />
+
+    <transition title="Create and Sign"
+        source=""
+        destination="consented"
+        trigger="automatic"
+        condition="signatory_auto_sign"
+    />
+
+    <transition title="consent"
+        source="awaiting_consent"
+        destination="consented"
+        trigger="manual"
+        roles="bungeni.Owner"
+        require_confirmation="true"
+        condition="pi_allow_signature"
+    />
+    
+    <transition title="reject"
+        source="awaiting_consent"
+        destination="rejected"
+        trigger="manual"
+        roles="bungeni.Owner"
+        require_confirmation="true"
+        condition="pi_allow_signature_actions"
+    />
+
+    <transition title="withdraw signature"
+        source="consented"
+        destination="withdrawn"
+        trigger="manual"
+        roles="bungeni.Owner"
+        require_confirmation="true"
+        condition="pi_allow_signature_actions"
+    />
+    
+    <transition title="withdraw signature - automatic"
+        source="awaiting_consent"
+        destination="withdrawn"
+        trigger="automatic"
+        condition="pi_signature_period_expired"
+    />
+    
+    <transition title="unsign document - automatic"
+        source="consented rejected withdrawn"
+        destination="awaiting_consent"
+        trigger="automatic"
+        condition="pi_unsign_signature"
+    />
+
+</workflow>

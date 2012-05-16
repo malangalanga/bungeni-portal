@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<workflow title="Attachment Workflow"
+    description="Workflow for attachments"
+    domain="bungeni"
+    initial_state=""
+    tags="public"
+    >
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" /><!-- !+MUST be enabled -->
+    <feature name="version" enabled="true" /><!-- !+MUST be enabled -:- this is 
+    not the ability to version attached file itself, but the ability to log
+    which files were attached to a specific version of an item -->
+    <feature name="attachment" enabled="false" /><!-- !+MUST be disabled -->
+    
+    <!-- global grants -->
+    <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
+    
+    <state id="attached" title="Attached file" 
+        tags="public"
+        permissions_from_parent="true" 
+    />
+    
+    <state id="internal" title="Published Internal">
+        <!-- attachment -->
+        <grant permission="zope.View" role="bungeni.Authenticated" />
+        <deny permission="zope.View" role="bungeni.Anonymous" />
+    </state>
+    
+    <!-- !+inactive(mr, aug-2011) review usage and rename across the board
+        currently being used in attachdfile, heading, event
+        consider using "dropped", "obsoleted", "removed"...
+    -->
+    <state id="inactive" title="Inactive file" like_state="internal" />
+    
+    <!-- !+IDENTICAL_TRANSITIONS(mr, sep-2011) attachment, address, event -->
+    <transition title="Create"
+        source=""
+        destination="attached"
+        trigger="automatic"
+    />
+    
+    <transition title="Publish Internal"
+        source="attached"
+        destination="internal"
+        condition="user_may_edit_context_parent"
+        trigger="manual"
+        roles="bungeni.Clerk bungeni.Owner"
+    />
+    
+    <transition title="Re-publish"
+        source="internal"
+        destination="attached"
+        condition="user_may_edit_context_parent"
+        trigger="manual"
+        roles="bungeni.Clerk bungeni.Owner"
+    />
+    
+    <transition title="Deactivate"
+        source="attached internal"
+        destination="inactive"
+        condition="user_may_edit_context_parent"
+        trigger="manual"
+        roles="bungeni.Clerk bungeni.Owner"
+        require_confirmation="true"
+    />
+
+</workflow>

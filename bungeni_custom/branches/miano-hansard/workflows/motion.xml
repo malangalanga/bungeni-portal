@@ -1,0 +1,548 @@
+<?xml version="1.0"?>
+<workflow title="Motion Workflow" 
+    description="A Motion" 
+    domain="bungeni"
+    initial_state=""
+    tags="draft private public
+        approved tobescheduled scheduled
+        actionclerk actionmp
+        terminal succeed fail
+    "
+    >
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="true" />
+    <feature name="attachment" enabled="true" />
+    <feature name="event" enabled="true" />
+    <feature name="signatory" enabled="true" />
+    <feature name="schedule" enabled="true" />
+    
+    <!-- global grants -->
+    <grant permission="bungeni.motion.View" role="bungeni.Owner" />
+    <grant permission="bungeni.motion.View" role="bungeni.Signatory" />
+    <grant permission="bungeni.motion.Edit" role="bungeni.Owner" />
+    <grant permission="bungeni.motion.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.motion.Add" role="bungeni.MP" />
+    <grant permission="bungeni.motion.Delete" role="bungeni.Owner" />
+    
+    
+    <state id="working_draft" title="Working Draft" tags="draft private">
+        <!-- motion -->
+        <grant permission="zope.View" role="bungeni.Clerk" />
+        <deny permission="zope.View" role="bungeni.Speaker" />
+        <deny permission="zope.View" role="bungeni.Owner" />
+        <deny permission="zope.View" role="bungeni.Signatory" />
+        <deny permission="zope.View" role="bungeni.MP" />
+        <deny permission="zope.View" role="bungeni.Minister" />
+        <deny permission="zope.View" role="bungeni.Anonymous" />
+        <grant permission="bungeni.motion.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.motion.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.motion.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.motion.Edit" role="bungeni.MP" />
+        <deny permission="bungeni.motion.Edit" role="bungeni.Minister" />
+        <deny permission="bungeni.motion.Edit" role="bungeni.Anonymous" />
+        <grant permission="bungeni.motion.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.motion.Delete" role="bungeni.Speaker" />
+        <deny permission="bungeni.motion.Delete" role="bungeni.Owner" />
+        <deny permission="bungeni.motion.Delete" role="bungeni.MP" />
+        <deny permission="bungeni.motion.Delete" role="bungeni.Minister" />
+        <deny permission="bungeni.motion.Delete" role="bungeni.Anonymous" />
+        <!-- signatory -->
+        <grant permission="bungeni.signatory.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.MP" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Minister" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Anonymous" />
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Speaker" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.MP" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Minister" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Anonymous" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.MP" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Minister" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Anonymous" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Speaker" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.MP" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Minister" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Anonymous" />
+    </state>
+    
+    <state id="draft" title="Draft" 
+        like_state="working_draft" 
+        tags="draft private">
+        <!-- motion -->
+        <deny permission="zope.View" role="bungeni.Clerk" />
+        <grant permission="zope.View" role="bungeni.Owner" />
+        <deny permission="bungeni.motion.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.motion.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.motion.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.motion.Delete" role="bungeni.Owner" />
+        <!-- signatory -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Clerk" />
+    </state>
+
+    <state id="submitted_signatories" title="Submitted to Signatories"
+        version="true" 
+        like_state="draft"
+        tags="actionmp">
+        <!-- motion -->
+        <grant permission="zope.View" role="bungeni.Signatory" />
+        <deny permission="bungeni.motion.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.motion.Delete" role="bungeni.Owner" />
+        <!-- signatory -->
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
+        <!-- attachment -->
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
+    </state>
+
+    <state id="redraft" title="Redraft" like_state="draft"
+        note="document under review before resubmission"
+        version="true">
+        <deny permission="bungeni.motion.Delete" role="bungeni.Owner" />
+    </state>
+
+    <state id="withdrawn_signatory" title="Dropped" 
+        like_state="submitted_signatories"
+        note="motion has been withdrawn before submission to house">
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+    </state>
+
+    <state id="submitted" title="Submitted" 
+        version="true"
+        like_state="submitted_signatories"
+        tags="actionclerk">
+        <!-- motion -->
+        <grant permission="zope.View" role="bungeni.Clerk" />
+        <grant permission="zope.View" role="bungeni.Speaker" />
+        <!-- signatory -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <notification condition="clerk_receive_notification"
+            subject="Motion submitted: ${item.short_title}"
+            from="${item.owner_email}"
+            to="${site.clerk_email}"
+            body="notification_email_to_clerk_upon_submit_of_motion"
+        />
+    </state>
+
+    <state id="received" title="Received by Clerks Office" 
+        like_state="submitted"
+        tags="actionclerk">
+        <!-- motion -->
+        <grant permission="bungeni.motion.Edit" role="bungeni.Clerk" />
+        <!-- signatory -->
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />        
+        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
+        <notification condition="owner_receive_notification"
+            subject="Motion received: ${item.short_title}"
+            from="${site.clerk_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_receipt_of_motion"
+        />
+    </state>
+    
+    <state id="clarification_required" title="Requires Clarification to Receive"
+        version="true"
+        like_state="submitted"
+        tags="actionmp">
+        <!-- motion -->
+        <grant permission="bungeni.motion.Edit" role="bungeni.Owner" />
+        <!-- signatory -->
+        <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <notification condition="owner_receive_notification"
+            subject="Motion needs clarification: ${item.short_title}"
+            from="${site.clerk_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_need_clarification_of_motion"
+        />
+    </state>
+    
+    <state id="completed" title="Submitted to the Speaker"
+        version="true"
+        like_state="submitted">
+        <!-- motion -->
+        <grant permission="bungeni.motion.Edit" role="bungeni.Speaker" />
+        <!-- signatory -->
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Speaker" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
+        <grant permission="bungeni.attachment.Add" role="bungeni.Speaker" />
+    </state>
+    
+    <state id="incomplete" title="Requires Clarification to Approve"
+        version="true"
+        like_state="received"
+        tags="actionclerk"
+    />
+    
+    <state id="withdrawn_internal" title="Withdrawn" 
+        like_state="submitted"
+        tags="terminal fail"
+    />
+    
+    <state id="inadmissible" title="Inadmissible" 
+        like_state="submitted"
+        tags="terminal fail">
+        <notification condition="owner_receive_notification"
+            subject="Motion rejected: ${item.short_title}"
+            from="${site.speaker_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_rejection_of_motion"
+        />
+    </state>
+    
+    <state id="admissible" title="Admissible" 
+        version="true"
+        publish="true"
+        like_state="submitted"
+        tags="public approved">
+        <!-- motion -->
+        <grant permission="zope.View" role="bungeni.Clerk" />
+        <grant permission="zope.View" role="bungeni.Speaker" />
+        <grant permission="zope.View" role="bungeni.Owner" />
+        <grant permission="zope.View" role="bungeni.Signatory" />
+        <grant permission="zope.View" role="bungeni.MP" />
+        <grant permission="zope.View" role="bungeni.Minister" />
+        <grant permission="zope.View" role="bungeni.Anonymous" />
+    </state>
+    
+    <state id="schedule_pending" title="Schedule pending"
+        like_state="admissible"
+        tags="public tobescheduled"
+    />
+    
+    <state id="scheduled" title="Scheduled" 
+        like_state="admissible"
+        tags="public scheduled">
+        <notification condition="owner_receive_notification"
+            subject="Motion scheduled: ${item.short_title}"
+            from="${site.clerk_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_schedule_of_motion"
+        />
+    </state>
+    
+    <state id="adopted" title="Adopted"
+        version="true"
+        like_state="admissible"
+        tags="public terminal succeed">
+    </state>
+    
+    <state id="adopted_amendments" title="Adopted with amendments"
+        version="true"
+        like_state="adopted"
+        tags="public terminal succeed"
+    />
+    
+    <state id="adjourned" title="Debate adjourned" 
+        like_state="admissible"
+        tags="public approved"
+        note="a motion was debated and the debate adjourned"
+    />
+    
+    <state id="deferred" title="Deferred" 
+        like_state="admissible"
+        tags="public approved"
+        note="An admissable motion that cannot be debated.">
+        <notification condition="owner_receive_notification"
+            subject="Motion deferred: ${item.short_title}"
+            from="${site.speaker_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_defer_of_motion"
+        />
+    </state>
+    
+    <state id="elapsed" title="Elapsed" 
+        like_state="admissible" 
+        tags="public terminal fail"
+        note="A defered motion that was not debated"
+    />
+    
+    <state id="dropped" title="Dropped" 
+        like_state="admissible" 
+        tags="public terminal fail"
+        note="A motion was scheduled, but dropped e.g. becuase no show of MP."
+    />
+    
+    <state id="rejected" title="Rejected" 
+        like_state="admissible"
+        tags="public terminal fail">
+        <notification condition="owner_receive_notification"
+            subject="Motion rejected: ${item.short_title}"
+            from="${site.speaker_email}"
+            to="${item.owner_email}"
+            body="notification_email_to_member_upon_rejection_of_motion"
+        />
+    </state>
+    
+    <state id="withdrawn" title="Withdrawn" 
+        like_state="admissible"
+        tags="public terminal fail"
+    />
+    
+    
+    <transition title="Create Motion"
+        source=""
+        destination="draft"
+        condition="user_is_context_owner"
+        trigger="automatic"
+    />
+    
+    <transition title="Create Motion (On behalf of)"
+        source=""
+        destination="working_draft"
+        condition="user_is_not_context_owner"
+        trigger="automatic"
+    />
+
+    <transition title="Submit"
+        source="draft submitted_signatories redraft"
+        destination="submitted"
+        condition="pi_signatories_check"
+        trigger="manual"
+        roles="bungeni.Owner"
+    />
+
+    <transition title="Submit"
+        source="working_draft"
+        destination="submitted"
+        condition="pi_signatories_check"
+        trigger="manual"
+        roles="bungeni.Clerk"
+    />
+
+    <transition title="Submit to Signatories"
+        source="draft redraft"
+        destination="submitted_signatories"
+        condition="pi_has_signatories"
+        roles="bungeni.Owner"
+        trigger="manual"
+    />
+    
+    <transition title="Redraft"
+        source="submitted_signatories"
+        destination="redraft"
+        condition="user_is_context_owner"
+        roles="bungeni.Owner"
+        trigger="manual"
+    />
+
+    <transition title="Drop"
+        source="redraft submitted_signatories"
+        destination="withdrawn_signatory"
+        grouping_unique_sources="withdrawn"
+        condition="user_is_context_owner"
+        roles="bungeni.Owner"
+        trigger="manual"
+    />
+
+    <transition title="Receive" 
+        source="submitted"
+        destination="received" 
+        condition=""
+        trigger="manual" 
+        roles="bungeni.Clerk"
+    />
+    
+    <transition title="Require Clarification to Receive"
+        source="received incomplete" 
+        destination="clarification_required"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk"
+        require_confirmation="true"
+    />
+
+    <transition title="Redraft (Automatic)"
+        source="clarification_required"
+        destination="redraft"
+        condition="pi_has_signatories"
+        trigger="automatic"
+        note="incomplete document needs to be resubmitted to signatories"
+    />
+
+    <transition title="Complete"
+        source="received" 
+        destination="completed" 
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk"
+    />
+    
+    <transition title="Approve" 
+        source="completed"
+        destination="admissible" 
+        condition=""
+        trigger="manual"
+        roles="bungeni.Speaker"
+    />
+    
+    <transition title="Disapprove"
+        source="completed"
+        destination="inadmissible"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Speaker"
+        require_confirmation="true"
+    />
+    
+    <transition title="Make available for scheduling" 
+        source="admissible deferred adjourned"
+        destination="schedule_pending"
+        trigger="manual"
+        roles="bungeni.Clerk"
+    />
+    
+    <transition title="Require Recomplete to Approve"
+        source="completed" 
+        destination="incomplete" 
+        condition=""
+        trigger="manual"
+        roles="bungeni.Speaker"
+        require_confirmation="true"
+    />
+    
+    <transition title="Recomplete"
+        source="incomplete"
+        destination="completed"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk"
+    />
+    
+    <transition title="Resubmit"
+        source="clarification_required"
+        destination="submitted"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Owner"
+    />
+    
+    <transition title="Defer"
+        source="admissible"
+        destination="deferred"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk"
+    />
+    
+    <transition title="Elapse"
+        source="deferred"
+        destination="elapsed"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk"
+        require_confirmation="true"
+    />
+    
+    <transition title="Schedule"
+        source="schedule_pending"
+        destination="scheduled" 
+        condition="is_scheduled"
+        trigger="system" 
+        roles="bungeni.Clerk"
+    />
+    
+    <transition title="Re-schedule" 
+        source="scheduled"
+        destination="schedule_pending"
+        condition=""
+        trigger="system"
+        roles="bungeni.Clerk"
+    />
+    
+    <transition title="Revert to admissible" 
+        source="schedule_pending"
+        destination="admissible"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk"
+    />
+    
+    <transition title="Drop" 
+        source="scheduled"
+        destination="dropped"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk"
+    />
+    
+    <transition title="Adjourn debate"
+        source="scheduled"
+        destination="adjourned"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk"
+    />
+    
+    <transition title="Adopt"
+        source="scheduled" 
+        destination="adopted"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk"
+        require_confirmation="true"
+    />
+    
+    <transition title="Adopt with amendments"
+        source="scheduled"
+        destination="adopted_amendments"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk"
+        require_confirmation="true"
+    />
+    
+    <transition title="Reject a scheduled motion"
+        source="scheduled"
+        destination="rejected"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Speaker"
+        require_confirmation="true"
+    />
+    
+    <transition title="Withdraw" 
+        source="submitted received completed clarification_required"
+        destination="withdrawn_internal"
+        grouping_unique_sources="withdrawn"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk bungeni.Owner"
+        require_confirmation="true" 
+    />
+    
+    <transition title="Withdraw"
+        source="admissible scheduled deferred adjourned schedule_pending"
+        destination="withdrawn"
+        grouping_unique_sources="withdrawn"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk bungeni.Owner"
+        require_confirmation="true"
+    />
+
+</workflow>
