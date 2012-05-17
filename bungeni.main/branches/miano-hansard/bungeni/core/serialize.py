@@ -11,13 +11,12 @@ log = __import__("logging").getLogger("bungeni.core.serialize")
 from zope.security.proxy import removeSecurityProxy
 from sqlalchemy.orm import RelationshipProperty, class_mapper
 
-from bungeni.alchemist import Session
 from bungeni.alchemist.container import stringKey
 from bungeni.alchemist.interfaces import IAlchemistContainer
 from bungeni.core.workflow.states import get_object_state_rpm, get_head_object_state_rpm
 from bungeni.core.workflow.interfaces import IWorkflow, IStateController
-from bungeni.models.schema import singular
-from bungeni.models.interfaces import IAuditable, IVersionable, IAttachmentable
+from bungeni.models import interfaces
+from bungeni.utils import naming
 
 import os
 import collections
@@ -61,11 +60,9 @@ def publish_to_xml(context):
     
     context = removeSecurityProxy(context)
     
-    # !+zope idioms need convolution no further: IVersionable.providedBy(context)
-    if IVersionable.implementedBy(context.__class__):
+    if interfaces.IFeatureVersion.providedBy(context):
         include.append("versions")
-    # !+zope idioms need convolution no further: IAuditable.providedBy(context)
-    if IAuditable.implementedBy(context.__class__):
+    if interfaces.IFeatureAudit.providedBy(context):
         include.append("event")
     
     data = obj2dict(context, 1, 
@@ -104,7 +101,7 @@ def publish_to_xml(context):
     file_path = os.path.join(path, stringKey(context)) 
     
     has_attachments = False
-    if IAttachmentable.implementedBy(context.__class__):
+    if interfaces.IFeatureAttachment.providedBy(context):
         attachments = getattr(context, "attachments", None)
         if attachments:
             has_attachments = True
@@ -115,7 +112,7 @@ def publish_to_xml(context):
                 # serializing attachment
                 attachment_dict = obj2dict(attachment, 1,
                     parent=context,
-                    exclude=["data", "event", "versions", "changes"])
+                    exclude=["data", "event", "versions"])
                 permissions = get_object_state_rpm(attachment).permissions
                 attachment_dict["permissions"] = \
                     get_permissions_dict(permissions)
@@ -166,7 +163,7 @@ def _serialize(parent_elem, data):
 
 def _serialize_list(parent_elem, data_list):
     for i in data_list:
-        item_elem = Element(singular(parent_elem.tag))
+        item_elem = Element(naming.singular(parent_elem.tag))
         parent_elem.append(item_elem)
         _serialize(item_elem, i)
 

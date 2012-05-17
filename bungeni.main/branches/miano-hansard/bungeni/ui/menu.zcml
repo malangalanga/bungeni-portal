@@ -60,13 +60,22 @@
     <browser:menu id="context_workflow"
         title="The 'workflow' menu - allows user to execute workflow transitions"
         class=".menu.WorkflowMenu"
-    /><!-- !+
+    />
+    <browser:menu id="context_download_document"
+        title="The 'workflow' menu - allows user to execute workflow transitions"
+        class=".menu.DownloadDocumentMenu"
+    />
+    <!-- !+
     the order of the items in this menu is alphabetic on the transition 
     id/title but it should really be on order of definition
     -->
     <browser:menu id="context_calendar"
         title="The 'Calendar' menu - allows user to select a scheduling context"
         class=".menu.CalendarMenu"
+    />
+    <browser:menu id="calendar_content_manager"
+        title="The 'Calendar' menu - for management of content used in calendars"
+        class=".menu.CalendarContentMenu"
     />
     <browser:menu id="context_add_parliamentary_content"
         title="The 'Add' menu - allows user to add content"
@@ -102,14 +111,6 @@
         title="The 'Actions' menu - provides context-specific actions (views)"
         class="ploned.ui.menu.PloneBrowserMenu"
     />
-    <browser:menu id="reporting_actions"
-        title="The 'Reports' menu - provides reporting actions"
-        class="ploned.ui.menu.PloneBrowserMenu"
-    />
-    <browser:menu id="download_actions"
-        title="Downloads Menu - provides different document download formats"
-        class="ploned.ui.menu.PloneBrowserMenu"
-    />
     
     <!-- CONTENT SUBMENUS -->
     <browser:subMenuItem menu="plone_contentmenu"
@@ -127,24 +128,6 @@
         layer=".interfaces.IAdminSectionLayer"
         submenu="context_add_parliamentary_content"
     />
-    <browser:subMenuItem menu="plone_contentmenu"
-        for="bungeni.core.interfaces.ISchedulingContext"
-        title="Reports"
-        action="reports"
-        permission="zope.View"
-        submenu="reporting_actions"
-        order="20"
-        layer=".interfaces.IWorkspaceSchedulingSectionLayer"
-    />
-    <browser:subMenuItem menu="plone_contentmenu"
-        for="bungeni.models.interfaces.ISitting"
-        title="Reports"
-        action="reports"
-        permission="zope.View"
-        submenu="reporting_actions"
-        order="20"
-        layer=".interfaces.IWorkspaceSchedulingSectionLayer"
-    />
     
     <!-- add menus for content -->
     <browser:menu id="additems"
@@ -160,6 +143,8 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         submenu="additems"
     />
+    <!-- !+(miano, may 2012) why have partymembership protected by a 
+    politicalgroup permission -->
     <browser:menuItem menu="additems"
         for="bungeni.models.interfaces.IPoliticalParty"
         title="Add party member..."
@@ -167,6 +152,22 @@
         permission="bungeni.politicalgroupmember.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="60"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IPartyMember"
+        action="edit"
+        title="Edit party member"
+        order="10"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.politicalgroupmember.Edit"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IPartyMember"
+        action="delete"
+        title="Delete party member"
+        order="99"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.politicalgroupmember.Delete"
     />
     <browser:menuItem menu="additems"
         for="bungeni.models.interfaces.IPoliticalParty"
@@ -194,7 +195,7 @@
     />
     <browser:menuItem menu="additems"
         for="bungeni.models.interfaces.ICommittee"
-        title="Add member..."
+        title="Add committee member..."
         action="./committeemembers/add"
         permission="bungeni.committeemember.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
@@ -207,6 +208,22 @@
         permission="bungeni.committeestaff.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="63"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.ICommitteeStaff"
+        action="edit"
+        title="Edit committee staff"
+        order="10"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.committee.Edit"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.ICommitteeStaff"
+        action="delete"
+        title="Delete committee staff"
+        order="99"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.committeestaff.Delete"
     />
     <browser:menuItem menu="additems"
         for="bungeni.models.interfaces.ICommittee"
@@ -273,6 +290,22 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="70"
     />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IMinister"
+        action="edit"
+        title="Edit minister"
+        order="10"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.minister.Edit"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IMinister"
+        action="delete"
+        title="Delete minister"
+        order="99"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.minister.Delete"
+    />
     <browser:menuItem menu="additems"
         for="bungeni.models.interfaces.IMinistry"
         title="Add address..."
@@ -337,6 +370,22 @@
         order="99"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         permission="bungeni.heading.Delete"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IHeading"
+        title="Edit heading"
+        action="edit"
+        order="10"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.heading.Edit"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IMemberTitle"
+        title="Edit member title"
+        action="edit"
+        order="10"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="zope.ManageContent"
     />
      <browser:menuItem menu="context_actions"
         for="bungeni.models.interfaces.IMemberTitle"
@@ -405,7 +454,7 @@
     />
     <browser:menuItem menu="additems"
         for="bungeni.models.interfaces.IOffice"
-        title="Add member..."
+        title="Add office member..."
         action="./officemembers/add"
         permission="bungeni.officemember.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
@@ -427,7 +476,22 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="80"
     />
-    
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IOfficeMember"
+        action="edit"
+        title="Edit office member"
+        order="10"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.officemember.Edit"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IOfficeMember"
+        action="delete"
+        title="Delete office member"
+        order="99"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.officemember.Delete"
+    />
     <!-- Navigation -->
     
     <browser:menuItem menu="admin_navigation"
@@ -514,19 +578,19 @@
     />
     <browser:menuItem menu="context_actions"
         for="bungeni.models.interfaces.IMemberOfParliament"
+        action="edit"
+        title="Edit MP"
+        order="10"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.mp.Edit"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IMemberOfParliament"
         action="delete"
-        title="Delete member of parliament"
+        title="Delete MP"
         order="99"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         permission="bungeni.mp.Delete"
-    />
-    <browser:menuItem menu="context_actions"
-        for="bungeni.models.interfaces.IBungeniGroupMembership"
-        action="delete"
-        title="Delete"
-        order="99"
-        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
-        permission="bungeni.groupmember.Delete"
     />
       
     <browser:menuItem menu="plone_contentmenu"
@@ -592,6 +656,22 @@
         permission="bungeni.committeemember.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
     />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.ICommitteeMember"
+        action="edit"
+        title="Edit committee member"
+        order="10"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.committeemember.Edit"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.ICommitteeMember"
+        action="delete"
+        title="Delete committee member"
+        order="99"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.mp.Delete"
+    />
     <browser:menuItem menu="plone_contentmenu"
         for="bungeni.models.domain.CommitteeStaffContainer"
         title="Add committee staff..."
@@ -646,22 +726,7 @@
         permission="bungeni.address.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
     />
-    
-    <browser:menuItem menu="plone_contentmenu"
-        for="bungeni.models.domain.UserAddressContainer"
-        title="Add user address..."
-        action="./add"
-        permission="bungeni.address.Add"
-        layer="bungeni.ui.interfaces.IBungeniSkin"
-    />
-    <browser:menuItem menu="plone_contentmenu"
-        for="bungeni.models.domain.User"
-        title="Add user address..."
-        action="./addresses/add"
-        permission="bungeni.address.Add"
-        layer="bungeni.ui.interfaces.IBungeniSkin"
-    />
-    
+     
     <browser:menuItem menu="context_actions"
         for="bungeni.models.domain.User"
         title="Edit user"
@@ -750,7 +815,14 @@
      permission="bungeni.session.Add"
      order="100"
      />
-
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IParliamentSession"
+        title="Edit session"
+        action="./edit"
+        order="10"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.session.Delete"
+    />
     <browser:menuItem menu="context_actions"
         for="bungeni.models.interfaces.IParliamentSession"
         title="Delete session"
@@ -782,7 +854,7 @@
         title="Add heading..."
         action="./add"
         permission="bungeni.heading.Add"
-        layer=".interfaces.IAdminSectionLayer"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
      />
      <browser:menuItem menu="plone_contentmenu"
         for="bungeni.models.domain.BillContainer"
@@ -793,7 +865,7 @@
     />
     
     <browser:menuItem menu="additems"
-        for="bungeni.models.interfaces.IAttachmentable"
+        for="bungeni.models.interfaces.IFeatureAttachment"
         title="Add file..."
         action="./files/add"
         permission="bungeni.attachment.Add"
@@ -808,48 +880,6 @@
         layer=".interfaces.IAdminSectionLayer"
     />
     
-    <!-- scheduling context reporting actions -->
-    
-    <browser:menuItem menu="reporting_actions"
-        for="bungeni.core.schedule.WorkspaceSchedulingContext"
-        title="Agenda..."
-        action="agenda"
-        permission="bungeni.reports.Edit"
-    />
-    <browser:menuItem
-        menu="reporting_actions"
-        for="bungeni.core.schedule.WorkspaceSchedulingContext"
-        title="Votes and proceedings..."
-        action="votes-and-proceedings"
-        permission="bungeni.reports.Edit"
-    />
-    <browser:menuItem menu="reporting_actions"
-        for="bungeni.core.schedule.CommitteeSchedulingContext"
-        title="Agenda..."
-        action="../../agenda"
-        permission="bungeni.reports.Edit"
-    />
-    <browser:menuItem
-        menu="reporting_actions"
-        for="bungeni.core.schedule.CommitteeSchedulingContext"
-        title="Votes and proceedings..."
-        action="../../votes-and-proceedings"
-        permission="bungeni.reports.Edit"
-    />
-    <!-- group-sitting scheduling view reporting actions -->
-    
-    <browser:menuItem menu="reporting_actions"
-        for="bungeni.models.interfaces.ISitting"
-        title="Agenda..."
-        action="agenda"
-        permission="bungeni.reports.Edit"
-    />
-    <browser:menuItem menu="reporting_actions"
-        for="bungeni.models.interfaces.ISitting"
-        title="Votes and proceedings..."
-        action="votes-and-proceedings"
-        permission="bungeni.reports.Edit"
-    />
     <!-- committee agenda items -->
     <browser:menuItem menu="plone_contentmenu"
         for="bungeni.core.schedule.CommitteeSchedulingContext"
@@ -870,9 +900,24 @@
         factory=".menu.CalendarSubMenuItem"
         provides="ploned.ui.interfaces.IContentMenuItem"
     />
+    <adapter name="plone.contentmenu.downloaddocument"
+        for="bungeni.models.interfaces.IBungeniContent *"
+        factory=".menu.DownloadDocumentSubMenuItem"
+        provides="ploned.ui.interfaces.IContentMenuItem"
+    />
+    <adapter name="plone.contentmenu.downloaddocument-container"
+        for="bungeni.alchemist.interfaces.IAlchemistContainer *"
+        factory=".menu.DownloadDocumentSubMenuItem"
+        provides="ploned.ui.interfaces.IContentMenuItem"
+    />
+    <adapter name="plone.contentmenu.calendar.content"
+        for="bungeni.core.interfaces.ISchedulingContext *"
+        factory=".menu.CalendarContentSubMenuItem"
+        provides="ploned.ui.interfaces.IContentMenuItem"
+    />
 
   <!--adapter
-     for="bungeni.models.interfaces.IVersionable *"
+     for="bungeni.models.interfaces.IFeatureVersion *"
      name="plone.contentmenu.translation"
      factory=".menu.TranslationSubMenuItem"
      provides="ploned.ui.interfaces.IContentMenuItem" /-->
@@ -1102,14 +1147,6 @@
         submenu="context_actions"
     />
     <browser:subMenuItem menu="plone_contentmenu"
-        for="*"
-        title="Download"
-        action="download_actions"
-        order="1"
-        permission="zope.View"
-        submenu="download_actions"
-    />
-    <browser:subMenuItem menu="plone_contentmenu"
         for="bungeni.models.domain.Report"
         title="Actions..."
         action="context_actions"
@@ -1132,9 +1169,6 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         >
         <browser:menuItem action="view" title="View" order="0" />
-        <browser:menuItem action="edit" title="Edit" order="10"
-            permission="zope.ManageContent"
-        />
     </browser:menuItems>
     <browser:menuItems menu="context_actions"
         for="bungeni.core.workflow.interfaces.IWorkflowed"
@@ -1159,7 +1193,7 @@
         order="30"
     />
     <browser:menuItem menu="context_actions"
-        for="bungeni.models.interfaces.IAuditable"
+        for="bungeni.models.interfaces.IFeatureAudit"
         action="audit-log"
         title="Audit log"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
@@ -1167,7 +1201,7 @@
         order="22"
     />
     <browser:menuItem menu="context_actions"
-        for="bungeni.models.interfaces.IVersionable"
+        for="bungeni.models.interfaces.IFeatureVersion"
         action="version-log"
         title="Versions"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
@@ -1195,7 +1229,14 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         permission="zope.ManageContent"
     />
-
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IBungeniUser"
+        action="edit"
+        title="Edit user"
+        order="10"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="zope.ManageContent"
+    />
     <browser:menuItems menu="context_actions"
         for="bungeni.models.interfaces.IAttachment"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer">
@@ -1393,10 +1434,34 @@
         permission="zope.ManageContent"
     />
     <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IProvince"
+        action="edit"
+        title="Edit province"
+        order="10"
+        layer=".interfaces.IAdminSectionLayer"
+        permission="zope.ManageContent"
+    />
+    <browser:menuItem menu="context_actions"
         for="bungeni.models.interfaces.IRegion"
         action="delete"
         title="Delete region"
         order="99"
+        layer=".interfaces.IAdminSectionLayer"
+        permission="zope.ManageContent"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IRegion"
+        action="edit"
+        title="Edit region"
+        order="10"
+        layer=".interfaces.IAdminSectionLayer"
+        permission="zope.ManageContent"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IConstituency"
+        action="edit"
+        title="Edit constituency"
+        order="10"
         layer=".interfaces.IAdminSectionLayer"
         permission="zope.ManageContent"
     />
@@ -1409,10 +1474,26 @@
         permission="zope.ManageContent"
     />
     <browser:menuItem menu="context_actions"
-        for="bungeni.models.interfaces._IAddress"
+        for="bungeni.models.interfaces.IGroupAddress"
+        action="edit"
+        title="Edit group address"
+        order="10"
+        layer=".interfaces.IAdminSectionLayer"
+        permission="zope.ManageContent"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IGroupAddress"
         action="delete"
-        title="Delete address"
+        title="Delete group address"
         order="99"
+        layer=".interfaces.IAdminSectionLayer"
+        permission="zope.ManageContent"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.ITitleType"
+        action="edit"
+        title="Edit title type"
+        order="10"
         layer=".interfaces.IAdminSectionLayer"
         permission="zope.ManageContent"
     />
@@ -1432,104 +1513,20 @@
         layer=".interfaces.IAdminSectionLayer"
         permission="zope.ManageContent"
     />
-    
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IUserDelegation"
+        action="edit"
+        title="Edit user delegation"
+        order="10"
+        layer=".interfaces.IAdminSectionLayer"
+        permission="zope.ManageContent"
+    />
     <browser:menuItem menu="context_actions"
         layer=".interfaces.IBusinessSectionLayer"
         for="bungeni.models.interfaces.ICommittee"
         action="./schedule"
         title="Committee schedule"
         order="40"
-    />
-    <browser:menuItem menu="download_actions"
-        for="bungeni.models.interfaces.IReport"
-        action="pdf"
-        title="Download PDF"
-        permission="zope.View"
-        order="42"
-    />
-    <browser:menuItem menu="download_actions"
-        for="bungeni.models.interfaces.IBill"
-        action="pdf"
-        title="Download PDF"
-        permission="zope.View"
-        order="42"
-    />
-    <browser:menuItem menu="download_actions"
-        for="bungeni.models.interfaces.ITabledDocument"
-        action="pdf"
-        title="Download PDF"
-        permission="zope.View"
-        order="42"
-    />
-    <browser:menuItem menu="download_actions"
-        for="bungeni.models.interfaces.IAgendaItem"
-        action="pdf"
-        title="Download PDF"
-        permission="zope.View"
-        order="42"
-    />
-    <browser:menuItem menu="download_actions"
-        for="bungeni.models.interfaces.IQuestion"
-        action="pdf"
-        title="Download PDF"
-        permission="zope.View"
-        order="42"
-    />
-    <browser:menuItem menu="download_actions"
-        for="bungeni.models.interfaces.IMotion"
-        action="pdf"
-        title="Download PDF"
-        permission="zope.View"
-        order="42"
-    />
-    <browser:menuItem menu="download_actions"
-        for="bungeni.models.interfaces.IReport"
-        action="odt"
-        title="Download ODT"
-        permission="zope.View"
-        order="43"
-    />
-    <browser:menuItem menu="download_actions"
-        for="bungeni.models.interfaces.IReport4Sitting"
-        action="odt"
-        title="Download ODT"
-        permission="zope.View"
-        order="43"
-    />
-    <browser:menuItem menu="download_actions"
-        for="bungeni.models.interfaces.IMotion"
-        action="odt"
-        title="Download ODT"
-        permission="zope.View"
-        order="43"
-    />
-    <browser:menuItem menu="download_actions"
-        for="bungeni.models.interfaces.IBill"
-        action="odt"
-        title="Download ODT"
-        permission="zope.View"
-        order="43"
-    />
-    <browser:menuItem menu="download_actions"
-        for="bungeni.models.interfaces.ITabledDocument"
-        action="odt"
-        title="Download ODT"
-        permission="zope.View"
-        order="43"
-    />
-    <browser:menuItem menu="download_actions"
-        for="bungeni.models.interfaces.IQuestion"
-        action="odt"
-        title="Download ODT"
-        permission="zope.View"
-        order="43"
-    />
-    <browser:menuItem menu="download_actions"
-        for="bungeni.models.interfaces.IAgendaItem"
-        action="odt"
-        title="Download ODT"
-        permission="zope.View"
-        order="43"
     />
     <browser:menuItem menu="context_actions"
         for="bungeni.core.interfaces.ISchedulingContext"
@@ -1599,192 +1596,7 @@
      viewName=""
      weight="30"
      /-->
-    <!-- RSS menus -->
 
-    <browser:menuItem menu="download_actions"
-        action="feed.rss"
-        title="RSS"
-        permission="zope.View"
-        order="44"
-        for="bungeni.models.interfaces.IBillContainer"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.rss"
-        title="RSS"
-        permission="zope.View"
-        order="44"
-        for="bungeni.models.interfaces.ICommitteeContainer"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.rss"
-        title="RSS"
-        permission="zope.View"
-        order="44"
-        for="bungeni.models.interfaces.IQuestionContainer"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.rss"
-        title="RSS"
-        permission="zope.View"
-        order="44"
-        for="bungeni.models.interfaces.IMotionContainer"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.rss"
-        title="RSS"
-        permission="zope.View"
-        order="44"
-        for="bungeni.models.interfaces.ITabledDocumentContainer"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.rss"
-        title="RSS"
-        permission="zope.View"
-        order="44"
-        for="bungeni.models.interfaces.IAgendaItemContainer"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.rss"
-        title="RSS"
-        permission="zope.View"
-        order="44"
-        for="bungeni.models.interfaces.ISittingContainer"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.rss"
-        title="RSS"
-        permission="zope.View"
-        order="44"
-        for="bungeni.models.interfaces.IReportContainer"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.rss"
-        title="RSS"
-        permission="zope.View"
-        order="44"
-        for="bungeni.models.interfaces.IBill"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.rss"
-        title="RSS"
-        permission="zope.View"
-        order="44"
-        for="bungeni.models.interfaces.IQuestion"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.rss"
-        title="RSS"
-        permission="zope.View"
-        order="44"
-        for="bungeni.models.interfaces.IMotion"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.rss"
-        title="RSS"
-        permission="zope.View"
-        order="44"
-        for="bungeni.models.interfaces.ITabledDocument"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.rss"
-        title="RSS"
-        permission="zope.View"
-        order="44"
-        for="bungeni.models.interfaces.IAgendaItem"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.akomantoso"
-        title="Akoma Ntoso"
-        permission="zope.View"
-        order="45"
-        for="bungeni.models.interfaces.IBillContainer"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.akomantoso"
-        title="Akoma Ntoso"
-        permission="zope.View"
-        order="45"
-        for="bungeni.models.interfaces.IQuestionContainer"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.akomantoso"
-        title="Akoma Ntoso"
-        permission="zope.View"
-        order="45"
-        for="bungeni.models.interfaces.IMotionContainer"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.akomantoso"
-        title="Akoma Ntoso"
-        permission="zope.View"
-        order="45"
-        for="bungeni.models.interfaces.ITabledDocumentContainer"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.akomantoso"
-        title="Akoma Ntoso"
-        permission="zope.View"
-        order="45"
-        for="bungeni.models.interfaces.IAgendaItemContainer"
-        layer=".interfaces.IRSSRepresentationLayer"
-     />
-    <browser:menuItem menu="download_actions"
-        action="feed.akomantoso"
-        title="Akoma Ntoso"
-        permission="zope.View"
-        order="45"
-        for="bungeni.models.interfaces.IBill"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.akomantoso"
-        title="Akoma Ntoso"
-        permission="zope.View"
-        order="45"
-        for="bungeni.models.interfaces.IQuestion"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.akomantoso"
-        title="Akoma Ntoso"
-        permission="zope.View"
-        order="45"
-        for="bungeni.models.interfaces.IMotion"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.akomantoso"
-        title="Akoma Ntoso"
-        permission="zope.View"
-        order="45"
-        for="bungeni.models.interfaces.ITabledDocument"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
-    <browser:menuItem menu="download_actions"
-        action="feed.akomantoso"
-        title="Akoma Ntoso"
-        permission="zope.View"
-        order="45"
-        for="bungeni.models.interfaces.IAgendaItem"
-        layer=".interfaces.IRSSRepresentationLayer"
-    />
      
     <!-- !+TYPES_CUSTOM
     <include file="menu-vocabularies.zcml"/>

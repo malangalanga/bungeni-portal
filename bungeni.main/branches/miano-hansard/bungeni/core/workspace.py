@@ -148,5 +148,5 @@ def load_workspaces(application, event):
     load_workspace("agendaitem.xml", domain.AgendaItem)
     load_workspace("motion.xml", domain.Motion)
     load_workspace("question.xml", domain.Question)
-    load_workspace("hansard.xml", domain.Hansard)
-    load_workspace("takes.xml", domain.Take)
+    #load_workspace("hansard.xml", domain.Hansard)
+    #load_workspace("takes.xml", domain.Take)

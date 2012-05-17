@@ -233,6 +233,7 @@ class OfficeRoles(object):
         app = common.get_application()
         terms = []
         roles = getUtilitiesFor(IRole, app)
+        print "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX START", 
         for name, role in roles:
             #Roles that must not be assigned to users in an office
             if name in ["bungeni.Anonymous",
@@ -244,6 +245,7 @@ class OfficeRoles(object):
                         "bungeni.Minister",
                         "bungeni.Admin"]:
                 continue
+            print "XXXXXXXXXXXXXXXXXXXX", name, role
             if not ISubRoleAnnotations(role).is_sub_role:
                 terms.append(vocabulary.SimpleTerm(name, name, name))
         return vocabulary.SimpleVocabulary(terms)
@@ -253,6 +255,7 @@ office_roles = OfficeRoles()
 class GroupSubRoles(object):
     interface.implements(IVocabularyFactory)
     def __call__(self, context):
+        print "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX group START", 
         terms = []
         while not IBungeniGroup.providedBy(context):
             context = context.__parent__

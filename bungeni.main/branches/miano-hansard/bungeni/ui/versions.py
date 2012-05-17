@@ -29,15 +29,14 @@ from bungeni.alchemist.interfaces import IIModelInterface
 from bungeni.alchemist.ui import getSelected
 
 from bungeni.core import version
-from bungeni.models.interfaces import IVersionable
+from bungeni.models.interfaces import IFeatureVersion
 from bungeni.ui.interfaces import IWorkspaceOrAdminSectionLayer
 from bungeni.ui.i18n import _
 from bungeni.ui.utils import url
-from bungeni.ui.diff import textDiff
 from bungeni.ui import browser
 from bungeni.ui import forms
 from bungeni.utils import register
-
+from bungeni.ui.htmldiff import htmldiff
 from bungeni.ui import audit
 from zc.table import column
 
@@ -159,7 +158,7 @@ class VersionLogMixin(object):
         formatter.cssClasses["table"] = "listing grid"
         return formatter()
 
-@register.view(IVersionable, layer=IWorkspaceOrAdminSectionLayer, 
+@register.view(IFeatureVersion, layer=IWorkspaceOrAdminSectionLayer, 
     name="version-log", 
     protect={"zope.Public": 
         dict(attributes=["publishTraverse", "browserDefault", "__call__"])})
@@ -311,10 +310,11 @@ class VersionLogView(VersionLogMixin,
 # The diff() utility is adapted from: z3c.schemadiff.schema.py
 # 
 # The DiffView here is different than the one in schemadiff.browser, as:
-# - the result of a diff is now always being obtained via .diff.textDiff(), so
-#   it is all much simpler -- note that z3c.schemadiff.schema.diff() was 
-#   anayway shortcutting any and all adapter genericity (for IFieldDiff) by 
-#   hard-wiring explicit checks on whether not to call IFieldDiff.html_diff()!
+# - the result of a diff is now always being obtained via from
+# htmldiff.htmldiff(),so it is all much simpler
+# note that z3c.schemadiff.schema.diff() was
+# anyway shortcutting any and all adapter genericity (for IFieldDiff) by
+# hard-wiring explicit checks on whether not to call IFieldDiff.html_diff()!
 # 
 # This implementation also removes all dependencies on the z3c.schemadiff
 # package, that may therefore be removed.
@@ -343,6 +343,7 @@ class DiffView(object):
                 content_changed = True
         return self.template(tables=tables, content_changed=content_changed)
 
+
 def diff(source, target, *interfaces):
     """Get a list of (field, changed, result) 3-tuples, for "diff-able" fields.
     """
@@ -352,16 +353,23 @@ def diff(source, target, *interfaces):
     for iface in interfaces:
         # the order is locked on the order returned by of interface.names()
         for name in iface.names():
-            field = iface[name]
+            #!+VERSIONS(miano, 2 may 2012) something changed in the last couple
+            # of weeks that makes removeSecurityPolicy below required yet
+            # it wasn't before.
+            field = removeSecurityProxy(iface[name])
             # only consider for diffing fields of this type
-            if not isinstance(field, (schema.Text, schema.TextLine, schema.Set)):
+            #!+VERSIONS(miano, 2 May 2012) This was an isinstance check before.
+            # switched it to check on interfaces.
+            if set((schema.interfaces.IText, schema.interfaces.ITextLine,
+                schema.interfaces.ISet)).isdisjoint(
+                    set(interface.providedBy(field))):
                 continue
             bound = field.bind(source)
             source_value = bound.query(source, field.default)
             target_value = bound.query(target, field.default)
             if source_value is None or target_value is None:
                 continue
-            hresult = textDiff(source_value, target_value)
+            hresult = htmldiff(source_value, target_value)
             results.append((field, bool(hresult!=source_value), hresult))
     return results
 

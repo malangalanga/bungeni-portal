@@ -15,16 +15,10 @@ from sqlalchemy.orm import mapper, class_mapper, relation, column_property, \
 import schema
 import domain
 import interfaces
+from bungeni.utils.naming import polymorphic_identity
 
+# Features
 
-def polymorphic_identity(cls):
-    """Formalize convention of determining the polymorphic discriminator value 
-    for a domain class as a function of the class name.
-    """
-    return schema.un_camel(cls.__name__)
-
-
-# !+PARAMETRIZABLE_DOCTYPES
 def configurable_mappings(kls):
     """Configuration mappings for declarative-model types.
     """
@@ -32,13 +26,17 @@ def configurable_mappings(kls):
     mapper_add_relation_vertical_properties(kls)
     
     # auditable, determine properties, map audit class/table
-    if interfaces.IAuditable.implementedBy(kls):
+    if interfaces.IFeatureAudit.implementedBy(kls):
+        # either defined manually or created dynamically in domain.feature_audit()
         audit_kls = getattr(domain, "%sAudit" % (name))
-        base_audit_kls = audit_kls.__bases__[0] # domain: base_audit_class(kls)
+        # assumption: audit_kls only uses single inheritance (at least for 
+        # those created dynamically in domain.feature_audit())
+        base_audit_kls = audit_kls.__bases__[0] 
         assert issubclass(base_audit_kls, domain.Audit), \
             "Audit class %s is not a proper subclass of %s" % (
                 audit_kls, domain.Audit)
-        if domain.CREATE_AUDIT_CLASS_FOR(kls):
+        # mapper for the audit_cls for this kls, if it was created dynamically
+        if kls in domain.feature_audit.CREATED_AUDIT_CLASS_FOR:
             mapper(audit_kls,
                 inherits=base_audit_kls,
                 polymorphic_identity=polymorphic_identity(kls)
@@ -54,7 +52,7 @@ def configurable_mappings(kls):
             """Add properties, as per configured features for a domain type.
             """
             # auditable
-            if interfaces.IAuditable.implementedBy(kls):
+            if interfaces.IFeatureAudit.implementedBy(kls):
                 # kls.changes <-> change.audit.audit_head=doc:
                 # doc[@TYPE] <-- TYPE_audit <-> audit <-> change
                 
@@ -64,6 +62,7 @@ def configurable_mappings(kls):
                 
                 # get tbl PK column
                 assert len(tbl.primary_key) == 1
+                # !+ASSUMPTION_SINGLE_COLUMN_PK(mr, may-2012)
                 pk_col = [ c for c in tbl.primary_key ][0]
                 mapper_properties["changes"] = relation(domain.Change,
                     primaryjoin=rdb.and_(
@@ -76,18 +75,18 @@ def configurable_mappings(kls):
                     lazy=True,
                     order_by=schema.change.c.audit_id.desc(),
                     cascade="all",
-                    passive_deletes=False,
+                    passive_deletes=False, # SA default
                 )
             # versionable
-            if interfaces.IVersionable.implementedBy(kls):
+            if interfaces.IFeatureVersion.implementedBy(kls):
                 pass
             return mapper_properties
         for key, prop in configurable_properties(kls, {}).items():
             kls_mapper.add_property(key, prop)
     mapper_add_configurable_properties(kls)
 
+# /Features
 
-# !+/PARAMETRIZABLE_DOCTYPES
 
 #user address types
 #!+TYPES_CUSTOM mapper(domain.PostalAddressType, schema.postal_address_types)
@@ -366,7 +365,7 @@ mapper(domain.Sitting, schema.sitting,
         "item_schedule": relation(domain.ItemSchedule,
             order_by=schema.item_schedules.c.planned_order
         ),
-        "venue": relation(domain.Venue),
+        "venue": relation(domain.Venue, lazy=False),
     }
 )
 
@@ -412,12 +411,15 @@ def relation_vertical_property(object_type, object_id_column, vp_name, vp_type):
         uselist=False,
         # !+abusive, cannot create a same-named backref to multiple classes!
         #backref=object_type,
-        # sqlalchemy.orm.relationship(cascade="refresh-expire, expunge, delete")
-        cascade="save-update, merge, delete-orphan",
+        # sqlalchemy.orm.relationship(cascade="save-update, merge, 
+        #       refresh-expire, expunge, delete, delete-orphan")
+        # False (default) -> "save-update, merge"
+        # "all" -> "save-update, merge, refresh-expire, expunge, delete"
+        cascade="all",
         single_parent=True,
-        lazy=True, # !+ True gives DetachedInstanceError in listings, while 
-        # False gives sqlalchemy.exc.ProgrammingError (missing FROM-clause 
-        # entry for table ... ) !!
+        lazy=True, # !+ False gives sqlalchemy.exc.ProgrammingError 
+        # e.g. in business/questions listing:
+        # (ProgrammingError) missing FROM-clause entry for table "doc"
     )
 
 
@@ -433,35 +435,45 @@ mapper(domain.Doc, schema.doc,
                 schema.users.c.user_id),
             uselist=False,
             lazy=False),
-        # !+AlchemistManagedContaineror, X same as amc_X.values(), property @X?
+        # !+AlchemistManagedContainer, X same as amc_X.values(), property @X?
+        # !+ARCHETYPE_MAPPER(mr, apr-2012) keep this mapper property always 
+        # present on predefined archetype mapper, or dynamically instrument it 
+        # on each on mapper of each (sub-archetype) type having this feature?
         "item_signatories": relation(domain.Signatory), #!+rename sa_signatories
-        "attachments": relation(domain.Attachment),
-        "sa_events": relation(domain.Event, uselist=True),
+        "attachments": relation(domain.Attachment), # !+ARCHETYPE_MAPPER
+        "sa_events": relation(domain.Event, uselist=True), # !+ARCHETYPE_MAPPER
         # for sub parliamentary docs, non-null implies a sub doc
         #"head": relation(domain.Doc,
         #    uselist=False,
         #    lazy=True,
         #),
-        "audits": relation(domain.DocAudit,
-            primaryjoin=rdb.and_(schema.doc.c.doc_id == 
-                schema.doc_audit.c.doc_id),
+        "audits": relation(domain.DocAudit, # !+ARCHETYPE_MAPPER
+            primaryjoin=rdb.and_(
+                schema.doc.c.doc_id == schema.doc_audit.c.doc_id
+            ),
             backref="audit_head",
             uselist=True,
             lazy=True,
             order_by=schema.doc_audit.c.audit_id.desc(),
+            cascade="all",
+            passive_deletes=False, # SA default
         ),
-        "versions": relation(domain.Version,
-           primaryjoin=rdb.and_(
-               schema.doc.c.doc_id == schema.doc_audit.c.doc_id,
+        "versions": relation(domain.DocVersion, # !+ARCHETYPE_MAPPER
+            primaryjoin=rdb.and_(
+                schema.doc.c.doc_id == schema.doc_audit.c.doc_id,
             ),
-            secondary=schema.change,
+            secondary=schema.doc_audit,
             secondaryjoin=rdb.and_(
-                schema.doc_audit.c.audit_id == schema.change.c.audit_id,
+                schema.doc_audit.c.audit_id == schema.audit.c.audit_id,
+                schema.audit.c.audit_id == schema.change.c.audit_id,
+                # !+NO_INHERIT_VERSION needs this
+                schema.change.c.action == "version",
             ),
             #!+backref: version.audit.audit_head
             uselist=True,
             lazy=True,
             order_by=schema.change.c.audit_id.desc(),
+            viewonly=True,
         ),
         "group": relation(domain.Group,
             primaryjoin=schema.doc.c.group_id == schema.groups.c.group_id,
@@ -512,14 +524,34 @@ mapper(domain.Change, schema.change,
 )
 mapper(domain.ChangeTree, schema.change_tree)
 
+''' !+NO_INHERIT_VERSION mapping domain.Version is actually unnecessary
 #vm = mapper(domain.Version,
 mapper(domain.Version,
     inherits=domain.Change,
     polymorphic_on=schema.change.c.action, # polymorphic discriminator
     polymorphic_identity=polymorphic_identity(domain.Version),
+)
+# !+polymorphic_identity_multi only allows a single value... e.g. if needed to 
+# add a 2nd value such as "reversion" would not be able to -- but seems we 
+# should be able to tweak the version mapper's polymorphic_map to allow 
+# multiple values for polymorphic_identity (but does not work anyway 
+# attachment.versions does not pick up reversions):
+#vm.polymorphic_map["reversion"] = vm.polymorphic_map["version"]
+#del vm
+'''
+
+mapper(domain.DocAudit, schema.doc_audit,
+    inherits=domain.Audit,
+    polymorphic_identity=polymorphic_identity(domain.Doc) # on head class
+)
+
+mapper(domain.DocVersion,
+    # !+NO_INHERIT_VERSION(mr, apr-2012) inheriting from domain.Version will 
+    # always give an empty doc.versions / attachment.versions / ... lists !
+    inherits=domain.Change,
     properties={
-        #!+version of an attachment is not attachmentable
-        "attachments": relation(domain.Version,
+        # !+ only for versionable doc sub-types that also support "attachment"
+        "attachments": relation(domain.AttachmentVersion, # !+ARCHETYPE_MAPPER
             primaryjoin=rdb.and_(
                 schema.change.c.audit_id == schema.change_tree.c.parent_id,
                 #schema.change.c.action == "version", # !+constraint
@@ -535,20 +567,9 @@ mapper(domain.Version,
             uselist=True,
             lazy=True,
         ),
-        #!+versionable items supporting feature "event":
+        #!+eventable items supporting feature "event":
         #"sa_events": relation(domain.Event, uselist=True),
-    }
-)
-# !+polymorphic_identity_multi only allows a single value... but, we can tweak 
-# the version mapper's polymorphic_map to allow multiple values for 
-# polymorphic_identity (but attachment.versions does not pick up reversions):
-#vm.polymorphic_map["reversion"] = vm.polymorphic_map["version"]
-#del vm
-
-
-mapper(domain.DocAudit, schema.doc_audit,
-    inherits=domain.Audit,
-    polymorphic_identity=polymorphic_identity(domain.Doc) # on head class
+    },
 )
 
 mapper(domain.AgendaItem,
@@ -614,23 +635,27 @@ mapper(domain.Attachment, schema.attachment,
             uselist=False,
             lazy=False,
         ),
-        "audits": relation(domain.AttachmentAudit,
+        "audits": relation(domain.AttachmentAudit, # !+ARCHETYPE_MAPPER
             primaryjoin=rdb.and_(schema.attachment.c.attachment_id == 
                 schema.attachment_audit.c.attachment_id),
             backref="audit_head",
             uselist=True,
             lazy=True,
-            #cascade="all",
             order_by=schema.attachment_audit.c.audit_id.desc(),
+            cascade="all",
+            passive_deletes=False, # SA default
         ),
-        "versions": relation(domain.Version,
-           primaryjoin=rdb.and_(
-               schema.attachment.c.attachment_id ==
+        "versions": relation(domain.AttachmentVersion, # !+ARCHETYPE_MAPPER
+            primaryjoin=rdb.and_(
+                schema.attachment.c.attachment_id ==
                     schema.attachment_audit.c.attachment_id,
             ),
-            secondary=schema.change,
+            secondary=schema.attachment_audit,
             secondaryjoin=rdb.and_(
-                schema.attachment_audit.c.audit_id == schema.change.c.audit_id,
+                schema.attachment_audit.c.audit_id == schema.audit.c.audit_id,
+                schema.audit.c.audit_id == schema.change.c.audit_id,
+                # !+NO_INHERIT_VERSION needs this
+                schema.change.c.action == "version",
             ),
             #!+backref: version.audit.audit_head
             #backref="audit_head", !+ERROR: version.audit_head
@@ -639,6 +664,7 @@ mapper(domain.Attachment, schema.attachment,
             uselist=True,
             lazy=True,
             order_by=schema.change.c.audit_id.desc(),
+            viewonly=True,
         ),
     }
 )
@@ -646,36 +672,43 @@ mapper(domain.AttachmentAudit, schema.attachment_audit,
     inherits=domain.Audit,
     polymorphic_identity=polymorphic_identity(domain.Attachment) # on head class
 )
+mapper(domain.AttachmentVersion,
+    inherits=domain.Change, # !+NO_INHERIT_VERSION
+    properties={
+        #!+eventable items supporting feature "event":
+        #"sa_events": relation(domain.Event, uselist=True),
+    },
+)
 
-mapper(domain.Hansard, schema.hansards,
+mapper(domain.Hansard, schema.hansard,
         properties = {
             "items": relation(domain.HansardItem,
-                              order_by=schema.hansard_items.c.start_datetime,),
+                              order_by=schema.hansard_item.c.start_datetime,),
             "sitting": relation(domain.Sitting, uselist=False),    
             }
        )
 
-mapper(domain.HansardItem, schema.hansard_items, 
+mapper(domain.HansardItem, schema.hansard_item, 
         polymorphic_on=schema.doc.c.type,
         polymorphic_identity=polymorphic_identity(domain.HansardItem),  
         )
         
-mapper(domain.HansardAgendaItem, schema.hansard_agenda_items,
+mapper(domain.HansardAgendaItem, schema.hansard_agenda_item,
         inherits=domain.HansardItem,
-        polymorphic_on=schema.hansard_items.c.type,
+        polymorphic_on=schema.hansard_item.c.type,
         polymorphic_identity=polymorphic_identity(domain.HansardAgendaItem),
     )
     
-mapper(domain.Speech, schema.speeches, 
+mapper(domain.Speech, schema.speech, 
         inherits=domain.HansardItem,
-        polymorphic_on=schema.hansard_items.c.type,
+        polymorphic_on=schema.hansard_item.c.type,
         polymorphic_identity=polymorphic_identity(domain.Speech),
         properties = {
                 'person': relation(domain.User),
                 } 
         )
 
-mapper(domain.Take, schema.takes)
+mapper(domain.Take, schema.take)
 
 mapper(domain.Heading, schema.headings,
     properties={
@@ -724,6 +757,8 @@ mapper(domain.Signatory, schema.signatory,
             uselist=True,
             lazy=True,
             order_by=schema.signatory_audit.c.signatory_id.desc(),
+            cascade="all",
+            passive_deletes=False, # SA default
         ),
     }
 )
@@ -790,7 +825,7 @@ mapper(domain.Report,
     polymorphic_identity=polymorphic_identity(domain.Report)
 )
 
-mapper(domain.SittingReport, schema.sitting_reports, # !+?
+mapper(domain.SittingReport, schema.sitting_report,
     properties={
         "sitting": relation(domain.Sitting,
             backref="reports",
@@ -798,14 +833,14 @@ mapper(domain.SittingReport, schema.sitting_reports, # !+?
             uselist=False
         ),
         "report": relation(domain.Report, # !+doc.head
-            backref="sitting",
+            backref="sittingreport",
             lazy=True,
             uselist=False
         ),
     }
 )
 
-mapper(domain.Report4Sitting, schema.sitting_reports,
+mapper(domain.Report4Sitting, schema.sitting_report,
     inherits=domain.Report
 )
 
@@ -813,7 +848,7 @@ mapper(domain.ObjectTranslation, schema.translations)
 
 
 # !+IChange-vertical-properties special case: 
-# class is NOT workflowed, and in any case __dynamic_features__ = False
+# class is NOT workflowed, and in any case has no dynamic_features
 mapper_add_relation_vertical_properties(domain.Change)
 
 

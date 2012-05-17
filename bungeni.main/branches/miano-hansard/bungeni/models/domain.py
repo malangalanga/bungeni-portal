@@ -21,7 +21,7 @@ from bungeni.alchemist.traversal import one2many, one2manyindirect
 import sqlalchemy.sql.expression as sql
 from sqlalchemy.orm import class_mapper, object_mapper
 
-import interfaces
+from bungeni.models import interfaces
 
 from bungeni.utils.capi import capi
 
@@ -36,7 +36,7 @@ def object_hierarchy_type(object):
     return ""
 
 
-CHANGE_ACTIONS = ("add", "modify", "workflow", "remove", "version", "reversion")
+CHANGE_ACTIONS = ("add", "modify", "workflow", "remove", "version")
 
 def assert_valid_change_action(action):
     assert action in CHANGE_ACTIONS, \
@@ -59,6 +59,7 @@ def get_audit_table_name(kls):
     return "%s_audit" % (get_mapped_table(kls).name)
 
 def get_mapped_object_id(ob):
+    # !+ASSUMPTION_SINGLE_COLUMN_PK(mr, may-2012)
     return object_mapper(ob).primary_key_from_instance(ob)[0]
 
 #
@@ -103,16 +104,18 @@ class Entity(object):
     __name__ = None
     __parent__ = None
     
-    # !+ base archetype
-    __dynamic_features__ = False
+    # list of names (may be empty) of dynamic feature available for this type
+    dynamic_features = []
     
     extended_properties = [] # [(name, type)]
     
     def __init__(self, **kw):
         try:
-            domain_schema = model.queryModelInterface(self.__class__)
-            known_names = [k for k, d in domain_schema.namesAndDescriptions(1)]
-        except:
+            domain_schema = model.queryModelInterface(type(self))
+            known_names = [ k for k, d in domain_schema.namesAndDescriptions(1) ]
+        except Exception, e:
+            log.error("Failed queryModelInterface(%s): %s: %s" % (
+                type(self), type(e).__name__, e))
             known_names = None
         
         for k, v in kw.items():
@@ -123,62 +126,25 @@ class Entity(object):
                     "Invalid attribute on %s %s" % (
                         self.__class__.__name__, k))
     
-    # sort_on: the list of column names the query is sorted on by default
-    sort_on = None
-    
-    # sort_dir = desc | asc
-    #sort_dir = "desc"
-    
-    # sort_replace: a dictionary that maps one column to another
-    # so when the key is requested in a sort the value gets sorted
-    # eg: {"user_id":"sort_name"} when the sort on user_id is requested the 
-    # query gets sorted by sort_name
-    #sort_replace = None
+    @property
+    def pk(self):
+        """ () -> [(pk_name, pk_value)] -- intended primarily as debug utility.
+        """
+        return [ (c.name, getattr(self, c.name))
+             for c in object_mapper(self).primary_key ]
 
-#
+# Features (as per a deployment's configuration) - decorators for domain types
+# to support a "feature", to collect in one place all that is needed for the 
+# domain type to support that "feature".
+# 
+# The quality of a domain type to support a specific feature is externalized 
+# as a localization parameter, and its implementation must thus be completely 
+# isolated, depending only on that one declaration.
 
-# !+PARAMETRIZABLE_DOCTYPES(mr, jun-2011) the quality of a domain type to
-# be auditable or versionable is externalized as a localization parameter, and
-# its implementation must thus be completely isolated, depending only on that
-# one declaration.
-
-# Handling of dynamic features (as per a deployment's configuration)
-# Note: in a simplified one-generic-document-type world, these can be 
-# simplified even further. 
-
-def CREATE_AUDIT_CLASS_FOR(cls):
-    """Is the audit_cls for this kls created dynamically?"""
-    return cls in CREATE_AUDIT_CLASS_FOR.classes
-CREATE_AUDIT_CLASS_FOR.classes = []
-
-
-def configurable_domain(kls, workflow):
-    assert kls.__dynamic_features__, \
-        "Class [%s] does not allow dynamic features" % (kls)
-    # note: versionable implies auditable
-    for feature in workflow.features:
-        if feature.enabled:
-            kls = configurable_domain.feature_decorators[feature.name](kls)
-    return kls
-configurable_domain.feature_decorators = {}
-
-# convenience, per decorator name, remember decorated types
-CUSTOM_DECORATED = {
-    # decorator_name: set([kls])
-    "auditable": set(), # [kls]
-    "versionable": set(), # [kls]
-    "enable_attachment": set(), # [kls]
-    "enable_schedule": set(), # [kls]
-}
-
-def auditable(kls):
-    """Decorator for auditable domain types, to collect in one place all
-    that is needed for a domain type to be auditale.
-    
-    Executed on adapters.load_workflow()
+def feature_audit(kls):
+    """Decorator for domain types to support "audit" feature.
     """
-    CUSTOM_DECORATED["auditable"].add(kls)
-    interface.classImplements(kls, interfaces.IAuditable)
+    interface.classImplements(kls, interfaces.IFeatureAudit)
     # If a domain class is explicitly defined, then it is assumed that all 
     # necessary setup is also taken care of. Typically, only the sub-classes
     # of an archetype (mapped to a same table) need dynamic creation/setup.
@@ -186,64 +152,98 @@ def auditable(kls):
         audit_cls_name = "%sAudit" % (auditable_cls.__name__)
         return bool(globals().get(audit_cls_name))
     if not audit_cls_exists_for(kls):
-        CREATE_AUDIT_CLASS_FOR.classes.append(kls)
-    if CREATE_AUDIT_CLASS_FOR(kls):
         # define {kls}Audit class
+        feature_audit.CREATED_AUDIT_CLASS_FOR.add(kls)
         def base_audit_class(kls):
             """Identify what should be the BASE audit class for a 
             {kls}Audit class to inherit from, and return it.
             """
             # !+ may have a deeper inheritance
-            # !+ other achetypes
+            # !+ other archetypes
             if kls is not Doc and issubclass(kls, Doc):
                 return DocAudit
             return Audit
         audit_kls = base_audit_class(kls).auditFactory(kls)
         globals()[audit_kls.__name__] = audit_kls
+    # !+ITER_TYPE_INFO remember decorated classes, for audit.set_auditor(kls), 
+    # that is called quite early, and capi.iter_type_info() is not yet ready...
+    feature_audit.DECORATED.add(kls)
     return kls
-configurable_domain.feature_decorators["audit"] = auditable
+# keep track of decorated domain classes
+feature_audit.DECORATED = set()
+# keep track of domain classes for which an audit class was created dynamically
+feature_audit.CREATED_AUDIT_CLASS_FOR = set()
 
-def versionable(kls):
-    """Decorator for versionable domain types, to collect in one place all
-    that is needed for a domain type to be versionable.
-    
-    Executed on adapters.load_workflow()
-    
-    Note: @versionable implies @auditable
+def feature_version(kls):
+    """Decorator for domain types to support "version" feature.
     """
-    CUSTOM_DECORATED["versionable"].add(kls)
-    assert interfaces.IAuditable.implementedBy(kls)
-    # assign interface (versions property added downstream)
-    interface.classImplements(kls, interfaces.IVersionable)
+    # domain.Version itself may NOT support versions
+    assert not interfaces.IVersion.implementedBy(kls)
+    # !+ @version requires @audit
+    assert interfaces.IFeatureAudit.implementedBy(kls)
+    interface.classImplements(kls, interfaces.IFeatureVersion)
     return kls
-configurable_domain.feature_decorators["version"] = versionable
 
-def enable_attachment(kls):
-    """Decorator for attachment-feature of domain types.
-    Executed on adapters.load_workflow()
-    
-    !+ currently assumes that the object is versionable.
+def feature_attachment(kls):
+    """Decorator for domain types to support "attachment" feature.
+    !+ currently assumes that kls is versionable.
     """
-    # !+ domain.Attachment is versionable, but does not support attachments
-    CUSTOM_DECORATED["enable_attachment"].add(kls)
-    interface.classImplements(kls, interfaces.IAttachmentable)
+    # !+ domain.Attachment is versionable
+    # domain.Attachment itself may NOT support attachments
+    assert not interfaces.IAttachment.implementedBy(kls)
+    interface.classImplements(kls, interfaces.IFeatureAttachment)
     return kls
-configurable_domain.feature_decorators["attachment"] = enable_attachment
 
-def enable_schedule(kls):
-    """Decorator for schedulable types
+def feature_event(kls):
+    """Decorator for domain types to support "event" feature.
+    For Doc types (other than Event itself).
     """
-    CUSTOM_DECORATED["enable_schedule"].add(kls)
-    interface.classImplements(kls, interfaces.ISchedulable)
+    # domain.Event itself may NOT support events
+    assert not interfaces.IEvent.implementedBy(kls)
+    interface.classImplements(kls, interfaces.IFeatureEvent)
     return kls
-configurable_domain.feature_decorators["schedule"] = enable_schedule
 
-# !+/PARAMETRIZABLE_DOCTYPES
+def feature_signatory(kls):
+    """Decorator for domain types to support "signatory" feature.
+    For Doc types.
+    """
+    interface.classImplements(kls, interfaces.IFeatureSignatory)
+    return kls
+
+def feature_schedule(kls):
+    """Decorator for domain types to support "schedule" feature.
+    For Doc types, means support for being scheduled in a group sitting.
+    """
+    interface.classImplements(kls, interfaces.IFeatureSchedule)
+    return kls
+
+def feature_address(kls):
+    """Decorator for domain types to support "address" feature.
+    For User and Group types, means support for possibility to have addresses.
+    """
+    interface.classImplements(kls, interfaces.IFeatureAddress)
+    return kls
+
+
+def configurable_domain(kls, workflow):
+    """Executed on adapters.load_workflow().
+    """
+    for feature in workflow.features:
+        if feature.enabled:
+            assert feature.name in kls.dynamic_features, \
+                "Class [%s] does not allow dynamic feature [%s]" % (
+                    kls, feature.name)
+            feature_decorator = globals()["feature_%s" % (feature.name)]
+            kls = feature_decorator(kls)
+    return kls
+
+# /Features
+
 
 class User(Entity):
     """Domain Object For A User. General representation of a person.
     """
-    __dynamic_features__ = True
+    dynamic_features = ["address"]
     
     interface.implements(interfaces.IBungeniUser, interfaces.ITranslatable)
     
@@ -279,9 +279,6 @@ class User(Entity):
     def fullname(self):
         return "%s %s" % (self.first_name, self.last_name)
 
-    sort_on = ["last_name", "first_name", "middle_name"]
-    sort_replace = {"user_id": ["last_name", "first_name"]}
-    sort_dir = "asc"
     addresses = one2many("addresses",
         "bungeni.models.domain.UserAddressContainer", "user_id")
     delegations = one2many("delegations",
@@ -323,11 +320,9 @@ class PasswordRestoreLink(object):
 class Group(Entity):
     """ an abstract collection of users
     """
-    __dynamic_features__ = True # !+ False
+    dynamic_features = ["address"]
     interface.implements(interfaces.IBungeniGroup, interfaces.ITranslatable)
-    sort_on = ["short_name", "full_name"]
-    sort_dir = "asc"
-    sort_replace = {"group_id": ["short_name", ]}
+    
     #users = one2many("users", 
     #   "bungeni.models.domain.GroupMembershipContainer", "group_id")
     #sittings = one2many("sittings", 
@@ -362,12 +357,10 @@ class GroupMembership(HeadParentedMixin, Entity):
     """A user's membership in a group-abstract basis for 
     ministers, committeemembers, etc.
     """
-    __dynamic_features__ = False
+    dynamic_features = []
     interface.implements(
         interfaces.IBungeniGroupMembership, interfaces.ITranslatable)
-    sort_on = ["last_name", "first_name", "middle_name"]
-    sort_replace = {"user_id": ["last_name", "first_name"]}
-    sort_dir = "asc"
+    
     
     @property
     def image(self):
@@ -389,13 +382,11 @@ class CommitteeStaff(GroupMembership):
 class Sitting(Entity):
     """Scheduled meeting for a group (parliament, committee, etc).
     """
+    dynamic_features = ["audit", "version", "attachment"]
     interface.implements(
         interfaces.ITranslatable,
-        interfaces.IDocument, # !+IDoc?
     )
-
-    __dynamic_features__ = True # !+ False
-
+    
     attendance = one2many("attendance",
         "bungeni.models.domain.SittingAttendanceContainer", "sitting_id")
     items = one2many("items",
@@ -408,8 +399,6 @@ class Sitting(Entity):
 class SittingAttendance(object):
     """A record of attendance at a meeting .
     """
-    sort_on = ["last_name", "first_name", "middle_name"]
-    sort_replace = {"member_id": ["last_name", "first_name", ]}
 
 ''' !+TYPES_CUSTOM
 class AttendanceType(Entity):
@@ -425,7 +414,7 @@ class AttendanceType(Entity):
 class Parliament(Group):
     """A parliament.
     """
-    sort_on = ["start_date"]
+    
     sessions = one2many("sessions",
         "bungeni.models.domain.ParliamentSessionContainer", "parliament_id")
     committees = one2many("committees",
@@ -456,10 +445,7 @@ class Parliament(Group):
 class MemberOfParliament(GroupMembership):
     """Defined by groupmembership and additional data.
     """
-    sort_on = ["last_name", "first_name", "middle_name"]
-    sort_replace = {"user_id": ["last_name", "first_name"],
-        "constituency_id":["name"], "province_id":["name"],
-        "region_id":["name"], "party_id":["name"]}
+    
     titles = one2many("titles",
         "bungeni.models.domain.MemberTitleContainer", "membership_id")
     addresses = one2manyindirect("addresses", 
@@ -493,7 +479,6 @@ class PartyMember(GroupMembership):
 class Government(Group):
     """A government.
     """
-    sort_on = ["start_date"]
     ministries = one2many("ministries",
         "bungeni.models.domain.MinistryContainer", "parent_group_id")
 
@@ -573,7 +558,8 @@ class OfficeMember(GroupMembership):
 class Address(HeadParentedMixin, Entity):
     """Address base class
     """
-    __dynamic_features__ = False
+    dynamic_features = []
+    interface.implements(interfaces.IAddress)
     # !+ note corresponding tbls exist only for subclasses
 class UserAddress(Address):
     """User address (personal)
@@ -659,18 +645,12 @@ class vp(object):
 class Doc(Entity):
     """Base class for a workflowed parliamentary document.
     """
-    __dynamic_features__ = True
-    
+    dynamic_features = ["audit", "version", "attachment", "event", 
+        "signatory", "schedule"]
     interface.implements(
-        interfaces.IDocument, # !+IDoc?
-        interfaces.IBungeniParliamentaryContent, #!+should be applied as needed?
+        interfaces.IBungeniContent,
         interfaces.ITranslatable
     )
-    
-    sort_on = ["doc.status_date", "doc.type_number"]
-    sort_dir = "desc"
-    
-    sort_replace = {"owner_id": ["last_name", "first_name"]}
     
     # !+AlchemistManagedContainer these attribute names are part of public URLs!
     # !+item_id->head_id
@@ -715,12 +695,16 @@ class AdmissibleMixin(object):
 
 
 class Change(HeadParentedMixin, Entity):
-    """Information about a change.
+    """Information about a change, along with the snapshot (on self.audit) of 
+    the object attribute values as of *after* the change.
     """
-    __dynamic_features__ = False
     interface.implements(
         interfaces.IChange
     )
+    
+    @property
+    def __name__(self):
+        return "%s-%s" % (self.action, self.seq)
     
     @property
     def head(self):
@@ -731,11 +715,19 @@ class Change(HeadParentedMixin, Entity):
     def status(self):
         return self.audit.status # assumption: audit.audit_head is workflowed
     
-    def get_seq_previous(self):
-        """Get the previous change in this seq of actions. 
-        Returns None if no previous.
+    @property
+    def seq_previous(self):
+        """The previous change in action seq on self.head. None if no previous.
         """
         changes = get_changes(self.head, self.action)
+        for c in changes[1 + changes.index(self):]:
+            return c
+    
+    @property
+    def previous(self):
+        """The previous change (any action) on self.head. None if no previous.
+        """
+        changes = get_changes(self.head, *CHANGE_ACTIONS)
         for c in changes[1 + changes.index(self):]:
             return c
     
@@ -752,11 +744,16 @@ class ChangeTree(Entity):
     """Relates a parent change with a child change.
     """
 
-# !+VERSION_CLASS_PER_AUDIT_TYPE(mr, apr-2012) review domain+descriptor for 
-# versions, how to display a version
+# !+VERSION_CLASS_PER_TYPE(mr, apr-2012) should there be dedicated Version 
+# type/descriptor, to facilitate UI views for each version type? Or should
+# simply keep a single generic Change type, and handle all "type-specific" 
+# aspects via the self.audit instance (and its type)?
 class Version(Change):
-    """A version (a special kind of change action) of an object and 
-    associated change information.
+    """A specialized change type, with the information of a version (a special 
+    kind of change action) of an object.
+    
+    Behaves somewhat like a combined Change and Audit record, as this will 
+    automatically try to resolve additional attrs off self.audit before failing.
     """
     interface.implements(
         interfaces.IVersion,
@@ -766,21 +763,50 @@ class Version(Change):
     def __name__(self):
         return "ver-%s" % (self.seq)
     
-    # !+ should be only for versionable self.head
+    # !+ should only be when type(self.head) is versionable
+    # !+ other features?
     files = one2many("files",
         "bungeni.models.domain.AttachmentContainer", "head_id")
     
-    # !+VERSION_CLASS_PER_AUDIT_TYPE
-    # !+DOCUMENT tmp dummy values to avoid attr errors, etc...
     def __getattr__(self, name):
-        print "!+DOCUMENT VERSION->AUDIT...", name, self.audit
-        return getattr(self.audit, name)
-
+        """Try to pick any attribute (not found on this change record--this 
+        method only gets called when a nonexistent attribute is accessed) off 
+        the related audit snapshot record (as every change record is related 
+        to a type-dedicated audit record).
+        
+        !+ should this be on Change i.e. for all change actions?
+        !+ possible issue with attribute hiding, if an type has a 
+           same-named property as one in in Change type/table, then that one
+           will always be retrieved first (and so the one on the related
+           Audit type/table will be unreachable in this way).
+        """
+        try:
+            return getattr(self.audit, name)
+        except AttributeError:
+            # !+SA_INCORRECT_TYPE_DEBUG strangely, sometimes the type of 
+            # (this change's) self.audit that sqlalchemy returns does not 
+            # correspond to self.head...
+            audit_id = self.audit_id
+            def get_correctly_typed_change(change):
+                for v in change.head.versions:
+                    if v.audit_id == audit_id:
+                        return v
+            correctly_typed_change = get_correctly_typed_change(self)
+            if correctly_typed_change and correctly_typed_change is not self:
+                print ("*** %s.%s head/id=%s/%s, audit/id=%s/%s \n"
+                    "    SA INCORRECT TYPE:%s \n"
+                    "    SHOULD HAVE BEEN:%s" % (
+                        type(self).__name__, name, 
+                        self.head, self.head_id, 
+                        self.audit, audit_id, 
+                        self, correctly_typed_change))
+            # !+/SA_INCORRECT_TYPE_DEBUG
+            raise AttributeError("%r object has no attribute %r" % (
+                type(self).__name__, name))
 
 class Audit(HeadParentedMixin, Entity):
     """Base (abstract) audit record for a document.
     """
-    __dynamic_features__ = False
     interface.implements(
         interfaces.IChange # !+IAudit?
     )
@@ -834,10 +860,26 @@ class DocAudit(Audit):
     ]
 #instrument_extended_properties(DocAudit, "doc_audit")
 
+class DocVersion(Version):
+    """A version of a document.
+    """
+    files = one2many("files",
+        "bungeni.models.domain.AttachmentContainer", "head_id")
+    #!+eventable items supporting feature "event":
+    
+    submission_date = None # !+bypass error when loading a doc version view
+    # !+ proper logic of this would have to be the value of 
+    # self.head.submission_date at the time of *this* version!
+    
 
 class AgendaItem(AdmissibleMixin, Doc):
     """Generic Agenda Item that can be scheduled on a sitting.
     """
+    dynamic_features = ["audit", "version", "attachment", "schedule"]
+    interface.implements(
+        interfaces.IBungeniParliamentaryContent,
+    )
+    
     files = one2many("files",
         "bungeni.models.domain.AttachmentContainer", "head_id")
     # !+signatories on AgendaItems?
@@ -851,6 +893,12 @@ class AgendaItem(AdmissibleMixin, Doc):
 class Bill(Doc):
     """Bill domain type.
     """
+    dynamic_features = ["audit", "version", "attachment", "event", 
+        "signatory", "schedule"]
+    interface.implements(
+        interfaces.IBungeniParliamentaryContent,
+    )
+    
     files = one2many("files",
         "bungeni.models.domain.AttachmentContainer", "head_id")
     signatories = one2many("signatories",
@@ -878,12 +926,17 @@ class Bill(Doc):
     @property
     def publication_date(self):
         return self._get_workflow_date("gazetted")
-
 #BillAudit
 
 class Motion(AdmissibleMixin, Doc):
     """Motion domain type.
     """
+    dynamic_features = ["audit", "version", "attachment", "event", 
+        "signatory", "schedule"]
+    interface.implements(
+        interfaces.IBungeniParliamentaryContent,
+    )
+    
     files = one2many("files",
         "bungeni.models.domain.AttachmentContainer", "head_id")
     signatories = one2many("signatories",
@@ -899,6 +952,12 @@ class Motion(AdmissibleMixin, Doc):
 class Question(AdmissibleMixin, Doc):
     """Question domain type.
     """
+    dynamic_features = ["audit", "version", "attachment", "event", 
+        "signatory", "schedule"]
+    interface.implements(
+        interfaces.IBungeniParliamentaryContent,
+    )
+    
     files = one2many("files",
         "bungeni.models.domain.AttachmentContainer", "head_id")
     signatories = one2many("signatories",
@@ -930,7 +989,6 @@ class Question(AdmissibleMixin, Doc):
         ("response_text", vp.TranslatedText),
     ]
 instrument_extended_properties(Question, "doc")
-
 #QuestionAudit
 
 class TabledDocument(AdmissibleMixin, Doc):
@@ -949,6 +1007,12 @@ class TabledDocument(AdmissibleMixin, Doc):
     
     It must be possible to schedule a tabled document for a sitting.
     """
+    dynamic_features = ["audit", "version", "attachment", "event", 
+        "signatory", "schedule"]
+    interface.implements(
+        interfaces.IBungeniParliamentaryContent,
+    )
+    
     files = one2many("files",
         "bungeni.models.domain.AttachmentContainer", "head_id")
     signatories = one2many("signatories",
@@ -964,20 +1028,28 @@ class Event(HeadParentedMixin, Doc):
     #!+parliament_id is (has always been) left null for events, how best to 
     # handle this, possible related constraint e.g. head_id must NOT be null, 
     # validation, ... ?
-    __dynamic_features__ = True
+    dynamic_features = ["audit", "version", "attachment"]
+    interface.implements(
+        interfaces.IEvent,
+    )
     
     # !+alchemist properties not inherited, must be re-instrumented on class
     files = one2many("files",
         "bungeni.models.domain.AttachmentContainer", "head_id")
+    
+    @property
+    def event_date(self):
+        # !+ should this be when first added? if in a "attached" state, the 
+        # latest of these (what is returned here) ? if in "internal"??
+        return self._get_workflow_date("attached")
 #EventAudit
 
 
 class Attachment(HeadParentedMixin, Entity):
     """A file attachment to a document. 
     """
-    __dynamic_features__ = True # !+ should be False?
+    dynamic_features = ["audit", "version"]
     interface.implements(
-        interfaces.IDocument, # !+IDoc?
         interfaces.IAttachment,
         ore.xapian.interfaces.IIndexable, # !+bungeni_custom
     )
@@ -990,32 +1062,20 @@ class Attachment(HeadParentedMixin, Entity):
     @property
     def owner(self):
         return self.head.owner
-
+        
 class AttachmentAudit(Audit):
     """An audit record for an attachment.
     """
     label_attribute_name = "title"
-    
-    # !+VERSION_CLASS_PER_AUDIT_TYPE?
-    @property # !+TMP workaround erros
-    def short_title(self):
-        print "!+AttachmentAudit... short_title -> title", self.title, self
-        return self.title
-    @property # !+TMP
-    def long_title(self):
-        print "!+AttachmentAudit... long_title -> title", self.title, self
-        return self.title
-    @property # !+TMP
-    def body(self):
-        print "!+AttachmentAudit... body -> description", self.description, self
-        return self.title
 
+class AttachmentVersion(Version):
+    """A version of an attachment.
+    """
 
 class Heading(Entity):
     """A heading in a report.
     """
     interface.implements(interfaces.ITranslatable, interfaces.IScheduleText)
-    __dynamic_features__ = False
     
     type = "heading"
     
@@ -1027,12 +1087,10 @@ class Heading(Entity):
 class Signatory(Entity):
     """Signatory for a Bill or Motion or other doc.
     """
+    dynamic_features = ["audit", "version", "attachment"]
     interface.implements(
         interfaces.IBungeniContent,
-        interfaces.IDocument, # !+IDoc?
     )
-    
-    __dynamic_features__ = True
     
     @property
     def owner_id(self):
@@ -1050,7 +1108,7 @@ class SignatoryAudit(Audit):
     def label(self):
         return self.user.fullname
     description = label
-
+    
     @property
     def user(self):
         return self.audit_head.user
@@ -1060,8 +1118,6 @@ class SignatoryAudit(Audit):
 class ParliamentSession(Entity):
     """
     """
-    sort_on = ["start_date", ]
-    sort_dir = "desc"
     interface.implements(interfaces.ITranslatable)
 
 
@@ -1078,7 +1134,6 @@ class Constituency(Entity):
         "bungeni.models.domain.ConstituencyDetailContainer", "constituency_id")
     parliamentmembers = one2many("parliamentmembers",
         "bungeni.models.domain.MemberOfParliamentContainer", "constituency_id")
-    #sort_replace = {"province_id": ["province"], "region_id": ["region"]}
     interface.implements(interfaces.ITranslatable)
 
 
@@ -1179,8 +1234,7 @@ class ItemSchedule(Entity):
 
     item = property(_get_item, _set_item)
     
-    sort_on = ["planned_order", ]
-    sort_dir = "asc"
+    
 
 class ItemScheduleDiscussion(Entity):
     """A discussion on a scheduled item.
@@ -1215,12 +1269,11 @@ class Venue(Entity):
 class Report(Doc):
     """Agendas and minutes.
     """
+    dynamic_features = ["audit", "version"]
     interface.implements(interfaces.ITranslatable)
-    sort_on = ["end_date"] + Doc.sort_on
+    
 
-# !+SITTING_REPORT(mr, apr-2011) why does SittingReport (mapped as an 
-# association type, and not a Doc in any way) inherit from Report?!
-class SittingReport(Report):
+class SittingReport(Entity):
     """Which reports are created for this sitting.
     """
 
@@ -1235,10 +1288,11 @@ class ObjectTranslation(object):
     """
 
 class Hansard(Entity):
-    interface.implements(interfaces.IHansard)
     """
     The hansard report of a sitting
-    """   
+    """
+    interface.implements(interfaces.IHansard)
+    dynamic_features = ["audit"]
     agendaitems = one2many("agendaitems",
         "bungeni.models.domain.HansardAgendaItemContainer", "hansard_id")
     speeches = one2many("speeches", 

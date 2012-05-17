@@ -268,9 +268,7 @@ class VersionDescriptiveProperties(DescriptiveProperties):
         if is_translation(self.context):
             language = get_language_by_name(self.context.language)["name"]
             return "%s %s" % (language, _("translation"))
-        if interfaces.IChange.providedBy(self.context): # !+DOCUMENT tmp
-            return "%s %s" % (_("Version"), self.context.seq)
-        return "%s %s" % (_("Version"), self.context.version_id)
+        return "%s %s" % (_("Version"), self.context.seq)
     
     @property
     def description(self):
@@ -548,13 +546,7 @@ class ReportDescriptiveProperties(DescriptiveProperties):
 
     @property
     def description(self):
-        session = Session()
-        context = session.merge(removeSecurityProxy(self.context))
-        return u"%s %s to %s" % (translate_i18n(_(u"Covers")), 
-            context.start_date.strftime('%Y-%m-%d'),
-            context.end_date.strftime('%Y-%m-%d')
-        )
-
+        return self.title
 
 @register.adapter()
 class ItemScheduleCategoryDescriptiveProperties(DescriptiveProperties):
@@ -609,7 +601,7 @@ class AttachmentDescriptiveProperties(DescriptiveProperties):
         context = session.merge(removeSecurityProxy(self.context))
         return u"%s  (%s)" % (context.name, context.mimetype)
 
-'''
+''' !+VERSION_CLASS_PER_TYPE
 @register.adapter()
 class AttachedFileVersionDescriptiveProperties(DescriptiveProperties):
     component.adapts(interfaces.IAttachedFileVersion)

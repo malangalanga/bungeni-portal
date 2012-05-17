@@ -179,6 +179,10 @@ class IModelDescriptorField(interface.Interface):
         title=u"A Custom Column Widget for Listing Views",
         required=False
     )
+    listing_column_filter = schema.Object(interface.Interface,
+        title=u"A function that filters a listing column on a value",
+        required=False
+    )
     # !+LISTING_WIDGET(mr, nov-2010) why inconsistently named "listing_column"?
     view_widget = schema.Object(interface.Interface,
         title=u"A Custom Widget Factory for Read Views",
@@ -219,7 +223,7 @@ class Field(object):
     interface.implements(IModelDescriptorField)
     
     # A field in a descriptor must be displayable in at least one of these modes
-    _modes = ["view", "edit", "add", "listing", "search"]
+    _modes = ["view", "edit", "add", "listing"] #!+"search"]
     @classmethod 
     def validated_modes(cls, modes, nullable=False):
         return validated_set("modes", cls._modes, modes, nullable=nullable)
@@ -254,8 +258,18 @@ class Field(object):
     description = "" # str : description for field
     
     # displayable modes
-    modes = validated_set("modes", _modes, "view edit add listing")
-    
+    def modes():
+        doc = "Field.modes property, list of defaulted/validated displayable modes"
+        def fget(self):
+            # in self.__dict__ or in  self.__class__.__dict__
+            return self._modes 
+        def fset(self, str_or_seq):
+            self._modes = self.validated_modes(str_or_seq)
+        def fdel(self):
+            del self._modes
+        return locals()
+    modes = property(**modes())
+
     # the default list of show/hide localization directives -- by default
     # a field is NOT localizable in any mode and for any role.
     localizable = None # [ either(show, hide) ]
@@ -264,6 +278,12 @@ class Field(object):
     property = None # zope.schema.interfaces.IField
     
     listing_column = None   # zc.table.interfaces.IColumn
+    
+    # listing_column_filter must be a function that accepts three parameters
+    # 1. an sqlalchemy session query
+    # 2. the string to filter the column on
+    # 3. the sqlalchemy sort expression desc or asc
+    listing_column_filter = None
     
     view_widget = None      # zope.formlib.interaces.IDisplayWidget
     edit_widget = None      # zope.formlib.interfaces.IInputWidget
@@ -303,7 +323,8 @@ class Field(object):
     
     def __init__(self, 
             name=None, label=None, description=None, 
-            modes=None, localizable=None, property=None, listing_column=None, 
+            modes=None, localizable=None, property=None,
+            listing_column=None, listing_column_filter=None,
             view_widget=None, edit_widget=None, add_widget=None, 
             search_widget=None,
             #view_permission=None, edit_permission=None
@@ -324,7 +345,8 @@ class Field(object):
         kw = vars()
         for p in (
                 "name", "label", "description", "modes", 
-                "localizable", "property", "listing_column", 
+                "localizable", "property",
+                "listing_column", "listing_column_filter",
                 "view_widget", "edit_widget", "add_widget", "search_widget", 
                 #"view_permission", "edit_permission"
                 # !+FIELD_PERMISSIONS(mr, nov-2010) deprecated
@@ -335,7 +357,7 @@ class Field(object):
         
         # parameter integrity
         assert self.name, "Field [%s] must specify a valid name" % (self.name)
-        self.modes = self.validated_modes(self.modes)
+        #self.modes = self.validated_modes(self.modes)
         # Ensure that a field is included in a descriptor only when it is 
         # relevant to the UI i.e. it is displayed in at least one mode -- 
         # this obsoletes/replaces the previous concept of descriptor "omit". 
@@ -349,6 +371,10 @@ class Field(object):
         if listing_column:
             assert "listing" in self.modes, \
                 "Field [%s] sets listing_column but no listing mode" % (
+                    self.name)
+        if listing_column_filter:
+            assert "listing" in self.modes, \
+                "Field [%s] sets listing_column_filter but no listing mode" % (
                     self.name)
         # the default list of show/hide localization directives
         if self.localizable is None:
@@ -422,7 +448,7 @@ class Field(object):
     
     def __getitem__(self, k):
         return self.__dict__[k]
-
+    
     # to allow: with field as f:
     def __enter__(self): 
         return self
@@ -482,6 +508,12 @@ class ModelDescriptor(object):
     properties = () # !+USED?
     schema_order = () # !+USED?
     schema_invariants = ()
+    
+    # sort_on: the list of column names the query is sorted on by default
+    sort_on = None
+    
+    # sort_dir = desc | asc
+    sort_dir = "desc"
     
     def __call__(self, iface):
         """Models are also adapters for the underlying objects

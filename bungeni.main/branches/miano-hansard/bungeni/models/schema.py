@@ -8,52 +8,18 @@ $Id$
 """
 log = __import__("logging").getLogger("bungeni.models.schema")
 
-import re
 import sqlalchemy as rdb
 from fields import FSBlob
 from sqlalchemy.sql import text #, functions #!+CATALYSE(mr, nov-2010)
 from datetime import datetime
 
-import domain
-import interfaces
 
 metadata = rdb.MetaData()
 
-# bills, motions, questions
-ItemSequence = rdb.Sequence("item_sequence")
 
 # users and groups because of the zope users and groups
 PrincipalSequence = rdb.Sequence("principal_sequence")
 
-# !+PARAMETRIZABLE_DOCTYPES
-
-def un_camel(name):
-    """Convert a CamelCase name to lowercase underscore-separated.
-    """
-    s1 = un_camel.first_cap_re.sub(r"\1_\2", name)
-    return un_camel.all_cap_re.sub(r"\1_\2", s1).lower()
-un_camel.first_cap_re = re.compile("(.)([A-Z][a-z]+)")
-un_camel.all_cap_re = re.compile("([a-z0-9])([A-Z])")
-
-# !+ singular/plural still needed?
-def singular(pname):
-    """Get the english singular of (plural) name.
-    """
-    for sname in plural.custom:
-        if plural.custom[sname] == pname:
-            return sname
-    if pname.endswith("s"):
-        return pname[:-1]
-    return pname
-
-def plural(sname):
-    """Get the english plural of (singular) name.
-    """
-    return plural.custom.get(sname, None) or "%ss" % (sname)
-plural.custom = {
-    "user_address": "user_addresses",
-    "group_address": "group_addresses",
-}
 
 # vertical properties
 
@@ -187,99 +153,6 @@ def make_audit_table(table, metadata):
     )
     return audit_tbl
 
-''' !+DEC
-def make_changes_table(table, metadata):
-    """Create an object log table for an object.
-    """
-    table_name = table.name
-    entity_name = singular(table_name)
-    changes_name = "%s_changes" % (entity_name)
-    fk_id = "%s_id" % (entity_name)
-    changes_table = rdb.Table(changes_name, metadata,
-        rdb.Column("change_id", rdb.Integer, primary_key=True),
-        # the item_id of the "owning" item being logged !+HEAD_DOCUMENT_ITEM
-        rdb.Column("content_id", rdb.Integer, 
-            rdb.ForeignKey(table.c[fk_id]),
-            nullable=False,
-            index=True
-        ),
-        rdb.Column("action", rdb.Unicode(16)),
-        # audit date, exclusively managed by the system
-        rdb.Column("date_audit", rdb.DateTime(timezone=False),
-            #!+CATALYSE(mr, nov-2010) fails descriptor catalisation
-            #default=functions.current_timestamp(),
-            server_default=text("now()"),
-            nullable=False
-        ),
-        # user-modifiable effective date, defaults to same value as audit date;
-        # this is the date to be used for all intents and purposes other than 
-        # for data auditing
-        rdb.Column("date_active", rdb.DateTime(timezone=False),
-            #!+CATALYSE(mr, nov-2010)
-            #default=functions.current_timestamp(),
-            server_default=text("now()"),
-            nullable=False
-        ),
-        rdb.Column("description", rdb.UnicodeText),
-        rdb.Column("notes", rdb.UnicodeText),
-        rdb.Column("user_id", rdb.Integer, rdb.ForeignKey("users.user_id")),
-        # Workflow State at time of change - visibility of a change record 
-        # depends on permissions of parent object in this specific state.
-        rdb.Column("status", rdb.Unicode(48)),
-        #!+SA0.7 rdb.Index("%s_changes_cid_idx" % (entity_name), "content_id"),
-        useexisting=False
-    )
-    return changes_table
-
-def make_versions_table(table, metadata, secondary_table=None):
-    """Create a versions table, requires change log table for which
-    some version metadata information will be stored.
-    
-    A secondary table may be defined if the object mapped to this
-    table consists of a join between two tables.
-    
-    Assumption: table and secondary_table both have only a single surrogate pk.
-    """
-    table_name = table.name
-    entity_name = singular(table_name)
-    versions_name = "%s_versions" % (entity_name)
-    fk_id = "%s_id" % (entity_name)
-    columns = [
-        # the id of this record
-        rdb.Column("version_id", rdb.Integer, primary_key=True),
-        # the item_id of the "owning" item being versioned !+HEAD_DOCUMENT_ITEM
-        rdb.Column("content_id", rdb.Integer, 
-            rdb.ForeignKey(table.c[fk_id]), 
-            nullable=False,
-            index=True
-        ),
-        # the id of the change record triggered by this version !+needed?
-        rdb.Column("change_id", rdb.Integer,
-            rdb.ForeignKey("%s_changes.change_id" % entity_name),
-            #nullable=False # !+VERSION_CHANGE_ID(mr, sep-2011) application 
-            # policy stipulates that a new version is *always* logged also as 
-            # a change, thus this should filed should not be nullable. But, 
-            # setting it so breaks the versions.txt doctest. 
-            # See also related issue: ATTACHED_FILE_VERSIONS
-        ),
-        rdb.Column("manual", rdb.Boolean, nullable=False, default=False),
-    ]
-    def extend_cols(cols, ext_cols):
-        names = [ c.name for c in cols ]
-        for c in ext_cols:
-            if not c.primary_key:
-                assert c.name not in names, "Duplicate column."
-                names.append(c.name)
-                cols.append(c.copy())
-    extend_cols(columns, table.columns)
-    if secondary_table is not None:
-        extend_cols(columns, secondary_table.columns)
-    versions_table = rdb.Table(versions_name, metadata, *columns,
-        useexisting=False
-    )
-    return versions_table
-'''
-# !+/PARAMETRIZABLE_DOCTYPES
 
 '''
 def make_vocabulary_table(vocabulary_prefix, metadata, table_suffix="_types",
@@ -762,17 +635,19 @@ sitting = rdb.Table("sitting", metadata,
     rdb.Column("short_name", rdb.Unicode(512), nullable=True),
     rdb.Column("start_date", rdb.DateTime(timezone=False), nullable=False),
     rdb.Column("end_date", rdb.DateTime(timezone=False), nullable=False),
+    rdb.Column("sitting_length", rdb.Integer),
     # if a sitting is recurring this is the id of the original sitting
     # there is no foreign key to the original sitting
     # like rdb.ForeignKey("sitting.sitting_id")
     # to make it possible to delete the original sitting
     rdb.Column("recurring_id", rdb.Integer),
+    rdb.Column("recurring_type", rdb.String(32)),
     rdb.Column("status", rdb.Unicode(48)),
     rdb.Column("status_date", rdb.DateTime(timezone=False),
         server_default=text("now()"),
         nullable=False
     ),
-    # venues for sittings
+    # venue for the sitting
     rdb.Column("venue_id", rdb.Integer, rdb.ForeignKey("venues.venue_id")),
     rdb.Column("language", rdb.String(5), nullable=False),
     # other vocabularies
@@ -798,7 +673,7 @@ sitting_attendance = rdb.Table("sitting_attendance", metadata,
     ),
 )
 
-hansards = rdb.Table("hansards", metadata,
+hansard = rdb.Table("hansard", metadata,
     rdb.Column("hansard_id", rdb.Integer,
         primary_key=True
     ),
@@ -811,40 +686,42 @@ hansards = rdb.Table("hansards", metadata,
     rdb.Column("high_quality_video_path", rdb.UnicodeText, nullable=True), 
 )
 
-hansard_items = rdb.Table("hansard_items", metadata,
+hansard_audit = make_audit_table(hansard, metadata)
+
+hansard_item = rdb.Table("hansard_item", metadata,
     rdb.Column("hansard_item_id", rdb.Integer, primary_key=True),
     rdb.Column("hansard_id", rdb.Integer,
-        rdb.ForeignKey("hansards.hansard_id")),
+        rdb.ForeignKey("hansard.hansard_id")),
     rdb.Column("start_datetime", rdb.DateTime(timezone=False), nullable=False),
     rdb.Column("end_datetime", rdb.DateTime(timezone=False), nullable=False),
     # type for polymorphic_identity
     rdb.Column("type", rdb.Unicode(128), nullable=False),
 )
 
-hansard_agenda_items = rdb.Table(
-    "hansard_agenda_items",
+hansard_agenda_item = rdb.Table(
+    "hansard_agenda_item",
     metadata, 
     rdb.Column("hansard_agenda_item_id", rdb.Integer,
-        rdb.ForeignKey("hansard_items.hansard_item_id"),
+        rdb.ForeignKey("hansard_item.hansard_item_id"),
         primary_key=True
         ),
     rdb.Column("agenda_item_id", rdb.Integer,
         rdb.ForeignKey("doc.doc_id")),
    )
 
-speeches = rdb.Table(
-    "speeches",
+speech = rdb.Table(
+    "speech",
     metadata, 
     rdb.Column("speech_id", rdb.Integer,
-        rdb.ForeignKey("hansard_items.hansard_item_id"),
+        rdb.ForeignKey("hansard_item.hansard_item_id"),
         primary_key=True
         ),
     rdb.Column("user_id", rdb.Integer, rdb.ForeignKey("users.user_id")),
     rdb.Column("text", rdb.UnicodeText),
    )
 
-takes = rdb.Table(
-    "takes",
+take = rdb.Table(
+    "take",
     metadata,
     rdb.Column('take_id', rdb.Integer, primary_key=True),
     rdb.Column("take_name", rdb.Unicode(512), nullable=False),
@@ -986,7 +863,7 @@ item_schedule_discussions = rdb.Table("item_schedule_discussions", metadata,
     ),
 )
 
-sitting_reports = rdb.Table("sitting_reports", metadata,
+sitting_report = rdb.Table("sitting_report", metadata,
     rdb.Column("report_id", rdb.Integer,
         rdb.ForeignKey("doc.doc_id"), primary_key=True
     ),
@@ -1011,11 +888,12 @@ subscriptions = rdb.Table("object_subscriptions", metadata,
 
 
 # NOT a parliamentary_item
-# !+doc_attachment -- assumption is that attachments ae only for doc?
+# !+doc_attachment
 attachment = rdb.Table("attachment", metadata,
     rdb.Column("attachment_id", rdb.Integer, primary_key=True),
     # the id of the "owning" head document
-    rdb.Column("head_id", rdb.Integer, # !+item_id
+    # !+doc_attachment -- this assumes that attachments are only for doc?
+    rdb.Column("head_id", rdb.Integer,
         rdb.ForeignKey("doc.doc_id"),
         nullable=False
     ),
@@ -1025,7 +903,6 @@ attachment = rdb.Table("attachment", metadata,
         default="document",
         nullable=False,
     ),
-    #rdb.Column("doc_version_id", rdb.Integer), #!+file_version_id !?!?
     rdb.Column("title", rdb.Unicode(255), nullable=False), #!+file
     rdb.Column("description", rdb.UnicodeText), #!+file
     rdb.Column("data", FSBlob(32)), #!+file
@@ -1232,8 +1109,6 @@ doc_index = rdb.Index("doc_status_idx", doc.c["status"])
 # doc audit
 doc_audit = make_audit_table(doc, metadata)
 
-
-committee_reports = ()
 
 signatory = rdb.Table("signatory", metadata,
     rdb.Column("signatory_id", rdb.Integer,

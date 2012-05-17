@@ -20,6 +20,7 @@ from bungeni.core.workflow.states import StateController, WorkflowController, \
 import bungeni.core.audit
 import bungeni.core.version
 import bungeni.core.interfaces
+from bungeni.utils import naming
 from bungeni.utils.capi import capi
 
 __all__ = ["get_workflow"]
@@ -85,8 +86,8 @@ TYPE_REGISTRY = [
     ("tabled_document", TI("tableddocument", interfaces.ITabledDocument)),
     ("user", TI("user", interfaces.IBungeniUser)),
     ("signatory", TI("signatory", interfaces.ISignatory)),
-    ("hansard", TI("hansard", interfaces.IHansard)),
-    ("take", TI("take", interfaces.ITake)),
+    #("hansard", TI("hansard", interfaces.IHansard)),
+    #("take", TI("take", interfaces.ITake)),
 ]
 
 # !+ dedicated interfaces for archetype incantations should be auto-generated, 
@@ -140,16 +141,12 @@ def apply_customization_workflow(name, ti):
     Must (currently) be run after db setup.
     """
     # support to infer/get the domain class from the type key
-    def camel(name):
-        """Convert an underscore-separated word to CamelCase.
-        """
-        return "".join([ s.capitalize() for s in name.split("_") ])
     from bungeni.models import domain, orm
     def get_domain_kls(name):
         """Infer the target domain kls from the type key, following underscore 
         naming to camel case convention.
         """
-        return getattr(domain, camel(name))
+        return getattr(domain, naming.camel(name))
     
     # get the domain class, and associate with type
     kls = get_domain_kls(name)
@@ -158,23 +155,17 @@ def apply_customization_workflow(name, ti):
     # We "mark" the domain class with IWorkflowed, to be able to 
     # register/lookup adapters generically on this single interface.
     classImplements(kls, IWorkflowed)
+    
     # dynamic features from workflow
     wf = ti.workflow
-    def _apply_customization_workflow(kls):
-        # decorate/modify domain/schema/mapping as needed
-        kls = domain.configurable_domain(kls, wf)
-        orm.configurable_mappings(kls)
-        
-        # !+ ok to call set_auditor(kls) more than once?
-        # !+ following should be part of the domain.auditable(kls) logic
-        if wf.has_feature("audit"):
-            # create/set module-level dedicated auditor singleton for auditable kls
-            bungeni.core.audit.set_auditor(kls)
+    # decorate/modify domain/schema/mapping as needed
+    kls = domain.configurable_domain(kls, wf)
+    orm.configurable_mappings(kls)
     
-    # !+dynamic_features(mr, mar-2012) necessary? Address, ... ?
-    if kls.__dynamic_features__:
-        _apply_customization_workflow(kls)
-
+    # !+ following should be part of the domain.feature_audit(kls) logic
+    if wf.has_feature("audit"):
+        # create/set module-level dedicated auditor singleton for auditable kls
+        bungeni.core.audit.set_auditor(kls)
 
 def load_workflows():
     # workflow instances (+ adapter *factories*)
