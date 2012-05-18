@@ -7,7 +7,7 @@
   <!-- Alchemist UI overrides -->
   <include package="alchemist.ui" />
     
-    <!-- pakage for resource registration -->
+    <!-- package for resource registration -->
     <include package=".resources" />
     <!-- Must be included before executing .forms.overrides.zcml otherwise 
     calling queryModelDescriptor(model_interface) will return None.
@@ -63,14 +63,13 @@
 
     <!-- Admin UI -->
     <include package=".admin"/>
-
+  <!-- Hansard UI -->
+  <include package=".hansard"/>
   <!-- Javascript -->
   <include package="ore.yui"/>
   <include package="ore.yuiwidget"/>
   <include package="zdhtmlxscheduler"/>
   <include package="z3tinymce"/>
-  <!-- Transcripts -->
-  <!--include package="bungeni.transcripts"/ -->
   <browser:defaultView
      for="bungeni.models.interfaces.IBungeniApplication"
      name="index"
@@ -107,14 +106,6 @@
        provides="marginalia.interfaces.IMarginaliaAnnotatableAdaptor"
        factory="bungeni.ui.adaptors.BillAnnotationAdaptor"
        /-->
-    <!-- Experimental transcripts support -->
-   <!--class class="bungeni.models.domain.Sitting">
-    <implements
-       interface="bungeni.transcripts.interfaces.ITranscribable"
-       />
-  </class-->
-    <!--End Experimental transcripts support -->
-
     <!-- vocabularies -->
 
     <utility name="bungeni.vocabulary.workflow"

@@ -134,7 +134,18 @@
         permission="bungeni.sittingschedule.Edit"
         layer="bungeni.ui.interfaces.IBungeniSkin"
     />
-
+  <browser:page name="add"
+        for="bungeni.models.interfaces.IHansardContainer"
+        class=".common.AddForm"
+        permission="bungeni.hansard.Add"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+    />
+    <browser:page name="edit"
+        for="bungeni.models.interfaces.IHansard"
+        class=".common.EditForm"
+        permission="bungeni.hansard.Edit"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+    />
   <browser:page
      name="edit"
      for="bungeni.models.domain.ItemScheduleDiscussion"

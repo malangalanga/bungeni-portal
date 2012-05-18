@@ -1543,9 +1543,14 @@
      title="Similar"
      order="30"
       /-->
-     
-
-
+   <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.ISitting"
+        action="hansards/add"
+        title="Add Hansard"
+        permission="bungeni.hansard.Add"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        order="10"
+   />
 
    <browser:viewlet
      name="login"
