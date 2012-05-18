@@ -25,6 +25,7 @@ from bungeni.core.workflows._conditions import (
     # negation of condition) on each of the two transition options 
     user_is_not_context_owner, 
     user_is_context_owner,
+    context_is_public,
     # common global settings
     clerk_receive_notification,
     owner_receive_notification,
@@ -59,6 +60,8 @@ from bungeni.core.workflows._conditions import (
     # A doc is a draft iff its current current state is tagged with "draft".
     context_parent_is_draft, 
     context_parent_is_not_draft,
+    context_parent_is_public,
+    context_parent_is_not_public,
     user_may_edit_context_parent,
     
     # signatories
@@ -71,4 +74,10 @@ from bungeni.core.workflows._conditions import (
     pi_allow_signature_actions,
     pi_unsign_signature,
 )
+
+def may_edit_context_parent_and_is_not_public(context):
+    """Two conditions combined into a single"""
+    return (
+        user_may_edit_context_parent(context) and 
+        context_parent_is_not_public(context))
 

@@ -95,14 +95,6 @@
         roles="bungeni.Owner"
     />
     
-    <transition title="Publish Internal"
-        source="attached"
-        destination="internal"
-        condition="user_may_edit_context_parent"
-        trigger="manual"
-        roles="bungeni.Clerk bungeni.Owner"
-    />
-    
     <transition title="Re-publish"
         source="internal"
         destination="attached"
@@ -111,10 +103,23 @@
         roles="bungeni.Clerk bungeni.Owner"
     />
     
+    <!-- 
+    if the parent has been published (i.e. is public, assuming that once 
+    published it is never retracted) we do not want to allow transitioning away 
+    from "attached".
+    -->
+    <transition title="Publish Internal"
+        source="attached"
+        destination="internal"
+        condition="may_edit_context_parent_and_is_not_public"
+        trigger="manual"
+        roles="bungeni.Clerk bungeni.Owner"
+    />
+    
     <transition title="Deactivate"
         source="attached internal"
         destination="inactive"
-        condition="user_may_edit_context_parent"
+        condition="may_edit_context_parent_and_is_not_public"
         trigger="manual"
         roles="bungeni.Clerk bungeni.Owner"
         require_confirmation="true"

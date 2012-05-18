@@ -16,9 +16,9 @@
     <!-- global grants -->
     <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
     
-    <state id="attached" title="Attached file" 
+    <state id="attached" title="Attached file"
         tags="public"
-        permissions_from_parent="true" 
+        permissions_from_parent="true"
     />
     
     <state id="internal" title="Published Internal">
@@ -27,10 +27,7 @@
         <deny permission="zope.View" role="bungeni.Anonymous" />
     </state>
     
-    <!-- !+inactive(mr, aug-2011) review usage and rename across the board
-        currently being used in attachdfile, heading, event
-        consider using "dropped", "obsoleted", "removed"...
-    -->
+    <!-- !+inactive(mr, aug-2011) review usage and rename across the board -->
     <state id="inactive" title="Inactive file" like_state="internal" />
     
     <!-- !+IDENTICAL_TRANSITIONS(mr, sep-2011) attachment, address, event -->
