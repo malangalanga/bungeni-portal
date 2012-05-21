@@ -855,16 +855,6 @@ dl.portalMessage dd {
     line-height: 20px;
     margin: 0;
 }
-.formPanel #description .content-left-column,
-.formPanel #body_text .content-left-column {
-    display:none;
-    width:0;
-}
-.formPanel #description .content-right-column,
-.formPanel #body_text .content-right-column {
-    padding-top:5px;
-    width: 100%;
-}
 .formPanel .field .content-right-column div,
 .formPanel .field .content-right-column.widget {
     margin: 0;
@@ -1201,15 +1191,14 @@ div.main-column #collage h2 {
 .template-portal #top-layer #demoWarning {
     height: 18px;
     line-height: 18px;
+    z-index:99888;
+    margin-top:20px;
     margin-left:auto;
     margin-right:auto;
     position:relative;
 }
-#demoWarning {
-    display:none;
-}
 .template-portal #top-layer #demoWarning blink {
-    margin-left:-150px;
+    margin-left:0px;
     text-align:center;
     white-space: nowrap;
 }
