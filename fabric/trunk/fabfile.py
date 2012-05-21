@@ -267,6 +267,14 @@ def plone_build_opt():
 
     tasks = bungeni.PloneTasks()
     tasks.build_opt()
+    
+def plone_build_minimal():
+    """
+    Run the plone build minimally: only workspaces installed. 
+    """
+
+    tasks = bungeni.PloneTasks()
+    tasks.build_minimal()    
 
 
 def plone_update(revision="default"):

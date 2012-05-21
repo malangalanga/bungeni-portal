@@ -351,6 +351,7 @@ class BungeniConfigs:
         self.plone_site_content = self.cfg.get_config("plone",
                 "site_content")
         self.plone_general_buildout_config = "buildout.cfg"
+        self.plone_additional_buildout_config = "additional.cfg"
         self.plone_local_buildout_config = "plone_local.cfg"
         self.plone_deploy_ini = self.user_plone + "/plone.ini"
         self.plone_buildout_config = \
@@ -860,6 +861,7 @@ class Tasks:
         boprefix,
         boparam,
         boconfig,
+        boextends=""
         ):
         """
         Runs the buildout for the currently set working copy
@@ -877,8 +879,12 @@ class Tasks:
                     boparam = "-vvv"
 
         with cd(self.scm.working_copy):
-            run("%s ./bin/buildout -t 3600 %s -c %s" % (boprefix,
-                boparam, boconfig))
+            if boextends is not "":
+                run("%s ./bin/buildout -t 3600 %s -c %s" % (boprefix,
+                    boparam, boextends))            
+            else:
+                run("%s ./bin/buildout -t 3600 %s -c %s" % (boprefix,
+                    boparam, boconfig))
 
     def build_exists(self, li_files):
         for file in li_files:
@@ -1000,7 +1006,8 @@ class PloneTasks:
        self.tasks.buildout("PATH=%s:$PATH PYTHON=%s"
                             % (self.cfg.postgresql_bin,
                             self.pycfg.python), "",
-                            self.cfg.plone_buildout_config)
+                            self.cfg.plone_buildout_config,
+                            self.cfg.plone_additional_buildout_config)
 
     def build_opt(self):
        """
@@ -1010,7 +1017,18 @@ class PloneTasks:
        self.tasks.buildout("PATH=%s:$PATH PYTHON=%s"
                             % (self.cfg.postgresql_bin,
                             self.pycfg.python), "-N",
-                            self.cfg.plone_buildout_config)
+                            self.cfg.plone_buildout_config,
+                            self.cfg.plone_additional_buildout_config)
+                            
+    def build_minimal(self):
+       """
+       Runs a minimalist plone buildout - only contains the workspaces;
+       """
+
+       self.tasks.buildout("PATH=%s:$PATH PYTHON=%s"
+                            % (self.cfg.postgresql_bin,
+                            self.pycfg.python), "-N",
+                            self.cfg.plone_buildout_config)                            
 
     def deploy_ini(self):
         run("cp %(plone)s/deploy.ini %(deploy_ini)s" % {"plone"
