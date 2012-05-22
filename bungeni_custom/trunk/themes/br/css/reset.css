@@ -71,8 +71,12 @@
     color: #888;
 }
 #top-layer ul#portal-languageselector {
+    width:644px;
     height: 33px;
     margin: 0 .5em;
+    margin-left:-3px;
+    margin-top:3px;
+    background-color:#1da73a;
     float: left;
     padding: 0;
     font-size: 100%;
@@ -130,12 +134,18 @@
     border-top: 0 none;
 }
 .template-portal #top-layer #demoWarning {
-    margin: .5em auto;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-	position: relative;
-	float: left;
+    height: 18px;
+    line-height: 18px;
+    z-index:99888;
+    margin-top:0px;
+    margin-left:auto;
+    margin-right:auto;
+    position:relative;
+}
+.template-portal #top-layer #demoWarning blink {
+    margin-left:0px;
+    text-align:center;
+    white-space: nowrap;
 }
 
 /*

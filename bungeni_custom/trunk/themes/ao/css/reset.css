@@ -60,12 +60,18 @@
 }
 
 .template-portal #top-layer #demoWarning {
-    width: 150px;
     height: 18px;
     line-height: 18px;
+    z-index:99888;
+    margin-top:26px;
     margin-left:auto;
     margin-right:auto;
     position:relative;
+}
+.template-portal #top-layer #demoWarning blink {
+    margin-left:0px;
+    text-align:center;
+    white-space: nowrap;
 }
 
 .template-portal #visual-table-wrapper {
