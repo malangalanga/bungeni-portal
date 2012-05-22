@@ -586,3 +586,7 @@ def translate_workflow_xml(default_lang="en"):
     tasks.translate_workflow_xml(default_lang)
 
 
+def exist_install():
+    
+   tasks = bungeni.XmldbTasks()
+   tasks.setup_exist()

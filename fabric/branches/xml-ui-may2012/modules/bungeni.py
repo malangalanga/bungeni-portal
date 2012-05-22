@@ -397,10 +397,16 @@ class BungeniConfigs:
                 "enabled_translations").split(":")
         self.translatable_packages = self.cfg.get_config("custom",
                 "translatable_packages").split(":")
-        self.country_theme = self.cfg.get_config('custom', 'country_theme')
+        self.country_theme = self.cfg.get_config("custom", "country_theme")
         # supervisor
         self.supervisorconf = self.user_config + "/supervisord.conf"
-
+        # eXist installation folder
+        self.exist_install_url = self.cfg.get_config("exist", "download_url")
+        self.user_exist = self.user_install_root + "/exist"
+        self.exist_download_command = self.get_download_command(self.exist_install_url)
+        self.exist_download_file = self.utils.get_basename(self.exist_install_url)
+        self.user_exist_build_path = self.user_build_root + "/exist"
+        self.java_home = self.cfg.get_config("exist", "java_home")
 
 
     def get_download_command(self, strURL):
@@ -620,6 +626,8 @@ class Presetup:
             "bungeni_ini": self.cfg.bungeni_deploy_ini,
             "plone_ini": self.cfg.plone_deploy_ini,
             "static_ini": self.cfg.portal_static_ini,
+            "java": self.cfg.java_home,
+            "user_exist": self.cfg.user_exist,
             }
         run("mkdir -p %s" % self.cfg.user_config)
         run("mkdir -p %s" % self.cfg.user_logs)
@@ -1453,6 +1461,25 @@ class BungeniTasks:
             run("./bin/admin-passwd < .pass.txt")
             run("rm .pass.txt")
 
+class XmldbTasks:
+
+    def __init__(self):
+        self.cfg = BungeniConfigs()
+
+    def setup_exist(self):
+        run("mkdir -p %(exist_build_path)s" %
+                       {"exist_build_path":self.cfg.user_exist_build_path})
+        run("rm -rf %(exist_build_path)s/*.*" % 
+                       {"exist_build_path":self.cfg.user_exist_build_path})
+        with cd(self.cfg.user_exist_build_path):
+            run(self.cfg.exist_download_command)
+            run("mkdir -p %(user_exist)s" % {"user_exist":self.cfg.user_exist})
+            run("tar --strip-components=1 -xvf %(exist_download_file)s -C %(user_exist)s" %
+                         {"user_exist":self.cfg.user_exist,
+                          "exist_download_file":self.cfg.exist_download_file})
+            run("cd %(user_exist)s && echo JAVA_HOME=%(java)s %(user_exist)s/bin/startup.sh > run_exist.sh && chmod ug+x ./run_exist.sh" %
+                           {"user_exist":self.cfg.user_exist,"java":self.cfg.java_home})
+
 
 
 class CustomTasks:
@@ -1563,4 +1590,6 @@ class CustomTasks:
         print green("Writing XML with text translations")
         f_wf_xml.close()
         f_wf_xml = open(wf_xml_file, "w")
-        f_wf_xml.write(str_repl_xml.encode('UTF-8'))                                             
+        f_wf_xml.write(str_repl_xml.encode('UTF-8'))
+
+                                        

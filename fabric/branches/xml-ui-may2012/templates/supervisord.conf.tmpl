@@ -75,3 +75,11 @@ stdout_logfile= %(user_logs)s/openoffice.log
 priority = 70
 redirect_stderr = true
 autostart = false
+
+[program:exist]
+command = %(user_exist)s/run_exist.sh
+stdout_logfile = %(user_logs)s/exist.log
+priority = 40
+redirect_stderr = true
+stopsignal = INT
+autostart = false
