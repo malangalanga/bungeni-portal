@@ -5,12 +5,12 @@
     initial_state=""
     tags="draft private public">
     
+    <!-- sub-item: NO global grants -->
+    
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
-    
-    <!-- NO global grants -->
     
     <state id="draft" title="Draft Event" tags="draft private">
         <!-- event -->
@@ -33,7 +33,8 @@
         publish="true"
         tags="public"
         permissions_from_parent="true" 
-    />
+    /><!-- !+ sub-item publish="true", means what? is this not only published 
+    when parent is published? Should sub-items be allowed setting this? -->
     
     <state id="internal" title="Published Internal" like_state="draft">
         <!-- event -->
@@ -58,6 +59,7 @@
         <!-- event -->
         <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <!-- !+delete also deny? -->
     </state>
     
     
@@ -98,7 +100,6 @@
     <transition title="Re-publish"
         source="internal"
         destination="attached"
-        condition="user_may_edit_context_parent"
         trigger="manual"
         roles="bungeni.Clerk bungeni.Owner"
     />
@@ -111,7 +112,7 @@
     <transition title="Publish Internal"
         source="attached"
         destination="internal"
-        condition="may_edit_context_parent_and_is_not_public"
+        condition="context_parent_is_not_public"
         trigger="manual"
         roles="bungeni.Clerk bungeni.Owner"
     />
@@ -119,7 +120,7 @@
     <transition title="Deactivate"
         source="attached internal"
         destination="inactive"
-        condition="may_edit_context_parent_and_is_not_public"
+        condition="context_parent_is_not_public"
         trigger="manual"
         roles="bungeni.Clerk bungeni.Owner"
         require_confirmation="true"

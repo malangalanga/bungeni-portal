@@ -54,6 +54,8 @@
         <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner" />
         <!-- event -->
         <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
@@ -83,6 +85,8 @@
         <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Owner" />
     </state>
 
     <state id="submitted_signatories" title="Submitted to Signatories"
@@ -96,6 +100,7 @@
         <!-- attachment -->
         <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner" />
     </state>
 
     <state id="redraft" title="Redraft" version="true" like_state="draft"
@@ -134,6 +139,7 @@
         <!-- attachment -->
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
     </state>
 
     <state id="gazetted" title="Bill Published in Gazette"
@@ -255,6 +261,8 @@
         <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner" />
         <!-- event -->
         <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />

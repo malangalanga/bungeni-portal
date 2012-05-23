@@ -279,9 +279,29 @@ permissions_from_parent="true" declaration).
 - The sub-item workflow may still make use of workflow state option 
 permissions_from_parent="true" on any state in its own workflow.
 
-----
-Separate issue: workflows for sub-item types, e.g. for attachment, address, 
-event, SHOULD default newly created items into a DRAFT state that SHOULD NOT
-be bound with permissions_from_parent.
-----
+- !+ The "primary" View permission on the sub-item should ALWAYS use the 
+generic "zope.View" (that is redefined upstream to "bungeni.TYPE.View".
+!+redefinePermission "zope.View" to "bungeni.View", and then redefinePermission
+of "bungeni.View" to "bungeni.TYPE.View"?
+
+
+Workflow "draft" state for sub-items
+
+The workflow for a sub-item type, e.g. for attachment, address, event, 
+SHOULD default newly created items into a DRAFT state that SHOULD NOT
+be bound with permissions_from_parent="true".
+
+As a convenience for when the parent document is also in draft, the worklfow 
+transition conditions "context_parent_is_draft" and "context_parent_is_not_draft" 
+may be used to auto-transit directly a newly created sub-item to a state 
+bound to parent with permissions_from_parent="true" e.g. "attached". The rule 
+of thumb to respect here is that when parent is NOT in draft, any newly created
+sub-item SHOULD be created in draft.
+
+A related issue with transiting a sub-item away from a state bound to parent 
+with permissions_from_parent="true" is that such items SHOULD NOT be adjusted 
+once the parent document has become public. The workflow conditions 
+"context_parent_is_public" and "context_parent_is_not_public" are provided to
+be able to control availability of such transitions.
+
 

@@ -75,9 +75,12 @@ from bungeni.core.workflows._conditions import (
     pi_unsign_signature,
 )
 
+
+''' !+composite_condition(mr, may-2012) ability to do this in xml directly?
 def may_edit_context_parent_and_is_not_public(context):
-    """Two conditions combined into a single"""
+    """A composite condition, combines two conditions."""
     return (
         user_may_edit_context_parent(context) and 
         context_parent_is_not_public(context))
+'''
 

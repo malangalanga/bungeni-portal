@@ -49,6 +49,9 @@
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Speaker" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Speaker" />
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner" />
         <!-- event -->
         <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
@@ -87,6 +90,8 @@
         <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Owner" />
         <!-- signatories -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.signatory.Add" role="bungeni.Owner"/>
@@ -103,6 +108,7 @@
         <!-- attachment -->
         <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner" />
         <!-- signatory -->
         <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
     </state>
@@ -141,6 +147,7 @@
         <!-- attachment -->
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
         <notification condition="owner_receive_notification"
             subject="Question received: ${item.short_title}"
             from="${site.clerk_email}"
@@ -157,6 +164,7 @@
         <!-- attachment -->
         <grant permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Speaker" />
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Speaker" />
         <notification condition="owner_receive_notification"
             subject="Question forwarded to Speaker's Office: ${item.short_title}"
             from="${site.clerk_email}"
@@ -211,6 +219,7 @@
         <!-- attachment -->
         <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Owner" />
         <notification condition="owner_receive_notification"
             subject="Question needs clarification: ${item.short_title}"
             from="${site.clerk_email}"

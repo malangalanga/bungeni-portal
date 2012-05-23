@@ -26,7 +26,6 @@
     <grant permission="bungeni.motion.Add" role="bungeni.MP" />
     <grant permission="bungeni.motion.Delete" role="bungeni.Owner" />
     
-    
     <state id="working_draft" title="Working Draft" tags="draft private">
         <!-- motion -->
         <grant permission="zope.View" role="bungeni.Clerk" />
@@ -65,15 +64,15 @@
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
         <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.attachment.Edit" role="bungeni.MP" />
-        <deny permission="bungeni.attachment.Edit" role="bungeni.Minister" />
-        <deny permission="bungeni.attachment.Edit" role="bungeni.Anonymous" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Speaker" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
         <deny permission="bungeni.attachment.Add" role="bungeni.MP" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Minister" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Anonymous" />
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Speaker" />
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Owner" />
         <!-- event -->
         <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
@@ -104,7 +103,7 @@
         <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Clerk" />
     </state>
-
+    
     <state id="submitted_signatories" title="Submitted to Signatories"
         version="true" 
         like_state="draft"
@@ -118,20 +117,23 @@
         <!-- attachment -->
         <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner" />
     </state>
-
+    
     <state id="redraft" title="Redraft" like_state="draft"
         note="document under review before resubmission"
         version="true">
         <deny permission="bungeni.motion.Delete" role="bungeni.Owner" />
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Owner" />
     </state>
-
+    
     <state id="withdrawn_signatory" title="Dropped" 
         like_state="submitted_signatories"
         note="motion has been withdrawn before submission to house">
-        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />        
     </state>
-
+    
     <state id="submitted" title="Submitted" 
         version="true"
         like_state="submitted_signatories"
@@ -141,6 +143,8 @@
         <grant permission="zope.View" role="bungeni.Speaker" />
         <!-- signatory -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <!-- attachment -->
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner" />
         <notification condition="clerk_receive_notification"
             subject="Motion submitted: ${item.short_title}"
             from="${item.owner_email}"
@@ -148,7 +152,7 @@
             body="notification_email_to_clerk_upon_submit_of_motion"
         />
     </state>
-
+    
     <state id="received" title="Received by Clerks Office" 
         like_state="submitted"
         tags="actionclerk">
@@ -159,6 +163,7 @@
         <!-- attachment -->
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />        
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
         <notification condition="owner_receive_notification"
             subject="Motion received: ${item.short_title}"
             from="${site.clerk_email}"
