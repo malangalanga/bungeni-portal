@@ -587,6 +587,9 @@ def translate_workflow_xml(default_lang="en"):
 
 
 def exist_install():
-    
+   """
+   Installs eXist, WARNING: Will overwrite any existing installation
+   """    
+   
    tasks = bungeni.XmldbTasks()
    tasks.setup_exist()

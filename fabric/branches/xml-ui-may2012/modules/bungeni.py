@@ -407,6 +407,9 @@ class BungeniConfigs:
         self.exist_download_file = self.utils.get_basename(self.exist_install_url)
         self.user_exist_build_path = self.user_build_root + "/exist"
         self.java_home = self.cfg.get_config("exist", "java_home")
+        self.exist_port = self.cfg.get_config("exist", "http_port")
+        self.exist_startup_mem = self.cfg.get_config("exist", "startup_mem")
+        self.exist_max_mem = self.cfg.get_config("exist", "max_mem")
 
 
     def get_download_command(self, strURL):
@@ -628,6 +631,9 @@ class Presetup:
             "static_ini": self.cfg.portal_static_ini,
             "java": self.cfg.java_home,
             "user_exist": self.cfg.user_exist,
+            "exist_port": self.cfg.exist_port,
+            "exist_max_mem": self.cfg.exist_max_mem,
+            "exist_startup_mem": self.cfg.exist_startup_mem,
             }
         run("mkdir -p %s" % self.cfg.user_config)
         run("mkdir -p %s" % self.cfg.user_logs)
@@ -1462,11 +1468,23 @@ class BungeniTasks:
             run("rm .pass.txt")
 
 class XmldbTasks:
+    """
+    Tasks for installing eXist XML db
+    """
 
     def __init__(self):
         self.cfg = BungeniConfigs()
 
     def setup_exist(self):
+        """
+        Sets up eXist by downloading it from the cache and installing it 
+        Installation is bascially just extracting the tar archive
+        We dont use the eXist provided startup scripts as using that forks
+        the java process, which doesnt let it be stopped via supervisor.
+        Instead we invoke eXist by calling Java directly and running it 
+        in the supervisord foreground (which also allows us to catch java 
+        logging).
+        """
         run("mkdir -p %(exist_build_path)s" %
                        {"exist_build_path":self.cfg.user_exist_build_path})
         run("rm -rf %(exist_build_path)s/*.*" % 
@@ -1477,9 +1495,6 @@ class XmldbTasks:
             run("tar --strip-components=1 -xvf %(exist_download_file)s -C %(user_exist)s" %
                          {"user_exist":self.cfg.user_exist,
                           "exist_download_file":self.cfg.exist_download_file})
-            run("cd %(user_exist)s && echo JAVA_HOME=%(java)s %(user_exist)s/bin/startup.sh > run_exist.sh && chmod ug+x ./run_exist.sh" %
-                           {"user_exist":self.cfg.user_exist,"java":self.cfg.java_home})
-
 
 
 class CustomTasks:
