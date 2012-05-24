@@ -19,25 +19,23 @@ def sync_xml_files():
         with proxy server configuration
         to generate actual configuration xml
     """                                  
-    deliverance_conf_path = os.path.abspath(os.path.join(
-        os.path.dirname(__file__),"../../../../deliverance-proxy.conf"))
-                                             
-    if os.path.exists(deliverance_conf_path):
+    deliverance_conf_path = os.path.abspath(os.path.join(os.path.dirname(
+                                __file__),"../../../../deliverance-proxy.conf"))
+                                          
+    if os.path.exists(deliverance_conf_path):    
 
         conf_file = open(deliverance_conf_path, 'r')
         conf_data = conf_file.read()
         conf_file.close()
 
         rules_file_path = os.path.join(os.path.dirname(__file__),
-                                       'rules/rules.xml')
-                                       
-        
+                                       'rules/rules.xml')       
         rules_file = open(rules_file_path, 'r')
         rules_data = rules_file.read()
         rules_file.close()
-
-        deliverance_file_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                       '../../../../proxy.xml'))                                                                                                                                                            
+        
+        deliverance_file_path = os.path.abspath(os.path.join(os.path.dirname(
+                                    __file__),'../../../..proxy.xml'))
         deliverance_file = open(deliverance_file_path, 'w')
         result_data = rules_data.replace('<!-- deliverance-proxy -->', conf_data)
         deliverance_file.write(result_data)
