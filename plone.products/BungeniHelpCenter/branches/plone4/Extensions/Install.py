@@ -53,6 +53,9 @@ def install(self, reinstall=False):
 
     # autoinstall tools
     portal = getToolByName(self,'portal_url').getPortalObject()
+    
+    setup_tool = getToolByName(portal, 'portal_setup')
+    setup_tool.runAllImportStepsFromProfile('profile-Products.BungeniHelpCenter:default')    
 
     print >>out, 'Installed'
     return out.getvalue()

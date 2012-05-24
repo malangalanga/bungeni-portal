@@ -261,7 +261,7 @@ class BungeniHelpCenterReferenceManual(BrowserDefaultMixin,
 
     archetype_name = 'Hierarchical Document'
     meta_type='HelpCenterReferenceManual'
-    content_icon = 'referencemanual_icon.gif'
+    content_icon = 'hierarchical_doc_icon.gif'
     schema = HelpCenterReferenceManualSchema
     
 
@@ -445,7 +445,7 @@ class BungeniHelpCenterTutorial(BrowserDefaultMixin,
 
     archetype_name = 'Categorized Document'
     meta_type = 'HelpCenterTutorial'
-    content_icon = 'tutorial_icon.gif'
+    content_icon = 'categorized_doc_icon.gif'
     schema = HelpCenterTutorialSchema
     global_allow = 1
     filter_content_types = 1

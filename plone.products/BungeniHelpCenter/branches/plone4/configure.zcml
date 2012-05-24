@@ -1,5 +1,14 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:five="http://namespaces.zope.org/five"
+           xmlns:gs="http://namespaces.zope.org/genericsetup"           
            xmlns:browser="http://namespaces.zope.org/browser">
+           
+    <gs:registerProfile
+        name="default"
+        title="BungeniHelpCenter"
+        directory="profiles/default"
+        description="PloneHelpCenter customization for Bungeni."
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+	/>                   
 
 </configure>
