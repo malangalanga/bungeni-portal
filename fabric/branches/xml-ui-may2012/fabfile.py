@@ -593,3 +593,14 @@ def exist_install():
    
    tasks = bungeni.XmldbTasks()
    tasks.setup_exist()
+
+
+def exist_fw_install():
+    tasks = bungeni.XmldbTasks()
+    tasks.ant_prop_config()
+    tasks.ant_fw_setup_config()
+
+
+def ant_version():
+    tasks = bungeni.XmldbTasks()
+    tasks.ant_version()

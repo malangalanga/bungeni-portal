@@ -171,12 +171,12 @@ class BungeniConfigReader:
                 return self.config.get(section_name,
                         config_name).strip()
             else:
-                print "warning : section [", section_name, \
-                    "] does not have option name ", config_name, " !!!!"
+                #print "warning : section [", section_name, \
+                #    "] does not have option name ", config_name, " !!!!"
                 return ""
         else:
-            print "warning: section [", section_name, \
-                "] does not exist !!!"
+            #print "warning: section [", section_name, \
+            #    "] does not exist !!!"
             return ""
 
 
@@ -198,10 +198,12 @@ class BungeniRelease:
         bungeni = self.cfg.get_config(release_name, "bungeni")
         plone = self.cfg.get_config(release_name, "plone")
         portal = self.cfg.get_config(release_name, "portal")
+        xmldb = self.cfg.get_config(release_name, "xmldb")
         return {
             "bungeni": bungeni,
             "plone": plone,
-            "portal": portal
+            "portal": portal,
+            "xmldb": xmldb
             }
 
 
@@ -410,6 +412,8 @@ class BungeniConfigs:
         self.exist_port = self.cfg.get_config("exist", "http_port")
         self.exist_startup_mem = self.cfg.get_config("exist", "startup_mem")
         self.exist_max_mem = self.cfg.get_config("exist", "max_mem")
+        self.exist_setup_user = self.cfg.get_config("exist", "setup_user")
+        self.exist_setup_password = self.cfg.get_config("exist", "setup_pass")
 
 
     def get_download_command(self, strURL):
@@ -747,7 +751,14 @@ class Templates:
         ftmpl = open("%s/%s" % (self.template_folder, template_file))
         fcontents = ftmpl.read()
         return fcontents % template_map
+  
 
+    def name_from_template(self, file_name):
+        from posixpath import basename
+        print "generating from template file ", file_name
+        return basename(file_name)[0:-5]
+
+    
     def new_file(
         self,
         template_file,
@@ -755,9 +766,7 @@ class Templates:
         output_dir,
         ):
         contents = self.template(template_file, template_map)
-        from posixpath import basename
-        print "generating from template file ", template_file
-        new_file = basename(template_file).rstrip(".tmpl")
+        new_file = self.name_from_template(template_file)
         print "new file from template going to be created ", new_file
         fnewfile = open("%(out_dir)s/%(file.conf)s" % {"out_dir"
                         : output_dir, "file.conf": new_file}, "w")
@@ -1474,7 +1483,22 @@ class XmldbTasks:
 
     def __init__(self):
         self.cfg = BungeniConfigs()
+        ## ant related config below
+        ## use the ant in the exist installation
+        self.ant_jars = ["ant.jar", "ant-launcher.jar"]
+        self.ant_home = self.cfg.user_exist + "/tools/ant/lib"
+        ant_jar_paths = []        
+        for jar in self.ant_jars:
+            ant_jar_paths.append(self.ant_home + "/" +  jar)          
 
+        self.ant = ("CLASSPATH=%(classpath)s %(java)s/bin/java "
+                    "-Dant.home=%(ant_home)s org.apache.tools.ant.launch.Launcher" % \
+                    {
+                     "classpath": ":".join(ant_jar_paths),
+                     "ant_home" : self.ant_home,
+                     "java" : self.cfg.java_home
+                    })
+    
     def setup_exist(self):
         """
         Sets up eXist by downloading it from the cache and installing it 
@@ -1495,6 +1519,31 @@ class XmldbTasks:
             run("tar --strip-components=1 -xvf %(exist_download_file)s -C %(user_exist)s" %
                          {"user_exist":self.cfg.user_exist,
                           "exist_download_file":self.cfg.exist_download_file})
+
+    def ant_prop_config(self):
+        templates = Templates(self.cfg)
+        xmldb_map = {
+            "exist_home":self.cfg.user_exist,
+            "upload_from":"/home/undesa",
+            "exist_admin":self.cfg.exist_setup_user,
+            "exist_password": self.cfg.exist_setup_password,
+            "exist_port":self.cfg.exist_port,
+        }
+        print xmldb_map
+        templates.new_file("xmldb.properties.tmpl", xmldb_map, self.cfg.user_config)
+                
+    def ant_fw_setup_config(self):
+        templates = Templates(self.cfg)
+        ant_script_tmpl = "xmldb_store_fw.xml.tmpl"
+        import shutil
+        ant_setup_script = templates.name_from_template(ant_script_tmpl)
+        shutil.copy2(templates.template_folder + "/" + ant_script_tmpl,
+                self.cfg.user_config + "/" + ant_setup_script)
+
+    
+
+    def ant_version(self):
+        run(self.ant + " -version")    
 
 
 class CustomTasks:
