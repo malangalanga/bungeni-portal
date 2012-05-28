@@ -54,7 +54,7 @@
         <tr tal:repeat="tocElement toc">
             <tal:item define="item tocElement/item">
                 <td valign="top">                   
-                <span tal:content="python:tocElement['numbering'][:-1]" class="portletItem" tal:condition="python:here.getNavType() == 'yes'"></span>
+                <span tal:content="python:tocElement['numbering'][:-1]" class="bquoteItem" tal:condition="python:here.getNavType() == 'yes'"></span>
                 </td>
                 <td valign="top" class="portlet-toc-item">                   
                 <a href="" class="notcurrent" tal:attributes="href item/getURL;
@@ -125,7 +125,7 @@
         <div tal:define="item      section/item;
                             itemObj   item/getObject;
                             itemUrl   itemObj/absolute_url;
-                            body      itemObj/getBody | nothing;
+                            body      itemObj/getText | nothing;
                             numbering section/numbering;
                             itemDepth section/depth;
                             children  section/children;
@@ -142,9 +142,7 @@
                 description
             </div>
 
-            <div class="documentDescription" tal:content="item/getBody">
-                description
-            </div>
+            <div class="documentBody" tal:replace="structure body" />
 
     
             <div id="bodyContent" tal:condition="nocall:body">
@@ -199,7 +197,7 @@
         <div tal:define="item      section/item;
                             itemObj   item/getObject;
                             itemUrl   itemObj/absolute_url;
-                            body      itemObj/getBody | nothing;
+                            body      itemObj/getText | nothing;
                             numbering section/numbering;
                             itemDepth section/depth;
                             children  section/children;
@@ -222,9 +220,7 @@
                 description
             </div>
 
-            <div class="documentDescription" tal:content="item/getBody">
-                description
-            </div>
+            <div class="documentBody" tal:replace="structure body" />            
 
 
 
@@ -272,7 +268,7 @@
         <div tal:define="item      section/item;
                             itemObj   item/getObject;
                             itemUrl   itemObj/absolute_url;
-                            body      itemObj/getBody | nothing;
+                            body      itemObj/getText | nothing;
                             numbering section/numbering;
                             itemDepth section/depth;
                             children  section/children;
@@ -296,9 +292,7 @@
                 description
             </div>
 
-            <div class="documentDescription" tal:content="item/getBody">
-                description
-            </div>
+            <div class="documentBody" tal:replace="structure body" />            
 
 
 
