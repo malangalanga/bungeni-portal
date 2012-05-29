@@ -23,7 +23,7 @@ from zope.browsermenu.interfaces import IBrowserMenu
 from zope.app.component.hooks import getSite
 
 from zope.app.pagetemplate import ViewPageTemplateFile
-#from bungeni.ui import z3evoque
+from bungeni.ui import z3evoque
 
 from bungeni.ui.utils import url, debug
 #from ploned.ui.interfaces import IViewView
@@ -31,7 +31,7 @@ from bungeni.ui.utils import url, debug
 def pos_action_in_url(action, request_url):
     """Get index of action in URL, or None."""
     # strip all leading combinations of "." "/" or "@" characters
-    normalized_action = action.lstrip('./@')
+    normalized_action = action.lstrip("./@")
     return request_url.rfind(normalized_action)
 
 # !-ID-GENERATION(ah,17-05-2011) - added back this api which was removed in 
@@ -39,24 +39,25 @@ def pos_action_in_url(action, request_url):
 # paths e.g. ./addresses/add since it was falling back to using the action 
 # name for id generation (see below )
 def action_to_id(action):
-    return action.strip('/'
-                ).replace('/', '-'
-                ).replace('.', ''
-                ).strip('-')
+    return action.strip("/"
+                ).replace("/", "-"
+                ).replace(".", ""
+                ).strip("-")
 
 
 def make_absolute(action, local_url, site_url):
-    if action.startswith('http://') or action.startswith('https://'):
+    if action.startswith("http://") or action.startswith("https://"):
         return action
-    if action.startswith('.'):
-        return "%s/%s" % (local_url, action[1:].lstrip('/'))
-    if action.startswith('/'):
+    if action.startswith("."):
+        return "%s/%s" % (local_url, action[1:].lstrip("/"))
+    if action.startswith("/"):
         return "%s/%s" % (site_url, action[1:])
     return "%s/%s" % (local_url, action)
     
 class PloneBrowserMenu(BrowserMenu):
     """This menu class implements the ``getMenuItems`` to conform with
-    Plone templates."""
+    Plone templates.
+    """
     
     def getMenuItems(self, object, request):
         menu = tuple(zope.component.getAdapters(
@@ -108,10 +109,10 @@ class PloneBrowserMenu(BrowserMenu):
             extra.setdefault("id", 
                 # try "id", BrowserMenu, bungeni.ui.menu.BrowserSubMenuItem
                 getattr(item, "id", None) or
-                # try "submenuId": zope.browsermenu.BrowserSubMenuItem
-                getattr(item, "submenuId", None) or 
-                # try "action": zope.browsermenu.BrowserMenuItem
-                action_to_id(getattr(item, "action", None))
+                    # try "submenuId": zope.browsermenu.BrowserSubMenuItem
+                    getattr(item, "submenuId", None) or 
+                    # try "action": zope.browsermenu.BrowserMenuItem
+                    action_to_id(getattr(item, "action", None))
             )
             # !+CSS_ID(mr, may-2011) the CSS menu styling should NOT be based 
             # on element id, it is unnecessarily brittle and limited e.g. what
@@ -125,14 +126,14 @@ class PloneBrowserMenu(BrowserMenu):
                 submenu = getMenu(item.submenuId, object, request)
             else:
                 submenu = None
-                extra['hideChildren'] = True
+                extra["hideChildren"] = True
             
             _url = make_absolute(item.action, local_url, site_url)
             
             if submenu:
                 for menu in submenu:
-                    menu['url'] = make_absolute(
-                        menu['action'], local_url, site_url)
+                    menu["url"] = make_absolute(
+                        menu["action"], local_url, site_url)
             
             pos = pos_action_in_url(item.action, request_url)
             if pos and pos > current_pos:
@@ -142,18 +143,18 @@ class PloneBrowserMenu(BrowserMenu):
                 selected_index = index
             
             items.append({
-                'title': title,
-                'description': item.description,
-                'action': item.action,
-                'url': _url,
-                'selected': u'',
+                "title": title,
+                "description": item.description,
+                "action": item.action,
+                "url": _url,
+                "selected": u"",
                 # !+MENU_ICON(mr, aug-2010) remove, icon always managed via CSS
-                'icon': item.icon,
-                'extra': extra,
-                'submenu': submenu})
+                "icon": item.icon,
+                "extra": extra,
+                "submenu": submenu})
         
         if selected_index is not None:
-            items[selected_index]['selected'] = u'selected'
+            items[selected_index]["selected"] = u"selected"
         return items
 
 class ContentMenuProvider(object):
@@ -164,15 +165,15 @@ class ContentMenuProvider(object):
         self.view = view
         self.context = context
         self.request = request
-
+    
     def update(self):
         pass
     
     # evoque
-    #render = z3evoque.ViewTemplateFile("ploned.html#action_menus")
+    render = z3evoque.ViewTemplateFile("ploned.html#action_menus")
     # zpt
-    render = ViewPageTemplateFile("templates/contentmenu.pt")
-
+    #render = ViewPageTemplateFile("templates/contentmenu.pt")
+    
     def available(self):
         #if menu is empty, hide
         if not self.menu():
@@ -180,7 +181,7 @@ class ContentMenuProvider(object):
         return True
     
     def menu(self):
-        menu = zope.component.getUtility(IBrowserMenu, name='plone_contentmenu')
+        menu = zope.component.getUtility(IBrowserMenu, name="plone_contentmenu")
         items = menu.getMenuItems(self.context, self.request)
         items.reverse()
         return items
