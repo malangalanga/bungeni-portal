@@ -28,7 +28,7 @@ try:
 except ImportError:
 	from plone.app.layout.navigation.navtree import buildFolderTree
 	
-from Products.PloneHelpCenter.config import DEFAULT_CONTENT_TYPES, REFERENCEABLE_TYPES, IMAGE_SIZES
+from Products.PloneHelpCenter.config import REFERENCEABLE_TYPES, IMAGE_SIZES
 from Products.BungeniHelpCenter.config import BUNGENI_REFERENCEABLE_TYPES
 
 
@@ -66,7 +66,6 @@ BodyField =  TextField(
                 rows = 25,
                 i18n_domain = "plonehelpcenter"
                 ),
-        **DEFAULT_CONTENT_TYPES
         )
 
 DefinitionField =  TextField(
@@ -80,7 +79,6 @@ DefinitionField =  TextField(
                 rows = 25,
                 i18n_domain = "plonehelpcenter"
                 ),
-        **DEFAULT_CONTENT_TYPES
         )
 
 IdentityField = ImageField(

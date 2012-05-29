@@ -22,10 +22,8 @@ from Products.CMFCore.utils import getToolByName
 
 from Products.BungeniHelpCenter.content import roman
 from Products.BungeniHelpCenter.config import BUNGENI_REFERENCEABLE_TYPES
-#import Products
-#Products.PloneHelpCenter.config.REFERENCEABLE_TYPES = BUNGENI_REFERENCEABLE_TYPES
 
-from Products.PloneHelpCenter.config import DEFAULT_CONTENT_TYPES, REFERENCEABLE_TYPES, IMAGE_SIZES
+from Products.PloneHelpCenter.config import REFERENCEABLE_TYPES, IMAGE_SIZES
 from Products.PloneHelpCenter.content import Definition, Glossary, \
     FAQFolder, LinkFolder, Link, PHCContent, PHCFolder, ReferenceManualPage
 from Products.PloneHelpCenter.content import ReferenceManual, ReferenceManualSection, \
@@ -57,7 +55,6 @@ BodyField =  TextField(
                 rows = 25,
                 i18n_domain = "plonehelpcenter"
                 ),
-        **DEFAULT_CONTENT_TYPES
         )
 
 DefinitionField =  TextField(
@@ -71,7 +68,6 @@ DefinitionField =  TextField(
                 rows = 25,
                 i18n_domain = "plonehelpcenter"
                 ),
-        **DEFAULT_CONTENT_TYPES
         )
 
 IdentityField = ImageField(
