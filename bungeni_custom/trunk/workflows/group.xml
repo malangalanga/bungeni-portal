@@ -22,6 +22,13 @@
         <deny permission="bungeni.groupmember.Delete" role="bungeni.Clerk" />
         <!-- office -->
         <grant permission="bungeni.office.ChangeType" role="bungeni.Clerk" /> 
+        <!-- address -->
+        <grant permission="bungeni.address.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.address.Edit" role="bungeni.Owner" />
+        <grant permission="bungeni.address.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.address.Add" role="bungeni.Owner" />
+        <grant permission="bungeni.address.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.address.Delete" role="bungeni.Owner" />
     </state>
     
     <state id="active" title="Active Group" publish="true" 
@@ -48,6 +55,13 @@
         <deny permission="bungeni.groupmember.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.groupmember.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.groupmember.Delete" role="bungeni.Clerk" />
+        <!-- address -->
+        <deny permission="bungeni.address.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.address.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.address.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.address.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.address.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.address.Delete" role="bungeni.Owner" />
     </state>
     
     
