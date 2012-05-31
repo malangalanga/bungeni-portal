@@ -103,12 +103,11 @@ class PloneBrowserMenu(BrowserMenu):
             # !+ID-GENERATION(ah, 17-05-2011) - added call to action_to_id 
             # around item.action as other-wise it returns an invalid @id 
             # attribute (see comment above)
-            extra.setdefault("id", 
-                # try "id", BrowserMenu, bungeni.ui.menu.BrowserSubMenuItem, 
-                # (that picks an id value off item.submenuId)
-                getattr(item, "id", None) or
-                    # try "action": zope.browsermenu.BrowserMenuItem
-                    action_to_id(item.action)
+            extra.setdefault("id",
+                # try "id", BrowserMenu, bungeni.ui.menu.BrowserSubMenuItem
+                # (that picks an id value off item.submenuId) otherwise use
+                # the "action" value, zope.browsermenu.BrowserMenuItem
+                getattr(item, "id", None) or action_to_id(item.action)
             )
             # !+CSS_ID(mr, may-2011) the CSS menu styling should NOT be based 
             # on element id, it is unnecessarily brittle and limited e.g. what
