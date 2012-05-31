@@ -34,15 +34,12 @@ def pos_action_in_url(action, request_url):
     normalized_action = action.lstrip("./@")
     return request_url.rfind(normalized_action)
 
-# !-ID-GENERATION(ah,17-05-2011) - added back this api which was removed in 
+# !+ID-GENERATION(ah, 17-05-2011) - added back this api which was removed in 
 # r8256. All the address add action menus were getting the ids as container 
 # paths e.g. ./addresses/add since it was falling back to using the action 
-# name for id generation (see below )
+# name for id generation
 def action_to_id(action):
-    return action.strip("/"
-                ).replace("/", "-"
-                ).replace(".", ""
-                ).strip("-")
+    return action.strip("/").replace("/", "-").replace(".", "").strip("-")
 
 
 def make_absolute(action, local_url, site_url):
@@ -103,16 +100,15 @@ class PloneBrowserMenu(BrowserMenu):
             
             extra = item.extra or {}
             # if no id has been explictly set, get one in some way or another...
-            # !-ID-GENERATION(ah,17-05-2011) - added call to action_to_id around
-            # getattr(item,"action"... other-wise it returns an invalid @id 
+            # !+ID-GENERATION(ah, 17-05-2011) - added call to action_to_id 
+            # around item.action as other-wise it returns an invalid @id 
             # attribute (see comment above)
             extra.setdefault("id", 
-                # try "id", BrowserMenu, bungeni.ui.menu.BrowserSubMenuItem
+                # try "id", BrowserMenu, bungeni.ui.menu.BrowserSubMenuItem, 
+                # (that picks an id value off item.submenuId)
                 getattr(item, "id", None) or
-                    # try "submenuId": zope.browsermenu.BrowserSubMenuItem
-                    getattr(item, "submenuId", None) or 
                     # try "action": zope.browsermenu.BrowserMenuItem
-                    action_to_id(getattr(item, "action", None))
+                    action_to_id(item.action)
             )
             # !+CSS_ID(mr, may-2011) the CSS menu styling should NOT be based 
             # on element id, it is unnecessarily brittle and limited e.g. what
