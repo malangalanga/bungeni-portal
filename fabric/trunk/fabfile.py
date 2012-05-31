@@ -578,7 +578,7 @@ def switch_bungeni_custom():
 def enable_country_theme():
     """
     Set country theme, based on setup.ini parameter
-    Parameter should map to a theme folder in bungeni_custom
+    Parameter should map to a theme folder in portal.country_themes
     """
     tasks = bungeni.CustomTasks()
     tasks.enable_country_theme()
