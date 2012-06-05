@@ -3,7 +3,7 @@ import os
 from paste import urlparser
 
 here = os.path.abspath(os.path.dirname(__file__))
-static = urlparser.StaticURLParser(os.path.join(here))
+static = urlparser.StaticURLParser(os.path.join(here, 'static'))
 
 
 def make_static_serving_app(global_conf, document_root=""):
@@ -29,13 +29,13 @@ def sync_xml_files():
         conf_file.close()
 
         rules_file_path = os.path.join(os.path.dirname(__file__),
-                                       'rules/rules.xml')       
+                                       'static/themes/rules.xml')       
         rules_file = open(rules_file_path, 'r')
         rules_data = rules_file.read()
         rules_file.close()
         
         deliverance_file_path = os.path.abspath(os.path.join(os.path.dirname(
-                                    __file__),'../../../..proxy.xml'))
+                                    __file__),'../../../../proxy.xml'))
         deliverance_file = open(deliverance_file_path, 'w')
         result_data = rules_data.replace('<!-- deliverance-proxy -->', conf_data)
         deliverance_file.write(result_data)
