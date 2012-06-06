@@ -1494,8 +1494,8 @@ class CustomTasks:
         country_theme = self.cfg.country_theme
         if country_theme != "default" and country_theme != "":
             theme_path = os.path.join(os.path.dirname(self.cfg.user_bungeni),
-                                      "bungeni/src/bungeni.main/bungeni/",
-                                      "portal/static/themes",country_theme)
+                                      "bungeni/portal/src/portal.theme/portal/",
+                                      "theme/static/themes",country_theme)
             if os.path.exists(theme_path):
                         print red("Cannot enable '%s' theme. Another theme file " 
                         "already exists in the target folder." % country_theme)
