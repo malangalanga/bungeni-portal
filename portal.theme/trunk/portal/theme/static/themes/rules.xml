@@ -59,17 +59,17 @@
 
     <rule class="load-workspace-navigation">    
         <pyquery pyref=
-            "portal.theme.rules.rules:add_member_workspace_links"
+            "portal.theme.static.themes.rules:add_member_workspace_links"
         />
         <pyquery pyref=
-            "portal.theme.rules.rules:add_group_workspace_links"
+            "portal.theme.static.themes.rules:add_group_workspace_links"
         />              
     </rule>  
 
     
     <rule class="load-member-content">    
         <pyquery pyref=
-            "portal.theme.rules.rules:add_member_public_links"
+            "portal.theme.static.themes.rules:add_member_public_links"
         />  
     </rule>                         
 
@@ -93,21 +93,21 @@
     
     <rule class="load-member-tab">
         <pyquery pyref=
-                 "portal.theme.rules.rules:add_space_tab"
+                 "portal.theme.static.themes.rules:add_space_tab"
                  pyarg-space_type="member"
         /> 
     </rule>
     
     <rule class="load-committee-tab">
         <pyquery pyref=
-                 "portal.theme.rules.rules:add_space_tab"
+                 "portal.theme.static.themes.rules:add_space_tab"
                  pyarg-space_type="committee"
         /> 
     </rule>
     
     <rule class="load-political-group-tab">
         <pyquery pyref=
-                 "portal.theme.rules.rules:add_space_tab"
+                 "portal.theme.static.themes.rules:add_space_tab"
                  pyarg-space_type="political-group"
         /> 
     </rule>         
@@ -153,7 +153,7 @@
             theme="#portal-column-content" />
 
         <pyquery pyref=
-            "portal.theme.rules.rules:add_menu_items"
+            "portal.theme.static.themes.rules:add_menu_items"
         />
         <drop content="#portal-column-content" /> 
     </rule>  
@@ -174,7 +174,7 @@
         <append content="children:#portal-personaltools"
             theme="children:#portal-personaltools"
         />
-        <pyquery pyref="portal.theme.rules.rules:image_links" />
+        <pyquery pyref="portal.theme.static.themes.rules:image_links" />
         
         <!-- language selector -->
         <replace content="#portal-languageselector"
@@ -186,7 +186,7 @@
             theme="#processing_indicatron"
         />
         
-        <pyquery pyref="portal.theme.rules.rules:replace_login_link"/>
+        <pyquery pyref="portal.theme.static.themes.rules:replace_login_link"/>
         
         <!-- breadcrumbs -->
         <append content="children:#portal-breadcrumbs"
@@ -209,16 +209,16 @@
         />
         
         <pyquery pyref=
-            "portal.theme.rules.rules:reposition_contentActions"
+            "portal.theme.static.themes.rules:reposition_contentActions"
         />      
         
         <!-- body attributes -->
         <append content="attributes:body" theme="attributes:body" />
         <pyquery pyref=
-            "portal.theme.rules.rules:add_section_links"
+            "portal.theme.static.themes.rules:add_section_links"
         />
         <!--<pyquery pyref=
-            "portal.theme.rules.rules:enable_text_editor"/>-->
+            "portal.theme.static.themes.rules:enable_text_editor"/>-->
 
 </rule>
 </ruleset>

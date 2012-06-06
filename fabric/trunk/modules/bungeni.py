@@ -1181,15 +1181,18 @@ class PortalTasks:
         print "Updating portal deliverance-proxy.conf"
         theme_url = self.cfg.portal_web_server_port == "80" and\
                     self.cfg.portal_web_server_host or\
-                    "%s:%s" % (self.cfg.portal_web_server_host, self.cfg.portal_web_server_port)                    
+                    "%s:%s" % (self.cfg.portal_web_server_host, self.cfg.portal_static_port)                    
         if self.cfg.country_theme == "default":
             country_theme = ""
         else:
             country_theme = self.cfg.country_theme
+        portal_theme = self.cfg.portal_web_server_port == "80" and\
+                    self.cfg.portal_theme or\
+                    "%s:%s" % (country_theme, self.cfg.portal_theme)            
         template_map = \
             {"app_host": self.cfg.app_host,
              "portal_http_port": self.cfg.portal_http_port,
-             "portal_theme": self.cfg.portal_theme,
+             "portal_theme": portal_theme,
              "bungeni_http_port": self.cfg.bungeni_http_port,
              "plone_http_port": self.cfg.plone_http_port,
              "portal_static_port": self.cfg.portal_static_port,
