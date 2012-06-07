@@ -1374,8 +1374,23 @@ class BungeniTasks:
             # may have out.failed=False/succeeded=True/return_code=0, so all 
             # OK -- but may still have a stderr! If such is the case, for 
             # load_min_data, we want to fail and correct the issue:
-            assert not out.stderr, "load_min_data: %s" % (result.stderr)
-    
+            # stderr may not be set if there is no stderr, add an exception             
+            # handler to trap such cases
+            try:
+               assert not out.stderr, "load_min_data: %s" % (result.stderr)
+            except AttributeError:
+               print "No standard errors were returned"
+
+            try:
+                print "loading minimum data " 
+                if out.failed == True:
+                  print " FAILED "
+                else:
+                  print " SUCCEEDED"
+            except AttributeError: 
+                pass
+
+
     def load_large_data(self):
         with cd(self.cfg.user_bungeni + "/testdatadmp"):
              run("if [ -f %(large_dump)s ]; then rm %(large_dump)s ; fi" % {"large_dump":self.large_dump_file})
