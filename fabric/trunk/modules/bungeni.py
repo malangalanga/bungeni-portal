@@ -1188,7 +1188,7 @@ class PortalTasks:
             country_theme = self.cfg.country_theme
         portal_theme = self.cfg.portal_web_server_port == "80" and\
                     self.cfg.portal_theme or\
-                    "%s:%s" % (country_theme, self.cfg.portal_theme)            
+                    "%s/%s" % (country_theme, self.cfg.portal_theme)            
         template_map = \
             {"app_host": self.cfg.app_host,
              "portal_http_port": self.cfg.portal_http_port,
