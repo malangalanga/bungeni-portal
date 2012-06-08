@@ -340,7 +340,12 @@ class UserManager(BasePlugin):
         query = '/++rest++brs/roles?'
         params = urllib.urlencode({'principal_id': principal.getId()})
         resp,content = http_obj.request(connection_url()+ query + params, "GET")
-        return simplejson.loads(content)        
+        if "bungeni.Owner" in content:
+            roles = simplejson.loads(content)
+            roles.append("Manager")
+            return roles          
+        else:
+            return simplejson.loads(content)        
 
 
 
