@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -6,16 +6,16 @@ msgstr ""
 "PO-Revision-Date: 2011-08-01 16:57+0300\n"
 "Last-Translator: Murithi <bungeni.translator@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Pootle 2.0.4\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"X-Generator: Pootle 2.0.4\n"
 
 #: src/bungeni.main/bungeni/core/app.py:110
 msgid "Bungeni"
@@ -354,7 +354,7 @@ msgstr "séance prévu pour"
 #. Default: "Sitting of ${group_name} @ ${sitting_venue}"
 #: src/bungeni.main/bungeni/core/dc.py:219
 msgid "verbose_sitting_title"
-msgstr ""
+msgstr "Séance du ${group_name} @ ${sitting_venue}"
 
 #: src/bungeni.main/bungeni/core/dc.py:244
 msgid "Scheduled for sitting ($start to $end)"
@@ -1414,6 +1414,7 @@ msgstr "le numéro maximal des questions par deputes"
 #: src/bungeni.main/bungeni/models/interfaces.py:302
 msgid "Number of sittings to include in what's business section"
 msgstr ""
+"Nombre de séances d&#39;inclure dans ce qui est la section des affaires"
 
 #: src/bungeni.main/bungeni/models/interfaces.py:307
 msgid "Minimum consented signatories for a bill"
@@ -1577,7 +1578,7 @@ msgstr "hebdomadaire"
 #. Default: "choose ${event_field_title}"
 #: src/bungeni.main/bungeni/ui/calendar/browser.py:96
 msgid "event_form_field_default"
-msgstr ""
+msgstr "choisissez ${event_field_title}"
 
 #: src/bungeni.main/bungeni/ui/calendar/browser.py:302
 #: src/bungeni.main/bungeni/ui/calendar/interfaces.py:37
@@ -1812,7 +1813,8 @@ msgstr "si une personne est inactive, la date de fin doit être indiquée"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:421
 msgid ""
-"A parliament member has to be elected/nominated before she/he can be sworn in"
+"A parliament member has to be elected/nominated before she/he can be sworn "
+"in"
 msgstr ""
 "un membre du parlement doit être élu ou nommé avant qu'elle puisse être "
 "assermenté"
@@ -2159,7 +2161,7 @@ msgstr "identifiant de la liste de rotation"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1320
 msgid "Unique identifier or number for this Committee"
-msgstr ""
+msgstr "Identifiant unique ou le numéro de ce comité"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1329
 msgid "Committee Type"
@@ -2332,7 +2334,7 @@ msgstr "id"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1744
 msgid "Unique identifier or number for this political party"
-msgstr ""
+msgstr "Identifiant unique ou le numéro de ce parti politique"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1753
 msgid "Logo"
@@ -2348,7 +2350,7 @@ msgstr "groupes politiques"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1775
 msgid "Unique identifier or number for this political group"
-msgstr ""
+msgstr "Identifiant unique ou le numéro de ce groupe politique"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1782
 msgid "Office"
@@ -2398,7 +2400,7 @@ msgstr "identifiant de la liste de rotation"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1862
 msgid "Unique identifier or number for this Ministry"
-msgstr ""
+msgstr "Identifiant unique ou le numéro de ce ministère"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1872
 msgid "Minister"
@@ -2423,7 +2425,7 @@ msgstr "identifiant du parlement"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1921
 msgid "Unique identifier or number for this Government"
-msgstr ""
+msgstr "Identifiant unique ou le numéro de ce gouvernement"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1931
 #, fuzzy
@@ -2480,7 +2482,7 @@ msgstr "numéro de registre"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2151
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:2169
 #: src/bungeni.main/bungeni/ui/reports.py:77
@@ -2811,7 +2813,7 @@ msgstr "type d'article "
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3321
 msgid "uri"
-msgstr ""
+msgstr "uri"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3322
 #, fuzzy
@@ -2820,7 +2822,7 @@ msgstr "article"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3328
 msgid "Editorial Note"
-msgstr ""
+msgstr "Note de la rédaction"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3354
 msgid "Discussions"
@@ -2859,7 +2861,7 @@ msgstr "date de publication"
 
 #: src/bungeni.main/bungeni/ui/downloaddocument.py:159
 msgid "No template for document of type: ${dtype}. Contact admin."
-msgstr ""
+msgstr "Aucun modèle de document de type: ${dtype}. Contactez-admin."
 
 #: src/bungeni.main/bungeni/ui/errors.py:24
 msgid "An error occurred in Bungeni."
@@ -2948,7 +2950,8 @@ msgstr "la version originale $la version du langue est indiquée à gauche"
 msgid "translate_item_legend"
 msgstr "ajouter la traduction de langue"
 
-#. Default: "The document \"$title\" has not yet been translated into $language. Use this form to add the translation"
+#. Default: "The document \"$title\" has not yet been translated into
+#. $language. Use this form to add the translation"
 #: src/bungeni.main/bungeni/ui/forms/common.py:595
 msgid "translate_item_help"
 msgstr ""
@@ -3090,7 +3093,7 @@ msgstr "un réponse écrite a la question par[ le concerne]"
 #: src/bungeni.main/bungeni/ui/login.py:267
 #: src/bungeni.main/bungeni/ui/login.py:269
 msgid "Email already taken!"
-msgstr ""
+msgstr "Envoyer déjà pris!"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:54
 msgid "Start date must be after (%s)"
@@ -3173,8 +3176,8 @@ msgstr "le lieu '$le lieu' est déjà réservé dans ce horaire"
 #: src/bungeni.main/bungeni/ui/forms/validations.py:494
 msgid "If recurrence is limited by date, it must lie after the starting date"
 msgstr ""
-"si la récurrence est limitée par date, cette date doit être après la date de "
-"début"
+"si la récurrence est limitée par date, cette date doit être après la date de"
+" début"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:503
 msgid ""
@@ -3237,7 +3240,7 @@ msgstr "vous êtes maintenant connecté"
 
 #: src/bungeni.main/bungeni/ui/login.py:80
 msgid "Restore Login"
-msgstr ""
+msgstr "Restaurer Connexion"
 
 #: src/bungeni.main/bungeni/ui/login.py:93
 #: src/bungeni.main/bungeni/ui/login.py:137
@@ -3247,7 +3250,7 @@ msgstr "réponse"
 
 #: src/bungeni.main/bungeni/ui/login.py:104
 msgid "Your login is: "
-msgstr ""
+msgstr "Votre login est:"
 
 #: src/bungeni.main/bungeni/ui/login.py:109
 #, fuzzy
@@ -3256,7 +3259,7 @@ msgstr "visiteur de bungeni"
 
 #: src/bungeni.main/bungeni/ui/login.py:112
 msgid "Your login was sent to you email."
-msgstr ""
+msgstr "Votre identifiant vous a été envoyé par email."
 
 #: src/bungeni.main/bungeni/ui/login.py:114
 #, fuzzy
@@ -3270,19 +3273,19 @@ msgstr "mot de passe"
 
 #: src/bungeni.main/bungeni/ui/login.py:161
 msgid "This user's link is still active!"
-msgstr ""
+msgstr "Lien Cet utilisateur est toujours actif!"
 
 #: src/bungeni.main/bungeni/ui/login.py:176
 msgid "Restore password link: "
-msgstr ""
+msgstr "Restaurer le lien Mot de passe:"
 
 #: src/bungeni.main/bungeni/ui/login.py:179
 msgid "This link will expire in 24 hours."
-msgstr ""
+msgstr "Ce lien expirera dans 24 heures."
 
 #: src/bungeni.main/bungeni/ui/login.py:184
 msgid "Bungeni password restoration"
-msgstr ""
+msgstr "Bungeni mot de passe de restauration"
 
 #: src/bungeni.main/bungeni/ui/login.py:188
 #, fuzzy
@@ -3291,7 +3294,7 @@ msgstr "adresse émail"
 
 #: src/bungeni.main/bungeni/ui/login.py:190
 msgid "User not found!"
-msgstr ""
+msgstr "Utilisateur non trouvé!"
 
 #: src/bungeni.main/bungeni/ui/login.py:195
 #, fuzzy
@@ -3305,11 +3308,11 @@ msgstr "mot de passe"
 
 #: src/bungeni.main/bungeni/ui/login.py:215
 msgid "Wrong key!"
-msgstr ""
+msgstr "Mauvaise touche!"
 
 #: src/bungeni.main/bungeni/ui/login.py:217
 msgid "Key expired!"
-msgstr ""
+msgstr "Key a expiré!"
 
 #: src/bungeni.main/bungeni/ui/login.py:220
 #, fuzzy
@@ -3318,11 +3321,11 @@ msgstr "Rejeter"
 
 #: src/bungeni.main/bungeni/ui/login.py:228
 msgid "Password confirmation failed!"
-msgstr ""
+msgstr "Confirmation mot de passe a échoué!"
 
 #: src/bungeni.main/bungeni/ui/login.py:236
 msgid "Password successfully reset!"
-msgstr ""
+msgstr "Mot de passe réinitialisé avec succès!"
 
 #: src/bungeni.main/bungeni/ui/login.py:247
 #, fuzzy
@@ -3341,7 +3344,7 @@ msgstr "deuxième prénom"
 
 #: src/bungeni.main/bungeni/ui/login.py:359
 msgid "Profile data updated"
-msgstr ""
+msgstr "Données du Profil de mise à jour"
 
 #: src/bungeni.main/bungeni/ui/login.py:387
 #, fuzzy
@@ -3355,7 +3358,7 @@ msgstr "mot de passe initial"
 
 #: src/bungeni.main/bungeni/ui/login.py:395
 msgid "Old password incorrect"
-msgstr ""
+msgstr "Ancien mot de passe incorrect"
 
 #: src/bungeni.main/bungeni/ui/login.py:403
 #: src/bungeni.main/bungeni/ui/login.py:421
@@ -3366,7 +3369,7 @@ msgstr "mot de passe initial"
 
 #: src/bungeni.main/bungeni/ui/login.py:428
 msgid "Password confirmation failed"
-msgstr ""
+msgstr "Confirmation mot de passe a échoué"
 
 #: src/bungeni.main/bungeni/ui/login.py:432
 #, fuzzy
@@ -3468,6 +3471,8 @@ msgstr "le menu 'rapports' - fournit des actions liées aux rapports"
 #: src/bungeni.main/bungeni/ui/menu.zcml:113
 msgid "Downloads Menu - provides different document download formats"
 msgstr ""
+"Téléchargements Menu - fournit différents formats de téléchargement de "
+"documents"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:119
 #: src/bungeni.main/bungeni/ui/menu.zcml:126
@@ -4132,7 +4137,7 @@ msgstr "date de publication"
 #: src/bungeni.main/bungeni/ui/menu.zcml:1841
 #: src/bungeni.main/bungeni/ui/menu.zcml:1849
 msgid "RSS"
-msgstr ""
+msgstr "RSS"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:1857
 #: src/bungeni.main/bungeni/ui/menu.zcml:1865
@@ -4151,7 +4156,7 @@ msgstr "akoma ntoso"
 #. Default: "Report template file does not exist at ${path}"
 #: src/bungeni.main/bungeni/ui/reporting/generators.py:139
 msgid "report-template-missing"
-msgstr ""
+msgstr "Fichier modèle de rapport n&#39;existe pas à ${path}"
 
 #: src/bungeni.main/bungeni/ui/reporting/generators.py:218
 #, fuzzy
@@ -4184,7 +4189,7 @@ msgstr "type de réponse"
 
 #: src/bungeni.main/bungeni/ui/reports.py:143
 msgid "Choose template to use in generating Report"
-msgstr ""
+msgstr "Sélectionner un modèle à utiliser pour générer rapport"
 
 #: src/bungeni.main/bungeni/ui/reports.py:147
 #, fuzzy
@@ -4198,7 +4203,7 @@ msgstr "date de publication"
 
 #: src/bungeni.main/bungeni/ui/reports.py:150
 msgid "Optional publication number for this Report"
-msgstr ""
+msgstr "Numéro de publication en option pour le présent rapport"
 
 #: src/bungeni.main/bungeni/ui/reports.py:161
 #, fuzzy
@@ -4212,7 +4217,7 @@ msgstr "aperçu"
 
 #: src/bungeni.main/bungeni/ui/reports.py:213
 msgid "See the preview of the report below"
-msgstr ""
+msgstr "Voir l&#39;aperçu du rapport ci-dessous"
 
 #: src/bungeni.main/bungeni/ui/reports.py:216
 msgid "Publish"
@@ -4220,7 +4225,7 @@ msgstr "Publier"
 
 #: src/bungeni.main/bungeni/ui/reports.py:238
 msgid "Report has been processed and saved"
-msgstr ""
+msgstr "Rapport a été traitée et enregistrée"
 
 #: src/bungeni.main/bungeni/ui/reports.py:261
 msgid "Type of report to be produced"
@@ -4265,11 +4270,11 @@ msgstr "non"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:21
 msgid "Okay"
-msgstr ""
+msgstr "Bien"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:22
 msgid "Done"
-msgstr ""
+msgstr "Fait"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:23
 #, fuzzy
@@ -4288,7 +4293,7 @@ msgstr "modifier"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:29
 msgid "Warning"
-msgstr ""
+msgstr "Avertissement"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:48
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:91
@@ -4325,15 +4330,15 @@ msgstr "points"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:56
 msgid "Modify Item"
-msgstr ""
+msgstr "Modifier l&#39;article"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:66
 msgid "minute text"
-msgstr ""
+msgstr "texte minute"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:67
 msgid "NO TEXT RECORD FOUND"
-msgstr ""
+msgstr "NO RECORD Texte trouvé"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:74
 #, fuzzy
@@ -4350,10 +4355,12 @@ msgid ""
 "the agenda is empty. add items from below from from the available documents "
 "to the right"
 msgstr ""
+"l&#39;ordre du jour est vide. ajouter des éléments à partir de ci-dessous à "
+"partir des documents disponibles à la droite"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:90
 msgid "add text records"
-msgstr ""
+msgstr "ajouter des enregistrements de texte"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:93
 #, fuzzy
@@ -4388,7 +4395,7 @@ msgstr "ajouter un ministre ..."
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:102
 msgid "change this text"
-msgstr ""
+msgstr "modifier ce texte"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:104
 #, fuzzy
@@ -4397,11 +4404,12 @@ msgstr " supprime un point encire a l'ordre du jour"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:106
 msgid "Are you sure you want to remove this item from schedule ?"
-msgstr ""
+msgstr "Etes-vous sûr de vouloir supprimer cet élément de calendrier?"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:113
 msgid "No items have been scheduled. Add something then save."
 msgstr ""
+"Aucun élément n&#39;a été prévue. Ajouter quelque chose puis enregistrez."
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:118
 #, fuzzy
@@ -4410,23 +4418,25 @@ msgstr "pas de point d'ordre du jour prévu"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:122
 msgid "saving changes to minutes..."
-msgstr ""
+msgstr "enregistrer les modifications à quelques minutes ..."
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:126
 msgid "reloading schedule..."
-msgstr ""
+msgstr "rechargement calendrier ..."
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:129
 msgid "there was an error while saving the schedule"
-msgstr ""
+msgstr "il y avait une erreur lors de l&#39;enregistrement le calendrier"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:131
 msgid "no filters selected"
-msgstr ""
+msgstr "pas de filtres sélectionnés"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:135
 msgid "you did not choose any filters.select some filters then hit apply"
 msgstr ""
+"vous n&#39;avez pas choisir n&#39;importe quel filters.select certains "
+"filtres, puis cliquez sur Apply"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:140
 #, fuzzy
@@ -4440,11 +4450,11 @@ msgstr "date de statut"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:142
 msgid "clear filters"
-msgstr ""
+msgstr "filtres clairs"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:144
 msgid "apply filters"
-msgstr ""
+msgstr "appliquer des filtres"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:145
 #, fuzzy
@@ -4463,20 +4473,22 @@ msgstr "programmation de la première lecture"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:159
 msgid "Do you want to delete unsaved minute?"
-msgstr ""
+msgstr "Voulez-vous supprimer minute perdus?"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:161
 msgid "Confirmation Required"
-msgstr ""
+msgstr "Confirmation requise"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:163
 msgid "Really remove this minute record?"
-msgstr ""
+msgstr "Vraiment supprimer cet enregistrement minute?"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:166
 msgid ""
 "You need to save the schedule before adding minutes for it.to this item."
 msgstr ""
+"Vous devez enregistrer le calendrier avant d&#39;ajouter minutes pour it.to "
+"cet article."
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:171
 #, fuzzy
@@ -4485,19 +4497,19 @@ msgstr "procès-verbal"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:172
 msgid "*Unsaved item. No minute records."
-msgstr ""
+msgstr "* Élément non enregistrées. Pas de dossiers minute."
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:175
 msgid "No minute records"
-msgstr ""
+msgstr "Pas de dossiers minute"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:179
 msgid "Loading minutes..."
-msgstr ""
+msgstr "Chargement minutes ..."
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:182
 msgid "unable to load minutes..."
-msgstr ""
+msgstr "impossible de charger minutes ..."
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:185
 #, fuzzy
@@ -4506,15 +4518,17 @@ msgstr "enregistrer et visualiser"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:186
 msgid "generating agenda preview..."
-msgstr ""
+msgstr "générer aperçu l&#39;ordre du jour ..."
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:189
 msgid "ERROR: Could to generate preview"
-msgstr ""
+msgstr "ERREUR: Impossible de générer l&#39;aperçu"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:194
 msgid "This event is unsaved. Edit to make any corrections and then save it"
 msgstr ""
+"Cet événement n&#39;a pas été enregistré. Modifier pour apporter des "
+"corrections et puis enregistrez-le"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:197
 #, fuzzy
@@ -4523,17 +4537,17 @@ msgstr "mes propositions"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:198
 msgid "Venue : Select a venue"
-msgstr ""
+msgstr "Lieu: Choisissez un lieu"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:199
 msgid "Language : Select a language"
-msgstr ""
+msgstr "Langue: Sélectionnez une langue"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:202
 msgid ""
 "This timeslot already has another event.\n"
 " Do you want to continue?"
-msgstr ""
+msgstr "Ce créneau a déjà un autre événement. Voulez-vous continuer?"
 
 #: src/bungeni.main/bungeni/ui/rss.py:357
 #: src/bungeni.main/bungeni/ui/search.py:335
@@ -4642,11 +4656,11 @@ msgstr "numéro de registre"
 #: src/bungeni.main/bungeni/ui/templates/default-report-scheduling.pt:79
 #: src/bungeni.main/bungeni/ui/templates/default-report-sitting.pt:79
 msgid "This document has no signatories."
-msgstr ""
+msgstr "Ce document n&#39;a pas signataires."
 
 #: src/bungeni.main/bungeni/ui/templates/diff.pt:3
 msgid "Diff <b>x</b>"
-msgstr ""
+msgstr "<b>X</b> Diff"
 
 #: src/bungeni.main/bungeni/ui/templates/diff.pt:3
 #, fuzzy
@@ -4744,7 +4758,7 @@ msgstr "version"
 
 #: src/bungeni.main/bungeni/ui/versions.py:100
 msgid "procedure"
-msgstr ""
+msgstr "procédure"
 
 #: src/bungeni.main/bungeni/ui/versions.py:104
 msgid "by"
@@ -4918,17 +4932,25 @@ msgstr "aucun point est inscrire a l'ordre du jour pendant cet période choisi"
 
 #: src/bungeni.main/bungeni/ui/viewlets/whatson.py:48
 msgid "N/A"
-msgstr ""
+msgstr "N / A"
 
-#. Default: "This document has the required number of signatories. ${signed_members} member(s) have signed. ${required_members} signature(s) required."
+#. Default: "This document has the required number of signatories.
+#. ${signed_members} member(s) have signed. ${required_members} signature(s)
+#. required."
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.py:60
 msgid "signature_requirement_met"
 msgstr ""
+"Ce document a le nombre requis de signataires. ${signed_members} membre (s) "
+"ont signé. ${required_members} signature (s) nécessaire."
 
-#. Default: "This document does not have the required number of signatories. Requires ${required_members} signature(s). ${signed_members} member(s) have signed."
+#. Default: "This document does not have the required number of signatories.
+#. Requires ${required_members} signature(s). ${signed_members} member(s) have
+#. signed."
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.py:72
 msgid "signature_requirements_not_met"
 msgstr ""
+"Ce document n&#39;a pas le nombre requis de signataires. Nécessite "
+"${required_members} signature (s). ${signed_members} membre (s) ont signé."
 
 #: src/bungeni.main/bungeni/ui/views.zcml:494
 msgid "Listing"
@@ -4964,7 +4986,7 @@ msgstr "éventuel"
 
 #: src/bungeni.main/bungeni/ui/widgets.py:76
 msgid "Unknown"
-msgstr ""
+msgstr "Inconnu"
 
 #: src/bungeni.main/bungeni/ui/widgets.py:108
 msgid "Invalid date: $value"
@@ -5008,7 +5030,7 @@ msgstr "base de donne incorrecte pour la date et l'heure"
 
 #: src/bungeni.main/bungeni/ui/widgets.py:972
 msgid "start typing to chose $fname..."
-msgstr ""
+msgstr "commencer à taper à choisir $fname ..."
 
 #: src/bungeni.main/bungeni/ui/widgets.py:1206
 msgid "selected subject terms"
@@ -5044,7 +5066,8 @@ msgstr "date actif dans le futur"
 
 #: src/bungeni.main/bungeni/ui/workflow.py:240
 msgid "Confirmation required for workflow transition: '${title}'"
-msgstr "confirmation requise pour la transition du flux de travail: '${titre}'"
+msgstr ""
+"confirmation requise pour la transition du flux de travail: '${titre}'"
 
 #: src/bungeni.main/bungeni/ui/workspace.py:44
 msgid "item type"
@@ -5054,11 +5077,9 @@ msgstr "type d'article "
 msgid "status date"
 msgstr "date de statut"
 
-#, fuzzy
 #~ msgid "Add member..."
 #~ msgstr "ajouter un membre ..."
 
-#, fuzzy
 #~ msgid "Delete member of parliament"
 #~ msgstr "membre du parlement"
 
@@ -5077,7 +5098,6 @@ msgstr "date de statut"
 #~ msgid "reject"
 #~ msgstr "Rejeter"
 
-#, fuzzy
 #~ msgid "withdraw signature"
 #~ msgstr "revoir la signature"
 
@@ -5120,7 +5140,6 @@ msgstr "date de statut"
 #~ msgid "Translate content"
 #~ msgstr "traduire le contenu"
 
-# voir l’employé du bureau
 #~ msgid "View office member"
 #~ msgstr " voir l'employé du bureau"
 
@@ -5394,7 +5413,6 @@ msgstr "date de statut"
 #~ msgid "Files"
 #~ msgstr "fichiers"
 
-#, fuzzy
 #~ msgid "File Type"
 #~ msgstr "type de fichier"
 
@@ -5600,7 +5618,6 @@ msgstr "date de statut"
 #~ msgid "Add Group Address..."
 #~ msgstr "ajouter une adresse du groupe ..."
 
-#, fuzzy
 #~ msgid "change password"
 #~ msgstr "mot de passe initial"
 
@@ -5616,15 +5633,12 @@ msgstr "date de statut"
 #~ msgid "no_attachments"
 #~ msgstr "pas des documents joint"
 
-#, fuzzy
 #~ msgid "Report Documentation"
 #~ msgstr "version du document déposé"
 
-#, fuzzy
 #~ msgid "Agenda Item"
 #~ msgstr "points inscrire a l'ordre du jour"
 
-#, fuzzy
 #~ msgid "Tabled Document"
 #~ msgstr "documents déposés"
 
@@ -5738,8 +5752,7 @@ msgstr "date de statut"
 
 #~ msgid "No user is defined. Are you logged in as Admin?"
 #~ msgstr ""
-#~ "aucun utilisateur est défini,est-ce que tu es connecte comme "
-#~ "administrateur?"
+#~ "aucun utilisateur est défini,est-ce que tu es connecte comme administrateur?"
 
 #~ msgid "Vocabularies Manager"
 #~ msgstr "gestionnaire des vocabulaires"
@@ -5795,25 +5808,21 @@ msgstr "date de statut"
 #~ msgid "Browse"
 #~ msgstr "parcourir"
 
-#, fuzzy
 #~ msgid "Current and historical records"
 #~ msgstr "accès aux dossiers courants et historiques"
 
 #~ msgid "Visit the digital document repository"
 #~ msgstr "visitez le répertoire de documents numériques"
 
-#, fuzzy
 #~ msgid "xapian settings"
 #~ msgstr "paramètres"
 
-#, fuzzy
 #~ msgid "Resurrect"
 #~ msgstr "résultats"
 
 #~ msgid "Inactive file obsolete"
 #~ msgstr "fichier inactif obsolète"
 
-#, fuzzy
 #~ msgid "Name of the Assignment"
 #~ msgstr "nom de la province"
 
@@ -5832,7 +5841,6 @@ msgstr "date de statut"
 #~ msgid "&larr;"
 #~ msgstr "←"
 
-#, fuzzy
 #~ msgid "User Unique"
 #~ msgstr "nom d'utilisateur"
 
@@ -5857,14 +5865,12 @@ msgstr "date de statut"
 #~ msgid "Duplicate Value for Unique Field"
 #~ msgstr "valeur en double pour champ unique"
 
-#, fuzzy
 #~ msgid "The 'Add...' menu - for a Parliament's GroupSittingContainer"
 #~ msgstr "le menu 'ajouter ...' - pour les séances de groupe"
 
 #~ msgid "Actions for Scheduling Discussions"
 #~ msgstr "actions pour les discussions de planification"
 
-#, fuzzy
 #~ msgid "Not a scheduling context"
 #~ msgstr "déplacer le créneau horaire vers le bas "
 
@@ -5916,7 +5922,6 @@ msgstr "date de statut"
 #~ msgid "agendas/minutes"
 #~ msgstr "agendas / procès-verbaux"
 
-#, fuzzy
 #~ msgid "My interests"
 #~ msgstr "ministres"
 
@@ -5932,7 +5937,6 @@ msgstr "date de statut"
 #~ msgid "My archive personal items"
 #~ msgstr "articles archivés"
 
-#, fuzzy
 #~ msgid "permanent"
 #~ msgstr "pour cent"
 
@@ -5948,7 +5952,6 @@ msgstr "date de statut"
 #~ msgid "P.O. Box"
 #~ msgstr "B.P."
 
-#, fuzzy
 #~ msgid "Military"
 #~ msgstr "ministère"
 
@@ -5964,11 +5967,9 @@ msgstr "date de statut"
 #~ msgid "Written"
 #~ msgstr "écrite"
 
-#, fuzzy
 #~ msgid "Finalize Minutes"
 #~ msgstr "procès-verbal"
 
-#, fuzzy
 #~ msgid "Approved"
 #~ msgstr "approuvé"
 
@@ -6094,8 +6095,7 @@ msgstr "date de statut"
 #~ msgstr "sélectionnez le mode de récurrence mensuel"
 
 #~ msgid ""
-#~ "Enter the number of times which the event should be repeated (as an "
-#~ "integer)"
+#~ "Enter the number of times which the event should be repeated (as an integer)"
 #~ msgstr ""
 #~ "entrez le nombre de fois où l'événement doit être répété (comme un entier)"
 
@@ -6109,11 +6109,11 @@ msgstr "date de statut"
 #~ msgstr "exceptions"
 
 #~ msgid ""
-#~ "Events will not be scheduled at dates appearing in this field. Separate "
-#~ "with comma or newline. Format: YYYY/MM/DD"
+#~ "Events will not be scheduled at dates appearing in this field. Separate with"
+#~ " comma or newline. Format: YYYY/MM/DD"
 #~ msgstr ""
-#~ "les événements ne seront pas programmés aux dates qui apparaissent dans "
-#~ "ce champ - séparez avec virgule ou saut de ligne - format: aaaa/mm/jj"
+#~ "les événements ne seront pas programmés aux dates qui apparaissent dans ce "
+#~ "champ - séparez avec virgule ou saut de ligne - format: aaaa/mm/jj"
 
 #~ msgid "Must limit recurrence (by number or date)"
 #~ msgstr "doit limiter la récurrence (par numéro ou date)"
