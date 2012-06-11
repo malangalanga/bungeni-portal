@@ -9,12 +9,13 @@ import re
 import polib
 from apiclient.discovery import build
 
-MESSAGE_SET_OPTIONS = ("untranslated", "all")
+MESSAGE_SET_OPTIONS = ("untranslated", "fuzzy" , "all")
 DEFAULT_MESSAGE_SET = "untranslated"
 DEFAULT_BUNCH_SIZE = 50
 DUMMY_OPTIONS = ["Y", "N", "YES", "NO"]
 DUMMY_MAPPING = { "Y": True, "N": False, "YES": True, "NO": False }
 UNTRANSLATABLE_STRINGS = "\$\w+|\${\w+\}|%\w+|%\(\w+\)\w"
+PURGE_FLAGS = ("fuzzy",)
 
 def bunch_list(source, size):
     return [ source[x:(x + size)] for x in xrange(0, len(source), size) ]
@@ -63,6 +64,8 @@ class CatalogTranslator(object):
             messages = src_file
         elif translate == "untranslated":
             messages = src_file.untranslated_entries()
+        elif translate == "fuzzy":
+            messages = src_file.fuzzy_entries()
         if dummy:
             print "============ DUMMY MODE =============="
         print "Translating %d messages" % len(messages)
@@ -101,6 +104,10 @@ class CatalogTranslator(object):
                 bunch[index].msgstr = self.restore_names(
                     translation.get("translatedText")
                 )
+                flags = bunch[index].flags
+                for flag in PURGE_FLAGS:
+                    if flag in flags:
+                        bunch[index].flags.remove(flag)
         if not dummy:
             src_file.save(self.dest_po)
 def usage():
