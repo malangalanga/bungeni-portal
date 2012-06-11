@@ -979,24 +979,26 @@ class PloneTasks:
             abort(red("The Plone buildout requires an existing bungeni buildout"
                   ))
 
-    def setup(self, version = "default"):
+    def setup(self):
         """
-        31-08-2011 - New setup API to handle pegged releases
-        version = default , uses release info specified in setup.ini 
-        version = HEAD, uses HEAD
+        31-08-2011 - New setup API to handle pegged releases.
+        Uses release info specified in setup.ini
         """
-
-        if version == "default":
-            # get release info
-            current_release = BungeniRelease().get_release(self.cfg.release)
+        
+        current_release = BungeniRelease().get_release(self.cfg.release)
+        if not current_release:
+            abort("no release parameter specified in setup.ini")
+        elif current_release["plone"] == "HEAD":
             self.tasks.src_checkout(current_release["plone"])
-        elif version == "HEAD":
-            self.tasks.src_checkout("HEAD")
+            with cd(self.cfg.user_plone):            
+                with cd("parts/svneggs"):      
+                    run("svn up -rHEAD ./apkn.repository ./apkn.templates" \
+                            "./bungenicms.plonepas ./bungenicms.policy" \
+                            "./bungenicms.theme ./bungenicms.workspaces") 
+                with cd("parts/svnproducts"):
+                    run("svn up -rHEAD ./BungeniHelpCenter")            
         else:
-            abort("setup() was called with an unknown version parameter")
-
-        self.tasks.bootstrap(self.pycfg.python)
-        self.deploy_ini()
+            self.tasks.src_checkout(current_release["plone"])       
 
 
     def build(self):
@@ -1089,18 +1091,25 @@ class PloneTasks:
         self.update_plone_zope_conf()                              
 
 
-    def update(self, version = "default"):
-       """
-       Update the plone source
-       """
-    
-       if version == "default" :
-           current_release = BungeniRelease().get_release(self.cfg.release)
-           self.tasks.src_update(current_release["plone"]) 
-       elif version == "HEAD" :
-           self.tasks.src_update("HEAD") 
-       else:
-           abort("attempted to update to UNKNOWN version")
+    def update(self):
+        """
+        Update the plone source
+        """
+
+        current_release = BungeniRelease().get_release(self.cfg.release)
+        if not current_release:
+            abort("no release parameter specified in setup.ini")
+        elif current_release["plone"] == "HEAD":
+            self.tasks.src_update(current_release["plone"])
+            with cd(self.cfg.user_plone):
+                with cd("parts/svneggs"):      
+                    run("svn up -rHEAD ./apkn.repository ./apkn.templates " \
+                            "./bungenicms.plonepas ./bungenicms.policy " \
+                            "./bungenicms.theme ./bungenicms.workspaces")  
+                with cd("parts/svnproducts"):
+                    run("svn up -rHEAD ./BungeniHelpCenter")                                
+        else:
+            self.tasks.src_update(current_release["plone"])             
 
 
 class PortalTasks:
@@ -1118,20 +1127,21 @@ class PortalTasks:
 
     def setup(self, version = "default"):
         """
-        31-08-2011 - New setup API to handle pegged releases
-        version = default , uses release info specified in setup.ini 
-        version = HEAD, uses HEAD
+        31-08-2011 - New setup API to handle pegged releases.
+        Uses release info specified in setup.ini 
         """
-
-        if version == "default":
-            # get release info
-            current_release = BungeniRelease().get_release(self.cfg.release)
+        
+        current_release = BungeniRelease().get_release(self.cfg.release)
+        if not current_release:
+            abort("no release parameter specified in setup.ini")
+        elif current_release["portal"] == "HEAD":
             self.tasks.src_checkout(current_release["portal"])
-        elif version == "HEAD":
-            self.tasks.src_checkout("HEAD")
+            # portal.theme is updated to HEAD
+            with cd(self.cfg.user_portal):
+                with cd("src"):
+                    run("svn up -rHEAD ./portal.theme")            
         else:
-            abort("setup() was called with an unknown version parameter")
-
+            self.tasks.src_checkout(current_release["portal"])
         self.tasks.bootstrap(self.pycfg.python)
         self.deploy_ini()
 
@@ -1206,18 +1216,21 @@ class PortalTasks:
             config_file.write(tmpl.template("deliverance-proxy.conf.tmpl", template_map))
         
 
-    def update(self, version = "default"):
-       """
-       Update the portal
-       """
-    
-       if version == "default" :
-           current_release = BungeniRelease().get_release(self.cfg.release)
-           self.tasks.src_update(current_release["portal"]) 
-       elif version == "HEAD" :
-           self.tasks.src_update("HEAD") 
-       else:
-           abort("attempted to update to UNKNOWN version")
+    def update(self):
+        """
+        Update the portal
+        """
+
+        current_release = BungeniRelease().get_release(self.cfg.release)    
+        if not current_release:
+            abort("no release parameter specified in setup.ini")            
+        elif current_release["portal"] == "HEAD":
+            self.tasks.src_update(current_release["portal"]) 
+            with cd(self.cfg.user_portal):
+                with cd("src"):
+                    run("svn up -rHEAD ./portal.theme")           
+        else:
+            self.tasks.src_update(current_release["portal"]) 
 
 
 
@@ -1240,26 +1253,26 @@ class BungeniTasks:
             abort("Bungeni build requires a working python " + self.pycfg.python_ver )
 
 
-    def setup(self, version = "default"):
+    def setup(self):
         """
-        31-08-2011 - New setup API to handle pegged releases
-        version = default , uses release info specified in setup.ini 
-        version = HEAD, uses HEAD
+        31-08-2011 - New setup API to handle pegged releases.
+        Uses release info specified in setup.ini 
         """
-
-        if version == "default":
-            # get release info
-            current_release = BungeniRelease().get_release(self.cfg.release)
-            self.tasks.src_checkout(current_release["bungeni"])
+        
+        # get release info        
+        current_release = BungeniRelease().get_release(self.cfg.release)
+        
+        if not current_release:
+            abort("no release parameter specified in setup.ini")
             # bungeni.main and bungeni_custom are not updated to HEAD
-        elif version == "HEAD":
-            self.tasks.src_checkout("HEAD")
+        elif current_release["bungeni"] == "HEAD":
+            self.tasks.src_checkout(current_release["bungeni"])
             # bungeni.main, bungeni_custom and ploned.ui are updated to HEAD
             with cd(self.cfg.user_bungeni):
                 with cd("src"):
                     run("svn up -rHEAD ./bungeni.main ./bungeni_custom ./ploned.ui")
         else:
-            abort("setup() was called with an unknown version parameter")
+            self.tasks.src_checkout(current_release["bungeni"])
         self.tasks.bootstrap(self.pycfg.python)
         self.install_bungeni_custom()
         self.deploy_ini()
@@ -1283,21 +1296,22 @@ class BungeniTasks:
             : self.cfg.bungeni_deploy_ini})
 
 
-    def update(self, version = "default"):
-       """
-       Update the bungeni source folder
-       """
-    
-       if version == "default" :
-           current_release = BungeniRelease().get_release(self.cfg.release)
-           self.tasks.src_update(current_release["bungeni"]) 
-       elif version == "HEAD" :
-           self.tasks.src_update("HEAD") 
-           with cd(self.cfg.user_bungeni):
-               with cd("src"):
-                   run("svn up -rHEAD ./bungeni.main ./bungeni_custom")
-       else:
-           abort("attempted to update to UNKNOWN version")
+    def update(self):
+        """
+        Update the bungeni source folder
+        """
+       
+        current_release = BungeniRelease().get_release(self.cfg.release)
+        if not current_release:
+            abort("no release parameter specified in setup.ini")
+        elif current_release["bungeni"] == "HEAD" :
+            self.tasks.src_update(current_release["bungeni"])
+            with cd(self.cfg.user_bungeni):
+                with cd("src"):
+                    run("svn up -rHEAD ./bungeni.main ./bungeni_custom")
+        else:
+            self.tasks.src_update(current_release["bungeni"])
+
 
 
     def build(self):

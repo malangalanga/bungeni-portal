@@ -102,17 +102,15 @@ def bungeni_setup():
     tasks.setup()
 
 
-def bungeni_install(revision="default"):
+def bungeni_install():
     """
     Checkout,bootstrap and build bungeni
-    revision can be 'default' to use the pinned version
-    or can be 'HEAD' which updates the bungeni.main and bungeni_custom packages
-    to HEAD
+    Revision is based on the 'release' parameter in setup.ini
     """
 
     tasks = bungeni.BungeniTasks()
     # bootstrap
-    tasks.setup(revision)
+    tasks.setup()
     # do any local configuations
     tasks.local_config()
     # buildout 
@@ -149,13 +147,13 @@ def bungeni_setupdb():
     tasks.setupdb()
 
 
-def bungeni_update(revision="default"):
+def bungeni_update():
     """
         Update the bungeni source
      """
 
     tasks = bungeni.BungeniTasks()
-    tasks.update(revision)
+    tasks.update()
 
 
 def bungeni_build_opt():
@@ -226,6 +224,7 @@ def config_ini(which_ini):
 def plone_install():
     """
     Setup and build plone
+    Revision used is based on the 'release' parameter in setup.ini
     """
 
     tasks = bungeni.PloneTasks()
@@ -277,13 +276,13 @@ def plone_build_minimal():
     tasks.build_minimal()    
 
 
-def plone_update(revision="default"):
+def plone_update():
     """
     Update the plone installation 
     """
     
     tasks = bungeni.PloneTasks()
-    tasks.update(revision)
+    tasks.update()
 
 
 def plone_conf():
@@ -315,6 +314,7 @@ def plone_local_config():
 def portal_install():
     """
     Setup and builds the portal
+    Revision used is based on the 'release' parameter in setup.ini
     """
 
     tasks = bungeni.PortalTasks()
@@ -355,12 +355,12 @@ def __check(tasks):
     tasks.check_versions()
 
 
-def portal_update(revision="default"):
+def portal_update():
     """
     Update the portal
     """
     tasks = bungeni.PortalTasks()
-    tasks.update(revision)
+    tasks.update()
 
 
 def portal_check():
