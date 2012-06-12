@@ -43,7 +43,7 @@ redirect_stderr = true
 autostart = false
 
 [program:portal]
-command = %(user_portal)s/bin/deliverance-proxy %(user_bungeni)s/src/bungeni.main/bungeni/portal/static/themes/proxy.xml
+command = %(user_portal)s/bin/deliverance-proxy %(user_portal)s/proxy.xml
 process_name = portal
 stdout_logfile = %(user_logs)s/portal.log
 directory = %(user_portal)s/bin
