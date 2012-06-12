@@ -79,11 +79,9 @@ class CatalogTranslator(object):
             for message in bunch:
                 translate_text = message.msgid
                 if message.comment:
-                    parse_default = eval(
-                        message.comment.lstrip().rstrip().replace(
+                    parse_default = message.comment.lstrip().rstrip().replace(
                             "Default: ", ""
-                        )
-                    )
+                    ).strip("\"")
                     if parse_default:
                         translate_text = parse_default
                 replace_names = re.findall(UNTRANSLATABLE_STRINGS, translate_text)
