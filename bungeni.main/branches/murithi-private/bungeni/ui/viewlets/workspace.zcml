@@ -11,7 +11,7 @@
         weight="1"
     />
     <browser:viewlet name="bungeni.workspace_signatory_status"
-        for="bungeni.models.interfaces.IBungeniParliamentaryContent"
+        for="bungeni.models.interfaces.IFeatureSignatory"
         layer="..interfaces.IWorkspaceSectionLayer"
         class=".workspace.SignatoriesStatus"
         manager="ploned.ui.interfaces.IAboveContentManager"

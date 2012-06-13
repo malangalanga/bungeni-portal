@@ -10,27 +10,22 @@ $Id$
 import zope.component
 import zope.interface
 from zope.security.proxy import removeSecurityProxy
+from zope.component import getGlobalSiteManager
 
-from bungeni.models.interfaces import (IBill, IMotion, IQuestion,
-    IAgendaItem, ITabledDocument, ISignatoriesValidator
-)
-from bungeni.models.settings import BungeniSettings
-from bungeni.core.app import BungeniApp
+from bungeni.models import interfaces
+from bungeni.utils.capi import capi
 
 log = __import__("logging").getLogger("bungeni.models.signatories")
 
-app = BungeniApp()
-
 class SignatoryValidator(object):
-    zope.interface.implements(ISignatoriesValidator)
+    zope.interface.implements(interfaces.ISignatoryManager)
+    
+    max_signatories = 0
+    min_signatories = 0
     
     def __init__(self, pi_instance):
         self.pi_instance = pi_instance
         self.object_type = pi_instance.type
-    
-    @property
-    def settings(self):
-        return BungeniSettings(app)
 
     @property
     def signatories(self):
@@ -54,16 +49,6 @@ class SignatoryValidator(object):
     @property
     def signatories_count(self):
         return len(list(self.signatories))
-
-    @property
-    def min_signatories(self):
-        setting_id = "%s_signatories_min" %(self.object_type)
-        return getattr(self.settings, setting_id, 0)
-
-    @property
-    def max_signatories(self):
-        setting_id = "%s_signatories_max" %(self.object_type)
-        return getattr(self.settings, setting_id, 0)
 
     @property
     def consented_signatories(self):
@@ -104,17 +89,14 @@ class SignatoryValidator(object):
         """
         return unicode(self.pi_instance.status) == u"redraft"
 
-class BillSignatoryValidator(SignatoryValidator):
-    zope.component.adapts(IBill)
+def createManagerFactory(domain_class):
+    gsm = getGlobalSiteManager()
+    manager_name = "%sSignatoryManager" % domain_class.__name__
+    domain_iface = None
+    domain_iface = "I%s" % domain_class.__name__
+    globals()[manager_name] = type(manager_name, (SignatoryValidator,), {})
+    gsm.registerAdapter(globals()[manager_name], 
+        (getattr(interfaces, domain_iface),), 
+        interfaces.ISignatoryManager
+    )
 
-class MotionSignatoryValidator(SignatoryValidator):
-    zope.component.adapts(IMotion)
-
-class QuestionSignatoryValidator(SignatoryValidator):
-    zope.component.adapts(IQuestion)
-
-class AgendaItemSignatoryValidator(SignatoryValidator):
-    zope.component.adapts(IAgendaItem)
-
-class TabledDocumentSignatoryValidator(SignatoryValidator):
-    zope.component.adapts(ITabledDocument)

@@ -207,7 +207,11 @@ def feature_signatory(kls):
     """Decorator for domain types to support "signatory" feature.
     For Doc types.
     """
+    from bungeni.models.signatories import createManagerFactory
     interface.classImplements(kls, interfaces.IFeatureSignatory)
+    kls.signatories = one2many("signatories", 
+        "bungeni.models.domain.SignatoryContainer", "head_id")
+    createManagerFactory(kls)
     return kls
 
 def feature_schedule(kls):
@@ -660,8 +664,6 @@ class Doc(Entity):
     # !+item_id->head_id
     files = one2many("files",
         "bungeni.models.domain.AttachmentContainer", "head_id")
-    signatories = one2many("signatories",
-        "bungeni.models.domain.SignatoryContainer", "head_id")
     events = one2many("events",
         "bungeni.models.domain.EventContainer", "head_id")
     
@@ -886,9 +888,6 @@ class AgendaItem(AdmissibleMixin, Doc):
     
     files = one2many("files",
         "bungeni.models.domain.AttachmentContainer", "head_id")
-    # !+signatories on AgendaItems?
-    signatories = one2many("signatories",
-        "bungeni.models.domain.SignatoryContainer", "head_id")
     # !+events on AgendaItems?
     events = one2many("events",
         "bungeni.models.domain.EventContainer", "head_id")
@@ -905,8 +904,6 @@ class Bill(Doc):
     
     files = one2many("files",
         "bungeni.models.domain.AttachmentContainer", "head_id")
-    signatories = one2many("signatories",
-        "bungeni.models.domain.SignatoryContainer", "head_id")
     events = one2many("events",
         "bungeni.models.domain.EventContainer", "head_id")
     
@@ -943,8 +940,7 @@ class Motion(AdmissibleMixin, Doc):
     
     files = one2many("files",
         "bungeni.models.domain.AttachmentContainer", "head_id")
-    signatories = one2many("signatories",
-        "bungeni.models.domain.SignatoryContainer", "head_id")
+
     events = one2many("events",
         "bungeni.models.domain.EventContainer", "head_id")
     
@@ -964,8 +960,6 @@ class Question(AdmissibleMixin, Doc):
     
     files = one2many("files",
         "bungeni.models.domain.AttachmentContainer", "head_id")
-    signatories = one2many("signatories",
-        "bungeni.models.domain.SignatoryContainer", "head_id")
     events = one2many("events",
         "bungeni.models.domain.EventContainer", "head_id")
     
@@ -1019,8 +1013,6 @@ class TabledDocument(AdmissibleMixin, Doc):
     
     files = one2many("files",
         "bungeni.models.domain.AttachmentContainer", "head_id")
-    signatories = one2many("signatories",
-        "bungeni.models.domain.SignatoryContainer", "head_id")
     events = one2many("events",
         "bungeni.models.domain.EventContainer", "head_id")
 #TabledDocumentAudit
