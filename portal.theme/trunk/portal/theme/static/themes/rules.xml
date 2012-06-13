@@ -36,8 +36,10 @@
                 nocontent="ignore" />        
         <replace href="/"
             content="#portal-languageselector"
-            theme="#portal-languageselector"/>  
-        <drop content="#portal-personaltools"/>          
+            theme="#portal-languageselector"/>   
+        <drop content="ul#portal-personaltools li"
+            if-content="not:.navigation"
+        />                    
         <replace href="/"
             content="children:#portal-personaltools"
             theme="children:#portal-personaltools"/> 
@@ -51,8 +53,6 @@
             theme="children:#portal-globalnav > ul" />
         <drop href="/plone"
             content="#portal-globalnav > li:first-child"/>             
-        <prepend content="ul#portal-subnavbar li"
-            theme="children:#portal-globalnav ul.level1" /> 
         <drop theme="#processing_indicatron" />          
     </rule>
 
