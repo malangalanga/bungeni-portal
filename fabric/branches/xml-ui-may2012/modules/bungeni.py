@@ -414,6 +414,7 @@ class BungeniConfigs:
         self.exist_max_mem = self.cfg.get_config("exist", "max_mem")
         self.exist_setup_user = self.cfg.get_config("exist", "setup_user")
         self.exist_setup_password = self.cfg.get_config("exist", "setup_pass")
+        self.exist_repo = self.cfg.get_config("exist", "repo")
 
 
     def get_download_command(self, strURL):
@@ -1524,7 +1525,7 @@ class XmldbTasks:
         templates = Templates(self.cfg)
         xmldb_map = {
             "exist_home":self.cfg.user_exist,
-            "upload_from":"/home/undesa",
+            "upload_from":"/home/undesa/" + self.cfg.apps_tmp + "/db",
             "exist_admin":self.cfg.exist_setup_user,
             "exist_password": self.cfg.exist_setup_password,
             "exist_port":self.cfg.exist_port,
@@ -1540,11 +1541,37 @@ class XmldbTasks:
         shutil.copy2(templates.template_folder + "/" + ant_script_tmpl,
                 self.cfg.user_config + "/" + ant_setup_script)
 
-    
+    def download_fw(self):
+        """
+        Checks out the eXist framework files from repository and removes .svn files.
+        """
+        current_release = BungeniRelease().get_release(self.cfg.release)
+        run("rm -rf " +self.cfg.apps_tmp + "/db")
+        self.scm = SCM(self.cfg.development_build, self.cfg.exist_repo,self.cfg.svn_user, self.cfg.svn_password,self.cfg.apps_tmp)
+        self.scm.checkout(current_release["xmldb"])
+        run("find " +self.cfg.apps_tmp + "/db -name '.svn' | xargs rm -rf")
+        run("find " +self.cfg.apps_tmp + "/db -name '__contents__.xml' | xargs rm -rf")
 
     def ant_version(self):
         run(self.ant + " -version")    
 
+    def ant_run(self, buildfile):
+        run(self.ant + " -buildfile " + buildfile)
+
+    def ant_fw_install(self):
+        with cd(self.cfg.user_config):
+            self.ant_run("xmldb_store_fw.xml")
+
+    def check_exist_state(self):
+        from urllib2 import Request, urlopen, URLError, HTTPError
+        try:
+            connection = urlopen("http://localhost:8088/exist/xmlrpc")
+            print connection.getcode()
+            connection.close()
+        except HTTPError, e:
+            print e.getcode()
+        except URLError, e:
+            print e.reason
 
 class CustomTasks:
     

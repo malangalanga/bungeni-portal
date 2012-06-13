@@ -596,11 +596,21 @@ def exist_install():
 
 
 def exist_fw_install():
+    """
+    Installs Bungeni eXist framework, WARNING: Will overwrite any existing installation
+    """
     tasks = bungeni.XmldbTasks()
-    tasks.ant_prop_config()
-    tasks.ant_fw_setup_config()
+    #tasks.download_fw()
+    #tasks.ant_prop_config()
+    #tasks.ant_fw_setup_config()
+    tasks.ant_fw_install()
 
 
 def ant_version():
     tasks = bungeni.XmldbTasks()
     tasks.ant_version()
+    
+    
+def ant_run(buildfile="build.xml"):
+    tasks = bungeni.XmldbTasks()
+    tasks.ant_run(buildfile)
