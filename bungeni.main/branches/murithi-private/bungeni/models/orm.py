@@ -15,14 +15,7 @@ from sqlalchemy.orm import mapper, class_mapper, relation, column_property, \
 import schema
 import domain
 import interfaces
-
-
-def polymorphic_identity(cls):
-    """Formalize convention of determining the polymorphic discriminator value 
-    for a domain class as a function of the class name.
-    """
-    return schema.un_camel(cls.__name__)
-
+from bungeni.utils.naming import polymorphic_identity
 
 # Features
 
@@ -69,6 +62,7 @@ def configurable_mappings(kls):
                 
                 # get tbl PK column
                 assert len(tbl.primary_key) == 1
+                # !+ASSUMPTION_SINGLE_COLUMN_PK(mr, may-2012)
                 pk_col = [ c for c in tbl.primary_key ][0]
                 mapper_properties["changes"] = relation(domain.Change,
                     primaryjoin=rdb.and_(
@@ -288,24 +282,6 @@ mapper(domain.MemberOfParliament, schema.parliament_memberships,
     inherits=domain.GroupMembership,
     primary_key=[schema.user_group_memberships.c.membership_id],
     properties={
-        "constituency": relation(domain.Constituency,
-            primaryjoin=(schema.parliament_memberships.c.constituency_id ==
-                            schema.constituencies.c.constituency_id),
-            uselist=False,
-            lazy=False),
-        "constituency_id": [schema.parliament_memberships.c.constituency_id],
-        "province": relation(domain.Province,
-            primaryjoin=(schema.parliament_memberships.c.province_id ==
-                            schema.provinces.c.province_id),
-            uselist=False,
-            lazy=False),
-        "province_id": [schema.parliament_memberships.c.province_id],
-        "region": relation(domain.Region,
-            primaryjoin=(schema.parliament_memberships.c.region_id ==
-                            schema.regions.c.region_id),
-            uselist=False,
-            lazy=False),
-        "region_id": [schema.parliament_memberships.c.region_id],
         "party": relation(domain.PoliticalParty,
             primaryjoin=(schema.parliament_memberships.c.party_id ==
                             schema.political_parties.c.party_id),
@@ -751,19 +727,8 @@ mapper(domain.HoliDay, schema.holidays)
 ######################
 #
 
-mapper(domain.Constituency, schema.constituencies)
-mapper(domain.Province, schema.provinces)
-mapper(domain.Region, schema.regions)
 mapper(domain.Country, schema.countries)
-mapper(domain.ConstituencyDetail, schema.constituency_details,
-    properties={
-        "constituency": relation(domain.Constituency,
-            uselist=False,
-            lazy=True,
-            backref="details"
-        ),
-    }
-)
+
 
 mapper(domain.SittingAttendance, schema.sitting_attendance,
     properties={
@@ -809,7 +774,7 @@ mapper(domain.SittingReport, schema.sitting_report,
             uselist=False
         ),
         "report": relation(domain.Report, # !+doc.head
-            backref="sittings",
+            backref="sittingreport",
             lazy=True,
             uselist=False
         ),

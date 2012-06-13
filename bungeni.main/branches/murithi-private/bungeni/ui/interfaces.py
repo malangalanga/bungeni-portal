@@ -16,8 +16,6 @@ class IBungeniAuthenticatedSkin(IBungeniSkin):
     """Skin for authenticated users."""
 class IBungeniRESTSkin(IRESTLayer):
     """Bungeni REST skin."""
-class IWorkspaceContainer(interface.Interface):
-    """Marker for a domain object that is also a user's workspace container."""
 
 class IAdministratorWorkspace(IBrowserView): # !+ remove out
     """Administrator's workspace."""
@@ -98,22 +96,23 @@ class IGenenerateVocabularyDefault(interface.Interface):
     """Generate default value for vocabulary"""
     
     def getDefaultVocabularyValue():
-        "Get the default value in vocabulary"
+        """Get the default value in vocabulary"""
 
 
 class ITreeVocabulary(interface.Interface):
     """ Generate tree vocabulary as JSON data.
-        Also provides a validation of values
+    Also provides a validation of values
     """
-
+    
     def generateJSON():
-        "Generate JSON data from vocabulary "
-
+        "Generate JSON data from vocabulary"
+    
     def getTermById(value):
-        "Gets the vocabulary term or None"
-
+        "Get the vocabulary term or None"
+    
     def validateTerms(value_list):
-        "validate a list of vocabulary terms"
+        "Validate a list of vocabulary terms"
+
 
 class IVocabularyTextField(schema.interfaces.IText):
     """Text field supporting vocabulary """

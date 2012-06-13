@@ -20,6 +20,7 @@ from bungeni.core.workflow.states import StateController, WorkflowController, \
 import bungeni.core.audit
 import bungeni.core.version
 import bungeni.core.interfaces
+from bungeni.utils import naming
 from bungeni.utils.capi import capi
 
 __all__ = ["get_workflow"]
@@ -72,17 +73,19 @@ TYPE_REGISTRY = [
     ("attachment", TI("attachment", interfaces.IAttachment)),
     ("agenda_item", TI("agendaitem", interfaces.IAgendaItem)),
     ("bill", TI("bill", interfaces.IBill)),
-    ("committee", TI("committee", interfaces.ICommittee)),
-    ("event", TI("event", interfaces.IEvent)),
-    ("group", TI("group", interfaces.IBungeniGroup)),
-    ("sitting", TI("sitting", interfaces.ISitting)),
-    ("group_membership", TI("membership", interfaces.IBungeniGroupMembership)),
-    ("heading", TI("heading", interfaces.IHeading)),
     ("motion", TI("motion", interfaces.IMotion)),
-    ("parliament", TI("parliament", interfaces.IParliament)),
     ("question", TI("question", interfaces.IQuestion)),
     ("report", TI("report", interfaces.IReport)),
     ("tabled_document", TI("tableddocument", interfaces.ITabledDocument)),
+    ("event", TI("event", interfaces.IEvent)),
+    ("group", TI("group", interfaces.IBungeniGroup)),
+    ("group_membership", TI("membership", interfaces.IBungeniGroupMembership)),
+    ("committee", TI("committee", interfaces.ICommittee)),
+    ("committee_member", TI("membership", interfaces.ICommitteeMember)),
+    ("committee_staff", TI("membership", interfaces.ICommitteeStaff)),
+    ("parliament", TI("parliament", interfaces.IParliament)),
+    ("sitting", TI("sitting", interfaces.ISitting)),
+    ("heading", TI("heading", interfaces.IHeading)),
     ("user", TI("user", interfaces.IBungeniUser)),
     ("signatory", TI("signatory", interfaces.ISignatory)),
 ]
@@ -138,16 +141,12 @@ def apply_customization_workflow(name, ti):
     Must (currently) be run after db setup.
     """
     # support to infer/get the domain class from the type key
-    def camel(name):
-        """Convert an underscore-separated word to CamelCase.
-        """
-        return "".join([ s.capitalize() for s in name.split("_") ])
     from bungeni.models import domain, orm
     def get_domain_kls(name):
         """Infer the target domain kls from the type key, following underscore 
         naming to camel case convention.
         """
-        return getattr(domain, camel(name))
+        return getattr(domain, naming.camel(name))
     
     # get the domain class, and associate with type
     kls = get_domain_kls(name)
@@ -190,18 +189,15 @@ def register_workflow_adapters():
     component.provideAdapter(get_object_state_rpm, 
         (IWorkflowed,),
         zope.securitypolicy.interfaces.IRolePermissionMap)
-    
-    # !+VersionRolePermissionMap(mr, may-2012) superfluous, given Version is 
-    # just a kind of Change?
-    # IRolePermissionMap adapter for a version of an IWorkflowed object
-    #component.provideAdapter(get_head_object_state_rpm, 
-    #    (interfaces.IVersion,),
-    #    zope.securitypolicy.interfaces.IRolePermissionMap)
+    # NOTE: the rpm instance returned by IRolePermissionMap(workflowed) is
+    # different for different values of workflowed.status
     
     # IRolePermissionMap adapter for a change of an IWorkflowed object
     component.provideAdapter(get_head_object_state_rpm, 
         (interfaces.IChange,),
         zope.securitypolicy.interfaces.IRolePermissionMap)
+    # NOTE: the rpm instance returned by IRolePermissionMap(change) is
+    # different for different values of change.head.status
     
     # !+IPrincipalRoleMap(mr, aug-2011) also migrate principal_role_map from 
     # db to be dynamic and based on workflow definitions. Would need to infer

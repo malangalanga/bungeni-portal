@@ -31,16 +31,23 @@ IntAsSetting = {
     0: zope.securitypolicy.interfaces.Deny
 }
 
+def named__str__(self, name):
+    return "<%s.%s '%s' object at %s>" % (
+        self.__module__, type(self).__name__, name, hex(id(self)))
 
-def wrapped_condition(condition):
+
+def wrapped_condition(condition, parent):
     def test(context):
         if condition is None:
             return True
         try:
-            return condition(context)
+            result = condition(context)
+            log.debug("Trying condition %s of %s... %s" % (
+                condition.__name__, parent, result))
+            return result
         except Exception, e:
             raise interfaces.WorkflowConditionError("%s: %s [%s/%s]" % (
-                e.__class__.__name__, e, context, condition))
+                type(e).__name__, e, context, condition))
     return test
 
 
@@ -109,13 +116,13 @@ class State(object):
         for setting, p, role in self.permissions:
             if p == permission:
                 yield role, IntAsSetting[setting]
-    #def getSetting(self, permission, role):
-    #    """Return the setting for this principal_id, role_id combination.
-    #    """
-    #    for setting, p, r in self.permissions:
-    #        if p == permission and r == role:
-    #            return IntAsSetting[setting]
-    #    #return zope.securitypolicy.interfaces.Unset
+    def getSetting(self, permission, role):
+        """Return boolean for setting for the given permission id and role id.
+        If there is no setting, return None (Unset).
+        """
+        for setting, p, r in self.permissions:
+            if p == permission and r == role:
+                return bool(setting)
     #def getRolesAndPermissions(self):
     # /IRolePermissionMap
     #def getSettingAsBoolean(self, permission, role):
@@ -157,7 +164,7 @@ class Transition(object):
         self.destination = destination
         self.grouping_unique_sources = grouping_unique_sources
         self._raw_condition = condition # remember unwrapped condition
-        self.condition = wrapped_condition(condition)
+        self.condition = wrapped_condition(condition, self)
         self.trigger = trigger
         self.permission = permission
         self.order = order
@@ -172,6 +179,9 @@ class Transition(object):
     
     def __cmp__(self, other):
         return cmp(self.order, other.order)
+    
+    def __str__(self):
+        return named__str__(self, self.id)
 
 #
 
@@ -246,26 +256,6 @@ class _NoneStateRPM(State):
 NONE_STATE_RPM = _NoneStateRPM()
 
 
-def _tmp_hack_protected_get_context_head(context):
-    # !+ when a sub-object is initially created, context.head_id is
-    # correctly set but context.head is sometimes not yet...
-    try:
-        assert context.head is not None
-    except AssertionError:
-        # log it... !+bungeni.ui.utils.debug
-        cls, exc, tb = sys.exc_info()
-        log.warn(""" ***_tmp_/%s:%s [%s] %s """ % (
-            type(context).__name__, context.pk, cls.__name__, exc))
-        if context.head_id is not None:
-            # try force-setting head...
-            log.warn("context [%s] head is None...\n"
-                "    >>> TRYING TO FORCE-SET head FROM [head_id==%s]" % (
-                    context, context.head_id))
-            from bungeni.models import domain
-            context.head = Session().query(domain.Doc).filter(
-                domain.Doc.doc_id==context.head_id).one()
-    return context.head
-
 def get_object_state_rpm(context):
     """IRolePermissionMap(context) adapter factory. 
     
@@ -281,7 +271,7 @@ def get_object_state_rpm(context):
     """
     try:
         state = get_object_state(context)
-    except interfaces.InvalidStateError, e:
+    except interfaces.InvalidStateError:
         # log it... !+bungeni.ui.utils.debug
         cls, exc, tb = sys.exc_info()
         log.error(""" ***get_object_state_rpm/%s:%s [%s] %s """ % (
@@ -290,7 +280,7 @@ def get_object_state_rpm(context):
     if state.permissions_from_parent:
         # this state delegates permissions to parent, 
         # so just recurse passing parent item instead
-        head = _tmp_hack_protected_get_context_head(context)
+        head = context.head
         return get_object_state_rpm(head)
     return state
 
@@ -306,10 +296,8 @@ def get_head_object_state_rpm(sub_context):
     On lookup error, returns NONE_STATE_RPM, instead of what would be a 
     zope.component.ComponentLookupError.
     """
-    # !+HEAD_DOCUMENT_ITEM(mr, sep-2011) standardize name, "head", "document" 
-    # or "item"?
     try:
-        head = _tmp_hack_protected_get_context_head(sub_context)
+        head = sub_context.head
         return interfaces.IWorkflow(head).get_state(sub_context.status)
     except interfaces.InvalidStateError:
         from bungeni.models.interfaces import IChange
@@ -581,7 +569,10 @@ class Workflow(object):
         workflow instance that was registered for that class/interface.
         """
         return self
-
+    
+    def __str__(self):
+        return named__str__(self, self.name)
+    __repr__ = __str__
 
 class WorkflowController(object):
     

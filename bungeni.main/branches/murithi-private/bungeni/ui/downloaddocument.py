@@ -17,17 +17,17 @@ import re
 import htmlentitydefs
 import random
 import base64
+import mimetypes
 from tidylib import tidy_fragment
 from lxml import etree
 
 from zope.security.proxy import removeSecurityProxy
-from zope.component import getUtility, queryUtility
+from zope.component import getUtility
 #from zope.lifecycleevent import ObjectCreatedEvent
 #from zope.event import notify
 from zope.component.interfaces import ComponentLookupError
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
-from zope.schema.interfaces import IVocabularyFactory
 from zope.app.component.hooks import getSite
 
 from interfaces import IOpenOfficeConfig
@@ -40,6 +40,7 @@ from bungeni.utils.capi import capi
 from bungeni.ui.i18n import _
 from bungeni.ui.utils import url, misc
 from bungeni.ui.reporting import generators
+from bungeni.ui import vocabulary
 
 def unescape(text):
     def fixup(m):
@@ -88,9 +89,6 @@ class DownloadDocument(BrowserView):
     #Error page in case of failure to generate document
     error_template = ViewPageTemplateFile("templates/report-error.pt")
     #Custom Template selection UI
-    document_template_select = ViewPageTemplateFile(
-        "templates/choose-oo-template.pt"
-    )
     #Source document
     document = None
     #document type to be produced
@@ -104,13 +102,13 @@ class DownloadDocument(BrowserView):
         super(DownloadDocument, self).__init__(context, request)
 
     def setHeader(self, document_type):
-        content_type_mapping ={"pdf":"application/pdf",
-                               "odt":"application/vnd.oasis.opendocument.text"}
+        """Set Content-type and Content-disposition header
+        """        
         self.request.response.setHeader("Content-type",
-            "%s" % content_type_mapping[document_type]
+            mimetypes.guess_type(self.file_name)[0] or "application/octet-stream"
         )
         self.request.response.setHeader("Content-disposition", 
-            'inline;filename="%s"' % self.file_name
+            'attachment;filename="%s"' % self.file_name
         )
     def bodyText(self):
         """Returns body text of document. Must be implemented by subclass"""
@@ -140,11 +138,8 @@ class DownloadDocument(BrowserView):
             if default_templates:
                 return default_templates[0].value
             return  None
-        template_vocabulary = queryUtility(IVocabularyFactory, 
-            "bungeni.vocabulary.DocumentXHTMLTemplates"
-        )
-        
-        doc_templates = [ term.value for term in template_vocabulary() if 
+        template_vocabulary = vocabulary.document_xhtml_template_factory()
+        doc_templates = [ term.value for term in template_vocabulary if 
             self.document.type in term.doctypes
         ]
         log.debug("Looking for templates to generate [%s] report. Found : %s",
@@ -153,7 +148,7 @@ class DownloadDocument(BrowserView):
         if doc_templates:
             doc_template = doc_templates[0]
         else:
-            doc_template = default_template(template_vocabulary())
+            doc_template = default_template(template_vocabulary)
         if doc_template is None:
             self.error_messages.append(
                 _(u"No template for document of type: ${dtype}. Contact admin.",
@@ -163,11 +158,9 @@ class DownloadDocument(BrowserView):
             raise DocumentGenerationError(
                 "No template found to generate this document"
             )
-        #!+REPORTS(mrb, OCT-2011) Provide UI to select templates if more than 1
         generator = generators.ReportGeneratorXHTML(doc_template, 
             self.document
         )
-        #return generator.generateReport()
         return generator.generateReport()
 
     def generateDoc(self):
@@ -251,11 +244,10 @@ class DownloadDocument(BrowserView):
             except DocumentGenerationError:
                 return self.error_template()
 
-    def templateSelected(self):
+    def setupTemplate(self):
         """Check if a template was provided in the request as url/form 
         parameter.
         """
-        template_selected = False
         template_encoded = self.request.form.get("template", "")
         if template_encoded != "":
             template_file_name = base64.decodestring(template_encoded)
@@ -263,10 +255,13 @@ class DownloadDocument(BrowserView):
                 template_file_name
             )
             if os.path.exists(template_path):
-                template_selected = True
                 self.oo_template_file = template_path
-        return template_selected
 
+    def __call__(self):
+        self.setupTemplate();
+        return self.documentData(cached=False)
+        
+        
 
 #The classes below generate ODT and PDF documents of bungeni content items
 #TODO:This implementation displays a default set of the content item's attributes
@@ -283,8 +278,6 @@ class BungeniContentODT(DownloadDocument):
             self.document.group = session.query(domain.Group).get(self.document.parliament_id)
         return self.template()
     
-    def __call__(self):
-        return self.documentData(cached=False)
             
 class BungeniContentPDF(DownloadDocument):
     oo_template_file = os.path.dirname(__file__) + "/templates/bungenicontent.odt"  
@@ -297,5 +290,3 @@ class BungeniContentPDF(DownloadDocument):
             self.document.group = session.query(domain.Group).get(self.document.parliament_id)
         return self.template()
     
-    def __call__(self):
-        return self.documentData(cached=False)

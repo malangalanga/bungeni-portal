@@ -106,6 +106,9 @@ class IOfficeMember(IBungeniGroupMembership):
 class IOwned(interface.Interface):
     """Object supports having an "owner" i.e. an owner:user attribute.
     """
+    def owner():
+        """Get the user instance that is the owner of this item.
+        """
 
 class IBungeniContent(IOwned):
     """Parliamentary content
@@ -199,7 +202,7 @@ class IEditorialNote(interface.Interface):
     """Marker interface for editorial notes in a sitting's agenda"""
 
 class IScheduleText(interface.Interface):
-    """Marker interface for text records in and agenda.
+    """Marker interface for text records e.g. in agenda.
     This covers `IHeading` and `IEditorialNote'` at this point.
     """
 
@@ -453,12 +456,6 @@ class ISignatoriesValidator(interface.Interface):
         """Should pending signatures be archived
         """
 
-class IConstituency(interface.Interface):
-    """Constituencies.
-    """
-
-class IConstituencyDetail(interface.Interface):
-    pass
 
 class IItemScheduleCategory(interface.Interface):
     pass
@@ -546,12 +543,6 @@ class IReport4Sitting(IBungeniContent):
 class IUserDelegation(interface.Interface):
     pass
 
-class IProvince(interface.Interface):
-    pass
-
-class IRegion(interface.Interface):
-    pass
-
 class ITranslatable(interface.Interface):
     """Marker Interface if an object is translatable.
     """
@@ -616,7 +607,3 @@ class ISubRoleAnnotations(interface.Interface):
 
 class ICountry(interface.Interface):
     """Marker interface for Country"""
-
-class IWorkspaceContainer(interface.Interface):
-    pass
-

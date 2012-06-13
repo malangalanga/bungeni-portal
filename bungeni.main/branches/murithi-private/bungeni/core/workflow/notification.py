@@ -65,6 +65,7 @@ class TemplateNamespaceItem(object):
     
     @property
     def owner(self):
+        #!+BREAKS_TESTS(mr, may-2012) return context.owner
         return dbutils.get_user(self.context.owner_id)
     
     @property
@@ -183,7 +184,7 @@ class Notification(object):
             note=None
         ):
         self.condition = wrapped_condition(
-            capi.get_workflow_condition(condition))
+            capi.get_workflow_condition(condition), self)
         self.subject = subject 
         self.from_ = from_
         self.to = to

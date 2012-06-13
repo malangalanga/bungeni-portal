@@ -22,7 +22,8 @@ from bungeni.alchemist.model import ModelDescriptor, Field, show, hide, \
     queryModelInterface
 
 from bungeni.models import domain
-from bungeni.models.utils import get_db_user_id
+from bungeni.models.interfaces import IOwned
+from bungeni.models.utils import get_db_user
 
 # We import bungeni.core.workflows.adapters to ensure that the "states"
 # attribute on each "workflow" module is setup... this is to avoid an error
@@ -41,6 +42,7 @@ from bungeni.ui import vocabulary
 from bungeni.utils.capi import capi
 from bungeni.ui.interfaces import IAdminSectionLayer
 from bungeni.alchemist.interfaces import IAlchemistContainer
+from bungeni.utils import naming
 
 ###
 # Listing Columns
@@ -226,16 +228,14 @@ def user_party_column(name, title, default="-"):
     return column.GetterColumn(title, getter)
 
 
-def simple_view_column(name, title, default=_(u"view"), 
-        owner_msg=_(u"view")
-    ):
-    """Replace primary key with meaningful title - tests for owner"""
+def simple_view_column(name, title, default=_(u"view"), owner_msg=None):
+    """Replace primary key with meaningful title - tests for owner.
+    """
     def getter(item, formatter):
-        render_value = default
-        if hasattr(item, "owner_id"):
-            if item.owner_id == get_db_user_id():
-                render_value = owner_msg
-        return render_value
+        if IOwned.providedBy(item):
+            if item.owner == get_db_user():
+                return owner_msg or default
+        return default
     return column.GetterColumn(title, getter)
 
 
@@ -244,7 +244,7 @@ def member_title_column(name, title, default=""):
         return item.title_type.title_name
     return column.GetterColumn(title, getter)
 
-'''
+''' !+UNUSED
 def current_titles_in_group_column(name, title, default=""):
     def getter(item, formatter):
         value = getattr(item, name)
@@ -263,7 +263,6 @@ def current_titles_in_group_column(name, title, default=""):
                     title_list.append(obj.user_role_name)
         return ", ".join(title_list)
     return column.GetterColumn(title, getter)
-'''
 
 def inActiveDead_Column(name, title, default):
     aid = { "A": _("active"),
@@ -271,6 +270,7 @@ def inActiveDead_Column(name, title, default):
         "D": _("deceased")}
     renderer = lambda x: aid[x]
     return _column(name, title, renderer, default)
+'''
 
 
 
@@ -284,27 +284,6 @@ def workflow_column(name, title, default=""):
             context=request)
     return column.GetterColumn(title, getter)
 
-def constituency_column(name, title, default=""):
-    def getter(item, formatter):
-        if item.constituency is None:
-            return default
-        obj = translation.translate_obj(item.constituency)
-        return obj.name
-    return column.GetterColumn(title, getter)
-def province_column(name, title, default=""):
-    def getter(item, formatter):
-        if item.province is None:
-            return default
-        obj = translation.translate_obj(item.province)
-        return obj.province
-    return column.GetterColumn(title, getter)
-def region_column(name, title, default=""):
-    def getter(item, formatter):
-        if item.region is None:
-            return default
-        obj = translation.translate_obj(item.region)
-        return obj.region
-    return column.GetterColumn(title, getter)
 
 def party_column(name, title, default=""):
     def getter(item, formatter):
@@ -654,7 +633,7 @@ class UserDescriptor(ModelDescriptor):
                 show("listing"),
             ],
             property=schema.Choice(title=_("Gender"),
-                source=vocabulary.Gender
+                source=vocabulary.gender
             ),
             edit_widget=widgets.CustomRadioWidget,
             add_widget=widgets.CustomRadioWidget
@@ -676,11 +655,7 @@ class UserDescriptor(ModelDescriptor):
                 hide("listing"),
             ],
             property=schema.Choice(title=_("Country of Birth"),
-                source=vocabulary.DatabaseSource(domain.Country,
-                    token_field="country_id",
-                    title_field="country_name",
-                    value_field="country_id"
-                ),
+                source=vocabulary.country_factory,
             )
         ),
         Field(name="birth_nationality", # [user-req]
@@ -690,11 +665,7 @@ class UserDescriptor(ModelDescriptor):
                 hide("listing"),
             ],
             property=schema.Choice(title=_("Nationality at Birth"),
-                source=vocabulary.DatabaseSource(domain.Country,
-                    token_field="country_id",
-                    title_field="country_name",
-                    value_field="country_id"
-                ),
+                source=vocabulary.country_factory,
             ),
         ),
         Field(name="current_nationality", # [user-req]
@@ -704,11 +675,7 @@ class UserDescriptor(ModelDescriptor):
                 hide("listing"),
             ],
             property=schema.Choice(title=_("Current Nationality"),
-                source=vocabulary.DatabaseSource(domain.Country,
-                    token_field="country_id",
-                    title_field="country_name",
-                    value_field="country_id"
-                ),
+                source=vocabulary.country_factory,
             ),
         ),
         Field(name="date_of_death", # [user]
@@ -843,7 +810,7 @@ class GroupMembershipDescriptor(ModelDescriptor):
                 show("view listing"),
             ],
             property=schema.Choice(title=_("Status"),
-                vocabulary="bungeni.vocabulary.workflow",
+                vocabulary=vocabulary.workflow_vocabulary_factory,
             ),
             listing_column=workflow_column("status", "Workflow status"),
         ),
@@ -940,22 +907,6 @@ class MpDescriptor(GroupMembershipDescriptor):
         ),
     ]
     fields.extend(deepcopy(GroupMembershipDescriptor.fields))
-
-    constituencySource = vocabulary.DatabaseSource(domain.Constituency,
-        token_field="constituency_id",
-        title_field="name",
-        value_field="constituency_id"
-    )
-    provinceSource = vocabulary.DatabaseSource(domain.Province,
-        token_field="province_id",
-        title_field="province",
-        value_field="province_id"
-    )
-    regionSource = vocabulary.DatabaseSource(domain.Region,
-        token_field="region_id",
-        title_field="region",
-        value_field="region_id"
-    )
     partySource = vocabulary.DatabaseSource(domain.PoliticalParty,
         token_field="party_id",
         title_field="full_name",
@@ -963,42 +914,20 @@ class MpDescriptor(GroupMembershipDescriptor):
     )
 
     fields.extend([
-        Field(name="constituency_id", # [user]
+        Field(name="provenance", # [user]
             modes="view edit add listing",
-            localizable=[
-                show("view edit add listing"),
-            ],
-            property=schema.Choice(title=_("Constituency"),
-                source=constituencySource,
-                required=False
-            ),
-            listing_column=constituency_column("constituency_id",
-                "Constituency"
-            ),
-        ),
-        Field(name="province_id", # [user]
-            modes="view edit add listing",
-            localizable=[
+            localizable=[ 
                 show("view edit add"),
-                hide("listing")
+                hide("listing"),
             ],
-            property=schema.Choice(title=_("Province"),
-                source=provinceSource,
-                required=False
+            property=VocabularyTextField(title=_("Provenance"),
+                description=_("Select Provenance"),
+                vocabulary=vocabulary.provenance,
+                required=False,
             ),
-            listing_column=province_column("province_id", "Province"),
-        ),
-        Field(name="region_id", # [user]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit add"),
-                hide("listing")
-            ],
-            property=schema.Choice(title=_("region"),
-                source=regionSource,
-                required=False
-            ),
-            listing_column=region_column("region_id", "region"),
+            edit_widget=widgets.TreeVocabularyWidget,
+            add_widget=widgets.TreeVocabularyWidget,
+            view_widget=widgets.TermsDisplayWidget,
         ),
         Field(name="party_id", # [user]
             modes="view edit add listing",
@@ -1032,7 +961,7 @@ class MpDescriptor(GroupMembershipDescriptor):
     ])
 
     schema_invariants = GroupMembershipDescriptor.schema_invariants + [
-        MpStartBeforeElection]
+       MpStartBeforeElection]
 
 
 class PartyMemberDescriptor(GroupMembershipDescriptor):
@@ -1203,7 +1132,7 @@ class GroupDescriptor(ModelDescriptor):
                 show("view listing"),
             ],
             property=schema.Choice(title=_("Status"),
-                vocabulary="bungeni.vocabulary.workflow",
+                vocabulary=vocabulary.workflow_vocabulary_factory,
             ),
             listing_column=workflow_column("status", "Workflow status"),
         ),
@@ -1590,11 +1519,7 @@ class AddressDescriptor(ModelDescriptor):
                 show("view edit listing"),
             ],
             property=schema.Choice(title=_("Country"),
-                source=vocabulary.DatabaseSource(domain.Country,
-                    token_field="country_id",
-                    title_field="country_name",
-                    value_field="country_id"
-                ),
+                source=vocabulary.country_factory,
                 required=True
             ),
         ),
@@ -1665,7 +1590,7 @@ class TitleTypeDescriptor(ModelDescriptor):
             modes="view edit add listing",
             property=schema.Choice(title=_("Role"),
                 description=_("Role associated with this title"),
-                vocabulary="bungeni.vocabulary.group_sub_roles",
+                vocabulary=vocabulary.group_sub_role_factory,
                 required=False,
             ),
         ),
@@ -1674,7 +1599,7 @@ class TitleTypeDescriptor(ModelDescriptor):
             property=schema.Choice(title=_("Only one user may have this title"), 
                 description=_("Limits persons with this title to one"),
                 default=False,
-                source=vocabulary.YesNoSource
+                source=vocabulary.bool_yes_no
             ),
         ),
         Field(name="sort_order",
@@ -1849,7 +1774,7 @@ class OfficeDescriptor(GroupDescriptor):
             ],
             property=schema.Choice(title=_("Role"),
                 description=_("Role given to members of this office"),
-                vocabulary="bungeni.vocabulary.office_roles"
+                vocabulary=vocabulary.office_role_factory
             ),
         )
     ]
@@ -2054,7 +1979,7 @@ class AttachmentDescriptor(ModelDescriptor):
                 show("view listing"),
             ],
             property=schema.Choice(title=_("Status"),
-                vocabulary="bungeni.vocabulary.workflow",
+                vocabulary=vocabulary.workflow_vocabulary_factory,
             ),
             listing_column=workflow_column("status", "Workflow status"),
         ),
@@ -2250,7 +2175,7 @@ class DocDescriptor(ModelDescriptor):
                 show("view listing"),
             ],
             property=schema.Choice(title=_("Status"),
-                vocabulary="bungeni.vocabulary.workflow",
+                vocabulary=vocabulary.workflow_vocabulary_factory,
             ),
             listing_column=workflow_column("status", "Workflow status"),
         ),
@@ -2312,11 +2237,11 @@ class EventDescriptor(DocDescriptor):
         # "non-legal" parliamentary documents may be added by any user
         f.property = schema.Choice(title=_("Owner"), 
             # !+GROUP_AS_OWNER(mr, apr-2012) for Event, a common case would be
-            # to able to set a group (of the office/group member creating the 
+            # to be able to set a group (of the office/group member creating the 
             # event) as the owner (but Group is not yet polymorphic with User). 
             # For now we limit the owner of an Event to be simply the current 
             # logged in user:
-            source=vocabulary.LoggedInUserSource(
+            source=vocabulary.OwnerOrLoggedInUserSource(
                 token_field="user_id",
                 title_field="fullname",
                 value_field="user_id")
@@ -2769,7 +2694,7 @@ class QuestionDescriptor(DocDescriptor):
             ],
             property=VocabularyTextField(title=_("Subject Terms"),
                 description=_("Select Subjects"),
-                vocabulary="bungeni.vocabulary.SubjectTerms",
+                vocabulary=vocabulary.subject_terms,
                 required = False,
             ),
             edit_widget=widgets.TreeVocabularyWidget,
@@ -2941,7 +2866,7 @@ class SittingDescriptor(ModelDescriptor):
             ],
             property=schema.Choice(title=_(u"Activity Type"),
                 description=_(u"Sitting Activity Type"),
-                vocabulary="bungeni.vocabulary.SittingActivityTypes",
+                vocabulary=vocabulary.sitting_activity_types,
                 required=False
             ),
         ),
@@ -2952,7 +2877,7 @@ class SittingDescriptor(ModelDescriptor):
             ],
             property=schema.Choice(title=_(u"Meeting Type"),
                 description=_(u"Sitting Meeting Type"),
-                vocabulary="bungeni.vocabulary.SittingMeetingTypes",
+                vocabulary=vocabulary.sitting_meeting_types,
                 required=False
             ),
         ),
@@ -2963,7 +2888,7 @@ class SittingDescriptor(ModelDescriptor):
             ],
             property=schema.Choice(title=_(u"Convocation Type"),
                 description=_(u"Sitting Convocation Type"),
-                vocabulary="bungeni.vocabulary.SittingConvocationTypes",
+                vocabulary=vocabulary.sitting_convocation_types,
                 required=False
             ),
         ),
@@ -3152,85 +3077,10 @@ class SignatoryDescriptor(ModelDescriptor):
                     "bungeni.Signatory bungeni.Owner bungeni.Clerk")
             ],
             property=schema.Choice(title=_("Signature status"), 
-                vocabulary="bungeni.vocabulary.workflow",
+                vocabulary=vocabulary.workflow_vocabulary_factory,
                 required=True
             ),
             listing_column = workflow_column("status", "Signature Status"),
-        ),
-    ]
-
-
-class ConstituencyDescriptor(ModelDescriptor):
-    localizable = True
-    display_name = _("Constituency")
-    container_name = _("Constituencies")
-    fields = [
-        LanguageField("language"),
-        Field(name="name", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit listing"),
-            ],
-            property=schema.TextLine(title=_("Name"),
-                description=_("Name of the constituency"),
-            ),
-        ),
-        Field(name="start_date", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit listing"),
-            ],
-            property=schema.Date(title=_("Start Date")),
-            listing_column=day_column("start_date", _("Start Date")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
-        ),
-        Field(name="end_date", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit add listing"),
-            ],
-            property=schema.Date(title=_("End Date"), required=False),
-            listing_column=day_column("end_date", _("End Date")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
-        ),
-    ]
-    schema_invariants = [EndAfterStart]
-
-
-class ProvinceDescriptor(ModelDescriptor):
-    localizable = True
-    display_name = _("Province")
-    container_name = _("Provinces")
-    fields = [
-        LanguageField("language"),
-        Field(name="province", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit listing"),
-            ],
-            property=schema.TextLine(title=_("Province"),
-                description=_("Name of the Province"),
-            ),
-        ),
-    ]
-
-
-class RegionDescriptor(ModelDescriptor):
-    localizable = True
-    display_name = _("Region")
-    container_name = _("Regions")
-    fields = [
-        LanguageField("language"),
-        Field(name="region", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit listing"),
-            ],
-            property=schema.TextLine(title=_("Region"),
-                description=_("Name of the Region"),
-            ),
         ),
     ]
 
@@ -3258,47 +3108,6 @@ class CountryDescriptor(ModelDescriptor):
             ],
             property=schema.TextLine(title=_("Country"),
                 description=_("Name of the Country")
-            ),
-        ),
-    ]
-
-
-class ConstituencyDetailDescriptor(ModelDescriptor):
-    localizable = True
-    display_name = _("Constituency details")
-    container_name = _("Details")
-    fields = [
-        Field(name="date", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit listing"),
-            ],
-            property=schema.Date(title=_("Date"),
-                description=_("Date the data was submitted from the "
-                    "Constituency"),
-            ),
-            listing_column=day_column("date", "Date"),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
-        ),
-        Field(name="population", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit listing"),
-            ],
-            property=schema.Int(title=_("Population"),
-                description=_(
-                    "Total Number of People living in this Constituency"),
-            ),
-        ),
-        Field(name="voters", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit listing"),
-            ],
-            property=schema.Int(title=_("Registered Voters"),
-                description=_(
-                    "Number of Voters registered in this Constituency"),
             ),
         ),
     ]
@@ -3525,7 +3334,6 @@ def catalyse_descriptors():
             yield cls
     
     from bungeni.alchemist.catalyst import catalyst
-    from bungeni.models.schema import un_camel
     from bungeni.core.workflows import adapters
     for descriptor in descriptor_classes():
         descriptor_name = descriptor.__name__
@@ -3542,7 +3350,7 @@ def catalyse_descriptors():
             debug.log_exc(sys.exc_info(), log_handler=log.warn)
             continue
         # TYPE_REGISTRY, add descriptor
-        type_key = un_camel(kls_name)
+        type_key = naming.un_camel(kls_name)
         ti = capi.get_type_info(type_key, None)
         if ti is None:
             # non-workflowed type, add TI entry

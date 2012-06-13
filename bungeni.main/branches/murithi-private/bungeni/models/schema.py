@@ -8,7 +8,6 @@ $Id$
 """
 log = __import__("logging").getLogger("bungeni.models.schema")
 
-import re
 import sqlalchemy as rdb
 from fields import FSBlob
 from sqlalchemy.sql import text #, functions #!+CATALYSE(mr, nov-2010)
@@ -20,35 +19,6 @@ metadata = rdb.MetaData()
 
 # users and groups because of the zope users and groups
 PrincipalSequence = rdb.Sequence("principal_sequence")
-
-
-def un_camel(name):
-    """Convert a CamelCase name to lowercase underscore-separated.
-    """
-    s1 = un_camel.first_cap_re.sub(r"\1_\2", name)
-    return un_camel.all_cap_re.sub(r"\1_\2", s1).lower()
-un_camel.first_cap_re = re.compile("(.)([A-Z][a-z]+)")
-un_camel.all_cap_re = re.compile("([a-z0-9])([A-Z])")
-
-# !+ singular/plural still needed?
-def singular(pname):
-    """Get the english singular of (plural) name.
-    """
-    for sname in plural.custom:
-        if plural.custom[sname] == pname:
-            return sname
-    if pname.endswith("s"):
-        return pname[:-1]
-    return pname
-
-def plural(sname):
-    """Get the english plural of (singular) name.
-    """
-    return plural.custom.get(sname, None) or "%ss" % (sname)
-plural.custom = {
-    "user_address": "user_addresses",
-    "group_address": "group_addresses",
-}
 
 
 # vertical properties
@@ -306,24 +276,20 @@ password_restore_link = rdb.Table("password_restore_link", metadata,
     rdb.Column("expiration_date", rdb.DateTime(timezone=False), nullable=False) 
 ) 
 
+
 # specific user classes
 parliament_memberships = rdb.Table("parliament_memberships", metadata,
     rdb.Column("membership_id", rdb.Integer,
         rdb.ForeignKey("user_group_memberships.membership_id"),
         primary_key=True
     ),
-    # the constituency/province/region of the MP as of the time he was elected
-    # !+constituency_id/province_id/region_id/party_id(mr, jul-2011) are also 
-    # defined as mapper properties!
-    rdb.Column("constituency_id", rdb.Integer,
-        rdb.ForeignKey("constituencies.constituency_id")
-    ),
-    rdb.Column("province_id", rdb.Integer,
-        rdb.ForeignKey("provinces.province_id")
-    ),
-    rdb.Column("region_id", rdb.Integer,
-        rdb.ForeignKey("regions.region_id")
-    ),
+    # The region/province/constituency (divisions and order may be in any way 
+    # as appropriate for the given parliamentary territory) for the provenance
+    # of this member of parliament.
+    # Hierarchical Controlled Vocabulary Micro Data Format: 
+    # a triple-colon ":::" separated sequence of *key phrase paths*, each of 
+    # which is a double-colon "::" separated sequence of *key phrases*.
+    rdb.Column("provenance", rdb.UnicodeText, nullable=True),
     # the political party of the MP as of the time he was elected
     rdb.Column("party_id", rdb.Integer,
         rdb.ForeignKey("political_parties.party_id")
@@ -340,34 +306,8 @@ parliament_memberships = rdb.Table("parliament_memberships", metadata,
 
 
 #########################
-# Geo Localities
+# Countries
 #########################
-
-# !+GEO_LOCALITIES(mr, aug-2010) there is no longer any conceptual differences
-# between constituency/region/province entities -- maybe should be reduced to
-# a single table "geo_localities" plus a (parametrizable) type qualifier column.
-# This implies reworking: db schema, "add mp" form, core/ dc.py app.py, etc.
-
-# !+GEO_LOCALITIES(mr, aug-2010) all geo_localities should have start/end dates
-# as well as additional extra (dated) details.
-
-constituencies = rdb.Table("constituencies", metadata,
-    rdb.Column("constituency_id", rdb.Integer, primary_key=True),
-    rdb.Column("name", rdb.Unicode(256), nullable=False),
-    rdb.Column("start_date", rdb.Date, nullable=False),
-    rdb.Column("end_date", rdb.Date),
-    rdb.Column("language", rdb.String(5), nullable=False),
-)
-provinces = rdb.Table("provinces", metadata,
-    rdb.Column("province_id", rdb.Integer, primary_key=True),
-    rdb.Column("province", rdb.Unicode(256), nullable=False), # !+name
-    rdb.Column("language", rdb.String(5), nullable=False),
-)
-regions = rdb.Table("regions", metadata,
-    rdb.Column("region_id", rdb.Integer, primary_key=True),
-    rdb.Column("region", rdb.Unicode(256), nullable=False), # !+name
-    rdb.Column("language", rdb.String(5), nullable=False),
-)
 
 countries = rdb.Table("countries", metadata,
     rdb.Column("country_id", rdb.String(2), primary_key=True),
@@ -377,17 +317,6 @@ countries = rdb.Table("countries", metadata,
     rdb.Column("numcode", rdb.Integer),
     rdb.Column("language", rdb.String(5), nullable=False),
 )
-
-# !+GEO_LOCALITIES_DETAILS(mr, aug-2010) generalize/apply to all geo_localities
-constituency_details = rdb.Table("constituency_details", metadata,
-    rdb.Column("constituency_detail_id", rdb.Integer, primary_key=True),
-    rdb.Column("constituency_id", rdb.Integer,
-        rdb.ForeignKey("constituencies.constituency_id")),
-    rdb.Column("date", rdb.Date, nullable=False),
-    rdb.Column("population", rdb.Integer, nullable=False),
-    rdb.Column("voters", rdb.Integer, nullable=False),
-)
-
 
 #######################
 # Groups

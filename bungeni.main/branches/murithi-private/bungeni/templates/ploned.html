@@ -38,12 +38,12 @@ $begin{action_menus} #[ plond/ui/templates/contentmenu.pt ]#
         $for{ menu_item in view.menu() }
     <li class="${ menu_item['extra']['id'] }">
         $evoque{ #menu_item,
-            submenu=menu_item["submenu"] or [],
+            submenu=menu_item["submenu"],
             state=menu_item["extra"].get("state", None),
             state_class=menu_item["extra"].get("class", ""),
             state_title=menu_item["extra"].get("stateTitle", None),
             show_children=not menu_item["extra"].get("hideChildren", False),
-            link_id=menu_item["extra"].get("id", "")
+            link_id=menu_item["extra"]["id"]
         }
     </li>
         $rof
@@ -53,13 +53,15 @@ $end{action_menus}
 
 
 $begin{menu_item}
-    $if{ not submenu or len(submenu) or state }
+    #[ submenu=None means display the item (but no children) 
+       submenu=[] menas do not display anything! ]#
+    $if{ submenu is None or submenu or state }
         $if{ show_children } 
         <dl class="actionMenu" id="${ menu_item['extra']['id'] }">
             <dt class="actionMenuHeader label-${ state_class }">
         $fi
         $if{ menu_item["action"] } 
-                <a id="${ showchildren and link_id or '' 
+                <a id="${ link_id or ''
                    }" href="${ menu_item['url'] or menu_item['action'] 
                    }"$if{ menu_item['description'] 
                        } title="${ i18n(menu_item['description']) 

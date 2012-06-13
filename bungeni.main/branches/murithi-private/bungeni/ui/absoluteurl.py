@@ -1,21 +1,16 @@
 # !+ CLEAN UP THIS FILE, MINIMALLY AT LEAST THE SRC CODE FORMATTING !
 
-from sqlalchemy import orm
-from zope.traversing.browser import absoluteURL
 from zope.traversing.browser.absoluteurl import AbsoluteURL
 from zope.app.component.hooks import getSite
-from zope.security.proxy import removeSecurityProxy
-from zope.interface import providedBy
 from zope.component import getUtility
 import bungeni.ui.utils as ui_utils
 from bungeni.alchemist.container import stringKey
 from bungeni.alchemist import Session
 from bungeni.models.domain import Doc
-from bungeni.models import workspace
-from bungeni.models.utils import get_principal
+from bungeni.core import workspace
 from bungeni.ui.utils.common import get_workspace_roles
 from bungeni.core.interfaces import IWorkspaceTabsUtility
-from bungeni.models.workspace import OBJECT_ROLES
+
 
 class CustomAbsoluteURL(AbsoluteURL):
     section = ""
@@ -40,7 +35,7 @@ class WorkspaceAbsoluteURLView(AbsoluteURL):
         tabs_utility = getUtility(IWorkspaceTabsUtility)
         domain_class = self.context.__class__
         status = self.context.status
-        roles = get_workspace_roles() + OBJECT_ROLES
+        roles = get_workspace_roles() + workspace.OBJECT_ROLES
         tab = None
         for role in roles:
             tab = tabs_utility.get_tab(role, domain_class, status)
@@ -64,7 +59,7 @@ class BusinessAbsoluteURLView(CustomAbsoluteURL):
 class AttachmentBusinessAbsoluteURLView(BusinessAbsoluteURLView):
     
     def __str__(self):
-        item_id = self.context.item_id
+        item_id = self.context.owner_id
         base_url = ui_utils.url.absoluteURL(getSite(), self.request)
         session = Session()
         item = session.query(Doc).filter(Doc.doc_id==item_id).first()
@@ -145,14 +140,8 @@ class PoliticalGroupsArchiveAbsoluteURLView(ArchiveAbsoluteURLView):
     """ Custom absolute url for political groups in archive section
     """
     subsection = "politicalgroups"
-    
-    
-class ConstituenciesArchiveAbsoluteURLView(ArchiveAbsoluteURLView):
-    """ Custom absolute url for constituencies in archive section
-    """
-    subsection = "constituencies"
-    
-    
+
+
 class CommitteesArchiveAbsoluteURLView(ArchiveAbsoluteURLView):
     """ Custom absolute url for committees in archive section
     """

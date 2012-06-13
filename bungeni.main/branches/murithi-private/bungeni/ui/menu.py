@@ -29,7 +29,9 @@ from bungeni.core.workflow.interfaces import IWorkflow, IWorkflowController
 
 from bungeni.alchemist.interfaces import IAlchemistContainer
 from bungeni.models.utils import get_db_user_id
-from bungeni.models.interfaces import IVersion, IScheduleText, IBungeniContent
+from bungeni.models.interfaces import (IVersion, IScheduleText, IDoc, 
+    IFeatureAudit
+)
 
 from bungeni.core.translation import (get_language, get_all_languages, 
     get_available_translations, translate_i18n
@@ -38,7 +40,7 @@ from bungeni.core.dc import IDCDescriptiveProperties
 from bungeni.core import schedule
 
 from bungeni.ui.i18n import  _
-from bungeni.ui.utils import url
+from bungeni.ui.utils import url, misc
 from bungeni.ui import interfaces
 
 from bungeni.utils.capi import capi
@@ -445,12 +447,6 @@ class DownloadDocumentSubMenuItem(BrowserSubMenuItem):
     order = 8
     
     def __new__(cls, context, request):
-        if IAlchemistContainer.providedBy(context):
-            unproxied = proxy.removeSecurityProxy(context)
-            if not IBungeniContent.implementedBy(unproxied.domain_model):
-                return
-        elif not IBungeniContent.providedBy(context):
-            return
         return object.__new__(cls, context, request)
 
     @property
@@ -463,7 +459,7 @@ class DownloadDocumentSubMenuItem(BrowserSubMenuItem):
     
     @property
     def action(self):
-        return "dasdsd"
+        return url.absoluteURL(self.context, self.request)
     
     def selected(self):
         return False
@@ -472,10 +468,14 @@ i18n_pdf = _(u"Download PDF")
 i18n_odt = _(u"Download ODT")
 i18n_akomantoso = _(u"Akoma Ntoso")
 i18n_rss = _(u"RSS")
+document_types = ["pdf", "odt"]
+TYPE_RSS = "rss"
+TYPE_AKOMANTOSO = "akomantoso"
+xml_types = [TYPE_RSS, TYPE_AKOMANTOSO]
 
 class DownloadDocumentMenu(BrowserMenu):
 
-    def documentTemplates(self):
+    def documentTemplates(self, locale):
         templates = []
         templates_path = capi.get_path_for("reporting", "templates", 
             "templates.xml"
@@ -483,11 +483,16 @@ class DownloadDocumentMenu(BrowserMenu):
         if os.path.exists(templates_path):
             template_config = etree.fromstring(open(templates_path).read())
             for template in template_config.iter(tag="template"):
-                location = capi.get_path_for("reporting", "templates", 
-                    template.get("file")
-                )
                 template_file_name = template.get("file")
+                template_language = template.get("language", 
+                    capi.default_language
+                )
+                location = capi.get_path_for("reporting", "templates", 
+                    template_file_name
+                )
                 if os.path.exists(location):
+                    if (locale.id.language != template_language):
+                        continue
                     template_dict = dict(
                         title = template.get("name"),
                         language = template.get("language"),
@@ -503,19 +508,24 @@ class DownloadDocumentMenu(BrowserMenu):
     def getMenuItems(self, context, request):
         results = []
         _url = url.absoluteURL(context, request)
-        if IBungeniContent.providedBy(context):
-            doc_templates = self.documentTemplates()
-            for doc_type in ["pdf", "odt"]:
+        if IDoc.providedBy(context):
+            doc_templates = self.documentTemplates(request.locale)
+            for doc_type in document_types:
                 if doc_templates:
                     for template in doc_templates:
                         i18n_title = translate_i18n(globals()["i18n_%s" % doc_type])
                         results.append(dict(
-                            id="%s-%s" % (doc_type, template.get("language", "en")),
                             title="%s [%s]" % (i18n_title,template.get("title")),
                             description="",
-                            action="%s/%s?id=%s" % (_url, doc_type, 
+                            action="%s/%s?template=%s" % (_url, doc_type, 
                                 template.get("location")),
                             selected=False,
+                            extra = {
+                                "id": "download-%s-%s" %(doc_type,
+                                    misc.slugify(template.get("location"))
+                                ),
+                                "class": "download-document"
+                            },
                             icon=None,
                             submenu=None
                         ))
@@ -531,14 +541,32 @@ class DownloadDocumentMenu(BrowserMenu):
                         submenu=None
                     ))
         if interfaces.IRSSRepresentationLayer.providedBy(request):
-            for doc_type in ["akomantoso", "rss"]:
+            for doc_type in xml_types:
+                if doc_type == TYPE_AKOMANTOSO:
+                    if IAlchemistContainer.providedBy(context):
+                        if not IDoc.implementedBy(
+                            context.domain_model
+                        ):
+                            continue
+                elif doc_type == TYPE_RSS:
+                    # rss for content types only availble for auditables
+                    if (IDoc.providedBy(context) and not 
+                        IFeatureAudit.providedBy(context)
+                    ):
+                        continue
+                    elif (IAlchemistContainer.providedBy(context) and not 
+                        IFeatureAudit.implementedBy(context.domain_model)
+                    ):
+                        continue
                 results.append(dict(
                         title = globals()["i18n_%s" % doc_type],
                         description="",
                         action = "%s/feed.%s" %(_url, doc_type),
                         selected=False,
                         icon=None,
-                        extra={},
+                        extra={
+                            "id": "download-%s" % doc_type
+                        },
                         submenu=None
                 ))
         return results

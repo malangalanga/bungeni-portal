@@ -8,8 +8,6 @@ $Id$
 """
 log = __import__("logging").getLogger("bungeni.ui.audit")
 
-import sys
-
 from zope.security.proxy import removeSecurityProxy
 from zope.security.management import getInteraction
 
@@ -20,14 +18,13 @@ from zope.i18n import translate
 
 from bungeni.models import interfaces
 from bungeni.models import domain
-from bungeni.models.schema import un_camel
 from bungeni.core.workflow.interfaces import IWorkflow
 from bungeni.ui.forms.interfaces import ISubFormViewletManager
 from bungeni.ui.i18n import _
 from bungeni.ui.descriptor import descriptor
-from bungeni.ui.utils import date, debug
+from bungeni.ui.utils import date
 from bungeni.ui import browser
-from bungeni.utils import register
+from bungeni.utils import register, naming
 
 CHANGE_TYPES = ("head", "signatory", "attachment", "event")
 CHANGE_ACTIONS = domain.CHANGE_ACTIONS
@@ -139,6 +136,8 @@ def _eval_as_dict(s):
         assert isinstance(d, dict)
         return d
     except (SyntaxError, TypeError, AssertionError):
+        import sys
+        from bungeni.ui.utils import debug
         debug.log_exc(sys.exc_info(), log_handler=log.info)
         return {}
 '''
@@ -153,7 +152,7 @@ def get_auditable_type_key(change):
     name = type(change.audit).__name__
     if name.endswith("Audit"):
         name = name[:-5]
-    return un_camel(name)
+    return naming.un_camel(name)
 
 def get_changed_attribute_names(change):
     """Get the names of attributes (including extended attributes) that have
@@ -177,7 +176,10 @@ def _label(change):
     """Get a displayable translated label for this change.
     """
     return translate(change.audit.label)
-    
+
+def _link_event(change):
+    return"""<a href="events/obj-%s">%s</a>""" % (
+        change.audit.audit_head_id, _label(change))
 
 # Audit description format handlers !+bungeni_custom
 #
@@ -188,50 +190,65 @@ def _label(change):
 # formatter naming convention: _df_{action}[_{change_type}]
 
 _df_add = _label
+def _df_add(change):
+    return "%s: [%s]" % (translate(change.action), _label(change))
 def _df_add_event(change):
     # !+LINKED_SUB_ITEMS_IN_AUDIT_DESCRIPTION
-    return """<a href="events/obj-%s">%s</a>""" % (
-        change.audit.audit_head_id, _label(change))
+    return """%s: [<a href="events/obj-%s">%s</a>]""" % (
+        translate(change.action), change.audit.audit_head_id, _label(change))
 
 def _df_modify(change):
     # !+ rss -> get_changed_attribute_names(change) always returns empty list!
-    changed = _df_modify_head(change)
+    changed = ", ".join(get_changed_attribute_names(change))
     if changed:
-        return "%s: %s" % (_label(change), changed)
-    return _label(change)
+        return "%s: %s on [%s]" % (
+            translate(change.action), changed, _label(change))
+    else:
+        # !+ should never occur?
+        return "%s: [%s]" % (translate(change.action), _label(change))
 def _df_modify_head(change):
-    changed = get_changed_attribute_names(change)
+    changed = ", ".join(get_changed_attribute_names(change))
     #return '<span class="workflow_info">%s</span>' % (", ".join(changed))
-    return "%s" % (", ".join(changed))
+    return "%s: %s" % (translate(change.action), changed)
 def _df_modify_event(change):
-    return "%s: %s" % (_df_add_event(change), _df_modify_head(change))
+    changed = ", ".join(get_changed_attribute_names(change))
+    if changed:
+        return """%s: %s on [%s]""" % (
+            translate(change.action), changed, _link_event(change))
+    else:
+        # !+ should never occur?
+        return "%s: [%s]" % (translate(change.action), _link_event(change))
 
 def _df_workflow(change):
-    return "%s: %s" % (_label(change), _df_workflow_head(change))
+    return "%s [%s]" % (_df_workflow_head(change), _label(change))
 def _df_workflow_head(change):
     # !+change.audit.status(mr, apr-2012) use the workflow state's title instead? 
     wf_prev, wf_prev_status = change.seq_previous, None
     if wf_prev:
         wf_prev_status = wf_prev.audit.status
     return (
+        '%s: '
         '%s <span class="workflow_info">%s</span> '
         '%s <span class="workflow_info">%s</span>' % (
+            translate(change.action),
             translate("from"),
             translate(wf_prev_status),
             translate("to"),
             translate(change.audit.status)))
 def _df_workflow_event(change):
-    return "%s: %s" % (_df_add_event(change), _df_workflow_head(change))
+    return "%s [%s]" % (_df_workflow_head(change), _link_event(change))
 
 _df_remove = _label
 _df_remove_event = _df_add_event
 
 def _df_version(change):
-    return "%s: %d" % (_label(change), change.seq)
+    return "%s: %d [%s]" % (
+        translate(change.action), change.seq, _label(change))
 def _df_version_head(change):
-    return "%d" % (change.seq)
+    return "%s: %d" % (translate(change.action), change.seq)
 def _df_version_event(change):
-    return "%s: %d" % (_df_add_event(change), change.seq)
+    return "%s: %d [%s]" % (
+        translate(change.action), change.seq, _link_event(change))
 
 # !+LINKED_SUB_ITEMS_IN_AUDIT_DESCRIPTION(mr, may-2012) should the change 
 # instance for the type know how to generate the URL for the action/type?
@@ -278,15 +295,15 @@ class ChangeDataDescriptor(object):
     def columns(self):
         return [
             descriptor.user_name_column("user_id", _("user"), "user"),
-            column.GetterColumn(title="action date",
+            column.GetterColumn(title="date_active",
                 getter=lambda i,f: self.date_formatter.format(i.date_active)),
-            column.GetterColumn(title="action", 
-                getter=lambda i,f: "%s / %s" % (get_auditable_type_key(i), i.action)),
+            column.GetterColumn(title="object", 
+                getter=lambda i,f: get_auditable_type_key(i)),
             GetterColumn(title="description", 
                 getter=lambda i,f: format_description(i, self.head)),
             column.GetterColumn(title="note",
                 getter=lambda i,f: i.note and translate(i.note) or ""),
-            column.GetterColumn(title="audit date",
+            column.GetterColumn(title="date_audit",
                 getter=lambda i,f: self.date_formatter.format(i.date_audit)),
         ]
 
@@ -378,9 +395,8 @@ class AuditLogView(AuditLogMixin, browser.BungeniBrowserView):
     __call__ = ViewPageTemplateFile("templates/listing-view.pt")
     
     _page_title = "Change Log"
-    
     visible_column_names = [
-        "user", "action date", "action", "description", "note", "audit date"]
+        "user", "date_active", "object", "description", "note", "date_audit"]
     include_change_types = [ t for t in CHANGE_TYPES ]
     include_change_actions = [ a for a in CHANGE_ACTIONS ]
     
@@ -403,9 +419,9 @@ class TimeLineViewlet(AuditLogMixin, browser.BungeniItemsViewlet):
     
     render = ViewPageTemplateFile("templates/listing-viewlet.pt")
     
-    visible_column_names = ["action date", "description", "user"]
+    visible_column_names = ["object", "description", "user", "date_active"]
     include_change_types =  [ t for t in CHANGE_TYPES ]
-    include_change_actions = [ a for a in CHANGE_ACTIONS if not a == "modify" ]
+    include_change_actions = [ a for a in CHANGE_ACTIONS ] #if not a == "modify" ]
     
     def __init__(self,  context, request, view, manager):
         browser.BungeniItemsViewlet.__init__(self, context, request, view, manager)
