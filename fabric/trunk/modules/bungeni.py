@@ -990,15 +990,18 @@ class PloneTasks:
             abort("no release parameter specified in setup.ini")
         elif current_release["plone"] == "HEAD":
             self.tasks.src_checkout(current_release["plone"])
-            with cd(self.cfg.user_plone):            
-                with cd("parts/svneggs"):      
-                    run("svn up -rHEAD ./apkn.repository ./apkn.templates" \
-                            "./bungenicms.plonepas ./bungenicms.policy" \
-                            "./bungenicms.theme ./bungenicms.workspaces") 
-                with cd("parts/svnproducts"):
-                    run("svn up -rHEAD ./BungeniHelpCenter")            
+            with cd(self.cfg.user_plone):    
+                if os.path.exists(os.path.join(self.cfg.user_plone, "parts")):    
+                    with cd("parts/svneggs"):      
+                        run("svn up -rHEAD ./apkn.repository ./apkn.templates" \
+                                " ./bungenicms.plonepas ./bungenicms.policy" \
+                                " ./bungenicms.theme ./bungenicms.workspaces") 
+                    with cd("parts/svnproducts"):
+                        run("svn up -rHEAD ./BungeniHelpCenter")            
         else:
-            self.tasks.src_checkout(current_release["plone"])       
+            self.tasks.src_checkout(current_release["plone"])  
+        self.tasks.bootstrap(self.pycfg.python)
+        self.deploy_ini()
 
 
     def build(self):
@@ -1102,14 +1105,16 @@ class PloneTasks:
         elif current_release["plone"] == "HEAD":
             self.tasks.src_update(current_release["plone"])
             with cd(self.cfg.user_plone):
-                with cd("parts/svneggs"):      
-                    run("svn up -rHEAD ./apkn.repository ./apkn.templates " \
-                            "./bungenicms.plonepas ./bungenicms.policy " \
-                            "./bungenicms.theme ./bungenicms.workspaces")  
-                with cd("parts/svnproducts"):
-                    run("svn up -rHEAD ./BungeniHelpCenter")                                
+                if os.path.exists(os.path.join(self.cfg.user_plone, "parts")):
+                    with cd("parts/svneggs"):      
+                        run("svn up -rHEAD ./apkn.repository ./apkn.templates" \
+                                " ./bungenicms.plonepas ./bungenicms.policy" \
+                                " ./bungenicms.theme ./bungenicms.workspaces")  
+                    with cd("parts/svnproducts"):
+                        run("svn up -rHEAD ./BungeniHelpCenter")                                
         else:
-            self.tasks.src_update(current_release["plone"])             
+            self.tasks.src_update(current_release["plone"])
+             
 
 
 class PortalTasks:
