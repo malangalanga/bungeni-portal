@@ -189,16 +189,13 @@
             <hide modes="edit listing" />
         </field>
         <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="add view edit" />
-            <hide modes="listing" />
+            <show modes="view edit add listing" />
         </field>
         <field name="description" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="add view edit" />
-            <hide modes="listing" />
+            <show modes="view edit add listing" />
         </field>
         <field name="type_number" displayable="view listing" localizable="view listing">
-            <show modes="view" />
-            <hide modes="listing" />
+            <show modes="view listing" />
         </field>
         <field name="uri" displayable="view edit listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -352,34 +349,6 @@
         </field>
     </descriptor>
 
-    <descriptor name="Constituency">
-        <field name="language" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
-            <hide modes="listing" />
-        </field>
-        <field name="name" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
-        </field>
-    </descriptor>
-
-    <descriptor name="ConstituencyDetail">
-        <field name="date" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="population" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="voters" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-    </descriptor>
-
     <descriptor name="Country">
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -490,12 +459,10 @@
             <show modes="view edit add" />
         </field>
         <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add" />
-            <hide modes="listing" />
+            <show modes="view edit add listing" />
         </field>
         <field name="description" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add" />
-            <hide modes="listing" />
+            <show modes="view edit add listing" />
         </field>
         <field name="body" displayable="view edit add" localizable="view">
             <show modes="view" />
@@ -508,8 +475,7 @@
             <show modes="view edit listing" />
         </field>
         <field name="type_number" displayable="view listing" localizable="view listing">
-            <show modes="view" />
-            <hide modes="listing" />
+            <show modes="view listing" />
         </field>
         <field name="parliament_id" displayable="view listing" localizable="view listing">
             <hide modes="view listing" />
@@ -533,8 +499,7 @@
             <show modes="view listing" />
         </field>
         <field name="submission_date" displayable="view listing" localizable="view listing">
-            <show modes="view" />
-            <hide modes="listing" />
+            <show modes="view listing" />
         </field>
         <field name="timestamp" displayable="edit" localizable="edit">
             <show modes="edit" />
@@ -818,12 +783,10 @@
             <hide modes="edit listing" />
         </field>
         <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="add view edit" />
-            <hide modes="listing" />
+            <show modes="view edit add listing" />
         </field>
         <field name="description" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="add view edit" />
-            <hide modes="listing" />
+            <show modes="view edit add listing" />
         </field>
         <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
@@ -875,14 +838,7 @@
         <field name="status_date" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
         </field>
-        <field name="constituency_id" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="province_id" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add" />
-            <hide modes="listing" />
-        </field>
-        <field name="region_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="provenance" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
@@ -1074,16 +1030,6 @@
         </field>
     </descriptor>
 
-    <descriptor name="Province">
-        <field name="language" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
-            <hide modes="listing" />
-        </field>
-        <field name="province" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-    </descriptor>
-
     <descriptor name="Question">
         <field name="response_text" displayable="edit" />
         <field name="parliament_id" displayable="view listing" localizable="view listing">
@@ -1145,12 +1091,10 @@
             <hide modes="edit listing" />
         </field>
         <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="add view edit" />
-            <hide modes="listing" />
+            <show modes="view edit add listing" />
         </field>
         <field name="description" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="add view edit" />
-            <hide modes="listing" />
+            <show modes="view edit add listing" />
         </field>
         <field name="uri" displayable="view edit listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -1158,16 +1102,6 @@
         </field>
         <field name="timestamp" displayable="edit" localizable="edit">
             <show modes="edit" />
-        </field>
-    </descriptor>
-
-    <descriptor name="Region">
-        <field name="language" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
-            <hide modes="listing" />
-        </field>
-        <field name="region" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
         </field>
     </descriptor>
 
@@ -1310,12 +1244,10 @@
             <hide modes="edit listing" />
         </field>
         <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="add view edit" />
-            <hide modes="listing" />
+            <show modes="view edit add listing" />
         </field>
         <field name="description" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="add view edit" />
-            <hide modes="listing" />
+            <show modes="view edit add listing" />
         </field>
         <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
