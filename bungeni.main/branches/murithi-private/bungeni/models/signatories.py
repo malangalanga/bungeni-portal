@@ -17,6 +17,8 @@ from bungeni.utils.capi import capi
 
 log = __import__("logging").getLogger("bungeni.models.signatories")
 
+CONFIGURABLE_PARAMS = ("max_signatories", "min_signatories",)
+
 class SignatoryValidator(object):
     zope.interface.implements(interfaces.ISignatoryManager)
     
@@ -89,14 +91,28 @@ class SignatoryValidator(object):
         """
         return unicode(self.pi_instance.status) == u"redraft"
 
-def createManagerFactory(domain_class):
+def createManagerFactory(domain_class, **params):
     gsm = getGlobalSiteManager()
     manager_name = "%sSignatoryManager" % domain_class.__name__
     domain_iface = None
-    domain_iface = "I%s" % domain_class.__name__
+    iface_name = "I%s" % domain_class.__name__
+    domain_iface = getattr(interfaces, iface_name, None)
+    if domain_iface is None:
+        log.error("No such interface %s class %s", iface_name, domain_class)
+        log.error("Signatory Manager for class %s not created", domain_class)
+        return
+    if manager_name in globals().keys():
+        log.errror("Signatory manager named %s already exists", manager_name)
+        return
     globals()[manager_name] = type(manager_name, (SignatoryValidator,), {})
-    gsm.registerAdapter(globals()[manager_name], 
-        (getattr(interfaces, domain_iface),), 
-        interfaces.ISignatoryManager
-    )
+    manager = globals()[manager_name]
+    for config_name, config_value in params.iteritems():
+        assert (config_name in CONFIGURABLE_PARAMS), ("Check your signatory "
+            "feature configuration for %s. Only these parameters may be "
+            " configured %s" % (domain_class.__name__, CONFIGURABLE_PARAMS)
+        )
+        config_type = type(getattr(manager, config_name))
+        setattr(manager, config_name, config_type(config_value))
+
+    gsm.registerAdapter(manager, (domain_iface,), interfaces.ISignatoryManager)
 
