@@ -1,0 +1,34 @@
+<project xmlns:xdb="http://exist-db.org/ant" default="upload-exist-demo-data" name="eXist XQFramework">
+ 
+    <!-- this is where we set our exist-home, user, password and the place that we will load the docs -->
+    <property file="xmldb.properties"/>
+ 
+    <!-- this tells us where to find the key jar files relative to the ${exist-home} property -->
+    <path id="classpath.core">
+        <fileset dir="${exist-home}/lib/core">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement path="${exist-home}/exist.jar"/>
+        <pathelement path="${exist-home}/exist-optional.jar"/>
+    </path>
+    <typedef resource="org/exist/ant/antlib.xml" uri="http://exist-db.org/ant">
+        <classpath refid="classpath.core"/>
+    </typedef>
+ 
+    <!-- upload data -->
+    <target name="upload-exist-demo-data">
+        <echo message="Loading XQ Framework Demo data to eXist."/>
+        <xdb:store uri="${on-uri}" createcollection="true" createsubcollections="true" user="${user}" password="${password}">
+            <fileset dir="${exist-docs}/bungeni-xml">
+                <include name="*.xml"/>
+            </fileset>
+        </xdb:store>
+    </target>
+ 
+    <target name="show-properties">
+        <echo message="exist-home=${exist-home}"/>
+        <echo message="exist-docs=${exist-docs}"/>
+        <echo message="uri=${fw-uri}"/>
+    </target>
+
+</project>

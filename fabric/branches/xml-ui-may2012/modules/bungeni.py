@@ -199,11 +199,13 @@ class BungeniRelease:
         plone = self.cfg.get_config(release_name, "plone")
         portal = self.cfg.get_config(release_name, "portal")
         xmldb = self.cfg.get_config(release_name, "xmldb")
+        xmldb_data = self.cfg.get_config(release_name, "xmldb_data")
         return {
             "bungeni": bungeni,
             "plone": plone,
             "portal": portal,
-            "xmldb": xmldb
+            "xmldb": xmldb,
+            "xmldb_data": xmldb_data
             }
 
 
@@ -408,6 +410,8 @@ class BungeniConfigs:
         self.exist_download_command = self.get_download_command(self.exist_install_url)
         self.exist_download_file = self.utils.get_basename(self.exist_install_url)
         self.user_exist_build_path = self.user_build_root + "/exist"
+        self.exist_docs = self.apps_tmp + "/exist-docs"
+        self.exist_demo_data = "~/" + self.exist_docs + "/bungeni-xml"
         self.java_home = self.cfg.get_config("exist", "java_home")
         self.exist_port = self.cfg.get_config("exist", "http_port")
         self.exist_startup_mem = self.cfg.get_config("exist", "startup_mem")
@@ -419,7 +423,7 @@ class BungeniConfigs:
 
     def get_download_command(self, strURL):
         if strURL.startswith("http") or strURL.startswith("ftp"):
-            return "wget %(download_url)s" % {"download_url": strURL}
+            return "wget -c %(download_url)s" % {"download_url": strURL}
         else:
             return "cp %(file_path)s ." % {"file_path": strURL}
     
@@ -698,6 +702,25 @@ class SCM:
       else:
           print "Checkout out anonymously"
           cmd = "svn co http://%s -r%s %s" % (self.address, revision, 
+                  self.working_copy)
+          self.svn_perm()
+      run(cmd)
+
+    def export(self, revision):
+      """
+      Exports the source code anonymously with support for pegged releases
+      """
+
+      cmd = ""
+      if self.devmode == True:
+          print "Checking out in dev-mode with username = ", self.user
+          cmd = "svn --force export https://%s -r%s --username=%s --password=%s %s" \
+              % (self.address, revision, self.user, self.password,
+                 self.working_copy)
+          self.svn_perm()
+      else:
+          print "Checkout out anonymously"
+          cmd = "svn --force export http://%s -r%s %s" % (self.address, revision, 
                   self.working_copy)
           self.svn_perm()
       run(cmd)
@@ -1525,7 +1548,7 @@ class XmldbTasks:
         templates = Templates(self.cfg)
         xmldb_map = {
             "exist_home":self.cfg.user_exist,
-            "upload_from":"/home/undesa/" + self.cfg.apps_tmp + "/db",
+            "upload_from":"/home/undesa/" + self.cfg.exist_docs,
             "exist_admin":self.cfg.exist_setup_user,
             "exist_password": self.cfg.exist_setup_password,
             "exist_port":self.cfg.exist_port,
@@ -1541,16 +1564,40 @@ class XmldbTasks:
         shutil.copy2(templates.template_folder + "/" + ant_script_tmpl,
                 self.cfg.user_config + "/" + ant_setup_script)
 
+    def ant_demo_setup_config(self):
+        templates = Templates(self.cfg)
+        ant_script_tmpl = "xmldb_store_demo.xml.tmpl"
+        import shutil
+        ant_setup_script = templates.name_from_template(ant_script_tmpl)
+        shutil.copy2(templates.template_folder + "/" + ant_script_tmpl,
+                self.cfg.user_config + "/" + ant_setup_script)
+
     def download_fw(self):
         """
-        Checks out the eXist framework files from repository and removes .svn files.
+        Checks out the eXist framework files from repository and removes any __contents__.xml files.
+        """
+        run("mkdir -p %(exist_dir)s" % {"exist_dir":self.cfg.exist_docs})
+        current_release = BungeniRelease().get_release(self.cfg.release)
+        self.scm = SCM(self.cfg.development_build, self.cfg.exist_repo,self.cfg.svn_user, self.cfg.svn_password,self.cfg.exist_docs)
+        self.scm.export(current_release["xmldb"])
+        run("find " + self.cfg.exist_docs + " -name '__contents__.xml' | xargs rm -rf")
+
+    def setup_exist_demo_data(self):
+        """
+        Downloads the latest demo data as defined in the release.ini
+        Installation is basically just extracting the tar archive in the
+        .bungenitmp
         """
         current_release = BungeniRelease().get_release(self.cfg.release)
-        run("rm -rf " +self.cfg.apps_tmp + "/db")
-        self.scm = SCM(self.cfg.development_build, self.cfg.exist_repo,self.cfg.svn_user, self.cfg.svn_password,self.cfg.apps_tmp)
-        self.scm.checkout(current_release["xmldb"])
-        run("find " +self.cfg.apps_tmp + "/db -name '.svn' | xargs rm -rf")
-        run("find " +self.cfg.apps_tmp + "/db -name '__contents__.xml' | xargs rm -rf")
+        data_link = current_release["xmldb_data"]
+
+        run("mkdir -p %(exist_demo_data)s" %
+                       {"exist_demo_data":self.cfg.exist_demo_data})
+        demo_data_file = self.cfg.utils.get_basename(data_link)
+        with cd(self.cfg.exist_docs):
+            run(self.cfg.get_download_command(data_link))
+            run("tar --strip-components=1 -xvf %(demo_data_file)s -C %(exist_demo_data_dir)s" % 
+                            {"demo_data_file":demo_data_file,"exist_demo_data_dir":self.cfg.exist_demo_data})
 
     def ant_version(self):
         run(self.ant + " -version")    
@@ -1559,8 +1606,14 @@ class XmldbTasks:
         run(self.ant + " -buildfile " + buildfile)
 
     def ant_fw_install(self):
+        """stores framework files on eXist via ant."""
         with cd(self.cfg.user_config):
             self.ant_run("xmldb_store_fw.xml")
+
+    def ant_demo_install(self):
+        """stores demo data in eXist via ant."""
+        with cd(self.cfg.user_config):
+            self.ant_run("xmldb_store_demo.xml")
 
     def check_exist_state(self):
         from urllib2 import Request, urlopen, URLError, HTTPError
