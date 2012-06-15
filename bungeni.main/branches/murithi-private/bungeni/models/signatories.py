@@ -14,6 +14,15 @@ from zope.component import getGlobalSiteManager
 
 from bungeni.models import interfaces
 from bungeni.utils.capi import capi
+from bungeni.utils import register
+from bungeni.core.workflow.interfaces import IWorkflowController, IWorkflowTransitionEvent
+
+@register.handler(adapts=(interfaces.IFeatureSignatory, IWorkflowTransitionEvent))
+def doc_workflow(ob, event):
+    wfc = IWorkflowController(ob, None)
+    if wfc:
+        manager = interfaces.ISignatoryManager(ob)
+        manager.workflowActions(event)
 
 log = __import__("logging").getLogger("bungeni.models.signatories")
 
@@ -91,10 +100,18 @@ class SignatoryValidator(object):
         """
         return unicode(self.pi_instance.status) == u"redraft"
 
+    def workflowActions(self, event):
+        """Perform any workflow related actions on signatories and/or parent
+        """
+        pass
+
 def createManagerFactory(domain_class, **params):
     gsm = getGlobalSiteManager()
     manager_name = "%sSignatoryManager" % domain_class.__name__
     domain_iface = None
+    #!+TYPE_INFO(mb, Jun-2012) can't queryModelInterface or type info by the
+    # since workflow is being loaded at this time. Perhaps pass type_info
+    # when firing domain.configurable_domain in bungeni.core.workflows.adapters
     iface_name = "I%s" % domain_class.__name__
     domain_iface = getattr(interfaces, iface_name, None)
     if domain_iface is None:

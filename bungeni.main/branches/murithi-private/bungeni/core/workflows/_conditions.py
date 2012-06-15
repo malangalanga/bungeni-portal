@@ -180,13 +180,13 @@ def pi_has_signatories(context):
     validator = ISignatoryManager(context, None)
     if validator is not None:
         return validator.validateSignatories()
-    return False
+    return True
 
 def pi_signatories_check(context):
     validator = ISignatoryManager(context, None)
     if validator is not None:
         return validator.validateConsentedSignatories()
-    return False
+    return True
 
 def pi_signature_period_expired(context):
     """The document has been submitted"""
