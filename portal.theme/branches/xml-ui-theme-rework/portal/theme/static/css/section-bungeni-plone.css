@@ -1,0 +1,69 @@
+
+.section-bungeni- div#portal-breadcrumbs:empty {
+    display:none;
+}
+#content-wrapper {
+    margin-top:0;
+}
+    #content-wrapper #portal-siteactions {
+        margin:0;
+        padding:0;
+    }
+    #content h1.documentFirstHeading {
+        text-align:center;
+    }
+    #content .documentDescription, 
+    #content .description {
+        line-height: 1.5em !important;
+        margin: 0 0 0.5em !important;
+    }    
+    #content-core > p,
+    #content-core > dl,
+    #content-core > div {
+        padding:10px;
+    }
+        #content-core .tileItem, 
+        #content-core .item {
+            border-bottom: 1px solid #C1C1C0;
+            padding-top: 0.5em;
+            margin-top: 0.5em;
+        }
+        #content-core .blockitem {
+            margin-top: 1em;
+            background: url(../images/info_16.png) 2px 4px no-repeat;
+            padding-left: 23px;
+        }
+            #content-core .newsImageContainer {
+                float: right;
+                margin: 0 0 0.5em 1em;
+                width: 202px;
+            }
+                #content-core .newsImageContainer img, 
+                #content-core .tileImage {
+                    -webkit-border-bottom-right-radius: 5px;
+                    -webkit-border-bottom-left-radius: 5px;
+                    -moz-border-radius-bottomright: 5px;
+                    -moz-border-radius-bottomleft: 5px;
+                    border-bottom-right-radius: 5px;
+                    border-bottom-left-radius: 5px;
+                    -moz-box-shadow: 0 3px 7px rgba(0,0,0,.5);
+                    -webkit-box-shadow: 0 3px 7px rgba(0,0,0,.5);
+                    box-shadow: 0 3px 7px rgba(0,0,0,.5);                
+                }
+                #content-core .tileImage {
+                    float: right;
+                    margin: 0 0 0.5em 1em;
+                    border: 1px solid #C1C1C0;       
+                }    
+                #content-core .discreet {
+                    color: #7e7e7e;
+                    font-size: 90%;
+                    font-weight: normal;
+                }
+                
+           #content-core ul {
+                list-style-image: url(../images/bullet.png);
+                list-style-type: square;
+                margin: 0.5em 0 0 0.5em;
+                width:93%;
+           }
