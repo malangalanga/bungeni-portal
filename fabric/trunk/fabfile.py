@@ -471,6 +471,22 @@ def start_postgres():
     service = bungeni.Services()
     service.start_service("postgres")
 
+def start_exist(mode="ABORT_ON_ERROR"):
+    """
+    Start the eXist
+    """
+
+    service = bungeni.Services()
+    service.start_service("exist", mode)
+
+
+def stop_exist(mode="ABORT_ON_ERROR"):
+    """
+    Stop the eXist
+    """
+
+    service = bungeni.Services()
+    service.stop_service("exist", mode)
 
 def start_monitor():
     """
@@ -594,3 +610,47 @@ def translate_workflow_xml(default_lang="en"):
     tasks.translate_workflow_xml(default_lang)
 
 
+def exist_install():
+   """
+   Installs eXist, WARNING: Will overwrite any existing installation
+   """    
+   stop_exist("IGNORE_ERROR")
+   tasks = bungeni.XmldbTasks()
+   tasks.setup_exist()
+
+
+def exist_fw_install():
+    """
+    Installs Bungeni eXist framework, WARNING: Will overwrite any existing installation
+    """
+    start_exist("IGNORE_ERROR")
+    tasks = bungeni.XmldbTasks()
+    tasks.download_fw()
+    tasks.ant_prop_config()
+    tasks.ant_fw_setup_config()
+    tasks.ant_fw_install()
+
+def exist_load_demodata():
+    """
+    Loads demodata from the eXist repository
+    """
+    start_exist("IGNORE_ERROR")
+    tasks = bungeni.XmldbTasks()
+    tasks.setup_exist_demo_data()
+    tasks.ant_demo_setup_config()
+    tasks.ant_demo_install()
+
+def ant_version():
+    """
+    Get the Ant version used by eXist
+    """
+    tasks = bungeni.XmldbTasks()
+    tasks.ant_version()
+    
+    
+def ant_run(buildfile="build.xml"):
+    """
+    Run the Ant Script provided as the parameter
+    """
+    tasks = bungeni.XmldbTasks()
+    tasks.ant_run(buildfile)

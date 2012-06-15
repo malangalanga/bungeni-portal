@@ -75,3 +75,11 @@ stdout_logfile= %(user_logs)s/openoffice.log
 priority = 70
 redirect_stderr = true
 autostart = false
+
+[program:exist]
+command = %(java)s/bin/java -Xms%(exist_startup_mem)s -Xmx%(exist_max_mem)s -Dfile.encoding=UTF-8 -Djava.endorsed.dirs=%(user_exist)s/lib/endorsed -Dexist.home=%(user_exist)s -Djetty.port=%(exist_port)s -jar %(user_exist)s/start.jar jetty
+stdout_logfile = %(user_logs)s/exist.log
+priority = 40
+redirect_stderr = true
+stopsignal = INT
+autostart = false

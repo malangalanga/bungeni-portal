@@ -1,0 +1,49 @@
+<project xmlns:xdb="http://exist-db.org/ant" default="upload-exist-fw-app" name="eXist XQFramework">
+ 
+    <!-- this is where we set our exist-home, user, password and the place that we will load the docs -->
+    <property file="xmldb.properties"/>
+ 
+    <!-- this tells us where to find the key jar files relative to the ${exist-home} property -->
+    <path id="classpath.core">
+        <fileset dir="${exist-home}/lib/core">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement path="${exist-home}/exist.jar"/>
+        <pathelement path="${exist-home}/exist-optional.jar"/>
+    </path>
+    <typedef resource="org/exist/ant/antlib.xml" uri="http://exist-db.org/ant">
+        <classpath refid="classpath.core"/>
+    </typedef>
+ 
+    <!-- upload app -->
+    <target name="upload-exist-fw-app">
+        <echo message="Loading XQ Framework system to eXist."/>
+        <xdb:store uri="${fw-uri}" createcollection="true" createsubcollections="true" user="${user}" password="${password}">
+            <fileset dir="${exist-docs}/framework">
+                <include name="**/*.*"/>
+            </fileset>
+        </xdb:store>
+        
+        <echo message="Setting execute permission for main controller."/>
+        <xdb:chmod uri="${fw-uri}/bungeni" resource="controller.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        
+        <echo message="Loading index file for bungeni-collection to eXist."/>
+        <xdb:store uri="${sys-uri}/config/db/framework" createcollection="true" createsubcollections="true" user="${user}" password="${password}">
+            <fileset dir="${exist-docs}/system/config/db/framework">
+                <include name="*.xconf"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store uri="${sys-uri}/config/db/bungeni-xml" createcollection="true" createsubcollections="true" user="${user}" password="${password}">
+            <fileset dir="${exist-docs}/system/config/db/bungeni-xml">
+                <include name="*.xconf"/>
+            </fileset>
+        </xdb:store>
+    </target>
+ 
+    <target name="show-properties">
+        <echo message="exist-home=${exist-home}"/>
+        <echo message="exist-docs=${exist-docs}"/>
+        <echo message="uri=${fw-uri}"/>
+    </target>
+
+</project>

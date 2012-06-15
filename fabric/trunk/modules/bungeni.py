@@ -171,12 +171,12 @@ class BungeniConfigReader:
                 return self.config.get(section_name,
                         config_name).strip()
             else:
-                print "warning : section [", section_name, \
-                    "] does not have option name ", config_name, " !!!!"
+                #print "warning : section [", section_name, \
+                #    "] does not have option name ", config_name, " !!!!"
                 return ""
         else:
-            print "warning: section [", section_name, \
-                "] does not exist !!!"
+            #print "warning: section [", section_name, \
+            #    "] does not exist !!!"
             return ""
 
 
@@ -198,10 +198,14 @@ class BungeniRelease:
         bungeni = self.cfg.get_config(release_name, "bungeni")
         plone = self.cfg.get_config(release_name, "plone")
         portal = self.cfg.get_config(release_name, "portal")
+        xmldb = self.cfg.get_config(release_name, "xmldb")
+        xmldb_data = self.cfg.get_config(release_name, "xmldb_data")
         return {
             "bungeni": bungeni,
             "plone": plone,
-            "portal": portal
+            "portal": portal,
+            "xmldb": xmldb,
+            "xmldb_data": xmldb_data
             }
 
 
@@ -398,16 +402,30 @@ class BungeniConfigs:
                 "enabled_translations").split(":")
         self.translatable_packages = self.cfg.get_config("custom",
                 "translatable_packages").split(":")
-        self.country_theme = self.cfg.get_config('custom', 'country_theme')
+        self.country_theme = self.cfg.get_config("custom", "country_theme")
         self.theme_repo = self.cfg.get_config('custom', 'theme_repo')
         # supervisor
         self.supervisorconf = self.user_config + "/supervisord.conf"
-
+        # eXist installation folder
+        self.exist_install_url = self.cfg.get_config("exist", "download_url")
+        self.user_exist = self.user_install_root + "/exist"
+        self.exist_download_command = self.get_download_command(self.exist_install_url)
+        self.exist_download_file = self.utils.get_basename(self.exist_install_url)
+        self.user_exist_build_path = self.user_build_root + "/exist"
+        self.exist_docs = self.user_build_root + "/exist-docs"
+        self.exist_demo_data = self.exist_docs + "/bungeni-xml"
+        self.java_home = self.cfg.get_config("exist", "java_home")
+        self.exist_port = self.cfg.get_config("exist", "http_port")
+        self.exist_startup_mem = self.cfg.get_config("exist", "startup_mem")
+        self.exist_max_mem = self.cfg.get_config("exist", "max_mem")
+        self.exist_setup_user = self.cfg.get_config("exist", "setup_user")
+        self.exist_setup_password = self.cfg.get_config("exist", "setup_pass")
+        self.exist_repo = self.cfg.get_config("exist", "repo")
 
 
     def get_download_command(self, strURL):
         if strURL.startswith("http") or strURL.startswith("ftp"):
-            return "wget %(download_url)s" % {"download_url": strURL}
+            return "wget -c %(download_url)s" % {"download_url": strURL}
         else:
             return "cp %(file_path)s ." % {"file_path": strURL}
     
@@ -622,6 +640,11 @@ class Presetup:
             "bungeni_ini": self.cfg.bungeni_deploy_ini,
             "plone_ini": self.cfg.plone_deploy_ini,
             "static_ini": self.cfg.portal_static_ini,
+            "java": self.cfg.java_home,
+            "user_exist": self.cfg.user_exist,
+            "exist_port": self.cfg.exist_port,
+            "exist_max_mem": self.cfg.exist_max_mem,
+            "exist_startup_mem": self.cfg.exist_startup_mem,
             }
         run("mkdir -p %s" % self.cfg.user_config)
         run("mkdir -p %s" % self.cfg.user_logs)
@@ -685,6 +708,25 @@ class SCM:
           self.svn_perm()
       run(cmd)
 
+    def export(self, revision):
+      """
+      Exports the source code anonymously with support for pegged releases
+      """
+
+      cmd = ""
+      if self.devmode == True:
+          print "Checking out in dev-mode with username = ", self.user
+          cmd = "svn --force export https://%s -r%s --username=%s --password=%s %s" \
+              % (self.address, revision, self.user, self.password,
+                 self.working_copy)
+          self.svn_perm()
+      else:
+          print "Checkout out anonymously"
+          cmd = "svn --force export http://%s -r%s %s" % (self.address, revision, 
+                  self.working_copy)
+          self.svn_perm()
+      run(cmd)
+
 
     def update(self, revision):
        """
@@ -735,7 +777,14 @@ class Templates:
         ftmpl = open("%s/%s" % (self.template_folder, template_file))
         fcontents = ftmpl.read()
         return fcontents % template_map
+  
 
+    def name_from_template(self, file_name):
+        from posixpath import basename
+        print "generating from template file ", file_name
+        return basename(file_name)[0:-5]
+
+    
     def new_file(
         self,
         template_file,
@@ -743,9 +792,7 @@ class Templates:
         output_dir,
         ):
         contents = self.template(template_file, template_map)
-        from posixpath import basename
-        print "generating from template file ", template_file
-        new_file = basename(template_file).rstrip(".tmpl")
+        new_file = self.name_from_template(template_file)
         print "new file from template going to be created ", new_file
         fnewfile = open("%(out_dir)s/%(file.conf)s" % {"out_dir"
                         : output_dir, "file.conf": new_file}, "w")
@@ -1509,7 +1556,159 @@ class BungeniTasks:
             run("./bin/admin-passwd < .pass.txt")
             run("rm .pass.txt")
 
+class XmldbTasks:
+    """
+    Tasks for installing eXist XML db
+    """
 
+    def __init__(self):
+        self.cfg = BungeniConfigs()
+        ## ant related config below
+        ## use the ant in the exist installation
+        self.ant_jars = ["ant.jar", "ant-launcher.jar"]
+        self.ant_home = self.cfg.user_exist + "/tools/ant/lib"
+        ant_jar_paths = []        
+        for jar in self.ant_jars:
+            ant_jar_paths.append(self.ant_home + "/" +  jar)          
+
+        self.ant = ("CLASSPATH=%(classpath)s %(java)s/bin/java "
+                    "-Dant.home=%(ant_home)s org.apache.tools.ant.launch.Launcher" % \
+                    {
+                     "classpath": ":".join(ant_jar_paths),
+                     "ant_home" : self.ant_home,
+                     "java" : self.cfg.java_home
+                    })
+    
+    def setup_exist(self):
+        """
+        Sets up eXist by downloading it from the cache and installing it 
+        Installation is bascially just extracting the tar archive
+        We dont use the eXist provided startup scripts as using that forks
+        the java process, which doesnt let it be stopped via supervisor.
+        Instead we invoke eXist by calling Java directly and running it 
+        in the supervisord foreground (which also allows us to catch java 
+        logging).
+        """
+        run("mkdir -p %(exist_build_path)s" %
+                       {"exist_build_path":self.cfg.user_exist_build_path})
+        run("rm -rf %(exist_build_path)s/*.*" % 
+                       {"exist_build_path":self.cfg.user_exist_build_path})
+        with cd(self.cfg.user_exist_build_path):
+            run(self.cfg.exist_download_command)
+            run("mkdir -p %(user_exist)s" % {"user_exist":self.cfg.user_exist})
+            run("tar --strip-components=1 -xvf %(exist_download_file)s -C %(user_exist)s" %
+                         {"user_exist":self.cfg.user_exist,
+                          "exist_download_file":self.cfg.exist_download_file})
+
+    def ant_prop_config(self):
+        """
+        Generate the ant properties file
+        """
+        templates = Templates(self.cfg)
+        xmldb_map = {
+            "exist_home":self.cfg.user_exist,
+            "upload_from":self.cfg.exist_docs,
+            "exist_admin":self.cfg.exist_setup_user,
+            "exist_password": self.cfg.exist_setup_password,
+            "exist_port":self.cfg.exist_port,
+        }
+        templates.new_file("xmldb.properties.tmpl", xmldb_map, self.cfg.user_config)
+                
+    def ant_fw_setup_config(self):
+        """
+        Generate the ant script to install the XMLUI framework in eXist
+        """
+        templates = Templates(self.cfg)
+        ant_script_tmpl = "xmldb_store_fw.xml.tmpl"
+        import shutil
+        ant_setup_script = templates.name_from_template(ant_script_tmpl)
+        shutil.copy2(templates.template_folder + "/" + ant_script_tmpl,
+                self.cfg.user_config + "/" + ant_setup_script)
+
+    def ant_demo_setup_config(self):
+        """
+        Generate the ant script to install the XML dataset in eXist
+        """
+        templates = Templates(self.cfg)
+        ant_script_tmpl = "xmldb_store_demo.xml.tmpl"
+        import shutil
+        ant_setup_script = templates.name_from_template(ant_script_tmpl)
+        shutil.copy2(templates.template_folder + "/" + ant_script_tmpl,
+                self.cfg.user_config + "/" + ant_setup_script)
+
+    def download_fw(self):
+        """
+        Checks out the eXist framework files from repository and 
+        removes any __contents__.xml files.
+        """
+        run("mkdir -p %(exist_dir)s" % {"exist_dir":self.cfg.exist_docs})
+        current_release = BungeniRelease().get_release(self.cfg.release)
+        self.scm = SCM(
+            self.cfg.development_build, 
+            self.cfg.exist_repo,
+            self.cfg.svn_user, 
+            self.cfg.svn_password,
+            self.cfg.exist_docs
+        )
+        self.scm.export(current_release["xmldb"])
+        run("find %(exist_docs)s -name '__contents__.xml' | xargs rm -rf" %
+                {"exist_docs": self.cfg.exist_docs}) 
+
+    def setup_exist_demo_data(self):
+        """
+        Downloads the latest demo data as defined in the release.ini
+        Installation is basically just extracting the tar archive in the
+        .bungenitmp
+        """
+        current_release = BungeniRelease().get_release(self.cfg.release)
+        data_link = current_release["xmldb_data"]
+
+        run("mkdir -p %(exist_demo_data)s" %
+                       {"exist_demo_data":self.cfg.exist_demo_data})
+        demo_data_file = self.cfg.utils.get_basename(data_link)
+        with cd(self.cfg.exist_docs):
+            run(self.cfg.get_download_command(data_link))
+            run("tar --strip-components=1 -xvf %(demo_data_file)s -C %(exist_demo_data_dir)s" % 
+                            {"demo_data_file":demo_data_file,"exist_demo_data_dir":self.cfg.exist_demo_data})
+
+    def ant_version(self):
+        """
+        Prints the current ant version on the stdout
+        """
+        run(self.ant + " -version")    
+
+    def ant_run(self, buildfile):
+        """
+        Runs the ant script provided as the input parameter
+        """
+        run(self.ant + " -buildfile " + buildfile)
+
+    def ant_fw_install(self):
+        """
+        Stores framework files on eXist via ant.
+        """
+        with cd(self.cfg.user_config):
+            self.ant_run("xmldb_store_fw.xml")
+
+    def ant_demo_install(self):
+        """
+        Stores demo data in eXist via ant.
+        """
+        with cd(self.cfg.user_config):
+            self.ant_run("xmldb_store_demo.xml")
+    
+    """
+    def check_exist_state(self):
+        from urllib2 import Request, urlopen, URLError, HTTPError
+        try:
+            connection = urlopen("http://localhost:8088/exist/xmlrpc")
+            print connection.getcode()
+            connection.close()
+        except HTTPError, e:
+            print e.getcode()
+        except URLError, e:
+            print e.reason
+    """
 
 class CustomTasks:
     
@@ -1611,4 +1810,6 @@ class CustomTasks:
         print green("Writing XML with text translations")
         f_wf_xml.close()
         f_wf_xml = open(wf_xml_file, "w")
-        f_wf_xml.write(str_repl_xml.encode('UTF-8'))                                             
+        f_wf_xml.write(str_repl_xml.encode('UTF-8'))
+
+                                        
