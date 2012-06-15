@@ -410,8 +410,8 @@ class BungeniConfigs:
         self.exist_download_command = self.get_download_command(self.exist_install_url)
         self.exist_download_file = self.utils.get_basename(self.exist_install_url)
         self.user_exist_build_path = self.user_build_root + "/exist"
-        self.exist_docs = self.apps_tmp + "/exist-docs"
-        self.exist_demo_data = "~/" + self.exist_docs + "/bungeni-xml"
+        self.exist_docs = self.user_build_root + "/exist-docs"
+        self.exist_demo_data = self.exist_docs + "/bungeni-xml"
         self.java_home = self.cfg.get_config("exist", "java_home")
         self.exist_port = self.cfg.get_config("exist", "http_port")
         self.exist_startup_mem = self.cfg.get_config("exist", "startup_mem")
@@ -1548,7 +1548,7 @@ class XmldbTasks:
         templates = Templates(self.cfg)
         xmldb_map = {
             "exist_home":self.cfg.user_exist,
-            "upload_from":"/home/undesa/" + self.cfg.exist_docs,
+            "upload_from":self.cfg.exist_docs,
             "exist_admin":self.cfg.exist_setup_user,
             "exist_password": self.cfg.exist_setup_password,
             "exist_port":self.cfg.exist_port,
