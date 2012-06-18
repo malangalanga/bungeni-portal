@@ -423,7 +423,17 @@ class ISignatoryManager(interface.Interface):
     def expireSignatures():
         """Should pending signatures be archived
         """
-
+    
+    def updateSignatories():
+        """Fire any workflow transitions within current state.
+        This should update all signatures depending on parent document state.
+        """
+    
+    def updateRoles():
+        """Execute any role changes based on changes to parent document"""
+        
+    def workflowActions():
+        """Fire off any changes after workflow change on parent document"""
 
 class IItemScheduleCategory(interface.Interface):
     pass

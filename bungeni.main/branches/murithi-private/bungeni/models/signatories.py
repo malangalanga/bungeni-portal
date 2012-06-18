@@ -7,26 +7,59 @@
 $Id$
 """
 
+log = __import__("logging").getLogger("bungeni.models.signatories")
+
 import zope.component
 import zope.interface
+import zope.event
+import zope.lifecycleevent
 from zope.security.proxy import removeSecurityProxy
+from zope.securitypolicy.interfaces import IPrincipalRoleMap
 from zope.component import getGlobalSiteManager
 
+from bungeni.alchemist import Session
 from bungeni.models import interfaces
-from bungeni.utils.capi import capi
 from bungeni.utils import register
 from bungeni.core.workflow.interfaces import IWorkflowController, IWorkflowTransitionEvent
+
+CONFIGURABLE_PARAMS = ("max_signatories", "min_signatories",)
+OWNER_ROLE = "bungeni.Owner"
+SIGNATORY_ROLE = "bungeni.Signatory"
+SIGNATORIES_REJECT_STATES = [u"rejected", u"withdrawn"]
 
 @register.handler(adapts=(interfaces.IFeatureSignatory, IWorkflowTransitionEvent))
 def doc_workflow(ob, event):
     wfc = IWorkflowController(ob, None)
     if wfc:
         manager = interfaces.ISignatoryManager(ob)
-        manager.workflowActions(event)
+        manager.workflowActions()
 
-log = __import__("logging").getLogger("bungeni.models.signatories")
+@register.handler(adapts=(interfaces.ISignatory, 
+    zope.lifecycleevent.interfaces.IObjectCreatedEvent))
+def signatory_created(ob, event):
+    if interfaces.ISignatoryManager(ob.head).documentSubmitted():
+        IPrincipalRoleMap(ob).assignRoleToPrincipal(OWNER_ROLE, 
+            ob.owner.login
+        )
+        IPrincipalRoleMap(ob.head).assignRoleToPrincipal(SIGNATORY_ROLE,
+            ob.owner.login
+        )
 
-CONFIGURABLE_PARAMS = ("max_signatories", "min_signatories",)
+
+def make_owner_signatory(context):
+    """Make document owner a default signatory when document is submitted to
+    signatories for consent.
+    """
+    signatories = context.signatories
+    if context.owner_id not in [sgn.user_id for sgn in signatories._query]:
+        session = Session()
+        signatory = signatories._class()
+        signatory.user_id = context.owner_id
+        signatory.head_id = context.doc_id
+        session.add(signatory)
+        session.flush()
+        zope.event.notify(zope.lifecycleevent.ObjectCreatedEvent(signatory))
+
 
 class SignatoryValidator(object):
     zope.interface.implements(interfaces.ISignatoryManager)
@@ -34,9 +67,9 @@ class SignatoryValidator(object):
     max_signatories = 0
     min_signatories = 0
     
-    def __init__(self, pi_instance):
-        self.pi_instance = pi_instance
-        self.object_type = pi_instance.type
+    def __init__(self, context):
+        self.context = context
+        self.object_type = context.type
 
     @property
     def signatories(self):
@@ -45,15 +78,15 @@ class SignatoryValidator(object):
         #!+SECURITY(mb, aug-2011) remove proxy to allow access to 
         # signature status. View permission only checked on attribute access
         # from container `values` listing
-        if hasattr(self.pi_instance, "signatories"):
+        if hasattr(self.context, "signatories"):
             return removeSecurityProxy(
-               self.pi_instance.signatories.values()
+               self.context.signatories.values()
             )
-            return self.pi_instance.signatories.values()
+            return self.context.signatories.values()
         else:
             log.warning("The object  %s has no signatories. Returning empty"
                 " list of signatories.", 
-                self.pi_instance.__str__()
+                self.context.__str__()
             )
             return []
 
@@ -90,21 +123,51 @@ class SignatoryValidator(object):
         ) and self.documentSubmitted()
 
     def expireSignatures(self):
-        return unicode(self.pi_instance.status) == u"submitted"
+        return unicode(self.context.status) == u"submitted"
 
     def documentSubmitted(self):
-        return unicode(self.pi_instance.status) == u"submitted_signatories"
+        return unicode(self.context.status) == u"submitted_signatories"
 
     def documentInDraft(self):
         """Check that a document is being redrafted
         """
-        return unicode(self.pi_instance.status) == u"redraft"
+        return unicode(self.context.status) == u"redraft"
 
-    def workflowActions(self, event):
+    def updateSignatories(self):
+        for signatory in self.context.signatories.values():
+            wfc = IWorkflowController(signatory)
+            wfc.fireAutomatic()
+
+    def setupRoles(self):
+        if self.documentSubmitted():
+            make_owner_signatory(self.context)
+            for signatory in self.context.signatories.values():
+                login_id = signatory.owner.login
+                IPrincipalRoleMap(self.context).assignRoleToPrincipal(
+                    SIGNATORY_ROLE, login_id
+                )
+                IPrincipalRoleMap(signatory).assignRoleToPrincipal(
+                    OWNER_ROLE, login_id
+                )
+        elif self.documentInDraft():
+            for signatory in self.context.signatories.values():
+                IPrincipalRoleMap(self.context).unsetRoleForPrincipal(
+                    SIGNATORY_ROLE, signatory.owner.login
+                )
+        elif self.expireSignatures():
+            for signatory in self.context.signatories.values():
+                wfc = IWorkflowController(signatory)
+                if wfc.state_controller.get_status() in SIGNATORIES_REJECT_STATES:
+                    IPrincipalRoleMap(self.context).unsetRoleForPrincipal(
+                        SIGNATORY_ROLE, signatory.owner.login
+                    )
+                
+    def workflowActions(self):
         """Perform any workflow related actions on signatories and/or parent
         """
-        pass
-
+        self.setupRoles()
+        self.updateSignatories()
+        
 def createManagerFactory(domain_class, **params):
     gsm = getGlobalSiteManager()
     manager_name = "%sSignatoryManager" % domain_class.__name__

@@ -13,7 +13,6 @@ $Id$
 log = __import__("logging").getLogger("bungeni.core.workflows._conditions")
 
 from zope.security import checkPermission
-from bungeni.alchemist import Session
 from bungeni.models.interfaces import ISignatoryManager
 from bungeni.models import domain
 from bungeni.models import utils as model_utils
