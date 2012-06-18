@@ -1152,7 +1152,7 @@
         action="audit-log"
         title="Audit log"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
-        permission="bungeni.auditlog.View"
+        permission="bungeni.ui.audit.View"
         order="22"
     />
     <browser:menuItem menu="context_actions"
@@ -1434,6 +1434,7 @@
         action="./schedule"
         title="Committee schedule"
         order="40"
+        permission="zope.Public"
     />
     <browser:menuItem menu="context_actions"
         for="bungeni.core.interfaces.ISchedulingContext"

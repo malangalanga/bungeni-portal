@@ -40,7 +40,7 @@
     />
     <browser:page name="index"
         for="bungeni.models.interfaces.IBungeniApplication"
-        permission="bungeni.workspace.View"
+        permission="bungeni.ui.workspace.View"
         layer=".interfaces.IBungeniAuthenticatedSkin"
         class=".redirect.WorkspaceRootRedirect"
     />
@@ -245,13 +245,6 @@
      name="schedule"
      class=".calendar.browser.CalendarView"
     />
-  <browser:page
-     for="bungeni.models.interfaces.ISittingContainer"
-     permission="zope.View"
-     name="index"
-     class=".calendar.browser.CalendarView"
-     layer=".interfaces.IBusinessSectionLayer"
-    />
     <browser:page
         name="index"
         for="bungeni.core.interfaces.IWorkspaceScheduling"
@@ -382,7 +375,7 @@
         for="bungeni.core.interfaces.IWorkspaceContainer"
         class=".workspace.WorkspaceContainerListing"
         layer="bungeni.ui.interfaces.IBungeniSkin"
-        permission="bungeni.workspace.View"
+        permission="bungeni.ui.workspace.View"
     />
     
     <!-- Workspace Add views -->

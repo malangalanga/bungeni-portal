@@ -912,17 +912,16 @@ class MpDescriptor(GroupMembershipDescriptor):
         title_field="full_name",
         value_field="party_id"
     )
-
     fields.extend([
-        Field(name="provenance", # [user]
+        Field(name="representation", # [user]
             modes="view edit add listing",
             localizable=[ 
                 show("view edit add"),
                 hide("listing"),
             ],
-            property=VocabularyTextField(title=_("Provenance"),
-                description=_("Select Provenance"),
-                vocabulary=vocabulary.provenance,
+            property=VocabularyTextField(title=_("Representation"),
+                description=_("Select Representation"),
+                vocabulary=vocabulary.representation,
                 required=False,
             ),
             edit_widget=widgets.TreeVocabularyWidget,
