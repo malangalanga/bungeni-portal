@@ -10,7 +10,9 @@ $Id$
 """
 log = __import__("logging").getLogger("bungeni.models.domain")
 
-import md5, random, string
+import md5
+import random
+import string
 import datetime
 
 from zope import interface, location
@@ -228,6 +230,11 @@ def feature_address(kls, **params):
     interface.classImplements(kls, interfaces.IFeatureAddress)
     return kls
 
+def feature_workspace(kls):
+    """Decorator for domain types to support "workspace" feature.
+    """
+    interface.classImplements(kls, interfaces.IFeatureWorkspace)
+    return kls
 
 def configurable_domain(kls, workflow):
     """Executed on adapters.load_workflow().
@@ -459,27 +466,16 @@ class MemberOfParliament(GroupMembership):
     addresses = one2manyindirect("addresses", 
         "bungeni.models.domain.UserAddressContainer", "user_id")
 
-class PoliticalEntity(Group):
-    """Base class for political parties and political groups.
-    """
-    interface.implements(interfaces.ITranslatable)
-    
-class PoliticalParty(PoliticalEntity):
-    """A political party (ouside the parliament).
-    """
-    partymembers = one2many("partymembers",
-        "bungeni.models.domain.PartyMemberContainer", "group_id")
-    title_types = one2many("title_types",
-        "bungeni.models.domain.TitleTypeContainer", "group_id")
-class PoliticalGroup(PoliticalEntity):
+class PoliticalGroup(Group):
     """A political group in a parliament.
     """
-    partymembers = one2many("partymembers",
-        "bungeni.models.domain.PartyMemberContainer", "group_id")
+    interface.implements(interfaces.ITranslatable)
+    members = one2many("members",
+        "bungeni.models.domain.PolitcalGroupMemberContainer", "group_id")
     title_types = one2many("title_types",
         "bungeni.models.domain.TitleTypeContainer", "group_id")
-class PartyMember(GroupMembership):
-    """Member of a political party or group, defined by its group membership.
+class PoliticalGroupMember(GroupMembership):
+    """Member of a political group, defined by its group membership.
     """
     titles = one2many("titles",
         "bungeni.models.domain.MemberTitleContainer", "membership_id")
@@ -649,7 +645,8 @@ class vp(object):
             self.language = language or "en" # or get_default_language()
 
 #
-
+#!+(miano, jun 2012) dynamic_features are defined for doc then repeated for
+# every type ?!?
 class Doc(Entity):
     """Base class for a workflowed parliamentary document.
     """
@@ -881,7 +878,8 @@ class DocVersion(Version):
 class AgendaItem(AdmissibleMixin, Doc):
     """Generic Agenda Item that can be scheduled on a sitting.
     """
-    dynamic_features = ["audit", "version", "attachment", "schedule"]
+    dynamic_features = ["audit", "version", "attachment", "schedule",
+                        "workspace"]
     interface.implements(
         interfaces.IBungeniParliamentaryContent,
     )
@@ -897,7 +895,7 @@ class Bill(Doc):
     """Bill domain type.
     """
     dynamic_features = ["audit", "version", "attachment", "event", 
-        "signatory", "schedule"]
+        "signatory", "schedule", "workspace"]
     interface.implements(
         interfaces.IBungeniParliamentaryContent,
     )
@@ -933,7 +931,7 @@ class Motion(AdmissibleMixin, Doc):
     """Motion domain type.
     """
     dynamic_features = ["audit", "version", "attachment", "event", 
-        "signatory", "schedule"]
+        "signatory", "schedule", "workspace"]
     interface.implements(
         interfaces.IBungeniParliamentaryContent,
     )
@@ -953,7 +951,7 @@ class Question(AdmissibleMixin, Doc):
     """Question domain type.
     """
     dynamic_features = ["audit", "version", "attachment", "event", 
-        "signatory", "schedule"]
+        "signatory", "schedule", "workspace"]
     interface.implements(
         interfaces.IBungeniParliamentaryContent,
     )
@@ -1006,7 +1004,7 @@ class TabledDocument(AdmissibleMixin, Doc):
     It must be possible to schedule a tabled document for a sitting.
     """
     dynamic_features = ["audit", "version", "attachment", "event", 
-        "signatory", "schedule"]
+        "signatory", "schedule", "workspace"]
     interface.implements(
         interfaces.IBungeniParliamentaryContent,
     )
@@ -1109,10 +1107,11 @@ class ParliamentSession(Entity):
     """
     interface.implements(interfaces.ITranslatable)
 
-
+''' !+SUBSCRIPTIONS(mr, jun-2012) unused
 class ObjectSubscriptions(object):
     """
     """
+'''
 
 # ###############
 

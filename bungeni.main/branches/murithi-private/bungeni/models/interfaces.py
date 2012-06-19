@@ -70,9 +70,6 @@ class ICommittee(IBungeniGroup):
 class IPoliticalGroup(IBungeniGroup):
     """Marker interface for political group (inside parliament).
     """
-class IPoliticalParty(IBungeniGroup):
-    """Marker interface for political party (outside parliament).
-    """
 
 class IOffice(IBungeniGroup):
     """Marker interface for a parliamentary office.
@@ -88,7 +85,7 @@ class IBungeniGroupMembership(interface.Interface):
 class IMemberOfParliament(IBungeniGroupMembership):
     pass
 
-class IPartyMember(IBungeniGroupMembership):
+class IPoliticalGroupMember(IBungeniGroupMembership):
     pass
 
 class IMinister(IBungeniGroupMembership):
@@ -172,7 +169,6 @@ class IQuestion(IBungeniContent):
 # !+IITEMVersion
 #class IQuestionVersion(IQuestion): pass
 #!+OBSOLETE_VERSIONING class IQuestionVersionContainer(IVersionContainer): pass
-
 
 class IBill(IBungeniContent):
     """Parliamentary Bill.
@@ -479,7 +475,9 @@ class IFeatureSchedule(IFeature):
 class IFeatureAddress(IFeature):
     """Marks support for "address" feature.
     """
-
+class IFeatureWorkspace(IFeature):
+    """Marks support for "workspace" feature.
+    """
 #
 
 ''' !+DATERANGEFILTER(mr, dec-2010) disabled until intention is understood
