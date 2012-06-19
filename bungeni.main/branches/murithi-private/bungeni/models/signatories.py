@@ -22,10 +22,13 @@ from bungeni.models import interfaces
 from bungeni.utils import register
 from bungeni.core.workflow.interfaces import IWorkflowController, IWorkflowTransitionEvent
 
-CONFIGURABLE_PARAMS = ("max_signatories", "min_signatories",)
+CONFIGURABLE_PARAMS = ("max_signatories", "min_signatories", "submitted_states",
+    "draft_states", "expire_states", "open_states"
+)
 OWNER_ROLE = "bungeni.Owner"
 SIGNATORY_ROLE = "bungeni.Signatory"
 SIGNATORIES_REJECT_STATES = [u"rejected", u"withdrawn"]
+SIGNATORY_CONSENTED_STATE = [u"consented"]
 
 @register.handler(adapts=(interfaces.IFeatureSignatory, IWorkflowTransitionEvent))
 def doc_workflow(ob, event):
@@ -66,10 +69,16 @@ class SignatoryValidator(object):
     
     max_signatories = 0
     min_signatories = 0
+    submitted_states = ("submitted_signatories",)
+    draft_states = ("draft", "redraft",)
+    expire_states = ("submitted_signatories",)
+    open_states = ()
     
     def __init__(self, context):
         self.context = context
         self.object_type = context.type
+        self.wf_status = IWorkflowController(context
+            ).state_controller.get_status()
 
     @property
     def signatories(self):
@@ -79,10 +88,7 @@ class SignatoryValidator(object):
         # signature status. View permission only checked on attribute access
         # from container `values` listing
         if hasattr(self.context, "signatories"):
-            return removeSecurityProxy(
-               self.context.signatories.values()
-            )
-            return self.context.signatories.values()
+            return removeSecurityProxy(self.context.signatories.values())
         else:
             log.warning("The object  %s has no signatories. Returning empty"
                 " list of signatories.", 
@@ -106,8 +112,10 @@ class SignatoryValidator(object):
     def validateSignatories(self):
         return self.signatories_count > 0
 
-    def consentedSignatories(self, status=u"consented"):
-        return len(filter(lambda cs:cs.status==u"consented", self.signatories))
+    def consentedSignatories(self):
+        return len(filter(lambda cs:cs.status==SIGNATORY_CONSENTED_STATE, 
+            self.signatories
+        ))
     
     def validateConsentedSignatories(self):
         return (
@@ -123,25 +131,25 @@ class SignatoryValidator(object):
         ) and self.documentSubmitted()
 
     def expireSignatures(self):
-        return unicode(self.context.status) == u"submitted"
+        return self.wf_status in self.expire_states
 
     def documentSubmitted(self):
-        return unicode(self.context.status) == u"submitted_signatories"
+        return self.wf_status in self.submitted_states
 
     def documentInDraft(self):
         """Check that a document is being redrafted
         """
-        return unicode(self.context.status) == u"redraft"
+        return self.wf_status == self.draft_states
 
     def updateSignatories(self):
-        for signatory in self.context.signatories.values():
+        for signatory in self.signatories:
             wfc = IWorkflowController(signatory)
             wfc.fireAutomatic()
 
     def setupRoles(self):
         if self.documentSubmitted():
             make_owner_signatory(self.context)
-            for signatory in self.context.signatories.values():
+            for signatory in self.signatories:
                 login_id = signatory.owner.login
                 IPrincipalRoleMap(self.context).assignRoleToPrincipal(
                     SIGNATORY_ROLE, login_id
@@ -150,12 +158,12 @@ class SignatoryValidator(object):
                     OWNER_ROLE, login_id
                 )
         elif self.documentInDraft():
-            for signatory in self.context.signatories.values():
+            for signatory in self.signatories:
                 IPrincipalRoleMap(self.context).unsetRoleForPrincipal(
                     SIGNATORY_ROLE, signatory.owner.login
                 )
         elif self.expireSignatures():
-            for signatory in self.context.signatories.values():
+            for signatory in self.signatories:
                 wfc = IWorkflowController(signatory)
                 if wfc.state_controller.get_status() in SIGNATORIES_REJECT_STATES:
                     IPrincipalRoleMap(self.context).unsetRoleForPrincipal(
@@ -172,6 +180,7 @@ def createManagerFactory(domain_class, **params):
     gsm = getGlobalSiteManager()
     manager_name = "%sSignatoryManager" % domain_class.__name__
     domain_iface = None
+    #!+TIMING
     #!+TYPE_INFO(mb, Jun-2012) can't queryModelInterface or type info by the
     # since workflow is being loaded at this time. Perhaps pass type_info
     # when firing domain.configurable_domain in bungeni.core.workflows.adapters
@@ -192,7 +201,12 @@ def createManagerFactory(domain_class, **params):
             " configured %s" % (domain_class.__name__, CONFIGURABLE_PARAMS)
         )
         config_type = type(getattr(manager, config_name))
+        if config_type in (tuple, list):
+            config_value = map(str.strip, config_value.split(","))
         setattr(manager, config_name, config_type(config_value))
+    assert (set.intersection(set(manager.submitted_states), 
+        set(manager.draft_states), set(manager.expire_states))==set()
+    ), "draft, submitted and expired states must be distinct lists"
 
     gsm.registerAdapter(manager, (domain_iface,), interfaces.ISignatoryManager)
 
