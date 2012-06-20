@@ -41,3 +41,5 @@ check_auto_reload_localization = 5
 # default number of items in listings
 default_number_of_listing_items = 100
 
+# number of seconds in between workspace tab count refresh
+workspace_tab_count_cache_refresh_time = 120
