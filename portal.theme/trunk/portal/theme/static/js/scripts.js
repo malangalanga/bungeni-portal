@@ -131,4 +131,73 @@ $(document).ready(function(){
         var firstTD = $(this).children('td:first');
         firstTD.css('text-align', 'left');
     });
+    
+    //workspace splitter
+    if($(".template-workspace")[0]) {
+        makeSplitter();
+    }
 });
+
+function makeSplitter()
+{
+    $("#ws-splitter").splitter({
+	    type: "v",
+	    outline: true,
+	    sizeLeft: 150,
+	    minLeft: 120,
+	    minRight: 100,
+	    maxLeft: 165,
+	    resizeToWidth: true,
+	    dock: "left",
+	    dockSpeed: 200,
+	    cookie: "docksplitter",
+	    dockKey: 'Z',	// Alt-Shift-Z in FF/IE
+	    accessKey: 'I'	// Alt-Shift-I in FF/IE
+    });
+}
+
+/* lang selector */
+$(document).ready(function() {
+
+	// --- language dropdown --- //
+
+	// turn select into dl
+	createDropDown();
+	
+	var $dropTrigger = $(".dropdown dt a");
+	var $languageList = $(".dropdown dd ul");
+	
+	// open and close list when button is clicked
+	$dropTrigger.toggle(function() {
+		$languageList.slideDown(200);
+		$dropTrigger.addClass("active");
+	}, function() {
+		$languageList.slideUp(200);
+		$(this).removeAttr("class");
+	});
+
+	// close list when anywhere else on the screen is clicked
+	$(document).bind('click', function(e) {
+		var $clicked = $(e.target);
+		if (! $clicked.parents().hasClass("dropdown"))
+			$languageList.slideUp(200);
+			$dropTrigger.removeAttr("class");
+	});
+
+	// when a language is clicked, make the selection and then hide the list
+	$(".dropdown dd ul li a").click(function() {
+		var clickedValue = $(this).parent().attr("class");
+		var clickedTitle = $(this).find("em").html();
+		$("#target dt").removeClass().addClass(clickedValue);
+		$("#target dt em").html(clickedTitle);
+		$languageList.hide();
+		$dropTrigger.removeAttr("class");
+	});
+});
+
+// actual function to transform select to definition list
+function createDropDown(){
+	$("#country-select").append('<dl id="target" class="dropdown"></dl>');
+	var current = ($("#header-portal-languageselector li.selected a").length > 0)? $("#header-portal-languageselector li.selected a").text() : "default language" ;
+	$("#target").prepend('<dt class="selected"><a href="#"><em>' + current + '</em></a></dt>');
+}

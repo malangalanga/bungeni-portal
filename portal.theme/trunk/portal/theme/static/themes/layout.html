@@ -3,82 +3,94 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="/static/css/reset.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="/static/css/skin.css" type="text/css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="/static/css/newprint.css" media="print" />
+    <link rel="stylesheet" type="text/css" href="/static/css/bungeni.css" />
+    <script type="text/javascript" src="/static/js/jquery.cookie.js"></script>    
+    <script type="text/javascript" src="/static/js/splitter.js"></script>    
     <script type="text/javascript" src="/static/js/scripts.js"></script>
-    <title>BUNGENI</title>		
+    <title>BUNGENI</title>
   </head>
   <body>
-    	<span id="corner-a"></span>
-    	<span id="corner-b"></span>
-	<div id="header-wrapper">
-		<div id="header-in-left">&nbsp;</div>
-		<div id="header-in-right">&nbsp;</div>
-		<div id="top-layer">
-		  <div>
-		    <ul id="portal-personaltools" />        
-		    <!--<div id="demo">Demo Site</div>-->
-            <div id="processing_indicatron">
-				<img src="/static/images/progressbar.gif" />
-			</div>
-		    <ul id="portal-languageselector">
-		    </ul>
-		    <div id="demoWarning"><blink>!!! THIS IS A DEMO SITE !!!</blink></div>
-		  </div>
-		</div> <!-- end of top-layer A.K.A language menus -->
-
-		<div id="portal-logo-wrapper">
-		  <a id="portal-logo" href="/">
-		    <img src="/static/images/workspace_parliament.png" class="ws-left" alt="Your Parliament banner here" />
-			<img src="/static/images/workspace_logo.png"  class="ws-right" alt="The Workspace logo" />
-		  </a>
-		</div>
-	</div> <!-- end of header-wrapper -->
-	<!--div style="clear:both;">&nbsp;</div-->
-
-    <div id="visual-table-wrapper">
-      <div id="main-body-table" class="clearfix">
-
-        <div class="main-column" class="clearfix">
-          <ul id="portal-siteactions">
-          </ul>
-          <div id="portal-searchbox" />
-          <!-- global navigation -->
-          <div id="portal-globalnav">
-            <ul class="level0">
-              <!-- top-level navigation -->
-              <ul class="level1">
-                <!-- second-level navigation -->
-              </ul>
-            </ul>
-          </div>
-          <div id="portal-globalnav-bottom">
-            <!-- nothing here -->
-          </div>
-          <!-- breadcrumbs -->
-          <div id="portal-breadcrumbs" />
-          <!-- search -->
-          <div id="portal-search" />
-          <!-- Message Info -->
-          <div class="portalMessage" />
-          <!-- main content-->
-          <div id="portal-columns">
-            <div id="portal-column-one">
-            </div>
-            <div id="portal-column-content">
-            </div>
-            <div id="portal-column-two" />
-          </div>
+    <div id="pre-header">
+      <div id="header-top-layer">
+        <dl id="target" class="dropdown">
+          <dd>
+            <ul id="header-portal-languageselector"> </ul>
+          </dd>
+        </dl>
+        
+        <div id="header-tools" class="fixed-width">
+          <div id="demoWarning">
+            <blink>!!! THIS IS A DEMO SITE !!!</blink>
+          </div>          
+          <ul id="portal-personaltools" />
         </div>
-      </div>
+        
+        <div id="processing_indicatron"></div>
+       
+      </div>      
     </div>
-    <div id="portal-footer">
-      <div>
-        <img src="/static/images/bungeni-logo-tiny.gif"
-             alt="The bungeni portal logo" />
-        empowered by Bungeni
+    <div id="header">
+      <div id="header-parl-banner" class="fixed-width">
+        <div id="portal-logo-wrapper">
+          <a id="portal-logo" href="/">
+            <img src="/static/images/workspace_parliament.png" class="ws-left"
+              alt="Your Parliament banner here" />
+            <img src="/static/images/workspace_logo.png" class="ws-right" alt="The Workspace logo" />
+          </a>
+        </div>           
+        <div id="portal-search">
+          <!-- search -->
+        </div>           
       </div>
+      <div class="header-primary-nav fixed-width">
+        <div id="primary-nav" class="menu">
+          <ul><!-- top-level navigation --></ul>
+        </div>       
+      </div>
+      <div style="clear:both;"></div>
+    </div>
+    
+    <div id="post-header">
+        <div id="secondary-nav" class="submenu fixed-width">
+          <ul><!-- second-level navigation --></ul>
+        </div>
+    </div> 
+    
+    <!-- breadcrumbs -->
+    <div id="portal-breadcrumbs" class="fixed-width"></div>    
+    <!-- search -->
+    <!--div id="portal-search" class="fixed-width"></div-->
+    
+    <div id="content-wrapper" class="fixed-width">
+
+          <ul id="portal-siteactions"></ul>
+          <div id="portal-searchbox"></div>
+          <!-- Message Info -->
+          <div class="portalMessage"></div>
+          
+          <div id="ws-splitter">
+            <div id="LeftPane" class="left-pane">
+              <div class="listmenu">
+                <ul id="viewactive"></ul>
+              </div>
+              <div id="tree-nav" class="listmenu">
+                <ul></ul>
+              </div>              
+            </div>
+            <div id="RightPane" style="overflow:visible;">
+                <!-- main content-->
+                <div id="portal-columns">
+                  <div id="portal-column-one"> </div>
+                  <div id="portal-column-content" class="rounded-deep"> </div>
+                  <div id="portal-column-two"></div>
+                </div>
+                <div class="clearboth"></div>                
+            </div>
+          </div>
+    </div>
+    <!-- footer -->
+    <div id="portal-footer" class="fixed-width">
+        <img src="/static/images/bungeni-footer.png" alt="The bungeni portal logo" /> empowered by Bungeni   
     </div>
   </body>
 </html>
