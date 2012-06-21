@@ -10,7 +10,7 @@ log = __import__("logging").getLogger("bungeni.core.app")
 
 from zope.interface import implements
 from zope.interface import implementedBy
-from zope.component import provideAdapter
+from zope import component
 from zope.interface.declarations import alsoProvides
 
 from zope.app.appsetup.appsetup import getConfigContext
@@ -31,24 +31,23 @@ from bungeni.core.content import QueryContent
 from bungeni.core.i18n import _
 from bungeni.models.utils import get_current_parliament
 from bungeni.models.utils import container_getter
-from bungeni.ui.utils import url, common
+from bungeni.ui.utils import url, common # !+ core dependency on ui
 from bungeni.core.workspace import WorkspaceContainer
-
-
 from bungeni.utils.capi import capi
 
-def onWSGIApplicationCreatedEvent(application, event):
+
+def on_wsgi_application_created_event(application, event):
     """Subscriber to the ore.wsgiapp.interfaces.IWSGIApplicationCreatedEvent.
     """
     initializer = model_interfaces.IBungeniSetup(application)
     initializer.setUp()
-    log.debug("onWSGIApplicationCreatedEvent: _features: %s" % (
+    log.debug("on_wsgi_application_created_event: _features: %s" % (
         getConfigContext()._features))
 
-
 def to_locatable_container(domain_class, *domain_containers):
-    provideAdapter(location.ContainerLocation(*domain_containers),
+    component.provideAdapter(location.ContainerLocation(*domain_containers),
                (implementedBy(domain_class), ILocation))
+
 
 class BungeniApp(Application):
     implements(model_interfaces.IBungeniApplication)
@@ -64,15 +63,12 @@ class AppSetup(object):
     def setUp(self):
         
         # register translations
-        from bungeni.utils.capi import capi
         #import zope.i18n.zcml
         #zope.i18n.zcml.registerTranslations(getConfigContext(),
         #    capi.get_path_for("translations", "bungeni"))
-        # 
         # !+ZCML_PYTHON(mr, apr-2011) above registerTranslations() in python 
         # does not work, as subsequent utility lookup fails. We workaround it 
         # by executing the following parametrized bit of ZCML:
-        #
         from zope.configuration import xmlconfig
         xmlconfig.string("""
             <configure xmlns="http://namespaces.zope.org/zope"
@@ -82,23 +78,12 @@ class AppSetup(object):
             </configure>
             """ % (capi.get_path_for("translations", "bungeni")))
         
-        import index
         # ensure indexing facilities are setup(lazy)
+        import index
         index.setupFieldDefinitions(index.indexer)
-
         
         sm = site.LocalSiteManager(self.context)
-        self.context.setSiteManager(sm)
-        
-        from bungeni.ui import z3evoque
-        z3evoque.set_get_gettext()
-        z3evoque.setup_evoque()
-        z3evoque.domain.set_on_globals("devmode", common.has_feature("devmode"))
-        z3evoque.domain.set_on_globals("absoluteURL", url.absoluteURL)
-        z3evoque.domain.set_on_globals("get_section_name", url.get_section_name)
-        z3evoque.domain.set_on_globals("get_base_direction", 
-            language.get_base_direction)
-        z3evoque.domain.set_on_globals("is_rtl", language.is_rtl)            
+        self.context.setSiteManager(sm)           
             
         # !+ where is the view name for the app root (slash) set?
         
@@ -120,7 +105,7 @@ class AppSetup(object):
         )
         
         alsoProvides(workspace, interfaces.ISearchableSection)
-        workspace["documents"] = Section(
+        workspace["documents"] = WorkspaceSection(
             title=_(u"documents"),
             description=_(u"documents"),
             default_name="inbox",
@@ -325,7 +310,7 @@ class AppSetup(object):
         
         documents[u"reports"] = domain.ReportContainer()
         to_locatable_container(domain.Report, documents[u"reports"])
-        #provideAdapter(location.ContainerLocation(tableddocuments, documents[u"reports"]),
+        #component.provideAdapter(location.ContainerLocation(tableddocuments, documents[u"reports"]),
         #               (implementedBy(domain.Report), ILocation))
         
         records[u"parliaments"] = domain.ParliamentContainer()
@@ -340,7 +325,7 @@ class AppSetup(object):
         to_locatable_container(domain.Committee, records[u"committees"])
 
         #records[u"mps"] = domain.MemberOfParliamentContainer()
-        #provideAdapter(location.ContainerLocation(records[u"mps"]),
+        #component.provideAdapter(location.ContainerLocation(records[u"mps"]),
         #               (implementedBy(domain.MemberOfParliament), ILocation))
         
         ##########

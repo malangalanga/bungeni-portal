@@ -1,8 +1,10 @@
 log = __import__("logging").getLogger("bungeni.core.workspace")
 import os
+import time
 from sqlalchemy import orm
 from sqlalchemy.sql import expression
 from lxml import etree
+from collections import namedtuple
 
 from zope import interface
 from zope import component
@@ -15,12 +17,10 @@ from zope.securitypolicy.interfaces import IRole
 from bungeni.alchemist import Session
 from bungeni.alchemist.security import LocalPrincipalRoleMap
 from bungeni.alchemist.container import AlchemistContainer, contained
-from bungeni.models import domain
 from bungeni.models import utils
 from bungeni.utils.capi import capi, bungeni_custom_errors
 from bungeni.core.interfaces import IWorkspaceTabsUtility, IWorkspaceContainer
 from bungeni.ui.utils.common import get_workspace_roles
-
 
 
 #!+WORKSPACE(miano, jul 2011)
@@ -36,6 +36,8 @@ OBJECT_ROLES = ["bungeni.Owner", "bungeni.Signatory"]
 # Tabs that are available in the workspace
 # All logged in users get a workspace with these tabs
 TABS = ["draft", "inbox", "sent", "archive"]
+
+TabCountRecord = namedtuple('TabCountRecord', ['timestamp', 'count'])
 
 
 def stringKey(instance):
@@ -70,6 +72,7 @@ class WorkspaceContainer(AlchemistContainer):
         self.title = title
         self.description = description
         self.workspace_config = component.getUtility(IWorkspaceTabsUtility)
+        self.tab_count_cache = {}
         if marker is not None:
             interface.alsoProvides(self, marker)
         super(WorkspaceContainer, self).__init__()
@@ -81,17 +84,17 @@ class WorkspaceContainer(AlchemistContainer):
         """
         domain_status = {}
         for role in roles:
-            domains = self.workspace_config.get_role_domains(role, tab)
-            if domains:
-                for domain in domains:
+            domain_classes = self.workspace_config.get_role_domains(role, tab)
+            if domain_classes:
+                for domain_class in domain_classes:
                     status = self.workspace_config.get_status(
-                        role, domain, tab
+                        role, domain_class, tab
                         )
                     if status:
-                        if domain in domain_status.keys():
-                            domain_status[domain].extend(status)
+                        if domain_class in domain_status.keys():
+                            domain_status[domain_class].extend(status)
                         else:
-                            domain_status[domain] = status
+                            domain_status[domain_class] = status
         return domain_status
 
     def item_status_filter(self, kw, roles):
@@ -133,7 +136,7 @@ class WorkspaceContainer(AlchemistContainer):
         column = table.columns[utk["short_title"]]
         return column
 
-    def filter_query(self, query, domain_class, kw):
+    def filter_title(self, query, domain_class, kw):
         if kw.get("filter_short_title", None):
             column = self.title_column(domain_class)
             return query.filter("""(lower(%s) LIKE '%%%s%%')""" %
@@ -146,7 +149,7 @@ class WorkspaceContainer(AlchemistContainer):
             ):
             if reverse:
                 return query.order_by(expression.desc(
-                    getattr(domain_class, str(kw.get("sort_on"))))) 
+                    getattr(domain_class, str(kw.get("sort_on")))))
             else:
                 return query.order_by(expression.asc(
                     getattr(domain_class, str(kw.get("sort_on")))))
@@ -165,7 +168,7 @@ class WorkspaceContainer(AlchemistContainer):
             query = session.query(domain_class).filter(
                 domain_class.status.in_(status)).enable_eagerloads(False)
             #filter on title
-            query = self.filter_query(query, domain_class, kw)
+            query = self.filter_title(query, domain_class, kw)
             # Order results
             query = self.order_query(query, domain_class, kw, reverse)
             # The first page of the results is loaded the most number of times
@@ -181,7 +184,7 @@ class WorkspaceContainer(AlchemistContainer):
             query = session.query(domain_class).filter(
                 domain_class.status.in_(status)).enable_eagerloads(False)
             #filter on title
-            query = self.filter_query(query, domain_class, kw)
+            query = self.filter_title(query, domain_class, kw)
             # Order results
             query = self.order_query(query, domain_class, kw, reverse)
             for obj in query.all():
@@ -200,6 +203,11 @@ class WorkspaceContainer(AlchemistContainer):
                          reverse=reverse)
         if not first_page:
             count = len(results)
+        if not (kw.get("filter_short_title", None) or
+            kw.get("filter_type", None) or
+            kw.get("filter_status", None) or
+            kw.get("filter_status_date", None)):
+            self.set_tab_count(principal.id, count)
         return (results, count)
 
     def query(self, **kw):
@@ -210,11 +218,19 @@ class WorkspaceContainer(AlchemistContainer):
             name = stringKey(obj)
             yield (name, contained(obj, self, name))
 
-    def count(self):
-        """Approximate count of items in a container
+    def set_tab_count(self, principal_id, count):
+        self.tab_count_cache[principal_id] = TabCountRecord(time.time(), count)
+
+    def count(self, read_from_cache=True):
+        """Count of items in a container
         """
         kw = {}
+        results = []
         principal = utils.get_principal()
+        if (read_from_cache and principal.id in self.tab_count_cache.keys() and
+            (self.tab_count_cache[principal.id].timestamp +
+             capi.workspace_tab_count_cache_refresh_time) > time.time()):
+            return self.tab_count_cache[principal.id].count
         roles = get_workspace_roles()
         group_roles_domain_status = self.item_status_filter(kw, roles)
         session = Session()
@@ -222,6 +238,7 @@ class WorkspaceContainer(AlchemistContainer):
         for domain_class, status in group_roles_domain_status.iteritems():
             query = session.query(domain_class).filter(
                 domain_class.status.in_(status)).enable_eagerloads(False)
+            results.extend(query.all())
             count = count + query.count()
         object_roles_domain_status = self.item_status_filter(kw, OBJECT_ROLES)
         for domain_class, status in object_roles_domain_status.iteritems():
@@ -231,10 +248,13 @@ class WorkspaceContainer(AlchemistContainer):
             for obj in query.all():
                 prm = IPrincipalRoleMap(obj)
                 for obj_role in OBJECT_ROLES:
-                    if (prm.getSetting(obj_role, principal.id) == Allow):
+                    if (prm.getSetting(obj_role, principal.id) == Allow and
+                        obj not in results):
                         object_roles_results.append(obj)
                         break
             count = count + len(object_roles_results)
+            results.extend(object_roles_results)
+        self.set_tab_count(principal.id, count)
         return count
 
     def check_item(self, domain_class, status):
@@ -294,16 +314,15 @@ class WorkspaceContainer(AlchemistContainer):
         item.parliament_id = current_parliament.parliament_id
         session.add(item)
 
-# (SECURITY, miano, july 2011) This factory adapts the workspaces to
+
+# !+SECURITY(miano, july 2011) This factory adapts the workspaces to
 # zope.securitypolicy.interface.IPrincipalRoleMap and is equivalent to the
 # principalrolemap of the current parliament.
 # If/when Bungeni is modified to support bicameral houses this should be
 # modified so that the oid is set to the group_id of the house the current
 # principal in the interaction is a member of.
-
-
 class WorkspacePrincipalRoleMap(LocalPrincipalRoleMap):
-
+    
     def __init__(self, context):
         self.context = context
         current_parliament = utils.get_current_parliament()
@@ -400,9 +419,9 @@ class WorkspaceTabsUtility():
         if role in self.workspaces:
             for tab in self.workspaces[role]:
                 if (domain_class in self.workspaces[role][tab] and
-                    status in self.workspaces[role][tab][domain_class]
+                        status in self.workspaces[role][tab][domain_class]
                     ):
-                        return tab
+                    return tab
         return None
 
     def get_status(self, role, domain_class, tab):
@@ -417,7 +436,8 @@ class WorkspaceTabsUtility():
 
 #@bungeni_custom_errors
 def load_workspace(file_name, domain_class):
-    """Loads the workspace configuration for each documemnt"""
+    """Loads the workspace configuration for each documemnt.
+    """
     workspace_tabs = component.queryUtility(IWorkspaceTabsUtility, None)
     if not workspace_tabs:
         component.provideUtility(WorkspaceTabsUtility())
@@ -428,21 +448,18 @@ def load_workspace(file_name, domain_class):
     workspace_tabs.register_item_type(domain_class, item_type)
     workspace = etree.fromstring(open(file_path).read())
     for state in workspace.iterchildren(tag="state"):
-        
         for tab in state.iterchildren(tag="tab"):
             assert tab.get("id") in TABS, "Workspace configuration error : " \
                 "Invalid tab - %s. file: %s, state : %s" % (
-                tab.get("id"), file_name, state.get("id"))
+                    tab.get("id"), file_name, state.get("id"))
             if tab.get("roles"):
                 roles = tab.get("roles").split()
                 for role in roles:
-                    '''assert component.queryUtility(IRole, role, None), \
-                        "Workspace configuration error : " \
-                        "Invalid role - %s. file: %s, state : %s" % (
-                        role, file_name, state.get("id"))'''
-                    workspace_tabs.set_content(role,
-                                           tab.get("id"),
-                                           domain_class,
-                                           state.get("id")
-                                           )
+                    #assert component.queryUtility(IRole, role, None), \
+                    #    "Workspace configuration error : " \
+                    #    "Invalid role - %s. file: %s, state : %s" % (
+                    #        role, file_name, state.get("id"))
+                    workspace_tabs.set_content(role, 
+                        tab.get("id"), domain_class, state.get("id"))
+
 
