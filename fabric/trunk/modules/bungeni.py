@@ -1360,7 +1360,7 @@ class BungeniTasks:
             self.tasks.src_update(current_release["bungeni"])
             with cd(self.cfg.user_bungeni):
                 with cd("src"):
-                    run("svn up -rHEAD ./bungeni.main ./bungeni_custom")
+                    run("svn up -rHEAD ./bungeni.main ./bungeni_custom ./ploned.ui")
         else:
             self.tasks.src_update(current_release["bungeni"])
 
