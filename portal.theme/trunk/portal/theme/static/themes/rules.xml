@@ -223,7 +223,7 @@
             theme="#portal-column-content" />
         
         <pyquery pyref=
-            "portal.bungeni.static.themes.rules:add_menu_items"
+            "portal.theme.static.themes.rules:add_menu_items"
         />
         <drop content="#portal-column-content" />
         
@@ -314,8 +314,10 @@
         <pyquery pyref=
             "portal.theme.static.themes.rules:add_section_links"
         />
+
+        <!-- uncomment the below to disable the richtext editor -->
         <!--<pyquery pyref=
-            "bungeni.portal.static.themes.rules:enable_text_editor"/>-->
+            "portal.theme.static.themes.rules:enable_text_editor"/>-->
         
     </rule>
 </ruleset>
