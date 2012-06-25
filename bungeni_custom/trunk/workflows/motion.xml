@@ -16,7 +16,7 @@
     <feature name="attachment" enabled="true" />
     <feature name="event" enabled="true" />
     <feature name="signatory" enabled="true">
-        <config min_signatories="3"/>
+        <parameter name="min_signatories" value="2"/>
     </feature>
     <feature name="schedule" enabled="true" />
     <feature name="workspace" enabled="true"/>
