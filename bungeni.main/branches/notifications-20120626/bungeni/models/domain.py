@@ -231,9 +231,15 @@ def feature_address(kls, **params):
     return kls
 
 def feature_workspace(kls):
-    """Decorator for domain types to support "workspace" feature.
+    """Decorator for domain types that support "workspace" feature.
     """
     interface.classImplements(kls, interfaces.IFeatureWorkspace)
+    return kls
+
+def feature_notification(kls):
+    """Decorator for domain types to support "notification" feature.
+    """
+    interface.classImplements(kls, interfaces.IFeatureNotification)
     return kls
 
 def configurable_domain(kls, workflow):
@@ -879,7 +885,7 @@ class AgendaItem(AdmissibleMixin, Doc):
     """Generic Agenda Item that can be scheduled on a sitting.
     """
     dynamic_features = ["audit", "version", "attachment", "schedule",
-                        "workspace"]
+                        "workspace", "notification"]
     interface.implements(
         interfaces.IBungeniParliamentaryContent,
     )
@@ -895,7 +901,7 @@ class Bill(Doc):
     """Bill domain type.
     """
     dynamic_features = ["audit", "version", "attachment", "event", 
-        "signatory", "schedule", "workspace"]
+        "signatory", "schedule", "workspace", "notification"]
     interface.implements(
         interfaces.IBungeniParliamentaryContent,
     )
@@ -931,7 +937,7 @@ class Motion(AdmissibleMixin, Doc):
     """Motion domain type.
     """
     dynamic_features = ["audit", "version", "attachment", "event", 
-        "signatory", "schedule", "workspace"]
+        "signatory", "schedule", "workspace", "notification"]
     interface.implements(
         interfaces.IBungeniParliamentaryContent,
     )
@@ -951,7 +957,7 @@ class Question(AdmissibleMixin, Doc):
     """Question domain type.
     """
     dynamic_features = ["audit", "version", "attachment", "event", 
-        "signatory", "schedule", "workspace"]
+        "signatory", "schedule", "workspace", "notification"]
     interface.implements(
         interfaces.IBungeniParliamentaryContent,
     )
@@ -1004,7 +1010,7 @@ class TabledDocument(AdmissibleMixin, Doc):
     It must be possible to schedule a tabled document for a sitting.
     """
     dynamic_features = ["audit", "version", "attachment", "event", 
-        "signatory", "schedule", "workspace"]
+        "signatory", "schedule", "workspace", "notification"]
     interface.implements(
         interfaces.IBungeniParliamentaryContent,
     )

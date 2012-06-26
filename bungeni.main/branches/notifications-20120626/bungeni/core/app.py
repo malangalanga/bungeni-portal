@@ -27,12 +27,12 @@ from bungeni.models.utils import container_getter
 
 from bungeni.core import interfaces
 from bungeni.core import location
-from bungeni.core import language
 from bungeni.core.content import Section, AdminSection, AkomaNtosoSection, \
     WorkspaceSection
 from bungeni.core.content import QueryContent
 from bungeni.core.i18n import _
 from bungeni.core.workspace import WorkspaceContainer, load_workspaces
+from bungeni.core.notifications import load_notifications
 from bungeni.ui.utils import url, common # !+ core dependency on ui
 from bungeni.utils.capi import capi
 from bungeni.utils import register
@@ -52,7 +52,10 @@ def on_wsgi_application_created_event(application, event):
     
     # load workspaces
     load_workspaces()
-    
+
+    #load notifications configuration
+    load_notifications()
+
     # import events modules, registering handlers
     import bungeni.core.events
     

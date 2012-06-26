@@ -466,7 +466,5 @@ def load_workspace(file_name, domain_class):
                         "Workspace configuration error : " \
                         "Invalid role - %s. file: %s, state : %s" % (
                             role, file_name, state.get("id"))
-                    workspace_tabs.set_content(role, 
+                    workspace_tabs.set_content(role,
                         tab.get("id"), domain_class, state.get("id"))
-
-
