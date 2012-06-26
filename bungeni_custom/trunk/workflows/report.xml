@@ -8,7 +8,7 @@
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
     
-    <!-- global grants -->
+    <!-- global grants !+NAMING why plural "reports"? -->
     <grant permission="bungeni.reports.Edit" role="bungeni.Clerk" />
     <grant permission="bungeni.reports.Edit" role="bungeni.Speaker" /> 
     
@@ -16,7 +16,7 @@
     <state id="published" title="Published" publish="true">
         <grant permission="zope.View" role="bungeni.Authenticated" /> 
         <grant permission="zope.View" role="bungeni.Anonymous" />
-        <deny permission="bungeni.report.Edit" role="bungeni.Authenticated" />
+        <!-- !+PERM_NOT_REG deny permission="bungeni.report.Edit" role="bungeni.Authenticated" /-->
     </state>
     
     

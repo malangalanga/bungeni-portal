@@ -23,7 +23,7 @@
         <deny permission="zope.View" role="bungeni.MP" />
         <deny permission="zope.View" role="bungeni.Minister" />
         <deny permission="zope.View" role="bungeni.Anonymous" />
-        <grant permission="bungeni.group.Delete" role="bungeni.Owner" />
+        <grant permission="bungeni.parliament.Delete" role="bungeni.Owner" />
         <!-- groupmember -->
         <deny permission="bungeni.groupmember.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.groupmember.Add" role="bungeni.Clerk" />
@@ -41,7 +41,7 @@
         <grant permission="zope.View" role="bungeni.MP" />
         <grant permission="zope.View" role="bungeni.Minister" />
         <grant permission="zope.View" role="bungeni.Anonymous" />
-        <deny permission="bungeni.group.Delete" role="bungeni.Owner" />
+        <deny permission="bungeni.parliament.Delete" role="bungeni.Owner" />
         <!-- groupmember -->
         <grant permission="bungeni.groupmember.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.groupmember.Add" role="bungeni.Clerk" />

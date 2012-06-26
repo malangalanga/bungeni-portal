@@ -16,10 +16,11 @@
     <feature name="attachment" enabled="true" />
     <feature name="event" enabled="true" />
     <feature name="signatory" enabled="true">
-        <parameter name="min_signatories" value="2"/>
+        <parameter name="min_signatories" value="2" />
     </feature>
     <feature name="schedule" enabled="true" />
-    <feature name="workspace" enabled="true"/>
+    <feature name="workspace" enabled="true" />
+    
     <!-- global grants -->
     <grant permission="bungeni.motion.View" role="bungeni.Owner" />
     <grant permission="bungeni.motion.View" role="bungeni.Signatory" />
@@ -27,6 +28,7 @@
     <grant permission="bungeni.motion.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.motion.Add" role="bungeni.MP" />
     <grant permission="bungeni.motion.Delete" role="bungeni.Owner" />
+    
     
     <state id="working_draft" title="Working Draft" tags="draft private">
         <!-- motion -->

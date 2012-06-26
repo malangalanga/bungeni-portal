@@ -18,7 +18,8 @@
     <feature name="event" enabled="true" />
     <feature name="signatory" enabled="true" />
     <feature name="schedule" enabled="true" />
-    <feature name="workspace" enabled="true"/>
+    <feature name="workspace" enabled="true" />
+    
     <!-- global grants -->
     <grant permission="bungeni.question.View" role="bungeni.Owner" />
     <grant permission="bungeni.question.View" role="bungeni.Signatory" />
@@ -26,6 +27,7 @@
     <grant permission="bungeni.question.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.question.Add" role="bungeni.MP" />
     <grant permission="bungeni.question.Delete" role="bungeni.Owner" />
+    
     
     <state id="working_draft" title="Working Draft" tags="draft private">
         <!-- question -->
