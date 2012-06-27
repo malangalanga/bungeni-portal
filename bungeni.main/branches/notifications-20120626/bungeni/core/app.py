@@ -54,7 +54,7 @@ def on_wsgi_application_created_event(application, event):
     load_workspaces()
 
     #load notifications configuration
-    load_notifications()
+    #load_notifications()
 
     # import events modules, registering handlers
     import bungeni.core.events

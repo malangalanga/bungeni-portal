@@ -235,29 +235,55 @@ class IWorkspaceTabsUtility(interface.Interface):
         """Returns the tab an object should be in, given its domain class,
         status and role
         """
+
 class IMessageQueueConfig(interface.Interface):
+    def get_message_exchange():
+        """Message exchange
+        """
+    def get_task_exchange():
+        """Task exchange
+        """
     def get_username():
-        "Username to be used to connect to the AMQP server"
+        """Username to be used to connect to the AMQP server
+        """
     def get_password():
-        "Password to be used to connect to the AMQP server"
+        """Password to be used to connect to the AMQP server
+        """
     def get_host():
-        "AMQP server host"
+        """AMQP server host
+        """
     def get_port():
-        "AMQP server port"
+        """AMQP server port
+        """
     def get_virtual_host():
-        "AMQP virtual host"
+        """AMQP virtual host
+        """
     def get_channel_max():
-        "Maximum number of channels to allow"
+        """Maximum number of channels to allow
+        """
     def get_frame_max():
-        "Max frame size"
+        """Max frame size
+        """
     def get_heartbeat():
-        "Turn heartbeat checking on or off"
+        """Turn heartbeat checking on or off
+        """
+    def get_number_of_workers():
+        """Get number of task workers
+        """
+    def get_task_queue():
+        """Get name for the task queue
+        """
 
 
 class IMessageQueueConfigSchema(interface.Interface):
-    exchange=schema.Text(
-        title=u"Exchange",
-        description=u"Direct Exchange name to be used",
+    message_exchange=schema.Text(
+        title=u"Message Exchange",
+        description=u"Fanout Exchange name to be used",
+        required=True,
+        )
+    task_exchange=schema.Text(
+        title=u"Task Queue Exchange",
+        description=u"Direct task queue exchange name to be used",
         required=True,
         )
     username=schema.Text(

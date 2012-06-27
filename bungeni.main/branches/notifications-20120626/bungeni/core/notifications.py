@@ -23,10 +23,11 @@ class MessageQueueConfig(object):
 
     implements(IMessageQueueConfig)
 
-    def __init__(self, exchange, username, password, host, port, virtual_host,
-                 channel_max, frame_max, heartbeat, number_of_workers,
-                 task_queue):
-        self.exchange = exchange
+    def __init__(self, message_exchange, task_exchange, username, password,
+                 host, port, virtual_host, channel_max, frame_max, heartbeat,
+                 number_of_workers, task_queue):
+        self.message_exchange = message_exchange
+        self.task_exchange = task_exchange
         self.username = username
         self.password = password
         self.host = host
@@ -38,8 +39,11 @@ class MessageQueueConfig(object):
         self.number_of_workers = number_of_workers
         self.task_queue = task_queue
 
-    def get_exchange(self):
-        return self.exchange
+    def get_message_exchange(self):
+        return self.message_exchange
+
+    def get_task_exchange(self):
+        return self.task_exchange
 
     def get_username(self):
         return self.username
@@ -72,18 +76,17 @@ class MessageQueueConfig(object):
         return self.task_queue
 
 
-def registerMessageQueueConfig(context, exchange, username="", password="",
+def registerMessageQueueConfig(context, message_exchange, task_exchange,
+                               username="", password="",
                                host="", port=None, virtual_host="",
                                channel_max=None, frame_max=None,
                                heartbeat=None, number_of_workers=0,
                                task_queue=""):
-    context.action(discriminator=('RegisterMessageQueueConfig', exchange,
-                                  username, password, host, port,
-                                  virtual_host, channel_max, frame_max,
-                                  heartbeat, number_of_workers, task_queue),
+    context.action(discriminator=('RegisterMessageQueueConfig'),
                    callable=handler,
                    args=('registerUtility',
-                         MessageQueueConfig(exchange, username, password,
+                         MessageQueueConfig(message_exchange, task_exchange,
+                                            username, password,
                                             host, port, virtual_host,
                                             channel_max, frame_max, heartbeat,
                                             number_of_workers, task_queue),
@@ -122,7 +125,7 @@ def queue_transition_based_notification(document, event):
         }
     connection = pika.BlockingConnection(parameters=get_mq_parameters())
     channel = connection.channel()
-    channel.basic_publish(exchange=str(mq_utility.get_exchange()),
+    channel.basic_publish(exchange=str(mq_utility.get_task_exchange()),
                           routing_key=str(mq_utility.get_task_queue()),
                           body=simplejson.dumps(message),
                           properties=pika.BasicProperties(
@@ -154,16 +157,14 @@ def worker():
                     principal_ids.add(principal[0])
         else:
             pass
-        exchange = str(mq_utility.get_exchange())
-        for principal_id in principal_ids:
-            # create message and add send to exchange
-            # TODO: create obj2dict that checks principals permissions to
-            # access attributes
+        exchange = str(mq_utility.get_message_exchange())
+        if principal_ids:
+            # create message and send to exchange
             mes = obj2dict(document, 0)
+            mes["principal_ids"] = list(principal_ids)
             dthandler = lambda obj: obj.isoformat() if isinstance(obj,
                                                     datetime.datetime) else obj
             channel.basic_publish(exchange=exchange,
-                                  routing_key=principal_id,
                                   body=simplejson.dumps(mes,
                                                         default=dthandler),
                                   properties=pika.BasicProperties(
@@ -183,7 +184,7 @@ def setup_task_workers():
     channel = connection.channel()
     channel.queue_declare(queue=str(mq_utility.get_task_queue()), durable=True)
     channel.queue_bind(queue=str(mq_utility.get_task_queue()),
-                       exchange=str(mq_utility.get_exchange()),
+                       exchange=str(mq_utility.get_task_exchange()),
                        routing_key=str(mq_utility.get_task_queue()))
     for i in range(mq_utility.get_number_of_workers()):
         task_thread = Thread(target=worker)
@@ -191,11 +192,19 @@ def setup_task_workers():
         task_thread.start()
 
 
-def setup_exchange():
+def setup_message_exchange():
     connection = pika.BlockingConnection(parameters=get_mq_parameters())
     channel = connection.channel()
     mq_utility = component.getUtility(IMessageQueueConfig)
-    channel.exchange_declare(exchange=str(mq_utility.get_exchange()),
+    channel.exchange_declare(exchange=str(mq_utility.get_message_exchange()),
+                             type="fanout", durable=True)
+
+
+def setup_task_exchange():
+    connection = pika.BlockingConnection(parameters=get_mq_parameters())
+    channel = connection.channel()
+    mq_utility = component.getUtility(IMessageQueueConfig)
+    channel.exchange_declare(exchange=str(mq_utility.get_task_exchange()),
                              type="direct", durable=True)
 
 
@@ -293,7 +302,8 @@ def load_notification_config(file_name, domain_class):
 
 
 def load_notifications():
-    setup_exchange()
+    setup_message_exchange()
+    setup_task_exchange()
     setup_task_workers()
     from bungeni.core.workflows import adapters
     for type_key, ti in adapters.TYPE_REGISTRY:
