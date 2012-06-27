@@ -200,12 +200,14 @@ class BungeniRelease:
         portal = self.cfg.get_config(release_name, "portal")
         xmldb = self.cfg.get_config(release_name, "xmldb")
         xmldb_data = self.cfg.get_config(release_name, "xmldb_data")
+        glue = self.cfg.get_config(release_name, "glue")
         return {
             "bungeni": bungeni,
             "plone": plone,
             "portal": portal,
             "xmldb": xmldb,
-            "xmldb_data": xmldb_data
+            "xmldb_data": xmldb_data,
+            "glue": glue
             }
 
 
@@ -369,8 +371,8 @@ class BungeniConfigs:
         self.portal_general_buildout_config = "buildout.cfg"
         self.portal_local_buildout_config = "portal_local.cfg"
         self.portal_static_ini = self.user_portal + "/static.ini"
-        self.portal_rules_xml_uri = "file:" + self.user_bungeni \
-            + "/src/bungeni.main/bungeni/portal/static/themes/rules.xml"
+        self.portal_rules_xml_uri = "file:" + self.user_portal \
+            + "/src/portal.theme/portal/theme/static/themes/rules.xml"
         self.portal_theme = self.cfg.get_config("portal", "theme")
         self.portal_buildout_config = \
             (self.portal_general_buildout_config if self.local_cache
@@ -421,6 +423,22 @@ class BungeniConfigs:
         self.exist_setup_user = self.cfg.get_config("exist", "setup_user")
         self.exist_setup_password = self.cfg.get_config("exist", "setup_pass")
         self.exist_repo = self.cfg.get_config("exist", "repo")
+        # RabbitMQ installation folder
+        self.rabbitmq_install_url = self.cfg.get_config("rabbitmq", "download_url")
+        self.user_rabbitmq = self.user_install_root + "/rabbitmq"
+        self.rabbitmq_download_command = self.get_download_command(self.rabbitmq_install_url)
+        self.rabbitmq_download_file = self.utils.get_basename(self.rabbitmq_install_url)
+        self.user_rabbitmq_build_path = self.user_build_root + "/rabbitmq"
+        # Jython installation folder
+        self.jython_install_url = self.cfg.get_config("glue-script", "download_url")
+        self.user_jython = self.user_bungeni + "/jython"
+        self.jython_download_command = self.get_download_command(self.jython_install_url)
+        self.jython_download_file = self.utils.get_basename(self.jython_install_url)
+        self.user_jython_build_path = self.user_bungeni + "/jython"
+        # Glue-script installation folder
+        self.glue_repo = self.cfg.get_config("glue-script", "repo")
+        self.user_glue = self.user_install_root + "/glue"
+        self.glue_interval = self.cfg.get_config("glue-script", "interval")
 
 
     def get_download_command(self, strURL):
@@ -611,6 +629,34 @@ class Presetup:
         run(sup_pycfg.python_home + "/bin/easy_install supervisor"
             )
             
+    def pika(self):
+        """
+        Install Pika - A RabbitMQ Client
+        """
+        
+        sup_pycfg = PythonConfigs(self.cfg,"supervisor")
+        run(sup_pycfg.python_home + "/bin/easy_install pika"
+            )
+            
+    def magic(self):
+        """
+        Install Magic - Used by RabbitMQ's Pika publisher_daemon 
+        to get a file's mimeheaders
+        """
+        
+        sup_pycfg = PythonConfigs(self.cfg,"supervisor")
+        run(sup_pycfg.python_home + "/bin/easy_install python-magic"
+            )
+    def pyinotify(self):
+        """
+        Install Pyinotify - Implements a daemon for checking Bungeni 
+        outputs and feeding a MessageQueue
+        """
+        
+        sup_pycfg = PythonConfigs(self.cfg,"supervisor")
+        run(sup_pycfg.python_home + "/bin/easy_install pyinotify"
+            )
+            
     #def install_appy(self):
     #    """
     #    Install appy
@@ -645,6 +691,10 @@ class Presetup:
             "exist_port": self.cfg.exist_port,
             "exist_max_mem": self.cfg.exist_max_mem,
             "exist_startup_mem": self.cfg.exist_startup_mem,
+            "user_rabbitmq": self.cfg.user_rabbitmq,
+            "user_glue": self.cfg.user_glue,
+            "glue_interval": self.cfg.glue_interval,
+            "python": sup_pycfg.python_home,
             }
         run("mkdir -p %s" % self.cfg.user_config)
         run("mkdir -p %s" % self.cfg.user_logs)
@@ -659,6 +709,9 @@ class Presetup:
 
         self.setuptools()
         self.supervisor()
+        self.pika()
+        self.magic()
+        self.pyinotify()
 
 class SCM:
 
@@ -1556,6 +1609,7 @@ class BungeniTasks:
             run("./bin/admin-passwd < .pass.txt")
             run("rm .pass.txt")
 
+
 class XmldbTasks:
     """
     Tasks for installing eXist XML db
@@ -1709,6 +1763,91 @@ class XmldbTasks:
         except URLError, e:
             print e.reason
     """
+
+
+class RabbitMQTasks:
+    """
+    Tasks for setting up RabbitMQ and auto-sync scripts
+    """
+
+    def __init__(self):
+        self.cfg = BungeniConfigs()
+        ## ant related config below
+        ## use the ant in the exist installation
+
+    def setup_rabbitmq(self):
+        """
+        Downloads generic unix version of rabbitmq, doing it via debian aptitude works well 
+        though as such it requires superuser execution of all commands.
+        We download the generic archive file, extract it in root bungeni folder, then enable 
+        rabbitmq_management module to allow rabbitmq's web administrator.
+        """
+        run("mkdir -p %(rabbitmq_build_path)s" %
+                       {"rabbitmq_build_path":self.cfg.user_rabbitmq_build_path})
+        run("rm -rf %(rabbitmq_build_path)s/*.*" % 
+                       {"rabbitmq_build_path":self.cfg.user_rabbitmq_build_path})
+        with cd(self.cfg.user_rabbitmq_build_path):
+            run(self.cfg.rabbitmq_download_command)
+            run("mkdir -p %(user_rabbitmq)s" % {"user_rabbitmq":self.cfg.user_rabbitmq})
+            run("tar --strip-components=1 -xvf %(rabbitmq_download_file)s -C %(user_rabbitmq)s" %
+                         {"user_rabbitmq":self.cfg.user_rabbitmq,
+                          "rabbitmq_download_file":self.cfg.rabbitmq_download_file})
+            with cd(self.cfg.user_rabbitmq + "/sbin"):
+                run("./rabbitmq-plugins enable rabbitmq_management")
+
+class GlueScriptTasks:
+    """
+    Tasks for setting up Jython and Gluescript repository files
+    """
+
+    def __init__(self):
+        self.cfg = BungeniConfigs()
+        ## ant related config below
+        ## use the ant in the exist installation
+
+    def setup_jython(self):
+        """
+        Downloads generic jython jar file from www.jython.org and installs 
+        in the said folder.
+        """
+        run("mkdir -p %(jython_build_path)s" %
+                       {"jython_build_path":self.cfg.user_jython_build_path})
+        run("rm -rf %(jython_build_path)s/*" % 
+                       {"jython_build_path":self.cfg.user_jython_build_path})
+        with cd(self.cfg.user_build_root):
+            run(self.cfg.jython_download_command)
+            # jython auto-install instructions require an empty install folder so we had to 
+            # download the .jar into .bungenitmp and install in seperate user_jython path
+            run("mkdir -p %(user_jython)s" % {"user_jython":self.cfg.user_jython})
+            # RUN java -jar jython_installer-2.5.2.jar --help
+            # to learn more about the options
+            run("%(java)s/bin/java -jar %(jython_download_file)s -s -d %(user_jython)s -t all -i src -j %(java)s" %
+                         {"java" : self.cfg.java_home,
+                          "user_jython":self.cfg.user_jython,
+                          "jython_download_file":self.cfg.jython_download_file})
+
+    def setup_glue(self):
+        """
+        Checks out the glue-script framework files from repository.
+        """
+        run("mkdir -p %(glue_dir)s" % {"glue_dir":self.cfg.user_glue})
+        current_release = BungeniRelease().get_release(self.cfg.release)
+        self.scm = SCM(
+            self.cfg.development_build, 
+            self.cfg.glue_repo,
+            self.cfg.svn_user, 
+            self.cfg.svn_password,
+            self.cfg.user_glue
+        )
+        self.scm.export(current_release["glue"])
+
+    def glue_setup_config(self):
+        template_map = {
+            "user_bungeni": self.cfg.user_bungeni,
+            "user_glue": self.cfg.user_glue,
+            }
+        templates = Templates(self.cfg)
+        templates.new_file("glue.ini.tmpl", template_map,self.cfg.user_config)
 
 class CustomTasks:
     

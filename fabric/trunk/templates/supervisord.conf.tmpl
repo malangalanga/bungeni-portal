@@ -83,3 +83,29 @@ priority = 40
 redirect_stderr = true
 stopsignal = INT
 autostart = false
+
+[program:rabbitmq]
+command = %(user_rabbitmq)s/sbin/rabbitmq-server
+stdout_logfile = %(user_logs)s/rabbitmq.log
+priority = 40
+redirect_stderr = true
+stopsignal = INT
+autostart = false
+
+[program:rabbitmq-publisher]
+command = %(python)s/bin/python %(user_glue)s/src/publisher_daemon.py
+stdout_logfile = %(user_logs)s/rabbitmq_publisher.log
+priority = 40
+redirect_stderr = true
+stopsignal = INT
+autostart = false
+directory = %(user_glue)s
+
+[program:rabbitmq-consumer]
+command = %(java)s/bin/java -cp %(user_bungeni)s/jython/jython.jar:%(user_glue)s/lib/jaxen/jaxen.jar:%(user_glue)s/lib/xerces/xercesImpl.jar:%(user_glue)s/lib/saxon/saxon9he.jar:%(user_glue)s/lib/dom4j/dom4j-1.6.1.jar:%(user_glue)s/lib/log4j/log4j.jar:/lib/bungeni/editorplugininterface.jar:%(user_glue)s/lib/transformer/odttransformer.jar:%(user_glue)s/lib/commons-lang/commons-lang-2.3.jar:%(user_glue)s/lib/jsoup/jsoup-1.6.1.jar:%(user_glue)s/lib/zip4j/zip4j_1.2.8.jar:%(user_glue)s/lib/sardine/sardine.jar:%(user_glue)s/lib/sardine/httpclient-4.1.2.jar:%(user_glue)s/lib/sardine/httpcore-4.1.3.jar:%(user_glue)s/lib/sardine/slf4j-api-1.6.2.jar:%(user_glue)s/lib/sardine/commons-logging-1.1.1.jar:%(user_glue)s/lib/sardine/commons-codec-1.4.jar:%(user_glue)s/lib/rabbitmq/rabbitmq-client.jar:%(user_glue)s/lib/rabbitmq/mime-util-2.1.3.jar org.python.util.jython %(user_glue)s/src/consumer.py -c %(user_config)s/glue.ini -i %(glue_interval)s
+stdout_logfile = %(user_logs)s/rabbitmq_consumer.log
+priority = 40
+redirect_stderr = true
+stopsignal = INT
+autostart = false
+directory = %(user_glue)s
