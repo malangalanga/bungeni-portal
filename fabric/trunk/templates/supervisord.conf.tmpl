@@ -93,7 +93,7 @@ stopsignal = INT
 autostart = false
 
 [program:rabbitmq-publisher]
-command = %(python)s/bin/python %(user_glue)s/src/publisher_daemon.py
+command = %(python)s/bin/python %(user_glue)s/src/publisher_daemon.py -d %(user_bungeni)s/parts/xml_db
 stdout_logfile = %(user_logs)s/rabbitmq_publisher.log
 priority = 40
 redirect_stderr = true
