@@ -164,12 +164,13 @@ def worker():
             mes["principal_ids"] = list(principal_ids)
             dthandler = lambda obj: obj.isoformat() if isinstance(obj,
                                                     datetime.datetime) else obj
-            channel.basic_publish(exchange=exchange,
-                                  body=simplejson.dumps(mes,
-                                                        default=dthandler),
-                                  properties=pika.BasicProperties(
-                    content_type="text/plain",
-                    delivery_mode=1))
+            channel.basic_publish(
+                exchange=exchange,
+                body=simplejson.dumps(mes, default=dthandler),
+                properties=pika.BasicProperties(content_type="text/plain",
+                                                delivery_mode=1
+                                                ),
+                routing_key="")
         channel.basic_ack(delivery_tag=method.delivery_tag)
 
     channel.basic_qos(prefetch_count=1)

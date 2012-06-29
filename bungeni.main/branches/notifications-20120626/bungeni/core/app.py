@@ -33,6 +33,7 @@ from bungeni.core.content import QueryContent
 from bungeni.core.i18n import _
 from bungeni.core.workspace import WorkspaceContainer, load_workspaces
 from bungeni.core.notifications import load_notifications
+from bungeni.core.emailnotifications import email_notifications
 from bungeni.ui.utils import url, common # !+ core dependency on ui
 from bungeni.utils.capi import capi
 from bungeni.utils import register
@@ -54,7 +55,9 @@ def on_wsgi_application_created_event(application, event):
     load_workspaces()
 
     #load notifications configuration
-    #load_notifications()
+    load_notifications()
+
+    email_notifications()
 
     # import events modules, registering handlers
     import bungeni.core.events

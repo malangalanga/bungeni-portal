@@ -2,10 +2,8 @@ import smtplib
 import zope.interface
 import zope.sendmail.interfaces
 import logging
-from bungeni.core.app import BungeniApp
+from zope.app.component.hooks import getSite
 from bungeni.models.settings import EmailSettings
-
-app = BungeniApp()
 
 class SMTPMailer(object):
     """A direct mailer for use with zope.sendmail."""
@@ -13,7 +11,7 @@ class SMTPMailer(object):
     zope.interface.implements(zope.sendmail.interfaces.ISMTPMailer)
     
     def get_settings(self):
-        return EmailSettings(app)
+        return EmailSettings(getSite())
 
     def send(self, fromaddr, toaddrs, message):
         settings = self.get_settings()
@@ -22,7 +20,6 @@ class SMTPMailer(object):
         username = settings.username or None
         password = settings.password or None
         fromaddr = fromaddr or settings.default_sender
-
         connection = smtplib.SMTP(hostname, port)
         if settings.use_tls:
             connection.ehlo()
