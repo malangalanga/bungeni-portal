@@ -1839,7 +1839,7 @@ class GlueScriptTasks:
             self.cfg.svn_password,
             self.cfg.user_glue
         )
-        self.scm.export(current_release["glue"])
+        self.scm.checkout(current_release["glue"])
 
     def glue_setup_config(self):
         template_map = {
