@@ -135,15 +135,6 @@
         </field>
     </descriptor>
 
-    <descriptor name="Attendance">
-        <field name="member_id" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="attendance_type" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-    </descriptor>
-
     <descriptor name="Bill">
         <field name="parliament_id" displayable="view listing" localizable="view listing">
             <hide modes="view listing" />
@@ -649,6 +640,60 @@
         </field>
     </descriptor>
 
+    <descriptor name="MemberOfParliament">
+        <field name="user_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view listing" />
+            <hide modes="edit" />
+        </field>
+        <field name="member_election_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="election_nomination_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="active_p" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="edit" />
+            <hide modes="view listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
+            <hide modes="view edit listing" />
+        </field>
+        <field name="replaced_id" displayable="view edit listing" localizable="view edit listing">
+            <hide modes="view edit listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="representation" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="party" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="leave_reason" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="notes" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
+        </field>
+    </descriptor>
+
     <descriptor name="MemberTitle">
         <field name="title_type_id" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
@@ -797,60 +842,6 @@
         </field>
         <field name="timestamp" displayable="edit" localizable="edit">
             <show modes="edit" />
-        </field>
-    </descriptor>
-
-    <descriptor name="Mp">
-        <field name="user_id" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view listing" />
-            <hide modes="edit" />
-        </field>
-        <field name="member_election_type" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="election_nomination_date" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
-            <hide modes="listing" />
-        </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="active_p" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="edit" />
-            <hide modes="view listing" />
-        </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
-            <hide modes="listing" />
-        </field>
-        <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
-            <hide modes="view edit listing" />
-        </field>
-        <field name="replaced_id" displayable="view edit listing" localizable="view edit listing">
-            <hide modes="view edit listing" />
-        </field>
-        <field name="status" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="representation" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add" />
-            <hide modes="listing" />
-        </field>
-        <field name="party" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="leave_reason" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add" />
-            <hide modes="listing" />
-        </field>
-        <field name="notes" displayable="view edit add" localizable="view edit add">
-            <show modes="view edit add" />
         </field>
     </descriptor>
 
@@ -1170,6 +1161,15 @@
         <field name="political_party" displayable="listing" />
         <field name="status" displayable="view listing" localizable="view listing">
             <show modes="view listing" roles="bungeni.Clerk bungeni.Owner bungeni.Signatory" />
+        </field>
+    </descriptor>
+
+    <descriptor name="SittingAttendance">
+        <field name="member_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="attendance_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
         </field>
     </descriptor>
 
