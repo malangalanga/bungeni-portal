@@ -1,7 +1,10 @@
+log = __import__("logging").getLogger("bungeni.core.notifications")
+
 import os
 import pika
 import simplejson
 import datetime
+import socket
 from lxml import etree
 from threading import Thread
 from sqlalchemy import orm
@@ -110,6 +113,14 @@ def get_mq_parameters():
     return connection_parameters
 
 
+def get_mq_connection():
+    try:
+        return  pika.BlockingConnection(parameters=get_mq_parameters())
+    except socket.error:
+        log.error("Unable to connect to AMQP server."
+                  "Notifications will not be sent")
+        return None
+
 def queue_transition_based_notification(document, event):
     mq_utility = component.getUtility(IMessageQueueConfig)
     domain_class = document.__class__
@@ -123,7 +134,9 @@ def queue_transition_based_notification(document, event):
         "source": event.source,
         "destination": event.destination
         }
-    connection = pika.BlockingConnection(parameters=get_mq_parameters())
+    connection = get_mq_connection()
+    if not connection:
+        return
     channel = connection.channel()
     channel.basic_publish(exchange=str(mq_utility.get_task_exchange()),
                           routing_key=str(mq_utility.get_task_queue()),
@@ -134,7 +147,9 @@ def queue_transition_based_notification(document, event):
 
 
 def worker():
-    connection = pika.BlockingConnection(parameters=get_mq_parameters())
+    connection = get_mq_connection()
+    if not connection:
+        return
     channel = connection.channel()
 
     def callback(channel, method, properties, body):
@@ -181,7 +196,9 @@ def worker():
 
 def setup_task_workers():
     mq_utility = component.getUtility(IMessageQueueConfig)
-    connection = pika.BlockingConnection(parameters=get_mq_parameters())
+    connection = get_mq_connection()
+    if not connection:
+        return
     channel = connection.channel()
     channel.queue_declare(queue=str(mq_utility.get_task_queue()), durable=True)
     channel.queue_bind(queue=str(mq_utility.get_task_queue()),
@@ -194,7 +211,9 @@ def setup_task_workers():
 
 
 def setup_message_exchange():
-    connection = pika.BlockingConnection(parameters=get_mq_parameters())
+    connection = get_mq_connection()
+    if not connection:
+        return
     channel = connection.channel()
     mq_utility = component.getUtility(IMessageQueueConfig)
     channel.exchange_declare(exchange=str(mq_utility.get_message_exchange()),
@@ -202,7 +221,9 @@ def setup_message_exchange():
 
 
 def setup_task_exchange():
-    connection = pika.BlockingConnection(parameters=get_mq_parameters())
+    connection = get_mq_connection()
+    if not connection:
+        return
     channel = connection.channel()
     mq_utility = component.getUtility(IMessageQueueConfig)
     channel.exchange_declare(exchange=str(mq_utility.get_task_exchange()),

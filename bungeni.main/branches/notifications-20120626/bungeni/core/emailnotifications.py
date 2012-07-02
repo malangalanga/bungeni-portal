@@ -1,14 +1,13 @@
-import pika
 import simplejson
 from email.mime.text import MIMEText
 from threading import Thread
 from zope import component
 from zope.app.component.hooks import getSite
+import smtplib
 from bungeni.alchemist import Session
 from bungeni.core.interfaces import IMessageQueueConfig
-from bungeni.core.notifications import get_mq_parameters
+from bungeni.core.notifications import get_mq_connection
 from bungeni.models import domain
-from bungeni.server.smtp import dispatch
 from bungeni.models.settings import EmailSettings
 
 
@@ -24,12 +23,28 @@ def email_notifications_callback(channel, method, properties, body):
     msg["Subject"] = "Test email"
     msg["From"] = settings.default_sender
     msg["To"] = ', '.join(recipients)
-    dispatch(msg)
+    hostname = settings.hostname
+    port = settings.port
+    username = settings.username or None
+    password = settings.password or None
+    connection = smtplib.SMTP(hostname, port)
+    connection.set_debuglevel(1)
+    if settings.use_tls:
+        connection.ehlo()
+        connection.starttls()
+        connection.ehlo()
+        # authenticate if needed
+    if username is not None and password is not None:
+        connection.login(username, password)
+    connection.sendmail(settings.default_sender, msg["To"], msg.as_string())
+    connection.quit()
     channel.basic_ack(delivery_tag=method.delivery_tag)
 
 
 def email_worker():
-    connection = pika.BlockingConnection(parameters=get_mq_parameters())
+    connection = get_mq_connection()
+    if not connection:
+        return
     channel = connection.channel()
     channel.basic_qos(prefetch_count=1)
     channel.basic_consume(email_notifications_callback,
@@ -39,7 +54,9 @@ def email_worker():
 
 def email_notifications():
     mq_utility = component.getUtility(IMessageQueueConfig)
-    connection = pika.BlockingConnection(parameters=get_mq_parameters())
+    connection = get_mq_connection()
+    if not connection:
+        return
     channel = connection.channel()
     channel.queue_declare(queue="bungeni_email_queue", durable=True)
     channel.queue_bind(queue="bungeni_email_queue",

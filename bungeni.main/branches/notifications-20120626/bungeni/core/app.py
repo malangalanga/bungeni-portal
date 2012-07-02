@@ -54,9 +54,10 @@ def on_wsgi_application_created_event(application, event):
     # load workspaces
     load_workspaces()
 
-    #load notifications configuration
+    #load notifications
     load_notifications()
-
+    
+    #load email notifications
     email_notifications()
 
     # import events modules, registering handlers
