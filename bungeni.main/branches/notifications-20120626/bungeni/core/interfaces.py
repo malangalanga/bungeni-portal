@@ -356,3 +356,7 @@ class INotificationsUtility(interface.Interface):
         """Set the roles to be notified after a certain amount of time has
         elapsed since state was reached
         """  
+
+class IBungeniMailer(interface.Interface):
+    """Interface for mailer utility
+    """
