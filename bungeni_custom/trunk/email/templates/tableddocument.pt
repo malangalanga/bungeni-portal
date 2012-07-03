@@ -1,0 +1,90 @@
+<!-- convention status-subject for the subject title to be use in the email -->
+<metal:block define-macro="submitted-subject">
+  <tal:block i18n:translate="">Tabled document has been submitted :
+    <span tal:replace="options/short_title"/>
+  </tal:block>
+</metal:block>
+<metal:block define-macro="submitted-body">
+  <tal:block i18n:translate="">The Tabled document
+    <span tal:replace="options/short_title"/>
+      was submitted on 
+    <span tal:replace="options/status_date"/>
+  </tal:block>
+</metal:block>
+
+<metal:block define-macro="received-subject">
+  <tal:block i18n:translate="">Tabled document received :
+    <span tal:replace="options/short_title"/>
+  </tal:block>
+</metal:block>
+<metal:block define-macro="received-body">
+  <tal:block i18n:translate="">The Tabled document
+    <span tal:replace="options/short_title"/>
+      was recieved on 
+    <span tal:replace="options/status_date"/>
+  </tal:block>
+</metal:block>
+
+<metal:block define-macro="inadmissible-subject">
+  <tal:block i18n:translate="">Tabled document is inadmissible :
+    <span tal:replace="options/short_title"/>
+  </tal:block>
+</metal:block>
+<metal:block define-macro="inadmissible-body">
+  <tal:block i18n:translate="">The Tabled document
+    <span tal:replace="options/short_title"/>
+      was declared inadmissible on 
+    <span tal:replace="options/status_date"/>
+  </tal:block>
+</metal:block>
+
+<metal:block define-macro="clarification_required-subject">
+  <tal:block i18n:translate="">Clarification required for Tabled document :
+    <span tal:replace="options/short_title"/>
+  </tal:block>
+</metal:block>
+<metal:block define-macro="clarification_required-body">
+  <tal:block i18n:translate="">The Tabled document
+    <span tal:replace="options/short_title"/>
+    requires clarification
+  </tal:block>
+</metal:block>
+
+<metal:block define-macro="debated-subject">
+  <tal:block i18n:translate="">Tabled document has been debated :
+    <span tal:replace="options/short_title"/>
+  </tal:block>
+</metal:block>
+<metal:block define-macro="debated-body">
+  <tal:block i18n:translate="">The Tabled document
+    <span tal:replace="options/short_title"/>
+      was debated on 
+    <span tal:replace="options/status_date"/>
+  </tal:block>
+</metal:block>
+
+<metal:block define-macro="scheduled-subject">
+  <tal:block i18n:translate="">Tabled document has been scheduled :
+    <span tal:replace="options/short_title"/>
+  </tal:block>
+</metal:block>
+<metal:block define-macro="scheduled-body">
+  <tal:block i18n:translate="">The Tabled document
+    <span tal:replace="options/short_title"/>
+      was scheduled on 
+    <span tal:replace="options/status_date"/>
+  </tal:block>
+</metal:block>
+
+<metal:block define-macro="deferred-subject">
+  <tal:block i18n:translate="">Tabled document was deferred :
+    <span tal:replace="options/short_title"/>
+  </tal:block>
+</metal:block>
+<metal:block define-macro="deferred-body">
+  <tal:block i18n:translate="">The Tabled document
+    <span tal:replace="options/short_title"/>
+      was deffered on 
+    <span tal:replace="options/status_date"/>
+  </tal:block>
+</metal:block>
