@@ -21,6 +21,8 @@
     <feature name="schedule" enabled="true" />
     <feature name="workspace" enabled="true" />
     
+    <feature name="notification" enabled="true"/>
+    
     <!-- global grants -->
     <grant permission="bungeni.motion.View" role="bungeni.Owner" />
     <grant permission="bungeni.motion.View" role="bungeni.Signatory" />
@@ -149,12 +151,6 @@
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
         <!-- attachment -->
         <deny permission="bungeni.attachment.Delete" role="bungeni.Owner" />
-        <notification condition="clerk_receive_notification"
-            subject="Motion submitted: ${item.short_title}"
-            from="${item.owner_email}"
-            to="${site.clerk_email}"
-            body="notification_email_to_clerk_upon_submit_of_motion"
-        />
     </state>
     
     <state id="received" title="Received by Clerks Office" 
@@ -168,12 +164,6 @@
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />        
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
-        <notification condition="owner_receive_notification"
-            subject="Motion received: ${item.short_title}"
-            from="${site.clerk_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_receipt_of_motion"
-        />
     </state>
     
     <state id="clarification_required" title="Requires Clarification to Receive"
@@ -188,12 +178,6 @@
         <!-- attachment -->
         <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
-        <notification condition="owner_receive_notification"
-            subject="Motion needs clarification: ${item.short_title}"
-            from="${site.clerk_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_need_clarification_of_motion"
-        />
     </state>
     
     <state id="completed" title="Submitted to the Speaker"
@@ -229,12 +213,6 @@
     <state id="inadmissible" title="Inadmissible" 
         like_state="withdrawn_internal"
         tags="terminal fail">
-        <notification condition="owner_receive_notification"
-            subject="Motion rejected: ${item.short_title}"
-            from="${site.speaker_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_rejection_of_motion"
-        />
     </state>
     
     <state id="admissible" title="Admissible" 
@@ -260,12 +238,6 @@
     <state id="scheduled" title="Scheduled" 
         like_state="admissible"
         tags="public scheduled">
-        <notification condition="owner_receive_notification"
-            subject="Motion scheduled: ${item.short_title}"
-            from="${site.clerk_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_schedule_of_motion"
-        />
     </state>
     
     <state id="adopted" title="Adopted"
@@ -297,12 +269,6 @@
         like_state="admissible"
         tags="public approved"
         note="An admissable motion that cannot be debated.">
-        <notification condition="owner_receive_notification"
-            subject="Motion deferred: ${item.short_title}"
-            from="${site.speaker_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_defer_of_motion"
-        />
     </state>
     
     <state id="elapsed" title="Elapsed" 
@@ -320,12 +286,6 @@
     <state id="rejected" title="Rejected" 
         like_state="adopted"
         tags="public terminal fail">
-        <notification condition="owner_receive_notification"
-            subject="Motion rejected: ${item.short_title}"
-            from="${site.speaker_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_rejection_of_motion"
-        />
     </state>
     
     <state id="withdrawn" title="Withdrawn" 

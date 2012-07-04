@@ -20,6 +20,8 @@
     <feature name="schedule" enabled="true" />
     <feature name="workspace" enabled="true" />
     
+    <feature name="notification" enabled="true"/>
+    
     <!-- global grants -->
     <grant permission="bungeni.question.View" role="bungeni.Owner" />
     <grant permission="bungeni.question.View" role="bungeni.Signatory" />
@@ -134,12 +136,6 @@
         <grant permission="zope.View" role="bungeni.Speaker" />
         <!-- signatory -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
-        <notification condition="clerk_receive_notification"
-            subject="Question submitted: ${item.short_title}"
-            from="${item.owner_email}"
-            to="${site.clerk_email}"
-            body="notification_email_to_clerk_upon_submit_of_question"
-        />
     </state>
 
     <state id="received" title="Received by clerk"
@@ -150,12 +146,6 @@
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
-        <notification condition="owner_receive_notification"
-            subject="Question received: ${item.short_title}"
-            from="${site.clerk_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_receipt_of_question"
-        />
     </state>
     
     <state id="completed" title="Submitted to the Speaker"
@@ -167,18 +157,6 @@
         <grant permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Speaker" />
         <grant permission="bungeni.attachment.Delete" role="bungeni.Speaker" />
-        <notification condition="owner_receive_notification"
-            subject="Question forwarded to Speaker's Office: ${item.short_title}"
-            from="${site.clerk_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_complete_of_question"
-        />
-        <notification condition="ministry_receive_notification"
-            subject="Question asked to ministry: ${item.short_title}"
-            from="${site.clerk_email}"
-            to="${item.ministry_emails}"
-            body="notification_email_to_ministry_upon_complete_question"
-        />
     </state>
     
     <state id="admissible" title="Admissible"
@@ -204,12 +182,6 @@
         <deny permission="bungeni.event.Add" role="bungeni.Speaker" />
         <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
         <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
-        <notification condition="owner_receive_notification"
-            subject="Question rejected: ${item.short_title}"
-            from="${site.speaker_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_rejection_of_question"
-        />
     </state>
     
     <state id="clarification_required" title="Requires Clarification to Receive"
@@ -222,12 +194,6 @@
         <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
         <grant permission="bungeni.attachment.Delete" role="bungeni.Owner" />
-        <notification condition="owner_receive_notification"
-            subject="Question needs clarification: ${item.short_title}"
-            from="${site.clerk_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_need_clarification_of_question"
-        />
     </state>
     
     <state id="incomplete" title="Require Clarification to Approve"
@@ -244,12 +210,6 @@
     <state id="scheduled" title="Scheduled" 
         like_state="admissible"
         tags="public scheduled oral">
-        <notification condition="owner_receive_notification"
-            subject="Question scheduled: ${item.short_title}"
-            from="${site.clerk_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_schedule_of_question"
-        />
     </state>
 
     <state id="adjourned" title="Debate adjourned" 
@@ -263,12 +223,6 @@
         <!-- response -->
         <grant permission="bungeni.response.View" role="bungeni.Minister" />
         <grant permission="bungeni.response.Edit" role="bungeni.Minister" />
-        <notification condition="owner_receive_notification"
-            subject="Question sent to ministry: ${item.short_title}"
-            from="${site.clerk_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_sent_to_ministry_of_question"
-        />
     </state>
     
     <state id="response_submitted" title="Response submitted" 
@@ -278,12 +232,6 @@
         <deny permission="bungeni.response.Edit" role="bungeni.Minister" />
         <grant permission="bungeni.response.View" role="bungeni.Clerk" />
         <grant permission="bungeni.response.View" role="bungeni.Speaker" />
-        <notification condition="owner_receive_notification"
-            subject="Question answered: ${item.short_title}"
-            from="${site.clerk_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_answer_of_question"
-        />
     </state>
     
     <state id="response_completed" title="Response completed" 
@@ -310,12 +258,6 @@
     <state id="deferred" title="Deferred" 
         like_state="admissible"
         tags="public approved">
-        <notification condition="owner_receive_notification"
-            subject="Question deferred: ${item.short_title}"
-            from="${site.speaker_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_defer_of_question"
-        />
     </state>
         
     <state id="debated" title="Debated" 
@@ -328,12 +270,6 @@
         <deny permission="bungeni.event.Add" role="bungeni.Speaker" />
         <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
         <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
-        <notification condition="owner_receive_notification"
-            subject="Question debated: ${item.short_title}"
-            from="${site.clerk_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_debate_question"
-        />
     </state>
 
     <state id="elapsed" title="Elapsed" like_state="debated"

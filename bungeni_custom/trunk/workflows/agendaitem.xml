@@ -17,6 +17,8 @@
     <feature name="schedule" enabled="true" />
     <feature name="workspace" enabled="true" />
     
+    <feature name="notification" enabled="true"/>
+    
     <!-- global grants -->
     <grant permission="bungeni.agendaitem.View" role="bungeni.Owner" />
     <grant permission="bungeni.agendaitem.View" role="bungeni.Signatory" />
@@ -118,12 +120,6 @@
         <grant permission="zope.View" role="bungeni.Speaker" />
         <!-- signatories -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
-        <notification condition="clerk_receive_notification"
-            subject="Agenda Item submitted: ${item.short_title}"
-            from="${site.clerk_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_clerk_upon_submit_of_agenda_item"
-        />
     </state>
 
     <state id="received" title="Received by Clerks Office"
@@ -135,12 +131,6 @@
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
-        <notification condition="owner_receive_notification"
-            subject="Agenda Item received: ${item.short_title}"
-            from="${site.clerk_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_receipt_of_agenda_item"
-        />
     </state>
     
     <state id="clarification_required" title="Requires Clarification to Receive"
@@ -153,12 +143,6 @@
         <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
         <grant permission="bungeni.attachment.Delete" role="bungeni.Owner" />
-        <notification condition="owner_receive_notification"
-            subject="Agenda Item needs clarification: ${item.short_title}"
-            from="${site.clerk_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_need_clarification_of_agenda_item"
-        />
     </state>
     
     <state id="completed" title="Submitted to the Speaker"
@@ -185,12 +169,6 @@
     <state id="inadmissible" title="Inadmissible" 
         like_state="submitted"
         tags="terminal fail">
-        <notification condition="owner_receive_notification"
-            subject="Agenda Item rejected: ${item.short_title}"
-            from="${site.speaker_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_rejection_of_agenda_item"
-        />
     </state>
     
     <state id="withdrawn_internal" title="Withdrawn" 
@@ -216,22 +194,10 @@
     <state id="debated" title="Debated" 
         like_state="admissible"
         tags="public terminal succeed">
-        <notification condition="owner_receive_notification"
-            subject="Agenda Item was debated: ${item.short_title}"
-            from="${site.clerk_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_debate_of_agenda_item"
-        />
     </state>
     
     <state id="scheduled" title="Scheduled" like_state="admissible"
         tags="public scheduled">
-        <notification condition="owner_receive_notification"
-            subject="Agenda Item scheduled: ${item.short_title}"
-            from="${site.clerk_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_schedule_of_agenda_item"
-        />
     </state>
     
     <state id="adjourned" title="Debate adjourned" 
@@ -242,12 +208,6 @@
     <state id="deferred" title="Deferred" 
         like_state="admissible"
         tags="public approved">
-        <notification condition="owner_receive_notification"
-            subject="Agenda Item deferred: ${item.short_title}"
-            from="${site.speaker_email}"
-            to="${item.owner_email}"
-            body="notification_email_to_member_upon_defer_of_agenda_item"
-        />
     </state>
     
     <state id="elapsed" title="Elapsed" 
