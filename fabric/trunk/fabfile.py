@@ -656,25 +656,34 @@ def ant_run(buildfile="build.xml"):
     tasks.ant_run(buildfile)
 
 def rabbitmq_install():
-   """
-   Installs RabbitMQ, WARNING: Will overwrite any existing installation
-   """
-   #stop_rabbitmq("IGNORE_ERROR")
-   tasks = bungeni.RabbitMQTasks()
-   tasks.setup_rabbitmq()
+    """
+    Installs RabbitMQ, WARNING: Will overwrite any existing installation
+    """
+    #stop_rabbitmq("IGNORE_ERROR")
+    tasks = bungeni.RabbitMQTasks()
+    tasks.setup_rabbitmq()
 
 def glue_install():
-   """
-   Installs Jython, WARNING: Will overwrite any existing installation
-   """
-   tasks = bungeni.GlueScriptTasks()
-   tasks.setup_jython()
-   tasks.setup_glue()
-   tasks.glue_setup_config()
+    """
+    Installs Jython, WARNING: Will overwrite any existing installation
+    """
+    tasks = bungeni.GlueScriptTasks()
+    tasks.setup_jython()
+    tasks.setup_glue()
+    tasks.glue_setup_config()
 
 def config_glue():
-   """
-   Generates glue_script configuration
-   """
-   tasks = bungeni.GlueScriptTasks()
-   tasks.glue_setup_config()
+    """
+    Generates glue_script configuration
+    """
+    tasks = bungeni.GlueScriptTasks()
+    tasks.glue_setup_config()
+
+def exist_stack_update():
+    """
+    Updates eXist framework and glue-script files
+    """
+    exist_fw_install()
+    gtasks = bungeni.GlueScriptTasks()
+    gtasks.setup_glue()
+    gtasks.glue_setup_config()

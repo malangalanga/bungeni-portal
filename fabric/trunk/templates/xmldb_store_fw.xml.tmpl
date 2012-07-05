@@ -20,9 +20,17 @@
         <echo message="Loading XQ Framework system to eXist."/>
         <xdb:store uri="${fw-uri}" createcollection="true" createsubcollections="true" user="${user}" password="${password}">
             <fileset dir="${exist-docs}/framework">
+                <exclude name="**/*.tmp"/>
                 <include name="**/*.*"/>
             </fileset>
         </xdb:store>
+        
+        <echo message="Enforcing ui-config storage. Random bug led to this file not being properly read by common.xqm"/>
+        <xdb:store uri="${fw-uri}" user="${user}" password="${password}">
+            <fileset dir="${exist-docs}/framework/bungeni">
+                <include name="ui-config.xml"/>
+            </fileset>
+        </xdb:store>        
         
         <echo message="Setting execute permission for main controller."/>
         <xdb:chmod uri="${fw-uri}/bungeni" resource="controller.xql" mode="other=+execute" user="${user}" password="${password}"/>
