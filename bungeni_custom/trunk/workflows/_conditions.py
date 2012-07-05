@@ -26,10 +26,6 @@ from bungeni.core.workflows._conditions import (
     user_is_not_context_owner, 
     user_is_context_owner,
     context_is_public,
-    # common global settings
-    clerk_receive_notification,
-    owner_receive_notification,
-    ministry_receive_notification,
     
     # parliamentary items
     is_scheduled,
