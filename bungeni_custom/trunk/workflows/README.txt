@@ -21,8 +21,6 @@ grammar {
     element workflow {
         attribute title { text },
         attribute description { text },
-        attribute domain { "bungeni" },
-        attribute initial_state { "" }?,
         attribute tags { text }?, # declare any system defined tags used in workflow
         attribute note { text }?,
         
@@ -61,8 +59,6 @@ space-separated-value of tag names.
 - the order of workflow attributes should respect:
     title
     description
-    domain
-    initial_state
     tags
     note
 
