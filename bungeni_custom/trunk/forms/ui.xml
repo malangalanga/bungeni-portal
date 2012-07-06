@@ -136,8 +136,8 @@
         <field name="parliament_id" displayable="view listing" localizable="view listing">
             <hide modes="view listing" />
         </field>
-        <field name="short_title" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+        <field name="short_title" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
         </field>
         <field name="title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
@@ -1035,7 +1035,7 @@
         </field>
         <field name="response_type" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
-            <hide modes="listing" />
+            <show modes="listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
