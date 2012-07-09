@@ -13,7 +13,8 @@ See sample templates in:
 
 $Id$
 """
-log = __import__("logging").getLogger("bungeni.reports")
+import logging
+logging.basicConfig(level=logging.INFO)
 
 import sys
 from lxml import etree
@@ -21,8 +22,8 @@ from sqlalchemy.orm import class_mapper, Mapper
 
 from zope.dublincore.interfaces import IDCDescriptiveProperties
 
-from bungeni.models import domain
-
+from bungeni.models import domain, orm
+from bungeni.ui import descriptor
 from bungeni.utils.capi import capi
 
 SIMPLE_LIST = "<ul/>"
@@ -100,6 +101,7 @@ PROCESSED_PROPS = {}
 
 def generate_doc_for(domain_class, title=None, expand=True):
     doc = etree.fromstring(SIMPLE_LIST)
+    dc_adapter = None
     if title:
         add_sub_element(doc, "li", title)
     if not isinstance(domain_class, Mapper):
@@ -110,7 +112,7 @@ def generate_doc_for(domain_class, title=None, expand=True):
         try:
             dc_adapter = IDCDescriptiveProperties(mapped.class_(), None)
         except:
-            dc_adapter= None
+            logging.error("Unable to get dc adapter for %s", mapped.class_)
     if dc_adapter:
         dc_keys = {}
         dc_keys.update(dc_adapter.__class__.__dict__)
@@ -161,7 +163,7 @@ def generate_documentation():
     return etree.tostring(document)
 
 if __name__ == "__main__":
-    log.info("Starting generation of reporting documentation...")
+    logging.info("Starting generation of reporting documentation...")
     doc_file_name = "/".join([TARGET_DIRECTORY, "index.html"])
     doc_file = open(doc_file_name, "w")
     doc_args = dict(
@@ -189,6 +191,6 @@ if __name__ == "__main__":
         </html
         """ % doc_args
     )
-    log.info("Reporting documentation was generated and written to %s", 
+    logging.info("Reporting documentation was generated and written to %s", 
         doc_file_name
     )
