@@ -4,11 +4,16 @@
         <field name="title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
+        <field name="type_number" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
         <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="description" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -16,9 +21,6 @@
         </field>
         <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
-        </field>
-        <field name="type_number" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
         </field>
         <field name="parliament_id" displayable="view listing" localizable="view listing">
             <hide modes="view listing" />
@@ -136,11 +138,16 @@
         <field name="title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
+        <field name="type_number" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
         <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="description" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -148,9 +155,6 @@
         </field>
         <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
-        </field>
-        <field name="type_number" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
         </field>
         <field name="parliament_id" displayable="view listing" localizable="view listing">
             <hide modes="view listing" />
@@ -187,10 +191,12 @@
             <show modes="edit" />
         </field>
         <field name="short_title" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="group_id" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
     </descriptor>
 
@@ -350,33 +356,20 @@
         </field>
     </descriptor>
 
-    <descriptor name="DocVersion">
-        <field name="user_id" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="action" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="seq" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="procedure" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
-        <field name="date_audit" displayable="view listing" localizable="view listing">
-            <hide modes="view listing" />
-        </field>
-        <field name="date_active" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
-        </field>
+    <descriptor name="Doc">
         <field name="title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
+        <field name="type_number" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
         <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="description" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -384,9 +377,6 @@
         </field>
         <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
-        </field>
-        <field name="type_number" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
         </field>
         <field name="parliament_id" displayable="view listing" localizable="view listing">
             <hide modes="view listing" />
@@ -410,7 +400,81 @@
             <show modes="view listing" />
         </field>
         <field name="submission_date" displayable="view listing" localizable="view listing">
+            <show modes="view" />
+            <hide modes="listing" />
+        </field>
+        <field name="body" displayable="view edit add" localizable="view">
+            <show modes="view" />
+        </field>
+        <field name="timestamp" displayable="edit" localizable="edit">
+            <show modes="edit" />
+        </field>
+    </descriptor>
+
+    <descriptor name="DocVersion">
+        <field name="user_id" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
+        </field>
+        <field name="action" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="seq" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="procedure" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="date_audit" displayable="view listing" localizable="view listing">
+            <hide modes="view listing" />
+        </field>
+        <field name="date_active" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="title" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="type_number" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="description" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="language" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="view edit listing" />
+        </field>
+        <field name="parliament_id" displayable="view listing" localizable="view listing">
+            <hide modes="view listing" />
+        </field>
+        <field name="owner_id" displayable="view edit add listing" localizable="view edit listing">
+            <show modes="edit" />
+            <hide modes="view listing" roles="bungeni.Anonymous" />
+        </field>
+        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view" />
+            <hide modes="edit listing" />
+        </field>
+        <field name="uri" displayable="view edit listing" localizable="view edit listing">
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
+        <field name="submission_date" displayable="view listing" localizable="view listing">
+            <show modes="view" />
+            <hide modes="listing" />
         </field>
         <field name="body" displayable="view edit add" localizable="view">
             <show modes="view" />
@@ -440,11 +504,16 @@
         <field name="title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
+        <field name="type_number" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
         <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="description" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -452,9 +521,6 @@
         </field>
         <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
-        </field>
-        <field name="type_number" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
         </field>
         <field name="parliament_id" displayable="view listing" localizable="view listing">
             <hide modes="view listing" />
@@ -478,7 +544,8 @@
             <show modes="view listing" />
         </field>
         <field name="submission_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
+            <show modes="view" />
+            <hide modes="listing" />
         </field>
         <field name="body" displayable="view edit add" localizable="view">
             <show modes="view" />
@@ -777,11 +844,16 @@
         <field name="title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
+        <field name="type_number" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
         <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="description" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -789,9 +861,6 @@
         </field>
         <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
-        </field>
-        <field name="type_number" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
         </field>
         <field name="parliament_id" displayable="view listing" localizable="view listing">
             <hide modes="view listing" />
@@ -823,7 +892,8 @@
             <hide modes="listing" />
         </field>
         <field name="notice_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
+            <show modes="view" />
+            <hide modes="listing" />
         </field>
         <field name="body" displayable="view edit add" localizable="view">
             <show modes="view" />
@@ -1014,11 +1084,16 @@
         <field name="title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
+        <field name="type_number" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
         <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="description" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="response_type" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -1030,9 +1105,6 @@
         </field>
         <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
-        </field>
-        <field name="type_number" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
         </field>
         <field name="parliament_id" displayable="view listing" localizable="view listing">
             <hide modes="view listing" />
@@ -1056,7 +1128,8 @@
             <show modes="view listing" />
         </field>
         <field name="submission_date" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
+            <show modes="view" />
+            <hide modes="listing" />
         </field>
         <field name="admissible_date" displayable="view listing" localizable="view listing">
             <show modes="view" />
@@ -1190,11 +1263,16 @@
         <field name="title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
+        <field name="type_number" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
         <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="description" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
@@ -1202,9 +1280,6 @@
         </field>
         <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
-        </field>
-        <field name="type_number" displayable="view listing" localizable="view listing">
-            <show modes="view listing" />
         </field>
         <field name="parliament_id" displayable="view listing" localizable="view listing">
             <hide modes="view listing" />
