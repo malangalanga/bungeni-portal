@@ -12,15 +12,12 @@
         <h1 class="heading" br:type="text" br:source="title"/>
         <div id="listing-body">
             <div br:type="listing" br:source="sittings">
-                <h2 br:type="text" br:source="dc:title"/>
-
-                <h3>Agenda</h3>
                 <div class="agendaitems">
                     <ul br:type="listing" br:source="item_schedule">
                         <li>
-                            <span br:type="text" br:source="item_type"/>
+                            <span br:type="text" br:condition="dc:mover" br:source="item_type"/>
                             <span br:type="text" br:source="dc:title"/>
-                            <ul>
+                            <ul br:condition="dc:mover">
                                 <li><span>By: <span br:type="text" br:source="dc:mover"/></span></li>
                             </ul>
                         </li>
