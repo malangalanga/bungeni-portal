@@ -1,6 +1,6 @@
 <ui roles="bungeni.Admin bungeni.Clerk bungeni.Speaker bungeni.Owner bungeni.MP bungeni.Signatory bungeni.Minister bungeni.Anonymous">
 
-    <descriptor name="AgendaItem">
+    <descriptor name="agenda_item" order="10">
         <field name="title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -59,7 +59,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Attachment">
+    <descriptor name="attachment">
         <field name="type" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -86,7 +86,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="AttachmentVersion">
+    <descriptor name="attachment_version">
         <field name="user_id" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
         </field>
@@ -134,7 +134,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Bill">
+    <descriptor name="bill" order="11">
         <field name="title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -200,7 +200,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Committee">
+    <descriptor name="committee" order="20">
         <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
@@ -273,7 +273,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="CommitteeMember">
+    <descriptor name="committee_member">
         <field name="user_id" displayable="view add listing" localizable="view listing">
             <show modes="view listing" />
         </field>
@@ -308,7 +308,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="CommitteeStaff">
+    <descriptor name="committee_staff">
         <field name="user_id" displayable="view add listing" localizable="view listing">
             <show modes="view listing" />
         </field>
@@ -343,7 +343,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Country">
+    <descriptor name="country">
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
@@ -356,7 +356,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Doc">
+    <descriptor name="doc">
         <field name="title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -411,7 +411,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="DocVersion">
+    <descriptor name="doc_version">
         <field name="user_id" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
         </field>
@@ -487,7 +487,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="EditorialNote">
+    <descriptor name="editorial_note">
         <field name="editorial_note_id" displayable="view edit add listing" localizable="view listing">
             <show modes="view listing" />
         </field>
@@ -500,7 +500,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Event">
+    <descriptor name="event">
         <field name="title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -558,7 +558,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Government">
+    <descriptor name="government" order="21">
         <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
@@ -595,7 +595,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="GroupAddress">
+    <descriptor name="group_address">
         <field name="logical_address_type" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -626,7 +626,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Group">
+    <descriptor name="group">
         <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
@@ -660,7 +660,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Heading">
+    <descriptor name="heading" order="3">
         <field name="text" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -670,7 +670,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="ItemSchedule">
+    <descriptor name="item_schedule">
         <field name="item_id" displayable="view edit add listing" localizable="view listing">
             <show modes="view listing" />
         </field>
@@ -688,7 +688,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="ItemScheduleDiscussion">
+    <descriptor name="item_schedule_discussion">
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
@@ -698,7 +698,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="MemberOfParliament">
+    <descriptor name="member_of_parliament" order="18">
         <field name="user_id" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view listing" />
             <hide modes="edit" />
@@ -752,7 +752,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="MemberTitle">
+    <descriptor name="member_title">
         <field name="title_type_id" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -768,7 +768,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Minister">
+    <descriptor name="minister">
         <field name="user_id" displayable="view add listing" localizable="view listing">
             <show modes="view listing" />
         </field>
@@ -803,7 +803,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Ministry">
+    <descriptor name="ministry">
         <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
@@ -840,7 +840,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Motion">
+    <descriptor name="motion" order="12">
         <field name="title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -903,7 +903,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Office">
+    <descriptor name="office" order="2">
         <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
@@ -943,7 +943,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="OfficeMember">
+    <descriptor name="office_member">
         <field name="user_id" displayable="view add listing" localizable="view listing">
             <show modes="view listing" />
         </field>
@@ -978,7 +978,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Parliament">
+    <descriptor name="parliament" order="1">
         <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -1004,7 +1004,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="PoliticalGroup">
+    <descriptor name="political_group" order="19">
         <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
@@ -1044,7 +1044,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="PoliticalGroupMember">
+    <descriptor name="political_group_member">
         <field name="user_id" displayable="view add listing" localizable="view listing">
             <show modes="view listing" />
         </field>
@@ -1079,7 +1079,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Question">
+    <descriptor name="question" order="13">
         <field name="response_text" displayable="edit" />
         <field name="title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
@@ -1154,7 +1154,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Report4Sitting">
+    <descriptor name="report4_sitting" order="15">
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
@@ -1170,7 +1170,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Report">
+    <descriptor name="report" order="15">
         <field name="language" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit" />
             <hide modes="listing" />
@@ -1186,7 +1186,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Session">
+    <descriptor name="session" order="16">
         <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -1209,7 +1209,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Signatory">
+    <descriptor name="signatory">
         <field name="signatory_id" displayable="listing" localizable="listing">
             <show modes="listing" roles="bungeni.Owner bungeni.Signatory" />
         </field>
@@ -1222,7 +1222,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="SittingAttendance">
+    <descriptor name="sitting_attendance">
         <field name="member_id" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -1231,7 +1231,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="Sitting">
+    <descriptor name="sitting" order="17">
         <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -1259,7 +1259,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="TabledDocument">
+    <descriptor name="tabled_document" order="14">
         <field name="title" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -1318,7 +1318,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="TitleType">
+    <descriptor name="title_type" order="22">
         <field name="title_name" displayable="view edit add listing" />
         <field name="role_id" displayable="view edit add listing" />
         <field name="user_unique" displayable="view edit add listing" />
@@ -1329,7 +1329,7 @@
         </field>
     </descriptor>
 
-    <descriptor name="UserAddress">
+    <descriptor name="user_address">
         <field name="logical_address_type" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -1360,11 +1360,11 @@
         </field>
     </descriptor>
 
-    <descriptor name="UserDelegation">
+    <descriptor name="user_delegation" order="3">
         <field name="delegation_id" displayable="view edit add listing" />
     </descriptor>
 
-    <descriptor name="User">
+    <descriptor name="user" order="4">
         <field name="user_id" displayable="view listing" localizable="view listing">
             <hide modes="view" />
             <show modes="listing" />
