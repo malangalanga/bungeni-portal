@@ -35,6 +35,9 @@
         <echo message="Setting execute permission for main controller."/>
         <xdb:chmod uri="${fw-uri}/bungeni" resource="controller.xql" mode="other=+execute" user="${user}" password="${password}"/>
         
+        <echo message="Setting execute permission for admin controller."/>
+        <xdb:chmod uri="${fw-uri}/bungeni/admin" resource="controller.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        
         <echo message="Loading index file for bungeni-collection to eXist."/>
         <xdb:store uri="${sys-uri}/config/db/framework" createcollection="true" createsubcollections="true" user="${user}" password="${password}">
             <fileset dir="${exist-docs}/system/config/db/framework">
