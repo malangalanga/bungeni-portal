@@ -91,7 +91,15 @@
 #portal-breadcrumbs a:hover {
     text-decoration: underline;
 }
-
+#portal-breadcrumbs a::after {
+    content: " › " !important;
+}
+#portal-breadcrumbs a:last-child::after {
+    content: "" !important;
+}
+.breadcrumbSeparator {
+    display:none;
+}
 /* portal-searchbox and portal-siteactions are empty tags,
  * so they have been set to display: none because they make
  * the layout break in IE.
@@ -482,33 +490,35 @@ div#portal-globalnav ul.level0 li a:hover {
  *        <li>...</li>
  *   </ul>
  *   a suggested structure would be to have the <ul> elements separately:
+ *   !+IMPLEMENTED (9th July, 2012 - this is current layout) 
  *   <ul class="level0">...</ul>
  *   <ul class="level1">...</ul>
  */
  div#portal-globalnav-bottom {
  	border:0;
 }
-div#portal-globalnav ul.level0 ul.level1 {
+div#portal-globalnav ul.level1 {
     border-top: 0 none;
     background: #f9ac32;
 }
-div#portal-globalnav ul.level0 ul.level1 a {
+div#portal-globalnav ul.level1 a {
     background: transparent;
     border: 0 none;
     text-shadow: none;
+    color:#000000;
 }
-div#portal-globalnav ul.level0 ul.level1 li a:hover {
+div#portal-globalnav ul.level1 li a:hover {
     color: #000;
     text-decoration: underline;
     border: 0 none;
 }
-div#portal-globalnav ul.level0 ul.level1 li.selected a {
+div#portal-globalnav ul.level1 li.selected a {
     background: transparent;
     border: 0 none;
     font-weight: normal;
     color: #d50005 !important;
 }
-.template-portal div#portal-globalnav ul.level0 ul.level1 li.selected a {
+.template-portal div#portal-globalnav ul.level1 li.selected a {
 	color:#d42022 !important;
 }
 
@@ -1415,14 +1425,14 @@ div.main-column #collage h2 {
 	color:#fff !important;
 	text-shadow:0 0 0 #fff;
 }
-.template-workspace div#portal-globalnav ul.level0 ul.level1 a:hover {
+.template-workspace div#portal-globalnav ul.level1 a:hover {
     background:transparent;
     border:0px;
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
     border-radius: 0px;
 }
-.template-workspace div#portal-globalnav ul.level0 ul.level1 {
+.template-workspace div#portal-globalnav ul.level1 {
     border: 1px solid #aaf;
     border-right: 0 !important;
     border-top: 0 none !important;
@@ -1430,7 +1440,7 @@ div.main-column #collage h2 {
     background:#f9ac32 !important;
     display: block;
 }
-.section-bungeni-workspace div#portal-globalnav ul.level0 ul.level1 {
+.section-bungeni-workspace div#portal-globalnav ul.level1 {
     border: 1px solid #aaf;
     border-right: 0 none;
     border-top: 0 none !important;
@@ -1438,7 +1448,7 @@ div.main-column #collage h2 {
     background:#21a1ba url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x !important;
     display: block;
 }
-.section-bungeni-admin div#portal-globalnav ul.level0 ul.level1 {
+.section-bungeni-admin div#portal-globalnav ul.level1 {
     border: 1px solid #aaf;
     border-right: 0 none;
     border-top: 0 none !important;
@@ -1455,13 +1465,13 @@ div.main-column #collage h2 {
     background-color: #c8631b !important;
     color: white !important;
 }
-.template-workspace div#portal-globalnav ul.level0 ul.level1 li.selected a {
+.template-workspace div#portal-globalnav ul.level1 li.selected a {
     color: #1763aa !important;
 }
-.section-bungeni-workspace div#portal-globalnav ul.level0 ul.level1 a {
+.section-bungeni-workspace div#portal-globalnav ul.level1 a {
     color:#fff !important;
 }
-.section-bungeni-workspace div#portal-globalnav ul.level0 ul.level1 li.selected a {
+.section-bungeni-workspace div#portal-globalnav ul.level1 li.selected a {
     color:#3f3f3f !important;
 }
 /*
@@ -1661,4 +1671,288 @@ div.main-column #collage h2 {
 .template-workspace .portlet ul.contentViewsLeftPort li a:hover {
     background-color:#21a1ba !important;
     color:#fff !important;
+}
+
+/* =============================================================================
+   TEMPLATE-PORTAL-EXIST - eXist XML UI content styling
+   ========================================================================== */  
+div#region-content {
+    width:960px;
+    height:auto;
+    min-height:500px;
+    margin:0px auto 20px auto;
+    padding-top:10px;
+    padding-bottom:10px;
+    background-color:#fff;
+    border:1px solid #c1c1c0;
+}
+.template-portal-eXist  .rounded-eigh {
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+}
+.template-portal-eXist  .rounded-five {
+    -moz-border-radius: 5px; 
+    -webkit-border-radius:5px; 
+    border-radius:5px;
+} 
+.template-portal-eXist  .tab_container {
+	border: 1px solid #999;
+	border-top: none;
+	overflow: hidden;
+	clear: both;
+	float: left; width: 100%;
+	background: #fff;
+}
+.template-portal-eXist  .black-full {
+    margin-left:10px;
+    width:94%;
+    color:#000000;
+}
+
+.template-portal-eXist  .grey-full {
+    margin-left:10px;
+
+    width:100%;
+    color:#908a89;
+}
+ 
+.template-portal-eXist  h1.title {
+    text-shadow: 0px 1px 0px #c1c1c0;
+    color:#2b92be;
+    font-weight:normal;
+    font-size:1.5em;
+}
+.template-portal-eXist  h2.sub-title {
+    text-shadow: 0px 1px 0px #c1c1c0;
+    color:#2b92be;
+    font-weight:normal;
+    font-size:1.5em;
+    text-align:center;
+}
+.template-portal-eXist  h2:empty {
+    display: none;
+}
+
+/* Listing - version
+-------------------------------------------------------------- */
+.template-portal-eXist  ul.doc-versions {
+    display:block;
+    list-style-type:none;
+    padding:0 0 0 10px;
+    width:96% !important;
+}
+.template-portal-eXist  ul.doc-versions li {
+    color:#494949;
+    margin-bottom:3px;
+}
+.template-portal-eXist  ul.doc-versions li a {
+    color:#2b92be;
+}
+.template-portal-eXist  ul.doc-versions > li a {
+    text-transform:capitalize;
+}
+.template-portal-eXist  ul.doc-versions li span {
+    color:#b22b14;
+    text-transform:capitalize;
+}
+.template-portal-eXist  ul.doc-versions li a:hover {
+    color:#b22b14;
+}
+
+/* Tabs
+-------------------------------------------------------------- */
+.template-portal-eXist  ul.tabbernav {
+	margin: 0;
+	margin-left:25px;
+	padding: 0;
+	float: left;
+	list-style: none;
+	height: 22px; /*--Set height of tabs--*/
+}
+.template-portal-eXist  ul.tabbernav li {
+	float: left;
+	margin: 0;
+	padding: 0;
+	height: 21px; /*--Subtract 1px from the height of the unordered list--*/
+	line-height: 21px; /*--Vertically aligns the text within the tab--*/
+	border-left: none;
+	overflow: hidden;
+	position: relative;
+
+}
+.template-portal-eXist  ul.tabbernav li a {
+	text-decoration: none;
+	color: #000;
+	display: block;
+	font-size: 1em;
+	padding: 0 10px;
+	outline: none;
+}
+.template-portal-eXist  ul.tabbernav li a:hover {
+	background: #ccc;
+	border-bottom: 0px solid #ccc; 
+    -moz-border-radius-topleft: 5px; 
+    -webkit-border-top-left-radius:5px; 
+    border-top-left-radius:5px;	
+    -moz-border-radius-topright: 5px; 
+    -webkit-border-top-right-radius:5px; 
+    border-top-right-radius:5px;	
+}
+.template-portal-eXist  ul.tabbernav li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
+	background: #fff;
+}  
+.template-portal-eXist  ul.tabbernav li.active  { 
+	background: #fff;
+	border: 1px solid #999;
+	border-bottom: 1px solid #fff; 
+    -moz-border-radius-topleft: 5px; 
+    -webkit-border-top-left-radius:5px; 
+    border-top-left-radius:5px;	
+    -moz-border-radius-topright: 5px; 
+    -webkit-border-top-right-radius:5px; 
+    border-top-right-radius:5px;	
+}  
+.template-portal-eXist  ul.tabbernav li.selected {
+    padding:2px;
+    background-color:#b2b4b0;
+    -moz-border-radius: 4px; 
+    -webkit-border-radius:4px; 
+    border-radius:4px; 
+    border:1px solid #f0f0f0;
+    color:#f8f8f8;   
+}
+
+/* Tables
+-------------------------------------------------------------- */
+.template-portal-eXist  table.doc-tbl-details {
+    width:695px;
+    margin:0 auto 0 auto;
+    margin-left:10px !important;
+    margin-right:auto;
+    width:95% !important;
+    clear:both;    
+}
+
+/* Paginator
+-------------------------------------------------------------- */
+.template-portal-eXist  .paginate {
+ 	text-align:right;
+ 	float:left;
+ 	height:30px;
+}
+.template-portal-eXist  .paginate .page-state {
+    float:left;
+    color:#0085BE;
+    display:inline;
+    padding:1px 5px 0 0;
+    height:18px;    
+}
+.template-portal-eXist  .paginate a 
+{
+	color:#2b92be !important;
+	font-size:12px;
+	font-weight:bold;
+	background:#fff;
+	border:1px solid #e3d3ff;
+	margin:0 3px 0 3px;
+	padding:2px 6px 2px 6px;
+}
+.template-portal-eXist  .paginate a:first-child 
+{
+	margin-left:0;
+}
+.template-portal-eXist  .paginate a:hover
+{
+	color: #ffffff !important;
+	background-color: #2b92be;
+	border:1px solid #2b92be;
+}
+
+.template-portal-eXist  .paginate a.disabled {
+	color: #f79f0e !important;
+	font-size:12px;
+	padding:2px 6px 2px 6px;
+	border:1px solid #e3d3ff;
+	background:#fff !important;
+	cursor:text;
+	text-decoration:none;
+}
+
+.template-portal-eXist  .paginate a.curr-no {
+	color: #ffffff !important;
+	background-color: #2b92be;
+	border:1px solid #2b92be;
+}
+
+/* Form elements
+-------------------------------------------------------------- */
+.template-portal-eXist select {
+    padding: initial;
+}
+
+.template-portal-eXist input, 
+.template-portal-eXist select {
+    margin-left:3px !important;
+}
+.template-portal-eXist label {
+    margin-left:10px;
+}
+
+.template-portal-eXist select, 
+.template-portal-eXist input.search_for {
+    display: inline-block;
+    height: 20px;
+    padding: 0;
+    font-size: 1em;
+    line-height: 20px;
+    background-image: none;
+    background-color: #ffffff;
+    border: 1px solid #8e8e8e;
+    margin: 0;
+    vertical-align: baseline;    
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.template-portal-eXist label.search_for {
+    float:left;
+    padding-top:4px;
+    vertical-align:bottom;
+}
+
+.template-portal-eXist input.search_for {
+    width:215px;
+    padding-left:3px;
+    padding-right:3px;
+}
+
+/* Whatson datepicker
+-------------------------------------------------------------- */
+.template-portal-eXist  .datepickerContainer {
+	background: #434343;
+    -moz-border-radius: 4px;
+    border-radius: 4px;	
+	-webkit-border-radius: 4px;
+}
+.template-portal-eXist  td.datepickerNotInMonth a {
+	color: #666 !important;
+}
+.template-portal-eXist  tbody.datepickerDays td.datepickerSelected{
+	background: #136A9F !important;	
+}
+.template-portal-eXist  tbody.datepickerDays td.datepickerNotInMonth.datepickerSelected {
+	background: #17384d;
+}
+.template-portal-eXist  tbody.datepickerYears td.datepickerSelected,
+.template-portal-eXist  tbody.datepickerMonths td.datepickerSelected{
+	background: #17384d;
+}
+.template-portal-eXist  div.datepicker a:hover,
+.template-portal-eXist  div.datepicker a:hover {
+	color: #88c5eb;
+}
+.template-portal-eXist  div.datepicker td.datepickerNotInMonth a:hover {
+	color: #999;
 }

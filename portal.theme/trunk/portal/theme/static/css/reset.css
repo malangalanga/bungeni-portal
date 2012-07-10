@@ -152,12 +152,11 @@ div#portal-globalnav {
     height: 25px;
 }
 div#portal-globalnav ul.level0 {
-    position: relative;
+    position: absolute !important;
     margin: 0;
     padding: 0;
     width: auto;
     white-space: nowrap;
-    height: 20px;
     line-height: 20px;
 }
 div#portal-globalnav ul.level0 li {
@@ -165,11 +164,14 @@ div#portal-globalnav ul.level0 li {
     display: block !important;    
     float: left;
     height: 25px;
+    margin-bottom: 0;    
 }
 div#portal-globalnav ul.level0 li a { 
     padding: 0 1em;
     margin: 0 .25em 0 0;
     height: 22px;
+    display: block !important;
+    float: left !important;
 }
 div#portal-globalnav ul.level0 li.selected a {
     position: relative;
@@ -196,16 +198,16 @@ div#portal-globalnav ul.level0 li a:hover {
  *   <ul class="level0">...</ul>
  *   <ul class="level1">...</ul>
  */
-div#portal-globalnav ul.level0 ul.level1 {
+div#portal-globalnav ul.level1 {
     position: absolute;
     left: 0;
-    top:2.7em;
+    top:2.2em;
     height: 18px;
     margin: 0 0 0 0;
     width: 100%;
     display: block;
 }
-div#portal-globalnav ul.level0 ul.level1 li {
+div#portal-globalnav ul.level1 li {
     width: auto;
     float: left;
     margin: 0;
@@ -214,9 +216,9 @@ div#portal-globalnav ul.level0 ul.level1 li {
     display: block;
 }
 
-div#portal-globalnav ul.level0 ul.level1 li a {
-	padding-top:0 !important;
-	padding-bottom:0 !important;
+div#portal-globalnav ul.level1 li a {
+	padding: 0 15px !important;
+	line-height:18px;
 }
 /*
  * whats-on styles are shared by both template-portal and template-workspace.
@@ -1394,15 +1396,15 @@ div.main-column #collage h2 {
 .template-workspace div.main-column div#portal-globalnav ul.level0 li {
     margin-top:-7px;
 }
-.template-workspace div#portal-globalnav ul.level0 ul.level1 {
+.template-workspace div#portal-globalnav ul.level1 {
     height:18px;
     margin-top:-7px;
 }
-.template-workspace div#portal-globalnav ul.level0 ul.level1 li {
+.template-workspace div#portal-globalnav ul.level1 li {
     height:18px;
     margin-top:7px;
 }
-.template-workspace div#portal-globalnav ul.level0 ul.level1 li a {
+.template-workspace div#portal-globalnav ul.level1 li a {
     margin-top:-7px;
 }
 
@@ -1494,13 +1496,13 @@ div.main-column #collage h2 {
 
 /* portal-globalnav
 -------------------------------------------------------------- */
-.template-workspace div#portal-globalnav ul.level0 ul.level1 {
+.template-workspace div#portal-globalnav ul.level1 {
 	width: 99.97%;
 }
-.section-bungeni-workspace div#portal-globalnav ul.level0 ul.level1 {
+.section-bungeni-workspace div#portal-globalnav ul.level1 {
     width: 99.97%;
 }
-.section-bungeni-admin div#portal-globalnav ul.level0 ul.level1 {
+.section-bungeni-admin div#portal-globalnav ul.level1 {
     width: 99.97%;
 }
 
@@ -1792,12 +1794,12 @@ div.overlay #createGroup fieldset { border: none; }
     display:none;
 }
 
-.template-portal-eXist div#portal-globalnav ul.level0 ul.level1 {
-    top: 1.6em;
+.template-portal-eXist div#portal-globalnav ul.level1 {
+    /*top: 1.6em;*/
 }
 
 .template-portal-eXist div#main-wrapper {
-    width: 96%;
+    width: 100%;
 }
 
 .template-portal-eXist div#region-content {
@@ -1813,17 +1815,9 @@ div.overlay #createGroup fieldset { border: none; }
     margin-right:2px;
     color:#C8631B;
 }
+
 .template-portal-eXist #portal-breadcrumbs {
-    padding: 0;
-    margin:0;
-    margin-top:-5px;
-    width: auto;
-    clear: both;
-    position: relative;
-    line-height: 14px;
-}
-.template-portal-eXist div#title-holder {
-    width: 97%;
+    width: 100%;
 }
 .template-portal-eXist div#main-wrapper {
     margin: 0 auto 0 auto;
