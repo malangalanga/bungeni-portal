@@ -1418,6 +1418,9 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
+        <field name="marital_status" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
         <field name="date_of_death" displayable="view edit add listing" localizable="view add listing">
             <show modes="view" />
             <hide modes="add listing" />
