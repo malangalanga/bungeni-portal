@@ -3,7 +3,10 @@
     xmlns:bungeni="http://namespaces.bungeni.org/zope"
     i18n_domain="bungeni">
     
-    <!-- custom roles here -->
+    <!-- System roles are defined in bungeni.main/bungeni/models/roles.zcml -->
+    <role id="bungeni.Clerk" title="Clerks Office" />
+    <role id="bungeni.Speaker" title="Speaker Office" />
+    <role id="bungeni.Translator" title="Translators Office" />
     
     <!--Example on how to add a sub role
         id - Name of the new sub role
