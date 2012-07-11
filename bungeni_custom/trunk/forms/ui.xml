@@ -1369,8 +1369,12 @@
             <hide modes="view" />
             <show modes="listing" />
         </field>
-        <field name="titles" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
+        <field name="salutation" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <show modes="listing" />
+        </field>
+        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
             <show modes="listing" />
         </field>
         <field name="first_name" displayable="view edit add listing" localizable="view edit listing">
