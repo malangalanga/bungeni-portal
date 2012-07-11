@@ -19,6 +19,14 @@
     
     Disabling a type means the type will not be registered, and all associated 
     configuration e.g. workflow, descriptor, workspace, etc, will not be loaded.
+    
+    Type element attributes:
+        @name: the type name used throughout the system as the type key, REQUIRED
+        @workflow: the worklow key (the name of the workflow definition file, 
+            in `workflows/` folder), if not set then value of @name is used.
+        @enabled: "true" | "false", default is "true"
+            note that if parent is disabled, then all nested elements are also 
+            disabled (even if they set enabled="true")
     -->
     
     <doc name="agenda_item" workflow="agendaitem" enabled="true" />
@@ -26,7 +34,6 @@
     <doc name="motion" enabled="true" />
     <doc name="question" enabled="true" />
     <doc name="tabled_document" workflow="tableddocument" enabled="true" />
-    <doc name="report" enabled="true" />
     
     <group name="office" workflow="group" enabled="true">
         <member name="office_member" workflow="membership" enabled="true" />
