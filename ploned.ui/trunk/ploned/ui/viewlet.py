@@ -35,10 +35,14 @@ class StructureAwareViewlet(object):
 # specific content
 
 from zope.browsermenu.menu import getMenu
+from bungeni.ui import z3evoque
 from zope.app.pagetemplate import ViewPageTemplateFile
 
 class ContentViewsViewlet(StructureAwareViewlet):
-
+    # evoque
+    render = z3evoque.ViewTemplateFile("ploned.html#content_actions",
+                collection="bungeni.ui.viewlets", i18n_domain="bungeni.ui")
+    
     # zpt
     #render = ViewPageTemplateFile(
     #    "../../../bungeni.ui/bungeni/ui/viewlets/templates/portlet-contentactions.pt")
