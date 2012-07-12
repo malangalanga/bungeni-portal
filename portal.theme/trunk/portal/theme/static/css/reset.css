@@ -55,18 +55,6 @@
     height: 20px;
     line-height: 20px;
 }
-.template-portal #top-layer ul#portal-personaltools li:last-child {
-    margin-right:0px;
-    float:right;
-    clear:both;
-}
-#top-layer #demoWarning {
-    width: 150px;
-    height: 18px;
-    line-height: 18px;
-    margin: 0 auto;
-    padding: 0;
-}
 /* Breadcrumbs
 -------------------------------------------------------------- */
 #portal-breadcrumbs {
@@ -200,7 +188,6 @@ div#portal-globalnav ul.level0 li a:hover {
  */
 div#portal-globalnav ul.level1 {
     position: absolute;
-    left: 0;
     top:2.2em;
     height: 18px;
     margin: 0 0 0 0;
@@ -1138,6 +1125,18 @@ div.main-column #collage h2 {
 /* =============================================================================
    TEMPLATE PORTAL - Styling applied on portal
    ========================================================================== */
+.template-portal #top-layer #demoWarning {
+    width: 150px;
+    height: 18px;
+    line-height: 18px;
+    margin: 0 auto;
+    padding: 0;
+}
+.template-portal #top-layer ul#portal-personaltools li:last-child {
+    margin-right:0px;
+    float:right;
+    clear:both;
+}
 
 /* Portal-Width
 -------------------------------------------------------------- */
@@ -1196,8 +1195,8 @@ div.main-column #collage h2 {
     margin-right:auto;    
 }
 .template-portal #top-layer #demoWarning {
-    height: 18px;
-    line-height: 18px;
+    height: 12px;
+    line-height: 12px;
     z-index:99888;
     margin-top:20px;
     margin-left:auto;
@@ -1320,6 +1319,14 @@ div.main-column #collage h2 {
 /* =============================================================================
    TEMPLATE WORKSPACE - Styling applied on workspace
    ========================================================================== */
+.template-workspace #top-layer #demoWarning {
+    clear:both;
+    width: 150px;
+    height: 18px;
+    line-height: 18px;
+    margin: 0 auto;
+    padding: 0;
+}
 
 .template-workspace #header-wrapper {
     margin: 0 auto;
@@ -1393,19 +1400,12 @@ div.main-column #collage h2 {
 .template-workspace div.main-column div#portal-globalnav {
     margin-top: 0em;
 }
-.template-workspace div.main-column div#portal-globalnav ul.level0 li {
-    margin-top:-7px;
-}
+
 .template-workspace div#portal-globalnav ul.level1 {
     height:18px;
-    margin-top:-7px;
 }
 .template-workspace div#portal-globalnav ul.level1 li {
     height:18px;
-    margin-top:7px;
-}
-.template-workspace div#portal-globalnav ul.level1 li a {
-    margin-top:-7px;
 }
 
 .template-workspace.section-bungeni-admin div.main-column h2,
@@ -1705,6 +1705,19 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
     width: 94% !important;
 }
 
+.template-portal #login-form label {
+    float: left;
+    min-width: 100px;
+    text-align: right;
+    padding-top:10px;
+    padding-right: 10px;
+}
+.template-portal .formControls input {
+    min-width: 100px;
+    text-align: right;
+    padding-top:10px;
+    margin-right:10px;
+}
 
 /* styling for overlays (popups)
 -------------------------------------------------------------- */
@@ -1786,34 +1799,43 @@ div.overlay #createGroup fieldset { border: none; }
 /* =============================================================================
    TEMPLATE-PORTAL-EXIST - eXist XML UI content styling
    ========================================================================== */  
-.template-portal-eXist.template-portal #portal-breadcrumbs {
-    border-bottom: 0 none !important;
+div#region-content {
+    width:960px;
+    height:auto;
+    min-height:500px;
+    margin:0px auto 20px auto;
+    padding-top:10px;
+    padding-bottom:10px;
 }
-
-.template-portal-eXist.template-portal .portal-globalnav-bottom {
-    display:none;
+.template-portal-eXist  .tab_container {
+	overflow: hidden;
+	clear: both;
+	float: left; 
+	width: 100%;
 }
-
+.template-portal-eXist  .black-full {
+    margin-left:10px;
+    width:94%;
+}
+.template-portal-eXist  .grey-full {
+    margin-left:10px;
+    width:100%;
+}
 .template-portal-eXist div#portal-globalnav ul.level1 {
     /*top: 1.6em;*/
 }
-
 .template-portal-eXist div#main-wrapper {
     width: 100%;
 }
-
 .template-portal-eXist div#region-content {
     width: 100%;
 }
-
 .template-portal-eXist #search-form-global .header-links {
     margin-right:2px;
-    color:#36b9f1 !important;
 }
 .template-portal-eXist #portal-search a.header-links:visited, 
 .template-portal-eXist #portal-search a.header-links {
     margin-right:2px;
-    color:#C8631B;
 }
 
 .template-portal-eXist #portal-breadcrumbs {

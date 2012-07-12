@@ -1,14 +1,14 @@
-/***** BUNGENERAL SKIN ^_^ *****/
+/* =============================================================================
+   GENERAL - Styles are applied site-wide
+   ========================================================================== */
 /*
- * These are the general styles applied to both portal and workspace
- * A.K.A "the globals" unless overwritten in the specific zone (read 
- * portal or workspace) then editing this section should be enough
+ * These are the general styles applied to both portal and workspace 
+ * you can overwrite this section in the specific sections of (template-portal, template-workspace and template-portal-exist) 
  *
  */
  
-/*
- * top-layer
- */
+/* Top-layer
+-------------------------------------------------------------- */
 #top-layer {
     text-align:center;
     border: 1px solid transparent;
@@ -43,7 +43,7 @@
     color: #888;
 }
 #top-layer ul#portal-languageselector {
-    font-size: 100%;
+    font-size: 0.96em !important;
 }
 #top-layer ul#portal-languageselector li a {
     color: #fff;
@@ -56,6 +56,13 @@
 #top-layer ul#portal-languageselector li.selected a {
     color: #000000;
 }
+/*#top-layer ul#portal-personaltools li a.link-overlay {
+    margin-right:-60px;
+    float:right;
+    clear:both;
+}
+*/
+
 /*
  * Notes:
  * - set text-decoration to 'none' to remove blinking effect.
@@ -79,25 +86,34 @@
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     border-top: 0 none;
+    font-size:.9em !important;
+    display:none;
 }
 
-/*
- * Breadcrumbs
- */
+/* Breadcrumbs
+-------------------------------------------------------------- */
 #portal-breadcrumbs {
     font-size: 95%;
     color: #000;
-    background: transparent;
+    background: #fff;
     text-align: left;
 }
 #portal-breadcrumbs a {
-    color:#FF8A09;
-    font-weight:bold;
+    color:#333333;
+    font-weight:normal;
 }
 #portal-breadcrumbs a:hover {
     text-decoration: underline;
 }
-
+#portal-breadcrumbs a::after {
+    content: " › " !important;
+}
+#portal-breadcrumbs a:last-child::after {
+    content: "" !important;
+}
+.breadcrumbSeparator {
+    display:none;
+}
 /* portal-searchbox and portal-siteactions are empty tags,
  * so they have been set to display: none because they make
  * the layout break in IE.
@@ -115,11 +131,9 @@
     background: transparent;
 }
 
-/*
- * main-columns
- */
+/* main-columns
+-------------------------------------------------------------- */
 div.main-column h1 {
-    font-size: 200%;
     font-weight: bold;
     line-height: 20px;
     color: #FF8A09 !important;
@@ -183,11 +197,9 @@ div.main-column h3 {
     font-size: 100%;
     font-weight: normal !important;
 }
-/*
- * portal-columns-* styles
- */
+/* portal-columns-*
+-------------------------------------------------------------- */
 
-/* portal-column-content */
 #portal-column-content h1.title {
     font-size: 135%;
 }
@@ -218,14 +230,13 @@ div.main-column h3 {
     border-top: 1px solid #D4E2EF;
     background: #fff;
 }
-
 #portal-footer div {
     border-top: 1px solid #ccc;
     background: #fff;
 }
-/*
- * documentContent
- */
+
+/* documentContent
+-------------------------------------------------------------- */
 .documentContent {
     border: 0 none;
     background: transparent;
@@ -381,6 +392,12 @@ input.inputLabelActive {
 #portal-column-one .portlet .portletItem ul li {
     list-style-type: none;
 }
+#portal-column-one .portlet .portletItem .navTreeCurrentItem {
+    border:0 none !important;
+}
+#portal-column-one .portlet .portletItem .navTreeCurrentItem a {
+    border:1px solid #21a1ba !important;
+}
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode a {
     font-weight: bold;
     background: #eee;
@@ -432,10 +449,6 @@ input.inputLabelActive {
 /*
  * DocumentActions & contentActions
  */
-.contentActions {
-    background: url(/static/images/content-actions-bg.png) repeat-x top left;
-    border: 0 none;
-}
 .contentActions a {
     color: #000;
     text-decoration: none;
@@ -528,36 +541,40 @@ div#portal-globalnav ul.level0 li a:hover {
  *        <li>...</li>
  *   </ul>
  *   a suggested structure would be to have the <ul> elements separately:
+ *   !+IMPLEMENTED (9th July, 2012 - this is current layout) 
  *   <ul class="level0">...</ul>
  *   <ul class="level1">...</ul>
  */
  div#portal-globalnav-bottom {
  	border:0;
 }
-div#portal-globalnav ul.level0 ul.level1 {
+div#portal-globalnav ul.level1 {
     border-top: 0 none;
     background: #444444;       
 }
-div#portal-globalnav ul.level0 ul.level1 a {
+div#portal-globalnav ul.level1 a,
+.template-workspace div#portal-globalnav ul.level1 a,
+.template-portal div#portal-globalnav ul.level1 a {
     background: transparent;
     border: 0 none;
     text-shadow: none;
     color:#D2D2D2 !important;
 }
-div#portal-globalnav ul.level0 ul.level1 li a:hover {
+div#portal-globalnav ul.level1 li a:hover {
     color: #ff0000;
     text-decoration: underline;
     border: 0 none;
 }
-div#portal-globalnav ul.level0 ul.level1 li.selected a {
+div#portal-globalnav ul.level1 li.selected a {
     background: transparent;
     border: 0 none;
     font-weight: normal;
     color: #FF8A09 !important;
 }
-.template-portal div#portal-globalnav ul.level0 ul.level1 li.selected a {
+.template-portal div#portal-globalnav ul.level1 li.selected a {
 	color:#FF8A09 !important;
 }
+
 /*
  * Notes:
  * this tag is not used for any data or structure.
@@ -640,9 +657,8 @@ div#portal-globalnav ul.level0 ul.level1 li.selected a {
     border-color: #EEE685;
     border-bottom-color: #BDB76B;
 }
-/*
- * Table styles
- */
+/* table
+-------------------------------------------------------------- */
  
 table.listing,
 table.listingdescription,
@@ -735,10 +751,8 @@ table.listingdescription td,
 #alchemist\.container\.listing th.yui-dt-desc .yui-dt-liner {
     background: url(../images/sort_down.gif) no-repeat right !important;
 }
-/*
- * formTabs
- * Default styles.
- */
+/* formTabs
+-------------------------------------------------------------- */
  dd#items-to-be-scheduled-dl ul.formTabs,
 ul.formTabs {
     border: 0 none;
@@ -797,9 +811,9 @@ dd#items-to-be-scheduled-dl ul.formTabs li.formTab a.selected {
     border-top-color: #999;
     color: #222;
 }
-/*
- * formPanel styles
- */
+
+/* formPanel
+-------------------------------------------------------------- */
  .formPanel,
 dd#items-to-be-scheduled-dl .formPanel {
     text-align: center;
@@ -896,17 +910,15 @@ dl.portalMessage dd {
 .formPanel, dd#items-to-be-scheduled-dl .formPanel div:last-child {
     text-align: justify !important;
 }
-/*
- * Calendar
- */
+/* Calendar
+-------------------------------------------------------------- */
 div.calendar th.description a,
 div.calendar span.sitting-type,
 div.calendar div.sitting {
     color: #444;
 }
-/*
- * YUI button styles
- */
+/* YUI button
+-------------------------------------------------------------- */
 span.yui-button.yui-link-button span a {
     font-size: 90%;    
 }
@@ -927,9 +939,9 @@ span.yui-button.yui-link-button span a {
     border: 1px solid #aaa;
     color: #444;
 }
-/*
- * random styles
- */
+
+/* misc selectors
+-------------------------------------------------------------- */
 /*#content a[href^="http:"], #content a.link-external {
     background:transparent;
 }*/
@@ -993,9 +1005,8 @@ div.navTreeCurrentNode, .portletNavigationTree div.navTreeCurrentNode.hover, .na
     border:0 none;
     background: transparent;
 }
-/*
- * frontpage
- */
+/* frontpage
+-------------------------------------------------------------- */
 div.main-column #collage h2 {
     text-align: justify;
     text-shadow:  0 0 0 #fff;
@@ -1052,6 +1063,9 @@ div.main-column #collage h2 {
 .section-bungeni-\@\@index #content h1.documentFirstHeading {
     font-size:140% !important;
 }
+#portal-column-content h1.documentFirstHeading {
+    border-bottom: 1px solid #c1c1c0 !important;
+}
 #portal-languageselector li.selected a {
     background:#FFFD6E none repeat scroll 0 0;
     border:1px solid #CCCCCC;
@@ -1062,7 +1076,8 @@ div.main-column #collage h2 {
 .section-bungeni-business .dhx_scale_holder_now .dhx_cal_event .dhx_body[style] {
     cursor: pointer !important;
 }
-/* SEARCh RESULT */
+/* search results
+-------------------------------------------------------------- */
 .search-result-item div.title {
     font-size:1.8em !important;
 }
@@ -1071,13 +1086,26 @@ div.main-column #collage h2 {
     font-weight:bold;    
 }
 
-/*********************************************************************************************************/
 
-/***** BUNGENI-PORTAL *****/
-/* START: ALL CSS TO DO WITH PORTAL IS WITHIN THIS SECTION DON'T EDIT OTHERWISE */
-/* Contains bg-colors, bgs, borders font colours e.t.c */
+/* footer
+-------------------------------------------------------------- */
+#portal-footer {
+    color: #444;
+    text-align: center;
+    border: 0 none;
+    border-top: 1px solid #D4E2EF;
+    background: #fff;
+}
 
-/*********************************************************************************************************/
+#portal-footer div {
+    border-top: 1px solid #ccc;
+    background: #fff;
+}
+
+/* =============================================================================
+   TEMPLATE PORTAL - Styling applied on portal
+   ========================================================================== */
+
 body {
 background: #F8FFFF;
 }
@@ -1125,10 +1153,8 @@ background: #F8FFFF;
 .template-portal div#portal-globalnav-bottom {
     background:transparent;
 }
-/*
-* menu-navs 
-*/
-.template-portal div#portal-globalnav ul.level0 ul.level1 {
+
+.template-portal div#portal-globalnav ul.level1 {
     border-bottom-left-radius: 5px;
     -moz-border-radius-bottomleft: 5px;
     -webkit-border-bottom-left-radius: 5px;      
@@ -1144,6 +1170,7 @@ background: #F8FFFF;
 /*
  * main-columns
  */
+
 .template-portal #content {
     border: 1px solid #d2dfe7;
     -moz-border-radius: 8px;
@@ -1243,13 +1270,15 @@ background: #F8FFFF;
 .section-bungeni-login form#alchemist-form.bungeniapp-form {
     border-top: 1px solid #ddd;
 }
+.template-portal .context, 
+.template-portal .formControls .actionButtons .button,
+.template-portal .documentEditable * .context {
+    border: 1px solid #c1c1c0 !important;
+}
 
-/*********************************************************************************************************/
-
-/***** BUNGENI-WORKSPACE *****/
-/* START: ALL CSS TO DO WITH WORKSPACE IS WITHIN THIS SECTION DON'T EDIT OTHERWISE */
-
-/*********************************************************************************************************/
+/* =============================================================================
+   TEMPLATE WORKSPACE - Styling applied on workspace
+   ========================================================================== */
 
 .template-workspace #header-wrapper {
     text-align:center;
@@ -1440,7 +1469,7 @@ div.dhx_cal_navline .dhx_cal_date {
     color: #222;
 }
 .section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li a {
-    border-right: 1px solid #aaa;
+    /*border-right: 1px solid #aaa;*/
 }
 .template-workspace.section-bungeni-archive #portal-column-one .portlet .portletItem ul li a,
 .template-workspace.section-bungeni-business #portal-column-one .portlet .portletItem ul li a,
@@ -1492,6 +1521,16 @@ div.dhx_cal_navline .dhx_cal_date {
 .template-workspace div.contentActions dt.label-state-admissible a,
 .template-workspace div.contentActions dt.label-state-public a {
     color:#000 !important;
+}
+.section-bungeni-workspace .contentActions {
+    background: url(/static/images/content-actions-bg.png) repeat-x top left;
+    border: 0 none;
+}
+.portaltype-folder .contentActions {
+    height:1.8em;
+}
+.portaltype-folder #content .contentActions ul {
+    margin: 0 0 0 -2px !important;
 }
 /*
  * portal-globalnav
@@ -1745,4 +1784,317 @@ div.dhx_cal_navline .dhx_cal_date {
 .template-workspace #portal-footer div {
 
     border: 0 none;
+}
+
+/* footer  */
+.template-workspace #portal-footer div {
+
+    border: 0 none;
+}
+
+/*Workspace overrides*/
+.template-workspace.section-bungeni-workspace table.listing th,
+.template-workspace.section-bungeni-workspace table.listingdescription th,
+.template-workspace.section-bungeni-workspace .stx table th,
+.template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th,
+.section-bungeni-workspace tr.yui-dt-first th {
+    background:#aaa !important;
+    text-shadow: 0 0 0  #fff;
+    color: #000 !important;
+}
+.template-workspace.section-bungeni-workspace #display_form_spacer {
+    background:#aaa !important;
+}
+
+/*MailBox*/
+.template-workspace .portlet ul.contentViewsLeftPort {
+    z-index:99 !important;
+}
+.template-workspace .portlet ul.contentViewsLeftPort li {
+    border:0 none !important;
+}
+.template-workspace .portlet ul.contentViewsLeftPort li a {
+    border:1px solid #888 !important;
+    -moz-border-radius: 3px; 
+    -webkit-border-radius: 3px; 
+    border-radius: 3px;
+    background-color:#f9f9f9 !important;
+}
+.template-workspace .portlet ul.contentViewsLeftPort li.selected,
+.template-workspace .portlet ul.contentViewsLeftPort li a:hover {
+    background-color:#21a1ba !important;
+    color:#fff !important;
+}
+
+/* =============================================================================
+   TEMPLATE-PORTAL-EXIST - eXist XML UI content styling
+   ========================================================================== */  
+.template-portal-eXist div#region-content {
+    background-color:#fff;
+    border:1px solid #c1c1c0;
+}
+.template-portal-eXist div#region-content a {
+    color: #FF8A09;
+}
+.template-portal-eXist  .rounded-eigh {
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+}
+.template-portal-eXist  .rounded-five {
+    -moz-border-radius: 5px; 
+    -webkit-border-radius:5px; 
+    border-radius:5px;
+} 
+.template-portal-eXist  .tab_container {
+	border: 1px solid #999;
+	border-top: none;
+	background: #fff;
+}
+.template-portal-eXist  .black-full {
+    color:#000000;
+}
+
+.template-portal-eXist  .grey-full {
+    color:#908a89;
+}
+ 
+.template-portal-eXist  h1.title {
+    text-shadow: 0px 1px 0px #c1c1c0;
+    color:#2b92be;
+    font-weight:normal;
+    font-size:1.5em;
+}
+.template-portal-eXist  h2.sub-title {
+    text-shadow: 0px 1px 0px #c1c1c0;
+    color:#2b92be;
+    font-weight:normal;
+    font-size:1.5em;
+    text-align:center;
+}
+.template-portal-eXist  h2:empty {
+    display: none;
+}
+
+/* Listing - version
+-------------------------------------------------------------- */
+.template-portal-eXist  ul.doc-versions {
+    display:block;
+    list-style-type:none;
+    padding:0 0 0 10px;
+    width:96% !important;
+}
+.template-portal-eXist  ul.doc-versions li {
+    color:#494949;
+    margin-bottom:3px;
+}
+.template-portal-eXist  ul.doc-versions li a {
+    color:#2b92be;
+}
+.template-portal-eXist  ul.doc-versions > li a {
+    text-transform:capitalize;
+}
+.template-portal-eXist  ul.doc-versions li span {
+    color:#b22b14;
+    text-transform:capitalize;
+}
+.template-portal-eXist  ul.doc-versions li a:hover {
+    color:#b22b14;
+}
+
+/* Tabs
+-------------------------------------------------------------- */
+.template-portal-eXist  ul.tabbernav {
+	margin: 0;
+	margin-left:25px;
+	padding: 0;
+	float: left;
+	list-style: none;
+	height: 22px; /*--Set height of tabs--*/
+}
+.template-portal-eXist  ul.tabbernav li {
+	float: left;
+	margin: 0;
+	padding: 0;
+	height: 21px; /*--Subtract 1px from the height of the unordered list--*/
+	line-height: 21px; /*--Vertically aligns the text within the tab--*/
+	border-left: none;
+	overflow: hidden;
+	position: relative;
+
+}
+.template-portal-eXist  ul.tabbernav li a {
+	text-decoration: none;
+	color: #000;
+	display: block;
+	font-size: 1em;
+	padding: 0 10px;
+	outline: none;
+}
+.template-portal-eXist  ul.tabbernav li a:hover {
+	background: #ccc;
+	border-bottom: 0px solid #ccc; 
+    -moz-border-radius-topleft: 5px; 
+    -webkit-border-top-left-radius:5px; 
+    border-top-left-radius:5px;	
+    -moz-border-radius-topright: 5px; 
+    -webkit-border-top-right-radius:5px; 
+    border-top-right-radius:5px;	
+}
+.template-portal-eXist  ul.tabbernav li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
+	background: #fff;
+}  
+.template-portal-eXist  ul.tabbernav li.active  { 
+	background: #fff;
+	border: 1px solid #999;
+	border-bottom: 1px solid #fff; 
+    -moz-border-radius-topleft: 5px; 
+    -webkit-border-top-left-radius:5px; 
+    border-top-left-radius:5px;	
+    -moz-border-radius-topright: 5px; 
+    -webkit-border-top-right-radius:5px; 
+    border-top-right-radius:5px;	
+}  
+.template-portal-eXist  ul.tabbernav li.selected {
+    padding:2px;
+    background-color:#b2b4b0;
+    -moz-border-radius: 4px; 
+    -webkit-border-radius:4px; 
+    border-radius:4px; 
+    border:1px solid #f0f0f0;
+    color:#f8f8f8;   
+}
+
+/* Tables
+-------------------------------------------------------------- */
+.template-portal-eXist  table.doc-tbl-details {
+    width:695px;
+    margin:0 auto 0 auto;
+    margin-left:10px !important;
+    margin-right:auto;
+    width:95% !important;
+    clear:both;    
+}
+
+/* Paginator
+-------------------------------------------------------------- */
+.template-portal-eXist  .paginate {
+ 	text-align:right;
+ 	float:left;
+ 	height:30px;
+}
+.template-portal-eXist  .paginate .page-state {
+    float:left;
+    color:#000;
+    display:inline;
+    padding:1px 5px 0 0;
+    height:18px;    
+}
+.template-portal-eXist  .paginate a 
+{
+	color:#FF8A09 !important;
+	font-size:12px;
+	font-weight:bold;
+	background:#fff;
+	border:1px solid #e3d3ff;
+	margin:0 3px 0 3px;
+	padding:2px 6px 2px 6px;
+}
+.template-portal-eXist  .paginate a:first-child 
+{
+	margin-left:0;
+}
+.template-portal-eXist  .paginate a:hover
+{
+	color: #ffffff !important;
+	background-color: #FF8A09;
+	border:1px solid #FF8A09;
+}
+
+.template-portal-eXist  .paginate a.disabled {
+	color: #f79f0e !important;
+	font-size:12px;
+	padding:2px 6px 2px 6px;
+	border:1px solid #e3d3ff;
+	background:#fff !important;
+	cursor:text;
+	text-decoration:none;
+}
+
+.template-portal-eXist  .paginate a.curr-no {
+	color: #ffffff !important;
+	background-color: #FF8A09;
+	border:1px solid #FF8A09;
+}
+
+/* Form elements
+-------------------------------------------------------------- */
+.template-portal-eXist select {
+    padding: initial;
+}
+
+.template-portal-eXist input, 
+.template-portal-eXist select {
+    margin-left:3px !important;
+}
+.template-portal-eXist label {
+    margin-left:10px;
+}
+
+.template-portal-eXist select, 
+.template-portal-eXist input.search_for {
+    display: inline-block;
+    height: 20px;
+    padding: 0;
+    font-size: 1em;
+    line-height: 20px;
+    background-image: none;
+    background-color: #ffffff;
+    border: 1px solid #8e8e8e;
+    margin: 0;
+    vertical-align: baseline;    
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.template-portal-eXist label.search_for {
+    float:left;
+    padding-top:4px;
+    vertical-align:bottom;
+}
+
+.template-portal-eXist input.search_for {
+    width:215px;
+    padding-left:3px;
+    padding-right:3px;
+}
+
+/* Whatson datepicker
+-------------------------------------------------------------- */
+.template-portal-eXist  .datepickerContainer {
+	background: #434343;
+    -moz-border-radius: 4px;
+    border-radius: 4px;	
+	-webkit-border-radius: 4px;
+}
+.template-portal-eXist  td.datepickerNotInMonth a {
+	color: #666 !important;
+}
+.template-portal-eXist  tbody.datepickerDays td.datepickerSelected{
+	background: #136A9F !important;	
+}
+.template-portal-eXist  tbody.datepickerDays td.datepickerNotInMonth.datepickerSelected {
+	background: #17384d;
+}
+.template-portal-eXist  tbody.datepickerYears td.datepickerSelected,
+.template-portal-eXist  tbody.datepickerMonths td.datepickerSelected{
+	background: #17384d;
+}
+.template-portal-eXist  div.datepicker a:hover,
+.template-portal-eXist  div.datepicker a:hover {
+	color: #88c5eb;
+}
+.template-portal-eXist  div.datepicker td.datepickerNotInMonth a:hover {
+	color: #999;
 }

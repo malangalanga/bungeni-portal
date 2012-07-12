@@ -78,6 +78,7 @@
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     border-top: 0 none;
+    font-size:.9em !important;
 }
 
 /* Breadcrumbs
@@ -116,9 +117,8 @@
 /* main-columns
 -------------------------------------------------------------- */
 div.main-column h1 {
-    font-size: 200%;
     font-weight: bold;
-    line-height: 20px;
+    line-height: 30px;
     color: #C8631B !important;
     text-shadow: 0 0 1px #fff;
     text-align:center;
@@ -360,6 +360,12 @@ input.inputLabelActive {
 }
 #portal-column-one .portlet .portletItem ul li {
     list-style-type: none;
+}
+#portal-column-one .portlet .portletItem .navTreeCurrentItem {
+    border:0 none !important;
+}
+#portal-column-one .portlet .portletItem .navTreeCurrentItem a {
+    border:1px solid #21a1ba !important;
 }
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode a {
     font-weight: bold;
@@ -912,7 +918,10 @@ span.yui-button.yui-link-button span a {
     font-size: 90%;
     border: 1px solid #ccc;
 }
-div.navTreeCurrentNode, .portletNavigationTree div.navTreeCurrentNode.hover, .navTreeHome.navTreeCurrentNode, .navTreeHome.navTreeCurrentNode.hover {
+div.navTreeCurrentNode, 
+.portletNavigationTree div.navTreeCurrentNode.hover, 
+.navTreeHome.navTreeCurrentNode, 
+.navTreeHome.navTreeCurrentNode.hover {
     border: 1px solid #fff;
 }
 #col3 {
@@ -1331,7 +1340,7 @@ div.main-column #collage h2 {
     color: #222;
 }
 .section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li a {
-    border-right: 1px solid #aaa;
+    /*border-right: 1px solid #aaa;*/
 }
 .template-workspace.section-bungeni-archive #portal-column-one .portlet .portletItem ul li a,
 .template-workspace.section-bungeni-business #portal-column-one .portlet .portletItem ul li a,
@@ -1676,13 +1685,7 @@ div.main-column #collage h2 {
 /* =============================================================================
    TEMPLATE-PORTAL-EXIST - eXist XML UI content styling
    ========================================================================== */  
-div#region-content {
-    width:960px;
-    height:auto;
-    min-height:500px;
-    margin:0px auto 20px auto;
-    padding-top:10px;
-    padding-bottom:10px;
+.template-portal-eXist div#region-content {
     background-color:#fff;
     border:1px solid #c1c1c0;
 }
@@ -1699,21 +1702,13 @@ div#region-content {
 .template-portal-eXist  .tab_container {
 	border: 1px solid #999;
 	border-top: none;
-	overflow: hidden;
-	clear: both;
-	float: left; width: 100%;
 	background: #fff;
 }
 .template-portal-eXist  .black-full {
-    margin-left:10px;
-    width:94%;
     color:#000000;
 }
 
 .template-portal-eXist  .grey-full {
-    margin-left:10px;
-
-    width:100%;
     color:#908a89;
 }
  
