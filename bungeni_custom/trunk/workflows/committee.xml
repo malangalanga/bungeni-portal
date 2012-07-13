@@ -20,8 +20,8 @@
         <deny permission="zope.View" role="bungeni.Minister" />
         <deny permission="zope.View" role="bungeni.Anonymous" /> 
         <grant permission="bungeni.committee.Delete" role="bungeni.Owner" />
-        <!-- agendaitem -->
-        <deny permission="bungeni.agendaitem.Add" role="bungeni.CommitteeMember" />
+        <!-- agenda_item -->
+        <deny permission="bungeni.agenda_item.Add" role="bungeni.CommitteeMember" />
     </state>
 
     <state id="active" title="Active Committee" 
@@ -33,15 +33,15 @@
         <grant permission="zope.View" role="bungeni.Minister" />
         <grant permission="zope.View" role="bungeni.Anonymous" />
         <deny permission="bungeni.committee.Delete" role="bungeni.Owner" />
-        <!-- agendaitem -->
-        <grant permission="bungeni.agendaitem.Add" role="bungeni.CommitteeMember" />
+        <!-- agenda_item -->
+        <grant permission="bungeni.agenda_item.Add" role="bungeni.CommitteeMember" />
     </state>
   
     <state id="dissolved" title="Committee is Dissolved" 
         like_state="active"
         tags="public">
-        <!-- agendaitem -->
-        <deny permission="bungeni.agendaitem.Add" role="bungeni.CommitteeMember" />
+        <!-- agenda_item -->
+        <deny permission="bungeni.agenda_item.Add" role="bungeni.CommitteeMember" />
     </state>
     
     

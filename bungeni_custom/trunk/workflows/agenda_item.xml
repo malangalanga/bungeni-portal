@@ -18,16 +18,16 @@
     <feature name="download" enabled="true" />
     
     <!-- global grants -->
-    <grant permission="bungeni.agendaitem.View" role="bungeni.Owner" />
-    <grant permission="bungeni.agendaitem.View" role="bungeni.Signatory" />
-    <grant permission="bungeni.agendaitem.Edit" role="bungeni.Owner" />
-    <grant permission="bungeni.agendaitem.Add" role="bungeni.Clerk" />
-    <!--grant permission="bungeni.agendaitem.Add" role="bungeni.MP" /-->
-    <grant permission="bungeni.agendaitem.Delete" role="bungeni.Owner" />
+    <grant permission="bungeni.agenda_item.View" role="bungeni.Owner" />
+    <grant permission="bungeni.agenda_item.View" role="bungeni.Signatory" />
+    <grant permission="bungeni.agenda_item.Edit" role="bungeni.Owner" />
+    <grant permission="bungeni.agenda_item.Add" role="bungeni.Clerk" />
+    <!--grant permission="bungeni.agenda_item.Add" role="bungeni.MP" /-->
+    <grant permission="bungeni.agenda_item.Delete" role="bungeni.Owner" />
     
     
     <state id="working_draft" title="Working Draft" tags="draft private">
-        <!-- agendaitem -->
+        <!-- agenda_item -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <deny permission="zope.View" role="bungeni.Speaker" />
         <deny permission="zope.View" role="bungeni.Owner" />
@@ -35,12 +35,12 @@
         <deny permission="zope.View" role="bungeni.MP" />
         <deny permission="zope.View" role="bungeni.Minister" />
         <deny permission="zope.View" role="bungeni.Anonymous" />
-        <grant permission="bungeni.agendaitem.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.agendaitem.Edit" role="bungeni.Speaker" />
-        <deny permission="bungeni.agendaitem.Edit" role="bungeni.Owner" />
-        <grant permission="bungeni.agendaitem.Delete" role="bungeni.Clerk" />
-        <deny permission="bungeni.agendaitem.Delete" role="bungeni.Speaker" />
-        <deny permission="bungeni.agendaitem.Delete" role="bungeni.Owner" />
+        <grant permission="bungeni.agenda_item.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.agenda_item.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.agenda_item.Edit" role="bungeni.Owner" />
+        <grant permission="bungeni.agenda_item.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.agenda_item.Delete" role="bungeni.Speaker" />
+        <deny permission="bungeni.agenda_item.Delete" role="bungeni.Owner" />
         <!-- attachment -->
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
@@ -64,13 +64,13 @@
     
     <state id="draft" title="Draft" like_state="working_draft" 
         tags="draft private">
-        <!-- agendaitem -->
+        <!-- agenda_item -->
         <deny permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Owner" />
-        <deny permission="bungeni.agendaitem.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.agendaitem.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.agendaitem.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.agendaitem.Delete" role="bungeni.Owner" />
+        <deny permission="bungeni.agenda_item.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.agenda_item.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.agenda_item.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.agenda_item.Delete" role="bungeni.Owner" />
         <!-- attachment -->        
         <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
@@ -87,10 +87,10 @@
     
     <state id="submitted_signatories" title="Submitted to Signatories" 
         version="true" like_state="draft">
-        <!-- agendaitem -->
+        <!-- agenda_item -->
         <grant permission="zope.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.agendaitem.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.agendaitem.Delete" role="bungeni.Owner" />
+        <deny permission="bungeni.agenda_item.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.agenda_item.Delete" role="bungeni.Owner" />
         <!-- attachment -->        
         <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
@@ -101,7 +101,7 @@
     
     <state id="redraft" title="Redraft" version="true" like_state="draft"
         note="document under review before resubmission">
-        <deny permission="bungeni.agendaitem.Delete" role="bungeni.Owner" />
+        <deny permission="bungeni.agenda_item.Delete" role="bungeni.Owner" />
     </state>
     
     <state id="withdrawn_signatory" title="Dropped"  
@@ -113,7 +113,7 @@
     <state id="submitted" title="Submitted" version="true" 
         like_state="submitted_signatories"
         tags="actionclerk">
-        <!-- agendaitem -->
+        <!-- agenda_item -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Speaker" />
         <!-- signatories -->
@@ -123,8 +123,8 @@
     <state id="received" title="Received by Clerks Office"
         like_state="submitted"
         tags="actionclerk">
-        <!-- agendaitem -->
-        <grant permission="bungeni.agendaitem.Edit" role="bungeni.Clerk" />
+        <!-- agenda_item -->
+        <grant permission="bungeni.agenda_item.Edit" role="bungeni.Clerk" />
         <!-- attachment -->        
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
@@ -135,8 +135,8 @@
         version="true"
         like_state="submitted"
         tags="actionmp">
-        <!-- agendaitem -->        
-        <grant permission="bungeni.agendaitem.Edit" role="bungeni.Owner" />
+        <!-- agenda_item -->        
+        <grant permission="bungeni.agenda_item.Edit" role="bungeni.Owner" />
         <!-- attachment -->
         <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
@@ -146,9 +146,9 @@
     <state id="completed" title="Submitted to the Speaker"
         version="true"
         like_state="submitted">
-        <!-- agendaitem -->
-        <deny permission="bungeni.agendaitem.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.agendaitem.Edit" role="bungeni.Speaker" />
+        <!-- agenda_item -->
+        <deny permission="bungeni.agenda_item.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.agenda_item.Edit" role="bungeni.Speaker" />
         <!-- attachment -->
         <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
@@ -179,7 +179,7 @@
         publish="true" 
         like_state="submitted"
         tags="public approved">
-        <!-- agendaitem -->
+        <!-- agenda_item -->
         <grant permission="zope.View" role="bungeni.Anonymous" />
     </state>
     

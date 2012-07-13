@@ -20,16 +20,16 @@
     <feature name="download" enabled="true" />
     
     <!-- global grants -->
-    <grant permission="bungeni.tableddocument.View" role="bungeni.Owner" />
-    <grant permission="bungeni.tableddocument.View" role="bungeni.Signatory" />
-    <grant permission="bungeni.tableddocument.Edit" role="bungeni.Owner" />
-    <grant permission="bungeni.tableddocument.Add" role="bungeni.Clerk" />
-    <grant permission="bungeni.tableddocument.Add" role="bungeni.MP" />
-    <grant permission="bungeni.tableddocument.Delete" role="bungeni.Owner" />
+    <grant permission="bungeni.tabled_document.View" role="bungeni.Owner" />
+    <grant permission="bungeni.tabled_document.View" role="bungeni.Signatory" />
+    <grant permission="bungeni.tabled_document.Edit" role="bungeni.Owner" />
+    <grant permission="bungeni.tabled_document.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.tabled_document.Add" role="bungeni.MP" />
+    <grant permission="bungeni.tabled_document.Delete" role="bungeni.Owner" />
     
     
     <state id="working_draft" title="Working Draft" tags="draft private">
-        <!-- tableddocument -->
+        <!-- tabled_document -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <deny permission="zope.View" role="bungeni.Speaker" />
         <deny permission="zope.View" role="bungeni.Owner" />
@@ -37,12 +37,12 @@
         <deny permission="zope.View" role="bungeni.MP" />
         <deny permission="zope.View" role="bungeni.Minister" />
         <deny permission="zope.View" role="bungeni.Anonymous" />
-        <grant permission="bungeni.tableddocument.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.tableddocument.Edit" role="bungeni.Speaker" />
-        <deny permission="bungeni.tableddocument.Edit" role="bungeni.Owner" />
-        <grant permission="bungeni.tableddocument.Delete" role="bungeni.Clerk" />
-        <deny permission="bungeni.tableddocument.Delete" role="bungeni.Speaker" />
-        <deny permission="bungeni.tableddocument.Delete" role="bungeni.Owner" />
+        <grant permission="bungeni.tabled_document.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.tabled_document.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.tabled_document.Edit" role="bungeni.Owner" />
+        <grant permission="bungeni.tabled_document.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.tabled_document.Delete" role="bungeni.Speaker" />
+        <deny permission="bungeni.tabled_document.Delete" role="bungeni.Owner" />
         <!-- attachment -->
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
@@ -74,13 +74,13 @@
     <state id="draft" title="Draft" 
         like_state="working_draft" 
         tags="draft private">
-        <!-- tableddocument -->
+        <!-- tabled_document -->
         <deny permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Owner" />
-        <deny permission="bungeni.tableddocument.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.tableddocument.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.tableddocument.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.tableddocument.Delete" role="bungeni.Owner" />
+        <deny permission="bungeni.tabled_document.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.tabled_document.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.tabled_document.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.tabled_document.Delete" role="bungeni.Owner" />
         <!-- attachment -->
         <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
@@ -97,10 +97,10 @@
 
     <state id="submitted_signatories" title="Submitted to Signatories" 
         version="true" like_state="draft">
-        <!-- tableddocument -->
+        <!-- tabled_document -->
         <grant permission="zope.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.tableddocument.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.tableddocument.Delete" role="bungeni.Owner" />
+        <deny permission="bungeni.tabled_document.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.tabled_document.Delete" role="bungeni.Owner" />
         <!-- attachment -->
         <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
@@ -111,7 +111,7 @@
 
     <state id="redraft" title="Redraft" version="true" like_state="draft"
         note="document under review before resubmission">
-        <deny permission="bungeni.tableddocument.Delete" role="bungeni.Owner" />
+        <deny permission="bungeni.tabled_document.Delete" role="bungeni.Owner" />
     </state>
 
     <state id="withdrawn_signatory" title="Dropped" 
@@ -123,7 +123,7 @@
     <state id="submitted" title="Submitted" version="true" 
         like_state="submitted_signatories"
         tags="actionclerk">
-        <!-- tableddocument -->
+        <!-- tabled_document -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Speaker" />
         <!-- event -->
@@ -140,8 +140,8 @@
     <state id="received" title="Received by Clerks Office"
         like_state="submitted"
         tags="actionclerk">
-        <!-- tableddocument -->
-        <grant permission="bungeni.tableddocument.Edit" role="bungeni.Clerk" />
+        <!-- tabled_document -->
+        <grant permission="bungeni.tabled_document.Edit" role="bungeni.Clerk" />
         <!-- attachment -->
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
@@ -158,8 +158,8 @@
     <state id="completed" title="Submitted to the Speaker"
         version="true"
         like_state="submitted">
-        <!-- tableddocument -->
-        <grant permission="bungeni.tableddocument.Edit" role="bungeni.Speaker" />
+        <!-- tabled_document -->
+        <grant permission="bungeni.tabled_document.Edit" role="bungeni.Speaker" />
         <!-- attachment -->
         <grant permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Speaker" />
@@ -178,7 +178,7 @@
         publish="true"
         like_state="submitted"
         tags="public approved">
-        <!-- tableddocument -->
+        <!-- tabled_document -->
         <grant permission="zope.View" role="bungeni.MP" />
         <grant permission="zope.View" role="bungeni.Minister" />
         <grant permission="zope.View" role="bungeni.Anonymous" />
@@ -212,7 +212,7 @@
         like_state="submitted"
         tags="actionmp">
         <!-- question -->
-        <grant permission="bungeni.tableddocument.Edit" role="bungeni.Owner" />
+        <grant permission="bungeni.tabled_document.Edit" role="bungeni.Owner" />
         <!-- attachment -->
         <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
@@ -229,11 +229,11 @@
         tags="public approved">
     </state>
     
-    <!-- only after it has been tabled does a tableddocument become public -->
+    <!-- only after it has been tabled does a tabled_document become public -->
     <state id="tabled" title="Tabled" 
         like_state="admissible"
         tags="public terminal succeed">
-        <!-- tableddocument -->
+        <!-- tabled_document -->
         <grant permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Speaker" />
         <grant permission="zope.View" role="bungeni.Owner" />
