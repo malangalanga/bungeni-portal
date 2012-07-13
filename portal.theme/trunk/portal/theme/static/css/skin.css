@@ -364,9 +364,6 @@ input.inputLabelActive {
 #portal-column-one .portlet .portletItem .navTreeCurrentItem {
     border:0 none !important;
 }
-#portal-column-one .portlet .portletItem .navTreeCurrentItem a {
-    border:1px solid #21a1ba !important;
-}
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode a {
     font-weight: bold;
     background: #eee;
@@ -1349,8 +1346,12 @@ div.main-column #collage h2 {
 }
 .section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li.selected a,
 .section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li a:hover {
-    background: #6CA6CD;
+    background: #21a1ba;
     color: #fff;
+}
+.template-workspace #portal-column-one .portlet .portletItem .navTreeCurrentItem a {
+    background-color:#21a1ba !important;
+    color:#ffffff !important;
 }
 /* hides the portlet header. */
 .section-bungeni-admin #portal-column-one .portlet .portletItem.even,
@@ -1491,7 +1492,7 @@ div.main-column #collage h2 {
 .section-bungeni-workspace.template-workspace.stx table tr:hover,
 .section-bungeni-workspace.template-workspace.yui-skin-sam .yui-dt table tr.yui-dt-odd:hover,
 .section-bungeni-workspace.template-workspace.yui-skin-sam .yui-dt table tr:hover {
-    background:#C2D5FC;
+    background:#abdae4;
 }
 .template-workspace.section-bungeni-archive table.listing th,
 .template-workspace.section-bungeni-archive table.listingdescription th,
@@ -1577,8 +1578,8 @@ div.main-column #collage h2 {
 .section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a.selected, 
 .section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
     border-right: 1px solid #090;
-    background-color: #e4702d !important;
-    color: #fff !important;
+    background-color: #f79f0e !important;
+    color: #000 !important;
 }
 .template-workspace.section-bungeni-admin ul.formTabs li.formTab a:hover,
 .template-workspace.section-bungeni-admin ul.formTabs li.formTab a:active,
@@ -1680,6 +1681,98 @@ div.main-column #collage h2 {
 .template-workspace .portlet ul.contentViewsLeftPort li a:hover {
     background-color:#21a1ba !important;
     color:#fff !important;
+}
+
+/* scheduler layout
+-------------------------------------------------------------- */
+.yui-skin-sam  #scheduler-layout.yui-layout .yui-layout-hd {
+    background: #147b92 url(/static/images/content-actions-bg.png) repeat-x top left;
+    border: 1px solid gray;
+    color: white !important;
+}
+
+.yui-skin-sam #scheduler-layout .yui-layout-unit .yui-resize-handle-r {
+    background-color: #f79f0e;
+    border:1px solid gray;
+}
+.yui-skin-sam #scheduler-layout.yui-layout .yui-resize-proxy div {
+    border: 1px solid gray;
+    background-color: #f79f0e;
+}
+.yui-skin-sam #scheduler-layout .yui-dt table tr td {
+    border-right: 1px solid inherit !important;
+}
+
+.yui-skin-sam #scheduler-layout .yui-menu-button-hover,
+.yui-skin-sam #scheduler-layout .yui-button-button-hover,
+.yui-skin-sam #scheduler-layout .yui-nav li a:hover { 
+    background:#fff;
+}
+
+.yui-skin-sam #text-records-dialog .yui-navset .yui-nav, 
+.yui-skin-sam #text-records-dialog .yui-navset .yui-navset-top .yui-nav,
+.yui-skin-sam #scheduler-layout .yui-navset .yui-nav, 
+.yui-skin-sam #scheduler-layout .yui-navset .yui-navset-top .yui-nav {
+    border-bottom: solid #147b92;
+}
+.yui-skin-sam #text-records-dialog .yui-navset .yui-nav .selected a, 
+.yui-skin-sam #text-records-dialog .yui-navset .yui-nav .selected a:focus, 
+.yui-skin-sam #text-records-dialog .yui-navset .yui-nav .selected a:hover,
+.yui-skin-sam #scheduler-layout .yui-navset .yui-nav .selected a, 
+.yui-skin-sam #scheduler-layout .yui-navset .yui-nav .selected a:focus, 
+.yui-skin-sam #scheduler-layout .yui-navset .yui-nav .selected a:hover {
+    background: #147b92 url(/static/images/content-actions-bg.png) repeat-x top left;
+    color: white;
+}
+.yui-skin-sam #text-records-dialog .yui-dt table tr td,
+.yui-skin-sam #scheduler-layout .yui-dt table tr td,
+.yui-skin-sam #text-records-dialog .yui-dt-first th,
+.yui-skin-sam #scheduler-layout .yui-dt-first th {
+    border-left: 1px solid #147b92;
+    border-right: 1px solid #147b92;
+}
+
+.yui-skin-sam #text-records-dialog tr.yui-dt-selected td, 
+.yui-skin-sam #text-records-dialog tr.yui-dt-selected td.yui-dt-asc, 
+.yui-skin-sam #text-records-dialog tr.yui-dt-selected td.yui-dt-desc,
+.yui-skin-sam #scheduler-layout tr.yui-dt-selected td, 
+.yui-skin-sam #scheduler-layout tr.yui-dt-selected td.yui-dt-asc, 
+.yui-skin-sam #scheduler-layout tr.yui-dt-selected td.yui-dt-desc {
+    background-color: #21a1ba !important;
+    color: white;
+}
+.yui-skin-sam #scheduler-layout th.yui-dt-highlighted,
+.yui-skin-sam #scheduler-layout th.yui-dt-highlighted a {
+    background-color:#abdae4;
+}
+.yui-skin-sam #scheduler-layout tr.yui-dt-highlighted,
+.yui-skin-sam #scheduler-layout tr.yui-dt-highlighted td.yui-dt-asc,
+.yui-skin-sam #scheduler-layout tr.yui-dt-highlighted td.yui-dt-desc,
+.yui-skin-sam #scheduler-layout tr.yui-dt-even td.yui-dt-highlighted,
+.yui-skin-sam #scheduler-layout tr.yui-dt-odd td.yui-dt-highlighted{ 
+    cursor:pointer;
+    background-color:#abdae4;
+ }
+.yui-skin-sam #scheduler-layout .yui-dt-list th.yui-dt-highlighted,
+.yui-skin-sam #scheduler-layout .yui-dt-list th.yui-dt-highlighted a {
+    background-color:#abdae4;
+ }
+.yui-skin-sam #scheduler-layout .yui-dt-list tr.yui-dt-highlighted,
+.yui-skin-sam #scheduler-layout .yui-dt-list tr.yui-dt-highlighted td.yui-dt-asc,
+.yui-skin-sam #scheduler-layout .yui-dt-list tr.yui-dt-highlighted td.yui-dt-desc,
+.yui-skin-sam #scheduler-layout .yui-dt-list tr.yui-dt-even td.yui-dt-highlighted,
+.yui-skin-sam #scheduler-layout .yui-dt-list tr.yui-dt-odd td.yui-dt-highlighted { 
+    cursor:pointer;
+    background-color:#abdae4;
+}
+
+.yui-skin-sam .yui-button-focus,
+.yui-skin-sam .yui-button-hover { 
+    background:#abdae4;border-color:#21a1ba;
+ }
+.yui-skin-sam #scheduler-layout .yui-button-hover { 
+    background:#abdae4;
+    border-color:#21a1ba;
 }
 
 /* =============================================================================

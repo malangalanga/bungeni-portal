@@ -1587,6 +1587,9 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
 .template-workspace #portal-column-content div#region-content div h2:first-child { 
 	margin-top:0px !important;
 }
+.section-bungeni-workspace div.main-column #portal-column-content #region-content h2.title:first-child {
+    margin-top: 1.5em !important;
+}
 /* portal-messages
 -------------------------------------------------------------- */
 .template-workspace dl.portalMessage {
@@ -1789,6 +1792,70 @@ div.overlay div.close span {
     margin-bottom: 1em;
     padding: 1px 10px 1px 15px !important;
     font-size: 100% !important; 
+}
+
+/* scheduler layout
+-------------------------------------------------------------- */
+#text-records-dialog table {
+    width:auto;
+    margin-left:0;
+}
+#scheduler-layout table {
+    width:auto;
+    margin-left:0;
+}
+#scheduler-layout .yui-skin-sam .yui-dt-liner {
+    margin: 0;
+    padding: 0;
+    padding: 4px 10px 4px 10px;
+}
+.yui-skin-sam #text-records-dialog .yui-dt table tr td,
+.yui-skin-sam #scheduler-layout .yui-dt table tr td {
+    padding: 0;
+}
+.yui-skin-sam #text-records-dialog .yui-dt-liner,
+.yui-skin-sam #scheduler-layout .yui-dt-liner {
+    padding: 4px 4px 4px 10px !important;
+}
+.yui-skin-sam #text-records-dialog .yui-dt-first th,
+.yui-skin-sam #scheduler-layout .yui-dt-first th {
+    padding: 0;
+}
+
+.yui-skin-sam #scheduler-layout .yui-layout-unit .yui-resize-handle-r {
+    right: 0;
+    top: 2px;
+    zoom: 1;
+    width:5px;
+    height:99.1%;
+    margin: 5px 0 0 0 !important;
+}
+.yui-skin-sam #scheduler-layout.yui-layout .yui-resize-proxy div {
+    position: absolute;
+}
+
+.yui-skin-sam #scheduler-layout .yui-dt table tr td,
+.yui-skin-sam #scheduler-layout .yui-dt-first th {
+    width:0px !important;
+    padding:0 !important;
+}
+.yui-skin-sam #scheduler-layout .yui-split-button button, 
+.yui-skin-sam #scheduler-layout .yui-menu-button button {
+    padding-right: 20px;
+}
+.yui-skin-sam #scheduler-layout .yui-dt0-col-row_controls {
+    max-width:115px !important;
+} 
+.section-bungeni-workspace #text-records-dialog input.scheduler-bigtext {
+    width: 98% !important;
+}
+.yui-editor-editable-container {
+    max-height:300px;
+    overflow-y:auto;
+}
+.yui-editor-editable-container:empty {
+    height:30px;
+    overflow-y:auto;
 }
 
 /* Hide form elements that don't make sense within an overlay. */
