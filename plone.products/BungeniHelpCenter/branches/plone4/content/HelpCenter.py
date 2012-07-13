@@ -58,6 +58,9 @@ def getExtraArgs(self):
 BodyField =  TextField(
         'body',
         searchable=1,
+        default_output_type = 'text/x-html-safe',
+        storage = AnnotationStorage(migrate=True),
+        validators = ('isTidyHtmlWithCleanup',),
         widget=RichWidget(
                 description = "The body text.",
                 description_msgid = "phc_desc_body_referencemanual",

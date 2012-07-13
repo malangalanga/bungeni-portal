@@ -7,8 +7,8 @@
   <body>
     <div metal:fill-slot="main"
          tal:define="view here/@@hcf_view;
-					 audiences view/getItemsByAudiencesAndSections;
-                     noAudiences python:len(audiences) == 1">
+                     sections here/getItemsBySections;
+                     noSections python:len(sections) == 1">
 
     <div tal:replace="structure provider:plone.documentactions"/>
     
@@ -16,37 +16,12 @@
       Folder Title
     </h1>
     
-    <table class="sectionIndex" tal:condition="not:noAudiences">
-        <thead>
-            <tr><th i18n:translate="phc_index_audiences">Audiences</th></tr>
-        </thead>
-        <tbody>
-            <tr tal:repeat="audience audiences">
-                <td><a tal:attributes="href python:'%s#%s'% (here.absolute_url(), audience['id'],)"
-                       tal:content="audience/audience" i18n:translate="">audience</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
 
     <div class="documentDescription"
          tal:content="here/Description">
       Description.
     </div>
 
-    <tal:audience repeat="audience audiences">
-
-        <h2 tal:condition="not:noAudiences" >
-            <a class="link-anchor" 
-                tal:attributes="name audience/id"
-                tal:content="audience/audience"
-		i18n:translate="">
-                Audience Heading
-            </a>
-        </h2>
-
-        <tal:block define="sections audience/sections;
-                           noSections python:len(sections) == 1">
         
         <tal:section repeat="section sections">
 
@@ -71,9 +46,7 @@
 
         </tal:section>
         
-      </tal:block>
-
-    </tal:audience>
+ 
 
     <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
       see also - shows the references if this feature is switched on

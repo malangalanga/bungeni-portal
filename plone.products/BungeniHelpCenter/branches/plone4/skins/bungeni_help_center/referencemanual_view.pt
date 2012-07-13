@@ -5,9 +5,10 @@
 
 <body>
 
-  <div metal:fill-slot="main" class="referencemanual">
+  <div metal:fill-slot="main" class="referencemanual"
+    tal:define="putils context/plone_utils">
+    
     <div metal:define-macro="main">
-
 
     <h1 class="documentFirstHeading">
         <span tal:replace="here/Title">Title</span>
@@ -50,7 +51,7 @@
     <div class="documentBody"
       tal:condition="here/getBody"
       tal:content="structure here/getBody">
-      Description
+      Body
     </div>
 
 

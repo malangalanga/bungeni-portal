@@ -12,49 +12,10 @@
 
 
 <body>
-  <div metal:fill-slot="main"
-     tal:define="chapters python:here.aq_parent.getFolderContents(contentFilter = {'portal_type' : ['BungeniHelpCenterTutorial'], 'sort_on':'getSections'});
-                 sibl     python:[p for p in chapters];
-                 num_sibl python:len(sibl);
-                 pos      python: [i for i in range(num_sibl)  if sibl[i].getId == here.getId()][0];"
-       class="tutorial">
+  <div metal:fill-slot="main" class="tutorial">
     <div metal:define-macro="main">
 
-    <div tal:replace="structure provider:plone.documentactions"/>
-    
-    <div class="listingBar" tal:condition="python: next or prev"
-              tal:define="next python:pos < num_sibl-1;
-                   prev python:pos != 0;">
-   <table class="navtable"><tr> 
-    <td class="leftcell">  
-               <span tal:condition="prev">
-                  <a class="listingPrevious"
-                     tal:define="prevsib python:sibl[pos-1]"
-                     tal:attributes="href prevsib/getURL"
-                     tabindex="2"
-                     href="">
-                    <img tal:replace="structure here/arrowLeft.gif" />
-                    <!--<span i18n:translate="label_previous">Previous: </span>-->
-                    <span tal:replace="prevsib/Title" />
-                  </a>
-               </span>
-    </td>
-    <td class="rightcell">
- 
-               <span tal:condition="next">
-                  <a class="listingNext"
-                   tal:define="nextsib python:sibl[pos+1]"
-                   tal:attributes="href nextsib/getURL"
-                   tabindex="1"
-                   href="">
-                  <!--<span i18n:translate="label_next">Next: </span>-->
-                  <span tal:replace="nextsib/Title" />
-                  <img tal:replace="structure here/arrowRight.gif" /> 
-                   </a>
-               </span>
-</td></tr></table>
-</div> 
-
+    <div tal:replace="structure provider:plone.documentactions"/>   
 
     <h1 class="documentFirstHeading">
         <span tal:replace="here/Title">Title</span>
@@ -92,13 +53,6 @@
       tal:content="structure here/Description">
       Description
     </div>
-
-    <div class="documentBody"
-      tal:condition="here/getBody"
-      tal:content="structure here/getBody">
-      Description
-    </div>
-
     
     <div metal:define-slot="sectiontoc">
     <ol tal:condition="here/getPages">
@@ -147,39 +101,6 @@
       see also - shows the references if this feature is switched on
     </div>
     <div tal:replace="structure provider:plone.belowcontenttitle"/>
-    
-    <div class="listingBar" tal:condition="python: next or prev"
-              tal:define="next python:pos < num_sibl-1;
-                   prev python:pos != 0;">
-   <table class="navtable"><tr> 
-    <td class="leftcell">  
-               <span tal:condition="prev">
-                  <a class="listingPrevious"
-                     tal:define="prevsib python:sibl[pos-1]"
-                     tal:attributes="href prevsib/getURL"
-                     tabindex="2"
-                     href="">
-                    <img tal:replace="structure here/arrowLeft.gif" />
-                    <!--<span i18n:translate="label_previous">Previous: </span>-->
-                    <span tal:replace="prevsib/Title" />
-                  </a>
-               </span>
-    </td>
-    <td class="rightcell">
- 
-               <span tal:condition="next">
-                  <a class="listingNext"
-                   tal:define="nextsib python:sibl[pos+1]"
-                   tal:attributes="href nextsib/getURL"
-                   tabindex="1"
-                   href="">
-                  <!--<span i18n:translate="label_next">Next: </span>-->
-                  <span tal:replace="nextsib/Title" />
-                  <img tal:replace="structure here/arrowRight.gif" /> 
-                   </a>
-               </span>
-</td></tr></table>
-</div> 
 
     
    </div>

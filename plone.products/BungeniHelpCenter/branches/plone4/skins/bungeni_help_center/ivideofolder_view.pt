@@ -19,7 +19,7 @@
       Description.
     </div>
 
-    <div tal:repeat="section here/getSectionsToList">
+    <div tal:repeat="section here/getItemsBySections">
 
         <h2 tal:content="section">Section Heading</h2>
 
