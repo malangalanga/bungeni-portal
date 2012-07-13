@@ -17,8 +17,8 @@
     <feature name="signatory" enabled="true" />
     <feature name="schedule" enabled="true" />
     <feature name="workspace" enabled="true" />
-    <feature name="notification" enabled="true"/>
-    <feature name="download" enabled="true"/>
+    <feature name="notification" enabled="true" />
+    <feature name="download" enabled="true" />
     
     <!-- global grants -->
     <grant permission="bungeni.question.View" role="bungeni.Owner" />
@@ -72,10 +72,10 @@
         <deny permission="bungeni.response.Edit" role="bungeni.Signatory" />
         <deny permission="bungeni.response.Edit" role="bungeni.Minister" />
         <!-- signatories -->
-        <grant permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
+        <grant permission="bungeni.signatory.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
-        <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
-        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
     </state>
     
     <state id="draft" title="Draft" like_state="working_draft" 
@@ -96,9 +96,9 @@
         <grant permission="bungeni.attachment.Delete" role="bungeni.Owner" />
         <!-- signatories -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Clerk" />
-        <grant permission="bungeni.signatory.Add" role="bungeni.Owner"/>
-        <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
-        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
     </state>
 
     <state id="submitted_signatories" title="Submitted to Signatories"
@@ -117,13 +117,13 @@
 
     <state id="redraft" title="Redraft" version="True" like_state="draft"
         note="document under review before resubmission">
-        <deny permission="bungeni.question.Delete" role="bungeni.Owner"/>
+        <deny permission="bungeni.question.Delete" role="bungeni.Owner" />
     </state>
 
     <state id="withdrawn_signatory" title="Dropped" 
         like_state="submitted_signatories">
         <!-- signatories -->
-        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
     </state>
 
     <state id="submitted" title="Submitted to clerk" 

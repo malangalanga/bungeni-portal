@@ -16,8 +16,8 @@
     <feature name="signatory" enabled="true" />
     <feature name="schedule" enabled="true" />
     <feature name="workspace" enabled="true" />
-    <feature name="notification" enabled="true"/>
-    <feature name="download" enabled="true"/>
+    <feature name="notification" enabled="true" />
+    <feature name="download" enabled="true" />
     
     <!-- global grants -->
     <grant permission="bungeni.bill.View" role="bungeni.Clerk" />
@@ -106,7 +106,7 @@
 
     <state id="redraft" title="Redraft" version="true" like_state="draft"
         note="document under review before resubmission">
-        <deny permission="bungeni.bill.Delete" role="bungeni.Owner"/>
+        <deny permission="bungeni.bill.Delete" role="bungeni.Owner" />
     </state>
     
     <state id="withdrawn_signatory" title="Dropped" 

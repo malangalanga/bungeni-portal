@@ -16,8 +16,8 @@
     <feature name="signatory" enabled="true" />
     <feature name="schedule" enabled="true" />
     <feature name="workspace" enabled="true" />
-    <feature name="notification" enabled="true"/>
-    <feature name="download" enabled="true"/>
+    <feature name="notification" enabled="true" />
+    <feature name="download" enabled="true" />
     
     <!-- global grants -->
     <grant permission="bungeni.tableddocument.View" role="bungeni.Owner" />
@@ -67,8 +67,8 @@
         <deny permission="bungeni.signatory.Add" role="bungeni.MP" />
         <deny permission="bungeni.signatory.Add" role="bungeni.Minister" />
         <deny permission="bungeni.signatory.Add" role="bungeni.Anonymous" />
-        <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
-        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
     </state>
     
     <state id="draft" title="Draft" 
@@ -89,10 +89,10 @@
         <deny permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Delete" role="bungeni.Owner" />
         <!-- signatories -->
-        <deny permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
-        <grant permission="bungeni.signatory.Add" role="bungeni.Owner"/>
-        <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
-        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
     </state>
 
     <state id="submitted_signatories" title="Submitted to Signatories" 
@@ -106,18 +106,18 @@
         <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
         <deny permission="bungeni.attachment.Delete" role="bungeni.Owner" />
         <!-- signatories -->
-        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
     </state>
 
     <state id="redraft" title="Redraft" version="true" like_state="draft"
         note="document under review before resubmission">
-        <deny permission="bungeni.tableddocument.Delete" role="bungeni.Owner"/>
+        <deny permission="bungeni.tableddocument.Delete" role="bungeni.Owner" />
     </state>
 
     <state id="withdrawn_signatory" title="Dropped" 
         like_state="submitted_signatories">
         <!-- signatories -->
-        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
     </state>
     
     <state id="submitted" title="Submitted" version="true" 
@@ -134,7 +134,7 @@
         <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
         <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
         <!-- signatories -->
-        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
     </state>
         
     <state id="received" title="Received by Clerks Office"

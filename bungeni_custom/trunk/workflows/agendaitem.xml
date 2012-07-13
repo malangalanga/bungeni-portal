@@ -14,8 +14,8 @@
     <feature name="attachment" enabled="true" />
     <feature name="schedule" enabled="true" />
     <feature name="workspace" enabled="true" />
-    <feature name="notification" enabled="true"/>
-    <feature name="download" enabled="true"/>
+    <feature name="notification" enabled="true" />
+    <feature name="download" enabled="true" />
     
     <!-- global grants -->
     <grant permission="bungeni.agendaitem.View" role="bungeni.Owner" />
@@ -101,7 +101,7 @@
     
     <state id="redraft" title="Redraft" version="true" like_state="draft"
         note="document under review before resubmission">
-        <deny permission="bungeni.agendaitem.Delete" role="bungeni.Owner"/>
+        <deny permission="bungeni.agendaitem.Delete" role="bungeni.Owner" />
     </state>
     
     <state id="withdrawn_signatory" title="Dropped"  
@@ -117,7 +117,7 @@
         <grant permission="zope.View" role="bungeni.Clerk" />
         <grant permission="zope.View" role="bungeni.Speaker" />
         <!-- signatories -->
-        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
     </state>
 
     <state id="received" title="Received by Clerks Office"
