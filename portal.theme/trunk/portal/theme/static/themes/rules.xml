@@ -4,8 +4,8 @@
     <!--The comment below is required by deliverance proxy.-->
 	<!-- deliverance-proxy -->
 
-    <match path="regex:.*/(emptypage)$"
-        abort="1" />
+    <match path="regex:.*/(emptypage)$" abort="1" />
+    <match path="regex:.*/(preview)$" abort="1" />                     
     <match environ="QUERY_STRING: wildcard:headless=*" abort="1" />    
     <match path="regex:.*/(addcontentselector)$"
         abort="1" />   
