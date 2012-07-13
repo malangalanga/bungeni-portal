@@ -1654,6 +1654,21 @@ class XmldbTasks:
                          {"user_exist":self.cfg.user_exist,
                           "exist_download_file":self.cfg.exist_download_file})
 
+    
+    def switchto_dev_mode(self):
+        with cd(self.cfg.user_exist):
+            with cd("webapp/WEB-INF"):
+                run("cp web_customize.xml.tmpl web.xml")
+                print("Changed to devmode. You will need to restart the eXist service now.")
+
+
+    def switchto_deploy_mode(self):
+        with cd(self.cfg.user_exist):
+            with cd("webapp/WEB-INF"):
+                run("cp web_deploy.xml.tmpl web.xml")
+                print("Changed to deployment mode. You will need to restart the eXist service now.")
+
+
     def ant_prop_config(self):
         """
         Generate the ant properties file
