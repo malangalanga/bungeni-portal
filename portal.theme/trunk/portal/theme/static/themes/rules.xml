@@ -81,6 +81,12 @@
             theme="children:#portal-globalnav ul"
         />
         
+        <!-- bungeni login link -->
+        <append href="/bungeni"
+            content="ul#portal-personaltools li:not(.navigation)"
+            theme="children:#portal-personaltools"
+        />        
+        
         <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
             theme="children:#portal-globalnav > ul" />
         <drop theme="#processing_indicatron" />
