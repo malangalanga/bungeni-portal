@@ -806,8 +806,9 @@ dl.portalMessage dt {
 	padding:0 1em .3em 1em !important;
 }
 dl.portalMessage dd {
-    padding: 0;
+    padding: 0 !important;
     display:inline;
+    width:100% !important;
 }
 #display_form_spacer {
     width: 95%;
@@ -1510,6 +1511,13 @@ div.main-column #collage h2 {
 -------------------------------------------------------------- */
 .template-workspace div#portal-columns div#portal-column-content div {
     margin-top:0px !important;
+}
+
+.portaltype-folder .contentActions {
+    height:1.8em;
+}
+.portaltype-folder #content .contentActions ul {
+    margin: 0 0 0 -2px !important;
 }
 
 /* Table

@@ -373,7 +373,8 @@ input.inputLabelActive {
     border:0 none !important;
 }
 #portal-column-one .portlet .portletItem .navTreeCurrentItem a {
-    border:1px solid #21a1ba !important;
+    background-color:#21a1ba !important;
+    color:#ffffff !important;
 }
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode a {
     font-weight: bold;
@@ -385,9 +386,6 @@ input.inputLabelActive {
 }
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul {
     border-bottom: 1px solid #aaa;
-}
-.template-workspace #portal-column-one .portlet .portletItem  a {
-    color:#000 !important;
 }
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul a {
     font-weight: normal;
@@ -1410,7 +1408,7 @@ div.dhx_cal_navline div.active {
 }
 .section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li.selected a,
 .section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li a:hover {
-    background: #6CA6CD;
+    background: #21a1ba;
     color: #fff;
 }
 /* hides the portlet header. */
@@ -1558,7 +1556,7 @@ div.dhx_cal_navline div.active {
 .section-bungeni-workspace.template-workspace.stx table tr:hover,
 .section-bungeni-workspace.template-workspace.yui-skin-sam .yui-dt table tr.yui-dt-odd:hover,
 .section-bungeni-workspace.template-workspace.yui-skin-sam .yui-dt table tr:hover {
-    background:#C2D5FC;
+    background:#abdae4;
 }
 .template-workspace.section-bungeni-archive table.listing th,
 .template-workspace.section-bungeni-archive table.listingdescription th,
@@ -1600,7 +1598,7 @@ div.dhx_cal_navline div.active {
 }
 .template-workspace.section-bungeni-workspace li.formTab a.selected {
     background: url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
-    border-bottom-color: #6ca6cd;
+    border-bottom-color: #21a1ba;
     text-decoration: none;
 }
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a {

@@ -1478,8 +1478,8 @@ div.dhx_cal_navline .dhx_cal_date {
 }
 .section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li.selected a,
 .section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li a:hover {
-    background: #6CA6CD;
-    color: #fff;
+    background: #21a1ba;
+    color: #fff !important;
 }
 /* hides the portlet header. */
 .section-bungeni-admin #portal-column-one .portlet .portletItem.even,
@@ -1490,6 +1490,10 @@ div.dhx_cal_navline .dhx_cal_date {
 .template-workspace.section-bungeni-workspace #portal-column-one .portletItem a.navTreeCurrentItem {
     background: #eee;
     border: 0 none !important;
+}
+.template-workspace #portal-column-one .portlet .portletItem .navTreeCurrentItem a {
+    background-color:#21a1ba !important;
+    color:#ffffff !important;
 }
 /*
  * DocumentActions & contentActions
@@ -1525,12 +1529,6 @@ div.dhx_cal_navline .dhx_cal_date {
 .section-bungeni-workspace .contentActions {
     background: url(/static/images/content-actions-bg.png) repeat-x top left;
     border: 0 none;
-}
-.portaltype-folder .contentActions {
-    height:1.8em;
-}
-.portaltype-folder #content .contentActions ul {
-    margin: 0 0 0 -2px !important;
 }
 /*
  * portal-globalnav
@@ -1577,14 +1575,14 @@ div.dhx_cal_navline .dhx_cal_date {
 	color:#fff !important;
 	text-shadow:0 0 0 #fff;
 }
-.template-workspace div#portal-globalnav ul.level0 ul.level1 a:hover {
+.template-workspace div#portal-globalnav ul.level1 a:hover {
     background:transparent;
     border:0px;
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
     border-radius: 0px;
 }
-.template-workspace div#portal-globalnav ul.level0 ul.level1 {
+.template-workspace div#portal-globalnav ul.level1 {
     border: 1px solid #aaf;
     border-right: 0 !important;
     border-top: 0 none !important;
@@ -1592,7 +1590,7 @@ div.dhx_cal_navline .dhx_cal_date {
     background:#444444 !important;
     display: block;
 }
-.section-bungeni-workspace div#portal-globalnav ul.level0 ul.level1 {
+.section-bungeni-workspace div#portal-globalnav ul.level1 {
     border: 1px solid #aaf;
     border-right: 0 none;
     border-top: 0 none !important;
@@ -1600,7 +1598,7 @@ div.dhx_cal_navline .dhx_cal_date {
     background:#21a1ba url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x !important;
     display: block;
 }
-.section-bungeni-admin div#portal-globalnav ul.level0 ul.level1 {
+.section-bungeni-admin div#portal-globalnav ul.level1 {
     border: 1px solid #aaf;
     border-right: 0 none;
     border-top: 0 none !important;
@@ -1608,13 +1606,13 @@ div.dhx_cal_navline .dhx_cal_date {
     background:#888888 url(/static/images/w-globalnav-level1-bg-last.png) bottom left repeat-x !important;
     display: block;
 }
-.template-workspace div#portal-globalnav ul.level0 ul.level1 li.selected a {
+.template-workspace div#portal-globalnav ul.level1 li.selected a {
     color: #FF8A09 !important;
 }
-.section-bungeni-workspace div#portal-globalnav ul.level0 ul.level1 li.selected a {
+.section-bungeni-workspace div#portal-globalnav ul.level1 li.selected a {
     color:#333 !important;
 }
-.section-bungeni-admin div#portal-globalnav ul.level0 ul.level1 li.selected a {
+.section-bungeni-admin div#portal-globalnav ul.level1 li.selected a {
     color:#000 !important;
 }
 /*
@@ -1625,7 +1623,7 @@ div.dhx_cal_navline .dhx_cal_date {
 .section-bungeni-workspace.template-workspace.stx table tr:hover,
 .section-bungeni-workspace.template-workspace.yui-skin-sam .yui-dt table tr.yui-dt-odd:hover,
 .section-bungeni-workspace.template-workspace.yui-skin-sam .yui-dt table tr:hover {
-    background:#C2D5FC;
+    background:#abdae4;
 }
 .template-workspace.section-bungeni-archive table.listing th,
 .template-workspace.section-bungeni-archive table.listingdescription th,
@@ -1676,7 +1674,7 @@ div.dhx_cal_navline .dhx_cal_date {
 }
 .template-workspace.section-bungeni-workspace li.formTab a.selected {
     background: url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
-    border-bottom-color: #6ca6cd;
+    border-bottom-color: #21a1ba;
     text-decoration: none;
 }
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a {
