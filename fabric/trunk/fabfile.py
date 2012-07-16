@@ -628,6 +628,8 @@ def exist_fw_install():
     Installs Bungeni eXist framework, WARNING: Will overwrite any existing installation
     """
     start_exist("IGNORE_ERROR")
+    import time
+    time.sleep(5)
     tasks = bungeni.XmldbTasks()
     tasks.download_fw()
     tasks.ant_prop_config()
@@ -639,6 +641,8 @@ def exist_load_demodata():
     Loads demodata from the eXist repository
     """
     start_exist("IGNORE_ERROR")
+    import time
+    time.sleep(5)
     tasks = bungeni.XmldbTasks()
     tasks.setup_exist_demo_data()
     tasks.ant_demo_setup_config()
