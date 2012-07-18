@@ -510,6 +510,12 @@ class Presetup:
         else:
             print "This server was identified as a Gandi virtual server"
 
+    def exist_essentials(self):
+        """
+        Installs the required erlang packages for RabbitMQ to work properly
+        """
+        sudo(self.ossent.get_install_method(self.osinfo.release_id)
+             + " erlang-base-hipe erlang-os-mon erlang-xmerl erlang-inets")
 
     def build_py26(self):
         run("mkdir -p " + self.cfg.user_python26_build_path)

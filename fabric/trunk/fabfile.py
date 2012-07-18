@@ -716,5 +716,13 @@ def exist_deploy_mode():
     tasks.switchto_deploy_mode()
     start_exist("IGNORE_ERR")
 
-
+def exist_presetup():
+    """
+    Installs RabbitMQ / eXist dependencies
+    """
+    bungenipre = bungeni.Presetup()
+    bungenipre.exist_essentials()
+    bungenipre.pika()
+    bungenipre.magic()
+    bungenipre.pyinotify()
 
