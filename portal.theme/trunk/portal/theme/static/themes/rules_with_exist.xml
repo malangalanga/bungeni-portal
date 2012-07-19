@@ -12,6 +12,7 @@
     <match path="regex:.*/(fullviewmindmap)$"
         abort="1" />
     <match path="/plone/" class="load-plone-navigation" />
+    <match path="/exist/" class="load-exist-navigation" />
     <match path="regex:^/(workspace|business|members|archive|admin)/?"
         class="load-bungeni-navigation" />
     <match path="regex:^/(workspace)/?"
@@ -52,9 +53,53 @@
         <append content="#portal-globalnav > li:not(:first-child)"
             theme="children:#portal-globalnav > ul" />
         <drop href="/plone"
-            content="#portal-globalnav > li:first-child"/>                    
+            content="#portal-globalnav > li:first-child"/>             
+        <append href="/exist" content="#portal-globalnav > li:not(:first-child)"
+            theme="children:#portal-globalnav > ul" />         
         <drop theme="#processing_indicatron" />          
     </rule>
+
+    <rule class="load-exist-navigation">        
+        <append theme="//head"
+            content="//head"
+            nocontent="ignore" />        
+        
+        <!-- navigation -->
+        <prepend href="/"
+            content="#portal-globalnav > li"
+            theme="children:#portal-globalnav > ul" />
+        <append content="#portal-globalnav > li:not(:first-child)"
+            theme="children:#portal-globalnav > ul" />
+        <drop href="/exist"
+            content="#portal-globalnav > li:first-child"/>
+        <prepend content="ul#portal-personaltools li"
+            theme="children:#portal-globalnav ul.level1" /> 
+        <!-- add plone navigation -->
+        
+        <append href="/bungeni"
+            content="ul#portal-personaltools li.navigation"
+            theme="children:#portal-globalnav ul"
+        />
+        
+        <!-- bungeni login link -->
+        <append href="/bungeni"
+            content="ul#portal-personaltools li:not(.navigation)"
+            theme="children:#portal-personaltools"
+        />        
+        
+        <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
+            theme="children:#portal-globalnav > ul" />
+        <drop theme="#processing_indicatron" />
+    </rule>
+
+    <rule class="load-workspace-navigation">    
+        <pyquery pyref=
+            "portal.theme.static.themes.rules:add_member_workspace_links"
+        />
+        <pyquery pyref=
+            "portal.theme.static.themes.rules:add_group_workspace_links"
+        />              
+    </rule>  
 
     
     <rule class="load-member-content">    
@@ -79,7 +124,9 @@
         <!-- navigation -->
         <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
             theme="children:#portal-globalnav > ul" />
-        
+
+        <append href="/exist" content="#portal-globalnav > li:not(:first-child)"
+            theme="children:#portal-globalnav > ul" />         
     </rule>
     
     <rule class="load-member-tab">
@@ -120,6 +167,8 @@
             content="#portal-globalnav > li:first-child"/>
         <append href="/bungeni"
             content="#portal-globalnav > li:first-child"
+            theme="children:#portal-globalnav > ul" />
+        <append href="/exist" content="#portal-globalnav > li:not(:first-child)"
             theme="children:#portal-globalnav > ul" />          
         <append content="#portal-globalnav > li"
             theme="children:#portal-globalnav > ul" />
@@ -147,7 +196,11 @@
             "portal.theme.static.themes.rules:add_menu_items"
         />
         <drop content="#portal-column-content" /> 
-     
+
+        <append href="/exist"
+            content="ul#portal-personaltools li"
+            theme="children:#portal-personaltools ul"
+        />      
     </rule>  
 
     
