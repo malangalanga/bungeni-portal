@@ -258,6 +258,9 @@ class BungeniConfigs:
         self.release = self.cfg.get_config("global","release")
         self.linux_headers = "linux-headers-`uname -r`"
         # python 2.6
+        self.user_python27_home = self.user_install_root + "/python27"
+        self.python27 = self.user_python27_home + "/bin/python"
+        # python 2.6
         self.user_python26_home = self.user_install_root + "/python26"
         self.python26 = self.user_python26_home + "/bin/python"
         # python 2.5
@@ -274,7 +277,18 @@ class BungeniConfigs:
         self.user_logs = self.user_install_root + "/logs"
         self.user_pid = self.user_install_root + "/pid"
         # python setup 
-        # 2.6    
+        # 2.7   
+        self.python27_install_url = self.cfg.get_config("python27",
+                "download_url")
+        self.user_python27_build_path = self.user_build_root \
+            + "/python27"           
+        self.python27_src_dir = \
+            self.utils.get_basename_prefix(self.python27_install_url)
+        self.python27_download_file = \
+            self.utils.get_basename(self.python27_install_url)
+        self.python27_download_command = \
+            self.get_download_command(self.python27_install_url)
+         # 2.6    
         self.python26_install_url = self.cfg.get_config("python26",
                 "download_url")
         self.user_python26_build_path = self.user_build_root \
@@ -416,7 +430,7 @@ class BungeniConfigs:
         self.user_exist_build_path = self.user_build_root + "/exist"
         self.exist_docs = self.user_build_root + "/exist-docs"
         self.exist_demo_data = self.exist_docs + "/bungeni-xml"
-        self.java_home = self.cfg.get_config("exist", "java_home")
+        self.java_home = self.jre_home()
         self.exist_port = self.cfg.get_config("exist", "http_port")
         self.exist_startup_mem = self.cfg.get_config("exist", "startup_mem")
         self.exist_max_mem = self.cfg.get_config("exist", "max_mem")
@@ -440,12 +454,15 @@ class BungeniConfigs:
         self.user_glue = self.user_install_root + "/glue"
         self.glue_interval = self.cfg.get_config("glue-script", "interval")
 
-
     def get_download_command(self, strURL):
         if strURL.startswith("http") or strURL.startswith("ftp"):
             return "wget -c %(download_url)s" % {"download_url": strURL}
         else:
             return "cp %(file_path)s ." % {"file_path": strURL}
+
+    def jre_home(self):
+        return run('echo `readlink -f /usr/bin/java | sed "s:/bin/java::"`')
+
     
 
 class PythonConfigs:
@@ -460,14 +477,16 @@ class PythonConfigs:
 
     def get_python_home(self, config_name):
         selected_python = self.cfgreader.get_config(config_name,"python")
-        if selected_python == "2.6":
+	if selected_python == "2.7":
+            return self.cfg.user_python27_home
+        elif selected_python == "2.6":
             return self.cfg.user_python26_home
         elif selected_python == "2.5":
             return self.cfg.user_python25_home
         elif selected_python == "2.4":
             return self.cfg.user_python24_home
         else:
-            return self.cfg.user_python25_home
+            return self.cfg.user_python26_home
 
 
 
@@ -516,6 +535,26 @@ class Presetup:
         """
         sudo(self.ossent.get_install_method(self.osinfo.release_id)
              + " erlang-base erlang-os-mon erlang-xmerl erlang-inets")
+
+    def build_py27(self):
+        run("mkdir -p " + self.cfg.user_python27_build_path)
+        run("rm -rf " + self.cfg.user_python27_build_path + "/*.*")
+        run("mkdir -p " + self.cfg.user_python27_home)
+        with cd(self.cfg.user_python27_build_path):
+            run(self.cfg.python27_download_command)
+            run("tar xvf " + self.cfg.python27_download_file)
+            with cd(self.cfg.python27_src_dir):
+		   #
+		   # All other platforms revert to the normal build
+		   #
+		   run("CPPFLAGS=-I/usr/include/openssl "
+		       "LDFLAGS=-L/usr/lib/ssl "
+		       "./configure --prefix=%(python_home)s USE=sqlite --enable-unicode=ucs4"
+		        % {"python_home":self.cfg.user_python27_home})
+		   run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
+		   run("make install")
+
+
 
     def build_py26(self):
         run("mkdir -p " + self.cfg.user_python26_build_path)
@@ -597,6 +636,10 @@ class Presetup:
             run("rm -rf " + self.cfg.python_imaging_src_dir)
             run("tar xvzf " + self.cfg.python_imaging_download_file)
             with cd(self.cfg.python_imaging_src_dir):
+                if os.path.isfile(self.cfg.python27):
+                    print self.cfg.python27 + " setup.py build_ext -i"
+                    run(self.cfg.python27 + " setup.py build_ext -i")
+                    run(self.cfg.python27 + " setup.py install")
                 if os.path.isfile(self.cfg.python26):
                     print self.cfg.python26 + " setup.py build_ext -i"
                     run(self.cfg.python26 + " setup.py build_ext -i")
@@ -619,6 +662,8 @@ class Presetup:
         """
         Install setuptools for python
         """
+        self.__setuptools(self.cfg.python27,
+                          self.cfg.user_python27_home)
         self.__setuptools(self.cfg.python26,
                           self.cfg.user_python26_home)
         self.__setuptools(self.cfg.python25,
@@ -1627,6 +1672,7 @@ class XmldbTasks:
         ## use the ant in the exist installation
         self.ant_jars = ["ant.jar", "ant-launcher.jar"]
         self.ant_home = self.cfg.user_exist + "/tools/ant/lib"
+        self.jre_home= self.cfg.java_home
         ant_jar_paths = []        
         for jar in self.ant_jars:
             ant_jar_paths.append(self.ant_home + "/" +  jar)          
@@ -1636,9 +1682,9 @@ class XmldbTasks:
                     {
                      "classpath": ":".join(ant_jar_paths),
                      "ant_home" : self.ant_home,
-                     "java" : self.cfg.java_home
+                     "java" : self.jre_home
                     })
-    
+
     def setup_exist(self):
         """
         Sets up eXist by downloading it from the cache and installing it 

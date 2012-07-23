@@ -12,6 +12,14 @@ def essentials():
     bungenipre = bungeni.Presetup()
     bungenipre.essentials()
 
+def build_python27():
+    """
+    Builds Python 2.7 from source
+    """
+
+    bungenipre = bungeni.Presetup()
+    bungenipre.build_py27()
+
 
 def build_python26():
     """
@@ -81,6 +89,9 @@ def build_python():
     if "2.6" in used_pys:
         print "building python 2.6"
         build_python26()
+    if "2.7" in used_pys:
+        print "building python 2.7"
+        build_python27()
 
 
 def presetup():
@@ -725,4 +736,9 @@ def exist_presetup():
     bungenipre.pika()
     bungenipre.magic()
     bungenipre.pyinotify()
+
+
+def exist_java_home():
+    cfgs = bungeni.BungeniConfigs()
+    print cfgs.java_home
 
