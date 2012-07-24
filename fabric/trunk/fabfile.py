@@ -656,6 +656,7 @@ def exist_reset():
     import time
     time.sleep(5)
     tasks = bungeni.XmldbTasks()
+    tasks.ant_prop_config()
     tasks.ant_demo_reset_config()
     tasks.ant_demo_reset()
 
