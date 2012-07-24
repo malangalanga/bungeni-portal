@@ -1711,6 +1711,17 @@ class XmldbTasks:
         shutil.copy2(templates.template_folder + "/" + ant_script_tmpl,
                 self.cfg.user_config + "/" + ant_setup_script)
 
+    def ant_demo_reset_config(self):
+        """
+        Generate the ant script to reset the data in eXist
+        """
+        templates = Templates(self.cfg)
+        ant_script_tmpl = "xmldb_reset_demo.xml.tmpl"
+        import shutil
+        ant_setup_script = templates.name_from_template(ant_script_tmpl)
+        shutil.copy2(templates.template_folder + "/" + ant_script_tmpl,
+                self.cfg.user_config + "/" + ant_setup_script)
+
     def download_fw(self):
         """
         Checks out the eXist framework files from repository and 
@@ -1773,7 +1784,14 @@ class XmldbTasks:
         """
         with cd(self.cfg.user_config):
             self.ant_run("xmldb_store_demo.xml")
-    
+
+    def ant_demo_reset(self):
+        """
+        Resets demo data in eXist via ant.
+        """
+        with cd(self.cfg.user_config):
+            self.ant_run("xmldb_reset_demo.xml")    
+
     """
     def check_exist_state(self):
         from urllib2 import Request, urlopen, URLError, HTTPError

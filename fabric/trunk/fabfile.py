@@ -648,6 +648,17 @@ def exist_load_demodata():
     tasks.ant_demo_setup_config()
     tasks.ant_demo_install()
 
+def exist_reset():
+    """
+    Reset data in eXist repository
+    """
+    start_exist("IGNORE_ERROR")
+    import time
+    time.sleep(5)
+    tasks = bungeni.XmldbTasks()
+    tasks.ant_demo_reset_config()
+    tasks.ant_demo_reset()
+
 def ant_version():
     """
     Get the Ant version used by eXist

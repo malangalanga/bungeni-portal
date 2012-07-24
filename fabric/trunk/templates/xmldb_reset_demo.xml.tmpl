@@ -1,0 +1,39 @@
+<project xmlns:xdb="http://exist-db.org/ant" default="reset-run" name="eXist XQFramework">
+ 
+    <!-- this is where we set our exist-home, user, password and the place that we will load the docs -->
+    <property file="xmldb.properties"/>
+ 
+    <!-- this tells us where to find the key jar files relative to the ${exist-home} property -->
+    <path id="classpath.core">
+        <fileset dir="${exist-home}/lib/core">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement path="${exist-home}/exist.jar"/>
+        <pathelement path="${exist-home}/exist-optional.jar"/>
+    </path>
+    <typedef resource="org/exist/ant/antlib.xml" uri="http://exist-db.org/ant">
+        <classpath refid="classpath.core"/>
+    </typedef>
+ 
+    <target name="reset-run">
+	<condition property="exists">
+		<xdb:exist uri="${on-uri}" user="${user}" password="${password}"/>
+	</condition> 
+	<antcall target="reset-exist-demo-data"/>
+    </target>
+
+    <!-- delete data -->
+    <target name="reset-exist-demo-data" unless="exists">
+	<echo message="Reset bungeni-xml data"/>
+	<xdb:remove uri="${on-uri}" collection="." user="${user}" password="${password}"/>
+       	<echo message="Reset bungeni-atts data"/>
+	<xdb:remove uri="${atts-uri}" collection="." user="${user}" password="${password}"/>
+    </target>
+ 
+    <target name="show-properties">
+        <echo message="exist-home=${exist-home}"/>
+        <echo message="exist-docs=${exist-docs}"/>
+        <echo message="uri=${fw-uri}"/>
+    </target>
+
+</project>
