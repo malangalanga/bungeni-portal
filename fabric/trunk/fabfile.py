@@ -738,3 +738,6 @@ def exist_presetup():
     bungenipre.magic()
     bungenipre.pyinotify()
 
+def exist_java_home():
+    cfgs = bungeni.BungeniConfigs()
+    print cfgs.java_home

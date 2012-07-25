@@ -416,7 +416,7 @@ class BungeniConfigs:
         self.user_exist_build_path = self.user_build_root + "/exist"
         self.exist_docs = self.user_build_root + "/exist-docs"
         self.exist_demo_data = self.exist_docs + "/bungeni-xml"
-        self.java_home = self.cfg.get_config("exist", "java_home")
+        self.java_home = self.jre_home()
         self.exist_port = self.cfg.get_config("exist", "http_port")
         self.exist_startup_mem = self.cfg.get_config("exist", "startup_mem")
         self.exist_max_mem = self.cfg.get_config("exist", "max_mem")
@@ -440,14 +440,16 @@ class BungeniConfigs:
         self.user_glue = self.user_install_root + "/glue"
         self.glue_interval = self.cfg.get_config("glue-script", "interval")
 
-
     def get_download_command(self, strURL):
         if strURL.startswith("http") or strURL.startswith("ftp"):
             return "wget -c %(download_url)s" % {"download_url": strURL}
         else:
             return "cp %(file_path)s ." % {"file_path": strURL}
-    
 
+    def jre_home(self):
+        return run('echo `readlink -f /usr/bin/java | sed "s:/bin/java::"`')
+
+    
 class PythonConfigs:
 
     def __init__(self, cfg, config_name):
@@ -1627,6 +1629,7 @@ class XmldbTasks:
         ## use the ant in the exist installation
         self.ant_jars = ["ant.jar", "ant-launcher.jar"]
         self.ant_home = self.cfg.user_exist + "/tools/ant/lib"
+        self.jre_home= self.cfg.java_home
         ant_jar_paths = []        
         for jar in self.ant_jars:
             ant_jar_paths.append(self.ant_home + "/" +  jar)          
@@ -1636,7 +1639,7 @@ class XmldbTasks:
                     {
                      "classpath": ":".join(ant_jar_paths),
                      "ant_home" : self.ant_home,
-                     "java" : self.cfg.java_home
+                     "java" : self.jre_home
                     })
     
     def setup_exist(self):
