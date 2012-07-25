@@ -321,7 +321,7 @@ def portal_install():
     tasks.setup()
     tasks.local_config()
     tasks.build()
-    enable_country_theme()
+    enable_demo_theme()
 
 
 def portal_build():
@@ -591,13 +591,13 @@ def switch_bungeni_custom():
     tasks.switch_bungeni_custom()
 
 
-def enable_country_theme():
+def enable_demo_theme():
     """
-    Set country theme, based on setup.ini parameter
+    Set demo theme, based on setup.ini parameter
     Parameter should map to a theme folder in portal.country_themes
     """
     tasks = bungeni.CustomTasks()
-    tasks.enable_country_theme()
+    tasks.enable_demo_theme()
 
 
 def translate_workflow_xml(default_lang="en"):

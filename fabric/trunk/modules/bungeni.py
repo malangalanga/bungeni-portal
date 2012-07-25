@@ -404,7 +404,7 @@ class BungeniConfigs:
                 "enabled_translations").split(":")
         self.translatable_packages = self.cfg.get_config("custom",
                 "translatable_packages").split(":")
-        self.country_theme = self.cfg.get_config("custom", "country_theme")
+        self.demo_theme = self.cfg.get_config("custom", "demo_theme")
         self.theme_repo = self.cfg.get_config('custom', 'theme_repo')
         # supervisor
         self.supervisorconf = self.user_config + "/supervisord.conf"
@@ -1303,13 +1303,13 @@ class PortalTasks:
         theme_url = self.cfg.portal_web_server_port == "80" and\
                     self.cfg.portal_web_server_host or\
                     "%s:%s" % (self.cfg.portal_web_server_host, self.cfg.portal_static_port)                    
-        if self.cfg.country_theme == "default":
-            country_theme = ""
+        if self.cfg.demo_theme == "default":
+            demo_theme = ""
         else:
-            country_theme = self.cfg.country_theme
+            demo_theme = self.cfg.demo_theme
         portal_theme = self.cfg.portal_web_server_port == "80" and\
                     self.cfg.portal_theme or\
-                    "%s/%s" % (country_theme, self.cfg.portal_theme)            
+                    "%s/%s" % (demo_theme, self.cfg.portal_theme)            
         template_map = \
             {"app_host": self.cfg.app_host,
              "portal_http_port": self.cfg.portal_http_port,
@@ -1320,7 +1320,7 @@ class PortalTasks:
              "web_server_host": self.cfg.portal_web_server_host,
              "web_server_port": self.cfg.portal_web_server_port,
              "theme_url": theme_url,
-             "country_theme": country_theme}
+             "demo_theme": demo_theme}
         config_file_path = os.path.join(self.cfg.user_portal, "deliverance-proxy.conf")
         with open(config_file_path, "w") as config_file:
             tmpl = Templates(self.cfg)
@@ -1906,22 +1906,22 @@ class CustomTasks:
             run("echo `pwd` > %s " % self.cfg.bungeni_custom_pth)
 
     
-    def enable_country_theme(self):
-        country_theme = self.cfg.country_theme
-        if country_theme != "default" and country_theme != "":
+    def enable_demo_theme(self):
+        demo_theme = self.cfg.demo_theme
+        if demo_theme != "default" and demo_theme != "":
             theme_path = os.path.join(os.path.dirname(self.cfg.user_bungeni),
                                       "bungeni/portal/src/portal.theme/portal/",
-                                      "theme/static/themes",country_theme)
+                                      "theme/static/themes",demo_theme)
             if os.path.exists(theme_path):
                         print red("Cannot enable '%s' theme. Another theme file " 
-                        "already exists in the target folder." % country_theme)
+                        "already exists in the target folder." % demo_theme)
                         return
             else:
-                cmd = "svn export %s%s %s" % (self.cfg.theme_repo, country_theme, theme_path)
+                cmd = "svn export %s%s %s" % (self.cfg.theme_repo, demo_theme, theme_path)
                 run(cmd)  
-                print green("Country theme '%s' enabled." % country_theme)                                                        
+                print green("Demo theme '%s' enabled." % demo_theme)                                                        
         else:
-            print green("No country theme specified. Default theme used.")
+            print green("No demo theme specified. Default theme used.")
 
 
     
