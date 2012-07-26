@@ -62,6 +62,7 @@
                <ul class="visualNoMarker">
                <tal:related tal:repeat="item items">
                    <li tal:define="
+                           putils context/plone_utils;
                            desc      item/Description;
                            item_type item/portal_type;
                            item_type_class python: 'contenttype-' + putils.normalizeString(item_type);
