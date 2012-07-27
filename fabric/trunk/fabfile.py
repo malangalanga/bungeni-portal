@@ -13,6 +13,15 @@ def essentials():
     bungenipre.essentials()
 
 
+def build_python27():
+    """
+    Builds Python 2.7 from source
+    """
+
+    bungenipre = bungeni.Presetup()
+    bungenipre.build_py27()
+
+
 def build_python26():
     """
     Builds Python 2.6 from source
@@ -20,24 +29,6 @@ def build_python26():
 
     bungenipre = bungeni.Presetup()
     bungenipre.build_py26()
-
-
-def build_python25():
-    """
-    Builds Python 2.5 from source
-    """
-
-    bungenipre = bungeni.Presetup()
-    bungenipre.build_py25()
-
-
-def build_python24():
-    """
-    Builds Python 2.4 from source
-    """
-
-    bungenipre = bungeni.Presetup()
-    bungenipre.build_py24()
 
 
 def build_imaging():
@@ -66,22 +57,11 @@ def build_python():
     """
     
     cfg = bungeni.BungeniConfigs()
-    pys = []
-    pys.append(cfg.cfg.get_config("bungeni","python"))
-    pys.append(cfg.cfg.get_config("portal","python"))
-    pys.append(cfg.cfg.get_config("plone","python"))
-    pys.append(cfg.cfg.get_config("supervisor","python"))
-    used_pys = set(pys)
-    if "2.4" in used_pys:
-        print "building python 2.4"
-        build_python24()
-    if "2.5" in used_pys:
-        print "building python 2.5"
-        build_python25()
-    if "2.6" in used_pys:
-        print "building python 2.6"
-        build_python26()
-
+    pys = cfg.used_pythons()
+    for py in pys:
+        py_flat_name = py.replace(".","")
+        # call the appropriate build_python26, build_python27 function
+        globals()["build_python" + py_flat_name]()
 
 def presetup():
     """

@@ -257,6 +257,9 @@ class BungeniConfigs:
         # added release parameter on 2011-08-31 for release pegging support
         self.release = self.cfg.get_config("global","release")
         self.linux_headers = "linux-headers-`uname -r`"
+        # python 2.7
+        self.user_python27_home = self.user_install_root + "/python27"
+        self.python27 = self.user_python27_home + "/bin/python"
         # python 2.6
         self.user_python26_home = self.user_install_root + "/python26"
         self.python26 = self.user_python26_home + "/bin/python"
@@ -273,7 +276,18 @@ class BungeniConfigs:
         self.user_config = self.user_install_root + "/config"
         self.user_logs = self.user_install_root + "/logs"
         self.user_pid = self.user_install_root + "/pid"
-        # python setup 
+        # python setup
+        # 2.7   
+        self.python27_install_url = self.cfg.get_config("python27",
+                "download_url")
+        self.user_python27_build_path = self.user_build_root \
+            + "/python27"           
+        self.python27_src_dir = \
+            self.utils.get_basename_prefix(self.python27_install_url)
+        self.python27_download_file = \
+            self.utils.get_basename(self.python27_install_url)
+        self.python27_download_command = \
+            self.get_download_command(self.python27_install_url)
         # 2.6    
         self.python26_install_url = self.cfg.get_config("python26",
                 "download_url")
@@ -285,33 +299,7 @@ class BungeniConfigs:
             self.utils.get_basename(self.python26_install_url)
         self.python26_download_command = \
             self.get_download_command(self.python26_install_url)
-        # 2.5
-        self.python25_install_url = self.cfg.get_config("python25",
-                "download_url")
-        self.user_python25_build_path = self.user_build_root \
-            + "/python25"
-        self.user_python25_runtime = self.user_install_root \
-            + "/python25"
-        self.python25 = self.user_python25_runtime + "/bin/python"
-        self.python25_download_file = \
-            self.utils.get_basename(self.python25_install_url)
-        self.python25_src_dir = \
-            self.utils.get_basename_prefix(self.python25_install_url)
-        self.python25_download_command = \
-            self.get_download_command(self.python25_install_url)
-        self.python24_install_url = self.cfg.get_config("python24",
-                "download_url")
-        self.user_python24_build_path = self.user_build_root \
-            + "/python24"
-        self.user_python24_runtime = self.user_install_root \
-            + "/python24"
-        self.python24 = self.user_python24_runtime + "/bin/python"
-        self.python24_download_file = \
-            self.utils.get_basename(self.python24_install_url)
-        self.python24_src_dir = \
-            self.utils.get_basename_prefix(self.python24_install_url)
-        self.python24_download_command = \
-            self.get_download_command(self.python24_install_url)
+        # other python stuff
         self.python_imaging_download_url = self.cfg.get_config("imaging",
             "download_url")
         self.python_imaging_build_path = self.user_build_root \
@@ -322,12 +310,6 @@ class BungeniConfigs:
             self.utils.get_basename(self.python_imaging_download_url)
         self.python_imaging_src_dir = \
             self.utils.get_basename_prefix(self.python_imaging_download_file)
-        #self.python_appy_download_url = self.cfg.get_config("appy",
-        #    "download_url")
-        #self.python_appy_download_command = \
-        #    self.get_download_command(self.python_appy_download_url)
-        #self.python_appy_download_file = \
-        #    self.utils.get_basename(self.python_appy_download_url)
         # bungeni configuration parameters
         self.bungeni_repo = self.cfg.get_config("bungeni", "repo")
         self.bungeni_local_index = self.cfg.get_config("bungeni",
@@ -449,6 +431,15 @@ class BungeniConfigs:
     def jre_home(self):
         return run('echo `readlink -f /usr/bin/java | sed "s:/bin/java::"`')
 
+    def used_pythons(self):
+        pys = []
+	pys.append(self.cfg.get_config("bungeni","python"))
+	pys.append(self.cfg.get_config("portal","python"))
+	pys.append(self.cfg.get_config("plone","python"))
+	pys.append(self.cfg.get_config("supervisor","python"))
+	used_pys = set(pys)
+	return used_pys
+
     
 class PythonConfigs:
 
@@ -458,20 +449,17 @@ class PythonConfigs:
         self.python_ver = self.cfgreader.get_config(config_name, "python")
         self.python_home = self.get_python_home(config_name)
         self.python = self.python_home + "/bin/python"
-        self.python_packages = self.python_home + "/lib/python" + self.python_ver + "/site-packages"
+        self.python_packages = self.python_home + "/lib/python" + \
+	    self.python_ver + "/site-packages"
 
     def get_python_home(self, config_name):
         selected_python = self.cfgreader.get_config(config_name,"python")
-        if selected_python == "2.6":
+        if selected_python == "2.7":
+            return self.cfg.user_python27_home
+        elif selected_python == "2.6":
             return self.cfg.user_python26_home
-        elif selected_python == "2.5":
-            return self.cfg.user_python25_home
-        elif selected_python == "2.4":
-            return self.cfg.user_python24_home
         else:
-            return self.cfg.user_python25_home
-
-
+            return self.cfg.user_python27_home
 
 
 class Presetup:
@@ -519,7 +507,31 @@ class Presetup:
         sudo(self.ossent.get_install_method(self.osinfo.release_id)
              + " erlang-base erlang-os-mon erlang-xmerl erlang-inets")
 
+    def build_py27(self):
+        """
+        Build Python 2.7
+        """
+        run("mkdir -p " + self.cfg.user_python27_build_path)
+        run("rm -rf " + self.cfg.user_python27_build_path + "/*.*")
+        run("mkdir -p " + self.cfg.user_python27_home)
+        with cd(self.cfg.user_python27_build_path):
+            run(self.cfg.python27_download_command)
+            run("tar xvf " + self.cfg.python27_download_file)
+            with cd(self.cfg.python27_src_dir):
+		   #
+		   # All other platforms revert to the normal build
+		   #
+		   run("CPPFLAGS=-I/usr/include/openssl "
+		       "LDFLAGS=-L/usr/lib/ssl "
+		       "./configure --prefix=%(python_home)s USE=sqlite --enable-unicode=ucs4"
+		        % {"python_home":self.cfg.user_python27_home})
+		   run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
+		   run("make install")
+
     def build_py26(self):
+        """
+        Build Python 2.6
+        """
         run("mkdir -p " + self.cfg.user_python26_build_path)
         run("rm -rf " + self.cfg.user_python26_build_path + "/*.*")
         run("mkdir -p " + self.cfg.user_python26_home)
@@ -554,37 +566,6 @@ class Presetup:
                    run("make install")
 
 
-    def build_py25(self):
-        run("mkdir -p " + self.cfg.user_python25_build_path)
-        run("rm -rf " + self.cfg.user_python25_build_path + "/*.*")
-        run("mkdir -p " + self.cfg.user_python25_runtime)
-        with cd(self.cfg.user_python25_build_path):
-            run(self.cfg.python25_download_command)
-            run("tar xvf " + self.cfg.python25_download_file)
-            with cd(self.cfg.python25_src_dir):
-                run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl \
-                     ./configure --prefix=%(python_runtime)s USE=sqlite"\
-                     % {"python_runtime":self.cfg.user_python25_runtime})
-                run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
-                run("make install")
-
-
-    def build_py24(self):
-        """
-        Builds Python 2.4 from source
-        """
-
-        run("mkdir -p " + self.cfg.user_python24_build_path)
-        run("rm -rf " + self.cfg.user_python24_build_path + "/*.*")
-        run("mkdir -p " + self.cfg.user_python24_runtime)
-        with cd(self.cfg.user_python24_build_path):
-            run(self.cfg.python24_download_command)
-            run("tar xvf " + self.cfg.python24_download_file)
-            with cd(self.cfg.python24_src_dir):
-                run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl ./configure --prefix="
-                     + self.cfg.user_python24_runtime)
-                run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
-                run("make install")
 
     def build_imaging(self):
         """
@@ -599,17 +580,14 @@ class Presetup:
             run("rm -rf " + self.cfg.python_imaging_src_dir)
             run("tar xvzf " + self.cfg.python_imaging_download_file)
             with cd(self.cfg.python_imaging_src_dir):
+                if os.path.isfile(self.cfg.python27):
+                    print self.cfg.python27 + " setup.py build_ext -i"
+                    run(self.cfg.python27 + " setup.py build_ext -i")
+                    run(self.cfg.python27 + " setup.py install")
                 if os.path.isfile(self.cfg.python26):
                     print self.cfg.python26 + " setup.py build_ext -i"
                     run(self.cfg.python26 + " setup.py build_ext -i")
                     run(self.cfg.python26 + " setup.py install")
-                if os.path.isfile(self.cfg.python25):
-                    print self.cfg.python25 + " setup.py build_ext -i"
-                    run(self.cfg.python25 + " setup.py build_ext -i")
-                    run(self.cfg.python25 + " setup.py install")
-                if os.path.isfile(self.cfg.python24):
-                    run(self.cfg.python24 + " setup.py build_ext -i")
-                    run(self.cfg.python24 + " setup.py install")
 
     def __setuptools(self, pybin, pyhome):
         if os.path.isfile(pybin):
@@ -621,12 +599,10 @@ class Presetup:
         """
         Install setuptools for python
         """
+        self.__setuptools(self.cfg.python27,
+                          self.cfg.user_python27_home)
         self.__setuptools(self.cfg.python26,
                           self.cfg.user_python26_home)
-        self.__setuptools(self.cfg.python25,
-                          self.cfg.user_python25_home)
-        self.__setuptools(self.cfg.python24,
-                          self.cfg.user_python24_home)
 
     def supervisor(self):
         """
@@ -665,15 +641,6 @@ class Presetup:
         run(sup_pycfg.python_home + "/bin/easy_install pyinotify"
             )
             
-    #def install_appy(self):
-    #    """
-    #    Install appy
-    #    """
-    #    bungeni_pycfg = PythonConfigs(self.cfg,"bungeni")
-    #    with cd(bungeni_pycfg.python_packages):
-    #        run(self.cfg.python_appy_download_command)
-    #        run("unzip -o " + self.cfg.python_appy_download_file)
-    #        run("rm -rf " + self.cfg.python_appy_download_file)
             
     def supervisord_config(self):
         """
