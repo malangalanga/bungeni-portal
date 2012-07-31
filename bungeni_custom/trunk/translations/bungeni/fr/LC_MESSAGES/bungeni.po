@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -6,11 +6,11 @@ msgstr ""
 "PO-Revision-Date: 2011-08-01 16:57+0300\n"
 "Last-Translator: Murithi <bungeni.translator@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -379,7 +379,7 @@ msgstr "dernière modification"
 #: src/bungeni.main/bungeni/core/dc.py:342
 #, fuzzy
 msgid "member_title_with_representation"
-msgstr "Membre du Parlement pour ${constituency} (${member})"
+msgstr "Membre du Parlement pour ${representation} (${member})"
 
 #: src/bungeni.main/bungeni/core/dc.py:434
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3220
@@ -1797,12 +1797,12 @@ msgstr "pas de point d'ordre du jour prévu"
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:205
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:301
 msgid "Week ${week_no}"
-msgstr "semaine ${weekno}"
+msgstr "semaine ${week_no}"
 
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:264
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:364
 msgid "${count} item(s) scheduled"
-msgstr "${compte} point(s) prévu(s)"
+msgstr "${count} point(s) prévu(s)"
 
 #: src/bungeni.main/bungeni/ui/calendar/templates/scheduler.pt:7
 msgid "preview agenda"
@@ -1856,7 +1856,8 @@ msgstr "si une personne est inactive, la date de fin doit être indiquée"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:447
 msgid ""
-"A parliament member has to be elected/nominated before she/he can be sworn in"
+"A parliament member has to be elected/nominated before she/he can be sworn "
+"in"
 msgstr ""
 "un membre du parlement doit être élu ou nommé avant qu'elle puisse être "
 "assermenté"
@@ -2823,17 +2824,17 @@ msgstr "un record avec cet valeur existe déjà"
 #. Default: "choose ${title} ..."
 #: src/bungeni.main/bungeni/ui/forms/common.py:327
 msgid "bungeni_widget_no_value"
-msgstr "choisissez[titre]"
+msgstr "choisissez ${title} ..."
 
 #. Default: "Add $name"
 #: src/bungeni.main/bungeni/ui/forms/common.py:346
 msgid "add_item_legend"
-msgstr "ajouter $nom"
+msgstr "ajouter $name"
 
 #. Default: "Adding $name"
 #: src/bungeni.main/bungeni/ui/forms/common.py:351
 msgid "add_item_title"
-msgstr "ajoutant $nom"
+msgstr "ajoutant $name"
 
 #: src/bungeni.main/bungeni/ui/forms/common.py:395
 msgid "Save and add another"
@@ -2843,12 +2844,12 @@ msgstr "enregistrer et ajouter un autre"
 #: src/bungeni.main/bungeni/ui/forms/common.py:441
 #: src/bungeni.main/bungeni/ui/forms/common.py:585
 msgid "edit_translation_legend"
-msgstr "éditant $la traduction de langue  '$titre"
+msgstr "éditant $language traduction de langue  '$title'"
 
 #. Default: "Editing \"$title\" (version $version)"
 #: src/bungeni.main/bungeni/ui/forms/common.py:447
 msgid "edit_version_legend"
-msgstr "éditant '$titre' (version $version)"
+msgstr "éditant '$title' (version $version)"
 
 #. Default: "Editing \"$title\""
 #: src/bungeni.main/bungeni/ui/forms/common.py:451
@@ -2858,24 +2859,26 @@ msgstr "éditant  '$title'"
 #. Default: "The original $language version is shown on the left"
 #: src/bungeni.main/bungeni/ui/forms/common.py:459
 msgid "edit_translation_help"
-msgstr "la version originale $la version du langue est indiquée à gauche"
+msgstr ""
+"la version originale $language version du langue est indiquée à gauche"
 
 #. Default: "Add $language translation"
 #: src/bungeni.main/bungeni/ui/forms/common.py:571
 msgid "translate_item_legend"
-msgstr "ajouter la traduction de langue"
+msgstr "ajouter la traduction de $language"
 
-#. Default: "The document \"$title\" has not yet been translated into $language. Use this form to add the translation"
+#. Default: "The document \"$title\" has not yet been translated into
+#. $language. Use this form to add the translation"
 #: src/bungeni.main/bungeni/ui/forms/common.py:593
 msgid "translate_item_help"
 msgstr ""
-"le document '$titre' n'a pas encore été traduit en $langue Utilisez ce "
+"le document '$title' n'a pas encore été traduit en $langue Utilisez ce "
 "formulaire pour ajouter la traduction"
 
 #. Default: "Adding $language translation"
 #: src/bungeni.main/bungeni/ui/forms/common.py:605
 msgid "translate_item_title"
-msgstr "ajoutant $la traduction de langue"
+msgstr "ajoutant $language traduction de langue"
 
 #: src/bungeni.main/bungeni/ui/forms/common.py:672
 msgid "Save translation"
@@ -2898,7 +2901,8 @@ msgid ""
 "deleting any related sub-records first?"
 msgstr ""
 "Impossible de supprimer le point dû à une erreur d'intégrité de base de "
-"données. Vous pouvez essayer de supprimer toute les sous-dossiers en premier?"
+"données. Vous pouvez essayer de supprimer toute les sous-dossiers en "
+"premier?"
 
 #: src/bungeni.main/bungeni/ui/forms/common.py:854
 #: src/bungeni.main/bungeni/ui/forms/templates/sign-open-document.pt:5
@@ -2913,7 +2917,7 @@ msgstr "général"
 
 #: src/bungeni.main/bungeni/ui/forms/fields.py:121
 msgid "This content is not yet translated into $language"
-msgstr "le document n'a pas encore été traduit en Français"
+msgstr "le document n'a pas encore été traduit en $language"
 
 #: src/bungeni.main/bungeni/ui/forms/forms.py:118
 msgid "Direction"
@@ -2941,7 +2945,7 @@ msgstr "${DYNAMIC_CONTENT} ${DYNAMIC_CONTENT}"
 #: src/bungeni.main/bungeni/ui/viewlets/templates/schedulable-items.pt:1
 #: src/bungeni.main/bungeni/ui/viewlets/templates/signatories-status.pt:8
 msgid "${DYNAMIC_CONTENT}"
-msgstr "${un contenu dynamique}"
+msgstr "${DYNAMIC_CONTENT}"
 
 #: src/bungeni.main/bungeni/ui/forms/templates/delete.pt:5
 msgid "Delete item confirmation"
@@ -3021,7 +3025,7 @@ msgstr "documents"
 
 #: src/bungeni.main/bungeni/ui/forms/templates/written-question-response.pt:7
 msgid "Written response to question by ${respondent}"
-msgstr "un réponse écrite a la question par[ le concerne]"
+msgstr "un réponse écrite a la question par ${respondent}"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:51
 msgid "invalid date. choose or type correct date"
@@ -3111,28 +3115,28 @@ msgstr "une personne avec le titre %s existe déjà"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:479
 msgid "Venue \"$venue\" already booked in this time slot"
-msgstr "le lieu '$le lieu' est déjà réservé dans ce horaire"
+msgstr "le lieu '$venue' est déjà réservé dans ce horaire"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:513
 msgid "If recurrence is limited by date, it must lie after the starting date"
 msgstr ""
-"si la récurrence est limitée par date, cette date doit être après la date de "
-"début"
+"si la récurrence est limitée par date, cette date doit être après la date de"
+" début"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:522
 msgid ""
 "One or more events would be scheduled for $F, which is after the scheduling "
 "group's end date"
 msgstr ""
-"un ou plusieurs événements seraient programmés pour le $f, qui est après la "
-"date de fin"
+"un ou plusieurs événements seraient programmés pour le $F, qui est après"
+" la date de fin"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:566
 msgid ""
 "One or more events would be scheduled for $F, which overlaps with an "
 "existing sitting"
 msgstr ""
-"un ou plusieurs événements seraient prévus pour le $f, qui chevauche une "
+"un ou plusieurs événements seraient prévus pour le $F, qui chevauche une "
 "séance existante"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:608
@@ -4116,8 +4120,8 @@ msgstr "pas de filtres sélectionnés"
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:140
 msgid "you did not choose any filters.select some filters then hit apply"
 msgstr ""
-"vous n'avez pas choisir n'importe quel filters.select certains filtres, puis "
-"cliquez sur Apply"
+"vous n'avez pas choisir n'importe quel filters.select certains filtres, puis"
+" cliquez sur Apply"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:145
 msgid "start date"
@@ -4201,8 +4205,8 @@ msgstr "ERREUR: Impossible de générer l'aperçu"
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:199
 msgid "This event is unsaved. Edit to make any corrections and then save it"
 msgstr ""
-"Cet événement n'a pas été enregistré. Modifier pour apporter des corrections "
-"et puis enregistrez-le"
+"Cet événement n'a pas été enregistré. Modifier pour apporter des corrections"
+" et puis enregistrez-le"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:202
 msgid "Make Corrections"
@@ -4386,7 +4390,7 @@ msgstr "changement d'état ..."
 
 #: src/bungeni.main/bungeni/ui/templates/workflow.pt:8
 msgid "Current state: ${state}."
-msgstr "état actuel: ${état}"
+msgstr "état actuel: ${state}"
 
 #: src/bungeni.main/bungeni/ui/templates/workflow.pt:12
 msgid "History"
@@ -4562,7 +4566,7 @@ msgstr "un aperçu des activités quotidiennes du parlement"
 
 #: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:20
 msgid "From: ${whats_on_start_date} to: ${whats_on_end_date}"
-msgstr "du: ${quoi_on_début_date} jusqu'au: ${quoi_on_fin date}"
+msgstr "${whats_on_start_date} jusqu'au: ${whats_on_end_date}"
 
 #: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:25
 msgid "Period selected has no Sittings"
@@ -4597,14 +4601,18 @@ msgstr "documents"
 msgid "N/A"
 msgstr "N / A"
 
-#. Default: "This document has the required number of signatories. ${signed_members} member(s) have signed. ${required_members} signature(s) required."
+#. Default: "This document has the required number of signatories.
+#. ${signed_members} member(s) have signed. ${required_members} signature(s)
+#. required."
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.py:87
 msgid "signature_requirement_met"
 msgstr ""
 "Ce document a le nombre requis de signataires. ${signed_members} membre (s) "
 "ont signé. ${required_members} signature (s) nécessaire."
 
-#. Default: "This document does not have the required number of signatories. Requires ${required_members} signature(s). ${signed_members} member(s) have signed."
+#. Default: "This document does not have the required number of signatories.
+#. Requires ${required_members} signature(s). ${signed_members} member(s) have
+#. signed."
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.py:99
 msgid "signature_requirements_not_met"
 msgstr ""
@@ -4625,7 +4633,7 @@ msgstr "Inconnu"
 
 #: src/bungeni.main/bungeni/ui/widgets.py:104
 msgid "Invalid date: $value"
-msgstr "date invalide: $valeur"
+msgstr "date invalide: $value"
 
 #: src/bungeni.main/bungeni/ui/widgets.py:165
 #: src/bungeni.main/bungeni/ui/widgets.py:171
@@ -4706,7 +4714,8 @@ msgstr "date actif dans le futur"
 
 #: src/bungeni.main/bungeni/ui/workflow.py:219
 msgid "Confirmation required for workflow transition: '${title}'"
-msgstr "confirmation requise pour la transition du flux de travail: '${titre}'"
+msgstr ""
+"confirmation requise pour la transition du flux de travail: '${title}'"
 
 #: src/bungeni.main/bungeni/ui/workspace.py:53
 msgid "item type"
@@ -4755,8 +4764,7 @@ msgstr "ministres"
 #~ msgstr "courrier électronique de l'administrateur"
 
 #~ msgid "Days to Notify Ministry of Pending Response"
-#~ msgstr ""
-#~ "jours restants pour notifier le ministère en l'attente de la réponse"
+#~ msgstr "jours restants pour notifier le ministère en l'attente de la réponse"
 
 #~ msgid ""
 #~ "Days after which to notify concerned ministry and  clerk's office of "
@@ -4957,10 +4965,10 @@ msgstr "ministres"
 #~ msgstr "Ce document n'a pas signataires."
 
 #~ msgid "Day $number of every month"
-#~ msgstr "jour $numéro de chaque mois"
+#~ msgstr "jour $number de chaque mois"
 
 #~ msgid "First $day of every month"
-#~ msgstr "premier $jour de chaque mois"
+#~ msgstr "premier $day de chaque mois"
 
 #~ msgid "Male"
 #~ msgstr "mâle"
@@ -4984,7 +4992,7 @@ msgstr "ministres"
 #~ msgstr "rendre disponible"
 
 #~ msgid "Reverted to previous version $version"
-#~ msgstr "retourné à la version précédente %s"
+#~ msgstr "retourné à la version précédente %version"
 
 #~ msgid "Title of document assignment to group or committee"
 #~ msgstr "titre des documents assigne au un commission"
@@ -5622,8 +5630,7 @@ msgstr "ministres"
 
 #~ msgid "No user is defined. Are you logged in as Admin?"
 #~ msgstr ""
-#~ "aucun utilisateur est défini,est-ce que tu es connecte comme "
-#~ "administrateur?"
+#~ "aucun utilisateur est défini,est-ce que tu es connecte comme administrateur?"
 
 #~ msgid "Vocabularies Manager"
 #~ msgstr "gestionnaire des vocabulaires"
@@ -5957,8 +5964,7 @@ msgstr "ministres"
 #~ msgstr "sélectionnez le mode de récurrence mensuel"
 
 #~ msgid ""
-#~ "Enter the number of times which the event should be repeated (as an "
-#~ "integer)"
+#~ "Enter the number of times which the event should be repeated (as an integer)"
 #~ msgstr ""
 #~ "entrez le nombre de fois où l'événement doit être répété (comme un entier)"
 
@@ -5972,11 +5978,11 @@ msgstr "ministres"
 #~ msgstr "exceptions"
 
 #~ msgid ""
-#~ "Events will not be scheduled at dates appearing in this field. Separate "
-#~ "with comma or newline. Format: YYYY/MM/DD"
+#~ "Events will not be scheduled at dates appearing in this field. Separate with"
+#~ " comma or newline. Format: YYYY/MM/DD"
 #~ msgstr ""
-#~ "les événements ne seront pas programmés aux dates qui apparaissent dans "
-#~ "ce champ - séparez avec virgule ou saut de ligne - format: aaaa/mm/jj"
+#~ "les événements ne seront pas programmés aux dates qui apparaissent dans ce "
+#~ "champ - séparez avec virgule ou saut de ligne - format: aaaa/mm/jj"
 
 #~ msgid "Must limit recurrence (by number or date)"
 #~ msgstr "doit limiter la récurrence (par numéro ou date)"
