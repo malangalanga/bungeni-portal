@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -6,16 +6,16 @@ msgstr ""
 "PO-Revision-Date: 2011-08-23 16:37+0300\n"
 "Last-Translator: Murithi <bungeni.translator@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.4\n"
-"Language-Code: en\n"
 "Domain: DOMAIN\n"
-"Preferred-Encodings: utf-8 latin1\n"
+"Language: en\n"
+"Language-Code: en\n"
 "Language-Name: English\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"X-Generator: Pootle 2.0.4\n"
 
 #: src/bungeni.main/bungeni/alchemist/container.py:91
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:86
@@ -354,7 +354,7 @@ msgstr "sitting scheduled for"
 #. Default: "Sitting of ${group_name} @ ${sitting_venue}"
 #: src/bungeni.main/bungeni/core/dc.py:220
 msgid "verbose_sitting_title"
-msgstr ""
+msgstr "sitting of ${group_name} @ ${sitting_venue}"
 
 #: src/bungeni.main/bungeni/core/dc.py:245
 msgid "Scheduled for sitting ($start to $end)"
@@ -379,9 +379,8 @@ msgstr "last modified"
 
 #. Default: "Member of Parliament for ${representation} (${member})"
 #: src/bungeni.main/bungeni/core/dc.py:342
-#, fuzzy
 msgid "member_title_with_representation"
-msgstr "delete constituency"
+msgstr "member of Parliament for ${representation} (${member})"
 
 #: src/bungeni.main/bungeni/core/dc.py:434
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3220
@@ -1748,7 +1747,7 @@ msgstr "election type"
 #: src/bungeni.main/bungeni/ui/calendar/browser.py:432
 #, fuzzy
 msgid "${localized_start_date} to ${localized_end_date}"
-msgstr "from: ${whats_on_start_date} to: ${whats_on_end_date}"
+msgstr "from ${localized_start_date} to ${localized_end_date}"
 
 #: src/bungeni.main/bungeni/ui/calendar/browser.py:582
 msgid "Unable to add a sitting. Please make corrections."
@@ -1830,7 +1829,7 @@ msgstr "no items scheduled"
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:205
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:301
 msgid "Week ${week_no}"
-msgstr "week ${weekno}"
+msgstr "week ${week_no}"
 
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:264
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:364
@@ -1891,9 +1890,11 @@ msgstr "if a person is inactive end date must be set"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:447
 msgid ""
-"A parliament member has to be elected/nominated before she/he can be sworn in"
+"A parliament member has to be elected/nominated before she/he can be sworn "
+"in"
 msgstr ""
-"a parliament member has to be elected/nominated before she/he can be sworn in"
+"a parliament member has to be elected/nominated before she/he can be sworn "
+"in"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:457
 msgid "Check dates: death must follow birth"
@@ -2918,12 +2919,13 @@ msgstr "the original $language version is shown on the left"
 msgid "translate_item_legend"
 msgstr "add $language translation"
 
-#. Default: "The document \"$title\" has not yet been translated into $language. Use this form to add the translation"
+#. Default: "The document \"$title\" has not yet been translated into
+#. $language. Use this form to add the translation"
 #: src/bungeni.main/bungeni/ui/forms/common.py:593
 msgid "translate_item_help"
 msgstr ""
-"the document \"$title\" has not yet been translated into $language. Use this "
-"form to add the translation"
+"the document \"$title\" has not yet been translated into $language. Use this"
+" form to add the translation"
 
 #. Default: "Adding $language translation"
 #: src/bungeni.main/bungeni/ui/forms/common.py:605
@@ -2986,7 +2988,7 @@ msgstr "item"
 #: src/bungeni.main/bungeni/ui/forms/templates/content-view.pt:8
 #, fuzzy
 msgid "${DYNAMIC_CONTENT} ${DYNAMIC_CONTENT}"
-msgstr "${dynamiccontent}"
+msgstr "${DYNAMIC_CONTENT} ${DYNAMIC_CONTENT}"
 
 #: src/bungeni.main/bungeni/ui/forms/templates/content-view.pt:21
 #: src/bungeni.main/bungeni/ui/forms/templates/generic-sub-container.pt:1
@@ -2994,7 +2996,7 @@ msgstr "${dynamiccontent}"
 #: src/bungeni.main/bungeni/ui/viewlets/templates/schedulable-items.pt:1
 #: src/bungeni.main/bungeni/ui/viewlets/templates/signatories-status.pt:8
 msgid "${DYNAMIC_CONTENT}"
-msgstr "${dynamiccontent}"
+msgstr "${DYNAMIC_CONTENT}"
 
 #: src/bungeni.main/bungeni/ui/forms/templates/delete.pt:5
 msgid "Delete item confirmation"
@@ -3175,14 +3177,14 @@ msgstr "if recurrence is limited by date, it must be after the starting date"
 msgid ""
 "One or more events would be scheduled for $F, which is after the scheduling "
 "group's end date"
-msgstr "one or more events would be scheduled for $f, which is after end date"
+msgstr "one or more events would be scheduled for $F, which is after end date"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:566
 msgid ""
 "One or more events would be scheduled for $F, which overlaps with an "
 "existing sitting"
 msgstr ""
-"one or more events would be scheduled for $f, which overlaps with an "
+"one or more events would be scheduled for $F, which overlaps with an "
 "existing sitting"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:608
@@ -3437,8 +3439,7 @@ msgstr "actions for calendar scheduling"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:60
 msgid "The 'workflow' menu - allows user to execute workflow transitions"
-msgstr ""
-"the \"workflow\" menu - allows the user to execute workflow transitions"
+msgstr "the \"workflow\" menu - allows the user to execute workflow transitions"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:64
 msgid "The 'download' menu - provides options/formats to download a document"
@@ -4755,12 +4756,16 @@ msgstr "documents"
 msgid "N/A"
 msgstr ""
 
-#. Default: "This document has the required number of signatories. ${signed_members} member(s) have signed. ${required_members} signature(s) required."
+#. Default: "This document has the required number of signatories.
+#. ${signed_members} member(s) have signed. ${required_members} signature(s)
+#. required."
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.py:87
 msgid "signature_requirement_met"
 msgstr ""
 
-#. Default: "This document does not have the required number of signatories. Requires ${required_members} signature(s). ${signed_members} member(s) have signed."
+#. Default: "This document does not have the required number of signatories.
+#. Requires ${required_members} signature(s). ${signed_members} member(s) have
+#. signed."
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.py:99
 msgid "signature_requirements_not_met"
 msgstr ""
@@ -4956,7 +4961,6 @@ msgstr "document tracker"
 #~ msgid "political parties"
 #~ msgstr "political parties"
 
-#, fuzzy
 #~ msgid "Sequential Number"
 #~ msgstr "id"
 
@@ -5005,55 +5009,42 @@ msgstr "document tracker"
 #~ msgid "Number of Voters registered in this Constituency"
 #~ msgstr "number of voters registered in this constituency"
 
-#, fuzzy
 #~ msgid "Add party member..."
 #~ msgstr "add party member..."
 
-#, fuzzy
 #~ msgid "Edit party member"
 #~ msgstr "add party member..."
 
-#, fuzzy
 #~ msgid "Delete party member"
 #~ msgstr "delete group member"
 
-#, fuzzy
 #~ msgid "Add political party..."
 #~ msgstr "add political party..."
 
-#, fuzzy
 #~ msgid "Add constituency..."
 #~ msgstr "add constituency..."
 
-#, fuzzy
 #~ msgid "Add province..."
 #~ msgstr "add province..."
 
-#, fuzzy
 #~ msgid "Add region..."
 #~ msgstr "add region..."
 
-#, fuzzy
 #~ msgid "Edit political party"
 #~ msgstr "political party"
 
-#, fuzzy
 #~ msgid "Delete political party"
 #~ msgstr "political party"
 
-#, fuzzy
 #~ msgid "Delete province"
 #~ msgstr "delete office"
 
-#, fuzzy
 #~ msgid "Edit province"
 #~ msgstr "edit office"
 
-#, fuzzy
 #~ msgid "Delete region"
 #~ msgstr "delete session"
 
-#, fuzzy
 #~ msgid "Edit region"
 #~ msgstr "edit session"
 
@@ -5063,11 +5054,9 @@ msgstr "document tracker"
 #~ msgid "Delete constituency"
 #~ msgstr "delete constituency"
 
-#, fuzzy
 #~ msgid "Covers"
 #~ msgstr "version"
 
-#, fuzzy
 #~ msgid "Attached file"
 #~ msgstr "attached files"
 
@@ -5107,7 +5096,6 @@ msgstr "document tracker"
 #~ msgid "The sitting has no scheduled items"
 #~ msgstr "the sitting has no scheduled items"
 
-#, fuzzy
 #~ msgid "Sitting Votes and  Proceedings"
 #~ msgstr "votes and proceedings"
 
@@ -5132,20 +5120,17 @@ msgstr "document tracker"
 #~ msgid "subsequent"
 #~ msgstr "subsequent"
 
-#, fuzzy
 #~ msgid "Add member..."
 #~ msgstr "add member..."
 
-#, fuzzy
 #~ msgid "Delete member of parliament"
 #~ msgstr "member of parliament"
 
 #~ msgid "Item scheduling"
 #~ msgstr "make available for scheduling"
 
-# reverted to previous version $version
 #~ msgid "Reverted to previous version $version"
-#~ msgstr "reverted to previous version %s"
+#~ msgstr "reverted to previous version $version"
 
 #~ msgid "Title of document assignment to group or committee"
 #~ msgstr "title of document assignment to group or committee"
@@ -5456,7 +5441,6 @@ msgstr "document tracker"
 #~ msgid "Files"
 #~ msgstr "files"
 
-#, fuzzy
 #~ msgid "File Type"
 #~ msgstr "file type"
 
@@ -5658,7 +5642,6 @@ msgstr "document tracker"
 #~ msgid "Add Group Address..."
 #~ msgstr "add group address..."
 
-#, fuzzy
 #~ msgid "change password"
 #~ msgstr "initial password"
 
@@ -5674,11 +5657,9 @@ msgstr "document tracker"
 #~ msgid "no_attachments"
 #~ msgstr "no attachments"
 
-#, fuzzy
 #~ msgid "Agenda Item"
 #~ msgstr "agenda items"
 
-#, fuzzy
 #~ msgid "Tabled Document"
 #~ msgstr "tabled documents"
 
@@ -5890,8 +5871,7 @@ msgstr "document tracker"
 #~ msgid "User Unique"
 #~ msgstr "user unique"
 
-#~ msgid ""
-#~ "Whether or not only one person at a time is allowed to have this title"
+#~ msgid "Whether or not only one person at a time is allowed to have this title"
 #~ msgstr ""
 #~ "whether or not only one person at a time is allowed to have this title"
 
@@ -6069,14 +6049,12 @@ msgstr "document tracker"
 #~ msgid "Needs Clarification to Receive"
 #~ msgstr "needs clarification"
 
-#, fuzzy
 #~ msgid "edit"
 #~ msgstr "edit"
 
 #~ msgid "delete"
 #~ msgstr "delete"
 
-#, fuzzy
 #~ msgid "Updated"
 #~ msgstr "date"
 
@@ -6198,11 +6176,9 @@ msgstr "document tracker"
 #~ msgstr "select monthly recurrence mode"
 
 #~ msgid ""
-#~ "Enter the number of times which the event should be repeated (as an "
-#~ "integer)"
+#~ "Enter the number of times which the event should be repeated (as an integer)"
 #~ msgstr ""
-#~ "enter the number of times which the event should be repeated (as an "
-#~ "integer)"
+#~ "enter the number of times which the event should be repeated (as an integer)"
 
 #~ msgid "Repeat until date"
 #~ msgstr "repeat until date"
@@ -6214,8 +6190,8 @@ msgstr "document tracker"
 #~ msgstr "exceptions"
 
 #~ msgid ""
-#~ "Events will not be scheduled at dates appearing in this field. Separate "
-#~ "with comma or newline. Format: YYYY/MM/DD"
+#~ "Events will not be scheduled at dates appearing in this field. Separate with"
+#~ " comma or newline. Format: YYYY/MM/DD"
 #~ msgstr ""
 #~ "events will not be scheduled at dates appearing in this field - separate "
 #~ "with comma or newline - format: yyyy/mm/dd"
@@ -6289,7 +6265,6 @@ msgstr "document tracker"
 #~ msgid "If a user is deceased he must have the status 'D'"
 #~ msgstr "if a user is deceased he must have the status 'd'"
 
-#, fuzzy
 #~ msgid "Attach a file"
 #~ msgstr "attached files"
 
@@ -6320,7 +6295,6 @@ msgstr "document tracker"
 #~ msgid "Add Category..."
 #~ msgstr "add category..."
 
-#, fuzzy
 #~ msgid "Identifer"
 #~ msgstr "identifier"
 

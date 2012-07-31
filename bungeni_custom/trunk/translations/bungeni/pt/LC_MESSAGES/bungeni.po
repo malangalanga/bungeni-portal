@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -6,11 +6,11 @@ msgstr ""
 "PO-Revision-Date: 2011-09-23 20:40+0300\n"
 "Last-Translator: Flavio <flavio.zeni@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Domain: DOMAIN\n"
+"Language: pt\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -380,7 +380,7 @@ msgstr "Ultima modificação "
 #: src/bungeni.main/bungeni/core/dc.py:342
 #, fuzzy
 msgid "member_title_with_representation"
-msgstr "Membro do Parlamento Europeu para ${constituency} (${member})"
+msgstr "Membro do Parlamento Europeu para ${representation} (${member})"
 
 #: src/bungeni.main/bungeni/core/dc.py:434
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3220
@@ -1800,7 +1800,7 @@ msgstr "nenhum existem agendamentos"
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:205
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:301
 msgid "Week ${week_no}"
-msgstr "${weekno} semana"
+msgstr "${week_no} semana"
 
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:264
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:364
@@ -1859,7 +1859,8 @@ msgstr "se uma pessoa é inativa a data de conclusão deve ser definida"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:447
 msgid ""
-"A parliament member has to be elected/nominated before she/he can be sworn in"
+"A parliament member has to be elected/nominated before she/he can be sworn "
+"in"
 msgstr ""
 "um membro do parlamento tem de ser eleito / nomeado antes de poder tomar "
 "posse"
@@ -2870,7 +2871,8 @@ msgstr "a versão original $language é mostrada à esquerda"
 msgid "translate_item_legend"
 msgstr "adicionar tradução $language"
 
-#. Default: "The document \"$title\" has not yet been translated into $language. Use this form to add the translation"
+#. Default: "The document \"$title\" has not yet been translated into
+#. $language. Use this form to add the translation"
 #: src/bungeni.main/bungeni/ui/forms/common.py:593
 msgid "translate_item_help"
 msgstr ""
@@ -2946,7 +2948,7 @@ msgstr "${DYNAMIC_CONTENT} ${DYNAMIC_CONTENT}"
 #: src/bungeni.main/bungeni/ui/viewlets/templates/schedulable-items.pt:1
 #: src/bungeni.main/bungeni/ui/viewlets/templates/signatories-status.pt:8
 msgid "${DYNAMIC_CONTENT}"
-msgstr "${dynamiccontent}"
+msgstr "${DYNAMIC_CONTENT}"
 
 #: src/bungeni.main/bungeni/ui/forms/templates/delete.pt:5
 msgid "Delete item confirmation"
@@ -3046,7 +3048,7 @@ msgstr "data de início deve ser posterior (%s)"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:87
 msgid "Start date must be prior to (%s)"
-msgstr "data de início deve ser anterior à data (gt13)"
+msgstr "data de início deve ser anterior à data (%s)"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:102
 msgid "End date must be equal to start date"
@@ -3127,7 +3129,7 @@ msgid ""
 "One or more events would be scheduled for $F, which is after the scheduling "
 "group's end date"
 msgstr ""
-"um ou mais eventos seriam agendados para $f, que é a data de conclusão do "
+"um ou mais eventos seriam agendados para $F, que é a data de conclusão do "
 "grupo que fez o agendamento"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:566
@@ -3135,7 +3137,7 @@ msgid ""
 "One or more events would be scheduled for $F, which overlaps with an "
 "existing sitting"
 msgstr ""
-"um ou mais eventos seria agendada para $f, que coincide com uma sessão "
+"um ou mais eventos seria agendada para $F, que coincide com uma sessão "
 "existente"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:608
@@ -4113,8 +4115,8 @@ msgstr "Filtros não foram elegidos"
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:140
 msgid "you did not choose any filters.select some filters then hit apply"
 msgstr ""
-"você não escolher qualquer filters.select alguns filtros, em seguida, clique "
-"em Aplicar"
+"você não escolher qualquer filters.select alguns filtros, em seguida, clique"
+" em Aplicar"
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:145
 msgid "start date"
@@ -4450,7 +4452,7 @@ msgstr "selecionar um item para reverter a/para"
 
 #: src/bungeni.main/bungeni/ui/versions.py:259
 msgid "Reverted to Previous Version %s"
-msgstr "revertido para versão anterior"
+msgstr "revertido para versão anterior %s"
 
 #: src/bungeni.main/bungeni/ui/versions.py:262
 msgid "Show Differences"
@@ -4592,14 +4594,18 @@ msgstr "documentos"
 msgid "N/A"
 msgstr "N / A"
 
-#. Default: "This document has the required number of signatories. ${signed_members} member(s) have signed. ${required_members} signature(s) required."
+#. Default: "This document has the required number of signatories.
+#. ${signed_members} member(s) have signed. ${required_members} signature(s)
+#. required."
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.py:87
 msgid "signature_requirement_met"
 msgstr ""
 "Este documento tem o número necessário de assinaturas. ${signed_members} "
 "membro (s) assinaram. ${required_members} assinatura (s) requerido."
 
-#. Default: "This document does not have the required number of signatories. Requires ${required_members} signature(s). ${signed_members} member(s) have signed."
+#. Default: "This document does not have the required number of signatories.
+#. Requires ${required_members} signature(s). ${signed_members} member(s) have
+#. signed."
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.py:99
 msgid "signature_requirements_not_met"
 msgstr ""
@@ -4743,8 +4749,7 @@ msgstr "meus interesses"
 #~ msgstr "notificação dos ministérios"
 
 #~ msgid "Notify concerned ministries by e-mail when a document is submitted"
-#~ msgstr ""
-#~ "notificar os ministérios por e-mail quando um documento é apresentado"
+#~ msgstr "notificar os ministérios por e-mail quando um documento é apresentado"
 
 #~ msgid "Administrator's Email"
 #~ msgstr "correio electrónico do administrador"
@@ -4756,9 +4761,9 @@ msgstr "meus interesses"
 #~ "Days after which to notify concerned ministry and  clerk's office of "
 #~ "questions with pending responses"
 #~ msgstr ""
-#~ "período de tempo após o qual o Gabinete do Secretário-Geral e o "
-#~ "Ministério são notificados de que as perguntas que aguardam resposta "
-#~ "ainda não foram respondidas"
+#~ "período de tempo após o qual o Gabinete do Secretário-Geral e o Ministério "
+#~ "são notificados de que as perguntas que aguardam resposta ainda não foram "
+#~ "respondidas"
 
 #~ msgid "Minimum consented signatories for a bill"
 #~ msgstr "número mínimo de signatários permitido para uma iniciativa"
@@ -4950,10 +4955,10 @@ msgstr "meus interesses"
 #~ msgstr "Este documento não tem signatários"
 
 #~ msgid "Day $number of every month"
-#~ msgstr "dia $número de cada mês"
+#~ msgstr "dia $number de cada mês"
 
 #~ msgid "First $day of every month"
-#~ msgstr "primeiro dia de cada mês"
+#~ msgstr "primeiro $day de cada mês"
 
 #~ msgid "Male"
 #~ msgstr "masculino"
@@ -4977,7 +4982,7 @@ msgstr "meus interesses"
 #~ msgstr "Disponível para agendamento"
 
 #~ msgid "Reverted to previous version $version"
-#~ msgstr "convertido para versão anterior"
+#~ msgstr "convertido para versão anterior $version"
 
 #~ msgid "Start date of document assignment"
 #~ msgstr "data de início da tarefa"
@@ -5715,8 +5720,7 @@ msgstr "meus interesses"
 #~ msgid "User Unique"
 #~ msgstr "único utilizador"
 
-#~ msgid ""
-#~ "Whether or not only one person at a time is allowed to have this title"
+#~ msgid "Whether or not only one person at a time is allowed to have this title"
 #~ msgstr ""
 #~ "se este título só pode ser utilizado por uma pessoa de cada vez ou não"
 
@@ -5976,11 +5980,10 @@ msgstr "meus interesses"
 #~ msgstr "seleccionar o modo de recorrência mensal"
 
 #~ msgid ""
-#~ "Enter the number of times which the event should be repeated (as an "
-#~ "integer)"
+#~ "Enter the number of times which the event should be repeated (as an integer)"
 #~ msgstr ""
-#~ "introduza o número de vezes que o evento deve ser repetido (como um "
-#~ "número inteiro)"
+#~ "introduza o número de vezes que o evento deve ser repetido (como um número "
+#~ "inteiro)"
 
 #~ msgid "Repeat until date"
 #~ msgstr "repetir até a data de"
@@ -5992,11 +5995,11 @@ msgstr "meus interesses"
 #~ msgstr "excepções"
 
 #~ msgid ""
-#~ "Events will not be scheduled at dates appearing in this field. Separate "
-#~ "with comma or newline. Format: YYYY/MM/DD"
+#~ "Events will not be scheduled at dates appearing in this field. Separate with"
+#~ " comma or newline. Format: YYYY/MM/DD"
 #~ msgstr ""
-#~ "eventos não serão agendados em datas que aparecem neste campo - separe "
-#~ "com vírgula ou quebra de linha - formato: aaaa / mm / dd"
+#~ "eventos não serão agendados em datas que aparecem neste campo - separe com "
+#~ "vírgula ou quebra de linha - formato: aaaa / mm / dd"
 
 #~ msgid "Must limit recurrence (by number or date)"
 #~ msgstr "devem limitar a recorrência (por número ou data)"

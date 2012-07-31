@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -6,15 +6,14 @@ msgstr ""
 "PO-Revision-Date: 2010-07-24 11:31+0300\n"
 "Last-Translator: Ashok <ashok@parliaments.info>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Domain: DOMAIN\n"
+"Language: ar\n"
 "Language-Code: ar\n"
 "Language-Name: العربية\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "X-Generator: Pootle 2.0.4\n"
 
@@ -380,7 +379,7 @@ msgstr "آخر تعديل"
 #: src/bungeni.main/bungeni/core/dc.py:342
 #, fuzzy
 msgid "member_title_with_representation"
-msgstr "عضو البرلمان عن ${constituency} (${member})"
+msgstr "عضو البرلمان عن ${representation} (${member})"
 
 #: src/bungeni.main/bungeni/core/dc.py:434
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3220
@@ -1854,7 +1853,8 @@ msgstr "يجب إذا كان الشخص غير نشط يتم تعيين تاري
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:447
 msgid ""
-"A parliament member has to be elected/nominated before she/he can be sworn in"
+"A parliament member has to be elected/nominated before she/he can be sworn "
+"in"
 msgstr "وقال عضو البرلمان أن ينتخب / رشح من قبل وقالت / انه يمكن في اليمين"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:457
@@ -2860,7 +2860,8 @@ msgstr "يتم عرض النسخة الأصلية $language على اليسار"
 msgid "translate_item_legend"
 msgstr "إضافة $language الترجمة"
 
-#. Default: "The document \"$title\" has not yet been translated into $language. Use this form to add the translation"
+#. Default: "The document \"$title\" has not yet been translated into
+#. $language. Use this form to add the translation"
 #: src/bungeni.main/bungeni/ui/forms/common.py:593
 msgid "translate_item_help"
 msgstr ""
@@ -3390,7 +3391,8 @@ msgstr ""
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:110
 msgid "The 'Actions' menu - provides context-specific actions (views)"
-msgstr "القائمة &quot;إجراءات&quot; -- توفر إجراءات محددة للسياق (وجهات النظر)"
+msgstr ""
+"القائمة &quot;إجراءات&quot; -- توفر إجراءات محددة للسياق (وجهات النظر)"
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:116
 #: src/bungeni.main/bungeni/ui/menu.zcml:123
@@ -4569,14 +4571,18 @@ msgstr "وثائق"
 msgid "N/A"
 msgstr "N / A"
 
-#. Default: "This document has the required number of signatories. ${signed_members} member(s) have signed. ${required_members} signature(s) required."
+#. Default: "This document has the required number of signatories.
+#. ${signed_members} member(s) have signed. ${required_members} signature(s)
+#. required."
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.py:87
 msgid "signature_requirement_met"
 msgstr ""
-"هذه الوثيقة لديها العدد المطلوب من الدول الموقعة. وقد وقعت ${signed_members} "
-"عضو (s). ${required_members} التوقيع (التوقيعات) المطلوبة."
+"هذه الوثيقة لديها العدد المطلوب من الدول الموقعة. وقد وقعت ${signed_members}"
+" عضو (s). ${required_members} التوقيع (التوقيعات) المطلوبة."
 
-#. Default: "This document does not have the required number of signatories. Requires ${required_members} signature(s). ${signed_members} member(s) have signed."
+#. Default: "This document does not have the required number of signatories.
+#. Requires ${required_members} signature(s). ${signed_members} member(s) have
+#. signed."
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.py:99
 msgid "signature_requirements_not_met"
 msgstr ""
@@ -5909,8 +5915,7 @@ msgstr "بلدي المصالح"
 #~ msgstr "حدد النمط من تكرار الشهرية"
 
 #~ msgid ""
-#~ "Enter the number of times which the event should be repeated (as an "
-#~ "integer)"
+#~ "Enter the number of times which the event should be repeated (as an integer)"
 #~ msgstr "أدخل عدد المرات التي يجب تكرار الحدث (كعدد صحيح)"
 
 #~ msgid "Repeat until date"
@@ -5923,11 +5928,11 @@ msgstr "بلدي المصالح"
 #~ msgstr "الاستثناءات"
 
 #~ msgid ""
-#~ "Events will not be scheduled at dates appearing in this field. Separate "
-#~ "with comma or newline. Format: YYYY/MM/DD"
+#~ "Events will not be scheduled at dates appearing in this field. Separate with"
+#~ " comma or newline. Format: YYYY/MM/DD"
 #~ msgstr ""
-#~ "ولن تكون الأحداث المقرر في المواعيد الواردة في هذا الميدان. منفصلة مع "
-#~ "فاصلة أو سطر جديد. الشكل : YYYY / MM / DD"
+#~ "ولن تكون الأحداث المقرر في المواعيد الواردة في هذا الميدان. منفصلة مع فاصلة "
+#~ "أو سطر جديد. الشكل : YYYY / MM / DD"
 
 #~ msgid "Must limit recurrence (by number or date)"
 #~ msgstr "يجب الحد من تكرار (عن طريق الرقم أو التاريخ)"

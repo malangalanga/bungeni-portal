@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -6,16 +6,16 @@ msgstr ""
 "PO-Revision-Date: 2012-06-13 17:07+0300\n"
 "Last-Translator: UNDESA <bungeni.translator@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: sw\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.4\n"
 "Domain: DOMAIN\n"
+"Language: sw\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"X-Generator: Pootle 2.0.4\n"
 
 #: src/bungeni.main/bungeni/alchemist/container.py:91
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:86
@@ -380,7 +380,7 @@ msgstr "imebadilishwa"
 #: src/bungeni.main/bungeni/core/dc.py:342
 #, fuzzy
 msgid "member_title_with_representation"
-msgstr "Mbunge wa  ${constituency} (${member})"
+msgstr "Mbunge wa  ${representation} (${member})"
 
 #: src/bungeni.main/bungeni/core/dc.py:434
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:3220
@@ -1796,7 +1796,7 @@ msgstr "hakuna pointi zilizoratibiwa"
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:205
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:301
 msgid "Week ${week_no}"
-msgstr "wiki ${weekno}"
+msgstr "wiki ${week_no}"
 
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:264
 #: src/bungeni.main/bungeni/ui/calendar/templates/macros.pt:364
@@ -1855,7 +1855,8 @@ msgstr "kama mtu haendelei siku ya mwisho lazima iwekwe"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:447
 msgid ""
-"A parliament member has to be elected/nominated before she/he can be sworn in"
+"A parliament member has to be elected/nominated before she/he can be sworn "
+"in"
 msgstr ""
 "mwanachama wa bunge lazima achaguliwe / ateuliwe kabla aweze kula kiapo"
 
@@ -1967,9 +1968,9 @@ msgid ""
 "Must contain only letters, numbers, a period(.) and underscore (_). Should "
 "start with a letter and be between 3 and 20 characters long"
 msgstr ""
-"tumia herufi za alphabeti, nambari, kikomo(.) na alama ya _. lazima uanzishe "
-"na herfi ya alphabeti. urefu lazima uwe kati ya alama tatu (3) na ishirini"
-"(20)"
+"tumia herufi za alphabeti, nambari, kikomo(.) na alama ya _. lazima uanzishe"
+" na herfi ya alphabeti. urefu lazima uwe kati ya alama tatu (3) na "
+"ishirini(20)"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:640
 msgid "Initial password"
@@ -2342,7 +2343,8 @@ msgid ""
 "The order in which members with this title will appear relative to other "
 "members"
 msgstr ""
-"mpangilio wa utaratibu wa wenye hiki cheo ikilinganishwa na wanachama wengine"
+"mpangilio wa utaratibu wa wenye hiki cheo ikilinganishwa na wanachama "
+"wengine"
 
 #: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1677
 msgid "Titles"
@@ -2777,8 +2779,8 @@ msgstr "tarehe ya uchapishaji"
 #: src/bungeni.main/bungeni/ui/downloaddocument.py:154
 msgid "No template for document of type: ${dtype}. Contact admin."
 msgstr ""
-"Hati ya kutunga ripoti ya hati ya aina \"${dtype}\" haikupatikana. Wasiliana "
-"na msimamizi."
+"Hati ya kutunga ripoti ya hati ya aina \"${dtype}\" haikupatikana. Wasiliana"
+" na msimamizi."
 
 #: src/bungeni.main/bungeni/ui/errors.py:24
 msgid "An error occurred in Bungeni."
@@ -2867,7 +2869,8 @@ msgstr "$language ya asili imeonyeshwa katika upande wa kushoto"
 msgid "translate_item_legend"
 msgstr "ongeza tafsiri ya $language "
 
-#. Default: "The document \"$title\" has not yet been translated into $language. Use this form to add the translation"
+#. Default: "The document \"$title\" has not yet been translated into
+#. $language. Use this form to add the translation"
 #: src/bungeni.main/bungeni/ui/forms/common.py:593
 msgid "translate_item_help"
 msgstr ""
@@ -2935,7 +2938,7 @@ msgstr "kitambulisho cha rekodi"
 
 #: src/bungeni.main/bungeni/ui/forms/templates/content-view.pt:8
 msgid "${DYNAMIC_CONTENT} ${DYNAMIC_CONTENT}"
-msgstr " ${DYNAMIC_CONTENT}"
+msgstr "${DYNAMIC_CONTENT} ${DYNAMIC_CONTENT}"
 
 #: src/bungeni.main/bungeni/ui/forms/templates/content-view.pt:21
 #: src/bungeni.main/bungeni/ui/forms/templates/generic-sub-container.pt:1
@@ -2943,7 +2946,7 @@ msgstr " ${DYNAMIC_CONTENT}"
 #: src/bungeni.main/bungeni/ui/viewlets/templates/schedulable-items.pt:1
 #: src/bungeni.main/bungeni/ui/viewlets/templates/signatories-status.pt:8
 msgid "${DYNAMIC_CONTENT}"
-msgstr "${dynamiccontent}"
+msgstr "${DYNAMIC_CONTENT}"
 
 #: src/bungeni.main/bungeni/ui/forms/templates/delete.pt:5
 msgid "Delete item confirmation"
@@ -3124,7 +3127,7 @@ msgid ""
 "One or more events would be scheduled for $F, which is after the scheduling "
 "group's end date"
 msgstr ""
-"tukio moja au zaidi lingeratibiwa kwa $f, ambayo ni baada ya tarehe ya "
+"tukio moja au zaidi lingeratibiwa kwa $F, ambayo ni baada ya tarehe ya "
 "mwisho ya kikundi cha ratiba"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:566
@@ -3132,7 +3135,7 @@ msgid ""
 "One or more events would be scheduled for $F, which overlaps with an "
 "existing sitting"
 msgstr ""
-"tukio moja au zaidi lingeratibiwa kwa $f, ambayo iko wakati mmoja na kikao "
+"tukio moja au zaidi lingeratibiwa kwa $F, ambayo iko wakati mmoja na kikao "
 "kingine"
 
 #: src/bungeni.main/bungeni/ui/forms/validations.py:608
@@ -4084,8 +4087,8 @@ msgstr "una hakika wataka kuondoa kipengele hiki kutoka kwenye ratiba?"
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:118
 msgid "No items have been scheduled. Add something then save."
 msgstr ""
-"ratiba hii haina vipengele vyvyote. ongeza vipengele kisha ubonyeze \"hifadhi"
-"\""
+"ratiba hii haina vipengele vyvyote. ongeza vipengele kisha ubonyeze "
+"\"hifadhi\""
 
 #: src/bungeni.main/bungeni/ui/resources/dynamic.py:123
 msgid "saving changes to schedule..."
@@ -4589,14 +4592,18 @@ msgstr "hati"
 msgid "N/A"
 msgstr "haihusiki"
 
-#. Default: "This document has the required number of signatories. ${signed_members} member(s) have signed. ${required_members} signature(s) required."
+#. Default: "This document has the required number of signatories.
+#. ${signed_members} member(s) have signed. ${required_members} signature(s)
+#. required."
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.py:87
 msgid "signature_requirement_met"
 msgstr ""
 "Hati hii inazo sahihi zinazohitajika. wajume ${signed_members} wametia "
 "sahihi. sahihi ${required_members} zilihitajika."
 
-#. Default: "This document does not have the required number of signatories. Requires ${required_members} signature(s). ${signed_members} member(s) have signed."
+#. Default: "This document does not have the required number of signatories.
+#. Requires ${required_members} signature(s). ${signed_members} member(s) have
+#. signed."
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.py:99
 msgid "signature_requirements_not_met"
 msgstr ""
@@ -4713,7 +4720,6 @@ msgstr "tarehe ya hali"
 msgid "My interests"
 msgstr "mawaziri"
 
-#, fuzzy
 #~ msgid "Timeline"
 #~ msgstr "kipindi cha wakati cha muswada"
 
@@ -4916,34 +4922,27 @@ msgstr "mawaziri"
 #~ msgid "Votes and proceedings..."
 #~ msgstr "kura na tangulizi..."
 
-#, fuzzy
 #~ msgid "Download"
 #~ msgstr "pakua odt"
 
-#, fuzzy
 #~ msgid "Agenda Items"
 #~ msgstr "pointi za ajenda"
 
-#, fuzzy
 #~ msgid "Tabled Documents"
 #~ msgstr "hati zilizopendekezwa"
 
-#, fuzzy
 #~ msgid "Type of report to be produced"
 #~ msgstr "aina ya hati itakayotolewa"
 
 #~ msgid "Order of the day"
 #~ msgstr "utaratibu wa siku"
 
-#, fuzzy
 #~ msgid "The sitting has no scheduled items"
 #~ msgstr "hakuna pointi zilizoratibiwa"
 
-#, fuzzy
 #~ msgid "Sitting Votes and  Proceedings"
 #~ msgstr "kura na tangulizi"
 
-#, fuzzy
 #~ msgid "timeline"
 #~ msgstr "kipindi cha wakati cha muswada"
 
@@ -4965,320 +4964,243 @@ msgstr "mawaziri"
 #~ msgid "subsequent"
 #~ msgstr "baadae"
 
-#, fuzzy
 #~ msgid "Add member..."
 #~ msgstr "ongeza mwanachama ..."
 
-#, fuzzy
 #~ msgid "Delete member of parliament"
 #~ msgstr "mwanachama wa bunge"
 
-#, fuzzy
 #~ msgid "Item scheduling"
 #~ msgstr "futa ratiba"
 
-#, fuzzy
 #~ msgid "Reverted to previous version $version"
-#~ msgstr "rudi katika aina ya awali %s"
+#~ msgstr "rudi katika aina ya awali $version"
 
-#, fuzzy
 #~ msgid "Start date of document assignment"
 #~ msgstr "tarehe la kuanza"
 
-#, fuzzy
 #~ msgid "End date of document assignment"
 #~ msgstr "tarehe ya kula kiapo"
 
-#, fuzzy
 #~ msgid "Document assignment type"
 #~ msgstr "aina ya hati"
 
-#, fuzzy
 #~ msgid "Add government"
 #~ msgstr "ongeza serikali ..."
 
-#, fuzzy
 #~ msgid "Delete government"
 #~ msgstr "serikali"
 
-#, fuzzy
 #~ msgid "View government"
 #~ msgstr "serikali"
 
-#, fuzzy
 #~ msgid "Add group member"
 #~ msgstr "ongeza kikundi cha kisiasa ..."
 
-#, fuzzy
 #~ msgid "Edit group member"
 #~ msgstr "ongeza kikundi cha kisiasa ..."
 
-#, fuzzy
 #~ msgid "View group member"
 #~ msgstr "ongeza kikundi cha kisiasa ..."
 
-#, fuzzy
 #~ msgid "Add office"
 #~ msgstr "ongeza ofisi ..."
 
-#, fuzzy
 #~ msgid "View office"
 #~ msgstr "ex officio"
 
-#, fuzzy
 #~ msgid "Translate content"
 #~ msgstr "ofisi ya tafsiri"
 
-#, fuzzy
 #~ msgid "View office member"
 #~ msgstr "mwanachama wa ofisi"
 
-#, fuzzy
 #~ msgid "Add ministry"
 #~ msgstr "ongeza wizara ..."
 
-#, fuzzy
 #~ msgid "View ministry"
 #~ msgstr "wizara"
 
-#, fuzzy
 #~ msgid "Add mp"
 #~ msgstr "ongeza"
 
-#, fuzzy
 #~ msgid "Edit mp"
 #~ msgstr "hariri"
 
-#, fuzzy
 #~ msgid "Delete mp"
 #~ msgstr "futa"
 
-#, fuzzy
 #~ msgid "View mp"
 #~ msgstr "tazama"
 
-#, fuzzy
 #~ msgid "Add session"
 #~ msgstr "ongeza kikao ..."
 
-#, fuzzy
 #~ msgid "Add user"
 #~ msgstr "ongeza mtumiaji ..."
 
-#, fuzzy
 #~ msgid "View user"
 #~ msgstr "chanzo cha hati"
 
-#, fuzzy
 #~ msgid "Add constituency"
 #~ msgstr "ongeza eneo-bunge ..."
 
-#, fuzzy
 #~ msgid "View constituency"
 #~ msgstr "eneo-bunge"
 
-#, fuzzy
 #~ msgid "Add sitting"
 #~ msgstr "ongeza kikao ..."
 
-#, fuzzy
 #~ msgid "View minister"
 #~ msgstr "waziri"
 
-#, fuzzy
 #~ msgid "View committee member"
 #~ msgstr "ongeza mwanachama wa kamati ..."
 
-#, fuzzy
 #~ msgid "View committee staff"
 #~ msgstr "miswada iliyopelekwa"
 
-#, fuzzy
 #~ msgid "View political group member"
 #~ msgstr "ongeza kikundi cha kisiasa ..."
 
-#, fuzzy
 #~ msgid "View address"
 #~ msgstr "anwani ya barua pepe"
 
-#, fuzzy
 #~ msgid "Add delegation"
 #~ msgstr "ongeza wajumbe ..."
 
-#, fuzzy
 #~ msgid "View delegation"
 #~ msgstr "wajumbe"
 
-#, fuzzy
 #~ msgid "Add title/function"
 #~ msgstr "ongeza kichwa / kazi ..."
 
-#, fuzzy
 #~ msgid "Edit title/function"
 #~ msgstr "ongeza kichwa / kazi ..."
 
-#, fuzzy
 #~ msgid "Delete title/function"
 #~ msgstr "futa kikao"
 
-#, fuzzy
 #~ msgid "View title/function"
 #~ msgstr "ongeza kichwa / kazi ..."
 
-#, fuzzy
 #~ msgid "View the schedule of a sitting"
 #~ msgstr "pointi zilizoratibiwa kwa mkutano huu"
 
-#, fuzzy
 #~ msgid "Add title/event"
 #~ msgstr "ongeza tukio"
 
 #~ msgid "View title/event"
 #~ msgstr "tazama kichwa / tukio"
 
-#, fuzzy
 #~ msgid "View audit log"
 #~ msgstr "ukaguzi wa historia"
 
-#, fuzzy
 #~ msgid "Add and edit amendments"
 #~ msgstr "marekebisho ya msukumo"
 
-#, fuzzy
 #~ msgid "View amendments"
 #~ msgstr "marekebisho ya msukumo"
 
-#, fuzzy
 #~ msgid "Add and edit comments"
 #~ msgstr "ongeza hati iliyopendekezwa ..."
 
 #~ msgid "View comments"
 #~ msgstr "tazama maoni"
 
-#, fuzzy
 #~ msgid "Add a signatory"
 #~ msgstr "ongeza saini ..."
 
-#, fuzzy
 #~ msgid "Edit a signatory"
 #~ msgstr "saini"
 
-#, fuzzy
 #~ msgid "View a signatory"
 #~ msgstr "saini"
 
-#, fuzzy
 #~ msgid "Assign a document to a group or committee"
 #~ msgstr "peleka muswada katika kikundi ..."
 
-#, fuzzy
 #~ msgid "Permission to generate report"
 #~ msgstr "fomu hii inatoa ripoti ya ajenda"
 
-#, fuzzy
 #~ msgid "Edit item scheduling discussion"
 #~ msgstr "vitendo vya majadiliano ya ratiba"
 
-#, fuzzy
 #~ msgid "view an attached file"
 #~ msgstr "faili zilizopachikwa"
 
-#, fuzzy
 #~ msgid "add translation"
 #~ msgstr "hifadhi tafsiri"
 
-#, fuzzy
 #~ msgid "View workspace"
 #~ msgstr "eneo la kazi"
 
-#, fuzzy
 #~ msgid "View sitting attendance"
 #~ msgstr "mahudhurio ya kikao"
 
-#, fuzzy
 #~ msgid "Add sitting attendance"
 #~ msgstr "mahudhurio ya kikao"
 
-#, fuzzy
 #~ msgid "Edit sitting attendance"
 #~ msgstr "mahudhurio ya kikao"
 
-#, fuzzy
 #~ msgid "Delete sitting attendance"
 #~ msgstr "mahudhurio ya kikao"
 
-#, fuzzy
 #~ msgid "Add committee"
 #~ msgstr "ongeza kamati ..."
 
-#, fuzzy
 #~ msgid "View committee"
 #~ msgstr "ongeza kamati ..."
 
-#, fuzzy
 #~ msgid "Add Question"
 #~ msgstr "ongeza swali ..."
 
-#, fuzzy
 #~ msgid "View Question"
 #~ msgstr "swali"
 
-#, fuzzy
 #~ msgid "View heading"
 #~ msgstr "kichwa"
 
-#, fuzzy
 #~ msgid "Add Motion"
 #~ msgstr "ongeza msukumo ..."
 
-#, fuzzy
 #~ msgid "View Motion"
 #~ msgstr "msukumo"
 
-#, fuzzy
 #~ msgid "Add agenda item"
 #~ msgstr "ongeza pointi ya ajenda ..."
 
-#, fuzzy
 #~ msgid "Add tabled document"
 #~ msgstr "ongeza hati iliyopendekezwa ..."
 
-#, fuzzy
 #~ msgid "View tabled document"
 #~ msgstr "hati iliyopendekezwa"
 
-#, fuzzy
 #~ msgid "Edit Response"
 #~ msgstr "jibu"
 
-#, fuzzy
 #~ msgid "View Response"
 #~ msgstr "jibu"
 
-#, fuzzy
 #~ msgid "Add Parliament"
 #~ msgstr "ongeza bunge ..."
 
-#, fuzzy
 #~ msgid "View Parliament"
 #~ msgstr "bunge"
 
-#, fuzzy
 #~ msgid "Add Bill"
 #~ msgstr "ongeza muswada ..."
 
-#, fuzzy
 #~ msgid "View Bill"
 #~ msgstr "muswada"
 
 #~ msgid "Add party"
 #~ msgstr "ongeza chama"
 
-#, fuzzy
 #~ msgid "Edit party"
 #~ msgstr "chama cha kisiasa"
 
-#, fuzzy
 #~ msgid "Delete party"
 #~ msgstr "futa"
 
@@ -5294,7 +5216,6 @@ msgstr "mawaziri"
 #~ msgid "Clerks Office"
 #~ msgstr "ofisi ya karani"
 
-#, fuzzy
 #~ msgid "Speaker Office"
 #~ msgstr "ofisi ya mtafiti"
 
@@ -5307,37 +5228,30 @@ msgstr "mawaziri"
 #~ msgid "Bungeni Visitor"
 #~ msgstr "mgeni wa bungeni"
 
-#, fuzzy
 #~ msgid "Document Signatory"
 #~ msgstr "chanzo cha hati"
 
-#, fuzzy
 #~ msgid "Party Member"
 #~ msgstr "mwanachama wa chama"
 
-#, fuzzy
 #~ msgid "Member of Government"
 #~ msgstr "mwanachama wa bunge"
 
-#, fuzzy
 #~ msgid "Committee Member"
 #~ msgstr "ongeza mwanachama wa kamati ..."
 
 #~ msgid "action"
 #~ msgstr "tendo"
 
-#, fuzzy
 #~ msgid "Sitting Info"
 #~ msgstr "kikao"
 
 #~ msgid "Due Date"
 #~ msgstr "tarehe inatakapotakikana"
 
-#, fuzzy
 #~ msgid "Assigned item"
 #~ msgstr "ongeza kamati ..."
 
-#, fuzzy
 #~ msgid "Assigned items"
 #~ msgstr "miswada iliyopelekwa"
 
@@ -5353,7 +5267,6 @@ msgstr "mawaziri"
 #~ msgid "Files"
 #~ msgstr "faili"
 
-#, fuzzy
 #~ msgid "File Type"
 #~ msgstr "aina ya muswada"
 
@@ -5417,82 +5330,66 @@ msgstr "mawaziri"
 #~ msgid "Add Title/Function..."
 #~ msgstr "ongeza kichwa / kazi ..."
 
-#, fuzzy
 #~ msgid "Delete Session"
 #~ msgstr "futa kikao"
 
-#, fuzzy
 #~ msgid "The 'Add...' menu - for political parties"
 #~ msgstr "menyu ya 'ongeza ..' - kwa vyama vya siasa"
 
 #~ msgid "Respond"
 #~ msgstr "jibu"
 
-#, fuzzy
 #~ msgid "Add Party Address..."
 #~ msgstr "ongeza bunge ..."
 
-#, fuzzy
 #~ msgid "download pdf"
 #~ msgstr "pakua"
 
-#, fuzzy
 #~ msgid "download odt"
 #~ msgstr "pakua pdf"
 
-#, fuzzy
 #~ msgid "Add Political Group Member..."
 #~ msgstr "ongeza kikundi cha kisiasa ..."
 
-#, fuzzy
 #~ msgid "rss"
 #~ msgstr "anwani"
 
-#, fuzzy
 #~ msgid "Add Political Group Address..."
 #~ msgstr "ongeza kikundi cha kisiasa ..."
 
 #~ msgid "The 'Add...' menu - for committees"
 #~ msgstr "menyu ya 'ongeza ...' - kwa kamati"
 
-#, fuzzy
 #~ msgid "Assign an item..."
 #~ msgstr "peleka muswada ..."
 
-#, fuzzy
 #~ msgid "Add Committee Address..."
 #~ msgstr "ongeza kamati ..."
 
-#, fuzzy
 #~ msgid "The 'Add...' menu - for a Parliament"
 #~ msgstr "menyu ya 'add ..' - kwa serikali"
 
-#, fuzzy
 #~ msgid "Add Parliament Address..."
 #~ msgstr "ongeza bunge ..."
 
-#, fuzzy
 #~ msgid "The 'Add...' menu - for a parliament's sittings"
 #~ msgstr "menyu ya 'add ..' - kwa serikali"
 
 #~ msgid "The 'Add..' menu - for government"
 #~ msgstr "menyu ya 'add ..' - kwa serikali"
 
-#, fuzzy
 #~ msgid "Add Government Address..."
 #~ msgstr "ongeza serikali ..."
 
 #~ msgid "The 'Add..' menu - for ministry"
 #~ msgstr "menyu ya 'add ..' - kwa wizara"
 
-#, fuzzy
 #~ msgid "Add Ministry Address..."
 #~ msgstr "ongeza wizara ..."
 
 #~ msgid "The 'Add...' menu - for Group Memberships"
 #~ msgstr "menyu ya 'ongeza ...' - kwa uanachama katika vikundi"
 
-#, fuzzy
 #~ msgid "Add Member Address..."
 #~ msgstr "ongeza anwani ..."
 
@@ -5502,43 +5399,36 @@ msgstr "mawaziri"
 #~ msgid "The 'Add...' menu - for motion"
 #~ msgstr "menyu ya 'ongeza ...' - kwa msukumo"
 
-#, fuzzy
 #~ msgid "Assign motion to a group..."
 #~ msgstr "peleka muswada katika kikundi ..."
 
-#, fuzzy
 #~ msgid "Assign bill to a committee..."
 #~ msgstr "peleka muswada katika kikundi ..."
 
 #~ msgid "The 'Add...' menu - for question"
 #~ msgstr "menyu ya 'ongeza ...'  - kwa swali"
 
-#, fuzzy
 #~ msgid "Assign question to a group..."
 #~ msgstr "peleka muswada katika kikundi ..."
 
 #~ msgid "The 'Add...' menu - for tabled document"
 #~ msgstr "menyu ya 'ongeza ...'  - kwa hati iliyopendekezwa"
 
-#, fuzzy
 #~ msgid "Assign this document to a group..."
 #~ msgstr "peleka muswada katika kikundi ..."
 
 #~ msgid "The 'Add...' menu - for agenda item"
 #~ msgstr "menyu ya 'ongeza ...' - kwa pointi za ajenda"
 
-#, fuzzy
 #~ msgid "Assign agenda item to a group..."
 #~ msgstr "peleka muswada katika kikundi ..."
 
 #~ msgid "The 'Add...' menu - for offices"
 #~ msgstr "menyu ya 'ongeza ...'  - kwa ofisi"
 
-#, fuzzy
 #~ msgid "Add Office Address..."
 #~ msgstr "ongeza anwani ..."
 
-#, fuzzy
 #~ msgid "Add Title..."
 #~ msgstr "ongeza kichwa ..."
 
@@ -5563,22 +5453,18 @@ msgstr "mawaziri"
 #~ msgid "Add Office Member..."
 #~ msgstr "ongeza mwanachama wa ofisi ..."
 
-#, fuzzy
 #~ msgid "Add Group Address..."
 #~ msgstr "ongeza anwani ..."
 
-#, fuzzy
 #~ msgid "change password"
 #~ msgstr "nywila ya awali"
 
 #~ msgid "A parliament must be active in the period"
 #~ msgstr "bunge lazima iendelee katika kipindi hiki"
 
-#, fuzzy
 #~ msgid "Agenda Item"
 #~ msgstr "pointi za ajenda"
 
-#, fuzzy
 #~ msgid "Tabled Document"
 #~ msgstr "hati zilizopendekezwa"
 
@@ -5588,19 +5474,15 @@ msgstr "mawaziri"
 #~ msgid "No items"
 #~ msgstr "hakuna pointi"
 
-#, fuzzy
 #~ msgid "vocabularies"
 #~ msgstr "vyama vya kisiasa"
 
-#, fuzzy
 #~ msgid "Committee type status"
 #~ msgstr "kamati"
 
-#, fuzzy
 #~ msgid "Committee type statuses"
 #~ msgstr "kamati"
 
-#, fuzzy
 #~ msgid "Committee types"
 #~ msgstr "kamati"
 
@@ -5613,139 +5495,108 @@ msgstr "mawaziri"
 #~ msgid "Address types"
 #~ msgstr "aina za anwani"
 
-#, fuzzy
 #~ msgid "Postal address types"
 #~ msgstr "aina za anwani"
 
-#, fuzzy
 #~ msgid "Postal address type name"
 #~ msgstr "aina ya anwani"
 
-#, fuzzy
 #~ msgid "Postal Type"
 #~ msgstr "aina ya muswada"
 
-#, fuzzy
 #~ msgid "Bill types"
 #~ msgstr "aina ya muswada"
 
-#, fuzzy
 #~ msgid "Question type"
 #~ msgstr "aina ya swali"
 
-#, fuzzy
 #~ msgid "Question types"
 #~ msgstr "aina ya swali"
 
-#, fuzzy
 #~ msgid "Response type"
 #~ msgstr "aina ya jibu"
 
-#, fuzzy
 #~ msgid "Response types"
 #~ msgstr "aina ya jibu"
 
-#, fuzzy
 #~ msgid "Attendance types"
 #~ msgstr "aina ya mahudhurio"
 
 #~ msgid "Attendance type"
 #~ msgstr "aina ya mahudhurio"
 
-#, fuzzy
 #~ msgid "None"
 #~ msgstr "kidokezo"
 
-#, fuzzy
 #~ msgid "Member election type"
 #~ msgstr "aina machapisho "
 
-#, fuzzy
 #~ msgid "Member election types"
 #~ msgstr "aina machapisho "
 
 #~ msgid "elected/nominated"
 #~ msgstr "waliochaguliwa / walioteuliwa"
 
-#, fuzzy
 #~ msgid "Add bill type..."
 #~ msgstr "ongeza faili ..."
 
-#, fuzzy
 #~ msgid "Add question type..."
 #~ msgstr "ongeza swali ..."
 
-#, fuzzy
 #~ msgid "Add response type..."
 #~ msgstr "aina ya anwani"
 
-#, fuzzy
 #~ msgid "Add attendance type..."
 #~ msgstr "ongeza mahudhurio ..."
 
-#, fuzzy
 #~ msgid "Add committee type..."
 #~ msgstr "ongeza kamati ..."
 
-#, fuzzy
 #~ msgid "Add committee type status..."
 #~ msgstr "ongeza kamati ..."
 
-#, fuzzy
 #~ msgid "Add postal type..."
 #~ msgstr "ongeza faili ..."
 
-#, fuzzy
 #~ msgid "Add address type..."
 #~ msgstr "aina ya anwani"
 
-#, fuzzy
 #~ msgid "Publish to Public"
 #~ msgstr "tarehe ya machapisho"
 
-#, fuzzy
 #~ msgid "Publish internal"
 #~ msgstr "tarehe ya machapisho"
 
 #~ msgid "Make private"
 #~ msgstr "fanya iwe ya kibinafsi"
 
-#, fuzzy
 #~ msgid "withdraw"
 #~ msgstr "ondoa"
 
-#, fuzzy
 #~ msgid "unsignauto"
 #~ msgstr "saini"
 
-#, fuzzy
 #~ msgid "Archived"
 #~ msgstr "nyaraka"
 
-#, fuzzy
 #~ msgid "Draft Translation"
 #~ msgstr "hifadhi tafsiri"
 
-#, fuzzy
 #~ msgid "Create Translation"
 #~ msgstr "hifadhi tafsiri"
 
 #~ msgid "Internal - visible to bungeni users"
 #~ msgstr "ya ndani - inayoonekana na watumiaji wa bungeni"
 
-#, fuzzy
 #~ msgid "Private"
 #~ msgstr "tangazo la kibinafsi"
 
-#, fuzzy
 #~ msgid "Published internal"
 #~ msgstr "tarehe ya machapisho"
 
-#, fuzzy
 #~ msgid "Public event"
 #~ msgstr "kuchapisha"
 
-#, fuzzy
 #~ msgid "Change office type"
 #~ msgstr "aina"
 
@@ -5755,22 +5606,18 @@ msgstr "mawaziri"
 #~ msgid "Browse"
 #~ msgstr "pekua"
 
-#, fuzzy
 #~ msgid "Current and historical records"
 #~ msgstr "upatikanaji wa rekodi za sasa na za kihistoria"
 
 #~ msgid "Visit the digital document repository"
 #~ msgstr "zuru makavazi ya hati"
 
-#, fuzzy
 #~ msgid "xapian settings"
 #~ msgstr "miongozo"
 
-#, fuzzy
 #~ msgid "Resurrect"
 #~ msgstr "matokeo"
 
-#, fuzzy
 #~ msgid "Name of the Assignment"
 #~ msgstr "jina la mkoa"
 
@@ -5789,7 +5636,6 @@ msgstr "mawaziri"
 #~ msgid "&larr;"
 #~ msgstr "←"
 
-#, fuzzy
 #~ msgid "User Unique"
 #~ msgstr "jina la mtumiaji"
 
@@ -5814,18 +5660,15 @@ msgstr "mawaziri"
 #~ msgid "Duplicate Value for Unique Field"
 #~ msgstr "nakala ya pointi kwa uwanja wa kipekee"
 
-#, fuzzy
 #~ msgid "The 'Add...' menu - for a Parliament's GroupSittingContainer"
 #~ msgstr "menyu ya 'ongeza ...' - kwa vikao vya kikundi "
 
 #~ msgid "Actions for Scheduling Discussions"
 #~ msgstr "vitendo vya majadiliano ya ratiba"
 
-#, fuzzy
 #~ msgid "Not a scheduling context"
 #~ msgstr "songesha ratiba chini"
 
-#, fuzzy
 #~ msgid "date must be of type datetime or date"
 #~ msgstr "mfumo wa tarehe lazima uwe tarehe pekee au siku na tarehe"
 
@@ -5874,22 +5717,18 @@ msgstr "mawaziri"
 #~ msgid "agendas/minutes"
 #~ msgstr "ajenda / kumbukumbu"
 
-#, fuzzy
 #~ msgid "The sections of a user's workspace"
 #~ msgstr "vitendo vya sehemu ya kazi"
 
-#, fuzzy
 #~ msgid " items"
 #~ msgstr "hakuna pointi"
 
 #~ msgid "Parliamentary items"
 #~ msgstr "pointi za bunge"
 
-#, fuzzy
 #~ msgid "My archive personal items"
 #~ msgstr "pointi katika nyaraka"
 
-#, fuzzy
 #~ msgid "permanent"
 #~ msgstr "asilimia"
 
@@ -5905,7 +5744,6 @@ msgstr "mawaziri"
 #~ msgid "P.O. Box"
 #~ msgstr "sanduku la posta"
 
-#, fuzzy
 #~ msgid "Military"
 #~ msgstr "wizara"
 
@@ -5921,11 +5759,9 @@ msgstr "mawaziri"
 #~ msgid "Written"
 #~ msgstr "lililoandikwa"
 
-#, fuzzy
 #~ msgid "Finalize Minutes"
 #~ msgstr "kumbukumbu"
 
-#, fuzzy
 #~ msgid "Approved"
 #~ msgstr "imekubaliwa"
 
@@ -6050,8 +5886,7 @@ msgstr "mawaziri"
 #~ msgstr "chagua aina ya marudio ya kila mwezi"
 
 #~ msgid ""
-#~ "Enter the number of times which the event should be repeated (as an "
-#~ "integer)"
+#~ "Enter the number of times which the event should be repeated (as an integer)"
 #~ msgstr "weka idadi ya nyakati ambazo tuko lazima lirudiwe (kama nambari)"
 
 #~ msgid "Repeat until date"
@@ -6064,8 +5899,8 @@ msgstr "mawaziri"
 #~ msgstr "isipokuwa"
 
 #~ msgid ""
-#~ "Events will not be scheduled at dates appearing in this field. Separate "
-#~ "with comma or newline. Format: YYYY/MM/DD"
+#~ "Events will not be scheduled at dates appearing in this field. Separate with"
+#~ " comma or newline. Format: YYYY/MM/DD"
 #~ msgstr ""
 #~ "matukio hayataratibiwa katika tarehe zinazoonekana katika uwanja huu. "
 #~ "tenganisha na koma au mstari mpya. jinsi: yyyy / mm / dd"
