@@ -31,8 +31,8 @@ class PersonalBarViewlet(common.PersonalBarViewlet):
                     'url': item.absolute_url(),
                     'title': item.title_or_id(),
                     'selected':self.context.absolute_url()} \
-                    for item in subcontext.objectValues()]
-        
+                    for item in subcontext.objectValues()
+                        if not item.exclude_from_nav()]      
         except IndexError:
             pass
         
