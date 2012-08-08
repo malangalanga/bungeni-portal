@@ -4,7 +4,8 @@
     <!--The comment below is required by deliverance proxy.-->
 	<!-- deliverance-proxy -->
 
-    <match path="regex:.*/(emptypage|image_view_fullscreen|)$" abort="1" />
+    <match path="regex:.*/(emptypage|image_view_fullscreen|addcontentselector)$"
+        abort="1" />
     <match path="regex:.*/(getContextSubMenu|translationbrowser_popup)$"
         abort="1" />
     <match path="regex:.*/(table.htm|ploneimage.htm|anchor.htm|plonelink.htm)$"
@@ -13,11 +14,7 @@
         abort="1" />
     <match path="regex:.*(.jpg|.png|.gif|.js|.css|.ico|.xml|.xsl)$" abort="1"/>
     <match path="regex:.*/(preview)$" abort="1" />                     
-    <match environ="QUERY_STRING: wildcard:headless=*" abort="1" />    
-    <match path="regex:.*/(addcontentselector)$"
-        abort="1" />   
-    <match path="regex:.*/(fullviewmindmap)$"
-        abort="1" />
+    <match environ="QUERY_STRING: wildcard:headless=*" abort="1" />      
     <match path="/plone/" class="load-plone-navigation" />
     <match path="regex:^/(workspace|business|members|archive|admin)/?"
         class="load-bungeni-navigation" />
