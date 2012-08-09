@@ -468,6 +468,22 @@ def stop_exist(mode="ABORT_ON_ERROR"):
     service = bungeni.Services()
     service.stop_service("exist", mode)
 
+def start_rabbitmq(mode="ABORT_ON_ERROR"):
+    """
+    Start the RabbitMQ
+    """
+
+    service = bungeni.Services()
+    service.start_service("rabbitmq", mode)
+
+def stop_rabbitmq(mode="ABORT_ON_ERROR"):
+    """
+    Stop the eXist
+    """
+
+    service = bungeni.Services()
+    service.stop_service("rabbitmq", mode)
+
 def start_monitor():
     """
     Start the supervisord service
@@ -662,6 +678,13 @@ def rabbitmq_install():
     #stop_rabbitmq("IGNORE_ERROR")
     tasks = bungeni.RabbitMQTasks()
     tasks.setup_rabbitmq()
+
+def rabbitmq_reset():
+    """
+    Purges all queues created for Bungeni.
+    """
+    tasks = bungeni.RabbitMQTasks()
+    tasks.rabbitmq_purge()
 
 def glue_install():
     """

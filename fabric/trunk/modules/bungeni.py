@@ -505,7 +505,7 @@ class Presetup:
         Installs the required erlang packages for RabbitMQ to work properly
         """
         sudo(self.ossent.get_install_method(self.osinfo.release_id)
-             + " erlang-base erlang-os-mon erlang-xmerl erlang-inets")
+             + " erlang-base erlang-os-mon erlang-xmerl erlang-inets openjdk-6-jre")
 
     def build_py27(self):
         """
@@ -848,6 +848,8 @@ class Services:
 
     def start_service(self, service, mode = "ABORT_ON_ERROR"):
         service_map = self.service_map.copy()
+        if service == "exist":
+            self.exist_cleanup()
         service_map["service"] = service
         output = run("%(supervisorctl)s -c %(supervisorconf)s start %(service)s"
             % service_map)
@@ -857,6 +859,39 @@ class Services:
             else:
                 print("Unable to start service " + service)
 
+    def service_status(self, service):
+        """
+        Requests status of a service and returns pid OR zero if its not running
+        """
+        service_map = self.service_map.copy()
+        service_map["service"] = service
+        output = run("%(supervisorctl)s -c %(supervisorconf)s pid %(service)s" % service_map)
+        return output
+
+    def exist_cleanup(self):
+        """
+        Cleanup any stale *.lck files and before starting eXist service
+        """
+        srv_status = self.service_status("exist")
+        # ensure eXist service is not running and check for .lck files
+        if srv_status == "0":
+            lck_files = False
+            import os
+            for r,d,f in os.walk("%(user_exist)s/webapp/WEB-INF/data" % {"user_exist":self.cfg.user_exist}):
+                for files in f:
+                    if files.endswith(".lck") or files.endswith(".lock") or files.endswith(".log"):
+                        lck_files = True
+                        print os.path.join(r,files)
+            if lck_files == True:
+                print "Found stale *.lck files. Cleaning up..."
+                # may add an option to initialize backup and consitency check procedures
+                run("find %(user_exist)s/webapp/WEB-INF/data -type f \( -name '*.lck' -o -name '*.lock' \) -exec rm -rf {} \;"  
+                % {"user_exist":self.cfg.user_exist})
+                print "Done."
+            else:
+                pass
+        else:
+            pass
 
     def stop_service(self, service, mode = "ABORT_ON_ERROR"):
         service_map = self.service_map.copy()
@@ -1804,7 +1839,16 @@ class RabbitMQTasks:
                          {"user_rabbitmq":self.cfg.user_rabbitmq,
                           "rabbitmq_download_file":self.cfg.rabbitmq_download_file})
             with cd(self.cfg.user_rabbitmq + "/sbin"):
-                run("./rabbitmq-plugins enable rabbitmq_management")
+                run("./rabbitmq-plugins enable rabbitmq_management rabbitmq_management_visualiser")
+
+    def rabbitmq_purge(self):
+        """
+        Resets all the queues created for Bungeni operations
+        """
+        with cd(self.cfg.user_rabbitmq + "/sbin"):
+            run("./rabbitmqctl stop_app")
+            run("./rabbitmqctl reset")
+            run("./rabbitmqctl start_app")
 
 class GlueScriptTasks:
     """
