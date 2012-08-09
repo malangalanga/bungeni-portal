@@ -20,6 +20,11 @@
     <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'top']">
     <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
     </span>
+    
+    <span tal:omit-tag="" tal:condition="python:here.getTocType() == 'drop'">    
+        <div metal:use-macro="here/referencemanual_macros/macros/jump_box"/>
+    </span>
+    
     <h1 class="documentFirstHeading">
         <span tal:replace="numbering" tal:condition="python:here.getNavType() == 'yes'">1.2.</span>
         <span tal:replace="here/Title">Title</span>
@@ -29,48 +34,45 @@
       Identity Image 
     </div>
 
-    <span tal:omit-tag="" tal:condition="python:here.getTocType() == 'drop'">    
-        <div metal:use-macro="here/referencemanual_macros/macros/jump_box"/>
-    </span>
     <span tal:omit-tag="" tal:condition="python:here.getTocType() == 'box'">
     <div class="visualClear">&nbsp;</div>
 
     <tal:block define="fullToc python:here.getTOC(current = context.aq_parent);
                        tocInfo python:here.getTOCInfo(fullToc);
                    toc  python:tocInfo['localTOC'] or fullToc;">
-    
-	<div metal:define-slot="sectiontoc">
-    <div class="stoc"
-         tal:define="parent python:context.aq_parent">
+        
+        <div metal:define-slot="sectiontoc">
+        <div class="stoc"
+             tal:define="parent python:context.aq_parent">
 
-    <div class="portalMessage"
-         tal:condition="python:here.portal_workflow.getInfoFor(here, 'review_state') != 'published'"
-         i18n:translate="must_publish_before_visible_to_public">
-      You must publish this page before it becomes visible to the public.
-    </div>
+        <div class="portalMessage"
+             tal:condition="python:here.portal_workflow.getInfoFor(here, 'review_state') != 'published'"
+             i18n:translate="must_publish_before_visible_to_public">
+          You must publish this page before it becomes visible to the public.
+        </div>
 
-     
-    <table>
-        <tr>
-                <td valign="top" tal:condition="python:len(toc)">                   
-                <span tal:content="python:toc[0]['numbering'][:-3]" tal:condition="python:here.getNavType() == 'yes'" ></span>
-                <span tal:condition="python:here.getNavType() == 'yes'" >:</span>
-                </td>
-                <td valign="top">                                     
-      <!--<a href="" tal:attributes="href parent/absolute_url">-->
-        <span tal:content="string:${parent/Title}"/>
-      <!--</a>-->
-      <p class="pmargin">
-           <span tal:replace="parent/Description">Description</span>
-      </p>        
-        <metal:recursion use-macro="here/referencemanual_macros/macros/float_toc"/>
-      </td>
-        </tr>
-    </table>
+         
+        <table>
+            <tr>
+                    <td valign="top" tal:condition="python:len(toc)">                   
+                    <span tal:content="python:toc[0]['numbering'][:-3]" tal:condition="python:here.getNavType() == 'yes'" ></span>
+                    <span tal:condition="python:here.getNavType() == 'yes'" >:</span>
+                    </td>
+                    <td valign="top">                                     
+          <!--<a href="" tal:attributes="href parent/absolute_url">-->
+            <span tal:content="string:${parent/Title}"/>
+          <!--</a>-->
+          <p class="pmargin">
+               <span tal:replace="parent/Description">Description</span>
+          </p>        
+            <metal:recursion use-macro="here/referencemanual_macros/macros/float_toc"/>
+          </td>
+            </tr>
+        </table>
 
-    </div>
-	</div>
-            
+        </div>
+        </div>
+                
     </tal:block>
     </span>
 
@@ -83,7 +85,7 @@
     </div>
     </span>
         
-    <div tal:replace="structure here/getBody"/>
+    <div tal:replace="structure here/getText"/>
 
 
     <div tal:repeat="subpage subpages">
@@ -100,7 +102,7 @@
                width="16"
                title="Edit subpage"/>
         </a>
-        <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template_id};
+        <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template/getId};
                                  here python: subpage;
                                  here_url string:${here/absolute_url};
                                  object_title here/Title">                    
@@ -118,9 +120,7 @@
     <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
     </span>
 
-    <div metal:use-macro="here/document_byline/macros/byline">
-      Get the byline - contains details about author and modification date.
-    </div>
+    <div tal:replace="structure provider:plone.belowcontenttitle"/>
 
     </div>
   
