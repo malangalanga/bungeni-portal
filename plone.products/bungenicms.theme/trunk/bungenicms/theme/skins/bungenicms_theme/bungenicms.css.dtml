@@ -33,19 +33,11 @@ h1, h2 {
   color: #C8631B;
 }
 
-a span.hovertooltip {
-  display: none;
-}
- 
 a:hover {
   background-color: #EEEEEE;
 }
 
-/* The above hover change defeats the
-  IE/Win display changing bug */
 a:hover span.hovertooltip {
-  position: absolute;
-  display: block;
   background: #f4e0b5;
   border: 1px solid #FBAE0A;
   color: #6A0803;

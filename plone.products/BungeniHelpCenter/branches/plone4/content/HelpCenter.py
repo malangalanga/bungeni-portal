@@ -344,14 +344,10 @@ class BungeniHelpCenterReferenceManual(BrowserDefaultMixin,
         if length <= max_pos:
             return s + suffix
         else:
-            # Case 2: Return it to nearest period if possible
-            try:
-                end = s.rindex('.',min_pos,max_pos)
-            except ValueError:
-                # Case 3: Return string to nearest space
-                end = s.rfind(' ',min_pos,max_pos)
-                if end == NOT_FOUND:
-                    end = max_pos
+            # Case 2: Return string to nearest space
+            end = s.rfind(' ',min_pos,max_pos)
+            if end == NOT_FOUND:
+                end = max_pos
             return s[0:end] + suffix
 
     security.declareProtected(CMFCorePermissions.View, 'getTOC')
