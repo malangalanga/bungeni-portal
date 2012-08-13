@@ -992,7 +992,9 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="election_date" displayable="view edit add listing" />
+        <field name="election_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
         <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
         </field>
@@ -1370,14 +1372,13 @@
             <show modes="listing" />
         </field>
         <field name="salutation" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add" />
-            <show modes="listing" />
+            <show modes="view edit add listing" />
         </field>
         <field name="title" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add" />
-            <show modes="listing" />
+            <show modes="view edit add listing" />
         </field>
-        <field name="first_name" displayable="view edit add listing" localizable="view edit listing">
+        <field name="first_name" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
@@ -1385,48 +1386,53 @@
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="last_name" displayable="view edit add listing" localizable="view edit listing">
+        <field name="last_name" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="email" displayable="view edit add listing" localizable="view edit listing">
+        <field name="email" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit" />
             <show modes="listing" />
         </field>
-        <field name="login" displayable="view add listing" localizable="view listing">
+        <field name="login" displayable="view add listing" localizable="view add listing">
+            <show modes="add" />
             <show modes="view" />
             <hide modes="listing" />
         </field>
-        <field name="_password" displayable="add" />
+        <field name="_password" displayable="add" localizable="add">
+            <show modes="add" />
+        </field>
         <field name="national_id" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="gender" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
+        <field name="gender" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
             <show modes="listing" />
         </field>
-        <field name="date_of_birth" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
+        <field name="date_of_birth" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
             <show modes="listing" />
         </field>
-        <field name="birth_country" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
+        <field name="birth_country" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="birth_nationality" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
+        <field name="birth_nationality" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="current_nationality" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
+        <field name="current_nationality" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
             <hide modes="listing" />
         </field>
         <field name="marital_status" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
         </field>
-        <field name="date_of_death" displayable="view edit add listing" localizable="view add listing">
-            <show modes="view" />
+        <field name="date_of_death" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit" />
             <hide modes="add listing" />
         </field>
         <field name="image" displayable="view edit add" localizable="view edit add">
