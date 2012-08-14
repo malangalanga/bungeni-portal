@@ -20,6 +20,11 @@
     <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'top']">
     <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
     </span>
+    
+    <span tal:omit-tag="" tal:condition="python:here.getTocType() == 'drop'">    
+        <div metal:use-macro="here/referencemanual_macros/macros/jump_box"/>
+    </span>
+    
     <h1 class="documentFirstHeading">
         <span tal:replace="numbering" tal:condition="python:here.getNavType() == 'yes'">1.2.</span>
         <span tal:replace="here/Title">Title</span>
@@ -29,9 +34,6 @@
       Identity Image 
     </div>
 
-    <span tal:omit-tag="" tal:condition="python:here.getTocType() == 'drop'">    
-        <div metal:use-macro="here/referencemanual_macros/macros/jump_box"/>
-    </span>
     <span tal:omit-tag="" tal:condition="python:here.getTocType() == 'box'">
     <div class="visualClear">&nbsp;</div>
 
