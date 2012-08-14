@@ -10,8 +10,9 @@
                    tocInfo python:here.getTOCInfo(fullToc);
                    currentIdx tocInfo/currentIdx|nothing;
                    tocList    tocInfo/tocList;
-                   currentInfo    python:currentIdx and tocList[currentIdx] or here;
-                   toc     tocInfo/localTOC|nothing">
+                   current    python:currentIdx and tocList[currentIdx] or here;
+                   numbering  current/numbering|nothing;
+                   toc     tocInfo/localTOC|nothing">               
 
     <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'top']">
     <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
@@ -29,8 +30,7 @@
     </div>
 
     <h1 class="documentFirstHeading">
-        
-        <!--<span tal:content="currentInfo/numbering"></span>-->
+        <span tal:replace="python:here.castNav(numbering)" tal:condition="python:here.getNavType() == 'yes'">1.2.</span>
         <span tal:replace="here/Title">Title</span>
     </h1>
     

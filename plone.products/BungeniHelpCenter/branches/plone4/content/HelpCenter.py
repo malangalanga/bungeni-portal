@@ -420,6 +420,18 @@ class BungeniHelpCenterReferenceManual(BrowserDefaultMixin,
                 str=str+"."+roman.toAlpha(int(number))
         if str:
             return str[1:]
+            
+    def castNav(self, numbering):
+        """Cast navigation to either Roman or Alpha
+           depending on view selected on the ReferenceManual. 
+        """        
+        layout_tmpl = self.getLayout()
+        if layout_tmpl == "referencemanual_view_letter":
+            return self.toAlpha(numbering)
+        elif layout_tmpl == "referencemanual_view_roman":
+            return self.toRoman(numbering)
+        else:
+            return numbering            
 
 registerType(BungeniHelpCenterReferenceManual, PROJECTNAME)
 

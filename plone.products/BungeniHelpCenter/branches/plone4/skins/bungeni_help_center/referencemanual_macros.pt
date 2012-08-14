@@ -77,12 +77,20 @@
     <table tal:condition="toc | nothing">
         <tr tal:repeat="tocElement toc">
             <tal:item define="item tocElement/item">
-                <td valign="top">                   
+                <td valign="top" class="portlet-toc-item">           
                 <span tal:content="python:here.toRoman(tocElement['numbering'])" tal:condition="python:here.getNavType() == 'yes'"></span>
                 </td>
-                <td valign="top">                   
-                <a href="" tal:attributes="href item/getURL">
-                <span tal:content="string:${item/Title}"/></a>
+                <td valign="top"> 
+                <div>                     
+                <a href="" tal:attributes="href item/getURL" class="sectionurl" >
+                <span tal:content="python:here.trunc(item.Title)"/>
+                <span tal:content="item/Title"
+                      class="hovertooltip"
+                      tal:condition="python:len(item.Title) > len(here.trunc(item.Title))"/>
+                </a>
+                </div>  
+                <p class="pmargin"><span tal:replace="item/Description">Description</span></p>
+                
                     <tal:block define="toc tocElement/children">
                         <metal:recursion use-macro="here/referencemanual_macros/macros/section_toc_roman"/>
                     </tal:block>
@@ -103,8 +111,15 @@
                 <span tal:content="python:here.toAlpha(tocElement['numbering'])" tal:condition="python:here.getNavType() == 'yes'"></span>
                 </td>
                 <td valign="top">                   
-                <a href="" tal:attributes="href item/getURL">
-                <span tal:content="string:${item/Title}"/></a>
+                <div>                     
+                <a href="" tal:attributes="href item/getURL" class="sectionurl" >
+                <span tal:content="python:here.trunc(item.Title)"/>
+                <span tal:content="item/Title"
+                      class="hovertooltip"
+                      tal:condition="python:len(item.Title) > len(here.trunc(item.Title))"/>
+                </a>
+                </div>  
+                <p class="pmargin"><span tal:replace="item/Description">Description</span></p>
                     <tal:block define="toc tocElement/children">
                         <metal:recursion use-macro="here/referencemanual_macros/macros/section_toc_alpha"/>
                     </tal:block>
@@ -358,7 +373,7 @@
            tabindex="1"
            href="">
             <img tal:replace="structure here/arrowLeft.gif" />
-            <span tal:replace="python:tocList[prevIdx]['numbering']" tal:condition="python:here.getNavType() == 'yes'"/>
+            <span tal:replace="python:here.castNav(tocList[prevIdx]['numbering'])" tal:condition="python:here.getNavType() == 'yes'"/>
             <span tal:content="python:here.trunc(prev.Title)" /><span tal:content="prev/Title" class="hovertooltip" tal:condition="python:len(prev.Title) > len(here.trunc(prev.Title))"/>
        </a>
 </tal:item>    
@@ -374,7 +389,7 @@
            tal:attributes="href next/getURL"
            tabindex="1"
            href="">
-            <span tal:replace="python:tocList[nextIdx]['numbering']" tal:condition="python:here.getNavType() == 'yes'"/>
+            <span tal:replace="python:here.castNav(tocList[nextIdx]['numbering'])" tal:condition="python:here.getNavType() == 'yes'"/>
             <span tal:content="python:here.trunc(next.Title)" /> <span tal:content="next/Title" class="hovertooltip" tal:condition="python:len(next.Title) > len(here.trunc(next.Title))"/> 
            <img tal:replace="structure here/arrowRight.gif" />
        </a>   
