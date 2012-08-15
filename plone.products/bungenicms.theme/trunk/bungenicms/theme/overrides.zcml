@@ -8,7 +8,14 @@
         manager="plone.app.layout.viewlets.interfaces.IPortalTop"
         class=".navigation.PersonalBarViewlet"
         permission="zope2.View" 
-    />    
+    />  
+    
+    <browser:viewlet
+        name="bungenicms.path_bar"
+        manager="plone.app.layout.viewlets.interfaces.IAboveContent"
+        class=".navigation.PathBarViewlet"
+        permission="zope2.View" 
+    />             
 
   <!-- Override next/previous links for folders -->
     <adapter

@@ -12,7 +12,7 @@
     <viewlet name="plone.global_sections" />
   </order>
   <order manager="plone.abovecontent" skinname="Bungeni CMS theme">
-    <viewlet name="plone.path_bar" />
+    <viewlet name="bungenicmstheme.path_bar" />
   </order>
   <order manager="plone.contentviews" skinname="Bungeni CMS theme">
     <viewlet name="plone.contentviews" />
@@ -36,5 +36,9 @@
   <hidden manager="plone.portalheader" skinname="Bungeni CMS theme">
     <viewlet name="plone.personal_bar"/>
   </hidden>
+  
+  <hidden manager="plone.abovecontent" skinname="Bungeni CMS theme">
+    <viewlet name="plone.path_bar"/>
+  </hidden>    
   
 </object>

@@ -80,7 +80,7 @@
                 <td valign="top" class="portlet-toc-item">           
                 <span tal:content="python:here.toRoman(tocElement['numbering'])" tal:condition="python:here.getNavType() == 'yes'"></span>
                 </td>
-                <td valign="top"> 
+                <td valign="top" class="portlet-toc-item"> 
                 <div>                     
                 <a href="" tal:attributes="href item/getURL" class="sectionurl" >
                 <span tal:content="python:here.trunc(item.Title)"/>
@@ -110,7 +110,7 @@
                 <td valign="top">                   
                 <span tal:content="python:here.toAlpha(tocElement['numbering'])" tal:condition="python:here.getNavType() == 'yes'"></span>
                 </td>
-                <td valign="top">                   
+                <td valign="top" class="portlet-toc-item">                   
                 <div>                     
                 <a href="" tal:attributes="href item/getURL" class="sectionurl" >
                 <span tal:content="python:here.trunc(item.Title)"/>
