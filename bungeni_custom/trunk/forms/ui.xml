@@ -1396,7 +1396,10 @@
     </descriptor>
 
     <descriptor name="user_delegation" order="3">
-        <field name="delegation_id" displayable="view edit add listing" />
+        <field name="delegation_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
+            <show modes="view edit listing" />
+        </field>
     </descriptor>
 
     <descriptor name="user" order="4">
