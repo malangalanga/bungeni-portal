@@ -19,7 +19,16 @@
         manager="plone.leftcolumn"
         category="context"
         key="/"
-    />  
+    />
+    
+    <!-- Removing the news portlet from the right bar -->         
+    <assignment name="news"  
+        remove="true"     
+        manager="plone.rightcolumn"
+        category="context"
+        key="/"
+        type="portlets.News"
+     />      
     
     <!-- Removing the calendar portlet from the right bar -->         
     <assignment name="calendar"  

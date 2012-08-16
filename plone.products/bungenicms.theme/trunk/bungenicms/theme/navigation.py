@@ -26,11 +26,15 @@ class PersonalBarViewlet(common.PersonalBarViewlet):
         try:
             parents = self.aq_parent.aq_inner.aq_chain
             subcontext = parents[-4]
+            if len(parents) > 6:
+                selected_url = parents[-5].absolute_url()
+            else:
+                selected_url = self.context.absolute_url()            
             if IFolderish.providedBy(subcontext):
                 self.subcontext = [{
                     'url': item.absolute_url(),
                     'title': item.title_or_id(),
-                    'selected':self.context.absolute_url()} \
+                    'selected':selected_url} \
                     for item in subcontext.objectValues()
                         if not item.exclude_from_nav()]      
         except IndexError:
