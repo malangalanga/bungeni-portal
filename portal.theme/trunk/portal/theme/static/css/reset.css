@@ -798,12 +798,12 @@ dd#items-to-be-scheduled-dl .formPanel {
 dl.portalMessage dt {
 	height:15px !important;
 	line-height: 15px !important;
-	padding: 0 .5em 0 .5em !important;
+	padding: 0 .5em 0 .5em;
 }
 #alchemist-form dl.portalMessage dt {
 	height:15px !important;
 	line-height: 15px !important;
-	padding:0 1em .3em 1em !important;
+	padding:0 1em .3em 1em;
 }
 dl.portalMessage dd {
     padding: 0 !important;
@@ -1608,13 +1608,19 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
     width:99.5%;
 }
 .template-workspace.section-bungeni-admin dl.portalMessage {
-    margin-top:-25px !important;
-    margin-bottom:25px !important;
+    /*margin-top:-25px !important;*/
+    /*margin-bottom:25px !important;*/
     float:left;
     margin-left:0.2%;
     height:15px;
     clear:both;
-    width:85%;
+    width:99.6%;
+}
+.template-workspace.section-bungeni-admin dl.portalMessage dt {
+    padding-bottom:0 !important;
+}
+.template-workspace.section-bungeni-admin .formPanel div.field.even {
+    clear:both;
 }
 .template-workspace.section-bungeni-workspace dl.portalMessage {
     margin:0 auto;
@@ -1804,6 +1810,28 @@ div.overlay div.close span {
 
 /* scheduler layout
 -------------------------------------------------------------- */
+.documentContent #scheduler-layout ul.yui-nav {
+    margin: 0.5em 0 1em .6em !important;
+}
+
+.documentContent #scheduler-layout .schedule-available-item-filters {
+    margin: 0.2em 0em;
+    padding: 0.2em 0 !important;
+}
+
+.yui-dt.yui-dt-scrollable {
+    width:100% !important;
+}
+
+.yui-dt-hd table,
+.yui-dt-bd table {
+    width:100% !important;
+}
+
+.yui-skin-sam #scheduler-layout .yui-button:first-child {
+    margin: auto .25em auto .1em !important;
+}
+
 #text-records-dialog table {
     width:auto;
     margin-left:0;
@@ -1823,7 +1851,7 @@ div.overlay div.close span {
 }
 .yui-skin-sam #text-records-dialog .yui-dt-liner,
 .yui-skin-sam #scheduler-layout .yui-dt-liner {
-    padding: 4px 4px 4px 10px !important;
+    padding: 0 4px 0 10px !important;
 }
 .yui-skin-sam #text-records-dialog .yui-dt-first th,
 .yui-skin-sam #scheduler-layout .yui-dt-first th {
@@ -1849,7 +1877,7 @@ div.overlay div.close span {
 }
 .yui-skin-sam #scheduler-layout .yui-split-button button, 
 .yui-skin-sam #scheduler-layout .yui-menu-button button {
-    padding-right: 20px;
+    padding-right: 15px;
 }
 .yui-skin-sam #scheduler-layout .yui-dt0-col-row_controls {
     max-width:115px !important;
