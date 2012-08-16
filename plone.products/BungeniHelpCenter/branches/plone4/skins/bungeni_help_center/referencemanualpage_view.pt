@@ -17,12 +17,12 @@
 
 
     
-    <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'top']">
-    <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
-    </span>
-    
     <span tal:omit-tag="" tal:condition="python:here.getTocType() == 'drop'">    
         <div metal:use-macro="here/referencemanual_macros/macros/jump_box"/>
+    </span>
+    
+    <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'top']">
+        <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
     </span>
     
     <h1 class="documentFirstHeading">
