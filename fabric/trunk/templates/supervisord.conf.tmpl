@@ -83,6 +83,7 @@ priority = 40
 redirect_stderr = true
 stopsignal = INT
 autostart = false
+autorestart=false
 
 [program:rabbitmq]
 command = %(user_rabbitmq)s/sbin/rabbitmq-server
