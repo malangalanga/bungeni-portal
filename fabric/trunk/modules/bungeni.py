@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import with_statement
 import os
+import cgi
+import inspect
+from fabric import state
 from fabric.api import *
 from fabric.colors import red, green
 from fabric.contrib.files import exists
@@ -676,6 +679,42 @@ class Presetup:
         run("mkdir -p %s" % self.cfg.user_pid)
         self.templates.new_file("supervisord.conf.tmpl", template_map,
                                 self.cfg.user_config)
+                                
+
+    def supervisor_docs(self):
+        """
+        Include fabric commands into supervisor services status page
+        """
+        sup_pycfg = PythonConfigs(self.cfg,"supervisor")
+        python_bin = sup_pycfg.python
+        supervisor_path = run(
+            "%s -c 'import supervisor;print supervisor.__path__[0]'" % python_bin
+        )
+        if not os.path.exists(supervisor_path):
+            print red("No supervisor install found - skipping docs setup ")
+            return
+        utils = Utils()
+        command_docs = u""
+        commands = list(state.commands.iteritems())
+        commands = sorted(commands, 
+            key=lambda command: command[1].func_code.co_firstlineno
+        )
+        for count, (key, command) in enumerate(commands):
+            tr_class = "shade" if (count % 2) else ""
+            command_docs = (command_docs + 
+                u"<tr class='%s'><td>%s</td><td>%s</td><td>%s</td></tr>" %(
+                    tr_class, key, cgi.escape(command.__doc__ or "&mdash;"),
+                    "&nbsp;&nbsp;".join(inspect.getargspec(command).args)
+                )
+            )
+            
+        self.templates.new_file("status.html.tmpl",
+            { 
+                "fabric_commands_docs": command_docs, 
+                "fabric_home": utils.get_fab_path()
+            },
+            os.path.join(supervisor_path, "ui")
+        )
 
     def required_pylibs(self):
         """

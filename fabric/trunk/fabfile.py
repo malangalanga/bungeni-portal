@@ -169,6 +169,7 @@ def config_supervisord():
 
     pre = bungeni.Presetup()
     pre.supervisord_config()
+    pre.supervisor_docs()
 
 
 def install_bungeni_custom():
@@ -184,7 +185,8 @@ def install_bungeni_custom():
 
 def config_ini(which_ini):
     """
-    Config deployment ini files : bungeni, plone, portal
+    Config deployment ini files : options (bungeni, plone, portal).
+    Example: run ./fl config_ini:bungeni
     """
 
     tasks = None
@@ -374,6 +376,8 @@ def bungeni_check():
 def start_service(service_name):
     """
     Starts a named service
+    Example - to start bungeni: ./fl start_service:bungeni
+    Other services are listed above (Supervisor status page)
     """
 
     service = bungeni.Services()
@@ -383,6 +387,8 @@ def start_service(service_name):
 def stop_service(service_name):
     """
     Stops a named service
+    Example - to stop postgres: ./fl stop_service:postgres
+    Other services are listed above (Supervisor status page)
     """
 
     service = bungeni.Services()
@@ -523,6 +529,7 @@ def __db_load_services_start():
 def db_dump_data(to_path):
     """
     Dumps the bungeni db data
+    Example: ./fl db_dump_data:/home/undesa/db-dump.txt
     """
 
     tasks = bungeni.BungeniTasks()
@@ -742,5 +749,8 @@ def exist_presetup():
     bungenipre.pyinotify()
 
 def exist_java_home():
+    """
+    Prints out the install location of the Java used by eXist
+    """
     cfgs = bungeni.BungeniConfigs()
     print cfgs.java_home
