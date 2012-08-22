@@ -1458,7 +1458,7 @@ div.dhx_cal_navline div.active {
     background: #abdae4;
     border: 1px solid #ccc;
     border-bottom: 0 none;
-    border-top: 0 none;
+    border-top: 0 none; 
 }
 .section-bungeni-workspace .actionMenu .actionMenuContent ul li a {
     color: #000 !important;
@@ -1777,6 +1777,103 @@ div.dhx_cal_navline div.active {
 .template-workspace .portlet ul.contentViewsLeftPort li a:hover {
     background-color:#21a1ba !important;
     color:#fff !important;
+}
+
+/* scheduler layout
+-------------------------------------------------------------- */
+.yui-skin-sam  #scheduler-layout.yui-layout .yui-layout-hd {
+    background: #147b92 url(/static/images/content-actions-bg.png) repeat-x top left;
+    border: 1px solid gray;
+    color: white !important;
+}
+
+.yui-skin-sam #yui-gen1 .yui-dt table tr.yui-dt-even,
+.yui-skin-sam #yui-gen1 .yui-dt table tr.yui-dt-odd {
+    background: #fff;
+}
+
+.yui-skin-sam #scheduler-layout .yui-layout-unit .yui-resize-handle-r {
+    background-color: #f79f0e;
+    border:1px solid gray;
+}
+.yui-skin-sam #scheduler-layout.yui-layout .yui-resize-proxy div {
+    border: 1px solid gray;
+    background-color: #f79f0e;
+}
+.yui-skin-sam #scheduler-layout .yui-dt table tr td {
+    border-right: 1px solid inherit !important;
+}
+
+.yui-skin-sam #scheduler-layout .yui-menu-button-hover,
+.yui-skin-sam #scheduler-layout .yui-button-button-hover,
+.yui-skin-sam #scheduler-layout .yui-nav li a:hover { 
+    background:#fff;
+}
+
+.yui-skin-sam #text-records-dialog .yui-navset .yui-nav, 
+.yui-skin-sam #text-records-dialog .yui-navset .yui-navset-top .yui-nav,
+.yui-skin-sam #scheduler-layout .yui-navset .yui-nav, 
+.yui-skin-sam #scheduler-layout .yui-navset .yui-navset-top .yui-nav {
+    border-bottom: solid #147b92;
+}
+.yui-skin-sam #text-records-dialog .yui-navset .yui-nav .selected a, 
+.yui-skin-sam #text-records-dialog .yui-navset .yui-nav .selected a:focus, 
+.yui-skin-sam #text-records-dialog .yui-navset .yui-nav .selected a:hover,
+.yui-skin-sam #scheduler-layout .yui-navset .yui-nav .selected a, 
+.yui-skin-sam #scheduler-layout .yui-navset .yui-nav .selected a:focus, 
+.yui-skin-sam #scheduler-layout .yui-navset .yui-nav .selected a:hover {
+    background: #147b92 url(/static/images/content-actions-bg.png) repeat-x top left;
+    color: white;
+}
+.yui-skin-sam #text-records-dialog .yui-dt table tr td,
+.yui-skin-sam #scheduler-layout .yui-dt table tr td,
+.yui-skin-sam #text-records-dialog .yui-dt-first th,
+.yui-skin-sam #scheduler-layout .yui-dt-first th {
+    border-left: 1px solid #147b92;
+    border-right: 1px solid #147b92;
+}
+
+.yui-skin-sam #text-records-dialog tr.yui-dt-selected td, 
+.yui-skin-sam #text-records-dialog tr.yui-dt-selected td.yui-dt-asc, 
+.yui-skin-sam #text-records-dialog tr.yui-dt-selected td.yui-dt-desc,
+.yui-skin-sam #scheduler-layout tr.yui-dt-selected td, 
+.yui-skin-sam #scheduler-layout tr.yui-dt-selected td.yui-dt-asc, 
+.yui-skin-sam #scheduler-layout tr.yui-dt-selected td.yui-dt-desc {
+    background-color: #21a1ba !important;
+    color: white;
+}
+.yui-skin-sam #scheduler-layout th.yui-dt-highlighted,
+.yui-skin-sam #scheduler-layout th.yui-dt-highlighted a {
+    background-color:#abdae4;
+}
+.yui-skin-sam #scheduler-layout tr.yui-dt-highlighted,
+.yui-skin-sam #scheduler-layout tr.yui-dt-highlighted td.yui-dt-asc,
+.yui-skin-sam #scheduler-layout tr.yui-dt-highlighted td.yui-dt-desc,
+.yui-skin-sam #scheduler-layout tr.yui-dt-even td.yui-dt-highlighted,
+.yui-skin-sam #scheduler-layout tr.yui-dt-odd td.yui-dt-highlighted{ 
+    cursor:pointer;
+    background-color:#abdae4;
+ }
+.yui-skin-sam #scheduler-layout .yui-dt-list th.yui-dt-highlighted,
+.yui-skin-sam #scheduler-layout .yui-dt-list th.yui-dt-highlighted a {
+    background-color:#abdae4;
+ }
+.yui-skin-sam #scheduler-layout .yui-dt-list tr.yui-dt-highlighted,
+.yui-skin-sam #scheduler-layout .yui-dt-list tr.yui-dt-highlighted td.yui-dt-asc,
+.yui-skin-sam #scheduler-layout .yui-dt-list tr.yui-dt-highlighted td.yui-dt-desc,
+.yui-skin-sam #scheduler-layout .yui-dt-list tr.yui-dt-even td.yui-dt-highlighted,
+.yui-skin-sam #scheduler-layout .yui-dt-list tr.yui-dt-odd td.yui-dt-highlighted { 
+    cursor:pointer;
+    background-color:#abdae4;
+}
+
+.yui-skin-sam .yui-button-focus,
+.yui-skin-sam .yui-button-hover { 
+    background:#abdae4;border-color:#21a1ba;
+ }
+.yui-skin-sam #scheduler-layout .yui-button-hover { 
+    background:#abdae4;
+    border-color:#21a1ba;
 }
 
 /* =============================================================================

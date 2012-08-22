@@ -146,6 +146,7 @@ div#portal-globalnav ul.level0 {
     width: auto;
     white-space: nowrap;
     line-height: 20px;
+    bottom:0;
 }
 div#portal-globalnav ul.level0 li {
     position: relative;
@@ -189,6 +190,7 @@ div#portal-globalnav ul.level0 li a:hover {
 div#portal-globalnav ul.level1 {
     position: absolute;
     top:2.2em;
+    left:0px;
     height: 18px;
     margin: 0 0 0 0;
     width: 100%;
@@ -798,12 +800,12 @@ dd#items-to-be-scheduled-dl .formPanel {
 dl.portalMessage dt {
 	height:15px !important;
 	line-height: 15px !important;
-	padding: 0 .5em 0 .5em;
+	padding: 0 .5em 0 .5em !important;
 }
 #alchemist-form dl.portalMessage dt {
 	height:15px !important;
 	line-height: 15px !important;
-	padding:0 1em .3em 1em;
+	padding:0 1em .3em 1em !important;
 }
 dl.portalMessage dd {
     padding: 0 !important;
@@ -1181,13 +1183,13 @@ div.main-column #collage h2 {
 }
 .template-portal #header-in-left {
     margin: 0;
-    width:20%;
+    width:30%;
     height:133px;
     float:left;
 }
 .template-portal #header-in-right {
     margin: 0;
-    width:20%;
+    width:30%;
     height:133px;
     float:right;
 }
@@ -1227,8 +1229,8 @@ div.main-column #collage h2 {
 }
 .template-portal #portal-logo {
     display: block;
-    margin: .5em 0 0 0;
-    height: 105px;
+    margin: 5px 0 0 0;
+    height: 106px;
 }
 .template-portal a#portal-logo img.ws-left,.template-portal a#portal-logo img.ws-right {
 	display:none;
