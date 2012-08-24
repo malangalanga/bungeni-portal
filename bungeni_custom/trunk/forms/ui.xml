@@ -237,13 +237,14 @@
         <field name="description" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
-        <field name="identifier" displayable="view edit add" localizable="view edit">
-            <show modes="view edit" />
+        <field name="identifier" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
         </field>
-        <field name="sub_type" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+        <field name="sub_type" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
         </field>
-        <field name="group_continuity" displayable="view edit add listing" localizable="view edit listing">
+        <field name="group_continuity" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit listing" />
         </field>
         <field name="num_members" displayable="view edit add listing" localizable="view edit add listing">
@@ -607,24 +608,26 @@
     </descriptor>
 
     <descriptor name="group_address">
-        <field name="logical_address_type" displayable="view edit add listing" localizable="view edit listing">
+        <field name="logical_address_type" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="postal_address_type" displayable="view edit add listing" localizable="view edit listing">
+        <field name="postal_address_type" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="street" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
+        <field name="street" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="city" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+        <field name="city" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
         </field>
-        <field name="zipcode" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+        <field name="zipcode" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
         </field>
-        <field name="country_id" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+        <field name="country_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
         </field>
         <field name="phone" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
@@ -1001,14 +1004,15 @@
     </descriptor>
 
     <descriptor name="parliament" order="1">
-        <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
+        <field name="full_name" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="short_name" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
-        </field>
-        <field name="identifier" displayable="view edit add" localizable="view edit">
-            <show modes="view edit" />
+        <field name="identifier" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="add" />
@@ -1372,24 +1376,26 @@
     </descriptor>
 
     <descriptor name="user_address">
-        <field name="logical_address_type" displayable="view edit add listing" localizable="view edit listing">
+        <field name="logical_address_type" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="postal_address_type" displayable="view edit add listing" localizable="view edit listing">
+        <field name="postal_address_type" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="street" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
+        <field name="street" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="city" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+        <field name="city" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
         </field>
-        <field name="zipcode" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+        <field name="zipcode" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
         </field>
-        <field name="country_id" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+        <field name="country_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
         </field>
         <field name="phone" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
@@ -1444,6 +1450,9 @@
         <field name="_password" displayable="add" localizable="add">
             <show modes="add" />
         </field>
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
+        </field>
         <field name="national_id" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add" />
             <hide modes="listing" />
@@ -1469,7 +1478,8 @@
             <hide modes="listing" />
         </field>
         <field name="marital_status" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="date_of_death" displayable="view edit listing" localizable="view edit listing">
             <show modes="view edit" />
