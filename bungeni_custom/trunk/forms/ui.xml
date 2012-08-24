@@ -1,4 +1,4 @@
-<ui roles="bungeni.Admin bungeni.Clerk bungeni.Speaker bungeni.Owner bungeni.MP bungeni.Signatory bungeni.Minister bungeni.CommitteeMember bungeni.Anonymous">
+<ui roles="bungeni.CommitteeMember bungeni.Admin bungeni.Minister bungeni.Owner bungeni.Signatory bungeni.PoliticalGroupMember bungeni.Government bungeni.Anonymous bungeni.Authenticated bungeni.MP bungeni.Translator bungeni.Clerk bungeni.Speaker">
 
     <descriptor name="agenda_item" order="10">
         <field name="title" displayable="view edit add listing" localizable="view edit listing">
@@ -1255,7 +1255,7 @@
             <show modes="listing" />
         </field>
         <field name="status" displayable="view listing" localizable="view listing">
-            <show modes="view listing" roles="bungeni.Clerk bungeni.Owner bungeni.Signatory" />
+            <show modes="view listing" roles="bungeni.Owner bungeni.Signatory" />
         </field>
     </descriptor>
 
