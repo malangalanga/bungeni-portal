@@ -1743,8 +1743,18 @@ div.main-column #collage h2 {
 .yui-skin-sam #scheduler-layout tr.yui-dt-selected td, 
 .yui-skin-sam #scheduler-layout tr.yui-dt-selected td.yui-dt-asc, 
 .yui-skin-sam #scheduler-layout tr.yui-dt-selected td.yui-dt-desc {
-    background-color: #21a1ba !important;
-    color: white;
+    background-color: transparent !important;
+    border: 2px solid #f79f0e;    
+    color: #000000;
+}
+.yui-skin-sam #text-records-dialog tr.yui-dt-selected td.yui-dt-first,
+.yui-skin-sam #scheduler-layout tr.yui-dt-selected td.yui-dt-first {
+    border-left: 1px solid #f79f0e;
+    border-right: 1px solid #f79f0e;
+}
+.yui-skin-sam #text-records-dialog tr.yui-dt-selected td.yui-dt-last,
+.yui-skin-sam #scheduler-layout tr.yui-dt-selected td.yui-dt-last {
+    border-left: 1px solid #f79f0e;
 }
 .yui-skin-sam #scheduler-layout th.yui-dt-highlighted,
 .yui-skin-sam #scheduler-layout th.yui-dt-highlighted a {
