@@ -61,17 +61,23 @@
     </descriptor>
 
     <descriptor name="attachment">
-        <field name="type" displayable="view edit add listing" localizable="view edit listing">
+        <field name="type" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="title" displayable="view edit add listing" localizable="view edit listing">
+        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="data" displayable="view edit add" localizable="view edit">
-            <show modes="view edit" />
+        <field name="data" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
         </field>
-        <field name="name" displayable="edit add" />
-        <field name="mimetype" displayable="edit add" />
+        <field name="name" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="mimetype" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
         <field name="status" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
         </field>
@@ -107,17 +113,23 @@
         <field name="date_active" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
         </field>
-        <field name="type" displayable="view edit add listing" localizable="view edit listing">
+        <field name="type" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="title" displayable="view edit add listing" localizable="view edit listing">
+        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="data" displayable="view edit add" localizable="view edit">
-            <show modes="view edit" />
+        <field name="data" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
         </field>
-        <field name="name" displayable="edit add" />
-        <field name="mimetype" displayable="edit add" />
+        <field name="name" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="mimetype" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
         <field name="status" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
         </field>
@@ -602,8 +614,8 @@
         <field name="description" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
-        <field name="identifier" displayable="view edit add" localizable="view edit">
-            <show modes="view edit" />
+        <field name="identifier" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
         </field>
     </descriptor>
 
@@ -773,7 +785,8 @@
     </descriptor>
 
     <descriptor name="member_title">
-        <field name="title_type_id" displayable="view edit add listing" localizable="view edit listing">
+        <field name="title_type_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit listing" />
         </field>
         <field name="start_date" displayable="view edit add listing" localizable="view edit add listing">
@@ -858,8 +871,8 @@
         <field name="description" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
-        <field name="identifier" displayable="view edit add" localizable="view edit">
-            <show modes="view edit" />
+        <field name="identifier" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
         </field>
     </descriptor>
 
@@ -958,11 +971,11 @@
         <field name="description" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
-        <field name="identifier" displayable="view edit add" localizable="view edit">
-            <show modes="view edit" />
+        <field name="identifier" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
         </field>
-        <field name="office_role" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+        <field name="office_role" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
         </field>
     </descriptor>
 
@@ -1066,8 +1079,8 @@
         <field name="description" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
-        <field name="identifier" displayable="view edit add" localizable="view edit">
-            <show modes="view edit" />
+        <field name="identifier" displayable="view edit add" localizable="view edit add">
+            <show modes="view edit add" />
         </field>
         <field name="logo_data" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
@@ -1364,10 +1377,19 @@
     </descriptor>
 
     <descriptor name="title_type" order="22">
-        <field name="title_name" displayable="view edit add listing" />
-        <field name="role_id" displayable="view edit add listing" />
-        <field name="user_unique" displayable="view edit add listing" />
-        <field name="sort_order" displayable="view edit add listing" />
+        <field name="title_name" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
+            <show modes="view edit listing" />
+        </field>
+        <field name="role_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="user_unique" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="sort_order" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
         <field name="language" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="add" />
             <show modes="view edit" />
