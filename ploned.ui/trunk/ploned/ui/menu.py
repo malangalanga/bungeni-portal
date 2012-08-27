@@ -56,17 +56,17 @@ class PloneBrowserMenu(BrowserMenu):
     Plone templates.
     """
     
-    def getMenuItems(self, object, request):
+    def getMenuItems(self, obj, request):
+        obj = removeSecurityProxy(obj)
         menu = tuple(zope.component.getAdapters(
-            (object, request), self.getMenuItemType()))
+            (obj, request), self.getMenuItemType()))
         # filter out all items which you do not have the permissions for 
-        result = [ item for name, item in menu 
-                   if checkPermission(item.permission, object) ]
+        result = [ item for name, item in menu if item.available() ]
         # Now order the result. This is not as easy as it seems.
         # (1) Look at the interfaces and put the more specific menu entries
         #     to the front. 
         # (2) Sort unambigious entries by order and then by title.
-        ifaces = list(providedBy(removeSecurityProxy(object)).__iro__)
+        ifaces = list(providedBy(removeSecurityProxy(obj)).__iro__)
         max_key = len(ifaces)
         def iface_index(item):
             iface = item._for
@@ -74,7 +74,7 @@ class PloneBrowserMenu(BrowserMenu):
                 iface = Interface
             if zope.interface.interfaces.IInterface.providedBy(iface):
                 return ifaces.index(iface)
-            if isinstance(removeSecurityProxy(object), item._for):
+            if isinstance(removeSecurityProxy(obj), item._for):
                 # directly specified for class, this goes first.
                 return -1
             # no idea. This goes last.
@@ -83,7 +83,7 @@ class PloneBrowserMenu(BrowserMenu):
                   for item in result]
         result.sort()
         # !+ replace above with super getMenuItems()
-        local_url = url.absoluteURL(object, request)
+        local_url = url.absoluteURL(obj, request)
         site_url = url.absoluteURL(getSite(), request)
         request_url = request.getURL()
         
@@ -118,7 +118,7 @@ class PloneBrowserMenu(BrowserMenu):
             # "content", "top-menu-bar", "footer", etc. 
             
             if IBrowserSubMenuItem.providedBy(item):
-                submenu = getMenu(item.submenuId, object, request)
+                submenu = getMenu(item.submenuId, obj, request)
             else:
                 submenu = None
                 extra["hideChildren"] = True
