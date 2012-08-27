@@ -16,32 +16,32 @@
     </state>
     <state id="submitted">
         <tab id="inbox" roles="bungeni.Clerk"/>
-        <tab id="sent" roles="bungeni.Owner bungeni.Signatory"/>
+        <tab id="pending" roles="bungeni.Owner bungeni.Signatory"/>
     </state>
     <state id="submitted_signatories">
         <tab id="inbox" roles="bungeni.Signatory"/>
-        <tab id="sent" roles="bungeni.Owner"/>
+        <tab id="pending" roles="bungeni.Owner"/>
     </state>
     <state id="received">
         <tab id="inbox" roles="bungeni.Clerk"/>
-        <tab id="sent" roles="bungeni.Owner bungeni.Signatory"/>
+        <tab id="pending" roles="bungeni.Owner bungeni.Signatory"/>
     </state>
     <state id="completed">
         <tab id="inbox" roles="bungeni.Speaker"/>
-        <tab id="sent"
+        <tab id="pending"
 	     roles="bungeni.Owner
 		    bungeni.Clerk
 		    bungeni.Signatory"/>
     </state>
     <state id="admissible">
         <tab id="inbox" roles="bungeni.Clerk"/>
-        <tab id="sent" 
+        <tab id="pending" 
 	     roles="bungeni.Owner
 		    bungeni.Signatory
 		    bungeni.Speaker"/>
     </state>
     <state id="schedule_pending">
-        <tab id="sent" 
+        <tab id="pending" 
 	     roles="bungeni.Owner
 		    bungeni.Signatory
 		    bungeni.Speaker
@@ -49,14 +49,14 @@
     </state>
     <state id="incomplete">
         <tab id="inbox" roles="bungeni.Clerk"/>
-        <tab id="sent" roles="bungeni.Owner bungeni.Signatory"/>
+        <tab id="pending" roles="bungeni.Owner bungeni.Signatory"/>
     </state>
     <state id="clarification_required">
         <tab id="inbox" roles="bungeni.Owner"/>
-        <tab id="sent" roles="bungeni.Clerk bungeni.Signatory"/>
+        <tab id="pending" roles="bungeni.Clerk bungeni.Signatory"/>
     </state>
     <state id="scheduled">
-        <tab id="sent" roles="bungeni.Owner
+        <tab id="pending" roles="bungeni.Owner
 			      bungeni.Signatory
 			      bungeni.Speaker"/>
     </state>

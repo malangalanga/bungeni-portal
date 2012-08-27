@@ -13,23 +13,23 @@
     </state>
     <state id="submitted">
         <tab id="inbox" roles="bungeni.Clerk"/>
-        <tab id="sent" roles="bungeni.Owner"/>
+        <tab id="pending" roles="bungeni.Owner"/>
     </state>
     <state id="submitted_signatories">
         <tab id="inbox" roles="bungeni.Signatory"/>
-        <tab id="sent" roles="bungeni.Owner bungeni.Clerk"/>
+        <tab id="pending" roles="bungeni.Owner bungeni.Clerk"/>
     </state>
     <state id="received">
         <tab id="inbox" roles="bungeni.Clerk"/>
-        <tab id="sent" roles="bungeni.Owner"/>
+        <tab id="pending" roles="bungeni.Owner"/>
     </state>
     <state id="completed">
         <tab id="inbox" roles="bungeni.Speaker"/>
-        <tab id="sent" roles="bungeni.Clerk bungeni.Owner"/>
+        <tab id="pending" roles="bungeni.Clerk bungeni.Owner"/>
     </state>
     <state id="admissible">
         <tab id="inbox" roles="bungeni.Clerk"/>
-	      <tab id="sent" 
+	      <tab id="pending" 
 		   roles="bungeni.Speaker
 			  bungeni.Signatory
 			  bungeni.Owner"/>
@@ -43,7 +43,7 @@
     </state>
      <state id="clarification_required">
         <tab id="inbox" roles="bungeni.Owner"/>
-	      <tab id="sent" roles="bungeni.Clerk"/>
+	      <tab id="pending" roles="bungeni.Clerk"/>
     </state>
     <state id="incomplete">
         <tab id="archive"
@@ -53,7 +53,7 @@
                     bungeni.Speaker"/>
     </state>
     <state id="schedule_pending">
-        <tab id="sent" 
+        <tab id="pending" 
 	     roles="bungeni.Owner
 		    bungeni.Signatory
 		    bungeni.Speaker
@@ -68,7 +68,7 @@
     </state>
    <state id="response_pending">
         <tab id="inbox" roles="bungeni.Minister"/>
-	    <tab id="sent" 
+	    <tab id="pending" 
 		 roles="bungeni.Owner
 			bungeni.Clerk
 			bungeni.Speaker
@@ -76,7 +76,7 @@
     </state>
    <state id="response_submitted">
         <tab id="inbox" roles="bungeni.Clerk"/>
-        <tab id="sent" 
+        <tab id="pending" 
 	     roles="bungeni.Minister
 		    bungeni.Owner
 		    bungeni.Speaker

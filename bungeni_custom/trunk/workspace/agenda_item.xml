@@ -18,27 +18,27 @@
     </state>
     <state id="submitted">
         <tab id="inbox" roles="bungeni.Clerk"/>
-        <tab id="sent" roles="bungeni.Owner"/>
+        <tab id="pending" roles="bungeni.Owner"/>
     </state>
     <state id="submitted_signatories">
         <tab id="inbox" roles="bungeni.Signatory"/>
-        <tab id="sent" roles="bungeni.Owner"/>
+        <tab id="pending" roles="bungeni.Owner"/>
     </state>
     <state id="received">
         <tab id="inbox" roles="bungeni.Clerk"/>
-        <tab id="sent" roles="bungeni.Owner"/>
+        <tab id="pending" roles="bungeni.Owner"/>
     </state>
     <state id="clarification_required">
         <tab id="inbox" roles="bungeni.Owner"/>
-        <tab id="sent" roles="bungeni.Clerk"/>
+        <tab id="pending" roles="bungeni.Clerk"/>
     </state>
     <state id="completed">
         <tab id="inbox" roles="bungeni.Speaker"/>
-        <tab id="sent" roles="bungeni.Clerk"/>
+        <tab id="pending" roles="bungeni.Clerk"/>
     </state>
     <state id="incomplete">
         <tab id="inbox" roles="bungeni.Clerk"/>
-        <tab id="sent" roles="bungeni.Speaker"/>
+        <tab id="pending" roles="bungeni.Speaker"/>
     </state>
      <state id="inadmissible">
         <tab id="archive" 
@@ -54,21 +54,21 @@
     </state>
     <state id="admissible">
         <tab id="inbox" roles="bungeni.Clerk"/>
-        <tab id="sent" roles="bungeni.Owner bungeni.Speaker"/>
+        <tab id="pending" roles="bungeni.Owner bungeni.Speaker"/>
     </state>
     <state id="schedule_pending">
-        <tab id="sent" 
+        <tab id="pending" 
 	     roles="bungeni.Owner
 		    bungeni.Signatory
 		    bungeni.Speaker
 		    bungeni.Clerk"/>
     </state>
     <state id="scheduled">
-        <tab id="sent" roles="bungeni.Clerk bungeni.Owner"/>
+        <tab id="pending" roles="bungeni.Clerk bungeni.Owner"/>
     </state>
     <state id="schedule_pending">
         <tab id="inbox" roles="bungeni.Clerk"/>
-        <tab id="sent" roles="bungeni.Owner"/>
+        <tab id="pending" roles="bungeni.Owner"/>
     </state>
     <state id="adjourned">
         <tab id="archive" 
