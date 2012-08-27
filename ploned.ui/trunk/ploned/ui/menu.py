@@ -61,7 +61,8 @@ class PloneBrowserMenu(BrowserMenu):
         menu = tuple(zope.component.getAdapters(
             (obj, request), self.getMenuItemType()))
         # filter out all items which you do not have the permissions for 
-        result = [ item for name, item in menu if item.available() ]
+        result = [ item for name, item in menu if 
+            checkPermission(item.permission, obj) ]
         # Now order the result. This is not as easy as it seems.
         # (1) Look at the interfaces and put the more specific menu entries
         #     to the front. 
