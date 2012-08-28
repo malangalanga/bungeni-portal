@@ -1439,13 +1439,19 @@ div.dhx_cal_navline div.active {
     background: #eee;
     border: 0 none !important;
 }
+
+.template-workspace.section-bungeni-admin #portal-column-one .portlet .portletItem ul li.navTreeCurrentNode ul a:hover, 
+.template-workspace.section-bungeni-admin #portal-column-one .portlet .portletItem ul li.navTreeCurrentNode a.navTreeCurrentItem {
+    background: #888888 !important;
+    color: white !important;
+}
 /*
  * DocumentActions & contentActions
  */
 .template-workspace.section-bungeni-admin .contentActions {
     border: 1px solid #86a26a !important;
     background: #888888 url(wrong/static/images/w-bg-admin.png) repeat-x top center;
-}  
+}
 
 .template-workspace.section-bungeni-archive .contentActions,
 .template-workspace.section-bungeni-business .contentActions,
@@ -1672,6 +1678,13 @@ div.dhx_cal_navline div.active {
     margin-right:3px;
     border-bottom: 0 none;
 }
+.template-workspace.section-bungeni-admin li.formTab a:hover, 
+.template-workspace.section-bungeni-admin li.formTab a:active, 
+.template-workspace.section-bungeni-admin li.formTab a.selected {
+    border-bottom: 2px solid #888888;
+    background: #888888;
+}
+
 .template-workspace.section-bungeni-admin ul li.context_workflow dt a {
     color:#000 !important;
 }
@@ -1690,7 +1703,12 @@ div.dhx_cal_navline div.active {
     margin-top:15px !important;
 }
 .template-workspace.section-bungeni-admin .formPanel #display_form_spacer {
-    background:#fe0000;
+    background:#888888;
+}
+.template-workspace.section-bungeni-admin table.listingdescription th, 
+.template-workspace.section-bungeni-admin .stx table th, 
+.yui-skin-sam.section-bungeni-admin .yui-dt-first th {
+    background: #888888 !important;
 }
 .template-workspace.section-bungeni-workspace .formPanel #display_form_spacer {
     background: url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x;

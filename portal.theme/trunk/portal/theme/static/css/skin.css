@@ -1360,7 +1360,8 @@ div.main-column #collage h2 {
 }
 .template-workspace.section-bungeni-admin #portal-column-one .portletItem a.navTreeCurrentItem,
 .template-workspace.section-bungeni-workspace #portal-column-one .portletItem a.navTreeCurrentItem {
-    background: #eee;
+    background: #888888 !important;
+    color: white !important;
     border: 0 none !important;
 }
 /*
@@ -1588,6 +1589,8 @@ div.main-column #collage h2 {
     margin-left:3px;
     margin-right:3px;
     border-bottom: 0 none;
+    background: #888888;
+    color:#ffffff !important;
 }
 /*
  * formPanel styles
@@ -1605,6 +1608,28 @@ div.main-column #collage h2 {
 .template-workspace.section-bungeni-workspace .formPanel #display_form_spacer {
     background: url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x;
 }
+.template-workspace.section-bungeni-admin dd#fieldset-written-question-response div.documentDescription,
+.template-workspace.section-bungeni-admin .formPanel #display_form_spacer {
+    background:#888888 !important;
+}
+.template-workspace.section-bungeni-admin table.listing th,
+.template-workspace.section-bungeni-admin table.listingdescription th, 
+.template-workspace.section-bungeni-admin .stx table th, 
+.yui-skin-sam.section-bungeni-admin .yui-dt-first th {
+    background: #888888 !important;
+    color:#ffffff !important;
+}
+.template-workspace.section-bungeni-workspace table.listing th a,
+.template-workspace.section-bungeni-workspace table.listingdescription th a, 
+.template-workspace.section-bungeni-workspace .stx table th a, 
+.yui-skin-sam.section-bungeni-workspace .yui-dt-first th a,
+.template-workspace.section-bungeni-admin table.listing th a,
+.template-workspace.section-bungeni-admin table.listingdescription th a, 
+.template-workspace.section-bungeni-admin .stx table th a, 
+.yui-skin-sam.section-bungeni-admin .yui-dt-first th a {
+    color:#ffffff !important;
+}
+
 .template-workspace {
     background: #4d4d4d url(/static/images/workspace-border-left.png) repeat-y top left;
 }
@@ -1655,12 +1680,12 @@ div.main-column #collage h2 {
 .template-workspace.section-bungeni-workspace .stx table th,
 .template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th,
 .section-bungeni-workspace tr.yui-dt-first th {
-    background:#aaa !important;
+    background:#21a1ba !important;
     text-shadow: 0 0 0  #fff;
-    color: #000 !important;
+    color: #fff !important;
 }
 .template-workspace.section-bungeni-workspace #display_form_spacer {
-    background:#aaa !important;
+    background:#21a1ba !important;
 }
 
 /*MailBox*/
