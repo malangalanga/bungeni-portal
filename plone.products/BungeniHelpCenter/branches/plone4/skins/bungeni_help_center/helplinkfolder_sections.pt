@@ -17,7 +17,14 @@
       Folder Title
     </h1>
     
-    <a href="" tal:attributes="href python:here.absolute_url()">Alphabetical View</a>
+    <p class="visualNoPrint"> <a href="" tal:attributes="href python:here.absolute_url()">Alphabetical View</a><p>
+    
+    <p class="visualNoPrint">
+      <a href="links-all-pages"
+         i18n:translate="all_content_on_one_page">
+        All content on one page (useful for printing, presentation mode etc.)
+      </a>
+    </p>    
 
     <div metal:use-macro="here/phc_macros/macros/identityimage">
       Identity Image 
