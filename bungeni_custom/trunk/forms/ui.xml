@@ -1244,10 +1244,12 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit listing">
+        <field name="start_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit listing">
+        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit add listing">
