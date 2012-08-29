@@ -60,7 +60,15 @@
         <drop theme="#processing_indicatron" />          
     </rule>
 
-    
+    <rule class="load-workspace-navigation">    
+        <pyquery pyref=
+            "portal.theme.static.themes.rules:add_member_workspace_links"
+        />
+        <pyquery pyref=
+            "portal.theme.static.themes.rules:add_group_workspace_links"
+        />              
+    </rule>
+        
     <rule class="load-member-content">    
         <pyquery pyref=
             "portal.theme.static.themes.rules:add_member_public_links"
