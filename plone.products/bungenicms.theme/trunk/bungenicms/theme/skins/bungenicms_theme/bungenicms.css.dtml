@@ -13,7 +13,7 @@ body {
 
 #content {
     font-size: 125% !important;
-    padding: 1em 1em 2em 1em !important;
+    padding: 0 1em 2em 1em !important;
     background: White;
 }
 
@@ -41,12 +41,12 @@ body {
     font-weight: normal;
 }
 
-h1, h2, h3, h4, h5, h6 { 
-    margin: 0 0 0.25em;
-}
-
 h1, h2 {
   color: #C8631B;
+}
+
+.headline {
+   font-size: 140% !important;
 }
 
 a:hover {
@@ -364,6 +364,10 @@ p.bodyparagraph {
 
 .listingBar .next {
     float: right;
+}
+
+table.listing, .stx table {
+    width: 100%;
 }
 
 

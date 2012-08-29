@@ -47,20 +47,18 @@
       Description
     </div>
 
-   <tal:define define="results python:here.alphabetiseContext();
-                       parent_url python:here.navigationParent(here, template.getId())">
-   <ul id="alphabet_drop">
-    <li tal:repeat="item results">
-        <span tal:content="item/letter" 
-        tal:condition="python:not item['items']"></span>
-        <a href="#" tal:condition="python:item['items']"
-        tal:content="item/letter"></a>
-        <ul tal:condition="python:item['items']">
-            <li tal:repeat="definition python:item['items']">
-                <a href="" tal:attributes="href definition/getURL" tal:content="definition/Title"></a>
-            </li>
-        </ul>
-    </li>
+   <tal:define define="results
+         python:here.alphabetise()">
+   <ul id="nav">
+     <span tal:omit-tag="" tal:repeat="item results">
+      <li tal:condition="python:not item['items']"
+      tal:content="item/letter" />
+      <li tal:condition="python:item['items']"><a href="#" tal:attributes="href python:'#alpha' + item['letter']" tal:content="item/letter" class="linkSection" />
+      <ul>
+          <li tal:repeat="definition python:item['items']"><div><a href="" tal:attributes="href definition/getURL" tal:content="definition/Title"></a></div></li>
+      </ul>
+      </li>
+      </span>
    </ul>
 
    <span tal:omit-tag="" tal:repeat="item results">
