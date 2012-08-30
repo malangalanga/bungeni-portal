@@ -1263,8 +1263,8 @@
     </descriptor>
 
     <descriptor name="signatory">
-        <field name="signatory_id" displayable="listing" localizable="listing">
-            <show modes="listing" roles="bungeni.Owner bungeni.Signatory" />
+        <field name="status" displayable="view listing" localizable="view listing">
+            <show modes="view listing" roles="bungeni.Owner bungeni.Signatory" />
         </field>
         <field name="user_id" displayable="view add listing" localizable="view add listing">
             <show modes="add" />
@@ -1272,9 +1272,6 @@
         </field>
         <field name="party" displayable="listing" localizable="listing">
             <show modes="listing" />
-        </field>
-        <field name="status" displayable="view listing" localizable="view listing">
-            <show modes="view listing" roles="bungeni.Owner bungeni.Signatory" />
         </field>
     </descriptor>
 
