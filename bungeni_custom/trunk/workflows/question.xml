@@ -19,7 +19,10 @@
     <feature name="workspace" enabled="true" />
     <feature name="notification" enabled="true" />
     <feature name="download" enabled="true" />
-    
+    <feature name="assignment" enabled="true">
+      <parameter name="assigner_roles" value="bungeni.Clerk.HeadClerk"/>
+      <parameter name="assignable_roles" value="bungeni.Clerk.QuestionClerk"/>
+    </feature>
     <!-- global grants -->
     <grant permission="bungeni.question.View" role="bungeni.Owner" />
     <grant permission="bungeni.question.View" role="bungeni.Signatory" />
@@ -76,6 +79,9 @@
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
         <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
         <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
+        <!-- assignment -->
+        <deny permission="bungeni.assignment.View" role="bungeni.Clerk.HeadClerk" />
+        <deny permission="bungeni.assignment.Edit" role="bungeni.Clerk.HeadClerk" />
     </state>
     
     <state id="draft" title="Draft" like_state="working_draft" 
@@ -134,6 +140,7 @@
         <grant permission="zope.View" role="bungeni.Speaker" />
         <!-- signatory -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        
     </state>
 
     <state id="received" title="Received by clerk"
@@ -144,6 +151,9 @@
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
+        <!-- assignment -->
+        <grant permission="bungeni.assignment.View" role="bungeni.Clerk.HeadClerk" />
+        <grant permission="bungeni.assignment.Edit" role="bungeni.Clerk.HeadClerk" />
     </state>
     
     <state id="completed" title="Submitted to the Speaker"

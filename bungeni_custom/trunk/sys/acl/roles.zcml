@@ -5,6 +5,10 @@
     
     <!-- System roles are defined in bungeni.main/bungeni/models/roles.zcml -->
     <role id="bungeni.Clerk" title="Clerks Office" />
+    <bungeni:subrole id="bungeni.Clerk.QuestionClerk" title="Question Clerk"
+                     role="bungeni.Clerk"/>
+    <bungeni:subrole id="bungeni.Clerk.HeadClerk" title="Head Clerk"
+                     role="bungeni.Clerk"/>
     <role id="bungeni.Speaker" title="Speaker Office" />
     <role id="bungeni.Translator" title="Translators Office" />
     
