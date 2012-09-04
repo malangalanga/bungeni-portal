@@ -51,8 +51,7 @@
             <hide modes="listing" />
         </field>
         <field name="admissible_date" displayable="view listing" localizable="view listing">
-            <show modes="view" />
-            <hide modes="listing" />
+            <show modes="view listing" />
         </field>
         <field name="body" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
@@ -172,8 +171,8 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+        <field name="doc_type" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
         </field>
         <field name="parliament_id" displayable="view listing" localizable="view listing">
             <hide modes="view listing" />
@@ -204,19 +203,18 @@
         <field name="publication_date" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
         </field>
+        <field name="short_title" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="group_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
         <field name="body" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
         <field name="timestamp" displayable="edit" localizable="edit">
             <show modes="edit" />
-        </field>
-        <field name="short_title" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add" />
-            <hide modes="listing" />
-        </field>
-        <field name="group_id" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add" />
-            <hide modes="listing" />
         </field>
     </descriptor>
 
@@ -564,6 +562,9 @@
             <show modes="edit" />
             <hide modes="view listing" roles="bungeni.Anonymous" />
         </field>
+        <field name="group_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
         <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
             <show modes="view listing" />
             <hide modes="edit" />
@@ -587,9 +588,6 @@
         </field>
         <field name="timestamp" displayable="edit" localizable="edit">
             <show modes="edit" />
-        </field>
-        <field name="group_id" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add listing" />
         </field>
     </descriptor>
 
@@ -696,8 +694,10 @@
     </descriptor>
 
     <descriptor name="heading" order="3">
-        <field name="text" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+        <field name="text" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
+            <show modes="view edit" />
+            <hide modes="listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="add" />
@@ -937,8 +937,7 @@
             <hide modes="listing" />
         </field>
         <field name="admissible_date" displayable="view listing" localizable="view listing">
-            <show modes="view" />
-            <hide modes="listing" />
+            <show modes="view listing" />
         </field>
         <field name="notice_date" displayable="view listing" localizable="view listing">
             <show modes="view" />
