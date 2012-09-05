@@ -53,6 +53,15 @@
         <field name="admissible_date" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
         </field>
+        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
+        <field name="coverage" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
+        <field name="geolocation" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
         <field name="body" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
@@ -209,6 +218,15 @@
         <field name="group_id" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add" />
             <hide modes="listing" />
+        </field>
+        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
+        <field name="coverage" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
+        <field name="geolocation" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
         </field>
         <field name="body" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
@@ -429,6 +447,15 @@
             <show modes="view" />
             <hide modes="listing" />
         </field>
+        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
+        <field name="coverage" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
+        <field name="geolocation" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
         <field name="body" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
@@ -504,6 +531,15 @@
         <field name="submission_date" displayable="view listing" localizable="view listing">
             <show modes="view" />
             <hide modes="listing" />
+        </field>
+        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
+        <field name="coverage" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
+        <field name="geolocation" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
         </field>
         <field name="body" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
@@ -582,6 +618,15 @@
         <field name="submission_date" displayable="view listing" localizable="view listing">
             <show modes="view" />
             <hide modes="listing" />
+        </field>
+        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
+        <field name="coverage" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
+        <field name="geolocation" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
         </field>
         <field name="body" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
@@ -943,6 +988,15 @@
             <show modes="view" />
             <hide modes="listing" />
         </field>
+        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
+        <field name="coverage" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
+        <field name="geolocation" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
         <field name="body" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
         </field>
@@ -1193,12 +1247,21 @@
             <hide modes="listing" />
         </field>
         <field name="admissible_date" displayable="view listing" localizable="view listing">
-            <show modes="view" />
-            <hide modes="listing" />
+            <show modes="view listing" />
         </field>
         <field name="ministry_submit_date" displayable="view listing" localizable="view listing">
             <show modes="view" />
             <hide modes="listing" />
+        </field>
+        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="coverage" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
+        <field name="geolocation" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
         </field>
         <field name="body" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
@@ -1208,10 +1271,6 @@
         </field>
         <field name="group_id" displayable="view edit add listing" localizable="view edit listing">
             <show modes="view edit listing" />
-        </field>
-        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add" />
-            <hide modes="listing" />
         </field>
     </descriptor>
 
@@ -1381,6 +1440,15 @@
         <field name="admissible_date" displayable="view listing" localizable="view listing">
             <show modes="view" />
             <hide modes="listing" />
+        </field>
+        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
+        <field name="coverage" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
+        </field>
+        <field name="geolocation" displayable="view edit add listing" localizable="view edit add listing">
+            <hide modes="view edit add listing" />
         </field>
         <field name="body" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
