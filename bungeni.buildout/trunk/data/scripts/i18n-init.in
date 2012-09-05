@@ -1,0 +1,33 @@
+#!/bin/bash
+
+#create a locale messages directory for provided locale and initializes catalog
+
+locale=$1
+
+if [[ $locale =~ [a-z]{2}|[a-z]{2}_[A-Z]{2} ]]; 
+then 
+    zope_locale=${locale/_/-}
+    zope_locale=${zope_locale,,}
+    target_dir=%(locale_dir)s/$zope_locale/LC_MESSAGES
+    po_file=$target_dir/%(domain)s.po
+    if [ -f $po_file ]
+    then
+        echo "Message catalog for $locale already exists."
+        exit
+    fi
+    if [ ! -d $target_dir ]
+    then
+        echo "Trying to generate locale directory at: $target_dir"
+        mkdir -p $target_dir
+    fi
+    pot_file=%(locale_dir)s/%(domain)s.pot
+    if [ ! -f $po_file ]
+    then
+        echo "Initializing message catalog for $locale"
+        msginit -i $pot_file -o $po_file -l $locale --no-translator 
+    fi
+    exit
+fi
+
+echo "USAGE: $0 {{LOCALE_CODE}}"
+echo "LOCALE_CODE may be a two letter language code e.g. en or code_REGION code e.g. en_KE or fr_RW"
