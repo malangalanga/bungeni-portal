@@ -2,13 +2,12 @@
 
 #create a locale messages directory for provided locale and initializes catalog
 
+LOCALE_REGEX="^([[:lower:]]{2}|[[:lower:]]{2}-[[:lower:]]{2})$"
 locale=$1
 
-if [[ $locale =~ [a-z]{2}|[a-z]{2}_[A-Z]{2} ]]; 
+if [[ $locale =~ $LOCALE_REGEX ]]; 
 then 
-    zope_locale=${locale/_/-}
-    zope_locale=${zope_locale,,}
-    target_dir=%(locale_dir)s/$zope_locale/LC_MESSAGES
+    target_dir=%(locale_dir)s/$locale/LC_MESSAGES
     po_file=$target_dir/%(domain)s.po
     if [ -f $po_file ]
     then
@@ -30,4 +29,4 @@ then
 fi
 
 echo "USAGE: $0 {{LOCALE_CODE}}"
-echo "LOCALE_CODE may be a two letter language code e.g. en or code_REGION code e.g. en_KE or fr_RW"
+echo "LOCALE_CODE may be a two letter language code e.g. en or code-REGION code e.g. en-ke or fr-rw (case sensitive)"
