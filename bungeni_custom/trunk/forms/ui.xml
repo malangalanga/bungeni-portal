@@ -216,8 +216,7 @@
             <show modes="view edit add listing" />
         </field>
         <field name="group_id" displayable="view edit add listing" localizable="view edit add listing">
-            <show modes="view edit add" />
-            <hide modes="listing" />
+            <show modes="view edit add listing" />
         </field>
         <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
             <hide modes="view edit add listing" />
@@ -1208,17 +1207,16 @@
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="response_type" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit" />
-            <show modes="listing" />
+        <field name="response_type" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="doc_type" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+        <field name="doc_type" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
         </field>
         <field name="parliament_id" displayable="view listing" localizable="view listing">
             <hide modes="view listing" />
@@ -1249,6 +1247,9 @@
         <field name="admissible_date" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
         </field>
+        <field name="group_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
+        </field>
         <field name="ministry_submit_date" displayable="view listing" localizable="view listing">
             <show modes="view" />
             <hide modes="listing" />
@@ -1268,9 +1269,6 @@
         </field>
         <field name="timestamp" displayable="edit" localizable="edit">
             <show modes="edit" />
-        </field>
-        <field name="group_id" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
         </field>
     </descriptor>
 
@@ -1359,19 +1357,19 @@
     </descriptor>
 
     <descriptor name="sitting" order="17">
-        <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+        <field name="short_name" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="view edit add listing" />
         </field>
         <field name="language" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="start_date" displayable="view add listing" localizable="view listing">
-            <show modes="view listing" />
+        <field name="start_date" displayable="view add listing" localizable="view add listing">
+            <show modes="view add listing" />
         </field>
-        <field name="end_date" displayable="view add listing" localizable="view listing">
-            <show modes="view listing" />
+        <field name="end_date" displayable="view add listing" localizable="view add listing">
+            <show modes="view add listing" />
         </field>
         <field name="venue_id" displayable="view edit add listing" localizable="view edit add listing">
             <show modes="view edit add listing" />
@@ -1438,8 +1436,7 @@
             <hide modes="listing" />
         </field>
         <field name="admissible_date" displayable="view listing" localizable="view listing">
-            <show modes="view" />
-            <hide modes="listing" />
+            <show modes="view listing" />
         </field>
         <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
             <hide modes="view edit add listing" />
