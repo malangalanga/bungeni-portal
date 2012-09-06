@@ -266,12 +266,6 @@ class BungeniConfigs:
         # python 2.6
         self.user_python26_home = self.user_install_root + "/python26"
         self.python26 = self.user_python26_home + "/bin/python"
-        # python 2.5
-        self.user_python25_home = self.user_install_root + "/python25"
-        self.user_python25 = self.user_python25_home + "/bin/python"
-        # python 2.4
-        self.user_python24_home = self.user_install_root + "/python24"
-        self.user_python24 = self.user_python24_home + "/bin/python"
         # bungeni, plone, portal
         self.user_bungeni = self.user_install_root + "/bungeni"
         self.user_plone = self.user_bungeni + "/plone"
@@ -573,7 +567,7 @@ class Presetup:
     def build_imaging(self):
         """
         Builds Python imaging from source
-        Installs it for both Python 2.4 and 2.5
+        Installs it for both Python 2.6 and 2.7
         """
 
         run("mkdir -p " + self.cfg.python_imaging_build_path)
@@ -1501,6 +1495,7 @@ class BungeniTasks:
     def reset_schema(self):
         with cd(self.cfg.user_bungeni):
             run("./bin/reset-db")
+            run("rm -rf ./parts/xml_db/*")
 
 
     def load_demo_data(self):

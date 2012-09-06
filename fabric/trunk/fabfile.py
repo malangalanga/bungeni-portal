@@ -754,3 +754,15 @@ def exist_java_home():
     """
     cfgs = bungeni.BungeniConfigs()
     print cfgs.java_home
+
+
+def reset_all():
+    """
+    Resets Bungeni, eXist XML db and the message queue
+    """ 
+    db_load_mindata()
+    exist_reset()
+    rabbitmq_reset()
+
+
+    
