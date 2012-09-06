@@ -242,12 +242,16 @@
         <grant permission="zope.View" role="bungeni.Anonymous" />
     </state>
     
-    <state id="withdrawn" title="Withdrawn" 
-        like_state="submitted"
+    <state id="withdrawn_internal" title="Withdrawn" 
+        like_state="submitted" 
         tags="terminal fail"
     />
     
-    
+    <state id="withdrawn" title="Withdrawn" 
+        like_state="admissible" 
+        tags="public terminal fail"
+    />
+
     <transition title="Create Tabled Document"
         source=""
         destination="draft"
@@ -431,18 +435,26 @@
     />
     
     <transition title="Withdraw"
-        source="submitted
-                received
-                completed
-                clarification_required
-                admissible
-                scheduled
-                adjourned
-                schedule_pending"
-        destination="withdrawn"
+        source="submitted received completed clarification_required"
+        destination="withdrawn_internal"
+        grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
         roles="bungeni.Clerk bungeni.Owner"
+        order="26"
+        require_confirmation="true"
+        note="The MP can withdraw his question at any stage where it can 
+            still be presented to the ministry/house."
+    />
+    
+    <transition title="Withdraw"
+        source="admissible schedule_pending scheduled adjourned"
+        destination="withdrawn"
+        grouping_unique_sources="withdrawn"
+        condition=""
+        trigger="manual"
+        roles="bungeni.Clerk bungeni.Owner"
+        order="27"
         require_confirmation="true"
     />
 
