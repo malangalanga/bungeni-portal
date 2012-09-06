@@ -388,10 +388,12 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="country_id" displayable="view edit add" localizable="view edit">
-            <show modes="view edit" />
+        <field name="country_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
+            <show modes="view edit listing" />
         </field>
-        <field name="country_name" displayable="view edit add listing" localizable="view edit listing">
+        <field name="country_name" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit listing" />
         </field>
     </descriptor>
@@ -1307,10 +1309,12 @@
     </descriptor>
 
     <descriptor name="session" order="16">
-        <field name="short_name" displayable="view edit add listing" localizable="view edit listing">
+        <field name="short_name" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="full_name" displayable="view edit add listing" localizable="view edit listing">
+        <field name="full_name" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
