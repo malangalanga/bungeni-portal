@@ -5,226 +5,68 @@
 
 <body>
 
-<div metal:fill-slot="main" class="tutorial">
+<div metal:fill-slot="content">
 
-    <div metal:define-macro="main"
-         tal:define="len_text python:len(here.getBody());
+    <div tal:define="len_text python:len(here.getText());
                      sibl     python:[p for p in here.getPages()];
                      num_sibl python:len(sibl);
-                     pos      python:here.getPagePosition(here);
-                     subpages python:here.objectValues(['TabbedSubpages',]);
-                     mtool context/portal_membership;">
+                     pos      python:here.getPagePosition(here);">
       
-        <div tal:replace="structure provider:plone.documentactions"/>
 
-    <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'top']">
-        <div class="listingBar" tal:condition="python: next or prev"
-          tal:define="next python:pos &lt; num_sibl-1 and sibl[pos+1];
-               prev python:pos != 0 and sibl[pos-1]"
-               >
-            <a class="listingNext"
-               tal:condition="python:next"
-               tal:attributes="href next/getURL"
-               tabindex="1"
-               href="">
-           <span i18n:translate="phc_next">
-               Next: </span>
-           <span tal:replace="python:pos + 2">Position</span> - 
-           <span tal:replace="next/Title" /> 
-           <img tal:replace="structure here/arrowRight.gif" />
-           </a>
-            <a class="listingPrevious"
-               tal:condition="python:prev"
-               tal:attributes="href prev/getURL"
-               tabindex="1"
-               href="">
-               <img tal:replace="structure here/arrowLeft.gif" />
-           <span i18n:translate="phc_previous">
-            Previous: </span>
-           <span tal:replace="python:pos">Position</span> - 
-        <span tal:replace="prev/Title" />
-        </a>
-               &nbsp;
+
+
+             <div metal:use-macro="context/global_statusmessage/macros/portal_message">
+               Portal status message
+             </div>
+
+        <div id="content">
+                <h1 class="documentFirstHeading">
+                    <span tal:replace="here/title_or_id">Title or id</span>
+                </h1>
+
+                <p class="documentDescription"
+                     tal:content="here/Description">
+                    description
+                </p>
+
+                <div class="portalMessage" tal:condition="python:here.portal_workflow.getInfoFor(here, 'review_state') != 'published'">
+                   You must publish this page before it becomes visible to the public.
+                </div>
+
+
+                <div id="bodyContent">
+                    <div tal:replace="structure python:here.getText()" />
+                </div>
+
+        	<div class="listingBar" 
+        		tal:condition="python: next or prev"
+        		tal:define="next python:pos &lt; num_sibl-1 and sibl[pos+1];
+        			prev python:pos != 0 and sibl[pos-1]">
+
+        			<a class="next"
+        				tal:condition="python:next"
+        				tal:attributes="href next/getURL"
+        				href="">
+        				<span i18n:translate="phc_next">Next:</span>
+        				<span tal:replace="next/Title" /> 
+        				&#9658;
+        			</a>
+
+        			<a class="previous"
+        				tal:condition="python:prev"
+        				tal:attributes="href prev/getURL"
+        				href="">
+        				&#9668;
+        				<span i18n:translate="phc_previous">Previous:</span>
+        				<span tal:replace="prev/Title" />
+        			</a>
+        	</div>
+
+                <div class="visualClear">&nbsp;</div>
+
+
         </div>
-    </span>
-
-        <h1 class="documentFirstHeading">
-            <img tal:replace="structure here/tutorial_icon.gif" />
-            <span tal:replace="python:pos + 1">Position</span> -            
-            <span tal:replace="here/title_or_id">Title or id</span>
-        </h1>
-        <div class="portalMessage" tal:condition="python:here.portal_workflow.getInfoFor(here, 'review_state') != 'published'">
-           You must publish this page before it becomes visible to the public.
         </div>
-
-    <!--<div metal:use-macro="here/phc_macros/macros/identityimage">Identity Image</div>-->
-
-    <span tal:omit-tag="" tal:condition="python:here.getTocType() == 'drop'">    
-        <div class="jumpBox">
-          <form method="get" action="#" class="rfloat">
-            <label for="destination" class="hiddenStructure">Jump to:</label>
-            <select name=":action" tabindex="3"
-                    onchange="window.location.href=this.options[this.selectedIndex].value"
-                    tal:attributes="tabindex tabindex/next|nothing">
-	        <option value="tutorial-all-pages"
-			title="Useful for printing, presentation mode etc.">
-		  All content on one page
-		</option>
-                <option tal:repeat="s sibl"
-                        tal:attributes="value s/getId;
-                         selected python:s.getId == here.getId () and 'selected' or nothing;">
-                    Part <tal:index replace="repeat/s/number" />:
-                    <tal:page content="s/Title">Some Page</tal:page>
-                </option>
-            </select>
-            <noscript>
-                <input class="standalone"
-                       type="submit"
-                       value="Go"
-                       i18n:attributes="value"
-                       tabindex="4"
-                       tal:attributes="tabindex tabindex/next|nothing" />
-            </noscript>
-          </form>
-        </div>
-        </span>
-        <div class="tutorialAbout"
-             tal:define="portrait python: mtool.getPersonalPortrait(here.Creator());">
-        
-	  <tal:byline
-	      tal:condition="python: site_properties.allowAnonymousViewAbout or not isAnon">
-            <div class="textcenter">
-                <img src=""
-                     alt=""
-                     class="portraitPhoto"
-                     width="75"
-                     height="100"
-                     tal:attributes="src portrait/absolute_url" />
-            </div>
-
-            <tal:name tal:condition="here/Creator"
-                tal:define="creator here/Creator;
-                            author python:mtool.getMemberInfo(creator)">
-            <p>
-              <a href="#"
-                 tal:attributes="href string:${portal_url}/author/${creator}"
-                 tal:content="python:author and author['fullname'] or creator"
-                 tal:omit-tag="not:author">
-                Bob Dobalina
-              </a>
-            </p>                    
-            </tal:name>
-	  </tal:byline>
-            
-            <div tal:content="here/getTutorialDescription">
-            Tutorial Description
-            </div>
-            
-            <div>
-          <span i18n:translate="phc_page">
-          Page </span>
-          <span tal:replace="python:pos+1">5</span>
-          <span i18n:translate="phc_of">
-          of </span>
-          <span tal:replace="python:num_sibl">10</span>.
-            </div>
-        </div>
-
-    <span tal:omit-tag="" tal:condition="python:here.getTocType() == 'box'">
-    <div class="stoc">
-    <ol tal:condition="here/getPages">
-         <li tal:repeat="page here/getPages">
-            <a tal:attributes="href page/getURL">
-               <span tal:attributes="class string:state-${page/review_state}" 
-                     tal:content="page/Title" /></a>
-
-            <p class="pmargin"><span tal:replace="page/Description">Description</span></p>
-         </li>
-    </ol>
-    </div>
-    </span>
-
-    <span tal:omit-tag="" tal:condition="python:here.getDisType() == 'yes'">
-        <div class="documentDescription"
-             tal:content="here/Description">
-            description
-        </div>
-    </span>
-        
-        <p class="discreet"
-           tal:condition="python: not len_text and is_editable"
-           i18n:domain="plone"
-           i18n:translate="no_body_text">
-            This item does not have any body text, click the edit tab to change it.
-        </p>
-    
-
-        <div id="bodyContent">
-            <div tal:replace="structure python:here.getBody()" />
-        </div>
-
-
-    <div tal:repeat="subpage subpages">
-      <div tal:define="number repeat/subpage/number;
-                       layout python: here.getTargetObjectLayout(subpage);
-                       template python: getattr(subpage, layout, None);
-                       macros template/macros | nothing;
-                       main_macro macros/main | nothing">
-        <a tal:condition="python: user.has_role(['Owner', 'Reviewer', 'Manager'], context)"
-           class="edit-icon"
-           href="#" tal:attributes="href string:${subpage/absolute_url}/base_edit;"
-           title="Rediger underside">
-          <img src="" tal:attributes="src string:$portal_url/edit_icon.gif"
-               width="16"
-               title="Edit subpage"/>
-        </a>
-        <tal:content tal:define="batch_base_url string:${here/absolute_url}/${template/getId};
-                                 here python: subpage;
-                                 here_url string:${here/absolute_url};
-                                 object_title here/Title">                    
-          <div metal:use-macro="main_macro" />
-        </tal:content>
-      </div>
-    </div>
-    <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'bottom']">
-        <div class="listingBar" tal:condition="python: next or prev"
-          tal:define="next python:pos &lt; num_sibl-1 and sibl[pos+1];
-               prev python:pos != 0 and sibl[pos-1]"
-               >
-            <a class="listingNext"
-               tal:condition="python:next"
-               tal:attributes="href next/getURL"
-               tabindex="1"
-               href="">
-           <span i18n:translate="phc_next">
-               Next: </span>
-           <span tal:replace="python:pos + 2">Position</span> - 
-           <span tal:replace="next/Title" /> 
-           <img tal:replace="structure here/arrowRight.gif" />
-           </a>
-            <a class="listingPrevious"
-               tal:condition="python:prev"
-               tal:attributes="href prev/getURL"
-               tabindex="1"
-               href="">
-               <img tal:replace="structure here/arrowLeft.gif" />
-           <span i18n:translate="phc_previous">
-            Previous: </span>
-           <span tal:replace="python:pos">Position</span> - 
-        <span tal:replace="prev/Title" />
-        </a>
-               &nbsp;
-        </div>
-    </span>
-
-        <div class="visualClear">&nbsp;</div>
-    <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
-      see also - shows the references if this feature is switched on
-    </div>
-
-        <div tal:replace="structure provider:plone.belowcontenttitle"/>   
-
-    </div>
 
 </div>
 

@@ -149,17 +149,8 @@
             </div>
 
             <div class="documentBody" tal:replace="structure body" />
-
-    
-            <div id="bodyContent" tal:condition="nocall:body">
-                <tal:block condition="nocall:addImagePaths">
-                    <div tal:replace="structure python:addImagePaths(body, itemUrl)" />
-                </tal:block>
-                <tal:block condition="not: nocall:addImagePaths">
-                    <div tal:replace="structure body" />
-                </tal:block>
-           </div>
      <hr/>
+
     <tal:subpage define="subpages python:itemObj.objectValues(['TabbedSubpages',]);">
 
     <div tal:repeat="subpage subpages">

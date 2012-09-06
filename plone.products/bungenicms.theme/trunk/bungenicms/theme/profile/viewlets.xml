@@ -7,14 +7,14 @@
     <viewlet name="plone.skip_links" />
     <viewlet name="bungenicmstheme.personal_bar" />
     <viewlet name="plone.app.i18n.locales.languageselector" />
-    <viewlet name="plone.searchbox" />
     <viewlet name="plone.logo" />
     <viewlet name="plone.global_sections" />
   </order>
   <order manager="plone.abovecontent" skinname="Bungeni CMS theme">
     <viewlet name="bungenicmstheme.path_bar" />
+    <viewlet name="bungenicmstheme.searchbox" insert-after="plone.path_bar" />    
   </order>
-  <order manager="plone.contentviews" skinname="Bungeni CMS theme">
+  <order manager="plone.contentviews" skinname="Bungeni CMS theme">  
     <viewlet name="plone.contentviews" />
     <viewlet name="plone.contentactions" />
   </order>
@@ -35,6 +35,7 @@
   
   <hidden manager="plone.portalheader" skinname="Bungeni CMS theme">
     <viewlet name="plone.personal_bar"/>
+    <viewlet name="plone.searchbox"/>    
   </hidden>
   
   <hidden manager="plone.abovecontent" skinname="Bungeni CMS theme">

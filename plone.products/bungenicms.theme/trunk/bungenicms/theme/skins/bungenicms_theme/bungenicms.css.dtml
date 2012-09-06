@@ -11,6 +11,14 @@ body {
   text-align:justify;
 }
 
+#portal-searchbox {
+    padding: 0.5em 2em 0 0 !important;
+}
+
+.documentEditable {
+    margin: 2.5em -1em 0em -1em !important;
+}
+
 #content {
     font-size: 125% !important;
     padding: 0 1em 2em 1em !important;
@@ -187,6 +195,10 @@ li {
     margin: 0 0 0.5em !important;
     width: 100% !important;
     color: #666;
+}
+
+.documentDescription {
+    background: none repeat scroll 0 0 #efecec;
 }
 
 p.bodyparagraph {
@@ -368,6 +380,12 @@ p.bodyparagraph {
 
 table.listing, .stx table {
     width: 100%;
+}
+
+
+.portaltype-folder #content-core {
+    border-top: 1px solid grey;
+    margin-top: 0.5em;
 }
 
 

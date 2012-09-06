@@ -30,7 +30,7 @@
       Folder Title
     </h1>
 
-    <a href="" tal:attributes="href python:here.absolute_url()+'/helplinkfolder_sections'">Category Based View</a>
+    <a href="" tal:condition="not: noSections" tal:attributes="href python:here.absolute_url()+'/helplinkfolder_sections'">Category Based View</a>
     
     <p class="visualNoPrint">
       <a href="links-all-pages"
