@@ -554,7 +554,8 @@
     </descriptor>
 
     <descriptor name="editorial_note">
-        <field name="editorial_note_id" displayable="view edit add listing" localizable="view listing">
+        <field name="editorial_note_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="edit add" />
             <show modes="view listing" />
         </field>
         <field name="text" displayable="view edit add listing" localizable="view edit add listing">
@@ -753,7 +754,8 @@
     </descriptor>
 
     <descriptor name="item_schedule">
-        <field name="item_id" displayable="view edit add listing" localizable="view listing">
+        <field name="item_id" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="edit add" />
             <show modes="view listing" />
         </field>
         <field name="item_title" displayable="view listing" localizable="view listing">
@@ -762,7 +764,8 @@
         <field name="item_mover" displayable="view listing" localizable="view listing">
             <show modes="view listing" />
         </field>
-        <field name="item_type" displayable="view edit add listing" localizable="view listing">
+        <field name="item_type" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="edit add" />
             <show modes="view listing" />
         </field>
         <field name="item_uri" displayable="view listing" localizable="view listing">
@@ -1280,11 +1283,12 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="title" displayable="view edit add listing" localizable="view edit listing">
+        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="status_date" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
         </field>
         <field name="body" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
@@ -1297,11 +1301,12 @@
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="title" displayable="view edit add listing" localizable="view edit listing">
+        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+            <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="status_date" displayable="view edit add listing" localizable="view edit listing">
-            <show modes="view edit listing" />
+        <field name="status_date" displayable="view listing" localizable="view listing">
+            <show modes="view listing" />
         </field>
         <field name="body" displayable="view edit add" localizable="view edit add">
             <show modes="view edit add" />
