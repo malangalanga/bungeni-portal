@@ -14,7 +14,10 @@
             <div br:type="listing" br:source="sittings">
                 <div class="agendaitems">
                     <ul br:type="listing" br:source="item_schedule">
-                        <li>
+                        <li br:condition="type_heading">
+                            <h2 br:type="text" br:source="dc:title"/>
+                        </li>
+                        <li br:condition="type_document">
                             <span br:type="text" br:condition="dc:mover" br:source="item_type"/>
                             <span br:type="text" br:source="dc:title"/>
                             <ul br:condition="dc:mover">
