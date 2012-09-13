@@ -14,7 +14,6 @@ log = __import__("logging").getLogger("bungeni.alchemist")
 # used directly in bungeni
 __all__ = [
     "queryModelInterface",      # redefn -> ore.alchemist.model
-    "queryModelDescriptor",     # redefn -> ore.alchemist.model
     "ModelDescriptor",          # redefn -> ore.alchemist.model
     "IModelDescriptorField",    # redefn -> ore.alchemist.interfaces
     
@@ -25,12 +24,11 @@ __all__ = [
 ]
 
 
-from zope import component, interface, schema
+from zope import interface, schema
 from zope.interface.interfaces import IInterface
 
 from bungeni.alchemist.interfaces import (
     IAlchemistContent,
-    IModelAnnotation,
     IIModelInterface,
     IModelDescriptor
 )
@@ -46,6 +44,7 @@ def queryModelInterface(cls):
     IIModelInterface interface. If cls is already such an interface it itself 
     is returned.
     """
+    # !+queryModel(mr, jun-2012) replace with capi.get_type_info().interface?
     if not IInterface.providedBy(cls):
         candidates = list(interface.implementedBy(cls))
         ifaces = filter(IIModelInterface.providedBy, candidates)
@@ -54,8 +53,7 @@ def queryModelInterface(cls):
             for i in candidates:
                 if issubclass(i, IAlchemistContent):
                     ifaces.append(i)
-        if not ifaces:
-            raise SyntaxError("No Model Interface on Domain Object [%s]" % (cls))
+        assert ifaces, "No Model Interface on Domain Object [%s]" % (cls)
         if ifaces:
             assert len(ifaces)==1, "Multiple Model Interfaces on Domain Object"
         #import pdb; pdb.set_trace()
@@ -64,20 +62,6 @@ def queryModelInterface(cls):
         assert IIModelInterface.providedBy(cls), "Invalid Interface"
         return cls
 
-
-def queryModelDescriptor(ob):
-    if not IInterface.providedBy(ob):
-        ob = filter(IIModelInterface.providedBy, 
-            list(interface.implementedBy(ob)))[0]    
-    name = "%s.%s" % (ob.__module__, ob.__name__)
-    return component.queryAdapter(ob, IModelDescriptor, name)
-
-# Register queryModelDescriptor adaptor (to override their upstream ZCML reg)
-# signature: factory, adapts:[iface], provides:iface, name, event=False
-component.getGlobalSiteManager().registerAdapter(queryModelDescriptor, 
-    [IAlchemistContent],
-    IModelAnnotation # !+IModelDescriptor ?
-)
 
 # local utils
 
@@ -217,7 +201,7 @@ class IModelDescriptorField(interface.Interface):
         required=False
     )
     '''
-    
+
 class Field(object):
     interface.implements(IModelDescriptorField)
     
@@ -227,17 +211,12 @@ class Field(object):
     def validated_modes(cls, modes, nullable=False):
         return validated_set("modes", cls._modes, modes, nullable=nullable)
     
-    # The list of roles exposed to localization
+    # Default list of roles that are guaranteed to always be there in Bungeni 
     _roles = [
         "bungeni.Admin", # parliament, has all privileges
-        "bungeni.Clerk", "bungeni.Speaker", 
         "bungeni.Owner", # instance + special objects with no mp context
-        "bungeni.MP", # parliament 
-        "bungeni.Signatory", #signatory
-        "bungeni.Minister", # ministry 
-        #"bungeni.Translator", # parliament
-        #"bungeni.Authenticated", # all authenticated users, all above roles
-        "bungeni.Anonymous" # unauthenticated user, anonymous
+        "bungeni.Anonymous", # unauthenticated user, anonymous
+        "bungeni.Signatory",
     ]
     @classmethod 
     def validated_roles(cls, roles, nullable=False):
@@ -319,7 +298,6 @@ class Field(object):
     #group = None
     # !+GROUP(mr, oct-2010) not used - determine intention, remove.
     
-    
     def __init__(self, 
             name=None, label=None, description=None, 
             modes=None, localizable=None, property=None,
@@ -340,6 +318,21 @@ class Field(object):
         CONVENTION: not specifying a parameter or specifying it as None
         are interpreted to be equivalent.
         """
+        
+        # !+modes_localizable_refactor - eliminate modes/displayable param/attr
+        # infer the list of displayable modes from the modes specified in the 
+        # list of localizables
+        # !+ for displayable but not-localizable (e.g. "add" for when column is
+        #    not nullable) add a db-column-validation on load of each field
+        # !+ for now, bridge to old behaviour, to be able to proceed as 
+        # previous, by just setting the modes parameter
+        if modes is None:
+            if localizable is None:
+                localizable = [show(modes=self.__class__._modes[:])]
+            modes = [ mode for loc in localizable for mode in loc.modes ]
+            # !+ ensure unique, normalized order
+        
+        
         # set attribute values
         kw = vars()
         for p in (
@@ -375,6 +368,7 @@ class Field(object):
             assert "listing" in self.modes, \
                 "Field [%s] sets listing_column_filter but no listing mode" % (
                     self.name)
+        # !+modes_localizable_refactor
         # the default list of show/hide localization directives
         if self.localizable is None:
             self.localizable = []
@@ -486,7 +480,7 @@ class ModelDescriptor(object):
     the class itself, implying there is no instance.fields=[Field] attribute.
     
     Always retrieve the *same* descriptor *instance* for a model class via:
-        queryModelDescriptor(model_interface)
+        alchemist.utils.get_descriptor(model_interface or ...)
     """
     __metaclass__ = MDType
     interface.implements(IModelDescriptor)
@@ -508,6 +502,12 @@ class ModelDescriptor(object):
     schema_order = () # !+USED?
     schema_invariants = ()
     
+    # a means to specify relative order to be used as needed by the usage 
+    # context e.g. when listing different containers for the different types,
+    # you may wish to fix the appearance order. 
+    # A "high" value, as default, such that unset will sort out last...
+    order = 999 # !+bungeni_custom
+    
     # sort_on: the list of column names the query is sorted on by default
     sort_on = None
     
@@ -526,6 +526,7 @@ class ModelDescriptor(object):
         log.info("Initializing ModelDescriptor: %s" % self)
         self._fields_by_name = {}
         self.sanity_check_fields()
+        log.warn("!+NO_NEED_TO_INSTANTIATE: %s" % (self))
     
     def sanity_check_fields(self):
         """Do necessary checks on all specified Field instances.

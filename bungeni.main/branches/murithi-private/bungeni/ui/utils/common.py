@@ -39,7 +39,6 @@ def has_feature(feature_name):
     # via zope.configuration.config.ConfigurationMachine.hasFeature(name)
     return getConfigContext().hasFeature(feature_name)
 
-
 def get_request():
     """ () -> either(IRequest, None)
     

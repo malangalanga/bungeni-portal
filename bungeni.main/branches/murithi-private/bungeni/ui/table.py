@@ -6,13 +6,13 @@ from zc.resourcelibrary import need
 from zc.table import batching
 from zope.app.pagetemplate import ViewPageTemplateFile
 from ore import yuiwidget
-from bungeni import alchemist
 from bungeni.ui import container
 from bungeni.ui.i18n import _
 from bungeni.ui.utils import url
 from bungeni.ui.widgets import text_input_search_widget
 from bungeni.utils.capi import capi
-from bungeni.alchemist import model
+import bungeni.alchemist
+from bungeni.alchemist import model, utils
 from bungeni.utils import naming
 
 _path = os.path.split(os.path.abspath(__file__))[0]
@@ -54,7 +54,7 @@ class ContextDataTableFormatter(yuiwidget.table.BaseDataTableFormatter):
     
     def getFields(self):
         if not self._fields:
-            self._fields = alchemist.container.getFields(self.context)
+            self._fields = bungeni.alchemist.container.getFields(self.context)
         return self._fields
     
     def getFieldColumns(self):
@@ -84,17 +84,20 @@ class ContextDataTableFormatter(yuiwidget.table.BaseDataTableFormatter):
 
     def get_search_widgets(self):
         script_html = ""
+        script_js = ""
         domain_model = proxy.removeSecurityProxy(self.context).domain_model
         domain_interface = model.queryModelInterface(domain_model)
         if domain_interface:
-            domain_annotation = model.queryModelDescriptor(domain_interface)
-            for field in domain_annotation.listing_columns:
-                search_widget = domain_annotation.get(field).search_widget
+            descriptor = utils.get_descriptor(domain_interface)
+            for field in descriptor.listing_columns:
+                search_widget = descriptor.get(field).search_widget
                 if search_widget:
-                    script_html += search_widget(self.prefix, field)
+                    s_html, s_js = search_widget(self.prefix, field)
                 else:
-                    script_html += text_input_search_widget(self.prefix, field)
-        return script_html
+                    s_html, s_js = text_input_search_widget(self.prefix, field)
+                script_html += s_html
+                script_js += s_js
+        return script_html, script_js
 
     def getDataTableConfig(self):
         config = {}
@@ -108,10 +111,11 @@ class ContextDataTableFormatter(yuiwidget.table.BaseDataTableFormatter):
 
     def __call__(self):
         need("yui-paginator")
-        return '<div id="%s">\n%s%s</div>' % (
+        script_html, script_js = self.get_search_widgets()
+        return '%s<div id="%s">\n%s%s</div>' % (script_html,
             self.prefix,
             self.script % self.getDataTableConfig(),
-            self.get_search_widgets())
+            script_js)
 
 
 class AjaxContainerListing(container.AjaxContainerListing):

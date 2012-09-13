@@ -1,3 +1,4 @@
+
 # Bungeni Parliamentary Information System - http://www.bungeni.org/
 # Copyright (C) 2010 - Africa i-Parliaments - http://www.parliaments.info/
 # Licensed under GNU GPL v2 - http://www.gnu.org/licenses/gpl-2.0.txt
@@ -88,9 +89,6 @@ def configurable_mappings(kls):
 # /Features
 
 
-#user address types
-#!+TYPES_CUSTOM mapper(domain.PostalAddressType, schema.postal_address_types)
-
 # Users
 # general representation of a person
 mapper(domain.User, schema.users,
@@ -104,6 +102,8 @@ mapper(domain.User, schema.users,
         ),
     }
 )
+
+mapper(domain.UserSubscription, schema.user_doc)
 
 mapper(domain.AdminUser, schema.admin_users,
     properties={
@@ -139,6 +139,7 @@ mapper(domain.Group, schema.groups,
         #     rdb.cast(schema.groups.c.group_id, rdb.String)
         #    ).label("group_principal_id")
         #),
+        "titletypes": relation(domain.TitleType),
         "contained_groups": relation(domain.Group,
             backref=backref("parent_group",
                 remote_side=schema.groups.c.group_id)
@@ -210,17 +211,6 @@ mapper(domain.Ministry,
     polymorphic_identity=polymorphic_identity(domain.Ministry)
 )
 
-''' !+TYPES_CUSTOM
-mapper(domain.CommitteeTypeStatus, schema.committee_type_status)
-mapper(domain.CommitteeType, schema.committee_type,
-    properties={
-        "committee_type_status": relation(domain.CommitteeTypeStatus,
-            uselist=False, 
-            lazy=False
-        )
-    }
-)
-'''
 mapper(domain.Committee, schema.committees,
     inherits=domain.Group,
     polymorphic_on=schema.groups.c.type,
@@ -256,6 +246,7 @@ mapper(domain.GroupMembership, schema.user_group_memberships,
                 schema.user_group_memberships.c.membership_id),
             uselist=False,
             lazy=True),
+        "sub_roles":relation(domain.GroupMembershipRole),
         "member_titles":relation(domain.MemberTitle)
     },
     polymorphic_on=schema.user_group_memberships.c.membership_type,
@@ -264,7 +255,11 @@ mapper(domain.GroupMembership, schema.user_group_memberships,
 # !+HEAD_DOCUMENT_ITEM(mr, sep-2011) standardize name, "head", "document", "item"
 domain.GroupMembership.head = domain.GroupMembership.user
 
-#!+TYPES_CUSTOM mapper(domain.MemberElectionType, schema.member_election_types)
+mapper(domain.GroupMembershipRole, schema.group_membership_role,
+       properties={
+        "member":relation(domain.GroupMembership)
+        }
+)
 
 # !+RENAME ParliamentMember
 mapper(domain.MemberOfParliament, schema.parliament_memberships,
@@ -312,7 +307,11 @@ mapper(domain.CommitteeStaff,
     polymorphic_identity=polymorphic_identity(domain.CommitteeStaff)
 )
 
-mapper(domain.ParliamentSession, schema.parliament_sessions)
+mapper(domain.Session, schema.sessions,
+    properties={
+        "group": relation(domain.Parliament, lazy=False),
+    }
+)
 
 mapper(domain.Sitting, schema.sitting,
     properties={
@@ -382,9 +381,10 @@ def relation_vertical_property(object_type, object_id_column, vp_name, vp_type):
         # "all" -> "save-update, merge, refresh-expire, expunge, delete"
         cascade="all",
         single_parent=True,
-        lazy=True, # !+ False gives sqlalchemy.exc.ProgrammingError 
+        lazy=False, # !+LAZY(mr, jul-2012) gives orm.exc.DetachedInstanceError
         # e.g. in business/questions listing:
-        # (ProgrammingError) missing FROM-clause entry for table "doc"
+        # Parent instance <Question at ...> is not bound to a Session; 
+        # lazy load operation of attribute '_vp_response_type' cannot proceed
     )
 
 
@@ -404,9 +404,12 @@ mapper(domain.Doc, schema.doc,
         # !+ARCHETYPE_MAPPER(mr, apr-2012) keep this mapper property always 
         # present on predefined archetype mapper, or dynamically instrument it 
         # on each on mapper of each (sub-archetype) type having this feature?
-        "item_signatories": relation(domain.Signatory), #!+rename sa_signatories
-        "attachments": relation(domain.Attachment), # !+ARCHETYPE_MAPPER
-        "sa_events": relation(domain.Event, uselist=True), # !+ARCHETYPE_MAPPER
+        "item_signatories": relation(domain.Signatory, uselist=True,
+            cascade="all"), #!+rename sa_signatories
+        "attachments": relation(domain.Attachment, 
+            cascade="all"), # !+ARCHETYPE_MAPPER
+        "sa_events": relation(domain.Event, uselist=True, 
+            cascade="all"), # !+ARCHETYPE_MAPPER
         # for sub parliamentary docs, non-null implies a sub doc
         #"head": relation(domain.Doc,
         #    uselist=False,
@@ -519,18 +522,20 @@ mapper(domain.DocVersion,
         "attachments": relation(domain.AttachmentVersion, # !+ARCHETYPE_MAPPER
             primaryjoin=rdb.and_(
                 schema.change.c.audit_id == schema.change_tree.c.parent_id,
-                #schema.change.c.action == "version", # !+constraint
             ),
             secondary=schema.change_tree,
             secondaryjoin=rdb.and_(
                 schema.change_tree.c.child_id == schema.change.c.audit_id,
-                #"version" == schema.change.c.action, # !+constraint
+                schema.change.c.audit_id == schema.audit.c.audit_id,
+                schema.audit.c.audit_type == polymorphic_identity(domain.Attachment),
             ),
             #backref=backref("parent", 
             #    uselist=False
             #),
             uselist=True,
             lazy=True,
+            order_by=schema.change.c.audit_id.desc(),
+            viewonly=True,
         ),
         #!+eventable items supporting feature "event":
         #"sa_events": relation(domain.Event, uselist=True),
@@ -639,6 +644,8 @@ mapper(domain.AttachmentAudit, schema.attachment_audit,
 )
 mapper(domain.AttachmentVersion,
     inherits=domain.Change, # !+NO_INHERIT_VERSION
+    polymorphic_on=schema.change.c.action,
+    polymorphic_identity=polymorphic_identity(domain.Version),
     properties={
         #!+eventable items supporting feature "event":
         #"sa_events": relation(domain.Event, uselist=True),
@@ -654,9 +661,6 @@ mapper(domain.Heading, schema.headings,
         )
     }
 )
-
-#!+TYPES_CUSTOM mapper(domain.QuestionType, schema.question_types)
-#!+TYPES_CUSTOM mapper(domain.ResponseType, schema.response_types)
 
 
 #Items scheduled for a sitting expressed as a relation
@@ -685,6 +689,12 @@ mapper(domain.Signatory, schema.signatory,
     properties={
         "head": relation(domain.Doc, uselist=False),
         "user": relation(domain.User, uselist=False),
+        "member": relation(domain.MemberOfParliament,
+            primaryjoin=rdb.and_(schema.signatory.c.user_id == 
+                schema.user_group_memberships.c.user_id),
+            secondary=schema.user_group_memberships,
+            uselist=False,
+        ),
         "audits": relation(domain.SignatoryAudit,
             primaryjoin=rdb.and_(schema.signatory.c.signatory_id == 
                 schema.signatory_audit.c.signatory_id),
@@ -702,10 +712,7 @@ mapper(domain.SignatoryAudit, schema.signatory_audit,
     polymorphic_identity=polymorphic_identity(domain.Signatory), # on head class
 )
 
-#!+TYPES_CUSTOM mapper(domain.BillType, schema.bill_types)
-#mapper(domain.DocumentSource, schema.document_sources)
-
-mapper(domain.HoliDay, schema.holidays)
+mapper(domain.Holiday, schema.holiday)
 
 ######################
 #
@@ -713,13 +720,14 @@ mapper(domain.HoliDay, schema.holidays)
 mapper(domain.Country, schema.countries)
 
 
+# !+RENAME simply to "Attendance"
 mapper(domain.SittingAttendance, schema.sitting_attendance,
     properties={
-        "user": relation(domain.User, uselist=False, lazy=False),
+        "member": relation(domain.User, uselist=False, lazy=False),
         "sitting": relation(domain.Sitting, uselist=False, lazy=False),
     }
 )
-#!+TYPES_CUSTOM mapper(domain.AttendanceType, schema.attendance_types)
+
 mapper(domain.TitleType, schema.title_types,
     properties={ "group": relation(domain.Group, uselist=False, lazy=False) }
 )
@@ -730,7 +738,6 @@ mapper(domain.MemberTitle, schema.member_titles,
     }
 )
 
-#!+TYPES_CUSTOM mapper(domain.AddressType, schema.address_types)
 mapper(domain.UserAddress, schema.user_addresses,
     properties={
         "country": relation(domain.Country, uselist=False, lazy=False),
@@ -764,6 +771,8 @@ mapper(domain.SittingReport, schema.sitting_report,
     }
 )
 
+# !+Report4Sitting domain.Report4Sitting inherits from domain.Report, it is 
+# mapped to the ASSOCIATION table schema.sitting_report ?!!
 mapper(domain.Report4Sitting, schema.sitting_report,
     inherits=domain.Report
 )

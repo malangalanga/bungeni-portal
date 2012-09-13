@@ -1,17 +1,15 @@
 
 from zope import interface
 from zope import component
-from zope.dublincore.interfaces import IDCDescriptiveProperties
 from zope.security.proxy import removeSecurityProxy
 from zope.i18n import translate
 from bungeni.models.interfaces import IBungeniContent
 from bungeni.ui.interfaces import IWorkspaceContentAdapter
-from bungeni.ui.descriptor.descriptor import localized_datetime_column
 from bungeni.ui.utils import date
 from bungeni.ui.utils.common import get_request
 from bungeni.ui.i18n import _
 from bungeni.core.workflow.states import get_object_state
-from bungeni.alchemist.model import queryModelDescriptor
+from bungeni.alchemist import utils
 
 
 class WorkspaceContentAdapter(object):
@@ -22,12 +20,12 @@ class WorkspaceContentAdapter(object):
         self.context = removeSecurityProxy(context)
 
     @property
-    def short_title(self):
-        return self.context.short_title
+    def title(self):
+        return self.context.title
 
     @property
     def type(self):
-        descriptor = queryModelDescriptor(self.context.__class__)
+        descriptor = utils.get_descriptor(self.context.__class__)
         item_type = descriptor.display_name if descriptor \
             else self.context.type
         request = get_request()

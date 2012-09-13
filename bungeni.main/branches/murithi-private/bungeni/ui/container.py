@@ -1,29 +1,30 @@
 log = __import__("logging").getLogger("bungeni.ui.container")
 
-import sys
 import datetime
 import simplejson
 import sqlalchemy.sql.expression as sql
-from sqlalchemy import types, orm
+from sqlalchemy import types, orm, Date, cast
 
 from ore import yuiwidget
 
 from zope.security import proxy
 from zope.security import checkPermission
 from zope.publisher.browser import BrowserPage
+from zope.schema.interfaces import IText, IDate, IDatetime
 from zc.resourcelibrary import need
 from zope.app.pagetemplate import ViewPageTemplateFile
-from bungeni.alchemist import model
+from bungeni.alchemist import model, utils
 from bungeni.alchemist import container
 from bungeni.alchemist.interfaces import IAlchemistContainer
 
 from bungeni.models import interfaces as mfaces
 from bungeni.models import domain
 
+from bungeni.core.workflow.interfaces import IWorkflowed
 from bungeni.core import translation
 
 from bungeni.ui import interfaces as ufaces
-from bungeni.ui.utils import url, date, debug
+from bungeni.ui.utils import url, date
 from bungeni.ui import cookies
 from bungeni.ui import browser
 from bungeni.utils import register
@@ -85,6 +86,30 @@ def query_filter_date_range(context, request, query, domain_model):
     return query
 
 
+def get_date_strings(date_string):
+    date_str = date_string.strip()
+    start_date, end_date = None, None
+    dates = date_str.split("->")
+    if date_str.startswith("->"):
+        end_date = dates[1]
+    elif date_str.endswith("->"):
+        start_date = dates[0]
+    elif len(date_str.split("->")) == 2:
+        start_date = dates[0]
+        end_date = dates[1]
+    return start_date, end_date
+
+
+def string_to_date(date_str):
+    date = None
+    if date_str:
+        try:
+            date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+        except:
+            log.error("The string %s does not conform to the format required" %
+                      date_str)
+    return date
+
 class AjaxContainerListing(
         container.ContainerListing,
         browser.BungeniBrowserView
@@ -94,22 +119,24 @@ class AjaxContainerListing(
     formatter_factory = yuiwidget.ContainerDataTableFormatter
 
     template = ViewPageTemplateFile("templates/generic-container.pt")
-
+    
     def __call__(self):
         need("yui-datatable")
         self.update()
         return self.template()
-
+    
     @property
     def form_name(self):
         dm = self.context.domain_model
-        return getattr(model.queryModelDescriptor(dm), "container_name",
-            dm.__name__)
-
+        try:
+            return utils.get_descriptor(dm).container_name
+        except KeyError:
+            return dm.__name__
+    
     @property
     def prefix(self):
         return "container_contents"
-
+    
     @property
     def formatter(self):
         context = proxy.removeSecurityProxy(self.context)
@@ -135,8 +162,7 @@ class ContainerJSONBrowserView(BrowserPage):
         self.domain_model = proxy.removeSecurityProxy(
             self.context).domain_model
         self.domain_interface = model.queryModelInterface(self.domain_model)
-        self.domain_annotation = model.queryModelDescriptor(
-            self.domain_interface)
+        self.domain_annotation = utils.get_descriptor(self.domain_interface)
         self.fields = tuple(container.getFields(
             self.context, self.domain_interface, self.domain_annotation))
         # table keys
@@ -177,36 +203,44 @@ class ContainerJSONListing(ContainerJSONBrowserView):
     """Paging, batching, sorting, json contents of a container.
     """
     permission = "zope.View"
-    
-    def _get_operator_field_filters(self, field_filter):
-        field_filters = [ff for ff in field_filter.strip().split(" ") if ff]
-        if "AND" in field_filters:
-            operator = " AND "
-            while "AND" in field_filters:
-                field_filters.remove("AND")
-        else:
-            operator = " OR "
-        while "OR" in field_filters:
-            field_filters.remove("OR")
-        return operator, field_filters
+    filter_property_fields = []
 
-    def _get_field_filter(self, fieldname, field_filters, operator):
-        """If we are filtering for replaced fields we assume
-        that they are character fields.
+    def string_listing_filter(self, query, filter_string, sort_dir_func,
+                              column):
+        filter_strings = filter_string.lower().split()
+        attr = getattr(self.domain_model, column)
+        for fs in filter_strings:
+            query = query.filter(
+                sql.or_(sql.func.lower(attr).like("%%%s%%" % fs)))
+        return query.order_by(sort_dir_func(attr))
+
+    def exact_string_listing_filter(self, query, filter_string, sort_dir_func,
+                              column):
+        attr = getattr(self.domain_model, column)
+        query = query.filter(attr == filter_string)
+        return query.order_by(sort_dir_func(attr))
+
+    def date_listing_filter(self, query, filter_string, sort_dir_func, column):
         """
-        fs = operator.join([
-                "lower(%s) LIKE '%%%s%%' " % (fieldname, f.lower())
-                for f in field_filters
-        ])
-        if fs:
-            return "(%s)" % (fs)
-        return ""
+        query: sqlalchemy query
+        filter_str: string with dates to filter on
+        sort_dir_func: desc or asc
+        column: date column to filter on.
+        """
+        attr = getattr(self.domain_model, column)
+        start_date_str, end_date_str = get_date_strings(filter_string)
+        start_date = string_to_date(start_date_str)
+        end_date = string_to_date(end_date_str)
+        if start_date:
+            query = query.filter(cast(attr, Date) >= start_date)
+        if end_date:
+            query = query.filter(cast(attr, Date) <= end_date)
+        return query.order_by(sort_dir_func(attr))
 
     def get_filter(self):
         """ () -> str
         """
         utk = self.utk
-        fs = []  # filter string
         filter_queries = []
         for field in self.fields:
             fn = field.__name__  # field name
@@ -215,34 +249,31 @@ class ContainerJSONListing(ContainerJSONBrowserView):
                 column = utk[fn]
                 kls = column.type.__class__
             ff_name = "filter_%s" % (fn)  # field filter name
-            ff = self.request.get(ff_name, None)  # field filter
-            if ff:
-                md_field = self.domain_annotation.get(fn) #model descriptor field
-                if md_field:
-                    lc_filter = md_field.listing_column_filter
-                    if lc_filter:
-                        filter_queries.append((lc_filter,ff))
-                        continue
-                if fs:
-                    fs.append(" AND ")
+            ff = self.request.get(ff_name, "").strip()  # field filter
+            if not ff:
+                # no filtering on this field
+                continue
+            # OK, add filter for this column...
+            md_field = self.domain_annotation.get(fn)  # model descriptor field
+            if md_field and md_field.listing_column_filter:
+                filter_queries.append((md_field.listing_column_filter,
+                                       [ff, None]))
+            else:
+                # no md_field.listing_column_filter (or md_field)
                 if fn in utk:
+                    # !+sqlalchemy.types.Unicode inherits from types.String
                     if kls in (types.String, types.Unicode):
-                        op, ffs = self._get_operator_field_filters(ff)
-                        fs = [self._get_field_filter(str(column), ffs, op)]
+                        filter_queries.append(
+                            (self.string_listing_filter, [ff, fn]))
                     elif kls in (types.Date, types.DateTime):
-                        f_name = "to_char(%s, 'YYYY-MM-DD')" % (column)
-                        fs = [self._get_field_filter(f_name, [ff], "")]
+                        filter_queries.append(
+                            (self.date_listing_filter, [ff, fn]))
                     else:
-                        fs.append("%s = %s" % (column, ff))
-        return ("".join(fs), filter_queries)
-
-    def query_add_filters(self, query, *filter_strings):
-        """ (filter_sytings) -> query
-        """
-        for fs in filter_strings:
-            if fs:
-                query = query.filter(fs)
-        return query
+                        filter_queries.append(
+                            (self.exact_string_listing_filter, [ff, fn]))
+                else:
+                    self.filter_property_fields.append(fn)
+        return filter_queries
 
     def get_sort_keys(self):
         """ server side sort,
@@ -255,9 +286,9 @@ class ContainerJSONListing(ContainerJSONBrowserView):
         if sort_on:
             sort_on = sort_on[5:]
             md_field = self.domain_annotation.get(sort_on) #model descriptor field
-            if md_field:
+            if md_field and sort_on in self.utk:
                 sort_on_keys.append(sort_on)
-        
+
         # second, process model defaults
         if self.defaults_sort_on:
             for dso in self.defaults_sort_on:
@@ -265,8 +296,41 @@ class ContainerJSONListing(ContainerJSONBrowserView):
                     sort_on_keys.append(dso)
         return sort_on_keys
     
-    def get_offsets(self, 
-            default_start=0,
+    #!+SQLAlchemy(miano, Aug 2012) This should be removed once we upgrade to
+    # sqlalchemy 0.7 and take advantage of Hybrid Properties
+    def filter_batch_on_properties(self, batch):
+        reverse = True if (self.sort_dir == "desc") else False
+        if self.sort_on in self.filter_property_fields:
+            sort_on = self.sort_on[5:]
+            if sort_on not in self.utk:
+                batch.sort(key=lambda x: getattr(x, sort_on),
+                           reverse=reverse)
+        for field_name in self.filter_property_fields:
+            md_field = self.domain_annotation.get(field_name)
+            ff_name = "filter_%s" % (field_name)
+            ff = self.request.get(ff_name, None)
+            if ff and md_field:
+                if (IDate.providedBy(md_field.property) or
+                    IDatetime.providedBy(md_field.property)):
+                    start_date_str, end_date_str = get_date_strings(ff)
+                    start_date = string_to_date(start_date_str)
+                    end_date = string_to_date(end_date_str)
+                    if start_date:
+                        batch = [x for x in batch if (
+                                getattr(x, field_name) and
+                                getattr(x, field_name).date() >= start_date)
+                                 ]
+                    if end_date:
+                        batch = [x for x in batch if (
+                                getattr(x, field_name) and
+                                getattr(x, field_name).date() <= end_date)
+                                 ]
+                elif IText.providedBy(md_field.property):
+                    batch = [x for x in batch
+                             if ff in getattr(x, field_name)]
+        return batch
+
+    def get_offsets(self, default_start=0,
             default_limit=capi.default_number_of_listing_items
         ):
         start = self.request.get("start", default_start)
@@ -282,22 +346,14 @@ class ContainerJSONListing(ContainerJSONBrowserView):
         return start, limit
     
     def translate_objects(self, nodes, lang=None):
-        """ (nodes:[ITranslatable]) -> [nodes]
+        """Translate container items if context domain is translatable
         """
+        if not mfaces.ITranslatable.implementedBy(self.domain_model):
+            return nodes
         # !+ lang should always be valid here... make not optional, assert?
         if lang is None:
             lang = translation.get_request_language(request=self.request)
-        t_nodes = []
-        for node in nodes:
-            try:
-                t_nodes.append(translation.translate_obj(node, lang))
-            except (AssertionError,):  # node is not ITranslatable
-                debug.log_exc_info(sys.exc_info(), log_handler=log.warn)
-                # if a node is not translatable then we assume that NONE of
-                # the nodes are translatable, so we simply break out,
-                # returning the untranslated nodes as is
-                return nodes
-        return t_nodes
+        return [ translation.translate_obj(node, lang) for node in nodes ]
 
     def _json_values(self, nodes):
         """
@@ -329,9 +385,15 @@ class ContainerJSONListing(ContainerJSONBrowserView):
                     d[fn] = v.strftime("%F %I:%M %p")
                 elif isinstance(v, datetime.date):
                     d[fn] = v.strftime("%F")
+
             d["object_id"] = url.set_url_context(container.stringKey(node))
             values.append(d)
         return values
+
+    def query_add_filters(self, query):
+        """Sub classes can add filters to the query by overriding this method
+        """
+        return query
 
     # !+BATCH(mr, sep-2010) this method (plus other support methods here)
     # replaces the combined logic in:
@@ -342,41 +404,44 @@ class ContainerJSONListing(ContainerJSONBrowserView):
         """
         context = proxy.removeSecurityProxy(self.context)
         query = context._query
-        
         # date_range filter (try from: model, then cookie, then request)
         query = query_filter_date_range(context, self.request, query,
             self.domain_model)
         sort_on_expressions = []
         # other filters
-        filter_string, lc_filter_queries = self.get_filter()
-        query = self.query_add_filters(query, filter_string)
+        lc_filter_queries = self.get_filter()
         sort_on_keys = self.get_sort_keys()
         if sort_on_keys:
             for sort_on in sort_on_keys:
                 md_field = self.domain_annotation.get(sort_on)
                 if md_field:
-                    lc_filter = md_field.listing_column_filter
-                    if not lc_filter:   
+                    if not md_field.listing_column_filter:
                         sort_on_expressions.append(
                             self.sort_dir_func(
                                 getattr(self.domain_model, sort_on)))
-        for lc_filter_query, lc_filter_string in lc_filter_queries:
-            query = lc_filter_query(query, lc_filter_string, self.sort_dir_func)
+        for lc_filter_query, params in lc_filter_queries:
+            filter_string = params[0]
+            column_name = params[1]
+            query = lc_filter_query(query, filter_string, self.sort_dir_func, column_name)
         if sort_on_expressions:
             query = query.order_by(sort_on_expressions)
+        #add optional filters, used by sub classes
+        query = self.query_add_filters(query)
         # get total number of items before applying an offset and limit
         self.set_size = query.count()
         # offset and limit
         query = query.offset(start).limit(limit)
         # bungeni.alchemist.container.AlchemistContainer.batch()
         # nodes: [<bungeni.models.domain.Question]
-        return [ 
+        return [
             container.contained(ob, self, container.stringKey(ob))
             for ob in query_iterator(query, self.context, self.permission)
         ]
-    
+
+
     def json_batch(self, start, limit, lang):
-        batch = self.get_batch(start, limit) 
+        batch = self.get_batch(start, limit)
+        batch = self.filter_batch_on_properties(batch)
         batch = self.translate_objects(batch, lang) # translate
         batch = self._json_values(batch) # serialize to json
         data = dict(
@@ -394,6 +459,29 @@ class ContainerJSONListing(ContainerJSONBrowserView):
         start, limit = self.get_offsets()  # ? start=0&limit=25
         lang = translation.get_request_language(request=self.request)
         return self.json_batch(start, limit, lang)
+
+@register.view(IAlchemistContainer, name="jsonlisting-raw")
+class ContainerJSONListingRaw(ContainerJSONListing):
+    """JSON listing for a container with no formatting.
+    Skip passing through descriptor listing column renderers.
+    """
+    def _json_values(self, nodes):
+        """Return nodes as JSON"""
+        values = []
+        for node in nodes:
+            d = {}
+            for field in self.fields:
+                fn = field.__name__
+                d[fn] = getattr(node, fn, None)
+                v = d[fn]
+                if isinstance(v, datetime.datetime):
+                    d[fn] = v.strftime("%F %I:%M %p")
+                elif isinstance(v, datetime.date):
+                    d[fn] = v.strftime("%F")
+
+            d["object_id"] = url.set_url_context(container.stringKey(node))
+            values.append(d)
+        return values
 
 #@register.view(IAlchemistContainer, 
 #    layer=ufaces.IMembersSectionLayer, name="jsonlisting") 
@@ -419,36 +507,34 @@ class PublicStatesContainerJSONListing(ContainerJSONListing):
     """
     # !+PUBLIC_CONTAINER_VIEW(mr, may-2102) having permission=None is a
     # somewhat dangerous optimization of avoiding to call checkPermission on
-    # each item (under the ssumption that the state-based logic will never
-    # be faulty. Should rellay be left as "ziope.View". 
+    # each item (under the assumption that the state-based logic will never
+    # be faulty. Should really be left as "ziope.View". 
     # In any case, this view class will go away.
     permission = None
     
-    def query_add_filters(self, query, *filter_strings):
+    def query_add_filters(self, query):
         """Add filtering on public workflow states
         """
-        ''' !+PUBLIC_CONTAINER_VIEW(mr, may-2102) any errors from following 
-        should NOT be silenced
-        - all public listings are on item types that MUST be workflowed.
-        - "public" listings will anyway go away.
-        '''
-        #try:
-        type_key = polymorphic_identity(self.context.domain_model)
-        workflow = capi.get_type_info(type_key).workflow
-        public_wfstates = workflow.get_state_ids(tagged=["public"], 
-            restrict=False)
-        if public_wfstates:
-            query = query.filter(
-                self.domain_model.status.in_(public_wfstates))
-        ''' !+PUBLIC_CONTAINER_VIEW
-        except KeyError, e:
-            # not workflowed...
-            log.warn("PublicStatesContainerJSONListing / get_workflow "
-                "for %s ERROR: %s: %s:" % (
-                    self.context.domain_model, e.__class__.__name__, e))
-        '''
-        return super(PublicStatesContainerJSONListing, self
-            ).query_add_filters(query, *filter_strings)
+        if IWorkflowed.implementedBy(self.context.domain_model):
+            type_key = polymorphic_identity(self.context.domain_model)
+            workflow = capi.get_type_info(type_key).workflow
+            #!+WORKFLOWS(mb, July-2012) skip filter states if no workflow
+            # type_info lookup of workflows will fail if no wf is explicitly
+            # registered. DISCREPANCY
+            # inheriting classes e.g. Report4Sitting implement IWorkflowed
+            # but lookup here fails. TODO rework/review Report4Sitting
+            # also type_info lookup should mirror zope registry lookup
+            if workflow:
+                public_wfstates = workflow.get_state_ids(tagged=["public"], 
+                    restrict=False)
+                if public_wfstates:
+                    query = query.filter(
+                        self.domain_model.status.in_(public_wfstates))
+        else:
+            log.warn("PublicStateContainerJSONListing.query_add_filters called "
+                "a type [%s] that is not workflowed... cannot apply any filters "
+                "on workflow states!" % (self.context.domain_model))
+        return query
     
     def get_cache_key(self, context, lang, start, limit, sort_direction):
         r = self.request
@@ -500,23 +586,6 @@ class JSLCache(object):
             @filter_params: [name:str] - query string filter parameter names
         """
         self.cache = evoque.collection.Cache(max_size)
-        log.debug("JSLCache queryModelDescriptor(%s) -> %s" % (
-            model_interface.__name__,
-            model.queryModelDescriptor(model_interface)))
-        '''
-        !+queryModelDescriptor(mr, mar-2011) because of the discrepancy between 
-        test and application ZCML code, when running bungeni.ui unittests 
-        the call to queryModelDescriptor here (i.e. when importing this module) 
-        returns None. To reduce this timing issue, the setting up of the 
-        JSLCache attributes descriptor and filter_params is being postponed 
-        to when it is needed i.e. when they are actually being called
-        and used--which is why they are implemented as properties. They are 
-        themselves cached to minimize the overhead of repeated lookups at 
-        runtime.
-        
-        !+queryModelDescriptor(mr, mar-2011) should be renamed, and behaviour 
-        changed accordingly (raise an error when None) to getModelDescriptor().
-        '''
         self.model_interface = model_interface
         self._descriptor = None
         self._filter_params = None
@@ -533,7 +602,7 @@ class JSLCache(object):
         """Get (cached) descriptor instance for self.model_interface.
         """
         if self._descriptor is None:
-            self._descriptor = model.queryModelDescriptor(self.model_interface)
+            self._descriptor = utils.get_descriptor(self.model_interface)
         return self._descriptor
     
     @property
@@ -573,10 +642,8 @@ JSLCaches = {
     "preports": 
         JSLCache(49, mfaces.IReport, ["Report"]),
     "attendance": 
-        # !+NAMING(mr, sep-2010) descriptor name: AttendanceDescriptor
         JSLCache(99, mfaces.ISittingAttendance, ["SittingAttendance"]),
     "parliamentmembers": # alias: "current"
-        # !+NAMING(mr, sep-2010) descriptor name: MpDescriptor
         JSLCache(99, mfaces.IMemberOfParliament, ["MemberOfParliament"]),
     "political-groups": # alias: "politicalgroups"
         JSLCache(49, mfaces.IPoliticalGroup, ["PoliticalGroup"]),
@@ -585,8 +652,7 @@ JSLCaches = {
     "governments": 
         JSLCache(49, mfaces.IGovernment, ["Government"]),
     "sessions": 
-        # !+NAMING(mr, sep-2010) descriptor name: SessionDescriptor
-        JSLCache(49, mfaces.IParliamentSession, ["ParliamentSession"]),
+        JSLCache(49, mfaces.ISession, ["Session"]),
     "sittings": 
         JSLCache(49, mfaces.ISitting, ["Sitting"]),
     "committeestaff": 
@@ -619,6 +685,10 @@ EVENT_TYPE_TO_ACTION_MAP = {
     "ObjectModifiedEvent": "edit",
     "WorkflowTransitionEvent": "transition",
 }
+
+from bungeni.alchemist.interfaces import IAlchemistContent
+from zope.component.interfaces import IObjectEvent
+@register.handler((IAlchemistContent, IObjectEvent))
 def on_invalidate_cache_event(instance, event):
     """Invalidate caches affected by creation of this instance.
     See similar handler: core.workflows.initializeWorkflow

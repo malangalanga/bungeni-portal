@@ -101,6 +101,28 @@
      layer="bungeni.ui.interfaces.IBungeniSkin"
      />
 
+   <browser:page
+     name="add"
+     for="bungeni.models.interfaces.IVenueContainer"
+     class=".common.AddForm"
+     permission="bungeni.venue.Add"
+     layer="..interfaces.IWorkspaceSchedulingSectionLayer"
+     />
+   <browser:page
+     name="edit"
+     for="bungeni.models.interfaces.IVenue"
+     class=".common.EditForm"
+     permission="bungeni.venue.Edit"
+     layer="..interfaces.IWorkspaceSchedulingSectionLayer"
+     />
+   <browser:page
+     name="delete"
+     for="bungeni.models.interfaces.IVenue"
+     class=".common.DeleteForm"
+     permission="bungeni.venue.Delete"
+     layer="..interfaces.IWorkspaceSchedulingSectionLayer"
+     />
+
 
   <browser:page
      name="delete"
@@ -145,10 +167,19 @@
 
   <browser:page
      name="translate"
-        for="bungeni.alchemist.interfaces.IAlchemistContent"
+     for="bungeni.alchemist.interfaces.IAlchemistContent"
      class=".common.TranslateForm"
-     permission="zope.ManageContent"
+     permission="bungeni.translation.Add"
      />
+
+  <browser:page
+     name="sign-open-document"
+     for="bungeni.models.interfaces.IFeatureSignatory"
+     class=".common.SignOpenDocumentForm"
+     permission="bungeni.signatory.Append"
+     layer="bungeni.ui.interfaces.IWorkspaceUnderConsiderationSectionLayer"
+     />
+
 
   <!-- content specific add, edit, delete and display forms -->
 

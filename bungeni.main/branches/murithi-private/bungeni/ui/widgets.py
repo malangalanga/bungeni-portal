@@ -26,18 +26,21 @@ import zope.traversing
 from zope.formlib.widgets import (TextAreaWidget, FileWidget, RadioWidget,
     DropdownWidget)
 from zope.formlib.itemswidgets import (ItemsEditWidgetBase, ItemDisplayWidget)
-
+from zope.formlib import form
+from zope.formlib.namedtemplate import NamedTemplate
 from zope.i18n import translate
-
+from zope import schema
 from zc.resourcelibrary import need
 
+from sqlalchemy.orm.exc import NoResultFound
 
 from bungeni.alchemist import Session
 from bungeni.models import domain
 from bungeni.ui.i18n import _
-from bungeni.ui.utils import url, debug, date, misc
-from bungeni.ui.interfaces import IGenenerateVocabularyDefault
-from bungeni.models.utils import get_db_user_id
+from bungeni.ui.utils import url, debug, date, misc, common
+from bungeni.ui.interfaces import IGenenerateVocabularyDefault, \
+    IAdminSectionLayer
+from bungeni.models.utils import get_db_user_id, get_user, get_member_of_parliament
 from bungeni.core.language import get_default_language
 
 
@@ -51,8 +54,10 @@ class IDiffDisplayWidget(zope.formlib.interfaces.IDisplayWidget):
 class TextWidget(zope.formlib.widgets.TextWidget):
     displayWidth = 60
 
+''' !+UNUSED (was prev used by Doc.title)
 class LongTextWidget(TextWidget):
     displayWidth = 90
+'''
 
 class ComputedTitleWidget(zope.formlib.widgets.DisplayWidget):
     """Computes a title and renders it if title field is empty
@@ -226,9 +231,11 @@ class FileInputWidget(ImageInputWidget):
         self.request.form["form.name"] = upload.filename
         return value
 
+
 class NoInputWidget(TextWidget):
     def __call__(self):
         return u""
+
 
 class FileAddWidget(FileInputWidget):
     __call__ = ViewPageTemplateFile("templates/add-file-widget.pt")
@@ -775,35 +782,57 @@ class UserDisplayWidget(zope.formlib.widget.DisplayWidget):
         return IDCDescriptiveProperties(self.user).title
 '''
 
-class MemberURLDisplayWidget(zope.formlib.widget.DisplayWidget):
+def _render_link_to_mp_or_user(user_id, context, request):
+    """Render the linked name of a Member of Parliament (or the User)
+    to the MP's (or the User's) "home" view.
+    
+    For use by forms in "view" mode.
+    """
+    try:
+        mp = get_member_of_parliament(user_id)
+        return zope.formlib.widget.renderElement("a",
+            contents=mp.user.fullname,
+            href="/members/current/obj-%s/" % (mp.membership_id))
+    except NoResultFound:
+        # not a member of parliament 
+        #
+        # Note that self.context is the field.property instance, while 
+        # self.context.context is the actual model instance with a "user" 
+        # relation/attribute -- BUT the user instance here may not 
+        # necessarily be the "right" user instance e.g. for case of 
+        # UserDelegation, the user we would want would be the one given by 
+        # the "delegation" attribute. So, we can only retrieve by user_id...
+        user = get_user(user_id)
+        if IAdminSectionLayer.providedBy(request):
+            # for now, only if admin, we link into the admin view...
+            return zope.formlib.widget.renderElement("a",
+                contents=user.fullname,
+                href="/admin/content/users/obj-%s/" % (user_id))
+        else:
+            # !+user_directory_listing_view(mr, aug-2012) link to a canonical
+            # directory listing page for the user (when that is available).
+            # Just the display text (no directory page to link to as yet).
+            return user.fullname
+
+
+class UserURLDisplayWidget(zope.formlib.widget.DisplayWidget):
     """Display the linked name of a Member of Parliament, using as URL the
     MP's "home" view.
 
     For use by forms in "view" mode.
     """
-
-    def get_member_of_parliament(self, user_id):
-        """Get the MemberOfParliament instance for user_id.
-        """
-        return Session().query(domain.MemberOfParliament).filter(
-            domain.MemberOfParliament.user_id == user_id).one()
-
+    
     def __call__(self):
         # this (user_id) attribute's value IS self._data
-        mp = self.get_member_of_parliament(self._data)
-        return zope.formlib.widget.renderElement("a",
-            contents=mp.user.fullname,
-            href="/members/current/obj-%s/" % (mp.membership_id)
-        )
+        user_id = self._data
+        return _render_link_to_mp_or_user(user_id, self.context, self.request)
 
 
 class widget(object):
-
     """Traverce adapter for getting widget by name from form views
     """
-
     interface.implements(zope.traversing.interfaces.ITraversable)
-
+    
     def __init__(self, context, request):
         self.context = zope.security.proxy.removeSecurityProxy(context)
         self.request = request
@@ -1085,17 +1114,57 @@ class _AutoCompleteWidget(ItemsEditWidgetBase):
         return "\n".join(contents)
 
 
-def AutoCompleteWidget(*attrs, **kw):
-  return CustomWidgetFactory(_AutoCompleteWidget, *attrs, **kw)
+# We instantiate an AutoCompleteWidget class customized as we need it
+AutoCompleteWidget = CustomWidgetFactory(_AutoCompleteWidget, remote_data=True)
 
-# !+RENAME (mr, feb-2012) nothing specific to members in this widget!
-class MemberDropDownWidget(DropdownWidget):
+def AutoCompleteWidgetOrSingleChoice(*args, **kws):
+    """A "wrapper" widget, for "edit" mode, that decides dynamically whether to
+    use the AutoCompleteWidget (if multiple options available) or a DropDown
+    (that therefore will have upto only a single option!).
+    
+    Using an auto complete widget (or equivalent variation of) may be needed 
+    some cases, but inapropriate in others e.g. using auto-complete for:
+    - when an MP/User must be selected from entire list of MP/Users (that 
+      will be in the hundreds) e.g. when Clerk is creating a document, or 
+      admin adding a member to a group.
+    - (not ideal, but could be OK) when a delegated must select the
+      delegator on behalf of whom he is creating a document (s/he may have 
+      been delegated multiple times even if the common case would likley be 
+      only once).
+    But, for the very common case of when an MP (or a delegated-only-once user) 
+    is creating an own (delegator's) document, a autocomplete makes no sense 
+    at all--in fact in that case, this only-one-value-possible field should 
+    be set automatically... 
+
+    !+ enhance the only-1-option case to simply set the value and just 
+    display it as if in "view" mode.
+    """
+    field_property = args[0] # should always be zope.schema.Choice
+    if len(field_property.vocabulary) > 1:
+        return AutoCompleteWidget(*args, **kws)
+    else:
+        return UserDropDownWidget(*args, **kws)
+
+
+class VocabularyDefaultDropDownWidget(DropdownWidget):
 
     interface.implements(IGenenerateVocabularyDefault)
 
     def __init__(self, field, request):
-        super(MemberDropDownWidget, self).__init__(field,
-            field.vocabulary, request)
+        super(VocabularyDefaultDropDownWidget, self).__init__(
+            field, field.vocabulary, request)
+
+    def getDefaultVocabularyValue(self):
+        raise NotImplemented
+        
+        user_id = get_db_user_id()
+        try:
+            self.context.vocabulary.getTerm(user_id)
+        except LookupError:
+            return None
+        return user_id
+
+class UserDropDownWidget(VocabularyDefaultDropDownWidget):
 
     def getDefaultVocabularyValue(self):
         user_id = get_db_user_id()
@@ -1105,9 +1174,11 @@ class MemberDropDownWidget(DropdownWidget):
             return None
         return user_id
 
-class LanguageLookupWidget(MemberDropDownWidget):
+class LanguageLookupWidget(VocabularyDefaultDropDownWidget):
+
     def getDefaultVocabularyValue(self):
         return get_default_language()
+
 
 class TreeVocabularyWidget(DropdownWidget):
     """
@@ -1230,5 +1301,63 @@ def text_input_search_widget(table_id, field_id):
     """Default search widget displays a text input field.
     """
     script = open("%s/templates/text-input-search-widget.js" % (_path)).read()
-    return script % {"table_id": table_id, "field_id": field_id}
+    return "", script % {"table_id": table_id, "field_id": field_id}
 
+
+class DateFilterWidget(form.PageForm):
+
+    macro_template = NamedTemplate("alchemist.form")
+    template = ViewPageTemplateFile("templates/date-input-search.pt")
+
+    def __init__(self, context, request, table_id, field_id):
+        self.prefix = "form_%s_%s" % (table_id, field_id)
+        super(DateFilterWidget, self).__init__(context, request)
+
+    class IDateRangeSchema(interface.Interface):
+        range_start_date = schema.Date(
+            title=_(u"From"),
+            description=_(u"Leave blank or set lower limit"),
+            required=False)
+
+        range_end_date = schema.Date(
+            title=_(u"To"),
+            description=_(u"Leave blank or set upper limit"),
+            required=False)
+
+    macro_template = NamedTemplate("alchemist.form")
+    template = ViewPageTemplateFile("templates/date-input-search.pt")
+    form_fields = form.Fields(IDateRangeSchema, render_context=True)
+    form_fields["range_start_date"].custom_widget = DateWidget
+    form_fields["range_end_date"].custom_widget = DateWidget
+    
+    def setUpWidgets(self, ignore_request=False, cookie=None):
+        class context:
+            range_start_date = None
+            range_end_date = None
+        self.adapters = {
+            self.IDateRangeSchema: context,
+            }
+        self.widgets = form.setUpWidgets(
+            self.form_fields, self.prefix, self.context, self.request,
+            form=self, adapters=self.adapters, ignore_request=True)
+
+    @form.action(_(u"Ok"), name="ok")
+    def handle_ok(self, action, data):
+        #Handled by Javascript
+        pass
+
+    @form.action(_(u"Clear"), name="clear")
+    def handle_clear(self, action, data):
+        #Handled by Javascript
+        pass
+
+
+def date_input_search_widget(table_id, field_id):
+    form = DateFilterWidget(common.get_application(), common.get_request(),
+                            table_id, field_id)
+    html = '<div id="date_input_search_widget_%(table_id)s_%(field_id)s" style="display: none;">%(html)s</div>' \
+           % {"table_id": table_id,
+              "field_id": field_id,
+              "html": form.render()}
+    script = open("%s/templates/date-input-search-widget.js" % (_path)).read()
+    return html, script % {"table_id": table_id, "field_id": field_id}

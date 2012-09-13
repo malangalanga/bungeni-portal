@@ -15,13 +15,14 @@ import zc.table
 from zc.table import column
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.i18n import translate
+from zope.dublincore.interfaces import IDCDescriptiveProperties
 
 from bungeni.models import interfaces
 from bungeni.models import domain
 from bungeni.core.workflow.interfaces import IWorkflow
 from bungeni.ui.forms.interfaces import ISubFormViewletManager
 from bungeni.ui.i18n import _
-from bungeni.ui.descriptor import descriptor
+from bungeni.ui.descriptor import listing
 from bungeni.ui.utils import date
 from bungeni.ui import browser
 from bungeni.utils import register, naming
@@ -294,7 +295,7 @@ class ChangeDataDescriptor(object):
     # !+bungeni_custom
     def columns(self):
         return [
-            descriptor.user_name_column("user_id", _("user"), "user"),
+            listing.related_user_name_column("user_id", _("user")),
             column.GetterColumn(title="date_active",
                 getter=lambda i,f: self.date_formatter.format(i.date_active)),
             column.GetterColumn(title="object", 
@@ -394,7 +395,7 @@ class AuditLogView(AuditLogMixin, browser.BungeniBrowserView):
     
     __call__ = ViewPageTemplateFile("templates/listing-view.pt")
     
-    _page_title = "Change Log"
+    _page_title = _("Change Log")
     visible_column_names = [
         "user", "date_active", "object", "description", "note", "date_audit"]
     include_change_types = [ t for t in CHANGE_TYPES ]
@@ -403,12 +404,12 @@ class AuditLogView(AuditLogMixin, browser.BungeniBrowserView):
     def __init__(self, context, request):
         browser.BungeniBrowserView.__init__(self, context, request)
         AuditLogMixin.__init__(self)
-        if hasattr(self.context, "short_title"):
+        if hasattr(self.context, "title"):
+            dc = IDCDescriptiveProperties(self.context, None)
             self._page_title = "%s: %s" % (
-                _(self._page_title), _(self.context.short_title))
-        else:
-            self._page_title = _(self.__class__._page_title)
-
+                translate(self._page_title), 
+                dc and dc.title or self.context.title
+            )
 
 @register.viewlet(interfaces.IFeatureAudit, manager=ISubFormViewletManager, 
     name="keep-zca-happy-timeline")

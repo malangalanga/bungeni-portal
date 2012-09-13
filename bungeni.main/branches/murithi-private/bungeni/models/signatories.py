@@ -18,7 +18,7 @@ from zope.securitypolicy.interfaces import IPrincipalRoleMap
 from zope.component import getGlobalSiteManager
 
 from bungeni.alchemist import Session
-from bungeni.models import interfaces
+from bungeni.models import interfaces, domain
 from bungeni.utils import register
 from bungeni.core.workflow.interfaces import IWorkflowController, IWorkflowTransitionEvent
 
@@ -28,7 +28,16 @@ CONFIGURABLE_PARAMS = ("max_signatories", "min_signatories", "submitted_states",
 OWNER_ROLE = "bungeni.Owner"
 SIGNATORY_ROLE = "bungeni.Signatory"
 SIGNATORIES_REJECT_STATES = [u"rejected", u"withdrawn"]
-SIGNATORY_CONSENTED_STATE = [u"consented"]
+SIGNATORY_CONSENTED_STATES = [u"consented"]
+SIGNATORY_CONSENTED_STATE = u"consented"
+
+def _allow_signatures(self):
+    """Callable on class to check if document is open for signatures.
+    
+    Used in bungeni/ui/menu.zcml to filter out 'sign document action'
+    """
+    manager =interfaces.ISignatoryManager(self)
+    return manager.autoSign()
 
 @register.handler(adapts=(interfaces.IFeatureSignatory, IWorkflowTransitionEvent))
 def doc_workflow(ob, event):
@@ -63,6 +72,31 @@ def make_owner_signatory(context):
         session.flush()
         zope.event.notify(zope.lifecycleevent.ObjectCreatedEvent(signatory))
 
+def sign_document(context, user_id):
+    """Sign context for this user if they have not already signed
+    """
+    signatories = removeSecurityProxy(context.signatories)
+    signatory = None
+    for sgn in signatories.values():
+        if sgn.user_id == user_id:
+            signatory = removeSecurityProxy(sgn)
+            break
+
+    if not signatory:
+        session = Session()
+        signatory = domain.Signatory()
+        signatory.user_id = user_id
+        signatory.head_id = context.doc_id
+        session.add(signatory)
+        session.flush()
+        zope.event.notify(zope.lifecycleevent.ObjectCreatedEvent(signatory))
+    else:
+        wfc = IWorkflowController(signatory)
+        if not wfc.state_controller.get_status() == SIGNATORY_CONSENTED_STATE:
+            wfc.state_controller.set_status(SIGNATORY_CONSENTED_STATE)
+    return signatory
+        
+
 
 class SignatoryValidator(object):
     zope.interface.implements(interfaces.ISignatoryManager)
@@ -71,7 +105,7 @@ class SignatoryValidator(object):
     min_signatories = 0
     submitted_states = ("submitted_signatories",)
     draft_states = ("draft", "redraft",)
-    expire_states = ("submitted_signatories",)
+    expire_states = ("submitted",)
     open_states = ()
     
     def __init__(self, context):
@@ -113,7 +147,7 @@ class SignatoryValidator(object):
         return self.signatories_count > 0
 
     def consentedSignatories(self):
-        return len(filter(lambda cs:cs.status==SIGNATORY_CONSENTED_STATE, 
+        return len(filter(lambda cs:cs.status in SIGNATORY_CONSENTED_STATES, 
             self.signatories
         ))
     
@@ -128,7 +162,13 @@ class SignatoryValidator(object):
     def allowSignature(self):
         return (not self.max_signatories or 
             (self.consented_signatories < self.max_signatories)
-        ) and self.documentSubmitted()
+        ) and (self.documentSubmitted() or self.autoSign)
+
+    def autoSign(self):
+        return self.wf_status in self.open_states
+
+    def signDocument(self, user_id):
+        return sign_document(self.context, user_id)
 
     def expireSignatures(self):
         return self.wf_status in self.expire_states
@@ -202,11 +242,12 @@ def createManagerFactory(domain_class, **params):
         )
         config_type = type(getattr(manager, config_name))
         if config_type in (tuple, list):
-            config_value = map(str.strip, config_value.split(","))
+            config_value = map(str.strip, config_value.split())
         setattr(manager, config_name, config_type(config_value))
     assert (set.intersection(set(manager.submitted_states), 
         set(manager.draft_states), set(manager.expire_states))==set()
     ), "draft, submitted and expired states must be distinct lists"
 
     gsm.registerAdapter(manager, (domain_iface,), interfaces.ISignatoryManager)
+    domain_class.allow_signatures = _allow_signatures
 

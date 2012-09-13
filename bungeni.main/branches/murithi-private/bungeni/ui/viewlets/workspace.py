@@ -21,21 +21,30 @@ from bungeni.models.interfaces import ISignatoryManager
 class WorkspaceContextNavigation(StructureAwareViewlet):
 
     render = ViewPageTemplateFile("templates/workspace.pt")
+    folder = "my-documents"
+    css_class = "workpace-listing"
 
     def update(self):
         self.tabs = []
-        app = getSite()
-        keys = app["workspace"]["documents"].keys()
-        for key in keys:
-            tab_url = url.absoluteURL(app["workspace"]["documents"][key],
-                self.request
-            )
+        directory = getSite()["workspace"][self.folder]
+        for key in directory.keys():
+            tab_url = url.absoluteURL(directory[key], self.request)
             tab = {}
-            tab["title"] = key
+            tab["title"] = directory[key].title
             tab["url"] = tab_url
             tab["active"] = self.request.getURL().startswith(tab_url)
             self.tabs.append(tab)
 
+
+class WorkspaceDocumentNavigation(WorkspaceContextNavigation):
+    css_class = "workspace-documents"
+
+
+class WorkspaceUnderConsiderationNavigation(WorkspaceContextNavigation):
+   
+    render = ViewPageTemplateFile("templates/workspace-under-consideration.pt")
+    folder = "under-consideration"
+    css_class = "workspace-under-consideration"
 
 class SignatoriesStatus(object):
     """Shows the signature status of a document - e.g. number required

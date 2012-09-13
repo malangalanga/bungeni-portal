@@ -154,23 +154,6 @@ def make_audit_table(table, metadata):
     return audit_tbl
 
 
-'''
-def make_vocabulary_table(vocabulary_prefix, metadata, table_suffix="_types",
-        column_suffix="_type"
-    ):
-    table_name = "%s%s" % (vocabulary_prefix, table_suffix)
-    column_key = "%s%s_id" % (vocabulary_prefix, column_suffix)
-    column_name = "%s%s_name" % (vocabulary_prefix , column_suffix)
-    return rdb.Table(table_name, metadata,
-        rdb.Column(column_key, rdb.Integer, primary_key=True),
-        rdb.Column(column_name, rdb.Unicode(256),
-            nullable=False,
-            unique=True
-        ),
-        rdb.Column("language", rdb.String(5), nullable=False),
-    )
-'''
-
 #######################
 # Users 
 #######################
@@ -178,8 +161,10 @@ def make_vocabulary_table(vocabulary_prefix, metadata, table_suffix="_types",
 users = rdb.Table("users", metadata,
     rdb.Column("user_id", rdb.Integer, PrincipalSequence, primary_key=True),
     # login is our principal id
-    rdb.Column("login", rdb.Unicode(80), unique=True, nullable=True),
-    rdb.Column("titles", rdb.Unicode(32)),
+    rdb.Column("login", rdb.Unicode(80), unique=True, nullable=False),
+    rdb.Column("salutation", rdb.Unicode(128)), # !+vocabulary?
+    rdb.Column("title", rdb.Unicode(128)), # !+vocabulary?
+    rdb.Column("titles", rdb.Unicode(32)), # !+TMP to work with preceding demo data 
     rdb.Column("first_name", rdb.Unicode(256), nullable=False),
     rdb.Column("last_name", rdb.Unicode(256), nullable=False),
     rdb.Column("middle_name", rdb.Unicode(256)),
@@ -197,6 +182,10 @@ users = rdb.Table("users", metadata,
     rdb.Column("current_nationality", rdb.String(2),
         rdb.ForeignKey("countries.country_id")
     ),
+    rdb.Column("marital_status", rdb.Unicode(128),
+        default=None,
+        nullable=True,
+    ),
     rdb.Column("uri", rdb.Unicode(1024), unique=True),
     rdb.Column("date_of_death", rdb.Date),
     rdb.Column("type_of_id", rdb.String(1)),
@@ -206,6 +195,7 @@ users = rdb.Table("users", metadata,
     ),
     rdb.Column("salt", rdb.String(24)),
     rdb.Column("description", rdb.UnicodeText),
+    rdb.Column("remarks", rdb.UnicodeText),
     rdb.Column("image", rdb.Binary),
     # !+active_p(mr, sep-2011) why is this "workflow status" column named
     # "active_p" and not "status"? Rename...
@@ -217,7 +207,7 @@ users = rdb.Table("users", metadata,
         # default value--it is up to the workflow to decide what this should be!
         #default="A", # active/inactive/deceased
     ),
-    # comment out for now - will be used for user preferences
+    #!+receive_notification comment out for now - will be used for user preferences
     rdb.Column("receive_notification", rdb.Boolean, default=True),
     rdb.Column("language", rdb.String(5), nullable=False),
 )
@@ -232,10 +222,12 @@ admin_users = rdb.Table("admin_users", metadata,
 # associations table for many-to-many relation between user and doc
 user_doc = rdb.Table("user_doc", metadata,
     rdb.Column("users_id", rdb.Integer,
-        rdb.ForeignKey("users.user_id")
+        rdb.ForeignKey("users.user_id"),
+        primary_key=True
     ),
     rdb.Column("doc_id", rdb.Integer,
-        rdb.ForeignKey("doc.doc_id")
+        rdb.ForeignKey("doc.doc_id"),
+        primary_key=True
     )
 )
 
@@ -264,8 +256,6 @@ currently_editing_document = rdb.Table("currently_editing_document", metadata,
     rdb.Column("editing_date", rdb.DateTime(timezone=False)) 
 )
 
-#!+TYPES_CUSTOM member_election_types = make_vocabulary_table("member_election", metadata)
-
 # password restore links
 password_restore_link = rdb.Table("password_restore_link", metadata,
     rdb.Column("user_id", rdb.Integer,
@@ -293,8 +283,7 @@ parliament_memberships = rdb.Table("parliament_memberships", metadata,
     # the political party of the MP as of the time he was elected
     rdb.Column("party", rdb.UnicodeText, nullable=True),
     # is the MP elected, nominated, ex officio member, ...
-    rdb.Column("member_election_type",
-        rdb.Unicode(128),
+    rdb.Column("member_election_type", rdb.Unicode(128),
         default="elected",
         nullable=False,
     ),
@@ -376,29 +365,12 @@ parliaments = rdb.Table("parliaments", metadata,
    rdb.Column("election_date", rdb.Date, nullable=False),
 )
 
-''' !+TYPES_CUSTOM
-committee_type_status = make_vocabulary_table("committee_type_status", metadata,
-    table_suffix="", column_suffix="")
-committee_type = rdb.Table("committee_types", metadata,
-    rdb.Column("committee_type_id", rdb.Integer, primary_key=True),
-    rdb.Column("committee_type", rdb.Unicode(256), nullable=False),
-    rdb.Column("description", rdb.UnicodeText),
-    rdb.Column("life_span", rdb.Unicode(16)),
-    rdb.Column("committee_type_status_id", rdb.Integer,
-        rdb.ForeignKey("committee_type_status.committee_type_status_id"),
-        nullable=False
-    ),
-    rdb.Column("language", rdb.String(5), nullable=False),
-)
-'''
-
 committees = rdb.Table("committees", metadata,
     rdb.Column("committee_id", rdb.Integer,
         rdb.ForeignKey("groups.group_id"),
         primary_key=True
     ),
-    rdb.Column("group_continuity",
-        rdb.Unicode(128),
+    rdb.Column("group_continuity", rdb.Unicode(128),
         default="permanent",
         nullable=False,
     ),
@@ -435,11 +407,20 @@ title_types = rdb.Table("title_types", metadata,
     rdb.Column("title_type_id", rdb.Integer, primary_key=True),
     rdb.Column("group_id", rdb.Integer, 
                 rdb.ForeignKey("groups.group_id"), nullable=False),
-    rdb.Column("role_id", rdb.Unicode(256), nullable=True),
     rdb.Column("title_name", rdb.Unicode(40), nullable=False),
     rdb.Column("user_unique", rdb.Boolean, default=False,), # nullable=False),
     rdb.Column("sort_order", rdb.Integer(2), nullable=False),
     rdb.Column("language", rdb.String(5), nullable=False),
+)
+
+# sub roles to be granted when a document is assigned to a user
+group_membership_role = rdb.Table("group_membership_role", metadata,
+    rdb.Column("membership_id", rdb.Integer,
+               rdb.ForeignKey("user_group_memberships.membership_id"),
+               primary_key=True),
+    rdb.Column("role_id", rdb.Unicode(256), nullable=False,
+               primary_key=True),
+    rdb.Column("is_global", rdb.Boolean, default=False),
 )
 
 #
@@ -481,7 +462,7 @@ user_group_memberships = rdb.Table("user_group_memberships", metadata,
     # type of membership staff or member
     rdb.Column("membership_type", rdb.String(30),
         default="member",
-        #nullable=False,
+        nullable=False,
     ),
     rdb.Column("language", rdb.String(5), nullable=False),
 )
@@ -489,7 +470,7 @@ user_group_memberships = rdb.Table("user_group_memberships", metadata,
 ##############
 # Titles
 ##############
-# To indicate the role a persons has in a specific context (Ministry, 
+# To indicate the title a persons has in a specific context (Ministry, 
 # Committee, Parliament, ...) and for what period (from - to)
 
 member_titles = rdb.Table("member_titles", metadata,
@@ -513,15 +494,6 @@ member_titles = rdb.Table("member_titles", metadata,
 # Addresses
 ############
 
-''' !+TYPES_CUSTOM 
-address_types = rdb.Table("address_types", metadata,
-    rdb.Column("address_type_id", rdb.Integer, primary_key=True),
-    rdb.Column("address_type_name", rdb.Unicode(40)),
-    rdb.Column("language", rdb.String(5), nullable=False),
-)
-postal_address_types = make_vocabulary_table("postal_address", metadata)
-'''
-
 def _make_address_table(metadata, fk_key="user"):
     assert fk_key in ("user", "group")
     table_name = "%s_addresses" % (fk_key) # e.g. user_addresses
@@ -534,22 +506,20 @@ def _make_address_table(metadata, fk_key="user"):
             rdb.ForeignKey(fk_target),
             nullable=False
         ),
-        rdb.Column("logical_address_type",
-            rdb.Unicode(128),
+        rdb.Column("logical_address_type", rdb.Unicode(128),
             default="office",
             nullable=False,
         ),
-        rdb.Column("postal_address_type",
-            rdb.Unicode(128),
+        rdb.Column("postal_address_type", rdb.Unicode(128),
             default="street",
             nullable=False,
         ),
-        rdb.Column("street", rdb.Unicode(256), nullable=False),
-        rdb.Column("city", rdb.Unicode(256), nullable=False),
+        rdb.Column("street", rdb.Unicode(256), nullable=True),
+        rdb.Column("city", rdb.Unicode(256), nullable=True),
         rdb.Column("zipcode", rdb.Unicode(20)),
         rdb.Column("country_id", rdb.String(2),
             rdb.ForeignKey("countries.country_id"),
-            nullable=False
+            nullable=True
         ),
         rdb.Column("phone", rdb.Unicode(256)),
         rdb.Column("fax", rdb.Unicode(256)),
@@ -569,9 +539,9 @@ user_addresses = _make_address_table(metadata, "user")
 # Activity 
 #
 
-parliament_sessions = rdb.Table("sessions", metadata,
+sessions = rdb.Table("sessions", metadata,
     rdb.Column("session_id", rdb.Integer, primary_key=True),
-    rdb.Column("parliament_id", rdb.Integer,
+    rdb.Column("parliament_id", rdb.Integer, # group_id
         rdb.ForeignKey("parliaments.parliament_id"),
         nullable=False
     ),
@@ -613,7 +583,6 @@ sitting = rdb.Table("sitting", metadata,
     rdb.Column("convocation_type", rdb.Unicode(1024)),
 )
 
-
 sitting_attendance = rdb.Table("sitting_attendance", metadata,
     rdb.Column("sitting_id", rdb.Integer,
         rdb.ForeignKey("sitting.sitting_id"),
@@ -623,8 +592,7 @@ sitting_attendance = rdb.Table("sitting_attendance", metadata,
         rdb.ForeignKey("users.user_id"),
         primary_key=True
     ),
-    rdb.Column("attendance_type",
-        rdb.Unicode(128),
+    rdb.Column("attendance_type", rdb.Unicode(128),
         default="present",
         nullable=False,
     ),
@@ -639,13 +607,6 @@ headings = rdb.Table("headings", metadata,
     rdb.Column("group_id", rdb.Integer, rdb.ForeignKey("groups.group_id"))
 )
 
-''' !+TYPES_CUSTOM
-attendance_types = rdb.Table("attendance_types", metadata,
-    rdb.Column("attendance_type_id", rdb.Integer, primary_key=True),
-    rdb.Column("attendance_type", rdb.Unicode(40), nullable=False),
-    rdb.Column("language", rdb.String(5), nullable=False),
-)
-'''
 
 # venues for sittings:
 
@@ -799,8 +760,7 @@ attachment = rdb.Table("attachment", metadata,
         nullable=False
     ),
     # attachment_type #!+attached_file_type
-    rdb.Column("type", 
-        rdb.Unicode(128),
+    rdb.Column("type", rdb.Unicode(128),
         default="document",
         nullable=False,
     ),
@@ -884,15 +844,13 @@ doc = rdb.Table("doc", metadata,
     # For validation of this field, we let upstream logic e.g. UI fields
     # using zope.schema.Choice combined with a vocabulary, to take 
     # responsibilty of validating this for *this* document type.
-    rdb.Column("doc_type",
-        rdb.Unicode(128),
+    rdb.Column("doc_type", rdb.Unicode(128),
         default=None,
         nullable=True,
     ),
     # document procedure: string enum (set by sub document type) 
     # e.g. urgent/ordinary, private/public
-    rdb.Column("doc_procedure",
-        rdb.Unicode(128),
+    rdb.Column("doc_procedure", rdb.Unicode(128),
         default=None,
         nullable=True,
     ),
@@ -915,12 +873,10 @@ doc = rdb.Table("doc", metadata,
     # CONTENT
     rdb.Column("acronym", rdb.Unicode(48)),
     # !+LABEL(mr, jan-2011) display label e.g. for link text?
-    # short_title <=> dc:Title !+DescriptiveProperties(mr, jan-2011)
+    # title <=> dc:Title !+DescriptiveProperties(mr, jan-2011)
     # The name given to the resource. Typically, a Title will be a name
     # by which the resource is formally known.
-    rdb.Column("short_title", rdb.Unicode(512), nullable=False), 
-    # long_title <=> no dc equivalent
-    rdb.Column("long_title", rdb.Unicode(1024), nullable=True),
+    rdb.Column("title", rdb.Unicode(1024), nullable=False),
     # description <=> dc:Description !+DescriptiveProperties(mr, jan-2011)
     # An account of the content of the resource. Description may include but is
     # not limited to: an abstract, table of contents, reference to a graphical
@@ -1069,10 +1025,10 @@ settings_index = rdb.Index("settings_propsheet_idx",
     settings.c["propertysheet"]
 )
 
-holidays = rdb.Table("holidays", metadata,
+holiday = rdb.Table("holiday", metadata,
     rdb.Column("holiday_id", rdb.Integer, primary_key=True),
-    rdb.Column("holiday_date", rdb.Date, nullable=False),
-    rdb.Column("holiday_name", rdb.Unicode(1024)),
+    rdb.Column("date", rdb.Date, nullable=False),
+    rdb.Column("name", rdb.Unicode(1024)),
     rdb.Column("language", rdb.String(5), nullable=False),
 )
 

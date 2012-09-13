@@ -18,31 +18,65 @@ from zope.app.component import site
 from zope.location.interfaces import ILocation
 
 from ore.wsgiapp.app import Application
+from ore.wsgiapp.interfaces import IWSGIApplicationCreatedEvent
 
 from bungeni.models import domain
 from bungeni.models import interfaces as model_interfaces
+from bungeni.models.utils import get_current_parliament
+from bungeni.models.utils import container_getter
 
 from bungeni.core import interfaces
 from bungeni.core import location
-from bungeni.core import language
 from bungeni.core.content import Section, AdminSection, AkomaNtosoSection, \
     WorkspaceSection
 from bungeni.core.content import QueryContent
 from bungeni.core.i18n import _
-from bungeni.models.utils import get_current_parliament
-from bungeni.models.utils import container_getter
+from bungeni.core.workspace import (WorkspaceContainer,
+                                    WorkspaceUnderConsiderationContainer,
+                                    WorkspaceTrackedDocumentsContainer,
+                                    load_workspaces)
+from bungeni.core.notifications import load_notifications
+from bungeni.core.emailnotifications import email_notifications
+from bungeni.core.serialize import serialization_notifications
 from bungeni.ui.utils import url, common # !+ core dependency on ui
-from bungeni.core.workspace import WorkspaceContainer
 from bungeni.utils.capi import capi
+from bungeni.utils import register
 
 
+
+@register.handler(
+    (model_interfaces.IBungeniApplication, IWSGIApplicationCreatedEvent))
 def on_wsgi_application_created_event(application, event):
-    """Subscriber to the ore.wsgiapp.interfaces.IWSGIApplicationCreatedEvent.
+    """Additional setup on IWSGIApplicationCreatedEvent.
     """
+    # additional workflow validation
+    for type_key, ti in capi.iter_type_info():
+        if ti.workflow:
+            ti.workflow.validate_permissions_roles()
+    
+    # import events module, registering handlers
+    import bungeni.core.workflows.events
+    
+    # load workspaces
+    load_workspaces()
+
+    #load notifications
+    load_notifications()
+    
+    #load email notifications
+    email_notifications()
+
+    #set up serialization notifications
+    serialization_notifications()
+
+    # import events modules, registering handlers
+    import bungeni.core.events
+    
     initializer = model_interfaces.IBungeniSetup(application)
     initializer.setUp()
     log.debug("on_wsgi_application_created_event: _features: %s" % (
         getConfigContext()._features))
+
 
 def to_locatable_container(domain_class, *domain_containers):
     component.provideAdapter(location.ContainerLocation(*domain_containers),
@@ -83,8 +117,19 @@ class AppSetup(object):
         index.setupFieldDefinitions(index.indexer)
         
         sm = site.LocalSiteManager(self.context)
-        self.context.setSiteManager(sm)           
-            
+        self.context.setSiteManager(sm)
+        
+        from bungeni.core import language
+        from bungeni.ui import z3evoque
+        z3evoque.set_get_gettext()
+        z3evoque.setup_evoque()
+        z3evoque.domain.set_on_globals("devmode", common.has_feature("devmode"))
+        z3evoque.domain.set_on_globals("absoluteURL", url.absoluteURL)
+        z3evoque.domain.set_on_globals("get_section_name", url.get_section_name)
+        z3evoque.domain.set_on_globals("get_base_direction", 
+            language.get_base_direction)
+        z3evoque.domain.set_on_globals("is_rtl", language.is_rtl)          
+        
         # !+ where is the view name for the app root (slash) set?
         
         # CONVENTION: the action of each site top-section is made to point 
@@ -101,41 +146,59 @@ class AppSetup(object):
         workspace = self.context["workspace"] = WorkspaceSection(
             title=_(u"Workspace"),
             description=_(u"Current parliamentary activity"),
-            default_name="documents",
+            default_name="my-documents",
         )
         
         alsoProvides(workspace, interfaces.ISearchableSection)
-        workspace["documents"] = WorkspaceSection(
-            title=_(u"documents"),
-            description=_(u"documents"),
+        workspace["my-documents"] = WorkspaceSection(
+            title=_(u"my documents"),
+            description=_(u"my documents"),
             default_name="inbox",
             marker=interfaces.IWorkspaceDocuments,
         )
-        workspace["documents"]["draft"] = WorkspaceContainer(
+        workspace["my-documents"]["draft"] = WorkspaceContainer(
             tab_type="draft",
             title=_("draft"),
             description=_("draft documents"),
             marker=interfaces.IWorkspaceDraft
         )
-        workspace["documents"]["inbox"] = WorkspaceContainer(
+        workspace["my-documents"]["inbox"] = WorkspaceContainer(
             tab_type="inbox",
             title=_("inbox"),
             description=_("incoming documents"),
             marker=interfaces.IWorkspaceInbox
         )
-        workspace["documents"]["sent"] = WorkspaceContainer(
-            tab_type="sent",
-            title=_("sent"),
-            description=_("sent documents"),
-            marker=interfaces.IWorkspaceSent
+        workspace["my-documents"]["pending"] = WorkspaceContainer(
+            tab_type="pending",
+            title=_("pending"),
+            description=_("pending documents"),
+            marker=interfaces.IWorkspacePending
         )
-        workspace["documents"]["archive"] = WorkspaceContainer(
+        workspace["my-documents"]["archive"] = WorkspaceContainer(
             tab_type="archive",
             title=_("archive"),
             description=_("archived documents"),
             marker=interfaces.IWorkspaceArchive
         )
-        
+        workspace["under-consideration"] = WorkspaceSection(
+            title=_(u"under consideration"),
+            description=_(u"documents under consideration"),
+            default_name="documents",
+            marker=interfaces.IWorkspaceUnderConsideration
+        )
+
+        workspace["under-consideration"]["documents"] = WorkspaceUnderConsiderationContainer(
+            name="documents",
+            title=_(u"under consideration"),
+            description=_(u"documents under consideration"),
+            marker=interfaces.IWorkspaceTrackedDocuments
+           )
+        workspace["under-consideration"]["tracked-documents"] = WorkspaceTrackedDocumentsContainer(
+            name="tracked documents",
+            title=_(u"tracked documents"),
+            description=_(u"tracked documents")
+           )
+
         workspace["scheduling"] = Section(
             title=_(u"Scheduling"),
             description=_(u"Scheduling"),
@@ -158,7 +221,7 @@ class AppSetup(object):
         #!+AUTO CONTAINERS SCHEDULING(mb, April-2012)
         # type_info missing container name
         for key, info in capi.iter_type_info():
-            if model_interfaces.IScheduleText.implementedBy(info.domain_model):
+            if model_interfaces.IScheduleContent.implementedBy(info.domain_model):
                 container_name = "%ss" % key
                 container = "%sContainer" % info.domain_model.__name__
                 workspace["scheduling"][container_name] = getattr(domain, container)()
@@ -370,57 +433,5 @@ class AppSetup(object):
         
         content[u"users"] = domain.UserContainer()
         to_locatable_container(domain.User, content[u"users"])
-        
-        content[u"headings"] = domain.HeadingContainer()
-        to_locatable_container(domain.Heading, content[u"headings"])
-        
-        ''' !+TYPES_CUSTOM
-        vocabularies = admin["vocabularies"] = Section(
-            title=_(u"vocabularies"),
-            description=_(u"manage vocabularies"),
-            marker=model_interfaces.IBungeniAdmin,
-            default_name="vocabularies")
-        
-        vocabularies[u"address-types"] = domain.AddressTypeContainer()
-        to_locatable_container(domain.AddressType, 
-            vocabularies[u"address-types"]
-        )
-        vocabularies[u"attendance-types"] = domain.AttendanceTypeContainer()
-        to_locatable_container(domain.AttendanceType, 
-            vocabularies[u"attendance-types"]
-        )
-        vocabularies[u"bill-types"] = domain.BillTypeContainer()
-        to_locatable_container(domain.BillType, 
-            vocabularies[u"bill-types"]
-        )
-        vocabularies[u"question-types"] = domain.QuestionTypeContainer()
-        to_locatable_container(domain.QuestionType, 
-            vocabularies[u"question-types"]
-        )
-        vocabularies[u"response-types"] = domain.ResponseTypeContainer()
-        to_locatable_container(domain.ResponseType, 
-            vocabularies[u"response-types"]
-        )
-        vocabularies[u"committee-types"] = domain.CommitteeTypeContainer()
-        to_locatable_container(domain.CommitteeType, 
-            vocabularies[u"committee-types"]
-        )
-        vocabularies[u"committee-types-statuses"] = \
-            domain.CommitteeTypeStatusContainer()
-        to_locatable_container(domain.CommitteeTypeStatus, 
-            vocabularies[u"committee-types-statuses"]
-        )
-        
-        vocabularies[u"venues"] = domain.VenueContainer()
-        to_locatable_container(domain.Venue, vocabularies[u"venues"])
-        
-        vocabularies[u"m-election-types"] = domain.MemberElectionTypeContainer()
-        to_locatable_container(domain.MemberElectionType, 
-            vocabularies[u"m-election-types"]
-        )
-        vocabularies[u"p-address-types"] = domain.PostalAddressTypeContainer()
-        to_locatable_container(domain.PostalAddressType, 
-            vocabularies[u"p-address-types"]
-        )
-        '''
+
 

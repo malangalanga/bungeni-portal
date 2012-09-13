@@ -2,9 +2,9 @@ import zope.interface
 import zope.publisher.interfaces
 import zope.security.management
 import zope.security.testing
-    
-import bungeni.ui.descriptor # !+register adapters, dc, ...
+
 from bungeni.models.testing import setup_db
+
 
 ''' !+UNUSED(mr, may-2012)
 def setup_indexer():
@@ -42,7 +42,7 @@ def set_interaction(principal):
             create_participation(principal))
     
 def refresh_dc_registrations():
-    """!+DC_REGISTRATIONS(mr, may-2012) for some reason dc adpater registrations
+    """!+DC_REGISTRATIONS(mr, may-2012) for some reason dc adapter registrations
     are being dropped across test_suites (interference with placelesssetup 
     setUp() and tearDown() methods!). 
     

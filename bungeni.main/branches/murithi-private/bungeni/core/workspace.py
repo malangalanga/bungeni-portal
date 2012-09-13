@@ -1,7 +1,7 @@
 log = __import__("logging").getLogger("bungeni.core.workspace")
 import os
 import time
-from sqlalchemy import orm
+from sqlalchemy import orm, Date, cast
 from sqlalchemy.sql import expression
 from lxml import etree
 from collections import namedtuple
@@ -17,10 +17,14 @@ from zope.securitypolicy.interfaces import IRole
 from bungeni.alchemist import Session
 from bungeni.alchemist.security import LocalPrincipalRoleMap
 from bungeni.alchemist.container import AlchemistContainer, contained
-from bungeni.models import utils
+from bungeni.models import utils, domain
 from bungeni.utils.capi import capi, bungeni_custom_errors
-from bungeni.core.interfaces import IWorkspaceTabsUtility, IWorkspaceContainer
+from bungeni.core.interfaces import (IWorkspaceTabsUtility,
+                                     IWorkspaceContainer,
+                                     IWorkspaceUnderConsiderationContainer,
+                                     IWorkspaceTrackedDocumentsContainer)
 from bungeni.ui.utils.common import get_workspace_roles
+from bungeni.ui.container import get_date_strings, string_to_date
 
 
 #!+WORKSPACE(miano, jul 2011)
@@ -35,7 +39,7 @@ OBJECT_ROLES = ["bungeni.Owner", "bungeni.Signatory"]
 
 # Tabs that are available in the workspace
 # All logged in users get a workspace with these tabs
-TABS = ["draft", "inbox", "sent", "archive"]
+TABS = ["draft", "inbox", "pending", "archive"]
 
 TabCountRecord = namedtuple('TabCountRecord', ['timestamp', 'count'])
 
@@ -63,9 +67,8 @@ def valueKey(identity_key):
     return domain_class, primary_key
 
 
-class WorkspaceContainer(AlchemistContainer):
+class WorkspaceBaseContainer(AlchemistContainer):
     __name__ = __parent__ = None
-    interface.implements(IWorkspaceContainer)
 
     def __init__(self, tab_type, title, description, marker=None):
         self.__name__ = tab_type
@@ -75,7 +78,7 @@ class WorkspaceContainer(AlchemistContainer):
         self.tab_count_cache = {}
         if marker is not None:
             interface.alsoProvides(self, marker)
-        super(WorkspaceContainer, self).__init__()
+        super(WorkspaceBaseContainer, self).__init__()
 
     def domain_status(self, roles, tab):
         """Given a list of roles and tab returns a dictionary containing the
@@ -96,7 +99,7 @@ class WorkspaceContainer(AlchemistContainer):
                         else:
                             domain_status[domain_class] = status
         return domain_status
-
+    
     def item_status_filter(self, kw, roles):
         domain_status = {}
         if kw.get("filter_type", None):
@@ -133,14 +136,14 @@ class WorkspaceContainer(AlchemistContainer):
         table = orm.class_mapper(domain_class).mapped_table
         utk = dict([(table.columns[k].key, k) for k in table.columns.keys()])
         # TODO : update to support other fields
-        column = table.columns[utk["short_title"]]
+        column = table.columns[utk["title"]]
         return column
 
     def filter_title(self, query, domain_class, kw):
-        if kw.get("filter_short_title", None):
+        if kw.get("filter_title", None):
             column = self.title_column(domain_class)
             return query.filter("""(lower(%s) LIKE '%%%s%%')""" %
-                        (column, kw["filter_short_title"].lower()))
+                        (column, kw["filter_title"].lower()))
         return query
 
     def order_query(self, query, domain_class, kw, reverse):
@@ -155,60 +158,21 @@ class WorkspaceContainer(AlchemistContainer):
                     getattr(domain_class, str(kw.get("sort_on")))))
         return query
 
+    def filter_status_date(self, query, domain_class, kw):
+        #filter on status_date
+        attr = getattr(domain_class, "status_date")
+        start_date_str, end_date_str = get_date_strings(
+            kw.get("filter_status_date", ""))
+        start_date = string_to_date(start_date_str)
+        end_date = string_to_date(end_date_str)
+        if start_date:
+            query = query.filter(cast(attr, Date) >= start_date)
+        if end_date:
+            query = query.filter(cast(attr, Date) <= end_date)
+        return query
+
     def _query(self, **kw):
-        principal = utils.get_principal()
-        roles = get_workspace_roles()
-        group_roles_domain_status = self.item_status_filter(kw, roles)
-        session = Session()
-        results = []
-        count = 0
-        first_page = not kw.get("start", 0)
-        reverse = True if (kw.get("sort_dir", "desc") == "desc") else False
-        for domain_class, status in group_roles_domain_status.iteritems():
-            query = session.query(domain_class).filter(
-                domain_class.status.in_(status)).enable_eagerloads(False)
-            #filter on title
-            query = self.filter_title(query, domain_class, kw)
-            # Order results
-            query = self.order_query(query, domain_class, kw, reverse)
-            # The first page of the results is loaded the most number of times
-            # The limit on the query below optimises for when no filter has
-            # been applied by limiting the number of results returned.
-            if first_page:
-                count = count + query.count()
-                query = query.limit(kw.get("limit", 25))
-            results.extend(query.all())
-        object_roles_domain_status = self.item_status_filter(kw, OBJECT_ROLES)
-        for domain_class, status in object_roles_domain_status.iteritems():
-            object_roles_results = []
-            query = session.query(domain_class).filter(
-                domain_class.status.in_(status)).enable_eagerloads(False)
-            #filter on title
-            query = self.filter_title(query, domain_class, kw)
-            # Order results
-            query = self.order_query(query, domain_class, kw, reverse)
-            for obj in query.all():
-                prm = IPrincipalRoleMap(obj)
-                for obj_role in OBJECT_ROLES:
-                    if (prm.getSetting(obj_role, principal.id) == Allow and
-                            obj not in results):
-                        object_roles_results.append(obj)
-                        break
-            if first_page:
-                count = count + len(object_roles_results)
-            results.extend(object_roles_results)
-        # Sort items
-        if (kw.get("sort_on", None) and kw.get("sort_dir", None)):
-            results.sort(key=lambda x: getattr(x, str(kw.get("sort_on"))),
-                         reverse=reverse)
-        if not first_page:
-            count = len(results)
-        if not (kw.get("filter_short_title", None) or
-            kw.get("filter_type", None) or
-            kw.get("filter_status", None) or
-            kw.get("filter_status_date", None)):
-            self.set_tab_count(principal.id, count)
-        return (results, count)
+        raise NotImplementedError("Inheriting class must implement this")
 
     def query(self, **kw):
         return self._query(**kw)
@@ -246,10 +210,11 @@ class WorkspaceContainer(AlchemistContainer):
             query = session.query(domain_class).filter(
                 domain_class.status.in_(status)).enable_eagerloads(False)
             for obj in query.all():
+                if obj in results:
+                    break
                 prm = IPrincipalRoleMap(obj)
                 for obj_role in OBJECT_ROLES:
-                    if (prm.getSetting(obj_role, principal.id) == Allow and
-                        obj not in results):
+                    if (prm.getSetting(obj_role, principal.id) == Allow):
                         object_roles_results.append(obj)
                         break
             count = count + len(object_roles_results)
@@ -315,6 +280,70 @@ class WorkspaceContainer(AlchemistContainer):
         session.add(item)
 
 
+class WorkspaceContainer(WorkspaceBaseContainer):
+    interface.implements(IWorkspaceContainer)
+
+    def _query(self, **kw):
+        principal = utils.get_principal()
+        roles = get_workspace_roles()
+        group_roles_domain_status = self.item_status_filter(kw, roles)
+        session = Session()
+        results = []
+        count = 0
+        first_page = not kw.get("start", 0)
+        reverse = True if (kw.get("sort_dir", "desc") == "desc") else False
+        for domain_class, status in group_roles_domain_status.iteritems():
+            query = session.query(domain_class).filter(
+                domain_class.status.in_(status)).enable_eagerloads(False)
+            #filter on title
+            query = self.filter_title(query, domain_class, kw)
+            #filter on status_date
+            query = self.filter_status_date(query, domain_class, kw)
+            # Order results
+            query = self.order_query(query, domain_class, kw, reverse)
+            # The first page of the results is loaded the most number of times
+            # The limit on the query below optimises for when no filter has
+            # been applied by limiting the number of results returned.
+            if first_page:
+                count = count + query.count()
+                query = query.limit(kw.get("limit", 25))
+            results.extend(query.all())
+        object_roles_domain_status = self.item_status_filter(kw, OBJECT_ROLES)
+        for domain_class, status in object_roles_domain_status.iteritems():
+            object_roles_results = []
+            query = session.query(domain_class).filter(
+                domain_class.status.in_(status)).enable_eagerloads(False)
+            #filter on title
+            query = self.filter_title(query, domain_class, kw)
+            #filter on status_date
+            query = self.filter_status_date(query, domain_class, kw)
+            # Order results
+            query = self.order_query(query, domain_class, kw, reverse)
+            for obj in query.all():
+                if obj in results:
+                    break
+                prm = IPrincipalRoleMap(obj)
+                for obj_role in OBJECT_ROLES:
+                    if (prm.getSetting(obj_role, principal.id) == Allow):
+                        object_roles_results.append(obj)
+                        break
+            if first_page:
+                count = count + len(object_roles_results)
+            results.extend(object_roles_results)
+        # Sort items
+        if (kw.get("sort_on", None) and kw.get("sort_dir", None)):
+            results.sort(key=lambda x: getattr(x, str(kw.get("sort_on"))),
+                         reverse=reverse)
+        if not first_page:
+            count = len(results)
+        if not (kw.get("filter_title", None) or
+                kw.get("filter_type", None) or
+                kw.get("filter_status", None) or
+                kw.get("filter_status_date", None)
+            ):
+            self.set_tab_count(principal.id, count)
+        return (results, count)
+
 # !+SECURITY(miano, july 2011) This factory adapts the workspaces to
 # zope.securitypolicy.interface.IPrincipalRoleMap and is equivalent to the
 # principalrolemap of the current parliament.
@@ -357,7 +386,7 @@ class WorkspaceContainerTraverser(SimpleComponentTraverser):
         raise NotFound(workspace, name)
 
 
-class WorkspaceTabsUtility():
+class WorkspaceTabsUtility(object):
     """This is utility stores the workflow configuration
     """
     interface.implements(IWorkspaceTabsUtility)
@@ -433,15 +462,21 @@ class WorkspaceTabsUtility():
                 if domain_class in self.workspaces[role][tab]:
                     return self.workspaces[role][tab][domain_class]
         return []
+# register a WorkspaceTabsUtility instance
+component.provideUtility(WorkspaceTabsUtility())
 
-#@bungeni_custom_errors
+
+def load_workspaces():
+    for type_key, ti in capi.iter_type_info():
+        workflow = ti.workflow
+        if workflow and workflow.has_feature("workspace"):
+            load_workspace("%s.xml" % ti.workflow_key, ti.domain_model)
+
+@bungeni_custom_errors
 def load_workspace(file_name, domain_class):
     """Loads the workspace configuration for each documemnt.
     """
-    workspace_tabs = component.queryUtility(IWorkspaceTabsUtility, None)
-    if not workspace_tabs:
-        component.provideUtility(WorkspaceTabsUtility())
-        workspace_tabs = component.getUtility(IWorkspaceTabsUtility)
+    workspace_tabs = component.getUtility(IWorkspaceTabsUtility)
     path = capi.get_path_for("workspace")
     file_path = os.path.join(path, file_name)
     item_type = file_name.split(".")[0]
@@ -455,11 +490,110 @@ def load_workspace(file_name, domain_class):
             if tab.get("roles"):
                 roles = tab.get("roles").split()
                 for role in roles:
-                    #assert component.queryUtility(IRole, role, None), \
-                    #    "Workspace configuration error : " \
-                    #    "Invalid role - %s. file: %s, state : %s" % (
-                    #        role, file_name, state.get("id"))
-                    workspace_tabs.set_content(role, 
+                    assert component.queryUtility(IRole, role, None), \
+                        "Workspace configuration error : " \
+                        "Invalid role - %s. file: %s, state : %s" % (
+                            role, file_name, state.get("id"))
+                    workspace_tabs.set_content(role,
                         tab.get("id"), domain_class, state.get("id"))
 
 
+class WorkspaceUnderConsiderationContainer(WorkspaceBaseContainer):
+
+    interface.implements(IWorkspaceUnderConsiderationContainer)
+
+    def __init__(self, name, title, description, marker=None):
+        self.__name__ = name
+        self.title = title
+        self.description = description
+        self.workspace_config = component.getUtility(IWorkspaceTabsUtility)
+        if marker is not None:
+            interface.alsoProvides(self, marker)
+        AlchemistContainer.__init__(self)
+
+    def domain_status(self):
+        from bungeni.core.workflows.adapters import get_workflow
+        domain_status_map = {}
+        for type_key, ti in capi.iter_type_info():
+            workflow = ti.workflow
+            if workflow and workflow.has_feature("workspace"):
+                states = get_workflow(ti.workflow_key).get_state_ids(
+                    tagged=["public"], not_tagged=["terminal"],
+                    conjunction="AND")
+                domain_status_map[ti.domain_model] = states
+        return domain_status_map
+
+    def item_status_filter(self, kw):
+        domain_status_map = self.domain_status()
+        filter_domain_status = {}
+        if kw.get("filter_type", None):
+            domain_class = self.workspace_config.get_domain(kw["filter_type"])
+            if domain_class in domain_status_map.keys():
+                if kw.get("filter_status", None):
+                    if kw["filter_status"] in domain_status_map[domain_class]:
+                        filter_domain_status[domain_class] = [kw["filter_status"]]
+                else:
+                    filter_domain_status[domain_class] = domain_status_map[domain_class]
+        else:
+            if kw.get("filter_status", None):
+                for domain_class in domain_status_map.keys():
+                    if kw["filter_status"] in domain_status_map[domain_class]:
+                        filter_domain_status[domain_class] = [kw["filter_status"]]
+            else:
+                filter_domain_status = domain_status_map
+        return filter_domain_status
+
+    def _query(self, **kw):
+        session = Session()
+        domain_status = self.item_status_filter(kw)
+        reverse = True if (kw.get("sort_dir", "desc") == "desc") else False
+        results = []
+        for domain_class, status in domain_status.iteritems():
+            query = session.query(domain_class).filter(
+                domain_class.status.in_(status)).enable_eagerloads(False)
+            query = self.filter_title(query, domain_class, kw)
+            #filter on status_date
+            query = self.filter_status_date(query, domain_class, kw)
+            query = self.order_query(query, domain_class, kw, reverse)
+            results.extend(query.all())
+        count = len(results)
+        if (kw.get("sort_on", None) and kw.get("sort_dir", None)):
+            results.sort(key=lambda x: getattr(x, str(kw.get("sort_on"))),
+                         reverse=reverse)
+        return (results, count)
+
+    def check_item(self, domain_class, status):
+        domain_status_map = self.domain_status()
+        if (domain_class in domain_status_map.keys() and
+            status in domain_status_map[domain_class]):
+            return True
+        else:
+            return False
+
+
+class WorkspaceTrackedDocumentsContainer(WorkspaceUnderConsiderationContainer):
+
+    interface.implements(IWorkspaceTrackedDocumentsContainer)
+
+    def _query(self, **kw):
+        session = Session()
+        user = utils.get_db_user()
+        reverse = True if (kw.get("sort_dir", "desc") == "desc") else False
+        results = []
+        domain_status = self.item_status_filter(kw)
+        for domain_class, status in domain_status.iteritems():
+            query = session.query(domain_class
+                ).filter(domain_class.status.in_(status)
+                ).enable_eagerloads(False
+                ).join(domain.UserSubscription
+                ).filter(domain.UserSubscription.users_id == user.user_id)
+            query = self.filter_title(query, domain_class, kw)
+            #filter on status_date
+            query = self.filter_status_date(query, domain_class, kw)
+            query = self.order_query(query, domain_class, kw, reverse)
+            results.extend(query.all())
+        count = len(results)
+        if (kw.get("sort_on", None) and kw.get("sort_dir", None)):
+            results.sort(key=lambda x: getattr(x, str(kw.get("sort_on"))),
+                         reverse=reverse)
+        return (results, count)

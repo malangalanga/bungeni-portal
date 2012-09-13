@@ -12,12 +12,15 @@ import os
 import hashlib
 from lxml import etree
 
-from zope import interface
-from zope.schema.interfaces import IContextSourceBinder, IBaseVocabulary
+from zope import interface, component
+from zope.schema.interfaces import (
+    IContextSourceBinder, 
+    IBaseVocabulary, # IBaseVocabulary(ISource)
+    IVocabulary, # IVocabulary(IIterableVocabulary, IBaseVocabulary)
+    IVocabularyFactory)
 from zope.schema import vocabulary
 from zope.security.proxy import removeSecurityProxy
 from zope.app.container.interfaces import IContainer
-from zope.schema.interfaces import IVocabularyFactory
 from zope.component import getUtility
 from zope.component import getUtilitiesFor
 from zope.securitypolicy.interfaces import IRole
@@ -33,21 +36,24 @@ from bungeni.alchemist.container import valueKey
 from bungeni.alchemist.interfaces import IAlchemistContainer
 from bungeni.alchemist.interfaces import IAlchemistContent
 
-from bungeni.models.interfaces import ISubRoleAnnotations
-from bungeni.models.interfaces import IBungeniGroup
 from bungeni.models import schema, domain, utils, delegation
-from bungeni.models.interfaces import (ITranslatable, ISignatory,)
+from bungeni.models.interfaces import (
+    ISubRoleAnnotations,
+    IBungeniGroup,
+    ITranslatable, 
+    ISignatory,
+    IVersion,
+)
 
 from bungeni.core.translation import translate_obj
 from bungeni.core.language import get_default_language
 from bungeni.core.dc import IDCDescriptiveProperties
 from bungeni.core.workflows.utils import get_group_local_role
-from bungeni.core.workflows import adapters
-from bungeni.core.workflow.interfaces import IWorkflow
 
 from bungeni.ui.utils import common
 from bungeni.ui.interfaces import ITreeVocabulary
 from bungeni.ui.reporting.generators import BUNGENI_REPORTS_NS
+from bungeni.utils import misc
 
 try:
     import json
@@ -55,7 +61,7 @@ except ImportError:
     import simplejson as json
 import imsvdex.vdex
 
-
+# !+combined_name?
 def get_translated_group_label(group):
     """Get a translated display text to refer to the group.
     """
@@ -64,11 +70,11 @@ def get_translated_group_label(group):
 
 
 days = [ _("day_%d" % index, default=default) for (index, default) in
-         enumerate((u"Mon", u"Tue", u"Wed", u"Thu", u"Fri", u"Sat", u"Sun")) ]
+    enumerate((u"Mon", u"Tue", u"Wed", u"Thu", u"Fri", u"Sat", u"Sun")) ]
 
 
 class BaseVocabularyFactory(object):
-
+    
     interface.implements(
         # IContextSourceBinder is needed for when this vocabulary factory 
         # instance is used as an ISource e.g. as the value of "source" or
@@ -78,7 +84,7 @@ class BaseVocabularyFactory(object):
         
         # IBaseVocabulary (inherits from ISource) is gained "automagically" 
         # when registering instance as a utility via ZCML
-        IBaseVocabulary, # getTerm(value) -> ITerm
+        IBaseVocabulary, # getTerm(value) -> ITerm, (ISource) __contains__(value)
         
         # can create vocabularies !+ same as IContextSourceBinder?!
         IVocabularyFactory, # __call__(context) -> IVocabulary
@@ -92,18 +98,62 @@ class VDEXManager(imsvdex.vdex.VDEXManager):
     fallback_to_default_language = True
 
 class VDEXVocabularyMixin(object):
+    interface.implements(IBaseVocabulary)
+    
     def __init__(self, file_name):
         self.vdex = VDEXManager(
             file=open(capi.get_path_for("vocabularies", file_name)))
+        # register each instance as a named utility on IVocabularyFactory
+        assert file_name.endswith(".vdex")
+        # !+tmp to make up for naming inconsistencies e.g. sitting-activity-types.vdex
+        vocabulary_name = file_name[:-len(".vdex")].replace("-", "_")
+        component.provideUtility(self, IVocabularyFactory, vocabulary_name)
+    
+    # zope.schema.interfaces.ISource(Interface)
+    
+    def __contains__(self, value):
+        """Is the value available in this source? 
+        (zope.schema.interfaces.ISource)
+        """
+        return self.vdex.getTermById(value) is not None
+    
+    # zope.schema.interfaces.IBaseVocabulary(ISource)
+    def getTerm(self, value):
+        """Return the zope.schema.vocabulary.SimpleTerm instance for value.
+        (zope.schema.interfaces.IBaseVocabulary)
+        """
+        # !+NONE_LOOKUPERROR(mr, jul-0212) making vdex try to seem like a 
+        # "schema vocab" with this method gives problems when value is None, 
+        # and vdex does not define a term for None.
+        term = self.getTermById(value)
+        title = self.vdex.getTermCaption(term, lang=get_default_language())
+        return vocabulary.SimpleTerm(value, title, title)
+    
+    # imsvdex.vdex.VDEXManager
     
     def getTermById(self, value):
-        return self.vdex.getTermById(value)
+        """Return the caption(s) for a given term identifier.
+        As per imsvdex.vdex.VDEXManager (well, almost... None is LookupError).
+        """
+        term = self.vdex.getTermById(value)
+        # !+NONE_LOOKUPERROR(mr, jul-2012) how should one handle a None value?
+        if term is None:
+            raise LookupError("This VDEX has no such ID :: %s", value)
+        return term
+    
+    def getTermCaptionById(self, value, lang=get_default_language()):
+        """Returns the str caption(s) for a given term identifier, in lang.
+        As per imsvdex.vdex.VDEXManager.
+        """
+        return self.vdex.getTermCaptionById(value, lang)
 
+# !+NEED_NOT_BE_A_FACTORY, can register on IVocabulary
 class TreeVDEXVocabulary(VDEXVocabularyMixin):
     """Class to generate hierarchical vdex vocabularies
     
     vocabulary = TreeVDEXVocabulary(file_name)
     """
+    # !+ should inherit from IVocabulary (so also Iterable?) ?
     interface.implements(ITreeVocabulary)
     
     def generateJSON(self, selected = []):
@@ -115,12 +165,8 @@ class TreeVDEXVocabulary(VDEXVocabularyMixin):
         for value in value_list:
             if self.getTermById(value) is None:
                 raise LookupError
-    
-    def getTermCaptionById(self, value, lang):
-        """Returns the caption(s) for a given term identifier, in lang.
-        """
-        return self.vdex.getTermCaptionById(value, lang)
 
+# !+NEED_NOT_BE_A_FACTORY, can register on IVocabulary
 class FlatVDEXVocabularyFactory(VDEXVocabularyMixin, BaseVocabularyFactory):
     """    
     !+ instances are called in zope.formlib.form.setUpEditWidgets() and a new
@@ -129,21 +175,50 @@ class FlatVDEXVocabularyFactory(VDEXVocabularyMixin, BaseVocabularyFactory):
     
     !+ to use POT-based translations instead... could make this inherit from
     vocabulary.SimpleVocabulary() and then only specify a single 
-    default/reference language in teh vdex file.
+    default/reference language in the vdex file.
     """
+    interface.implements(IVocabulary) # IVocabulary(IIterableVocabulary, IBaseVocabulary)
+    # !+BaseVocabularyFactory should probably simply include this, instead of IBaseVocabulary?
+    
+    # zope.schema.interfaces.IIterableVocabulary
+    def __iter__(self):
+        """Return an iterator which provides the 
+        (zope.schema.vocabulary.SimpleTerm) terms from the vocabulary.
+        zope.schema.interfaces.IIterableVocabulary
+        """
+        for term_value in self.vdex.term_dict:
+            yield self.getTerm(term_value)
+    def __len__(self):
+        """Return the number of valid terms, or sys.maxint.
+        zope.schema.interfaces.IIterableVocabulary
+        """
+        return len(self.vdex.term_dict)
+    
+    value_cast = unicode
+    # zope.schema.interfaces.IVocabularyFactory
     def __call__(self, context=None):
         """Return a context-bound instance that implements ISource.
+        zope.schema.interfaces.IVocabularyFactory
         """
         all_terms = self.vdex.getVocabularyDict(lang=get_default_language())
         # self.vdex.getVocabularyDict(lang="*") -> {term_id: ({lang: caption}, children)}
         terms = []
         assert self.vdex.isFlat() is True
+        value_cast = self.__class__.value_cast
         for (key, (caption, children)) in all_terms.iteritems():
             # assert children is None
-            term = vocabulary.SimpleTerm(key, key, caption)
+            term = vocabulary.SimpleTerm(value_cast(key), key, caption)
             terms.append(term)
         return vocabulary.SimpleVocabulary(terms)
-    
+
+class BoolFlatVDEXVocabularyFactory(FlatVDEXVocabularyFactory):
+    value_cast = staticmethod(misc.as_bool)
+
+    def getTermById(self, value):
+        """Look up vdex term using unicode of boolean value"""
+        value = unicode(value)
+        return super(BoolFlatVDEXVocabularyFactory, self).getTermById(value)
+
 # /vdex
 
 
@@ -223,82 +298,25 @@ ISResponse = vocabulary.SimpleVocabulary([
 # you have to add title_field to the vocabulary.SimpleTerm as only this gets 
 # translated, the token_field will NOT get translated
 
+bill_type = FlatVDEXVocabularyFactory("bill_type.vdex")
+doc_type = bill_type # placeholder vocabulary, use bill_type as dummy value
+component.provideUtility(doc_type, IVocabularyFactory, "doc_type")
+question_type = FlatVDEXVocabularyFactory("question_type.vdex")
+response_type = FlatVDEXVocabularyFactory("response_type.vdex")
+event_type = FlatVDEXVocabularyFactory("event_type.vdex")
+attachment_type = FlatVDEXVocabularyFactory("attachment_type.vdex")
+committee_type = FlatVDEXVocabularyFactory("committee_type.vdex")
+committee_continuity = FlatVDEXVocabularyFactory("committee_continuity.vdex")
+change_procedure = FlatVDEXVocabularyFactory("change_procedure.vdex")
+attendance_type = FlatVDEXVocabularyFactory("attendance_type.vdex")
+member_election_type = FlatVDEXVocabularyFactory("member_election_type.vdex")
+logical_address_type = FlatVDEXVocabularyFactory("logical_address_type.vdex")
+postal_address_type = FlatVDEXVocabularyFactory("postal_address_type.vdex")
 gender = FlatVDEXVocabularyFactory("gender.vdex")
-#bool_yes_no = FlatVDEXVocabularyFactory("yes_no.vdex")
-# !+ how do you get a VDEX vocab to use booleans as term values?
-bool_yes_no = vocabulary.SimpleVocabulary([
-    vocabulary.SimpleTerm(True, _(u"Yes"), _(u"Yes")), 
-    vocabulary.SimpleTerm(False, _(u"No"), _(u"No"))])
+marital_status = FlatVDEXVocabularyFactory("marital_status.vdex")
+bool_yes_no = BoolFlatVDEXVocabularyFactory("yes_no.vdex")
 
-# types
-
-# !+TYPES_CUSTOM - enum sources to move out to bungeni custom
-
-doc_type = vocabulary.SimpleVocabulary([
-    vocabulary.SimpleTerm("government", title="Government Initiative"),
-    vocabulary.SimpleTerm("member", title="Member Initiative"),
-])
-bill_type = doc_type
-event_type = vocabulary.SimpleVocabulary([
-    vocabulary.SimpleTerm("government", title="Government Initiative"),
-    vocabulary.SimpleTerm("committee", title="Committee Initiative"),
-    vocabulary.SimpleTerm("member", title="Member Initiative"),
-])
-committee_type = vocabulary.SimpleVocabulary([
-    vocabulary.SimpleTerm("housekeeping", title="House Keeping"),
-    vocabulary.SimpleTerm("departmental", title="Departmental"),
-    vocabulary.SimpleTerm("adhoc", title="Ad Hoc"),
-    vocabulary.SimpleTerm("watchdog", title="Watch Dog"),
-    vocabulary.SimpleTerm("liaison", title="Liaison"),
-])
-committee_continuity = vocabulary.SimpleVocabulary([
-    vocabulary.SimpleTerm("permanent", title="Permanent"),
-    vocabulary.SimpleTerm("temporary", title="Temporary"),
-])
-logical_address_type = vocabulary.SimpleVocabulary([
-    vocabulary.SimpleTerm("office", title="Office"),
-    vocabulary.SimpleTerm("home", title="Home"),
-    vocabulary.SimpleTerm("other", title="Other"),
-])
-postal_address_type = vocabulary.SimpleVocabulary([
-    vocabulary.SimpleTerm("street", title="Street/Physical"),
-    vocabulary.SimpleTerm("pobox", title="P.O. Box"),
-    vocabulary.SimpleTerm("military", title="Military"),
-    vocabulary.SimpleTerm("unknown", title="Undefined/Unknown"),
-])
-attachment_type = vocabulary.SimpleVocabulary([
-    vocabulary.SimpleTerm("image", title="Image"),
-    vocabulary.SimpleTerm("annex", title="Annex"),
-    vocabulary.SimpleTerm("document", title="Document"),
-    vocabulary.SimpleTerm("bill", title="Bill"),
-    # !+ATTACHED_FILE_TYPE_SYSTEM(mr, oct-2011) ui/downloaddocument and 
-    # ui/forms/files.py expects this, but should NOT be presented as an 
-    # option in the UI?
-    #vocabulary.SimpleTerm("system", title="System"),
-])
-attendance_type = vocabulary.SimpleVocabulary([
-    vocabulary.SimpleTerm("present", title="Present"),
-    vocabulary.SimpleTerm("absence_justified", title="Absence justified"),
-    vocabulary.SimpleTerm("absent", title="Absent"),
-])
-member_election_type = vocabulary.SimpleVocabulary([
-    vocabulary.SimpleTerm("elected", title="Elected"),
-    vocabulary.SimpleTerm("nominated", title="Nominated"),
-    vocabulary.SimpleTerm("ex_officio", title="Ex officio"),
-])
-question_type = vocabulary.SimpleVocabulary([
-    vocabulary.SimpleTerm("ordinary", title="Ordinary"),
-    vocabulary.SimpleTerm("private_notice", title="Private notice"),
-])
-response_type = vocabulary.SimpleVocabulary([
-    vocabulary.SimpleTerm("oral", title="Oral"),
-    vocabulary.SimpleTerm("written", title="Written"),
-])
-change_procedure = vocabulary.SimpleVocabulary([
-    vocabulary.SimpleTerm("a", title="Automatic"),
-    vocabulary.SimpleTerm("m", title="Manual"),
-])
-
+#
 
 class OfficeRoleFactory(BaseVocabularyFactory):
     def __call__(self, context=None):
@@ -307,20 +325,24 @@ class OfficeRoleFactory(BaseVocabularyFactory):
         roles = getUtilitiesFor(IRole, app)
         for name, role in roles:
             # Roles that must not be assigned to users in an office
-            # !+bungeni_custom
             if name in ["bungeni.Anonymous",
                         "bungeni.Authenticated",
                         "bungeni.Owner",
+                        "bungeni.Signatory",
                         "zope.Manager",
-                        "zope.Member",
+                        "bungeni.Admin",
                         "bungeni.MP",
                         "bungeni.Minister",
-                        "bungeni.Admin"]:
+                        "bungeni.PoliticalGroupMember",
+                        "bungeni.Government",
+                        "bungeni.CommitteeMember",
+                        ]:
                 continue
             if not ISubRoleAnnotations(role).is_sub_role:
                 terms.append(vocabulary.SimpleTerm(name, name, name))
         return vocabulary.SimpleVocabulary(terms)
 office_role_factory = OfficeRoleFactory()
+component.provideUtility(office_role_factory, IVocabularyFactory, "office_role")
 
 
 class GroupSubRoleFactory(BaseVocabularyFactory):
@@ -333,11 +355,10 @@ class GroupSubRoleFactory(BaseVocabularyFactory):
         trusted = removeSecurityProxy(context)
         role = getUtility(IRole, get_group_local_role(trusted))
         for sub_role in ISubRoleAnnotations(role).sub_roles:
-            print sub_role
             terms.append(vocabulary.SimpleTerm(sub_role, sub_role, sub_role))
         return vocabulary.SimpleVocabulary(terms)
 group_sub_role_factory = GroupSubRoleFactory()
-
+component.provideUtility(group_sub_role_factory, IVocabularyFactory, "group_sub_role")
 
 # database sources
 
@@ -347,6 +368,10 @@ class DatabaseSource(BaseVocabularyFactory):
     actual value stored is the id.
     """
     
+    # !+SOURCE_PARAMS(mr, aug-2012) make order of equivalent params consistent
+    # across DatabaseSource and SpecializedSource to (token, title, value)
+    # !+SOURCE_FACTORY(mr, aug-2012) merge DatabaseSource and SpecializedSource 
+    # down to only one source factory class.
     def __init__(self, domain_model, token_field, value_field, 
             title_field=None, 
             title_getter=None, 
@@ -355,6 +380,9 @@ class DatabaseSource(BaseVocabularyFactory):
         self.domain_model = domain_model
         self.token_field = token_field
         self.value_field = value_field
+        assert title_field is None or title_getter is None, \
+            "DatabaseSource [%s]: EITHER title_field [%s] OR title_getter [%s]" % (
+                title_field, title_getter)
         self.title_field = title_field
         self.title_getter = title_getter
         self.order_by = order_by
@@ -388,20 +416,25 @@ parliament_factory = DatabaseSource(
         ob.full_name,
         ob.start_date and ob.start_date.strftime("%Y/%m/%d") or "?",
         ob.end_date and ob.end_date.strftime("%Y/%m/%d") or "?"))
+component.provideUtility(parliament_factory, IVocabularyFactory, "parliament")
+
 
 country_factory = DatabaseSource(
     domain.Country, "country_id", "country_id",
     title_field="country_name",
 )
+component.provideUtility(country_factory, IVocabularyFactory, "country")
 
 
-class SpecializedSource(object):
-    interface.implements(IContextSourceBinder)
+
+class SpecializedSource(BaseVocabularyFactory):
     
+    # !+SOURCE_PARAMS(mr, aug-2012) make order of equivalent params consistent
+    # across DatabaseSource and SpecializedSource to (token, title, value)
     def __init__(self, token_field, title_field, value_field):
         self.token_field = token_field
-        self.value_field = value_field
         self.title_field = title_field
+        self.value_field = value_field
     
     def _get_parliament_id(self, context):
         trusted = removeSecurityProxy(context)
@@ -436,25 +469,26 @@ class VenueFactory(BaseVocabularyFactory):
         results = Session().query(domain.Venue).all()
         terms = []
         for ob in results:
-            terms.append(vocabulary.SimpleTerm(
-                    value = ob.venue_id, 
-                    token = ob.venue_id,
-                    title = "%s" % IDCDescriptiveProperties(ob).title
-                )
-            )
+            terms.append(
+                vocabulary.SimpleTerm(
+                    value=ob.venue_id, 
+                    token=ob.venue_id,
+                    title="%s" % IDCDescriptiveProperties(ob).title
+                ))
         return vocabulary.SimpleVocabulary(terms)
 venue_factory = VenueFactory()
+component.provideUtility(venue_factory, IVocabularyFactory, "venue")
 
 
-class TitleTypes(SpecializedSource):
+class GroupTitleTypesFactory(SpecializedSource):
     def __init__(self):
         pass
-        
+    
     def constructQuery(self, context):
         session= Session()
         return session.query(domain.TitleType) \
                 .filter(schema.title_types.c.group_id == context.group_id)
-
+    
     def __call__(self, context=None):
         while not IBungeniGroup.providedBy(context):
             context = context.__parent__
@@ -471,36 +505,38 @@ class TitleTypes(SpecializedSource):
                     title = obj.title_name,
                 ))
         return vocabulary.SimpleVocabulary(terms)
+component.provideUtility(GroupTitleTypesFactory(), IVocabularyFactory, "group_title_types")
 
 
-class WorkflowVocabularyFactory(BaseVocabularyFactory):
+class WorkflowStatesVocabularyFactory(BaseVocabularyFactory):
     def __call__(self, context):
-        if IAlchemistContent.providedBy(context):
-            ctx = context
-        elif  IAlchemistContainer.providedBy(context):
-            domain_model = removeSecurityProxy(context.domain_model)
-            ctx = domain_model()
-        workflow = IWorkflow(ctx)
-        items = []
-        for status in workflow.states.keys():
-            items.append(vocabulary.SimpleTerm(
-                    status, status, _(workflow.get_state(status).title)))
-        return vocabulary.SimpleVocabulary(items)
-workflow_vocabulary_factory = WorkflowVocabularyFactory()
+        if IVersion.providedBy(context):
+            # also provides IAlchemistContent (check must precede)
+            discriminator = removeSecurityProxy(context).head
+        elif IAlchemistContent.providedBy(context):
+            discriminator = context
+        elif IAlchemistContainer.providedBy(context):
+            discriminator = context.domain_model
+        wf = capi.get_type_info(discriminator).workflow
+        terms = [ 
+            vocabulary.SimpleTerm(status, status, _(wf.get_state(status).title))
+            for status in wf.states.keys() 
+        ]
+        return vocabulary.SimpleVocabulary(terms)
+workflow_states = WorkflowStatesVocabularyFactory()
+component.provideUtility(workflow_states, IVocabularyFactory, "workflow_states")
 
 
 class MemberOfParliament(object):
-    """ Member of Parliament = user join group membership join parliament"""
+    """Member of Parliament = user join group membership join parliament"""
     
 member_of_parliament = rdb.join(schema.user_group_memberships, 
     schema.users,
     schema.user_group_memberships.c.user_id == schema.users.c.user_id
-).join(schema.parliaments, 
-    schema.user_group_memberships.c.group_id == 
-        schema.parliaments.c.parliament_id) 
-
+).join(schema.parliaments,
+    schema.user_group_memberships.c.group_id ==
+        schema.parliaments.c.parliament_id)
 mapper(MemberOfParliament, member_of_parliament)
-        
 
 class MemberOfParliamentImmutableSource(SpecializedSource):
     """If a user is already assigned to the context 
@@ -615,16 +651,17 @@ class MemberOfParliamentSource(MemberOfParliamentImmutableSource):
                             domain.User.first_name,
                             domain.User.middle_name)
         return query
+parliament_member = MemberOfParliamentSource("user_id")
+component.provideUtility(parliament_member, IVocabularyFactory, "parliament_member")
 
 
 class MemberOfParliamentDelegationSource(MemberOfParliamentSource):
-    """ A logged in User will only be able to choose
-    himself if he is a member of parliament or those 
-    Persons who gave him rights to act on his behalf"""
+    """A logged in User will only be able to choose himself if he is a member
+    of parliament or those Persons who gave him rights to act on his behalf.
+    """
     def constructQuery(self, context):
         mp_query = super(MemberOfParliamentDelegationSource, 
                 self).constructQuery(context)
-        #XXX clerks cannot yet choose MPs freely
         user_id = utils.get_db_user_id()
         if user_id:
             user_ids = [user_id]
@@ -635,6 +672,9 @@ class MemberOfParliamentDelegationSource(MemberOfParliamentSource):
             if len(query.all()) > 0:
                 return query
         return mp_query
+parliament_member_delegation = MemberOfParliamentDelegationSource("owner_id")
+component.provideUtility(parliament_member_delegation, IVocabularyFactory,
+    "parliament_member_delegation")
 
 
 class MemberOfParliamentSignatorySource(MemberOfParliamentSource):
@@ -661,12 +701,14 @@ class MemberOfParliamentSignatorySource(MemberOfParliamentSource):
                 )
             )
         return mp_query
+signatory = MemberOfParliamentSignatorySource("user_id")
+component.provideUtility(signatory, IVocabularyFactory, "signatory")
 
 
 class MinistrySource(SpecializedSource):
     """Ministries in the current parliament.
     """
-
+    
     def __init__(self, value_field):
         self.value_field = value_field
     
@@ -713,7 +755,7 @@ class MinistrySource(SpecializedSource):
         query = self.constructQuery(context)
         results = query.all()
         terms = []
-        trusted=removeSecurityProxy(context)
+        trusted = removeSecurityProxy(context)
         ministry_id = getattr(trusted, self.value_field, None)
         for ob in results:
             terms.append(
@@ -722,6 +764,10 @@ class MinistrySource(SpecializedSource):
                     token = getattr(ob, "group_id"),
                     title = get_translated_group_label(ob)
                 ))
+        # !+MINISTRY_ID(mr, jul-2012) logic below must be faulty... (a) if this 
+        # is ever executed, it will fail as "obj" is undefined (since long time), 
+        # and (b) it seems to not have failed for a long time, so what is the 
+        # code below trying to do anyway?
         if ministry_id:
             if query.filter(domain.Group.group_id == ministry_id).count() == 0:
                 session = Session()
@@ -733,8 +779,12 @@ class MinistrySource(SpecializedSource):
                         title = get_translated_group_label(ob)
                 ))
         return vocabulary.SimpleVocabulary(terms)
+ministry = MinistrySource("ministry_id")
+component.provideUtility(ministry, IVocabularyFactory, "ministry")
 
-'''class MemberTitleSource(SpecializedSource):
+
+'''
+class MemberTitleSource(SpecializedSource):
     """ get titles (i.e. roles/functions) in the current context """
     
     def __init__(self, value_field):
@@ -767,7 +817,8 @@ class MinistrySource(SpecializedSource):
                     token = getattr(obj, 'user_role_type_id'),
                     title = getattr(obj, 'user_role_name'),
                    ))
-        return vocabulary.SimpleVocabulary(terms)'''
+        return vocabulary.SimpleVocabulary(terms)
+'''
 
 
 class OwnerOrLoggedInUserSource(SpecializedSource):
@@ -788,6 +839,12 @@ class OwnerOrLoggedInUserSource(SpecializedSource):
                 title=getattr(obj, title_field)),
         ]
         return vocabulary.SimpleVocabulary(terms)
+owner_or_login = OwnerOrLoggedInUserSource(
+    token_field="user_id",
+    title_field="fullname",
+    value_field="user_id"
+)
+component.provideUtility(owner_or_login, IVocabularyFactory, "owner_or_login")
 
 
 class UserSource(SpecializedSource):
@@ -798,6 +855,13 @@ class UserSource(SpecializedSource):
         users = session.query(domain.User).order_by(
             domain.User.last_name, domain.User.first_name)
         return users
+user = UserSource(
+    token_field="user_id", 
+    title_field="fullname", 
+    value_field="user_id"
+)
+component.provideUtility(user, IVocabularyFactory, "user")
+
 
 class GroupSource(SpecializedSource):
     """All active groups.
@@ -820,6 +884,12 @@ class GroupSource(SpecializedSource):
                     title = get_translated_group_label(ob)
                 ))
         return vocabulary.SimpleVocabulary(terms)
+group = GroupSource( 
+    token_field="group_id",
+    title_field="short_name",
+    value_field="group_id",
+)
+component.provideUtility(group, IVocabularyFactory, "group")
 
 
 class MembershipUserSource(UserSource):
@@ -838,6 +908,13 @@ class MembershipUserSource(UserSource):
                 sql.not_(domain.User.user_id.in_(list(exclude_ids)))
             )
         return users
+member = MembershipUserSource(
+    token_field="user_id",
+    title_field="fullname",
+    value_field="user_id",
+)
+component.provideUtility(member, IVocabularyFactory, "member")
+
 
 class UserNotMPSource(SpecializedSource):
     """ All users that are NOT a MP """
@@ -883,7 +960,14 @@ class UserNotMPSource(SpecializedSource):
                             getattr(ob, "last_name"))
                    ))
         return vocabulary.SimpleVocabulary(terms)
+user_not_mp = UserNotMPSource(
+    token_field="user_id",
+    title_field="fullname",
+    value_field="user_id"
+)
+component.provideUtility(user_not_mp, IVocabularyFactory, "user_not_mp")
 
+                
 class UserNotStaffSource(SpecializedSource):
     """ all users that are NOT staff """
 
@@ -943,6 +1027,15 @@ class SittingAttendanceSource(SpecializedSource):
                             getattr(ob, "last_name"))
                    ))
         return vocabulary.SimpleVocabulary(terms)
+sitting_attendance = SittingAttendanceSource(
+    token_field="user_id",
+    title_field="fullname",
+    value_field="member_id"
+)
+component.provideUtility(sitting_attendance, IVocabularyFactory, "sitting_attendance")
+
+
+
 
 class SubstitutionSource(SpecializedSource):
     """Active user of the same group.
@@ -995,12 +1088,14 @@ class SubstitutionSource(SpecializedSource):
         terms = []
         for t in tdict.keys():
             terms.append(
-                vocabulary.SimpleTerm(
-                    value = t, 
-                    token = t,
-                    title = tdict[t]
-                   ))
+                vocabulary.SimpleTerm(value=t, token=t, title=tdict[t]))
         return vocabulary.SimpleVocabulary(terms)
+substitution = SubstitutionSource(
+    token_field="user_id",
+    title_field="fullname",
+    value_field="user_id"
+)
+component.provideUtility(substitution, IVocabularyFactory, "substitution")
 
 
 ''' !+MODELS(mr, oct-2011) shouldn't this be elsewhere?
@@ -1015,14 +1110,15 @@ party_membership = sql.join(schema.political_parties, schema.groups,
 mapper(PartyMembership, party_membership)
 '''
 
+''' !+ORPHANED(mr, jun-2012) some time prior to r9435
 class PIAssignmentSource(SpecializedSource):
     
     # !+STATES_TAGS_ASSUMPTIONS(mr, jun-2012) this aggregates all states of all 
     # workflows, assumes that a same named state has the same meaning acorss 
-    # worksflows, plus assumes that state tag names have special meaning, plus
-    # assumes that all workflow/states are tagged with tehse tags.
+    # workflows, plus assumes that state tag names have special meaning, plus
+    # assumes that all workflow/states are tagged with these tags.
     assignable_state_ids = set(sid
-        for (name, ti) in adapters.TYPE_REGISTRY
+        for (key, ti) in capi.iter_type_info()
         for sid in ti.workflow.get_state_ids(
             not_tagged=["private", "fail", "terminal"], restrict=False)
     )
@@ -1046,8 +1142,9 @@ class PIAssignmentSource(SpecializedSource):
                     )
                 )
         return query
+'''
 
-
+''' !+UNUSED
 class CommitteeSource(SpecializedSource):
 
     def constructQuery(self, context):
@@ -1058,7 +1155,7 @@ class CommitteeSource(SpecializedSource):
             domain.Committee.status == "active",
             domain.Committee.parent_group_id == parliament_id))
         return query
-
+'''
 
 ''' !+UNUSED
 class MotionPoliticalGroupSource(SpecializedSource):
@@ -1103,14 +1200,14 @@ class QuerySource(object):
         return value_key
 
     def __init__(self,
-        domain_model, 
-        token_field, 
-        title_field, 
-        value_field, 
-        filter_field, 
-        filter_value=None, 
-        order_by_field=None
-    ):
+            domain_model, 
+            token_field, 
+            title_field, 
+            value_field, 
+            filter_field, 
+            filter_value=None, 
+            order_by_field=None
+        ):
         self.domain_model = domain_model
         self.token_field = token_field
         self.value_field = value_field
@@ -1118,23 +1215,23 @@ class QuerySource(object):
         self.filter_field = filter_field
         self.order_by_field = order_by_field
         self.filter_value = filter_value
-        
+    
     def constructQuery(self, context):
         session = Session()
         trusted=removeSecurityProxy(context)
         if self.filter_value:
             query = session.query(self.domain_model).filter(
                 self.domain_model.c[self.filter_field] == 
-                trusted.__dict__[self.filter_value])
+                    trusted.__dict__[self.filter_value])
         else:
             pfk = self.getValueKey(context)
             query = session.query(self.domain_model)
             query = query.filter(self.domain_model.c[self.filter_field] == pfk)
-            
+        
         query = query.distinct()
         if self.order_by_field:
             query = query.order_by(self.domain_model.c[self.order_by_field])
-            
+        
         return query
         
     def __call__(self, context=None):
@@ -1180,16 +1277,16 @@ def dict_to_dynatree(input_dict, selected):
     return retval
 
 
-subject_terms = TreeVDEXVocabulary("subject-terms.vdex")
+subject_terms = TreeVDEXVocabulary("subject_terms.vdex")
 representation = TreeVDEXVocabulary("representation.vdex")
 party = FlatVDEXVocabularyFactory("party.vdex")
 
 #
 # Sitting flat VDEX based vocabularies
 #
-sitting_activity_types = FlatVDEXVocabularyFactory("sitting-activity-types.vdex")
-sitting_meeting_types = FlatVDEXVocabularyFactory("sitting-meeting-types.vdex")
-sitting_convocation_types = FlatVDEXVocabularyFactory("sitting-convocation-types.vdex")
+sitting_activity_types = FlatVDEXVocabularyFactory("sitting-activity-types.vdex") # !+naming
+sitting_meeting_types = FlatVDEXVocabularyFactory("sitting-meeting-types.vdex") # !+naming
+sitting_convocation_types = FlatVDEXVocabularyFactory("sitting-convocation-types.vdex") # !+naming
 
 #
 # Vocabularies for XML configuration based report generation
@@ -1258,9 +1355,9 @@ def update_term_doctype(term):
     doctree = etree.fromstring(template_file.read())
     node = doctree.find("{%s}config/doctypes" % BUNGENI_REPORTS_NS)
     if node is None:
-        term.doctypes = None
+        term.doctypes = []
     else:
-        term.doctypes = [ dtype.strip() for dtype in node.text.split(",") ]
+        term.doctypes = [ dtype.strip() for dtype in node.text.split() ]
     template_file.close()
     return term
 

@@ -71,7 +71,7 @@ YAHOO.bungeni.schedulingpreview = function(){
                         gutter: "5 5",
                         height: 470,
                         resize: true,
-                        collapse: true
+                        collapse: false
                     },
                     { 
                         position: "center", 
@@ -89,6 +89,7 @@ YAHOO.bungeni.schedulingpreview = function(){
                 {
                     key : Columns.TYPE, 
                     label : SGlobals.column_type,
+                    formatter: formatters.type,
                 },
                 {
                     key : Columns.TITLE, 

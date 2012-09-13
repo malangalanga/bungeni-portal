@@ -29,14 +29,20 @@
   <permission id="bungeni.sitting.Delete" title="Delete sitting" />
   <permission id="bungeni.sitting.View" title="Delete sitting" />
   <meta:redefinePermission from="bungeni.sitting.View" to="zope.View" />
-  
-  <permission id="bungeni.sittingschedule.View" title="View the schedule of a sitting" />
-  <permission id="bungeni.sittingschedule.Edit" title="Reorder items in the schedule of a sitting" />
-  <permission id="bungeni.sittingschedule.item.Add" title="Add an item to a schedule" />
-  <permission id="bungeni.sittingschedule.item.Delete" title="Delete an item from a schedule" />
-  <permission id="bungeni.sittingschedule.itemdiscussion.Edit"
-              title="Edit item scheduling discussion" />
-              
+    
+    <permission id="bungeni.sittingschedule.View" 
+        title="View the schedule of a sitting" />
+    <permission id="bungeni.sittingschedule.Edit" 
+        title="Reorder items in the schedule of a sitting" />
+    <permission id="bungeni.sittingschedule.item.Add" 
+        title="Add an item to a schedule" />
+    <permission id="bungeni.sittingschedule.item.Delete" 
+        title="Delete an item from a schedule" />
+    <permission id="bungeni.sittingschedule.itemdiscussion.View"
+        title="View item scheduling discussion" />
+    <permission id="bungeni.sittingschedule.itemdiscussion.Edit"
+        title="Edit item scheduling discussion" />
+    
   <permission id="bungeni.sittingattendance.View" title="View sitting attendance" />
   <permission id="bungeni.sittingattendance.Add" title="Add sitting attendance" />
   <permission id="bungeni.sittingattendance.Edit" title="Edit sitting attendance" />
@@ -67,6 +73,12 @@
   <permission id="bungeni.heading.View" title="View heading" />
   <meta:redefinePermission from="bungeni.heading.View" to="zope.View" />
 
+  <permission id="bungeni.venue.Add" title="Add venue note" />
+  <permission id="bungeni.venue.Edit" title="Edit venue note" />
+  <permission id="bungeni.venue.Delete" title="Delete venue note" />
+  <permission id="bungeni.venue.View" title="View venue note" />
+  <meta:redefinePermission from="bungeni.venue.View" to="zope.View" />
+  
   <permission id="bungeni.editorialnote.Add" title="Add editorial note" />
   <permission id="bungeni.editorialnote.Edit" title="Edit editorial note" />
   <permission id="bungeni.editorialnote.Delete" title="Delete editorial note" />
@@ -79,17 +91,17 @@
   <permission id="bungeni.motion.View" title="View Motion" />
   <meta:redefinePermission from="bungeni.motion.View" to="zope.View" />
 
-  <permission id="bungeni.agendaitem.Add" title="Add agenda item" />
-  <permission id="bungeni.agendaitem.Edit" title="Edit agenda item" />
-  <permission id="bungeni.agendaitem.Delete" title="Delete agenda item" />
-  <permission id="bungeni.agendaitem.View" title="View agenda item" />
-  <meta:redefinePermission from="bungeni.agendaitem.View" to="zope.View" />
+  <permission id="bungeni.agenda_item.Add" title="Add agenda item" />
+  <permission id="bungeni.agenda_item.Edit" title="Edit agenda item" />
+  <permission id="bungeni.agenda_item.Delete" title="Delete agenda item" />
+  <permission id="bungeni.agenda_item.View" title="View agenda item" />
+  <meta:redefinePermission from="bungeni.agenda_item.View" to="zope.View" />
   
-  <permission id="bungeni.tableddocument.Add" title="Add tabled document" />
-  <permission id="bungeni.tableddocument.Edit" title="Edit tabled document" />
-  <permission id="bungeni.tableddocument.Delete" title="Delete tabled document" />
-  <permission id="bungeni.tableddocument.View" title="View tabled document" />
-  <meta:redefinePermission from="bungeni.tableddocument.View" to="zope.View" />
+  <permission id="bungeni.tabled_document.Add" title="Add tabled document" />
+  <permission id="bungeni.tabled_document.Edit" title="Edit tabled document" />
+  <permission id="bungeni.tabled_document.Delete" title="Delete tabled document" />
+  <permission id="bungeni.tabled_document.View" title="View tabled document" />
+  <meta:redefinePermission from="bungeni.tabled_document.View" to="zope.View" />
 
   <permission id="bungeni.response.Edit" title="Edit Response" />
   <permission id="bungeni.response.View" title="View Response" />
@@ -222,6 +234,12 @@
   <permission id="bungeni.function.View" title="View title/function" />
   <meta:redefinePermission from="bungeni.function.View" to="zope.View" />
 
+  <permission id="bungeni.groupmemberrole.Add" title="Add Member Role" />
+  <permission id="bungeni.groupmemberrole.Edit" title="Edit Member Role" />
+  <permission id="bungeni.groupmemberrole.Delete" title="Delete Member Role" />
+  <permission id="bungeni.groupmemberrole.View" title="View member Role" />
+  <meta:redefinePermission from="bungeni.groupmemberrole.View" to="zope.View" />
+
   <permission id="bungeni.event.Add" title="Add title/event" />
   <permission id="bungeni.event.Edit" title="Edit title/event" />
   <permission id="bungeni.event.Delete" title="Delete title/event" />
@@ -245,6 +263,7 @@
   <permission id="bungeni.signatory.Act" title="Consent or reject signature request" />
   <permission id="bungeni.signatory.Delete" title="Delete a signatory" />
   <permission id="bungeni.signatory.Edit" title="Edit a signatory" />
+  <permission id="bungeni.signatory.Append" title="Append signature to a document" />
   <permission id="bungeni.signatory.View" title="View a signatory" />
   <meta:redefinePermission from="bungeni.signatory.View" to="zope.View" />
 
@@ -258,6 +277,9 @@
   <meta:redefinePermission from="bungeni.attachment.View" to="zope.View" />
    
   <permission id="bungeni.translation.Add" title="add translation" />
+  
+  <permission id="bungeni.assignment.View" title="View Assignment" />
+  <permission id="bungeni.assignment.Edit" title="Edit Assignment"/>
   
   <include package="bungeni_custom.sys.acl" file="permissions.zcml" />
    

@@ -21,11 +21,10 @@ import sqlalchemy.sql.expression as sql
 
 #from bungeni.alchemist.ui import DynamicFields, EditFormViewlet
 from bungeni.alchemist import Session
-from bungeni.alchemist.model import queryModelDescriptor
+from bungeni.alchemist import utils
 from bungeni.alchemist.interfaces import IContentViewManager
 
 import bungeni.core.globalsettings as prefs
-from bungeni.core.workflows.adapters import get_workflow
 
 from bungeni.models import domain, interfaces
 from bungeni.models.utils import get_groups_held_for_user_in_parliament
@@ -40,7 +39,7 @@ from interfaces import (ISubFormViewletManager,
                         ISubformRssSubscriptionViewletManager)
 from bungeni.ui.interfaces import IBungeniAuthenticatedSkin
 from bungeni.utils import register
-
+from bungeni.utils.capi import capi
 
 def load_formatted_container_items(container, out_format={}, extra_params={}):
     """Load container items and return as a list of formatted dictionary
@@ -232,7 +231,7 @@ class OfficeMembersViewlet(SubformViewlet):
     sub_attr_name = "officemembers"
 
 class PoliticalGroupMembersViewlet(SubformViewlet):
-    sub_attr_name = "members"
+    sub_attr_name = "group_members"
 
 class SittingsViewlet(SubformViewlet):
     sub_attr_name = "sittings"
@@ -255,7 +254,7 @@ class PersonInfo(BungeniAttributeDisplay):
         self.__parent__ = context.__parent__
         self.manager = manager
         self.query = None
-        md = queryModelDescriptor(domain.User)
+        md = utils.get_descriptor(domain.User)
         self.form_fields = md.fields #.select("user_id", "start_date", "end_date")
 
     def update(self):
@@ -379,18 +378,20 @@ class OfficesHeldViewlet(browser.BungeniItemsViewlet):
 
 
 
+def _get_public_states_for(*tis):
+    ps = set()
+    for ti in tis:
+        ps.update(ti.workflow.get_state_ids(tagged=["public"]))
+    return list(ps)
+
 class MemberItemsViewlet(browser.BungeniItemsViewlet):
     """A tab with bills, motions etc for an MP 
     (the "parliamentary activities" tab of of the "member" view)
     """
-    # !+ un-hardwire, user defined document types
-    states = \
-        get_workflow("agendaitem").get_state_ids(tagged=["public"]) + \
-        get_workflow("bill").get_state_ids(tagged=["public"]) + \
-        get_workflow("motion").get_state_ids(tagged=["public"]) + \
-        get_workflow("question").get_state_ids(tagged=["public"]) + \
-        get_workflow("tableddocument").get_state_ids(tagged=["public"])
-
+    states = _get_public_states_for( *[ ti 
+        for (key, ti) in capi.iter_type_info() 
+        if ti.custom and issubclass(ti.domain_model, domain.Doc) ] )
+    
     render = ViewPageTemplateFile("templates/mp-item-viewlet.pt")
 
     def __init__(self, context, request, view, manager):
@@ -406,17 +407,18 @@ class MemberItemsViewlet(browser.BungeniItemsViewlet):
             ))
         #self.for_display = (self.query.count() > 0)
         self.formatter = self.get_date_formatter("date", "medium")
-
+    
     def update(self):
         user_id = self.context.user_id
         parliament_id = self.context.group_id
+        wf = capi.get_type_info("signatory").workflow
         session = Session()
         # add cosigned items
         signed_pi_ids = [sgn.head_id for sgn in
             session.query(domain.Signatory).filter(
                 sql.and_(domain.Signatory.user_id == user_id,
-                    domain.Signatory.status.in_(get_workflow(
-                            "signatory").get_state_ids(tagged=["public"])
+                    domain.Signatory.status.in_(
+                        wf.get_state_ids(tagged=["public"])
                     ),
                 )
             ).all()
@@ -436,14 +438,14 @@ class MemberItemsViewlet(browser.BungeniItemsViewlet):
         self.query = self.query.order_by(
             domain.Doc.doc_id.desc()
         )
-
+    
     @property
     def items(self):
         for item in self.query.all():
             _url = "/business/%ss/obj-%i" % (item.type,
                 item.doc_id)
             yield {"type": item.type,
-                "short_title": item.short_title,
+                "title": item.title,
                 "status": misc.get_wf_state(item),
                 "submission_date" : item.submission_date,
                 "url": _url }
@@ -478,7 +480,7 @@ class DisplayViewlet(BungeniAttributeDisplay):
             self.context = target
             self.has_data = True
             assert self.factory is not None
-            descriptor = queryModelDescriptor(self.factory)
+            descriptor = utils.get_descriptor(self.factory)
             self.form_fields = descriptor.fields
 
     def update(self):
@@ -510,7 +512,7 @@ class DisplayViewlet(BungeniAttributeDisplay):
 
     @property
     def form_name(self):
-        descriptor = queryModelDescriptor(self.factory)
+        descriptor = utils.get_descriptor(self.factory)
         return descriptor.display_name
 
 
@@ -529,7 +531,7 @@ class SchedulingMinutesViewlet(DisplayViewlet):
             self.context, self.request)
 
 
-@register.viewlet(interfaces.IParliamentSession,
+@register.viewlet(interfaces.ISession,
     manager=IContentViewManager,
     name="bungeni.viewlet.session-sitting-calendar")
 class SessionCalendarViewlet(browser.BungeniItemsViewlet):
@@ -668,8 +670,8 @@ class SessionCalendarViewlet(browser.BungeniItemsViewlet):
             css_class = css_class + "current-date "
         if Date.weekday() in prefs.getWeekendDays():
             css_class = css_class + "weekend-date "
-        query = Session().query(domain.HoliDay
-            ).filter(domain.HoliDay.holiday_date == Date)
+        query = Session().query(domain.Holiday
+            ).filter(domain.Holiday.date == Date)
         results = query.all()
         if results:
             css_class = css_class + "holyday-date "

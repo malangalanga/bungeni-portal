@@ -10,17 +10,21 @@ log = __import__("logging").getLogger("bungeni.ui.descriptor.localization")
 
 from time import time
 import elementtree.ElementTree
+from zope.component import getUtilitiesFor
+from zope.securitypolicy.interfaces import IRole
+from zope.configuration import xmlconfig
 
 from bungeni.alchemist.model import (
     #ModelDescriptor, 
     IModelDescriptor,
-    #queryModelDescriptor,
     Field,
     show, hide,
     norm_sorted, 
 )
 from bungeni.utils.capi import capi, bungeni_custom_errors
 from bungeni.ui.utils import debug
+from bungeni.utils import naming
+from bungeni.utils.misc import xml_attr_str
 
 # constants 
 
@@ -31,6 +35,7 @@ DESCRIPTOR_CLASSNAME_POSTFIX = "Descriptor"
 
 ROLES_DEFAULT = " ".join(Field._roles)
 INDENT = " " * 4
+
 
 # utils
 
@@ -74,8 +79,9 @@ def localizable_descriptor_classes(module):
 ####
 # Localize descriptors from {bungeni_custom}/forms/ui.xml.
 
-def get_localizable_descriptor_class(module, name):
-    descriptor_cls_name = "%s%s" % (name, DESCRIPTOR_CLASSNAME_POSTFIX)
+def get_localizable_descriptor_class(module, type_key):
+    cls_name = naming.camel(type_key)
+    descriptor_cls_name = "%s%s" % (cls_name, DESCRIPTOR_CLASSNAME_POSTFIX)
     assert hasattr(module, descriptor_cls_name), \
         "Unknown descriptor [%s]" % (descriptor_cls_name)
     cls = getattr(module, descriptor_cls_name) # raises AttributeError
@@ -122,44 +128,47 @@ def localize_descriptors():
     ROLES_DEFAULT = " ".join(Field._roles)
     
     STALE_INFO = False
-    for descriptor_elem in xml.findall("descriptor"):
-        dname = descriptor_elem.get("name")
-        cls = get_localizable_descriptor_class(DESCRIPTOR_MODULE, dname)
-        field_elems = descriptor_elem.findall("field")
+    for edescriptor in xml.findall("descriptor"):
+        type_key = xml_attr_str(edescriptor, "name")
+        order = xml_attr_str(edescriptor, "order")
+        cls = get_localizable_descriptor_class(DESCRIPTOR_MODULE, type_key)
+        if order is not None:
+            cls.order = int(order)
+        field_elems = edescriptor.findall("field")
         field_by_name = {}
         reorder_fields(cls, 
-            [fe.get("name") for fe in field_elems], field_by_name)
+            [ fe.get("name") for fe in field_elems ], 
+            field_by_name)
         for f_elem in field_elems:
-            fname = f_elem.get("name")
+            fname = xml_attr_str(f_elem, "name")
             f = field_by_name[fname]
-            
             # check if info-only field attributes are out of sync with bungeni
             # @displayable, from f.modes:tuple
             c_displayable_modes = f_elem.get("displayable").split()
             if is_stale_info(set(f.modes), set(c_displayable_modes),
                 "STALE INFO ATTR [%s.%s.modes]\n B: %s\n C: %s" % (
-                    dname, fname, f.modes, c_displayable_modes)):
+                    type_key, fname, f.modes, c_displayable_modes)):
                 f._SERIALIZE_modes = f.modes[:]
                 STALE_INFO = True
             # @localizable, from f._localizable_modes:set
             c_localizable_modes = set(f_elem.get("localizable", "").split())
             if is_stale_info(f._localizable_modes, c_localizable_modes,
                 "STALE INFO ATTR [%s.%s.localizable]\n B: %s\n C: %s" % (
-                    dname, fname, f._localizable_modes, c_localizable_modes)):
+                    type_key, fname, f._localizable_modes, c_localizable_modes)):
                 f._SERIALIZE_localizable_modes = list(f._localizable_modes)
                 STALE_INFO = True
             
             clocs = [] # custom_localizable_directives
             for cloc_elem in f_elem.getchildren():
-                modes = cloc_elem.get("modes", None)
-                roles = cloc_elem.get("roles", None) # ROLES_DEFAULT
+                modes = xml_attr_str(cloc_elem, "modes")
+                roles = xml_attr_str(cloc_elem, "roles") # ROLES_DEFAULT
                 if cloc_elem.tag == "show":
                     clocs.append(show(modes=modes, roles=roles))
                 elif cloc_elem.tag == "hide":
                     clocs.append(hide(modes=modes, roles=roles))
                 else:
                     assert False, "Unknown directive [%s/%s] %s" % (
-                        dname, fname, cloc_elem.tag)
+                        type_key, fname, cloc_elem.tag)
             if clocs:
                 f.localizable[:] = clocs
                 try: 
@@ -167,7 +176,7 @@ def localize_descriptors():
                         reference_localizable_modes=list(c_localizable_modes))
                 except Exception, e:
                     # make error message more useful
-                    raise e.__class__("Descriptor [%s] %s" % (dname, e.message))
+                    raise e.__class__("Descriptor [%s] %s" % (type_key, e.message))
     
     if STALE_INFO:
         # Re-sync info-only attributes, by re-serializing AFTER that all 
@@ -182,7 +191,22 @@ def localize_descriptors():
 
 
 #####
-# Generation of the default localization file
+# Generation of the default localization file -- this code executes only 
+# when this module is run as a standalone process.
+
+def get_defined_roles():
+    zcml_slug = """<configure xmlns="http://namespaces.zope.org/zope">
+        <include package="zope.component" file="meta.zcml" />
+        <includeOverrides package="repoze.whooze" file="overrides.zcml" />
+        <include package="zope.app.security" />
+        <include package="bungeni.server" />
+        <include package="bungeni" file="security.zcml"/>
+    </configure>
+    """
+    xmlconfig.string(zcml_slug)
+    system_roles = ["zope.Manager"]
+    return [ name for name, role in getUtilitiesFor(IRole)
+        if name not in system_roles ]
 
 def serialize_loc(loc, depth=3, localizable_modes=[]):
     """(loc:show/hide directive) -> [str]
@@ -250,7 +274,8 @@ def serialize_cls(cls, depth=1):
     Assumption: cls (subclass of ModelDescriptor) is localizable.
     """
     assert cls.__name__.endswith(DESCRIPTOR_CLASSNAME_POSTFIX)
-    name = cls.__name__[0:-len(DESCRIPTOR_CLASSNAME_POSTFIX)]
+    type_key = naming.un_camel(cls.__name__[0:-len(DESCRIPTOR_CLASSNAME_POSTFIX)])
+    order = cls.order
     
     _acc = []
     for f in cls.fields:
@@ -260,11 +285,15 @@ def serialize_cls(cls, depth=1):
     ind = INDENT * depth
     acc.append("")
     if _acc:
-        acc.append('%s<descriptor name="%s">' % (ind, name))
+        if order != 999: # default "not ordered":
+            acc.append('%s<descriptor name="%s" order="%s">' % (
+                    ind, type_key, order))
+        else:
+            acc.append('%s<descriptor name="%s">' % (ind, type_key))
         acc.extend(_acc)
         acc.append('%s</descriptor>' % (ind))
     else:
-        acc.append('%s<descriptor name="%s" />' % (ind, name))
+        acc.append('%s<descriptor name="%s" />' % (ind, type_key))
     return acc
 
 def serialize_module(module, depth=0):
@@ -277,16 +306,31 @@ def serialize_module(module, depth=0):
     
     acc = []
     ind = INDENT * depth
+    roles = " ".join(get_defined_roles())
     if _acc:
-        acc.append('%s<ui roles="%s">' % (ind, ROLES_DEFAULT))
+        acc.append('%s<ui roles="%s">' % (ind, roles))
         acc.extend(_acc)
         acc.append("")
         acc.append("%s</ui>" % (ind))
     else:
-        acc.append('%s<ui roles="%s" />' % (ind, ROLES_DEFAULT))
+        acc.append('%s<ui roles="%s" />' % (ind, roles))
     acc.append("") # blank line at end of file
     acc.append("")
     return acc
+
+
+def dump_i18n_message_ids():
+    """Dump msgids from Descriptor Field labels and descriptions
+    for internationalization.
+    """
+    from os import path
+    from bungeni.ui.descriptor.field import F
+    msgids_py_source_file_path = path.join(
+        path.dirname(path.abspath(__file__)), "_field_msgids.py")
+    msgids_py_source = "\n".join([ '_(%r)' % msgid for msgid in sorted(F.msgids) ])
+    open(msgids_py_source_file_path, "w").write(msgids_py_source.encode("utf-8"))
+    print "Descriptor Field message IDs:", msgids_py_source_file_path
+    print msgids_py_source
 
 
 if __name__ == "__main__":
@@ -296,5 +340,4 @@ if __name__ == "__main__":
     regenerated = "\n".join(serialize_module(DESCRIPTOR_MODULE))
     if persisted != regenerated:
         write_custom(persisted, regenerated)
-    
-
+    dump_i18n_message_ids()

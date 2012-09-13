@@ -5,6 +5,9 @@ $(document).ready(
     menu_links.bungeniPostWorkflowActionMenuItem();
     
     // set up parliament date range selection
-    $("select[id=form.parliament]").bungeniTimeRangeSelect(false, false);  
+    $("select[id=form.parliament]").bungeniTimeRangeSelect(false, false);
+    
+    // run workspace_count on workspace tab
+    $("dl.workspace-documents").workspace_count();
   }
 );

@@ -58,10 +58,16 @@ class IWorkspaceOrAdminSectionLayer(IDefaultBrowserLayer):
     """Requests for an object within the workspace OR admin section."""
 class IAdminSectionLayer(IWorkspaceOrAdminSectionLayer):
     """Requests for an object within the admin section."""
+
 class IWorkspaceSectionLayer(IWorkspaceOrAdminSectionLayer):
     """Requests for an object within the workspace section."""
-class IWorkspaceSchedulingSectionLayer(IWorkspaceOrAdminSectionLayer):
+class IWorkspaceMyDocumentsSectionLayer(IWorkspaceSectionLayer):
+    """Requests for an object within the workspace my documents section"""
+class IWorkspaceUnderConsiderationSectionLayer(IWorkspaceSectionLayer):
+    """Requests for an object within the workspace under consideration"""
+class IWorkspaceSchedulingSectionLayer(IWorkspaceSectionLayer):
     """Requests for an object within the scheduling section."""
+    
 class IFeedViewletManager(IViewletManager):
     """Viewlet manager for feed links"""
     
@@ -99,6 +105,7 @@ class IGenenerateVocabularyDefault(interface.Interface):
         """Get the default value in vocabulary"""
 
 
+# !+ should inherit from IVocabulary (so also Iterable?) ?
 class ITreeVocabulary(interface.Interface):
     """ Generate tree vocabulary as JSON data.
     Also provides a validation of values

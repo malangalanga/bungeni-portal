@@ -6,8 +6,7 @@
 
 $Id$
 """
-
-log = __import__("logging").getLogger("bungeni.ui.forms")
+log = __import__("logging").getLogger("bungeni.ui.forms.common")
 
 #import transaction
 from copy import copy
@@ -35,7 +34,7 @@ from sqlalchemy.exc import IntegrityError
 from bungeni.alchemist import Session
 from bungeni.alchemist import catalyst
 from bungeni.alchemist import ui
-from bungeni.alchemist.model import queryModelDescriptor
+from bungeni.alchemist import utils
 from bungeni.alchemist.interfaces import IAlchemistContainer, IAlchemistContent
 from bungeni.core.translation import get_language_by_name
 from bungeni.core.language import get_default_language
@@ -43,17 +42,19 @@ from bungeni.core.translation import is_translation
 from bungeni.core.translation import get_translation_for
 from bungeni.core.translation import CurrentLanguageVocabulary
 from bungeni.models.interfaces import IVersion, IBungeniContent, \
-    IAttachmentContainer #, ISittingContainer
-
+    IAttachmentContainer, ISignatoryManager #, ISittingContainer
 from bungeni.models import domain
+from bungeni.models.utils import get_db_user_id
 from bungeni.ui.forms.fields import filterFields
 from bungeni.ui.interfaces import IBungeniSkin, IFormEditLayer, \
-    IGenenerateVocabularyDefault
+    IGenenerateVocabularyDefault, IWorkspaceMyDocumentsSectionLayer
 from bungeni.ui.i18n import _
 from bungeni.ui import browser
+#from bungeni.ui import z3evoque
 from bungeni.ui.utils import url
 from bungeni.ui.container import invalidate_caches_for
 from bungeni.utils import register
+from bungeni.utils.capi import capi
 
 TRUE_VALS = "true", "1"
 
@@ -65,6 +66,17 @@ def set_widget_errors(widgets, errors):
             if isinstance(error, interface.Invalid) and name in error.args[1:]:
                 if widget._error is None:
                     widget._error = error
+
+
+def cascade_modifications(obj):
+    """cascade modify events on an object to the direct parent"""
+    if not ILocation.providedBy(obj):
+        return
+    if IAlchemistContainer.providedBy(obj.__parent__):
+        if IAlchemistContent.providedBy(obj.__parent__.__parent__):
+            notify(ObjectModifiedEvent(obj.__parent__.__parent__))
+    elif IAlchemistContent.providedBy(obj.__parent__):
+        notify(ObjectModifiedEvent(obj.__parent__))
 
 class NoPrefix(unicode):
     """The ``formlib`` library insists on concatenating the form
@@ -220,7 +232,7 @@ class BaseForm(formlib.form.FormBase):
 
     @cached_property.cachedIn("__cached_descriptor__")
     def model_descriptor(self):
-        return queryModelDescriptor(self.domain_model)
+        return utils.get_descriptor(self.domain_model)
 
     @cached_property.cachedIn("__cached_domain__")
     def domain_model(self):
@@ -239,17 +251,18 @@ class BaseForm(formlib.form.FormBase):
 # !+NamedTemplate(mr, jul-2010) converge all views to not use anymore
 # !+alchemist.form(mr, jul-2010) converge all form views to not use anymore
 class PageForm(BaseForm, formlib.form.PageForm, browser.BungeniBrowserView):
-     template = NamedTemplate("alchemist.form")
+    #template = z3evoque.PageViewTemplateFile("form.html#page")
+    template = NamedTemplate("alchemist.form")
 
 class DisplayForm(catalyst.DisplayForm, browser.BungeniBrowserView):
     
+    #template = z3evoque.PageViewTemplateFile("content.html#view")
     template = ViewPageTemplateFile("templates/content-view.pt")
 
     form_name = _("View")
 
     def __call__(self):
         return self.template()
-
 
 
 @register.view(IAttachmentContainer, layer=IBungeniSkin, name="add",
@@ -361,6 +374,7 @@ class AddForm(BaseForm, catalyst.AddForm):
 
     def createAndAdd(self, data):
         added_obj = super(AddForm, self).createAndAdd(data)
+        cascade_modifications(added_obj)
         return added_obj
     
     @formlib.form.action(
@@ -395,11 +409,16 @@ class AddForm(BaseForm, catalyst.AddForm):
                          name="save_and_add_another",
                          condition=formlib.form.haveInputWidgets)
     def handle_add_and_add_another(self, action, data):
-        self.createAndAdd(data)
+        ob = self.createAndAdd(data)
         name = self.domain_model.__name__
-
         if not self._next_url:
-            self._next_url = url.absoluteURL(self.context, self.request) + \
+            if IWorkspaceMyDocumentsSectionLayer.providedBy(self.request):
+                item_type = capi.get_type_info(ob).workflow_key
+                self._next_url = url.absoluteURL(self.context, self.request) + \
+                             "/add_%s?portal_status_message=%s Added" % \
+                             (item_type, name)
+            else:
+                self._next_url = url.absoluteURL(self.context, self.request) + \
                              "/add?portal_status_message=%s Added" % name
 
 @register.view(domain.Attachment, layer=IBungeniSkin, name="edit",
@@ -433,8 +452,7 @@ class EditForm(BaseForm, catalyst.EditForm):
             context = self.context.head
         else:
             context = self.context
-        props = IDCDescriptiveProperties.providedBy(context) \
-                and context or IDCDescriptiveProperties(context)
+        props = IDCDescriptiveProperties(context, None) or context
         
         if self.is_translation:
             language = get_language_by_name(self.context.language)["name"]
@@ -448,7 +466,6 @@ class EditForm(BaseForm, catalyst.EditForm):
                      default=u'Editing "$title" (version $version)',
                      mapping={"title": translate(props.title, context=self.request),
                               "version": self.context.seq})
-
         return _(u"edit_item_legend", default=u'Editing "$title"',
                  mapping={"title": translate(props.title, context=self.request)})
 
@@ -508,6 +525,7 @@ class EditForm(BaseForm, catalyst.EditForm):
         # !+EVENT_DRIVEN_CACHE_INVALIDATION(mr, mar-2011) no modify event
         # invalidate caches for this domain object type
         notify(ObjectModifiedEvent(self.context))
+        cascade_modifications(self.context)
         invalidate_caches_for(self.context.__class__.__name__, "edit")
 
     @formlib.form.action(_(u"Save"), name="save",
@@ -551,7 +569,7 @@ class TranslateForm(AddForm):
     def translatable_field_names(self):
         names = ["language"]
         for field in self.model_descriptor.edit_columns:
-            if field.property._type == unicode:
+            if field.property and (field.property._type == unicode):
                 names.append(field.name)
         return names
 
@@ -769,12 +787,10 @@ class DeleteForm(PageForm):
 
     Will redirect back to the container on success.
     """
-    # zpt
-    # !+form_template(mr, jul-2010) this is unused here, but needed by
-    # some adapter of this "object delete" view
-    # !+locationerror(mr, apr-2012)
-    #form_template = NamedTemplate("alchemist.form")
+    form_template = NamedTemplate("alchemist.form")
     template = ViewPageTemplateFile("templates/delete.pt")
+    #template = z3evoque.PageViewTemplateFile("delete.html")
+    
     _next_url = None
     form_fields = formlib.form.Fields()
 
@@ -823,6 +839,7 @@ class DeleteForm(PageForm):
         # we have to switch our context here otherwise the deleted object will
         # be merged into the session again and reappear magically
         self.context = container
+        cascade_modifications(container)
         next_url = self.nextURL()
 
         if next_url is None:
@@ -839,3 +856,31 @@ class DeleteForm(PageForm):
             self._next_url = url.absoluteURL(self.context, self.request)
         self.request.response.redirect(self._next_url)
 
+
+class SignOpenDocumentForm(PageForm):
+    """Provides a form to allow signing of a document open for signatures
+    """
+    form_template = NamedTemplate("alchemist.form")
+    template = ViewPageTemplateFile("templates/sign-open-document.pt")
+    form_fields = formlib.form.Fields()
+    
+    def _can_sign_document(self, action):
+        manager = ISignatoryManager(self.context)
+        return manager.autoSign()
+
+    def nextURL(self):
+        return url.absoluteURL(self.context, self.request)
+  
+    @formlib.form.action(_(u"Sign Document"), name="sign_document", 
+        condition=_can_sign_document)
+    def handle_sign_document(self, action, data):
+        user_id = get_db_user_id()
+        manager = ISignatoryManager(self.context)
+        manager.signDocument(user_id)
+        self.request.response.redirect(self.nextURL())
+        
+    @formlib.form.action(_(u"Cancel"), name="cancel", 
+        validator=ui.null_validator)    
+    def handle_cancel(self, action, data):
+        self.request.response.redirect(self.nextURL())
+    

@@ -67,11 +67,9 @@ def get_attr(element, name, namespace=BUNGENI_REPORTS_NS, default=None):
 
 def clean_element(element):
     """Clean out bungeni report namespace tags from document"""
-    REMOVE_ATTRIBUTES = ["type", "source", "url"]
-    for key in REMOVE_ATTRIBUTES:
-        _key = "{%s}%s" % (BUNGENI_REPORTS_NS, key)
-        if _key in element.keys():
-            del element.attrib[_key]
+    for key in element.keys():
+        if BUNGENI_REPORTS_NS in key:
+            del element.attrib[key]
 
 def empty_element(element):
     """Remove an element's children from document tree."""
@@ -172,6 +170,9 @@ class ReportGeneratorXHTML(_BaseGenerator):
                 if src:
                     node.text = get_element_value(context, src)
 
+        def check_exists(context, prop):
+            return bool(get_element_value(context, prop))
+                
         def process_document_tree(root, context):
             """Iterate and optionally update children of provided root node.
             
@@ -181,6 +182,9 @@ class ReportGeneratorXHTML(_BaseGenerator):
             Only nodes with the bungeni namespace tags "br:type" are modified
             with content from the provided context.
             """
+            cond = get_attr(root, "condition")
+            if cond and not check_exists(context, cond):
+                return None
             iter_children = root.getchildren() or [root]
             if not (root in iter_children):
                 root_typ = get_attr(root, "type")
@@ -191,6 +195,10 @@ class ReportGeneratorXHTML(_BaseGenerator):
             for child in iter_children:
                 typ = get_attr(child, "type")
                 src = get_attr(child, "source")
+                cond = get_attr(child, "condition")
+                if cond and not check_exists(context, cond):
+                    drop_element(child)
+                    continue
                 children = child.getchildren()
                 if len(children) == 0:
                     if typ:
@@ -224,11 +232,13 @@ class ReportGeneratorXHTML(_BaseGenerator):
                                         iroot = process_document_tree(inner_element, 
                                             item
                                         )
-                                        child.append(iroot)
+                                        if iroot:
+                                            child.append(iroot)
                         else:
                             process_document_tree(child, context)
                     else:
                         process_document_tree(child, context)
+            clean_element(root)
             return root
         process_document_tree(self.report_template, self.context)
         return etree.tostring(self.report_template)

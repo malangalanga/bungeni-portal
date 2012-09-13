@@ -53,6 +53,11 @@ class IBungeniGroup(interface.Interface):
     """
 class IUserContainer(IAlchemistContainer): pass
 
+
+class IBungeniContainer(IAlchemistContainer):
+    """Parliamentary container.
+    """
+
 class IParliament(IBungeniGroup):
     """Marker interface for group parliament.
     """
@@ -85,24 +90,31 @@ class IOfficeContainer(IAlchemistContainer): pass
 class ICommittee(IBungeniGroup): pass
 class ICommitteeContainer(IAlchemistContainer): pass
 
+
 class IBungeniGroupMembership(interface.Interface):
     """Group membership in bungeni.
     """
+class IBungeniGroupMembershipContainer(IBungeniContainer): pass
+
+class IGroupMembershipRole(interface.Interface):
+    """Group membership sub roles in bungeni.
+    """
+class IGroupMembershipRoleContainer(IBungeniContainer): pass
 
 class IMemberOfParliament(IBungeniGroupMembership): pass
-class IMemberOfParliamentContainer(IAlchemistContainer): pass
+class IMemberOfParliamentContainer(IBungeniGroupMembershipContainer): pass
 
-class IPoliticalGroupMember(IBungeniGroupMembership):
-    pass
+class IPoliticalGroupMember(IBungeniGroupMembership): pass
+class IPoliticalGroupMemberContainer(IBungeniGroupMembershipContainer): pass
 
 class IMinister(IBungeniGroupMembership): pass
-class IMinisterContainer(IAlchemistContainer): pass
+class IMinisterContainer(IBungeniGroupMembershipContainer): pass
 
-class ICommitteeMember(IBungeniGroupMembership):
-    pass
+class ICommitteeMember(IBungeniGroupMembership): pass
+class ICommitteeMemberContainer(IBungeniGroupMembershipContainer): pass
 
-class ICommitteeStaff(IBungeniGroupMembership):
-    pass
+class ICommitteeStaff(IBungeniGroupMembership): pass
+class ICommitteeStaffContainer(IBungeniGroupMembershipContainer): pass
 
 class IOfficeMember(IBungeniGroupMembership): pass
 class IOfficeMemberContainer(IAlchemistContainer): pass
@@ -131,21 +143,7 @@ class IBungeniParliamentaryContent(IBungeniContent):
     # !+IBungeniContent(mr, may-2012) drop either IBungeniContent or
     # IBungeniParliamentaryContent !
 
-class IBungeniContainer(IAlchemistContainer):
-    """Parliamentary container.
-    """
-
-class ISittingContainer(IBungeniContainer):
-    pass
-
-class IBungeniGroupMembershipContainer(IBungeniContainer):
-    pass
-
-class ICommitteeMemberContainer(IBungeniGroupMembershipContainer):
-    pass
-
-class ICommitteeStaffContainer(IBungeniGroupMembershipContainer):
-    pass
+class ISittingContainer(IBungeniContainer): pass
 
 class IVersion(interface.Interface):
     """A version of an object is identical in attributes to the actual 
@@ -169,6 +167,10 @@ class IEventContainer(IBungeniContainer): pass
 # !+IITEMVersion(mr, sep-2011): should IITEMVersion exist at all? if so, 
 # should it inherit from IITEM, or from IVersion? Note that 
 # IITEMVersionContainer inherits from IVersionContainer (is used by alchemist).
+
+class IDoc(IBungeniContent):
+    """Doc - dedicated interface.
+    """
 
 class IQuestion(IBungeniContent):
     """Parliamentary Question.
@@ -212,6 +214,10 @@ class IScheduleText(interface.Interface):
     This covers `IHeading` and `IEditorialNote'` at this point.
     """
 
+class IScheduleContent(interface.Interface):
+    """Marker interface for content that may be managed in scheduling
+    """
+
 class IItemScheduleDiscussion(interface.Interface): pass
 class IItemScheduleDiscussionContainer(IAlchemistContainer): pass
 
@@ -229,8 +235,8 @@ class IAgendaItemContainer(IBungeniContainer): pass
 #class IAgendaItemVersion(IAgendaItem): pass
 #!+OBSOLETE_VERSIONING class IAgendaItemVersionContainer(IVersionContainer): pass
 
-class IParliamentSession(interface.Interface): pass
-class IParliamentSessionContainer(IAlchemistContainer): pass
+class ISession(interface.Interface): pass
+class ISessionContainer(IAlchemistContainer): pass
 
 class IBungeniSetup(interface.Interface):
 
@@ -239,39 +245,6 @@ class IBungeniSetup(interface.Interface):
         """
 
 class IBungeniSettings(interface.Interface):
-    speakers_office_email = schema.TextLine(
-        title=_(u"Speaker's Office Email"),
-        default=u"speakers.office@parliament.go.tld"
-    )
-    speakers_office_notification = schema.Bool(
-        title=_(u"Speaker's Office Notification"),
-        description=_(u"Alert the speaker's office when a document is "
-            "submitted"
-        ),
-        default=False
-    )
-    clerks_office_notification = schema.Bool(
-        title=_(u"Clerk's Office Notification"),
-        description=_(u"Alert the clerk's office by e-mail when a document is "
-            "submitted"
-        ),
-        default=False
-    )
-    clerks_office_email = schema.TextLine(
-        title=_(u"Clerks's Office Email"),
-        default=u"clerks.office@parliament.go.tld"
-    )
-    ministries_notification = schema.Bool(
-        title=_(u"Ministries Notification"),
-        description=_(u"Notify concerned ministries by e-mail when a document "
-            "is submitted"
-        ),
-        default=False
-    )
-    administrators_email = schema.TextLine(
-            title=_(u"Administrator's Email"),
-            default=u"admin@parliament.go.tld"
-    )
     question_submission_allowed = schema.Bool(
         title=_(u"Allow Question Submission"),
         default=True
@@ -282,13 +255,6 @@ class IBungeniSettings(interface.Interface):
             "automatically deferred"
         ),
         default=10
-    )
-    days_to_notify_ministry_unanswered = schema.Int(
-        title=_(u"Days to Notify Ministry of Pending Response"),
-        description=_(u"Days after which to notify concerned ministry and  "
-            "clerk's office of questions with pending responses"
-        ),
-        default=5
     )
     days_before_question_schedule = schema.Int(
         title=_(u"Days before question scheduled"),
@@ -492,6 +458,15 @@ class IFeatureAddress(IFeature):
 class IFeatureWorkspace(IFeature):
     """Marks support for "workspace" feature.
     """
+class IFeatureNotification(IFeature):
+    """Marks support for "workspace" feature.
+    """
+class IFeatureDownload(IFeature):
+    """Marker for classes supporting "download" feature".
+    """
+class IFeatureAssignment(IFeature):
+    """Marks support for "assignment" feature
+    """
 #
 
 ''' !+DATERANGEFILTER(mr, dec-2010) disabled until intention is understood
@@ -548,33 +523,11 @@ class ITranslatable(interface.Interface):
 class IBungeniVocabulary(interface.Interface):
     """Marker interface for vocabularies managed in admin UI."""
 
-'''!+TYPES_CUSTOM
-class IAddressType(IBungeniVocabulary):
-    """Marker interface for address types vocabulary"""
-class IPostalAddressType(IBungeniVocabulary):
-    """Marker interface for address postal types"""
-
-class IBillType(IBungeniVocabulary):
-    """Marker interface for bill types vocabulary"""
-
-class IQuestionType(IBungeniVocabulary):
-    """Marker interface for question types"""
-class IResponseType(IBungeniVocabulary):
-    """Marker interface for response types"""
-
-class ICommitteeType(IBungeniVocabulary):
-    """Marker interface for committee types vocabulary"""
-
-class ICommitteeTypeStatus(IBungeniVocabulary):
-    """Marker interface for committe type statuses"""
-class IAttendanceType(IBungeniVocabulary):
-    """Marker interface for attendance types vocabulary"""
-class IMemberElectionType(IBungeniVocabulary):
-    """Marker interface for member election types"""
-'''
 
 class IVenue(IBungeniVocabulary):
     """Marker interface for venues vocabulary"""
+class IVenueContainer(IAlchemistContainer): pass
+    
 class ISubRoleDirective(interface.Interface):
     """Define a new sub role."""
     id = schema.Id(
@@ -598,8 +551,9 @@ class ISubRoleDirective(interface.Interface):
         required=True)
 
 class ISubRoleAnnotations(interface.Interface):
-    sub_roles = interface.Attribute('Sub_Roles')
-    is_sub_role = interface.Attribute('Sub_Roles')
+    sub_roles = interface.Attribute('sub_roles')
+    is_sub_role = interface.Attribute('is_sub_role')
+    parent = interface.Attribute('parent')
 
 class ICountry(interface.Interface):
     """Marker interface for Country"""

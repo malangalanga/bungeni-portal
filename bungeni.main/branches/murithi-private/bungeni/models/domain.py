@@ -16,16 +16,15 @@ import string
 import datetime
 
 from zope import interface, location
+from zope.dublincore.interfaces import IDCDescriptiveProperties
 import ore.xapian.interfaces
-from bungeni.alchemist import Session
-from bungeni.alchemist import model
+from bungeni import alchemist
+from bungeni.alchemist import utils
 from bungeni.alchemist.traversal import one2many, one2manyindirect
 import sqlalchemy.sql.expression as sql
 from sqlalchemy.orm import class_mapper, object_mapper
 
 from bungeni.models import interfaces
-
-from bungeni.utils.capi import capi
 
 
 def object_hierarchy_type(object):
@@ -51,14 +50,11 @@ def get_changes(auditable, *actions):
     for action in actions:
         assert_valid_change_action(action)
     # lazy loading - merge to avoid sqlalchemy.orm.exc.DetachedInstanceError
-    auditable = Session().merge(auditable)
+    auditable = alchemist.Session().merge(auditable)
     return [ c for c in auditable.changes if c.action in actions ]
 
-def get_mapped_table(kls):
-    return class_mapper(kls).mapped_table
-
 def get_audit_table_name(kls):
-    return "%s_audit" % (get_mapped_table(kls).name)
+    return "%s_audit" % (utils.get_local_table(kls).name)
 
 def get_mapped_object_id(ob):
     # !+ASSUMPTION_SINGLE_COLUMN_PK(mr, may-2012)
@@ -113,7 +109,7 @@ class Entity(object):
     
     def __init__(self, **kw):
         try:
-            domain_schema = model.queryModelInterface(type(self))
+            domain_schema = alchemist.model.queryModelInterface(type(self))
             known_names = [ k for k, d in domain_schema.namesAndDescriptions(1) ]
         except Exception, e:
             log.error("Failed queryModelInterface(%s): %s: %s" % (
@@ -231,9 +227,28 @@ def feature_address(kls, **params):
     return kls
 
 def feature_workspace(kls):
-    """Decorator for domain types to support "workspace" feature.
+    """Decorator for domain types that support "workspace" feature.
     """
     interface.classImplements(kls, interfaces.IFeatureWorkspace)
+    return kls
+
+def feature_notification(kls):
+    """Decorator for domain types to support "notification" feature.
+    """
+    interface.classImplements(kls, interfaces.IFeatureNotification)
+    return kls
+
+def feature_download(kls):
+    """Decorator for domain types that support downloading as 
+    pdf/odt/rss/akomanoto
+    """
+    interface.classImplements(kls, interfaces.IFeatureDownload)
+    return kls
+
+def feature_assignment(kls, **params):
+    """Decorator for domain types that support "assignable" feature.
+    """
+    interface.classImplements(kls, interfaces.IFeatureAssignment)
     return kls
 
 def configurable_domain(kls, workflow):
@@ -285,11 +300,14 @@ class User(Entity):
     def _set_status(self, value):
         self.active_p = value
     status = property(_get_status, _set_status)
-
+    
+    # !+FULLNAME(mr, jul-2012) inconsistent naming
     @property
     def fullname(self):
-        return "%s %s" % (self.first_name, self.last_name)
-
+        if not self.middle_name:
+            return "%s %s" % (self.first_name, self.last_name)
+        return "%s %s %s" % (self.first_name, self.middle_name, self.last_name)
+    
     addresses = one2many("addresses",
         "bungeni.models.domain.UserAddressContainer", "user_id")
     delegations = one2many("delegations",
@@ -325,11 +343,8 @@ class PasswordRestoreLink(object):
     def expired(self):
         return self.expiration_date < datetime.datetime.now() 
 
-#class HansardReporter(User):
-#    """ a reporter who reports on parliamentary procedings
-#    """
-#    rotas
-#    takes
+class UserSubscription(Entity):
+    """The documents a user is tracking"""
 
 
 ######
@@ -356,7 +371,7 @@ class Group(Entity):
         "group_id"
     )
     def active_membership(self, user_id):
-        session = Session()
+        session = alchemist.Session()
         query = session.query(GroupMembership).filter(
             sql.and_(
                 GroupMembership.group_id == self.group_id,
@@ -377,8 +392,7 @@ class GroupMembership(HeadParentedMixin, Entity):
     dynamic_features = []
     interface.implements(
         interfaces.IBungeniGroupMembership, interfaces.ITranslatable)
-    
-    
+
     @property
     def image(self):
         return self.user.image
@@ -393,7 +407,15 @@ class CommitteeStaff(GroupMembership):
     """
     titles = one2many("titles",
         "bungeni.models.domain.MemberTitleContainer", "membership_id")
-
+    subroles = one2many(
+        "subroles", "bungeni.models.domain.GroupMembershipRoleContainer",
+        "membership_id"
+    )
+class GroupMembershipRole(Entity):
+    """Association between an group member and subroles
+       that are granted when a document is assigned to a user
+    """
+    interface.implements(interfaces.IGroupMembershipRole)
 
 # auditable (by default), but not a Doc
 class Sitting(Entity):
@@ -411,18 +433,10 @@ class Sitting(Entity):
     sreports = one2many("sreports",
         "bungeni.models.domain.Report4SittingContainer", "sitting_id")
 
-class SittingAttendance(object):
+class SittingAttendance(Entity):
     """A record of attendance at a meeting .
     """
 
-''' !+TYPES_CUSTOM
-class AttendanceType(Entity):
-    """Lookup for attendance type.
-    """
-    interface.implements(interfaces.ITranslatable,
-        interfaces.IAttendanceType
-    )
-'''
 
 #############
 
@@ -431,7 +445,7 @@ class Parliament(Group):
     """
     
     sessions = one2many("sessions",
-        "bungeni.models.domain.ParliamentSessionContainer", "parliament_id")
+        "bungeni.models.domain.SessionContainer", "parliament_id")
     committees = one2many("committees",
         "bungeni.models.domain.CommitteeContainer", "parent_group_id")
     governments = one2many("governments",
@@ -460,7 +474,6 @@ class Parliament(Group):
 class MemberOfParliament(GroupMembership):
     """Defined by groupmembership and additional data.
     """
-    
     titles = one2many("titles",
         "bungeni.models.domain.MemberTitleContainer", "membership_id")
     addresses = one2manyindirect("addresses", 
@@ -470,8 +483,8 @@ class PoliticalGroup(Group):
     """A political group in a parliament.
     """
     interface.implements(interfaces.ITranslatable)
-    members = one2many("members",
-        "bungeni.models.domain.PolitcalGroupMemberContainer", "group_id")
+    group_members = one2many("group_members",
+        "bungeni.models.domain.PoliticalGroupMemberContainer", "group_id")
     title_types = one2many("title_types",
         "bungeni.models.domain.TitleTypeContainer", "group_id")
 class PoliticalGroupMember(GroupMembership):
@@ -491,8 +504,12 @@ class Ministry(Group):
     """
     ministers = one2many("ministers",
         "bungeni.models.domain.MinisterContainer", "group_id")
+    # !+MINISTRY_ID(mr, jun-2012) alchemist does not want target attribute to 
+    # be a domain class property [ministry_id] so the property corresponding 
+    # directly to the db table column [group_id] is used instead.
     questions = one2many("questions",
         "bungeni.models.domain.QuestionContainer", "group_id")
+    # !+MINISTRY_ID
     bills = one2many("bills",
         "bungeni.models.domain.BillContainer", "group_id")
     title_types = one2many("title_types",
@@ -529,15 +546,6 @@ class CommitteeMember(GroupMembership):
     titles = one2many("titles",
         "bungeni.models.domain.MemberTitleContainer", "membership_id")
 
-''' !+TYPES_CUSTOM
-class CommitteeType(Entity):
-    """Type of Committee.
-    """
-    interface.implements(interfaces.ITranslatable,
-        interfaces.ICommitteeType
-    )
-'''
-
 class Office(Group):
     """Parliamentary Office like speakers office, clerks office etc. 
     Internal only.
@@ -552,12 +560,10 @@ class OfficeMember(GroupMembership):
     """
     titles = one2many("titles",
         "bungeni.models.domain.MemberTitleContainer", "membership_id")
-
-
-#class Debate(Entity):
-#    """
-#    Debates
-#    """
+    subroles = one2many(
+        "subroles", "bungeni.models.domain.GroupMembershipRoleContainer",
+        "membership_id"
+    )
 
 class Address(HeadParentedMixin, Entity):
     """Address base class
@@ -605,7 +611,7 @@ def vertical_property(object_type, vp_name, vp_type, *args, **kw):
         vp = getattr(self, _vp_name, None)
         if vp is not None:
             vp.value = value
-        else: 
+        else:
             vp = vp_type(self, object_type, vp_name, value, *args, **kw)
             setattr(self, _vp_name, vp)
     def fdel(self):
@@ -625,9 +631,10 @@ class VerticalProperty(Entity):
         self.value = value
     
     def __repr__(self):
-        return "<%s %s=%r on (%r, %s) at %s>" % (self.__class__.__name__, 
-                self.name, self.value, 
-                self.object_type, self.object_id, hex(id(self._object)))
+        #!+VP(mb, Aug-2012) Why is reference to self.object_ i.e.
+        # hex(id(self._object)) sometimes not set? e.g. during serialization
+        return "<%s %s=%r on (%r, %s)>" % (self.__class__.__name__, 
+                self.name, self.value, self.object_type, self.object_id)
 
 class vp(object):
     """A convenient vp namespace.
@@ -651,7 +658,7 @@ class Doc(Entity):
     """Base class for a workflowed parliamentary document.
     """
     dynamic_features = ["audit", "version", "attachment", "event", 
-        "signatory", "schedule"]
+        "signatory", "schedule", "assignment"]
     interface.implements(
         interfaces.IBungeniContent, # IOwned
         interfaces.ITranslatable
@@ -659,10 +666,11 @@ class Doc(Entity):
     
     # !+AlchemistManagedContainer these attribute names are part of public URLs!
     # !+item_id->head_id
-    files = one2many("files",
-        "bungeni.models.domain.AttachmentContainer", "head_id")
-    events = one2many("events",
-        "bungeni.models.domain.EventContainer", "head_id")
+    # !+must be defined (dynamically, via feature) on each domain class
+    #files = one2many("files",
+    #    "bungeni.models.domain.AttachmentContainer", "head_id")
+    #events = one2many("events",
+    #    "bungeni.models.domain.EventContainer", "head_id")
     
     def _get_workflow_date(self, *states):
         """ (states:seq(str) -> date
@@ -804,8 +812,10 @@ class Version(Change):
                         self.audit, audit_id, 
                         self, correctly_typed_change))
             # !+/SA_INCORRECT_TYPE_DEBUG
-            raise AttributeError("%r object has no attribute %r" % (
-                type(self).__name__, name))
+            raise AttributeError(
+                "%r [audit_id=%r, audit_type=%r] object has no attribute %r" % (
+                    self, self.audit_id, self.audit_type, name))
+
 
 class Audit(HeadParentedMixin, Entity):
     """Base (abstract) audit record for a document.
@@ -827,7 +837,7 @@ class Audit(HeadParentedMixin, Entity):
         # define a subtype of Audit type
         audit_factory_name = "%sAudit" % (auditable_cls.__name__)
         auditable_pk_column = [ c for c in 
-            get_mapped_table(auditable_cls).primary_key ][0]
+            utils.get_local_table(auditable_cls).primary_key ][0]
         factory = type(audit_factory_name, (cls,), {
             "head_id_column_name": auditable_pk_column.name })
         # define a subtype of Audit type
@@ -858,7 +868,7 @@ class Audit(HeadParentedMixin, Entity):
 class DocAudit(Audit):
     """An audit record for a document.
     """
-    label_attribute_name = "short_title"
+    label_attribute_name = "title"
     extended_properties = [
     ]
 #instrument_extended_properties(DocAudit, "doc_audit")
@@ -867,8 +877,10 @@ class DocVersion(Version):
     """A version of a document.
     """
     files = one2many("files",
-        "bungeni.models.domain.AttachmentContainer", "head_id")
+        "bungeni.models.domain.AttachmentVersionContainer", "head_id")
     #!+eventable items supporting feature "event":
+    #events = one2many("events",
+    #    "bungeni.models.domain.DocVersionContainer", "head_id")
     
     submission_date = None # !+bypass error when loading a doc version view
     # !+ proper logic of this would have to be the value of 
@@ -879,7 +891,7 @@ class AgendaItem(AdmissibleMixin, Doc):
     """Generic Agenda Item that can be scheduled on a sitting.
     """
     dynamic_features = ["audit", "version", "attachment", "schedule",
-                        "workspace"]
+                        "workspace", "notification", "download", "assignment"]
     interface.implements(
         interfaces.IBungeniParliamentaryContent,
     )
@@ -895,7 +907,8 @@ class Bill(Doc):
     """Bill domain type.
     """
     dynamic_features = ["audit", "version", "attachment", "event", 
-        "signatory", "schedule", "workspace"]
+        "signatory", "schedule", "workspace", "notification", "download",
+        "assignment"]
     interface.implements(
         interfaces.IBungeniParliamentaryContent,
     )
@@ -910,6 +923,7 @@ class Bill(Doc):
     # !+BILL_MINISTRY(fz, oct-2011) the ministry field here logically means the 
     # bill is presented by the Ministry and so... Ministry should be the author,
     # not a "field" 
+    # !+MINISTRY_ID
     def ministry_id():
         doc = "Related group must be a ministry."
         def fget(self):
@@ -925,13 +939,19 @@ class Bill(Doc):
     @property
     def publication_date(self):
         return self._get_workflow_date("gazetted")
+    
+    extended_properties = [
+        ("short_title", vp.TranslatedText),
+    ]
+instrument_extended_properties(Bill, "doc")
 #BillAudit
 
 class Motion(AdmissibleMixin, Doc):
     """Motion domain type.
     """
     dynamic_features = ["audit", "version", "attachment", "event", 
-        "signatory", "schedule", "workspace"]
+        "signatory", "schedule", "workspace", "notification", "download",
+        "assignment"]
     interface.implements(
         interfaces.IBungeniParliamentaryContent,
     )
@@ -951,7 +971,8 @@ class Question(AdmissibleMixin, Doc):
     """Question domain type.
     """
     dynamic_features = ["audit", "version", "attachment", "event", 
-        "signatory", "schedule", "workspace"]
+        "signatory", "schedule", "workspace", "notification", "download",
+        "assignment"]
     interface.implements(
         interfaces.IBungeniParliamentaryContent,
     )
@@ -964,6 +985,7 @@ class Question(AdmissibleMixin, Doc):
     #!+doc_type: default="ordinary", nullable=False,
     #!+response_type: default="oral", nullable=False,
     
+    # !+MINISTRY_ID
     def ministry_id():
         doc = "Related group must be a ministry."
         def fget(self):
@@ -1004,7 +1026,8 @@ class TabledDocument(AdmissibleMixin, Doc):
     It must be possible to schedule a tabled document for a sitting.
     """
     dynamic_features = ["audit", "version", "attachment", "event", 
-        "signatory", "schedule", "workspace"]
+        "signatory", "schedule", "workspace", "notification", "download",
+        "assignment"]
     interface.implements(
         interfaces.IBungeniParliamentaryContent,
     )
@@ -1066,7 +1089,9 @@ class AttachmentVersion(Version):
 class Heading(Entity):
     """A heading in a report.
     """
-    interface.implements(interfaces.ITranslatable, interfaces.IScheduleText)
+    interface.implements(interfaces.ITranslatable, interfaces.IScheduleText,
+        interfaces.IScheduleContent
+    )
     
     type = "heading"
     
@@ -1086,6 +1111,10 @@ class Signatory(Entity):
     @property
     def owner(self):
         return self.user
+        
+    @property
+    def party(self):
+        return self.member.party
 
 class SignatoryAudit(Audit):
     """An audit record for a signatory.
@@ -1102,7 +1131,7 @@ class SignatoryAudit(Audit):
 
 #############
 
-class ParliamentSession(Entity):
+class Session(Entity):
     """
     """
     interface.implements(interfaces.ITranslatable)
@@ -1115,7 +1144,7 @@ class ObjectSubscriptions(object):
 
 # ###############
 
-class Country(object):
+class Country(Entity):
     """Country.
     """
     pass
@@ -1123,7 +1152,7 @@ class Country(object):
 
 # ##########
 
-class TitleType(object):
+class TitleType(Entity):
     """Types of titles in groups
     """
     interface.implements(interfaces.ITitleType, interfaces.ITranslatable)
@@ -1145,61 +1174,74 @@ class EditorialNote(Entity):
     """Arbitrary text inserted into schedule
     """
     type = u"editorial_note"
-    interface.implements(interfaces.ITranslatable, interfaces.IScheduleText)
+    interface.implements(interfaces.ITranslatable, interfaces.IScheduleText,
+        interfaces.IScheduleContent
+    )
+
 
 class ItemSchedule(Entity):
     """For which sitting was a parliamentary item scheduled.
     """
     discussions = one2many("discussions",
         "bungeni.models.domain.ItemScheduleDiscussionContainer", "schedule_id")
-
+    
     def get_item_domain(self):
-        domain_class = None
-        try:
-            domain_class = capi.get_type_info(self.item_type).domain_model
-        except KeyError:
-            #!+TYPE REGISTRY(mb, mar-2012) Try to lookup via workflow
-            # demo data not synced with polymorphic prop changes in trunk@r9135
-            log.debug("Unable to locate type %s from type info lookup." 
-                "Trying workflow lookup.", self.item_type
-            )
-            for type_key, type_info in capi.iter_type_info():
-                if (type_info.workflow and 
-                    (type_info.workflow.name == self.item_type)
-                ):
-                    domain_class = type_info.domain_model
-                    break
-        if domain_class is None:
-            log.error("Unable to locate domain  class for item of type %s",
-                self.item_type
-            )
-        return domain_class
-
-    def _get_item(self):
-        """Query for scheduled item by type and ORM mapped primary key
-        """
-        domain_class = self.get_item_domain()
-        if domain_class is None:
-            return None
-        item = Session().query(domain_class).get(self.item_id)
-        item.__parent__ = self
-        return item
-
-    def _set_item(self, schedule_item):
-        self.item_id = get_mapped_object_id(schedule_item)
-        self.item_type = schedule_item.type
-
-    item = property(_get_item, _set_item)
+        if self.item_type is None:
+            return # no item set
+        from bungeni.utils.capi import capi
+        return capi.get_type_info(self.item_type).domain_model
     
+    def item():
+        doc = "Related (schdulable) item, via item_type and item_id. " \
+            "Currently may be of (doc, heading, editorial_note) type."
+        def fget(self):
+            "Query for scheduled item by type and ORM mapped primary key."
+            domain_class = self.get_item_domain()
+            if domain_class is None:
+                return None
+            schedule_item = alchemist.Session().query(domain_class).get(self.item_id)
+            schedule_item.__parent__ = self
+            return schedule_item
+        def fset(self, schedule_item):
+            self.item_id = get_mapped_object_id(schedule_item)
+            self.item_type = schedule_item.type
+        def fdel(self):
+            raise NotImplementedError
+        return locals()
+    item = property(**item())
     
+    # !+IDCDP(ob).title should probably be the default/fallback for all 
+    # "labels" used to refer to the ob e.g. in listings. 
+    # Then, the 2 props below ca be reduced to just @owner (and reuse @item defined above)
+    @property
+    def item_title(self):
+        return IDCDescriptiveProperties(self.item).title
+    @property
+    def item_mover(self): # !+ item_owner_title
+        # currently item may be (doc, heading, editorial_note) of which 
+        # only doc has an "owner" attribute.
+        schedule_item = self.item
+        if hasattr(schedule_item, "owner"):
+            return IDCDescriptiveProperties(schedule_item.owner).title
+    @property
+    def item_uri(self):
+        return IDCDescriptiveProperties(self.item).uri
 
+    @property
+    def type_heading(self):
+        return self.get_item_domain() == Heading
+    
+    @property
+    def type_document(self):
+        return not self.type_heading
+    
 class ItemScheduleDiscussion(Entity):
     """A discussion on a scheduled item.
     """
     interface.implements(interfaces.ITranslatable)
 
 
-class HoliDay(object):
+class Holiday(object):
     """Is this day a holiday?
     if a date in in the table it is otherwise not
     """
@@ -1220,13 +1262,15 @@ class ResourceType(object):
 class Venue(Entity):
     """A venue for a sitting.
     """
-    interface.implements(interfaces.ITranslatable, interfaces.IVenue)
+    interface.implements(interfaces.ITranslatable, interfaces.IVenue,
+        interfaces.IScheduleContent
+    )
 
 
 class Report(Doc):
     """Agendas and minutes.
     """
-    dynamic_features = ["audit", "version"]
+    dynamic_features = ["audit", "version", "download"]
     interface.implements(interfaces.ITranslatable)
     
 
@@ -1243,49 +1287,4 @@ class Report4Sitting(Report):
 class ObjectTranslation(object):
     """Get the translations for an Object.
     """
-
-
-''' !+TYPES_CUSTOM
-
-#####################
-# DB vocabularies
-######################
-
-class QuestionType(Entity):
-    """Question type
-    """
-    interface.implements(interfaces.ITranslatable, interfaces.IQuestionType)
-
-class ResponseType(Entity):
-    """Response type
-    """
-    interface.implements(interfaces.ITranslatable, interfaces.IResponseType)
-
-class MemberElectionType(Entity):
-    """Member election type
-    """
-    interface.implements(interfaces.ITranslatable, 
-        interfaces.IMemberElectionType
-    )
-
-class AddressType(Entity):
-    """Address Types.
-    """
-    interface.implements(interfaces.ITranslatable, 
-        interfaces.IAddressType
-    )
-class PostalAddressType(Entity):
-    """Postal address type
-    """
-    interface.implements(interfaces.ITranslatable, 
-        interfaces.IPostalAddressType
-    )
-
-class CommitteeTypeStatus(Entity):
-    """Committee type status
-    """
-    interface.implements(interfaces.ITranslatable,
-        interfaces.ICommitteeTypeStatus
-    )
-'''
 

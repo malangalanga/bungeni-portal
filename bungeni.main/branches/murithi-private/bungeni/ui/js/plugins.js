@@ -230,6 +230,7 @@
         return this;
     };
 
+
     $.fn.yuiDataTable = function (context_name, link_url, data_url, fields, columns, table_id, rows_per_page) {
         if (!YAHOO.widget.DataTable) {
             return console.log("Warning: YAHOO.widget.DataTable module not loaded.");
@@ -269,7 +270,7 @@
                 var table_columns = oSelf.getColumnSet();
                 var qstr = '';
                 for (i = 0; i < table_columns.keys.length; i++) {
-                    var input_id = 'input#input_' + table_columns.keys[i].getKey();
+                    var input_id = 'input#input_'+table_id+'_'+table_columns.keys[i].getKey();
                     qstr = qstr + '&filter_' + table_columns.keys[i].getKey() + '=' + $(input_id).val();
                 }
                 return qstr;
@@ -388,6 +389,26 @@
         return table;
     };
 
+    var workspace_tab_count_response = function(data) {
+        var tab_data = JSON.parse(data);
+        for (var tab in tab_data){
+            var tab_element = $("dl.workspace li.navTreeItem a#workspace-"+tab+" > span#count");
+            tab_element.html("("+tab_data[tab]+")");
+        }
+    };
+
+    var workspace_tab_count_ajax = function(i, o) {
+        var tab_count_url = "/workspace/tabcount";
+        $.ajax({
+                type: "GET",
+                    url: tab_count_url,
+                    cache: false,
+                    processData: false,
+                    success: function(data){
+                    workspace_tab_count_response(data);
+                }   
+            });
+    }
     $.fn.yuiWorkspaceDataTable = function (context_name, link_url, data_url, fields, columns, table_id, item_type, status, rows_per_page) {
         if (!YAHOO.widget.DataTable) {
             return console.log("Warning: YAHOO.widget.DataTable module not loaded.");
@@ -425,7 +446,7 @@
         global_status_var = status;
         // filter per column  
         var get_text_filter = function (oSelf) {
-                var qstr = '&filter_short_title=' + $("#input_short_title").val();
+                var qstr = '&filter_title=' + $("#input_title").val();
                 return qstr;
             };
         var get_select_filter = function (oSelf) {
@@ -433,6 +454,10 @@
                 var qstr = '&filter_type=' + item_type.val();
                 var status = $("#input_status option:selected");
                 qstr = qstr + '&filter_status=' + status.val();
+                return qstr;
+            };
+        var get_status_date_filter = function (oSelf) {
+                var qstr = '&filter_status_date=' + $("#input_table_status_date").val();
                 return qstr;
             };
         // A custom function to translate the js paging request 
@@ -448,7 +473,7 @@
                 var startIndex = (oState.pagination) ? oState.pagination.recordOffset : 0;
                 var results = (oState.pagination) ? oState.pagination.rowsPerPage : rows_per_page;
                 // Build custom request
-                return "sort=" + sort + "&dir=" + dir + "&start=" + startIndex + "&limit=" + results + get_text_filter(oSelf) + get_select_filter(oSelf);
+                return "sort=" + sort + "&dir=" + dir + "&start=" + startIndex + "&limit=" + results + get_text_filter(oSelf) + get_select_filter(oSelf)+get_status_date_filter(oSelf);
             };
         config = {
             paginator: new YAHOO.widget.Paginator({
@@ -473,24 +498,13 @@
 
         };
         table = new YAHOO.widget.DataTable(YAHOO.util.Dom.get(table_id), columns, datasource, config);
-        var fn_tab_count_response_success = function(o) {
-            var tab_data = JSON.parse(o.responseText);
-            for (var tab in tab_data){
-                var tab_element = $("dl.workspace li.navTreeItem a#workspace-"+tab+" > span#count");
-                tab_element.html("("+tab_data[tab]+")");
-            }
-        };
+       
  
-        var tab_count_callback = {
-            success:fn_tab_count_response_success,
-            failure: function(o) {},
-            argument: []
-        };
+        
         
         var fnRequestReceived = function() {
+            workspace_tab_count_ajax();
             jQuery.unblockUI();
-            var tab_count_url = window.location + "/tabcount";
-            var transaction = YAHOO.util.Connect.asyncRequest('GET', tab_count_url, tab_count_callback, null);
         };
 
         table.subscribe("postRenderEvent", fnRequestReceived);
@@ -649,9 +663,16 @@
                     }
                 }
             };
-            newRequest = newRequest + get_text_filter(this) + get_select_filter(this);
+            newRequest = newRequest + get_text_filter(this) + get_select_filter(this)+get_status_date_filter(this);
             this.getDataSource().sendRequest(newRequest, oCallback);
         };
         return true;
+    };
+
+    $.fn.workspace_count = function (){
+        $.each($(this), function (i, o) {
+                workspace_tab_count_ajax();
+                return this;
+            });
     };
 })(jQuery);

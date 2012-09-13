@@ -255,8 +255,11 @@ YAHOO.bungeni.availableitems = function(){
                             selected_rows.length?(itemsDataTable.getTrIndex(selected_rows[0])+1):0
                         );
                         itemsDataTable.addRow(targetData, insert_index);
+                        itemsDataTable.unselectAllRows();
+                        itemsDataTable.selectRow(insert_index);
                         window.setTimeout(function(){
                             YAHOO.bungeni.scheduling.handlers.refreshRows();
+                            itemsDataTable.scrollTo(itemsDataTable.getRow(insert_index));
                         }, 200);
                     }
                 }else{
@@ -310,7 +313,7 @@ YAHOO.bungeni.availableitems = function(){
             var tab_view = new YAHOO.widget.TabView();
             var text_tab = new YAHOO.widget.Tab(
                 { 
-                    label: SGlobals.type_names.EDITORIAL_NOTE,
+                    label: SGlobals.type_names.editorial_note,
                     content: ("<div id='add-text-record'>" + 
                         "<textarea id='text-record-value' " +
                          "name='text-record-value'></textarea></div>"
@@ -319,7 +322,7 @@ YAHOO.bungeni.availableitems = function(){
             );
             var minute_tab = new YAHOO.widget.Tab(
                 { 
-                    label: SGlobals.type_names.MINUTE,
+                    label: SGlobals.type_names.minute,
                     content: ("<div id='add-minute-record'>" + 
                         "<textarea id='minute-record-value' " +
                          "name='minute-record-value'></textarea></div>"
@@ -328,7 +331,7 @@ YAHOO.bungeni.availableitems = function(){
             );
             var heading_tab = new YAHOO.widget.Tab(
                 { 
-                    label: SGlobals.type_names.HEADING,
+                    label: SGlobals.type_names.heading,
                     content: ("<div id='add-heading-record'>" + 
                         "<label class='scheduler-label'" + 
                         " for='heading-record-value'>"+
@@ -358,6 +361,9 @@ YAHOO.bungeni.availableitems = function(){
                 var dataSource = new YAHOO.util.DataSource(
                     SGlobals.schedulable_items_json_url + "?type=heading"
                 );
+                /*
+                    Heading and editorial poput
+                */
                 dataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
                 dataSource.responseSchema = YAHOO.bungeni.config.schemas.available_items;
                 hDt = new YAHOO.widget.DataTable(data_container,
@@ -366,7 +372,7 @@ YAHOO.bungeni.availableitems = function(){
                         selectionMode:"standard",
                         scrollable: true,
                         initialLoad: true,
-                        width:"468px",
+                        width:"100%",
                         height: "200px",
                     }
                 );
@@ -423,13 +429,13 @@ YAHOO.bungeni.availableitems = function(){
             }
             Event.onAvailable("add-text-record", function(event){
                 rteEditor = new YAHOO.widget.Editor("text-record-value",
-                    { width: "100%", autoHeight: true }
+                    { width: "100%", height: "60px",autoHeight: true }
                 );
                 rteEditor.render();
             });
             Event.onAvailable("add-minute-record", function(event){
                 minuteEditor = new YAHOO.widget.Editor("minute-record-value",
-                    { width: "100%", autoHeight: true }
+                    { width: "100%", height: "60px", autoHeight: true }
                 );
                 minuteEditor.render();
             });
@@ -462,9 +468,11 @@ YAHOO.bungeni.availableitems = function(){
                     if(idx!=t_id){
                         tab_view.deselectTab(idx);
                         tab_view.getTab(idx).setAttributes({disabled: true});
+                        tab_view.getTab(idx).setStyle('display', 'none');
                     }
                 }
                 tab_view.getTab(t_id).setAttributes({disabled: false});
+                tab_view.getTab(t_id).setStyle('display', '');
                 tab_view.selectTab(t_id);
             }
             tab_view.selectTab((active_tab_id?(tab_map[active_tab_id]):0));

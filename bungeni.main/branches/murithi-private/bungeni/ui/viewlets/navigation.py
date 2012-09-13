@@ -28,19 +28,20 @@ from ploned.ui.menu import make_absolute
 from ploned.ui.menu import pos_action_in_url
 
 from bungeni.alchemist.interfaces import IAlchemistContainer, IAlchemistContent
-from bungeni.alchemist.model import queryModelDescriptor
 from bungeni.alchemist.traversal import ManagedContainerDescriptor
+from bungeni.alchemist import utils
+from bungeni.core.interfaces import IWorkspaceContainer, ISection
 from bungeni.core import location
 from bungeni.ui.utils import url, debug
 from bungeni.ui import interfaces
 from bungeni.ui import browser
+from bungeni.utils.capi import capi
 
 
 def _get_context_chain(context):
-    context = proxy.removeSecurityProxy(context)
     chain = []
     while context is not None:
-        chain.append(context)
+        chain.append(proxy.removeSecurityProxy(context))
         context = context.__parent__
     return chain
 
@@ -62,13 +63,19 @@ AttributeError: 'GroupAddress' object has no attribute 'short_name':   File "/ho
                 #title = context.short_name 
 So, we temporarily default the above to the context.__class__.__name__:
                 '''
-                title = getattr(context, "short_title", 
-                    context.__class__.__name__)
+                title = getattr(context, "title", context.__class__.__name__)
+    elif IWorkspaceContainer.providedBy(context):
+        # WorkspaceContainer._class is not set (and not unique) and it breaks the
+        # connection between Container -> ContentClass
+        title = context.__name__
     elif IAlchemistContainer.providedBy(context):
         domain_model = context._class 
         try:
-            descriptor = queryModelDescriptor(domain_model)
-        except:
+            descriptor = utils.get_descriptor(domain_model)
+        except KeyError, e:
+            log.warn("TYPE_INFO: no descriptor for model %s "
+                    "[container=%s] [error=%s]" % (
+                        domain_model, context, e))
             descriptor = None
             name = ""
         if descriptor:
@@ -78,9 +85,9 @@ So, we temporarily default the above to the context.__class__.__name__:
         if not name:
             name = getattr(context, "__name__", None)
         title = name
-    elif ILocation.providedBy(context) and \
-         IDCDescriptiveProperties.providedBy(context):
-        title = context.title
+    elif (ILocation.providedBy(context) and
+        IDCDescriptiveProperties.providedBy(context)):
+        title = IDCDescriptiveProperties(context).title
     return title
 
 
@@ -128,6 +135,7 @@ class SecondaryNavigationViewlet(browser.BungeniViewlet):
         except (Exception,):
             debug.log_exc(sys.exc_info(), log_handler=log.debug)
             return []
+        
         # OK, do any necessary post-processing of each menu item
         local_url = url.absoluteURL(container, self.request)
         site_url = url.absoluteURL(getSite(), self.request)
@@ -154,28 +162,6 @@ class SecondaryNavigationViewlet(browser.BungeniViewlet):
     
     def add_container_menu_items(self, context, container):
         request = self.request
-        # add a menu item for each user workspace, if we are in an 
-        # IWorkspaceSectionLayer 
-        # !+ if user is logged in or if request.layer_data
-        
-        if (interfaces.IWorkspaceSectionLayer.providedBy(request) or
-            interfaces.IWorkspaceSchedulingSectionLayer.providedBy(request)
-        ):
-            try:
-                workspaces = IAnnotations(request)["layer_data"].get("workspaces")
-            except:
-                workspaces = []
-            log.info("%s got user workspaces: %s" % (self, workspaces))
-            base_url_path = "/workspace"
-            for workspace in workspaces:
-                log.info("appending menu item for user workspace: %s" % (
-                    workspace))
-                self.items.append(url.get_menu_item_descriptor(
-                    workspace.full_name,
-                    pos_action_in_url("/workspace/obj-%s" % workspace.group_id,
-                        request.getURL()),
-                    base_url_path,
-                    "obj-%s" % workspace.group_id))
         
         _url = url.absoluteURL(container, request)
         
@@ -334,6 +320,12 @@ class NavigationTreeViewlet(browser.BungeniViewlet):
         if not IReadContainer.providedBy(chain[-1]):
             return
 
+        # remove any views from navigation tree
+        if not(IAlchemistContent.providedBy(chain[0]) 
+            or IAlchemistContainer.providedBy(chain[0])
+            or ISection.providedBy(chain[0])):
+                chain.pop(0)
+
         subcontext = chain[-1]
         if (len(chain) > 1 or
             IReadContainer.providedBy(subcontext) and not
@@ -348,7 +340,7 @@ class NavigationTreeViewlet(browser.BungeniViewlet):
         self.__parent__= view
         self.manager = manager
         self.name = ""
-
+    
     def update(self):
         """Creates a navigation tree for ``context``.
 
@@ -356,20 +348,19 @@ class NavigationTreeViewlet(browser.BungeniViewlet):
         the tree is built. The siblings of managed containers are
         included.
         """
-
         chain = list(self.chain)
         self.nodes = self.expand(chain, include_siblings=False)
 
     def expand(self, chain, include_siblings=True):
         if len(chain) == 0:
             return ()
-
+        
         context = chain.pop()
         items = []
-
+        
         if IApplication.providedBy(context):
             items.extend(self.expand(chain))
-
+        
         elif IAlchemistContent.providedBy(context):
             _url = url.absoluteURL(context, self.request)
             if IDCDescriptiveProperties.providedBy(context):
@@ -379,18 +370,18 @@ class NavigationTreeViewlet(browser.BungeniViewlet):
                 if props is not None:
                     title = props.title
                 else:
-                    title = context.short_title
-
+                    title = context.title
+            
             selected = len(chain) == 0
             
             if chain:
                 nodes = self.expand(chain)
             else:
                 kls = context.__class__
-                containers = [
-                    (key, getattr(context, key))
+                containers = [ (key, getattr(context, key))
                     for key, value in kls.__dict__.items()
-                    if isinstance(value, ManagedContainerDescriptor)]
+                    if isinstance(value, ManagedContainerDescriptor)
+                ]
                 nodes = []
                 self.expand_containers(nodes, containers, _url, chain, None)
 
@@ -431,19 +422,13 @@ class NavigationTreeViewlet(browser.BungeniViewlet):
                         if isinstance(value, ManagedContainerDescriptor)]
             else:
                 containers = [(context.__name__, context)]
-                
             self.expand_containers(items, containers, _url, chain, context)
-
+        
         elif ILocation.providedBy(context):
             _url = url.absoluteURL(context, self.request)
-            #props = IDCDescriptiveProperties.providedBy(context) and \
-            #    context or IDCDescriptiveProperties(context)
-            if IDCDescriptiveProperties.providedBy(context):
-                props = IDCDescriptiveProperties(context)
-            else:
-                props = context
-            props = proxy.removeSecurityProxy(props)
-
+            props = (IDCDescriptiveProperties(context, None) or 
+                proxy.removeSecurityProxy(context)
+            )
             selected = len(chain) == 0
             if selected and IReadContainer.providedBy(context):
                 nodes = []
@@ -463,43 +448,47 @@ class NavigationTreeViewlet(browser.BungeniViewlet):
                     "kind": "location",
                     "nodes": nodes,
                 })
-
         elif IReadContainer.providedBy(context):
             items.extend(self.expand(chain))
-
         return items
-
+    
+    def _sort_containers(self, key_containers):
+        """Sort each container by its domain_model's descriptor order."""
+        dsu = [
+            (utils.get_descriptor(kc[1].domain_model).order, kc)
+            for kc in key_containers ]
+        dsu.sort()
+        return [ kc for (order, kc) in dsu ]
+    
     def expand_containers(self, items, containers, _url, chain=(), context=None):
         #seen_context = False
         current = False
         
-        for key, container in containers:
+        for key, container in self._sort_containers(containers):
             if IAlchemistContainer.providedBy(container):
-                descriptor = queryModelDescriptor(
-                    proxy.removeSecurityProxy(container).domain_model)
+                descriptor = utils.get_descriptor(container.domain_model)
                 if descriptor:
                     name = getattr(descriptor, "container_name", None)
                     if name is None:
                         name = getattr(descriptor, "display_name", None)
-                        
                 if not name:
                     name = container.domain_model.__name__
             else:
                 assert IDCDescriptiveProperties.providedBy(container)
                 container = proxy.removeSecurityProxy(container)
                 name = container.title
-
+            
             if context is not None:
                 current = container.__name__ == context.__name__
-
-            selected = len(chain) == 0 and current
-
+            
+            selected = not len(chain) and current
+            
             if current:
                 #seen_context = True
                 nodes = self.expand(chain)
             else:
                 nodes = ()
-
+            
             items.append({
                     "title": name,
                     "url": "%s/%s" % (_url.rstrip("/"), key),

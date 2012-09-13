@@ -34,10 +34,6 @@ from bungeni.core.workflows import dbutils
 # not tied to a state name, but to <state> @version bool attribute
 create_version = utils.create_version
 
-# publish document to xml
-# not tied to a state name, but to <state> @publish bool attribute
-from bungeni.core.serialize import publish_to_xml
-
 # /specially handled actions
 
 
@@ -62,23 +58,17 @@ _attachment_draft = __create
 _address_private = __create
 
 
-''' !+XML 
-def _address_attached(context):
-    # !+XML this is anyway incorrect, what about useraddress (uses same workflow)
-    publish_to_xml(context, type="groupaddress", include=[])
-'''
-
 # !+NUMBER_GENERATION (ah,nov-2011) - generate the number on receiving an item
 _question_received = __pi_received
 _bill_received = __pi_received
 _motion_received = __pi_received
-_agendaitem_received = __pi_received
-_tableddocument_received = __pi_received
+_agenda_item_received = __pi_received
+_tabled_document_received = __pi_received
 
 
-# agendaitem
+# agenda_item
 
-_agendaitem_draft = _agendaitem_working_draft = __create
+_agenda_item_draft = _agenda_item_working_draft = __create
 
 
 # bill
@@ -165,14 +155,14 @@ def _question_admissible(question):
     dbutils.set_doc_type_number(question)
 
 
-# tableddocument
+# tabled_document
 
-_tableddocument_draft = _tableddocument_working_draft = __create
+_tabled_document_draft = _tabled_document_working_draft = __create
 
-def _tableddocument_adjourned(context):
+def _tabled_document_adjourned(context):
     utils.setTabledDocumentHistory(context)
 
-def _tableddocument_admissible(tabled_document):
+def _tabled_document_admissible(tabled_document):
     dbutils.set_doc_type_number(tabled_document)
 
 # user

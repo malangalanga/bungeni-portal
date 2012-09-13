@@ -18,7 +18,7 @@ from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser import absoluteURL
 
 from bungeni.alchemist import Session
-from bungeni.alchemist.model import queryModelDescriptor
+from bungeni.alchemist import utils
 from bungeni.models.domain import User
 from bungeni.core.interfaces import IRSSValues
 from bungeni.core.translation import translate_obj
@@ -57,7 +57,7 @@ class RSSView(BrowserView):
 
     @property
     def channel_title(self):
-        return queryModelDescriptor(
+        return utils.get_descriptor(
             removeSecurityProxy(self.context).domain_model
         ).container_name
         
@@ -117,9 +117,12 @@ class RSSView(BrowserView):
         guid_element.appendChild(self.response.createTextNode(guid))
         item_element.appendChild(guid_element)
 
-        date_element = self.response.createElement("pubDate")
-        date_element.appendChild(self.response.createTextNode(self._format_date(pubDate)))
-        item_element.appendChild(date_element)
+        if pubDate:
+            date_element = self.response.createElement("pubDate")
+            date_element.appendChild(
+                self.response.createTextNode(self._format_date(pubDate))
+            )
+            item_element.appendChild(date_element)
 
         return item_element
 
@@ -217,7 +220,7 @@ class TimelineRSSView(RSSView):
         return item.date_audit
 
     def get_title(self, item):
-        return "%s %s %s" % (self.i18n_context.short_title,
+        return "%s %s %s" % (self.i18n_context.title,
                              _(u"changes from"),
                              self.format_date(item.date_audit))
 
@@ -259,10 +262,13 @@ class AkomantosoRSSView(RSSView):
         guid_element = self.response.createElement("guid")
         guid_element.appendChild(self.response.createTextNode(guid))
         item_element.appendChild(guid_element)
-
-        date_element = self.response.createElement("pubDate")
-        date_element.appendChild(self.response.createTextNode(self._format_date(pubDate)))
-        item_element.appendChild(date_element)
+        
+        if pubDate:
+            date_element = self.response.createElement("pubDate")
+            date_element.appendChild(
+                self.response.createTextNode(self._format_date(pubDate))
+            )
+            item_element.appendChild(date_element)
 
         return item_element
 

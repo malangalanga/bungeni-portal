@@ -23,6 +23,7 @@ import time
 import os
 from zope.dottedname.resolve import resolve
 from bungeni.utils import error
+from bungeni.core import type_info
 import bungeni_custom as bc
 
 
@@ -40,6 +41,16 @@ def bungeni_custom_errors(f):
 class CAPI(object):
     """Accessor class for Bungeni Custom parameters.
     """
+    
+    def __init__(self):
+        self.validate_properties()
+    
+    def validate_properties(self):
+        """Validate this capi instance.
+        Ensure valid setup of properties at instantiation of CAPI instance
+        """
+        self.default_language
+        self.right_to_left_languages
     
     # bungeni_custom parameter properties
     
@@ -63,13 +74,17 @@ class CAPI(object):
     def default_language(self):
         assert bc.default_language in self.zope_i18n_allowed_languages, \
             "Default language [%s] not in allowed languages [%s]" % (
-                self.zope_i18n_allowed_languages,)
+                bc.default_language, self.zope_i18n_allowed_languages,)
         return bc.default_language
         
     @property
     @bungeni_custom_errors
     def right_to_left_languages(self):
-        return tuple(bc.right_to_left_languages.split())        
+        rtl_langs = tuple(bc.right_to_left_languages.split())
+        assert set(rtl_langs).issubset(set(self.zope_i18n_allowed_languages)),\
+            "Right to left languages [%s] not in allowed languages [%s]" % (
+                bc.right_to_left_languages, self.zope_i18n_allowed_languages)
+        return rtl_langs
     
     @property
     @bungeni_custom_errors
@@ -96,10 +111,16 @@ class CAPI(object):
     
     @property
     @bungeni_custom_errors
+    def long_text_column_listings_truncate_at(self):
+        """When listing text columns, only display first so many characters."""
+        return int(bc.long_text_column_listings_truncate_at)
+    
+    @property
+    @bungeni_custom_errors
     def workspace_tab_count_cache_refresh_time(self):
         """The duration in seconds between tab count refresh operations"""
         return int(bc.workspace_tab_count_cache_refresh_time)
-
+    
     # utility methods
     
     def get_root_path(self):
@@ -168,26 +189,27 @@ class CAPI(object):
     
     # type registry
     
-    def get_type_info(self, key, exception=KeyError):
-        """Get the TypeInfo instance for key (see core.workflows.adapters.TI). 
-        If not found raise the specified exception (if that is not None).
+    def get_type_info(self, discriminator):
+        """Get the TypeInfo instance for discriminator (see core.type_info). 
         
-        param key:str - the type key,
-            underscore-separated lowercase of domain cls name.
+        The discriminator may be any of:
+            type_key: str (the lowercase underscore-separated of domain cls name)
+            workflow: an instance of Workflow, provides IWorkflow
+            interface: provides IInterface
+            domain model: provides IBungeniContent
+            domain model instance: type provides IBungeniContent
+            descriptor: provides IModelDescriptor
+        
+        Raise KeyError if no entry matched.
         """
-        for type_key, ti in self.iter_type_info():
-            if type_key == key:
-                return ti
-        if exception is not None:
-            raise exception(
-                "TYPE_REGISTRY has no type registered for key: %s" % (key))
+        return type_info._get(discriminator)
     
     def iter_type_info(self):
-        """Return iterator on all (key, TypeInfo) entries in TYPE_REGISTRY.
+        """Return iterator on all registered (key, TypeInfo) entries.
         """
-        from bungeni.core.workflows import adapters
-        for type_key, ti in adapters.TYPE_REGISTRY:
+        for type_key, ti in type_info._iter():
             yield type_key, ti
+
 
 # we access all via the singleton instance
 capi = CAPI()

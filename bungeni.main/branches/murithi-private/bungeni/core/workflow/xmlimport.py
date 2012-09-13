@@ -18,9 +18,9 @@ from bungeni.core.workflow import interfaces
 from bungeni.core.workflow.states import GRANT, DENY
 from bungeni.core.workflow.states import Feature, State, Transition, Workflow
 from bungeni.core.workflow.states import assert_distinct_permission_scopes
-from bungeni.core.workflow.notification import Notification
 from bungeni.utils.capi import capi, bungeni_custom_errors
 from bungeni.ui.utils import debug
+from bungeni.utils.misc import strip_none, as_bool
 
 #
 
@@ -39,22 +39,13 @@ ID_RE = re.compile("^[\w\d_]+$")
 
 FEATURE_ATTRS = ("name", "enabled", "note")
 
-STATE_ATTRS = ("id", "title", "version", "publish", "like_state", "tags", 
+STATE_ATTRS = ("id", "title", "version", "like_state", "tags", 
     "note", "permissions_from_parent", "obsolete")
 
 TRANS_ATTRS_REQUIREDS = ("title", "source", "destination")
 TRANS_ATTRS_OPTIONALS = ("grouping_unique_sources", "condition", "trigger", 
     "roles", "order", "require_confirmation", "note")
 TRANS_ATTRS = TRANS_ATTRS_REQUIREDS + TRANS_ATTRS_OPTIONALS
-
-
-''' !+NOT_WORKING... see: zope.security.permission
-from zope.app.security.interfaces import IPermission
-from zope.app import zapi
-def assertRegisteredPermission(permission_id):
-    assert zapi.queryUtility(IPermission, unicode(permission_id)), \
-        'Permission "%s" has not been registered.' % (permission_id)
-'''
 
 #
 
@@ -88,24 +79,6 @@ See the Bungeni Source Code Style Guide for further details.
 </configure>
 """
 
-def strip_none(s):
-    """Ensure non-empty whitespace-stripped string, else None.
-    """
-    if s is not None:
-        return s.strip() or None
-    return None
-
-def as_bool(s):
-    """ (s:str) -> bool
-    """
-    _s = s.lower()
-    if _s == "true":
-        return True
-    elif _s == "false":
-        return False
-    raise TypeError("Invalid bool: %s" % s)
-
-#
 
 def zcml_check_regenerate():
     """Called after all XML workflows have been loaded (see adapers.py).
@@ -153,22 +126,17 @@ def load(path_custom_workflows, name):
     file_path = os.path.join(path_custom_workflows, "%s.xml" % (name))
     return _load(etree.fromstring(open(file_path).read()), name)
 
-def _load(workflow, name):
+def _load(workflow, name, domain="bungeni"):
     """ (workflow:etree_doc, name:str) -> Workflow
     """
     # !+ @title, @description
     transitions = []
     states = []
-    domain = strip_none(workflow.get("domain")) 
-    # !+domain(mr, jul-2011) needed?
     wuids = set() # unique IDs in this XML workflow file
     note = strip_none(workflow.get("note"))
     allowed_tags = (strip_none(workflow.get("tags")) or "").split()
     
-    # initial_state, in XML this must be ""
-    assert workflow.get("initial_state") == "", "Workflow [%s] initial_state " \
-        "attribute must be empty string, not [%s]" % (
-            name, workflow.get("initial_state"))
+    # initial_state, in XML indicated a transition source=""
     initial_state = None
     
     ZCML_PROCESSED = bool(name in ZCML_WORKFLOWS_PROCESSED)
@@ -236,10 +204,9 @@ def _load(workflow, name):
             assert "audit" in [ fe.name for fe in features if fe.enabled ], \
                 "Workflow [%s] has version but no audit feature" % (name)
         config = [ cfg for cfg in f.iterchildren("config") ]
-        params = {}
-        assert (len(config)<2), "Feature may only contain one config node"
-        if config:
-            params = dict(config[0].items())
+        params = dict([ (param.get("name"), param.get("value")) for param in 
+            f.iterchildren("parameter")
+        ])
         features.append(Feature(feature_name, enabled=feature_enabled, 
                 note=strip_none(f.get("note")), **params
         ))
@@ -251,10 +218,12 @@ def _load(workflow, name):
         role = strip_none(p.get("role"))
         # for each global permission, build list of roles it is set to
         _permission_role_mixes.setdefault(pid, []).append(role)
-        #+!assertRegisteredPermission(permission)
         assert pid and role, "Global grant must specify valid permission/role" 
         ZCML_LINES.append(
             '%s<grant permission="%s" role="%s" />' % (ZCML_INDENT, pid, role))
+        # no real need to check that the permission and role of a global grant 
+        # are properly registered in the system -- an error should be raised 
+        # by the zcml if either is not defined. 
     for perm, roles in _permission_role_mixes.items():
         # assert roles mix limitations for state permissions
         assert_distinct_permission_scopes(perm, roles, name, "global grants")
@@ -304,32 +273,18 @@ def _load(workflow, name):
             for p in s.iterchildren(assign):
                 permission = strip_none(p.get("permission"))
                 role = strip_none(p.get("role"))
-                #+!assertRegisteredPermission(permission)
                 check_add_permission(permissions, like_permissions, 
                     ASSIGNMENTS[i], permission, role)
         if like_state:
             # splice any remaining like_permissions at beginning of permissions
             permissions[0:0] = like_permissions
-        # notifications
-        notifications = [] # [ notification.Notification ]
-        for n in s.iterchildren("notification"):
-            notifications.append(
-                Notification(
-                    strip_none(n.get("condition")), # python resolvable
-                    strip_none(n.get("subject")), # template source, i18n
-                    strip_none(n.get("from")), # template source
-                    strip_none(n.get("to")), # template source
-                    strip_none(n.get("body")), # template source, i18n
-                    strip_none(n.get("note")), # documentational note
-                )
-            )
         # states
         states.append(
             State(state_id, Message(strip_none(s.get("title")), domain),
                 strip_none(s.get("note")),
-                actions, permissions, notifications, tags,
+                actions, permissions, tags,
                 as_bool(strip_none(s.get("permissions_from_parent")) or "false"),
-                as_bool(strip_none(s.get("obsolete")) or "false")
+                as_bool(strip_none(s.get("obsolete")) or "false"),
             )
         )
     
@@ -412,8 +367,7 @@ def _load(workflow, name):
             tid = "%s.%s" % (sources[0] or "", destination)
             pid = "bungeni.%s.wf.%s" % (name, tid)
             if not ZCML_PROCESSED:
-                # use "bungeni.Clerk" as default list of roles
-                roles = (roles or "bungeni.Clerk").split()
+                roles = roles.split()
                 zcml_transition_permission(pid, title, roles)
                 # remember list of roles from xml
                 kw["_roles"] = roles

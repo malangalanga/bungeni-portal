@@ -11,8 +11,8 @@ var SGlobals = scheduler_globals;
  * Notify schedule author of unsaved changes
  */
 window.onbeforeunload = function(ev){
-    $.unblockUI();
     if (YAHOO.bungeni.unsavedChanges){
+        $.unblockUI();
         return SGlobals.text_unsaved_changes;
     }else{
         return null;
@@ -78,44 +78,6 @@ YAHOO.widget.DataTable.prototype.refresh = function(params) {
     );
 };
 
-/**
- * generate agenda preview button
- **/
-YAHOO.util.Event.onAvailable("agenda-preview-button", function(event){
-    var preview_button = new YAHOO.widget.Button("agenda-preview-button");
-    var previewPanel = new YAHOO.widget.Panel("agenda-preview-dialog",
-        { 
-            modal: true, 
-            visible: false, 
-            width: "800px", 
-            height: "600px", 
-            fixedcenter:true, 
-            zindex: 2000,
-        }
-    );
-    previewPanel.setHeader(SGlobals.preview_msg_header);
-    preview_button.on("click", function(){
-        YAHOO.bungeni.config.dialogs.blocking.show(SGlobals.preview_msg_generating);
-        var success = function(o){
-            YAHOO.bungeni.config.dialogs.blocking.hide();
-            previewPanel.setBody(o.responseText);
-            previewPanel.show();
-            previewPanel.bringToTop();
-        }
-        var failure = function(o){
-            YAHOO.bungeni.config.dialogs.blocking.hide();
-            YAHOO.bungeni.config.dialogs.notification.show(SGlobals.preview_msg_error);
-        }
-        var callback = {
-            success: success,
-            failure: failure,
-            argument: {}
-        }
-        var request = YAHOO.util.Connect.asyncRequest("GET", "./preview", callback);
-    });
-    previewPanel.render(document.body);
-});
-
 YAHOO.bungeni.config = function(){
     var lang = YAHOO.lang;
     var Event = YAHOO.util.Event;
@@ -180,6 +142,8 @@ YAHOO.bungeni.config = function(){
                 this.dialog.setBody("");
                 this.dialog.cfg.queueProperty("width", "200px");
                 this.dialog.cfg.queueProperty("close", false);
+                this.dialog.cfg.queueProperty("fixedcenter", true);
+                this.dialog.cfg.queueProperty("constraintoviewport", true);
                 this.dialog.cfg.queueProperty("icon",
                     YAHOO.widget.SimpleDialog.ICON_BLOCK
                 );
@@ -314,6 +278,10 @@ YAHOO.bungeni.config = function(){
                                         new_data_entries.push(entry);
                                     }
                                     sDt.addRows(new_data_entries, new_index);
+                                    sDt.scrollTo(sDt.getRow(new_index));
+                                    sDt.unselectAllRows();
+                                    sDt.selectRow(new_index+(recordData.value.length-1));
+                                    sDt.getTrEl(new_index+(recordData.value.length-1)).className += " row-"+recordData.type;
                                 }
                                 this.hide();
                             }else{
@@ -330,12 +298,17 @@ YAHOO.bungeni.config = function(){
                     },
                 ];
                 this.dialog = new YAHOO.widget.SimpleDialog(
-                    "text-records-dialog", dialog_config.default
-                );
+                    "text-records-dialog", {
+                    modal: true,
+                    visible: false,
+                    width: "90em",
+                    draggable: true,
+                    fixedcenter: true,
+                    constraintoviewport: false
+                });
                 this.dialog._parent = this;
                 this.dialog.setHeader(SGlobals.text_records_title);
                 this.dialog.setBody("");
-                this.dialog.cfg.queueProperty("width", "500px");
                 this.dialog.cfg.queueProperty("buttons", buttons);
                 this.dialog.renderEvent.subscribe(
                     YAHOO.bungeni.availableitems.handlers.renderTextRecordsTabs
@@ -352,6 +325,7 @@ YAHOO.bungeni.config = function(){
                 }
                 this.dialog.show();
                 this.dialog.bringToTop();
+                this.dialog.center();
             },
             hide: function(){
                 this.confirm_callback = null;
@@ -372,6 +346,16 @@ YAHOO.bungeni.config = function(){
         formatters : function(){
              var BungeniUtils = YAHOO.bungeni.Utils;
              var Columns = scheduling_columns;
+
+            /**
+             * @method itemTypeFormatter
+             * @description renders internationalized record type
+             **/
+             var itemTypeFormatter = function(el, record, column, data){
+                    rec_data = record.getData();
+                    type_key = rec_data[Columns.TYPE];
+                    el.innerHTML = SGlobals.type_names[rec_data[Columns.TYPE]];
+             }
 
             /**
              * @method itemTitleFormatter
@@ -430,6 +414,11 @@ YAHOO.bungeni.config = function(){
                           tHTML = tHTML + BungeniUtils.wrapText(text, "span");
                       }
                  }
+                 if (rec_data.item_uri){
+                    tHTML = tHTML + ("<a href='" + rec_data[Columns.URI] + 
+                        "' target='blank'>" + SGlobals.text_action_view + "</a>"
+                    );
+                }
                  el.innerHTML = tHTML;
              }
              
@@ -440,6 +429,7 @@ YAHOO.bungeni.config = function(){
               var itemTitleMinutesFormatter = function(el, record, column, data){
                   var data = record.getData();
                   var record_index = this.getRecordIndex(record);
+                  el.className += " list-minutes";
                   el.innerHTML = "";
                   if (SGlobals.discussable_types.indexOf(
                         data[Columns.TYPE]
@@ -465,7 +455,7 @@ YAHOO.bungeni.config = function(){
                           var attrs = "id='"+ ds_id +"' " + mAttrs;
                           cHTML = cHTML + BungeniUtils.wrapText(
                             BungeniUtils.wrapText(SGlobals.minutes_loading,
-                                "span", attrs
+                                "p", attrs
                             ), "div"
                           );
                           Event.onAvailable(ds_id, function(){
@@ -543,7 +533,7 @@ YAHOO.bungeni.config = function(){
                             ), "span", mAttrs
                           );
                       }
-                      el.innerHTML = cHTML;
+                      el.innerHTML = cHTML ;
                   }
               }
             
@@ -578,6 +568,16 @@ YAHOO.bungeni.config = function(){
                 }
             }
             
+            var noteEditButtonFormatter = function(el, record, column, data){
+                if (!el.innerHTML){
+                    var button = new YAHOO.widget.Button({
+                        label: SGlobals.column_discussion_noteedit_button,
+                        id: el.id + "-noteedit-button"
+                    });
+                    button.appendTo(el);
+                }
+            }            
+            
             var linkFormatter = function(el, oRecord, oColumn, oData, oDataTable) {
                 if(lang.isString(oData) && (oData > "")) {
                     el.innerHTML = ("<a href=\"" + oData + 
@@ -606,56 +606,11 @@ YAHOO.bungeni.config = function(){
                         checked = "checked='checked'";
                     }
                 }
-                el.innerHTML = ("<input type='checkbox' name='rec-sel-" + 
+                el.innerHTML = ("<input type='checkbox' id="+record_key+" name='rec-sel-" + 
                     index +"' " + checked + "/>"
                 );
                 
             }
-
-            /**
-             * @method workflowActionsFormatter
-             * @description render workflow actions available for current
-             * item
-             */
-             var workflowActionsFormatter = function(el, record, column, data){
-                 var index = this.getTrIndex(record);
-                 var rec_data = record.getData();
-                 if (rec_data[Columns.WORKFLOW_STATE]==undefined){
-                     el.innerHTML = "";
-                     return;
-                 }
-                 var actions = rec_data[Columns.WORKFLOW_ACTIONS];
-                 var state_title = rec_data[Columns.WORKFLOW_STATE];
-                 if(actions.length){
-                    el.innerHTML = "";
-                    var wfActionButton = new YAHOO.widget.Button(
-                        {
-                            type: "menu",
-                            label: BungeniUtils.wrapText(state_title),
-                            id: "wf_action_" + index,
-                            name: "wf_action_" + index,
-                            menu: actions,
-                            container: el,
-                        }
-                    );
-                    wfActionButton.on("selectedMenuItemChange", function(args){
-                            var menuValue = args.newValue;
-                            this.set("label", BungeniUtils.wrapText(
-                                args.newValue.cfg.getProperty("text")
-                            ));
-                        }
-                    );
-                    //!+HACK(add get wf value property to record)
-                    if (!record.getWFStatus){
-                        record.getWFStatus = function(){
-                            var active = wfActionButton.getMenu().activeItem;
-                            return active?active.value:null;
-                        }
-                    }
-                 }else{
-                     el.innerHTML = BungeniUtils.wrapText(state_title);
-                 }
-             }
 
 
             /**
@@ -666,59 +621,55 @@ YAHOO.bungeni.config = function(){
                 var rdata = record.getData();
                 el.innerHTML = "";
                 var type_el = document.createElement("div");
+                var type_key = rdata[Columns.TYPE];
                 type_el.className = "yui-dt-label";
-                var type_i18n = SGlobals.type_names[rdata[Columns.TYPE].toUpperCase()];
-                if(type_i18n){
-                    type_el.textContent = type_i18n;
-                }else{
-                    type_el.textContent = rdata[Columns.TYPE];
-                }
+                type_el.textContent = SGlobals.type_names[rdata[Columns.TYPE]];
                 el.appendChild(type_el);
-                if (SGlobals.discussable_types.indexOf(rdata[Columns.TYPE])>=0){
-                    var menu = [
+                var menu = [
+                    {
+                        text: SGlobals.heading_button_text,
+                        value: SGlobals.types.HEADING
+                    },
+                    {
+                        text: SGlobals.text_button_text,
+                        value: SGlobals.types.EDITORIAL_NOTE
+                    },
+                ]
+                if(YAHOO.bungeni.agendaconfig.minuteEditor!=undefined && 
+                    rdata.item_type != 'heading'){
+                    menu.push(
                         {
-                            text: SGlobals.heading_button_text,
-                            value: SGlobals.types.HEADING
-                        },
-                        {
-                            text: SGlobals.text_button_text,
-                            value: SGlobals.types.EDITORIAL_NOTE
-                        },
-                    ]
-                    if(YAHOO.bungeni.agendaconfig.minuteEditor!=undefined){
-                        menu.push(
-                            {
-                                text: SGlobals.minute_button_text,
-                                value: SGlobals.types.MINUTE
-                            }
+                            text: SGlobals.minute_button_text,
+                            value: SGlobals.types.MINUTE
+                        }
+                    );
+                }
+
+                var button = new YAHOO.widget.Button({
+                    type: "menu",
+                    label: "&nbsp;",
+                    id: el.id + "-add-text-record-button",
+                    menu: menu
+                });
+                var clickHandler = function(type, args){
+                    menuItem = args[1];
+                    if (menuItem){
+                        YAHOO.bungeni.config.dialogs.textrecords.show(
+                            menuItem.value
                         );
                     }
-
-                    var button = new YAHOO.widget.Button({
-                        type: "menu",
-                        label: "+",
-                        id: el.id + "-add-text-record-button",
-                        menu: menu
-                    });
-                    var clickHandler = function(type, args){
-                        menuItem = args[1];
-                        if (menuItem){
-                            YAHOO.bungeni.config.dialogs.textrecords.show(
-                                menuItem.value
-                            );
-                        }
-                    }
-                    button.getMenu().subscribe("click", clickHandler);
-                    button.appendTo(el);
                 }
+                button.addClass("schedule_edit");
+                button.getMenu().subscribe("click", clickHandler);
+                button.appendTo(el);
                 var rec_index = this.getRecordIndex(record);
                 var rec_size = this.getRecordSet().getLength();
                 var orderButtons = new YAHOO.widget.ButtonGroup({});
                 if(rec_index>0){
-                    orderButtons.addButton({ label: "&uarr;", value: "UP" });
+                    orderButtons.addButton({ label: "&nbsp;", value: "UP" }).addClass("schedule_up");
                 }
                 if(rec_index<(rec_size-1)){
-                    orderButtons.addButton({ label: "&darr;", value: "DOWN" });
+                    orderButtons.addButton({ label: "&nbsp;", value: "DOWN" }).addClass("schedule_down");
                 }
                 orderButtons.on("checkedButtonChange", function(ev){
                     if(ev.newValue){
@@ -730,18 +681,60 @@ YAHOO.bungeni.config = function(){
                     }
                 });
                 orderButtons.appendTo(el);
+                
                 var deleteButton = new YAHOO.widget.Button({
-                    label: "x"
+                    label: "&nbsp;"
                 })
+                
+                deleteButton.addClass("schedule_delete");
                 deleteButton.on("click", function(){
                     YAHOO.bungeni.config.scheduling.handlers.removeRow(
                         deleteButton.get("element")
                     );
                 });
                 deleteButton.appendTo(el);
+                
+                // adding minutes state
+                var index = this.getTrIndex(record);
+                var rec_data = record.getData();
+                if (rec_data[Columns.WORKFLOW_STATE]!==undefined) {
+                    var actions = rec_data[Columns.WORKFLOW_ACTIONS];
+                    var state_title = rec_data[Columns.WORKFLOW_STATE];
+                    if(actions.length){
+                        var wfActionButton = new YAHOO.widget.Button(
+                            {
+                                type: "menu",
+                                label: BungeniUtils.wrapText(state_title),
+                                id: "wf_action_" + index,
+                                name: "wf_action_" + index,
+                                menu: actions
+                            }
+                        );
+                        wfActionButton.addClass("wf-action-dropdown");
+                        wfActionButton.appendTo(el);
+                        wfActionButton.on("selectedMenuItemChange", function(args){
+                                var menuValue = args.newValue;
+                                this.set("label", BungeniUtils.wrapText(
+                                    args.newValue.cfg.getProperty("text")
+                                ));
+                            }
+                        );
+                        //!+HACK(add get wf value property to record)
+                        if (!record.getWFStatus){
+                            record.getWFStatus = function(){
+                                var active = wfActionButton.getMenu().activeItem;
+                                return active?active.value:null;
+                            }
+                        }
+                     }else{
+                         el.innerHTML = BungeniUtils.wrapText(state_title);
+                     }
+                }
+                // end of adding minutes state
             }
 
             return {
+                type: itemTypeFormatter,
                 title: itemTitleFormatter,
                 title_extended: itemTitleExtendedFormatter,
                 title_with_minutes: itemTitleMinutesFormatter,
@@ -749,9 +742,9 @@ YAHOO.bungeni.config = function(){
                 longText: longTextFormatter,
                 editButton: editButtonFormatter,
                 deleteButton: deleteButtonFormatter,
+                noteEditButton: noteEditButtonFormatter,
                 link: linkFormatter,
                 availableItemSelect: availableItemSelectFormatter,
-                workflowActions: workflowActionsFormatter,
                 rowControls: rowControlsFormatter
             }
         }(),
@@ -768,7 +761,15 @@ YAHOO.bungeni.config = function(){
              **/
              var _renderRTECellEditor = function(args){
                 rteCellEditor = new YAHOO.widget.Editor(args.editor.textarea,
-                    { width: "400px", autoHeight: true }
+                    { width: "90em", 
+                    height: "60px",
+                    fixedcenter: false,
+                    modal: true,
+                    visible: false,
+                    draggable: true,
+                    constraintoviewport: true,
+                    monitorresize: true,
+                    autoHeight: true }
                 );
                 rteCellEditor.render();
                 args.editor.getInputValue = function(){
@@ -835,9 +836,13 @@ YAHOO.bungeni.config = function(){
              var _removeRow = function(target){
                  var sDt = YAHOO.bungeni.scheduling.getScheduleTable();
                  var record = sDt.getRecord(target);
+                 sdata = record.getData()
+                 sd_id = sdata.item_id + ":" + sdata.item_type;
                  var _callback = function(){
-                     sDt.deleteRow(sDt.getRecordIndex(record));
+                    sDt.deleteRow(sDt.getRecordIndex(record));
+                    document.getElementById(sd_id).checked = false;
                  }
+                 
                  YAHOO.bungeni.config.dialogs.confirm.show(
                     SGlobals.delete_dialog_text, _callback
                  );

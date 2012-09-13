@@ -34,7 +34,6 @@ from zope.security.proxy import removeSecurityProxy
 from zope.security.proxy import ProxyFactory
 from zope.security import checkPermission
 from zope.formlib import form
-from zope import schema
 from zope.schema.interfaces import IChoice
 from zc.resourcelibrary import need
 from sqlalchemy.sql.expression import or_
@@ -53,10 +52,10 @@ from bungeni.ui.interfaces import IBusinessSectionLayer
 from bungeni.ui.browser import BungeniBrowserView
 from bungeni.ui.calendar import utils, config, interfaces, data
 from bungeni.ui.i18n import _
-from bungeni.ui.utils import misc, url, debug, date
+from bungeni.ui.utils import misc, url, date
 from bungeni.ui.menu import get_actions
 from bungeni.ui.widgets import LanguageLookupWidget
-from bungeni.ui.container import ContainerJSONListing
+from bungeni.ui.container import ContainerJSONListingRaw
 from bungeni.ui.forms.common import AddForm
 from bungeni.ui.reporting import generators
 
@@ -79,9 +78,13 @@ class TIME_SPAN:
 class EventPartialForm(AddForm):
     """Partial form for event entry form
     """
-    omit_fields = ["start_date", "end_date"]
+    omit_fields = ["start_date", "end_date", "sitting_id", "group_id", 
+        "sitting_length", "recurring_id", "recurring_type", "status",
+            "status_date"
+    ]
     
     def update_fields(self):
+        self.form_fields = self.form_fields.omit(*self.omit_fields)
         self.form_fields["language"].edit_widget = LanguageLookupWidget
         self.form_fields = self.form_fields.omit(*self.omit_fields)
     
@@ -214,7 +217,7 @@ def create_sittings_map(sittings, request):
         proxied = ProxyFactory(sitting)
         
         # !+ non-existant permission
-        if checkPermission(u"bungeni.agendaitem.wf.schedule", proxied):
+        if checkPermission(u"bungeni.agenda_item.wf.schedule", proxied):
             link = "%s/schedule" % url.absoluteURL(sitting, request)
         else:
             link = url.absoluteURL(sitting, request)
@@ -280,6 +283,22 @@ class CalendarView(BungeniBrowserView):
 
     @property
     def partial_event_form(self):
+        # !+PERMISSIONS_ON_PARTIAL_CONTEXT the sitting instance below is only
+        # partially defined (e.g. no sitting_id, parliament_id, status), plus 
+        # not being in any traversal context -- so checking of 
+        # permissions/roles on it will give incorrect results.
+        # 
+        # But, in addition, for when the failure was happening, the instantiation
+        # of EventPartialForm is ANYWAY not needed in the first place! 
+        # I.e. should not be done when Member loads the calendar, as Member is 
+        # categorically NOT allowed to add sittings, and so the context 
+        # necessary to add sittings SHOULD not be made available in the 
+        # first place. And, doing the (business logic) call to instantiate the 
+        # EventPartialForm from within the UI template entangles 
+        # buisness with UI logic...
+        # 
+        # So, the intent and the implementation of the business logic of why 
+        # this form is instantiated may need to be reviewed...
         form = EventPartialForm(domain.Sitting(), self.request)
         return form
 
@@ -289,7 +308,16 @@ class CalendarView(BungeniBrowserView):
             for venue in vocabulary.venue_factory()
         ]
         return venue_list
-
+    
+    @property
+    def groups_data(self):
+        group_list = [ {"key": comm.committee_id, 
+            "label": IDCDescriptiveProperties(comm).title}
+            for comm in Session().query(domain.Committee).all()
+            if comm.committee_id is not self.context.group_id
+        ]
+        return group_list        
+    
     @property
     def ical_url(self):
         return u"/".join(
@@ -310,37 +338,30 @@ class CalendarView(BungeniBrowserView):
             text_meeting_type=translate_i18n(_(u"Meeting Type")),
             text_convocation_type=translate_i18n(_(u"Convocation Type")),
             text_sitting=translate_i18n(_(u"Sitting")),
+            text_view=translate_i18n(_(u"View")),
         )
-        return """var cal_globals = %s;var venues_data=%s;""" %(
-            json.dumps(cal_globals), json.dumps(self.venues_data)
+        return """var cal_globals = %s;
+            var timeline_data = { venues: %s, committees: %s };
+            var group_urls= %s;""" %(
+            json.dumps(cal_globals), 
+            json.dumps(self.venues_data),
+            json.dumps(self.groups_data),
+            json.dumps(self.calendar_urls())
         )
 
-    def other_calendars(self):
+    def calendar_urls(self):
         """A list of URLs to other calendars - Loaded when selected"""
         menu = component.queryUtility(IBrowserMenu, "context_calendar")
         if menu is None:
             return []
         items = menu.getMenuItems(self.context, self.request)
         colors = utils.generate_event_colours(len(items))
-        map(lambda item:item[1].update([("color", colors[item[0]])]),
-            enumerate(items)
-        )
-        return items
+        return [ { "url": item[1]["action"], "color": colors[item[0]] }
+            for item in enumerate(items)
+        ]
 
     def render(self, template=None):
-        need("dhtmlxscheduler")
-        need("dhtmlxscheduler-recurring")
-        need("dhtmlxscheduler-year-view")
-        need("dhtmlxscheduler-week-agenda-view")
-        need("dhtmlxscheduler-expand")
-        need("bungeni-calendar-globals")
-        need("bungeni-calendar-extensions")
-        need("dhtmlxscheduler-timeline")
-        need("dhtmlxscheduler-tooltip")
-        need("dhtmlxscheduler-minical")
-        need("dhtmlxscheduler-multisource")
-        need("dhtmlxscheduler-collision")
-        need("multi-calendar-actions")
+        need("bungeni-calendar-bundle")
         if template is None:
             template = self.template
         if (not checkPermission(u"bungeni.sitting.Add", self.context)) or \
@@ -364,28 +385,28 @@ class DailyCalendarView(CalendarView):
             template = self.template
 
         calendar_url = url.absoluteURL(self.context.__parent__, self.request)
-        date = removeSecurityProxy(self.context.date)
+        cal_date = removeSecurityProxy(self.context.date)
 
         sittings = self.context.get_sittings()
         return template(
             display="daily",
 #            title=_(u"$B $Y", mapping=date),
-            title = date,
+            title = cal_date,
 #
             day={
-                "formatted": datetime.datetime.strftime(date, "%A %d"),
-                "id": datetime.datetime.strftime(date, "%Y-%m-%d"),
-                "today": date == today,
-                "url": "%s/%d" % (calendar_url, date.totimestamp()),
+                "formatted": datetime.datetime.strftime(cal_date, "%A %d"),
+                "id": datetime.datetime.strftime(cal_date, "%Y-%m-%d"),
+                "today": cal_date == today,
+                "url": "%s/%d" % (calendar_url, cal_date.totimestamp()),
                 },
             hours=range(6,21),
             week_no=date.isocalendar()[1],
             week_day=date.weekday(),
             links={
                 "previous": "%s/%d" % (
-                    calendar_url, (date - timedelta(days=1)).totimestamp()),
+                    calendar_url, (cal_date - timedelta(days=1)).totimestamp()),
                 "next": "%s/%d" % (
-                    calendar_url, (date + timedelta(days=1)).totimestamp()),
+                    calendar_url, (cal_date + timedelta(days=1)).totimestamp()),
                 },
             sittings_map = create_sittings_map(sittings, self.request),
             )
@@ -473,7 +494,7 @@ class SittingScheduleView(BrowserView):
     name="jsonlisting-schedule",
     protect={"bungeni.sittingschedule.itemdiscussion.Edit": 
         register.VIEW_DEFAULT_ATTRS})
-class ScheduleJSONListing(ContainerJSONListing):
+class ScheduleJSONListing(ContainerJSONListingRaw):
     """Returns JSON listing with expanded unlisted properties used in
     scheduling user interface setup
     """
@@ -584,7 +605,7 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
             convocation_type = None
         self.adapters = {
             interfaces.IDhtmlxCalendarSittingsEditForm: context
-            }
+        }
         self.widgets = form.setUpEditWidgets(
             self.form_fields, "", self.context, self.request,
                     adapters=self.adapters, ignore_request=ignore_request) 
@@ -849,17 +870,36 @@ class DhtmlxCalendarSittings(BrowserView):
         interface.alsoProvides(self.context, ILocation)
         interface.alsoProvides(self.context, IDCDescriptiveProperties)
         self.__parent__ = context
+          
+    def get_sessions(self):
+        sessions = [ removeSecurityProxy(session) for session in
+            Session().query(domain.Session).all()
+        ]
+        colours = utils.generate_event_colours(len(sessions))
+        for (index, sess) in enumerate(sessions):
+            sess.colour = colours[index]
+        return sessions
+    
+    def get_colour(self, event):
+        hx = event.colour if hasattr(event, "colour") else self.event_colour
+        return "#%s" % hx
+    
+    def get_event_type(self, event):
+        return event.__class__.__name__.lower()
     
     @property
     def event_colour(self):
         if not hasattr(self, "event_color"):
             rq_color = unicode(self.request.form.get("color", ""))
-            assert len(rq_color) <= 6
-            self._event_color = rq_color
-        return self._event_color
+            if rq_color:
+                assert len(rq_color) <= 6
+                self._event_color = rq_color
+        return self._event_color if hasattr(self, "_event_color") else ""
     
     
-    def __call__(self):
+    @property
+    def sittings_and_sessions(self):
+        event_list = []
         try:
             date = self.request.get("from")
             dateobj = datetime.datetime(*time.strptime(date, "%Y-%m-%d")[0:5])
@@ -882,11 +922,7 @@ class DhtmlxCalendarSittings(BrowserView):
             start_date = utils.datetimedict.fromdate(datetime.date.today())
             days = tuple(start_date + timedelta(days=d) for d in range(7))
             end_date = days[-1]
-        sittings = self.context.get_sittings(
-            start_date,
-            end_date,
-            )
-        self.sittings = []
+        sittings = self.context.get_sittings(start_date, end_date)
         for sitting in sittings.values():
             if checkPermission("zope.View", sitting):
                 trusted = removeSecurityProxy(sitting)
@@ -895,7 +931,13 @@ class DhtmlxCalendarSittings(BrowserView):
                         misc.get_wf_state(trusted, trusted.status)
                     )
                 )
-                self.sittings.append(trusted)
+                event_list.append(trusted)
+        if model_interfaces.IParliament.providedBy(self.context.get_group()):
+            return event_list + self.get_sessions()
+        else:
+            return event_list
+
+    def __call__(self):
         self.request.response.setHeader("Content-type", self.content_mimetype)
         return self.render()
         
@@ -923,7 +965,7 @@ class DhtmlxCalendarSittingsIcal(DhtmlxCalendarSittings):
                 ),
                 event_summary=IDCDescriptiveProperties(sitting).verbose_title,
             )
-            for sitting in self.sittings
+            for sitting in self.sittings_and_sessions
         ]
         return config.ICAL_DOCUMENT_TEMPLATE % dict(
             event_data = u"\n".join(event_data_list)

@@ -22,6 +22,13 @@
         template="templates/app-index.pt"
     />
 
+    <!-- Favicon -->
+    <browser:page name="favicon.ico"
+        for="bungeni.models.interfaces.IBungeniApplication"
+        permission="zope.Public"
+        class=".redirect.Favicon"
+    />
+    
     <!-- Setup Access to Browser Resources on the Application -->
 
     <browser:page name=""
@@ -44,6 +51,20 @@
         layer=".interfaces.IBungeniAuthenticatedSkin"
         class=".redirect.WorkspaceRootRedirect"
     />
+    <browser:page name="workflow-redirect"
+        for="bungeni.core.workflow.interfaces.IWorkflowed"
+        permission="zope.View"
+        layer="bungeni.ui.interfaces.IWorkspaceOrAdminSectionLayer"
+        class=".redirect.WorkflowRedirect"
+    />
+    <browser:page name="workflow-redirect"
+        for="bungeni.models.interfaces.ISitting"
+        permission="zope.View"
+        layer="bungeni.ui.interfaces.IWorkspaceSectionLayer"
+        class=".redirect.WorkflowRedirectSitting"
+    />
+    
+    <!-- file and attachment views -->
     <browser:view for="bungeni.alchemist.interfaces.IAlchemistContent"
         permission="zope.View"
         name="file-image"
@@ -173,7 +194,7 @@
 
   <!-- Reporting -->
      <!-- !+Reports(mb, 09-2011) To use one interface for registration. -->
-     <browser:page name="report-builder"
+     <browser:page name="create-report"
         for="*"
         permission="bungeni.reports.Edit"
         class=".reports.ReportBuilder"
@@ -233,6 +254,12 @@
      class=".calendar.browser.DhtmlxCalendarSittingsEdit"
     />
 
+  <browser:page
+     for="bungeni.models.interfaces.IParliament"
+     permission="zope.View"
+     name="schedule"
+     class=".calendar.browser.CalendarView"
+    />
   <browser:page
      for="bungeni.models.interfaces.ICommittee"
      permission="zope.View"
@@ -377,7 +404,12 @@
         layer="bungeni.ui.interfaces.IBungeniSkin"
         permission="bungeni.ui.workspace.View"
     />
-    
+    <browser:page name="index"
+        for="bungeni.core.interfaces.IWorkspaceUnderConsiderationContainer"
+        class=".workspace.WorkspaceUnderConsiderationListing"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        permission="bungeni.ui.workspace.View"
+    />
     <!-- Workspace Add views -->
     <!-- CONVENTION - view names must follow the following convention
     the word "add", then an undescore(_) then the item type as registered in the
@@ -394,11 +426,11 @@
         layer="bungeni.ui.interfaces.IBungeniSkin"
         permission="bungeni.motion.Add"
     />
-    <browser:page name="add_tableddocument"
+    <browser:page name="add_tabled_document"
         for="bungeni.core.interfaces.IWorkspaceDraft"
         class=".workspace.WorkspaceAddForm"
         layer="bungeni.ui.interfaces.IBungeniSkin"
-        permission="bungeni.tableddocument.Add"
+        permission="bungeni.tabled_document.Add"
     />
     <browser:page name="add_bill"
         for="bungeni.core.interfaces.IWorkspaceDraft"
@@ -563,5 +595,19 @@
      class=".macros.BungeniCalendarMacros"
      layer=".interfaces.IBungeniSkin"
      permission="zope.View"
-     />    
+     /> 
+
+   <browser:page
+      for="bungeni.models.interfaces.IFeatureAssignment"
+      name="assignment"
+      class=".assignment.AssignmentView"
+      permission="bungeni.assignment.View"
+      />
+
+   <browser:page
+      for="bungeni.models.interfaces.IFeatureAssignment"
+      name="edit-assignment"
+      class=".assignment.AssignmentEditView"
+      permission="bungeni.assignment.Edit"
+      />
 </configure>

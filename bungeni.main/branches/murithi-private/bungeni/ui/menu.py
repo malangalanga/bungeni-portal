@@ -31,9 +31,9 @@ from bungeni.alchemist.interfaces import IAlchemistContainer
 from bungeni.models.utils import get_db_user_id
 from bungeni.models.interfaces import (
     IVersion, 
-    IScheduleText, 
-    IBungeniParliamentaryContent, 
-    IFeatureAudit
+    IScheduleContent, 
+    IFeatureAudit,
+    IFeatureDownload
 )
 
 from bungeni.core.translation import (get_language, get_all_languages, 
@@ -259,8 +259,7 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
         if wfc is None:
             return {"id": self.id}
         status = wfc.state_controller.get_status()
-        stateTitle = translate(
-            str(wfc.workflow.get_state(status).title),
+        stateTitle = translate(wfc.workflow.get_state(status).title,
             domain="bungeni",
             context=self.request)
         return {
@@ -304,13 +303,13 @@ class WorkflowMenu(BrowserMenu):
         _url = url.absoluteURL(context, request)
         results = []
         for tid in tids:
-            transit_url = \
-                "%s/change_workflow_state?transition_id=%s&next_url=..." % (
-                    _url, tid)
+            transit_url = ("%s/change_workflow_state?transition_id=%s&"
+                "next_url=./workflow-redirect" % (_url, tid)
+            )
             extra = {"id": "workflow-transition-%s" % tid,
                      "separator": None,
                      "class": ""}
-            state_title = translate(str(wf.get_transition(tid).title),
+            state_title = translate(wf.get_transition(tid).title,
                 domain="bungeni",
                 context=request)
             results.append(
@@ -373,10 +372,14 @@ class CalendarMenu(BrowserMenu):
         contexts = []
         app = getSite()
         today = datetime.date.today()
+        
+        #!+HARDWIRING(mb, Aug-2012) unhardwire committees lookup
         if interfaces.IWorkspaceSchedulingSectionLayer.providedBy(request):
             committees = app["workspace"]["scheduling"]["committees"].values()
-        else:
+        elif interfaces.IBusinessSectionLayer.providedBy(request):
             committees = app["business"]["committees"].values()
+        else:
+            committees = []
 
         user_id = get_db_user_id()
         for committee in committees:
@@ -385,7 +388,7 @@ class CalendarMenu(BrowserMenu):
                      or committee.end_date >= today) and
                    (committee.start_date is None
                     or committee.start_date <= today) and
-                   checkPermission("bungeni.agendaitem.Add", committee) and
+                   checkPermission("bungeni.agenda_item.Add", committee) and
                    (committee.status == "active")):
                     contexts.append(schedule.CommitteeSchedulingContext(
                             committee))
@@ -399,13 +402,15 @@ class CalendarMenu(BrowserMenu):
                             committee))
         for context in contexts:
             context.__name__ = u"schedule"
+        #!+HARDWIRING(mb, Aug-2012) unhardwire committees lookup
         if interfaces.IWorkspaceSchedulingSectionLayer.providedBy(request):
             contexts.append(schedule.ISchedulingContext(
                     app["workspace"]["scheduling"]))
-        else:
+        elif interfaces.IBusinessSectionLayer.providedBy(request):
             contexts.append(schedule.ISchedulingContext(
                     app["business"]["sittings"]))
-        contexts[-1].__name__ = u""
+        if len(contexts):
+            contexts[-1].__name__ = u""
         return contexts
 
     def getMenuItems(self, context, request):
@@ -511,7 +516,7 @@ class DownloadDocumentMenu(BrowserMenu):
     def getMenuItems(self, context, request):
         results = []
         _url = url.absoluteURL(context, request)
-        if IBungeniParliamentaryContent.providedBy(context):
+        if IFeatureDownload.providedBy(context):
             doc_templates = self.documentTemplates(request.locale)
             for doc_type in document_types:
                 if doc_templates:
@@ -547,13 +552,13 @@ class DownloadDocumentMenu(BrowserMenu):
             for doc_type in xml_types:
                 if doc_type == TYPE_AKOMANTOSO:
                     if IAlchemistContainer.providedBy(context):
-                        if not IBungeniParliamentaryContent.implementedBy(
+                        if not IFeatureDownload.implementedBy(
                                 context.domain_model
                             ):
                             continue
                 elif doc_type == TYPE_RSS:
                     # rss for content types only availble for auditables
-                    if (IBungeniParliamentaryContent.providedBy(context) and not
+                    if (IFeatureDownload.providedBy(context) and not
                             IFeatureAudit.providedBy(context)
                         ):
                         continue
@@ -599,7 +604,7 @@ class CalendarContentMenu(BrowserMenu):
             return results
         for key, item in items:
             if not IAlchemistContainer.providedBy(item): continue
-            if not IScheduleText.implementedBy(item.domain_model): continue
+            if not IScheduleContent.implementedBy(item.domain_model): continue
             dc_adapter = IDCDescriptiveProperties(item, None)
             if dc_adapter:
                 _title = dc_adapter.title

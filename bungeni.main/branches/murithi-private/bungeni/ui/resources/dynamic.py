@@ -30,6 +30,15 @@ WARNING = _(u"Warning")
 
 def get_globals(group_name, **kwargs):
     language = kwargs.get("language", "en")
+    type_names = {
+        "heading":i18n(_(u"heading"), language),
+        "editorial_note":i18n(_(u"editorial note"), language),
+        "minute":i18n(_(u"minute record"), language),
+    }
+    type_names.update([
+        (name, i18n(info.get("display_name"), language))
+        for (name, info) in data.get_schedulable_types().iteritems()
+    ])
     globals_map = {
         "SCHEDULER_GLOBALS" : {
             "schedulable_types": [ 
@@ -44,11 +53,7 @@ def get_globals(group_name, **kwargs):
                 "EDITORIAL_NOTE": "editorial_note",
                 "MINUTE": "minute",
             },
-            "type_names": {
-                "HEADING":i18n(_(u"heading"), language),
-                "EDITORIAL_NOTE":i18n(_(u"editorial note"), language),
-                "MINUTE":i18n(_(u"minute record"), language),
-            },
+            "type_names": type_names,
             "current_schedule_title": i18n(_(u"Agenda"), language),
             "current_schedule_items": i18n(_(u"Scheduled Items"), language),
             "available_items_title": i18n(_(u"Available Items"), language),
@@ -56,13 +61,13 @@ def get_globals(group_name, **kwargs):
             "scheduled_item_context_menu_header": i18n(_(u"Modify Item"), 
                 language
             ),
-            "json_listing_url" : "./items/jsonlisting",
+            "json_listing_url" : "./items/jsonlisting-raw",
             "json_listing_url_meta" : "./items/jsonlisting-schedule",
             "save_schedule_url": "./items/save-schedule",
             "discussions_save_url": "discussions/save-discussions",
-            "discussion_items_json_url" : "discussions/jsonlisting",
+            "discussion_items_json_url" : "discussions/jsonlisting-raw",
             "schedulable_items_json_url" : "./schedulable-items-json",
-            "column_title": i18n(_(u"Title"), language),
+            "column_title": i18n(_(u"Description"), language),
             "column_discussion_text": i18n(_(u"minute text"), language),
             "column_discussion_text_missing": i18n(_(u"NO TEXT RECORD FOUND"), 
                 language

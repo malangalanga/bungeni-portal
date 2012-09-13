@@ -11,13 +11,14 @@ log = __import__("logging").getLogger("bungeni.core.dc")
 from zope import interface
 from zope import component
 from zope.security.proxy import removeSecurityProxy
+from zope.securitypolicy.role import IRole
 from zope.dublincore.interfaces import IDCDescriptiveProperties
 import zope.traversing.interfaces
+from lxml import html
 
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
-from bungeni.alchemist import Session
+from bungeni.alchemist import Session, utils
 from bungeni.alchemist.interfaces import IAlchemistContainer
-from bungeni.alchemist.model import queryModelDescriptor
 
 from bungeni.models import interfaces
 from bungeni.models import domain
@@ -85,9 +86,10 @@ class DescriptiveProperties(object):
     def translate(self, context, name):
         """Gets translated field values
         """
-        lang = get_request_language()
+        lang = (get_request_language(default=None) or 
+            getattr(context, "language", None))
         if not lang:
-            return getattr(context, name)
+            return getattr(context, name, "")
         if interfaces.ITranslatable.providedBy(context):
             if context.language != lang:
                 translation = get_translation_for(context, lang)
@@ -95,7 +97,8 @@ class DescriptiveProperties(object):
                     translation
                 )
                 if translation:
-                    return translation[0].field_text
+                    if translation[0].field_text:
+                        return translation[0].field_text
         return getattr(context, name)
 
 class DocumentDescriptiveProperties(DescriptiveProperties):
@@ -117,10 +120,10 @@ class QuestionDescriptiveProperties(DocumentDescriptiveProperties):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
         if context.type_number is None:
-            return self.translate(context, "short_title")
+            return self.translate(context, "title")
         return "#%d: %s" % (
             context.type_number,
-            self.translate(context, "short_title"))
+            self.translate(context, "title"))
 
     @property
     def description(self):
@@ -145,9 +148,9 @@ class BillDescriptiveProperties(DocumentDescriptiveProperties):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
         if context.type_number is None:
-            return self.translate(context, "short_title")
+            return self.translate(context, "title")
         return "#%d: %s" % (context.type_number, 
-            self.translate(context, "short_title")
+            self.translate(context, "title")
         )
 
     @property
@@ -171,10 +174,10 @@ class MotionDescriptiveProperties(DocumentDescriptiveProperties):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
         if context.type_number is None:
-            return self.translate(context, "short_title")
+            return self.translate(context, "title")
         return "#%d: %s" % (
             context.type_number,
-            self.translate(context, "short_title"))
+            self.translate(context, "title"))
     
     @property
     def description(self):
@@ -257,6 +260,13 @@ class EditorialNoteDescriptiveProperties(DescriptiveProperties):
     
     @property
     def title(self):
+        if len(self.context.text.strip())>0:
+            return html.fromstring(self.context.text).text_content()
+        else:
+            return _(u"Editorial Note")
+    
+    @property
+    def description(self):
         return self.context.text
 
 @register.adapter()
@@ -297,7 +307,7 @@ class ContainerDescriptiveProperties(DescriptiveProperties):
 
     @property
     def title(self):
-        descriptor = queryModelDescriptor(self.context.domain_model)
+        descriptor = utils.get_descriptor(self.context.domain_model)
         return descriptor.container_name
 
 
@@ -309,7 +319,9 @@ class UserDescriptiveProperties(DescriptiveProperties):
     def title(self):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
-        return "%s %s %s" % (self.translate(context,"titles"),
+        return "%s %s %s".strip() % (
+            (self.translate(context, "salutation") if context.salutation else 
+                ""), 
             context.first_name, context.last_name
         )
 
@@ -331,10 +343,15 @@ class UserDescriptiveProperties(DescriptiveProperties):
         finally:
             if mp_user is None:
                 return self.title
-        return _("member_title_with_representation",
-            default=u"Member of Parliament for ${representation} (${member})",
-            mapping={"representation": mp_user.representation, "member": self.title}
-        )
+        if mp_user.representation:
+            return _("member_title_with_representation",
+                default=u"Member of Parliament for ${representation}"
+                " (${member})",
+                mapping={"representation": mp_user.representation, 
+                    "member": self.title
+                }
+            )
+        return self.title
 
 
 @register.adapter()
@@ -346,7 +363,7 @@ class GroupMembershipDescriptiveProperties(DescriptiveProperties):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
         if context.user:
-            return "%s %s %s" % (self.translate(context.user, "titles"),
+            return "%s %s %s" % (self.translate(context.user, "salutation"),
                 context.user.first_name,
                 context.user.last_name)
         else:
@@ -361,10 +378,10 @@ class SittingAttendanceDescriptiveProperties(DescriptiveProperties):
     def title(self):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
-        if context.user:
-            return "%s %s %s" % (self.translate(context.user, "titles"),
-                context.user.first_name,
-                context.user.last_name)
+        if context.member:
+            user = context.member
+            return "%s %s %s" % (self.translate(user, "salutation"),
+                user.first_name, user.last_name)
         else:
             return u"New User"
     
@@ -386,7 +403,7 @@ class SignatoryDescriptiveProperties(DescriptiveProperties):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
         if context.user:
-            return "%s %s %s" % (self.translate(context.user, "titles"),
+            return "%s %s %s" % (self.translate(context.user, "salutation"),
                 context.user.first_name,
                 context.user.last_name)
         else:
@@ -400,8 +417,8 @@ class SignatoryDescriptiveProperties(DescriptiveProperties):
 
 
 @register.adapter()
-class ParliamentSessionDescriptiveProperties(DescriptiveProperties):
-    component.adapts(interfaces.IParliamentSession)
+class SessionDescriptiveProperties(DescriptiveProperties):
+    component.adapts(interfaces.ISession)
     
     @property
     def title(self):
@@ -415,6 +432,7 @@ class ParliamentSessionDescriptiveProperties(DescriptiveProperties):
         context = session.merge(removeSecurityProxy(self.context))
         return self.translate(context, "full_name")
 
+    verbose_title = description
 
 @register.adapter()
 class ItemScheduleDiscussionDescriptiveProperties(DescriptiveProperties):
@@ -456,7 +474,7 @@ class AgendaItemDescriptiveProperties(DocumentDescriptiveProperties):
     def title(self):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
-        return u"%s - %s" % (self.translate(context, "short_title"),
+        return u"%s - %s" % (self.translate(context, "title"),
             self.translate(context.group, "short_name")
         )
 
@@ -469,7 +487,7 @@ class TabledDocumentDescriptiveProperties(DocumentDescriptiveProperties):
     def title(self):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
-        return self.translate(context, "short_title")
+        return self.translate(context, "title")
 
 
 @register.adapter()
@@ -491,7 +509,7 @@ class ReportDescriptiveProperties(DescriptiveProperties):
     def title(self):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
-        return u'%s' % self.translate(context, "short_title")
+        return u'%s' % self.translate(context, "title")
 
     @property
     def description(self):
@@ -531,7 +549,7 @@ class EventProperties(DescriptiveProperties):
     def title(self):
         session = Session()
         context = session.merge(removeSecurityProxy(self.context))
-        return self.translate(context, "short_title")
+        return self.translate(context, "title")
 
 
 @register.adapter()
@@ -578,62 +596,6 @@ class HeadingDescriptiveProperties(DescriptiveProperties):
         context = session.merge(removeSecurityProxy(self.context))
         return self.translate(context, "text")
 
-''' !+TYPES_CUSTOM
-class AddressTypeDescriptiveProperties(DescriptiveProperties):
-    component.adapts(interfaces.IAddressType)
-    
-    @property
-    def title(self):
-        session = Session()
-        context = session.merge(removeSecurityProxy(self.context))
-        return self.translate(context, "address_type_name")
-
-class PostalAddressTypeDescriptiveProperties(DescriptiveProperties):
-    component.adapts(interfaces.IPostalAddressType)
-    
-    @property
-    def title(self):
-        session = Session()
-        context = session.merge(removeSecurityProxy(self.context))
-        return self.translate(context, "postal_address_type_name")
-
-class BillTypeDescriptiveProperties(DescriptiveProperties):
-    component.adapts(interfaces.IBillType)
-    
-    @property
-    def title(self):
-        session = Session()
-        context = session.merge(removeSecurityProxy(self.context))
-        return self.translate(context, "bill_type_name")
-
-class CommitteeTypeDescriptiveProperties(DescriptiveProperties):
-    component.adapts(interfaces.ICommitteeType)
-    
-    @property
-    def title(self):
-        session = Session()
-        context = session.merge(removeSecurityProxy(self.context))
-        return self.translate(context, "committee_type")
-
-class CommitteeTypeStatusDescriptiveProperties(DescriptiveProperties):
-    component.adapts(interfaces.ICommitteeTypeStatus)
-    
-    @property
-    def title(self):
-        session = Session()
-        context = session.merge(removeSecurityProxy(self.context))
-        return self.translate(context, "committee_type_status_name")
-
-class AttendanceTypeDescriptiveProperties(DescriptiveProperties):
-    component.adapts(interfaces.IAttendanceType)
-    
-    @property
-    def title(self):
-        session = Session()
-        context = session.merge(removeSecurityProxy(self.context))
-        return self.translate(context, "attendance_type")
-'''
-
 
 @register.adapter()
 class VenueDescriptiveProperties(DescriptiveProperties):
@@ -646,36 +608,6 @@ class VenueDescriptiveProperties(DescriptiveProperties):
         return self.translate(context, "short_name")
 
 
-''' !+TYPES_CUSTOM
-class QuestionTypeDescriptiveProperties(DescriptiveProperties):
-    component.adapts(interfaces.IQuestionType)
-    
-    @property
-    def title(self):
-        session = Session()
-        context = session.merge(removeSecurityProxy(self.context))
-        return self.translate(context, "question_type_name")
-
-class ResponseTypeDescriptiveProperties(DescriptiveProperties):
-    component.adapts(interfaces.IResponseType)
-    
-    @property
-    def title(self):
-        session = Session()
-        context = session.merge(removeSecurityProxy(self.context))
-        return self.translate(context, "response_type_name")
-
-class MemberElectionTypeDescriptiveProperties(DescriptiveProperties):
-    component.adapts(interfaces.IMemberElectionType)
-    
-    @property
-    def title(self):
-        session = Session()
-        context = session.merge(removeSecurityProxy(self.context))
-        return self.translate(context, "member_election_type_name")
-'''
-
-
 @register.adapter()
 class TitleTypeDescriptiveProperties(DescriptiveProperties):
     component.adapts(interfaces.ITitleType)
@@ -686,4 +618,12 @@ class TitleTypeDescriptiveProperties(DescriptiveProperties):
         context = session.merge(removeSecurityProxy(self.context))
         return self.translate(context, "title_name")
 
-
+@register.adapter()
+class GroupMembershipRoleDescriptiveProperties(DescriptiveProperties):
+    component.adapts(interfaces.IGroupMembershipRole)
+    
+    @property
+    def title(self):
+        session = Session()
+        context = session.merge(removeSecurityProxy(self.context))
+        return component.getUtility(IRole, context.role_id).title

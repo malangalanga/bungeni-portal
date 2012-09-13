@@ -11,21 +11,19 @@ from zope.app.security.interfaces import IUnauthenticatedPrincipal
 from zope.app.component.hooks import getSite
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import getUtility
-from zope.sendmail.interfaces import ISMTPMailer
+from bungeni.core.interfaces import IBungeniMailer
 
 from bungeni.models.domain import User
 from bungeni.alchemist import Session
 from bungeni.models.domain import PasswordRestoreLink
 from bungeni.models.utils import get_db_user
-from bungeni.ui.widgets import HiddenTextWidget
 from bungeni.ui import vocabulary
 from bungeni.ui import widgets
-from bungeni.models import domain
 from bungeni.core.i18n import _
 from bungeni.models.settings import EmailSettings
 from bungeni.core.app import BungeniApp
 import bungeni.ui.utils as ui_utils
-from bungeni.ui.constraints import check_email
+from bungeni.ui.descriptor.constraints import check_email
 from zope.interface import invariant
 from bungeni.ui.forms.common import BaseForm
 from bungeni.alchemist import ui
@@ -100,15 +98,15 @@ class RestoreLogin(form.FormBase):
             user = session.query(User).filter(
                             User.email==email).first()
             if user:
-                mailer = getUtility(ISMTPMailer, name="bungeni.smtp")
+                mailer = getUtility(IBungeniMailer)
                 self.message = _(u"Your login is: ") + user.login
                 
                 text = ViewPageTemplateFile("templates/mail.pt")(self)
                 message = MIMEText(text)
                 message.set_charset("utf-8")
                 message["Subject"] = _(u"Bungeni login restoration")
-                message["From"] = settings.default_sender
-                mailer.send(settings.default_sender, email, str(message))
+                message["To"] = email
+                mailer.send(message)
                 self.status = _(u"Your login was sent to you email.")
             else:
                 self.status = _(u"Wrong email address.")
@@ -170,7 +168,7 @@ class RestorePassword(form.FormBase):
             link.user_id = user.user_id
             session.add(link)
                         
-            mailer = getUtility(ISMTPMailer, name="bungeni.smtp")
+            mailer = getUtility(IBungeniMailer)
                 
                 
             self.message = _(u"Restore password link: ")\
@@ -182,9 +180,8 @@ class RestorePassword(form.FormBase):
             message = MIMEText(text)
             message.set_charset("utf-8")
             message["Subject"] = _(u"Bungeni password restoration")
-            message["From"] = settings.default_sender
-                
-            mailer.send(settings.default_sender, email, str(message))
+            message["To"] = email
+            mailer.send(str(message))
             self.status = _(u"Email was sent!")
         else:
             self.status = _(u"User not found!")
@@ -197,7 +194,7 @@ class IResetPasswordForm(interface.Interface):
 
 class ResetPassword(form.FormBase):
     form_fields = form.Fields(IResetPasswordForm)
-    form_fields["key"].custom_widget = HiddenTextWidget
+    form_fields["key"].custom_widget = widgets.HiddenTextWidget
     prefix = ""
     form_name = _(u"Reset Password")
     status = ""
@@ -240,7 +237,7 @@ class IProfileForm(interface.Interface):
     first_name = schema.TextLine(title=_(u"First name"))
     last_name = schema.TextLine(title=_(u"Last name"))
     middle_name = schema.TextLine(title=_(u"Middle name"), required=False)
-    email = schema.TextLine(title=_(u"Email"),constraint=check_email)
+    email = schema.TextLine(title=_(u"Email"), constraint=check_email)
     description = schema.Text(title=_(u"Biographical notes"), required=False)
     gender = schema.Choice(title=_("Gender"), vocabulary=vocabulary.gender)
     date_of_birth = schema.Date(title=_("Date of Birth"))

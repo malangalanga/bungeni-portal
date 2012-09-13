@@ -1,5 +1,4 @@
 import os
-import time
 import simplejson
 from zope import component
 from zope.publisher.browser import BrowserPage
@@ -13,11 +12,15 @@ from zope.lifecycleevent import ObjectCreatedEvent
 from zope.security import checkPermission
 from zc.resourcelibrary import need
 from bungeni.alchemist.container import contained
-from alchemist.ui import generic
+from bungeni.alchemist.ui import createInstance
+from bungeni.alchemist import utils
 from bungeni.core import workspace, translation
 from bungeni.core.content import WorkspaceSection
 from bungeni.core.i18n import _
-from bungeni.core.interfaces import IWorkspaceTabsUtility, IWorkspaceContainer
+from bungeni.core.interfaces import (IWorkspaceTabsUtility,
+                                     IWorkspaceContainer,
+                                     IWorkspaceUnderConsiderationContainer)
+from bungeni.models.interfaces import ITranslatable
 from bungeni.ui.utils import url
 from bungeni.ui.utils.common import get_workspace_roles
 from bungeni.ui import table
@@ -25,12 +28,13 @@ from bungeni.ui.interfaces import IWorkspaceContentAdapter
 from bungeni.ui.forms.common import AddForm
 from bungeni.core.workspace import OBJECT_ROLES
 from bungeni.core.workflow.interfaces import IWorkflow
-from bungeni.alchemist.model import queryModelDescriptor
 from bungeni.ui.utils import debug
 from bungeni.utils import register
 from bungeni.utils.capi import capi
+from bungeni.ui.widgets import date_input_search_widget
 
 _path = os.path.split(os.path.abspath(__file__))[0]
+
 
 class WorkspaceField(object):
 
@@ -43,7 +47,7 @@ class WorkspaceField(object):
 
 # These are the columns to be displayed in the workspace
 workspace_fields = [
-    WorkspaceField("short_title", _("title")),
+    WorkspaceField("title", _("title")),
     WorkspaceField("type", _("item type")),
     WorkspaceField("status", _("status")),
     WorkspaceField("status_date", _("status date"))
@@ -51,6 +55,8 @@ workspace_fields = [
 
 
 @register.view(IWorkspaceContainer, name="jsonlisting",
+    protect={"bungeni.ui.workspace.View": register.VIEW_DEFAULT_ATTRS})
+@register.view(IWorkspaceUnderConsiderationContainer, name="jsonlisting",
     protect={"bungeni.ui.workspace.View": register.VIEW_DEFAULT_ATTRS})
 class WorkspaceContainerJSONListing(BrowserPage):
     """Paging, batching, json contents of a workspace container.
@@ -105,35 +111,15 @@ class WorkspaceContainerJSONListing(BrowserPage):
             values.append(d)
         return values
 
-    def get_status_date_filters(self):
-        if self.request.get("filter_status_date"):
-            dates = self.request.get("filter_status_date").split(" ")
-        if dates and len(dates) == 2:
-            try:
-                date_from = time.strptime(dates[0], "%Y/%m/%d")
-                date_to = time.strptime(dates[1], "%Y/%m/%d")
-            except:
-                return None
-            return date_from, date_to
-        else:
-            return None
-
     def translate_objects(self, nodes, lang=None):
-        """ (nodes:[ITranslatable]) -> [nodes]
+        """ Translate container items if translatable
         """
         if lang is None:
             lang = translation.get_request_language(request=self.request)
-        t_nodes = []
-        for node in nodes:
-            try:
-                t_nodes.append(translation.translate_obj(node, lang))
-            except (AssertionError,):  # node is not ITranslatable
-                debug.log_exc_info(sys.exc_info(), log_handler=log.warn)
-                # if a node is not translatable then we assume that NONE of
-                # the nodes are translatable, so we simply break out,
-                # returning the untranslated nodes as is
-                return nodes
-        return t_nodes
+        for index, node in enumerate(nodes):
+            if ITranslatable.providedBy(node):
+                nodes[index] = translation.translate_obj(node, lang)
+        return nodes
     
     def check_permission(self, results):
         viewable = []
@@ -144,13 +130,15 @@ class WorkspaceContainerJSONListing(BrowserPage):
     
     def get_batch(self, start=0, limit=25, lang=None):
         context = removeSecurityProxy(self.context)
-        filter_short_title = self.request.get("filter_short_title", None)
+        filter_title = self.request.get("filter_title", None)
         filter_type = self.request.get("filter_type", None)
         filter_status = self.request.get("filter_status", None)
+        filter_status_date = self.request.get("filter_status_date", "")
         results, self.set_size = context.query(
-            filter_short_title=filter_short_title,
+            filter_title=filter_title,
             filter_type=filter_type,
             filter_status=filter_status,
+            filter_status_date=filter_status_date,
             sort_on=self.sort_on,
             sort_dir=self.sort_dir,
             start=start,
@@ -178,7 +166,7 @@ class WorkspaceDataTableFormatter(table.ContextDataTableFormatter):
     js_file.close()
 
     def get_search_widgets(self):
-        return ""
+        return date_input_search_widget("table", "status_date")
 
     def get_item_types(self):
         workspace_config = component.getUtility(IWorkspaceTabsUtility)
@@ -196,7 +184,7 @@ class WorkspaceDataTableFormatter(table.ContextDataTableFormatter):
         for domain in domains:
             value = workspace_config.get_type(domain)
             if value:
-                descriptor = queryModelDescriptor(domain)
+                descriptor = utils.get_descriptor(domain)
                 name = descriptor.display_name if descriptor else value
                 result[value] = translate(name, context=self.request)
         return result
@@ -268,6 +256,7 @@ class WorkspaceContainerListing(BrowserPage):
     render = ViewPageTemplateFile("templates/workspace-listing.pt")
     formatter_factory = WorkspaceDataTableFormatter
     columns = []
+    prefix = "workspace"
 
     def __call__(self):
         need("yui-datatable")
@@ -289,12 +278,62 @@ class WorkspaceContainerListing(BrowserPage):
             self.context,
             self.request,
             (),
-            prefix="workspace",
+            prefix=self.prefix,
             columns=self.columns,
         )
         formatter.cssClasses["table"] = "listing"
         formatter.table_id = "datacontents"
         return formatter
+
+
+class WorkspaceUnderConsiderationFormatter(WorkspaceDataTableFormatter):
+
+    def get_item_types(self):
+        result = dict([("", "-")])
+        for type_key, ti in capi.iter_type_info():
+            workflow = ti.workflow
+            if workflow and workflow.has_feature("workspace"):
+                name = ti.descriptor.display_name
+                result[ti.workflow_key] = translate(name, context=self.request)
+        return result
+
+    def get_status(self, item_type):
+        from bungeni.core.workflows.adapters import get_workflow
+        result = {}
+        for type_key, ti in capi.iter_type_info():
+            if (ti.workflow_key == item_type):
+                states = get_workflow(ti.workflow_key).get_state_ids(
+                    tagged=["public"], not_tagged=["terminal"],
+                    conjunction="AND")
+                for state in states:
+                    state_title = translate(
+                        ti.workflow.get_state(state).title,
+                        domain="bungeni",
+                        context=self.request
+                        )
+                    result[state] = state_title
+                break
+        return result
+
+    def getDataTableConfig(self):
+        config = table.ContextDataTableFormatter.getDataTableConfig(self)
+        item_types = self.get_item_types()
+        config["item_types"] = simplejson.dumps(item_types)
+        all_item_status = dict()
+        status = dict([("", "-")])
+        for item_type in item_types:
+            x = self.get_status(item_type)
+            for k, v in x.iteritems():
+                item_status_value = "%s+%s" % (item_type, k)
+                status[item_status_value] = v
+                all_item_status[k] = v
+        status.update(all_item_status)
+        config["status"] = simplejson.dumps(status)
+        return config
+
+class WorkspaceUnderConsiderationListing(WorkspaceContainerListing):
+    formatter_factory = WorkspaceUnderConsiderationFormatter
+    prefix="workspace_under_consideration"
 
 
 @register.view(WorkspaceSection, name="tabcount",
@@ -306,12 +345,12 @@ class WorkspaceTabCount(BrowserPage):
     def __call__(self):
         data = {}
         app = getSite()
-        keys = app["workspace"]["documents"].keys()
+        keys = app["workspace"]["my-documents"].keys()
         read_from_cache = True
         if self.request.get("cache") == "false":
             read_from_cache = False
         for key in keys:
-            data[key] = app["workspace"]["documents"][key].count(
+            data[key] = app["workspace"]["my-documents"][key].count(
                 read_from_cache)
         return simplejson.dumps(data)
 
@@ -322,7 +361,7 @@ class WorkspaceAddForm(AddForm):
         domain_model = removeSecurityProxy(self.domain_model)
         # create the object, inspect data for constructor args
         try:
-            ob = generic.createInstance(domain_model, data)
+            ob = createInstance(domain_model, data)
         except TypeError:
             ob = domain_model()
         # apply any context values
@@ -340,7 +379,7 @@ class WorkspaceAddForm(AddForm):
 
     @property
     def domain_model(self):
-        item_type = self.__name__.split("_")[1]
+        item_type = self.__name__.split("_", 1)[1]
         workspace_config = component.getUtility(IWorkspaceTabsUtility)
         domain = workspace_config.get_domain(item_type)
         return domain

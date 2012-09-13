@@ -48,15 +48,6 @@ def context_is_public(context):
     # also return False for None (Unset)
     return bool(state.getSetting("zope.View", "bungeni.Anonymous"))
 
-def clerk_receive_notification(context):
-    return prefs.getClerksOfficeReceiveNotification()
-
-def owner_receive_notification(context):
-    return False #!+NOTIFICATION_SETTINGS
-
-def ministry_receive_notification(context):
-    return prefs.getMinistriesReceiveNotification() and context.ministry_id
-
 
 # parliamentary items
 
@@ -166,6 +157,10 @@ def signatory_auto_sign(context):
     #!+SIGNATORIES(mb, aug-2011) this could be tricky versus checking if parent
     # document is in a 'working_draft' state
     if user_is_not_context_owner(context.head):
+        return True
+    #!+(mb, Jul-2012) move all signatory logic to signatory manager
+    validator = ISignatoryManager(context.head)
+    if validator.autoSign():
         return True
     return False
 

@@ -85,6 +85,11 @@ YAHOO.bungeni.scheduling = function(){
             YAHOO.bungeni.unsavedChanges = true;
         }
 
+        var checkAndDoScrolling = function(args) {
+            YAHOO.bungeni.unsavedChanges = true;
+            this.scrollTo(this.getRecordIndex(args.records[0]));
+        }
+
         /**
          * @method customSelectRow
          * @description conditional selection of rows on agenda datatable
@@ -109,8 +114,61 @@ YAHOO.bungeni.scheduling = function(){
             save_button.on("click", function(){
                 YAHOO.bungeni.scheduling.handlers.saveSchedule();
             });
+            /**
+             * generate agenda preview button
+             **/
+            var preview_button = new YAHOO.widget.Button({
+                label: SGlobals.preview_msg_header,
+                container: container
+            });
+            var previewPanel = new YAHOO.widget.Panel("agenda-preview-dialog",
+                { 
+                    modal: true, 
+                    visible: false, 
+                    width: "800px", 
+                    height: "auto", 
+                    fixedcenter:false, 
+                    constraintoviewport: false,
+                    zindex: 2000,
+                }
+            );
+            previewPanel.setHeader(SGlobals.preview_msg_header);
+            preview_button.on("click", function(){
+                YAHOO.bungeni.config.dialogs.blocking.show(SGlobals.preview_msg_generating);
+                var success = function(o){
+                    YAHOO.bungeni.config.dialogs.blocking.hide();
+                    previewPanel.setBody(o.responseText);
+                    previewPanel.show();
+                    previewPanel.bringToTop();
+                }
+                var failure = function(o){
+                    YAHOO.bungeni.config.dialogs.blocking.hide();
+                    YAHOO.bungeni.config.dialogs.notification.show(SGlobals.preview_msg_error);
+                }
+                var callback = {
+                    success: success,
+                    failure: failure,
+                    argument: {}
+                }
+                var request = YAHOO.util.Connect.asyncRequest("GET", "./preview", callback);
+            });
+            previewPanel.render(document.body);
+            
             this.unsubscribe("initEvent", renderScheduleControls);
         }
+        
+        /**
+         * @method addRowClass
+         * @description adds a class to identify row headings
+         **/
+        var addRowClass = function(args){
+            var sSize = YAHOO.bungeni.schedule.oDt.getRecordSet().getLength();
+            for (index=0; index<sSize; index++){
+                row_type = YAHOO.bungeni.schedule.oDt.getRecordSet()._records[index]._oData.item_type;
+                YAHOO.bungeni.schedule.oDt.getTrEl(index).className += " row-"+row_type;
+            }
+            this.unsubscribe("initEvent", renderScheduleControls);
+        }        
         
         /**
          * @method saveSchedule
@@ -218,8 +276,10 @@ YAHOO.bungeni.scheduling = function(){
 
         return {
             setUnsavedChanges: setUnsavedChanges,
+            checkAndDoScrolling: checkAndDoScrolling,
             customSelectRow: customSelectRow,
             renderScheduleControls: renderScheduleControls,
+            addRowClass: addRowClass,
             saveSchedule: saveSchedule,
             populateScheduledKeys: populateScheduledKeys,
             refreshCells: refreshCells,
@@ -238,7 +298,8 @@ YAHOO.bungeni.scheduling = function(){
                         position:'left',
                         header: AgendaConfig.TITLE_AGENDA,
                         body: '',
-                        width: "600",
+                        width: "660",
+                        unit: "%",
                         gutter: "2 2",
                         resize: true,
                     },
@@ -277,13 +338,14 @@ YAHOO.bungeni.scheduling = function(){
                 var tableContainer = document.createElement("div");
                 tableContainer.style.width = init_width + "px";
                 container.body.appendChild(tableContainer);
+                // YUI left pane width is set below
                 var dataTable = new YAHOO.widget.DataTable(
                     tableContainer,
                     columns, dataSource,
                     {
                         selectionMode: "single",
-                        scrollable: true,
-                        width: "100%",
+                        scrollable: 'y',
+                        width: "99.4%",
                         height: (container.body.clientHeight-30) + "px",
                         MSG_EMPTY: AgendaConfig.EMPTY_AGENDA_MESSAGE
                     }
@@ -305,6 +367,9 @@ YAHOO.bungeni.scheduling = function(){
                     YAHOO.bungeni.scheduling.handlers.renderScheduleControls
                 );
                 dataTable.subscribe("initEvent", 
+                    YAHOO.bungeni.scheduling.handlers.addRowClass
+                );
+                dataTable.subscribe("initEvent", 
                     YAHOO.bungeni.agendaconfig.afterDTRender
                 );
                 dataTable.doBeforeLoadData  = YAHOO.bungeni.scheduling.handlers.populateScheduledKeys;
@@ -312,7 +377,7 @@ YAHOO.bungeni.scheduling = function(){
                     YAHOO.bungeni.scheduling.handlers.setUnsavedChanges
                 );
                 dataTable.subscribe("rowsAddEvent", 
-                    YAHOO.bungeni.scheduling.handlers.setUnsavedChanges
+                    YAHOO.bungeni.scheduling.handlers.checkAndDoScrolling
                 );
                 dataTable.subscribe("rowDeleteEvent",
                     YAHOO.bungeni.scheduling.handlers.setUnsavedChanges

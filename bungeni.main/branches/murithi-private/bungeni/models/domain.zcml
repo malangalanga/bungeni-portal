@@ -37,8 +37,7 @@
                 registry_number
                 uri
                 acronym
-                short_title
-                long_title
+                title
                 description
                 language
                 body
@@ -60,8 +59,7 @@
                 registry_number
                 uri
                 acronym
-                short_title
-                long_title
+                title
                 description
                 language
                 body
@@ -112,8 +110,7 @@
                 registry_number
                 uri
                 acronym
-                short_title
-                long_title
+                title
                 description
                 language
                 body
@@ -134,6 +131,7 @@
         <require permission="zope.View"
             attributes="
                 ministry_id
+                short_title
                 publication_date
             "
         />
@@ -146,7 +144,7 @@
                 uri
                 acronym
                 short_title
-                long_title
+                title
                 description
                 language
                 body
@@ -183,8 +181,7 @@
                 registry_number
                 uri
                 acronym
-                short_title
-                long_title
+                title
                 description
                 language
                 body
@@ -225,8 +222,7 @@
                 registry_number
                 uri
                 acronym
-                short_title
-                long_title
+                title
                 description
                 language
                 body
@@ -253,7 +249,7 @@
                 admissible_date
             "
         />
-        <require permission="bungeni.agendaitem.Edit"
+        <require permission="bungeni.agenda_item.Edit"
             set_attributes="
                 doc_type
                 doc_procedure
@@ -261,8 +257,7 @@
                 registry_number
                 uri
                 acronym
-                short_title
-                long_title
+                title
                 description
                 language
                 body
@@ -284,7 +279,7 @@
                 admissible_date
             "
         />
-        <require permission="bungeni.tableddocument.Edit"
+        <require permission="bungeni.tabled_document.Edit"
             set_attributes="
                 doc_type
                 doc_procedure
@@ -292,8 +287,7 @@
                 registry_number
                 uri
                 acronym
-                short_title
-                long_title
+                title
                 description
                 language
                 body
@@ -308,7 +302,7 @@
         />
         <!-- !+WORKFLOW_TRANSITION(ah, jan-2011) was bungeni.historical.Edit 
             we use instead the permission used in the transition -->
-        <!-- require permission="bungeni.tableddocument.wf.completed.admissible"
+        <!-- require permission="bungeni.tabled_document.wf.completed.admissible"
             set_attributes="tabled_document_number"
         /-->
     </class>
@@ -696,6 +690,25 @@
                 real_order
                 active
                 item_status
+            "
+        />
+    </class>
+    
+    <class class=".domain.Venue">
+        <require permission="zope.View"
+            attributes="
+                venue_id
+                short_name
+                description
+                language
+            "
+        />
+        <require permission="bungeni.venue.Edit"
+            set_attributes="
+                venue_id
+                short_name
+                description
+                language
             "
         />
     </class>

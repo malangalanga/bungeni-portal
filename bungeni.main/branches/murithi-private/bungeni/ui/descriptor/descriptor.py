@@ -9,439 +9,29 @@ $Id$
 log = __import__("logging").getLogger("bungeni.ui.descriptor")
 
 from copy import deepcopy
-from zope import schema, interface
-from sqlalchemy.sql import expression
-import zope.formlib
-from zope.i18n import translate
-from zc.table import column
-from zope.dublincore.interfaces import IDCDescriptiveProperties
-from zope.security.proxy import removeSecurityProxy
 
-from bungeni.alchemist import Session
-from bungeni.alchemist.model import ModelDescriptor, Field, show, hide, \
-    queryModelInterface
-
-from bungeni.models import domain
-from bungeni.models.interfaces import IOwned
-from bungeni.models.utils import get_db_user
+from bungeni.alchemist.model import ModelDescriptor, show, hide
 
 # We import bungeni.core.workflows.adapters to ensure that the "states"
 # attribute on each "workflow" module is setup... this is to avoid an error
 # when importing bungeni.ui.descriptor.descriptor from standalone scripts:
-import bungeni.core.workflows.adapters # needed by standalone scripts
+import bungeni.core.workflows.adapters # needed by standalone scripts !+review
 
-from bungeni.core import translation
-
-from bungeni.ui import widgets
-from bungeni.ui.fields import VocabularyTextField
-from bungeni.ui import constraints
 from bungeni.ui.forms import validations
 from bungeni.ui.i18n import _
-from bungeni.ui.utils import common, date, misc, debug, url
-from bungeni.ui import vocabulary
-from bungeni.utils.capi import capi
-from bungeni.ui.interfaces import IAdminSectionLayer
-from bungeni.alchemist.interfaces import IAlchemistContainer
-from bungeni.utils import naming
+from bungeni.ui import vocabulary # !+
+from bungeni.ui.descriptor import constraints
+from bungeni.ui.descriptor.field import F
+from bungeni.utils import misc
 
-###
-# Listing Columns
-#
-
-
-def _column(name, title, renderer, default=""):
-    def getter(item, formatter):
-        value = getattr(item, name)
-        if value:
-            return renderer(value)
-        return default
-    return column.GetterColumn(title, getter)
-
-
-def localized_datetime_column(name, title, default="",
-        category="date", # "date" | "time" | "dateTime"
-        length="medium"     # "short" | "medium" | "long" | "full" | None
-    ):
-    def getter(item, formatter):
-        value = getattr(item, name)
-        if value:
-            request = common.get_request()
-            date_formatter = date.getLocaleFormatter(request, category, length)
-            return date_formatter.format(value)
-        return default
-    return column.GetterColumn(title, getter)
-
-
-def day_column(name, title, default=""):
-    return localized_datetime_column(name, title, default, "date", "medium")
-
-
-def datetime_column(name, title, default=""):
-    return localized_datetime_column(name, title, default, "dateTime", "medium")
-#def time_column(name, title, default=""):
-#    return localized_datetime_column(name, title, default, "time", "long")
-
-
-def date_from_to_column(name, title, default=""):
-    format_length = "medium"
-    def getter(item, formatter):
-        request = common.get_request()
-        start = getattr(item, "start_date")
-        if start:
-            start = date.getLocaleFormatter(request,
-                "dateTime", format_length).format(start)
-        end = getattr(item, "end_date")
-        if end:
-            end = date.getLocaleFormatter(request,
-                "time", format_length).format(end)
-        return "%s - %s" % (start, end)
-    return column.GetterColumn(title, getter)
-
-
-def name_column(name, title, default=""):
-    def renderer(value, size=50):
-        if len(value) > size:
-            return "%s..." % value[:size]
-        return value
-    return _column(name, title, renderer, default)
-
-
-def combined_name_column(name, title, default=""):
-    """An extended name, combining full_name (localized)
-    and short_name columns.
-
-    For types that have both a full_name and a short_name attribute:
-    Group, ParliamentarySession
-    """
-    def getter(item, formatter):
-        return "%s [%s]" % (_(item.full_name), item.short_name)
-    return column.GetterColumn(title, getter)
-    
-def combined_name_column_filter(query, filter_string, sort_dir_func):
-    fs = filter_string.strip().split(" ")
-    fc = []
-    for fs_ in fs:
-        fc.extend([domain.Group.full_name.like("%%%s%%" % fs_),
-            domain.Group.short_name.like("%%%s%%" % fs_),]
-        )
-    return query.filter(expression.or_(*fc)).order_by(
-        sort_dir_func(domain.Group.full_name), 
-        sort_dir_func(domain.Group.short_name),)      
-    
-
-def dc_property_column(name, title, property_name="title"):
-    def renderer(value):
-        if value:
-            return getattr(IDCDescriptiveProperties(value), property_name, "")
-        return ""
-    return _column(name, title, renderer)
-
-def _get_related_user(item_user, attr):
-    """Get the user instance that is related to this item via <attr>,
-    or if <attr> is None, return the item_user itself.
-    """
-    assertion_message = "Item User [%s] may not be None" % (item_user)
-    if attr:
-        item_user = getattr(item_user, attr, None)
-        assertion_message = "Item [%s] may not have None as [%s]" % (
-            item_user, attr)
-    assert item_user is not None, assertion_message
-    return item_user
-
-def user_name_column(name, title, attr):
-    def getter(item_user, formatter):
-        item_user = _get_related_user(item_user, attr)
-        return item_user.fullname # User.fullname property
-    return column.GetterColumn(title, getter)
-
-def user_name_column_filter(query, filter_string, sort_dir_func):
-    fs = filter_string.strip().split(" ")
-    fc = []
-    for fs_ in fs:
-        fc.extend([domain.User.first_name.like("%%%s%%" % fs_),
-            domain.User.middle_name.like("%%%s%%" % fs_),
-            domain.User.last_name.like("%%%s%%" % fs_),]
-        )
-    return query.join(domain.User).filter(expression.or_(*fc)).order_by(
-        sort_dir_func(domain.User.last_name),
-        sort_dir_func(domain.User.first_name),
-        sort_dir_func(domain.User.middle_name),
-    )
-
-def linked_mp_name_column(name, title, attr):
-    """This may be used to customize the default URL generated as part of the
-    container listing.
-
-    E.g. instead of the URL to the association view between a signatory (MP)
-    and a bill:
-        /business/bills/obj-169/signatories/obj-1/
-    the direct URL for the MP's "home" view is used instead:
-        /members/current/obj-55/
-    """
-    def get_member_of_parliament(user_id):
-        """Get the MemberOfParliament instance for user_id."""
-        return Session().query(domain.MemberOfParliament).filter(
-            domain.MemberOfParliament.user_id == user_id).one()
-
-    def getter(item_user, formatter):
-        related_user = _get_related_user(item_user, attr)
-        request = common.get_request()
-        if IAdminSectionLayer.providedBy(request):
-            parent = item_user
-            while parent and not IAlchemistContainer.providedBy(parent):
-                parent = removeSecurityProxy(parent.__parent__)
-            item_user.__parent__ = parent
-            href = url.absoluteURL(item_user, request)
-        else:
-            mp = get_member_of_parliament(related_user.user_id)
-            href = "/members/current/obj-%s/" % (mp.membership_id)
-        return zope.formlib.widget.renderElement("a",
-            contents=related_user.fullname,  # User.fullname derived property
-            href=href
-        )
-    return column.GetterColumn(title, getter)
-    
-def linked_mp_name_column_filter(query, filter_string, sort_dir_func):
-    fs = filter_string.strip().split(" ")
-    fc = []
-    for fs_ in fs:
-        fc.extend([domain.User.first_name.like("%%%s%%" % fs_),
-            domain.User.middle_name.like("%%%s%%" % fs_),
-            domain.User.last_name.like("%%%s%%" % fs_),]
-        )
-    return query.join(domain.User).filter(expression.or_(*fc)).order_by(
-        sort_dir_func(domain.User.first_name),
-        sort_dir_func(domain.User.middle_name),
-        sort_dir_func(domain.User.last_name)
-    )
-    
-def user_party_column(name, title, default="-"):
-    def getter(item, formatter):
-        session = Session()
-        mp_obj = session.query(domain.MemberOfParliament).filter(
-            domain.MemberOfParliament.user_id==item.user_id
-        ).one()
-        if mp_obj is not None:
-            if mp_obj.party is not None:
-                return vocabulary.party.getTermById(mp_obj.party).title
-        return default
-    return column.GetterColumn(title, getter)
-
-
-def simple_view_column(name, title, default=_(u"view"), owner_msg=None):
-    """Replace primary key with meaningful title - tests for owner.
-    """
-    def getter(item, formatter):
-        if IOwned.providedBy(item):
-            if item.owner == get_db_user():
-                return owner_msg or default
-        return default
-    return column.GetterColumn(title, getter)
-
-
-def member_title_column(name, title, default=""):
-    def getter(item, formatter):
-        return item.title_type.title_name
-    return column.GetterColumn(title, getter)
-
-''' !+UNUSED
-def current_titles_in_group_column(name, title, default=""):
-    def getter(item, formatter):
-        value = getattr(item, name)
-        today = datetime.date.today()
-        if not value:
-            return default
-        title_list = []
-        for title in item.member_titles:
-            if title.start_date <= today:
-                if title.end_date:
-                    if title.end_date >= today:
-                        obj = translation.translate_obj(title.title_name)
-                        title_list.append(obj.user_role_name)
-                else:
-                    obj = translation.translate_obj(title.title_name)
-                    title_list.append(obj.user_role_name)
-        return ", ".join(title_list)
-    return column.GetterColumn(title, getter)
-
-def inActiveDead_Column(name, title, default):
-    aid = { "A": _("active"),
-        "I": _("inactive"),
-        "D": _("deceased")}
-    renderer = lambda x: aid[x]
-    return _column(name, title, renderer, default)
-'''
-
-
-
-def workflow_column(name, title, default=""):
-    def getter(item, formatter):
-        state_title = misc.get_wf_state(item)
-        request = common.get_request()
-        return translate(
-            state_title,
-            domain="bungeni",
-            context=request)
-    return column.GetterColumn(title, getter)
-
-
-def ministry_column(name, title, default=""):
-    def getter(item, formatter):
-        # !+TRANSLATE_ATTR(mr, sep-2010)
-        #m = item.ministry
-        #return translation.translate_attr(m, m.group_id, "short_name")
-        return vocabulary.get_translated_group_label(item.ministry)
-    return column.GetterColumn(title, getter)
-
-def scheduled_item_title_column(name, title):
-    def getter(item, formatter):
-        return IDCDescriptiveProperties(item.item).title
-    return column.GetterColumn(title, getter)
-
-def scheduled_item_mover_column(name, title):
-    def getter(item, formatter):
-        if hasattr(item.item, "owner"):
-            return IDCDescriptiveProperties(item.item.owner).title
-        return ""
-    return column.GetterColumn(title, getter)
-
-def scheduled_item_uri_column(name, title):
-    def getter(item, formatter):
-        return IDCDescriptiveProperties(item.item).uri
-    return column.GetterColumn(title, getter)
-
-
-''' !+TYPES_CUSTOM
-def enumeration_column(name, title,
-        item_reference_attr=None, # parent item attribute, for enum
-        enum_value_attr=None, # enum attribute, for desired value
-    ):
-    """Get getter for the enum-value of an enumerated column.
-    """
-    if enum_value_attr is None:
-        # then assume that value-attr on enum is same as enum-attr on parent
-        enum_value_attr = item_reference_attr
-    assert item_reference_attr is not None
-    assert enum_value_attr is not None
-    def getter(item, formatter):
-        enum_obj = getattr(item, item_reference_attr)
-        enum_obj = translation.translate_obj(enum_obj)
-        return getattr(enum_obj, enum_value_attr)
-    return column.GetterColumn(title, getter)
-'''
-
-def vocabulary_column(name, title, vocabulary):
-    def getter(context, formatter):
-        return _(vocabulary.getTerm(getattr(context, name)).title)
-    return column.GetterColumn(title, getter)
-''' !+TYPES_CUSTOM_TRANSLATION(mr, nov-2011) issues with how translation for 
-the titles of such enum values should be handled:
-
-- such enum string values probably be considered part of UI (po) as opposed 
-to part of the data (translatable object records in the db)?
-
-- there is some "overlap" in, as in some cases, parent object is translatable 
-while in others it is not. Probably should auto-detect such enum columns, and 
-have them **always & only** auto-translated via UI.
-[Possible implementation may make use of view_widget/edit_widget on Field to
-autohandle how the str-values of these columns will be translated.]
-
-- small issue with pre-existing msgid's e.g. "Office", translations for which 
-are not picked up with _("Office") or equivalent... why?
-'''
-
-''' !+TYPES_CUSTOM
-from zope.dublincore.interfaces import IDCDescriptiveProperties
-def dc_getter(name, title, item_attribute, default=_(u"None")):
-    def getter(item, formatter):
-        obj = getattr(item, item_attribute)
-        return IDCDescriptiveProperties(obj).title
-    return column.GetterColumn(title, getter)
-'''
 
 def get_field(fields, name):
     return misc.get_keyed_item(fields, name, key="name")
+def replace_field(fields, field):
+    return misc.replace_keyed_item(fields, field, key="name")
+def insert_field_after(fields, name, field):
+    fields.insert(fields.index(get_field(fields, name)) + 1, field)
     
-
-####
-#  Constraints / Invariants
-#
-
-def ElectionAfterStart(obj):
-    """Start Date must be after Election Date."""
-    if obj.election_date >= obj.start_date:
-        raise interface.Invalid(
-            _("The life of a parliament must start after its election"),
-            "election_date",
-            "start_date"
-        )
-
-def EndAfterStart(obj):
-    """End Date must be after Start Date."""
-    if obj.end_date is None: return
-    if obj.end_date <= obj.start_date:
-        raise interface.Invalid(
-            _("End Date must be after Start Date"),
-            "start_date",
-            "end_date"
-        )
-
-def DissolutionAfterReinstatement(obj):
-    """A committee must be disolved before it can be reinstated."""
-    if (obj.dissolution_date is None) or (obj.reinstatement_date is None):
-        return
-    if obj.dissolution_date > obj.reinstatement_date:
-        raise interface.Invalid(
-            _("A committee must be disolved before it can be reinstated"),
-            "dissolution_date",
-            "reinstatement_date"
-        )
-
-def ActiveAndSubstituted(obj):
-    """A person cannot be active and substituted at the same time."""
-    if obj.active_p and obj.replaced_id:
-        raise interface.Invalid(
-            _("A person cannot be active and substituted at the same time"),
-            "active_p",
-            "replaced_id"
-        )
-
-def SubstitudedEndDate(obj):
-    """If a person is substituted he must have an end date."""
-    if not obj.end_date and obj.replaced_id:
-        raise interface.Invalid(
-            _("If a person is substituted End Date must be set"),
-            "replaced_id",
-            "end_date"
-        )
-
-def InactiveNoEndDate(obj):
-    """If you set a person inactive you must provide an end date."""
-    if not obj.active_p:
-        if not (obj.end_date):
-            raise interface.Invalid(
-                _("If a person is inactive End Date must be set"),
-                "end_date",
-                "active_p"
-            )
-
-def MpStartBeforeElection(obj):
-    """For members of parliament start date must be after election."""
-    if obj.election_nomination_date > obj.start_date:
-        raise interface.Invalid(_("A parliament member has to be "
-                "elected/nominated before she/he can be sworn in"),
-            "election_nomination_date",
-            "start_date"
-        )
-
-def DeathBeforeLife(User):
-    """Check if date of death is after date of birth."""
-    if User.date_of_death is None: return
-    if User.date_of_death < User.date_of_birth:
-        raise interface.Invalid(_("Check dates: death must follow birth"),
-            "date_of_death",
-            "date_of_birth"
-        )
 
 ####
 # Fields
@@ -457,7 +47,7 @@ def DeathBeforeLife(User):
 #   attribute of the domain's class), the domain.zcml setting for that same
 #   class attribute will anyway take precedence.
 #
-# modes:
+# modes: !+
 # - default: "view edit add"
 # - all individual bool params {view, edit, add, listing, search} for each
 #   supported mode are now obsolete
@@ -487,33 +77,34 @@ def DeathBeforeLife(User):
 
 # !+EDIT_AS_VIEW fields in "edit" mode on which user has no Edit permission? 
 
-
-def LanguageField(name="language", modes="view edit add listing", 
-        localizable=[ 
+def LanguageField(name="language", 
+        localizable=[
+            show("add"), # db-not-null-ui-add
             show("view edit"), 
             hide("listing"), 
         ]
     ):
-    # if a different modes param is specified, the localizable param should 
-    # also be specified accordingly
-    return Field(name=name,
-        label=_("Language"),
-        modes=modes,
+    f = F(name=name, 
+        label="Language", 
+        description=None, 
+        required=True,
         localizable=localizable,
-        property=schema.Choice(title=_("Language"),
-            vocabulary="language_vocabulary"
-        ),
-        add_widget=widgets.LanguageLookupWidget,
+        value_type="language",
+        render_type="single_select",
+        vocabulary="language_vocabulary",
     )
-
+    return f
 
 def AdmissibleDateField(name="admissible_date"):
-    # [sys]
-    return Field(name=name,
-        modes="view listing",
+    return F(name=name, # [derived]
+        label="Admissible Date", 
+        description=None, 
+        required=True,
         localizable=[ show("view listing"), ],
-        property=schema.Date(title=_("Admissible Date"), required=False),
+        value_type="date",
+        render_type="date",
     )
+
 
 ####
 # Descriptors
@@ -530,6 +121,7 @@ def AdmissibleDateField(name="admissible_date"):
 
 
 class UserDescriptor(ModelDescriptor):
+    order = 4 # top
     localizable = True
     display_name = _("User")
     container_name = _("Users")
@@ -537,296 +129,317 @@ class UserDescriptor(ModelDescriptor):
     sort_dir = "asc"
     
     fields = [
-        Field(name="user_id", # [sys] for linking item in listing
+        F(name="user_id", # [sys] for linking item in listing
             label="Name",
-            modes="view listing",
+            description=None, 
+            required=True,
             localizable=[
+                # "add edit" -> non-ui
                 hide("view"),
                 show("listing"),
             ],
-            listing_column=user_name_column("user_id", _("Name"), None),
+            value_type="user",
+            render_type="no_input",
         ),
-        Field(name="titles", # [user-req] !+RENAME salutation
-            modes="view edit add listing",
-            localizable=[ 
-                show("view edit"), 
-                show("listing"), 
+        F(name="salutation", 
+            label="Salutation", 
+            description="e.g. Mr. Mrs, Prof. etc.",
+            localizable=[
+                show("view edit add listing"),
             ],
-            property=schema.TextLine(title=_("Salutation"),
-                description=_("e.g. Mr. Mrs, Prof. etc."),
-            ),
         ),
-        Field(name="first_name", # [user-req]
-            modes="view edit add listing",
-            localizable=[ 
-                show("view edit"), 
+        F(name="title", 
+            label="Title",
+            description="e.g. Chief Advisor, etc.",
+            localizable=[
+                show("view edit add listing"),
+            ],
+        ),
+        F(name="first_name",
+            label="First Name",
+            localizable=[
+                show("add"), # db-not-null-ui-add
+                show("view edit listing"),
+            ],
+        ),
+        F(name="middle_name",
+            label="Middle Name",
+            localizable=[
+                show("view edit add"),
                 hide("listing"),
             ],
-            property=schema.TextLine(title=_("First Name"))
         ),
-        Field(name="middle_name", # [user]
-            modes="view edit add listing",
+        F(name="last_name",
+            label="Last Name",
             localizable=[
-                show("view edit add"), 
-                hide("listing"),
+                show("add"), # db-not-null-ui-add
+                show("view edit listing"),
             ],
-            property=schema.TextLine(title=_("Middle Name"), required=False)
         ),
-        Field(name="last_name", # [user-req]
-            modes="view edit add listing",
+        F(name="email",
+            label="Email",
+            description="Email address",
+            required=True,
             localizable=[
-                show("view edit"), 
-                hide("listing"),
+                show("add"), # db-not-null-ui-add
+                show("view edit listing"),
             ],
-            property=schema.TextLine(title=_("Last Name"))
+            value_type="email",
         ),
-        Field(name="email", # [user-req]
-            modes="view edit add listing",
+        F(name="login",
+            label="Login",
+            description="Must contain only letters, numbers, a period (.) "
+                "and underscore (_). Should start with a letter and be "
+                "between 3 and 20 characters long",
             localizable=[
-                show("view edit"), 
-                show("listing"),
-            ],
-            property=schema.TextLine(title=_("Email"),
-                description=_("Email address"),
-                constraint=constraints.check_email,
-            ),
-        ),
-        Field(name="login", # [user-req]
-            modes="view add listing",
-            localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view"),
                 hide("listing"),
             ],
-            property=schema.TextLine(title=_("Login"),
-                description=_("Must contain only letters, numbers, a "
-                    "period(.) and underscore (_). Should start with a letter "
-                    "and be between 3 and 20 characters long"),
-                min_length=3,
-                max_length=20,
-                constraint=constraints.check_login,
-            ),
+            value_type="login",
         ),
-        Field(name="_password", # [user-req]
-            modes="add",
-            property=schema.TextLine(title=_("Initial password")),
-        ),
-        Field(name="national_id", # [user]
-            modes="view edit add listing",
+        F(name="_password",
+            label="Initial password",
             localizable=[
-                show("view edit add"), 
+                show("add"), # db-not-null-ui-add
+            ],
+            value_type="password",
+        ),
+        F(name="status",
+            label="Status",
+            required=True,
+            localizable=[
+                show("view listing"),
+            ],
+            value_type="status",
+            render_type="single_select",
+            vocabulary="workflow_states",
+        ),
+        F(name="national_id",
+            label="National Id",
+            localizable=[
+                show("view edit add"),
                 hide("listing"),
             ],
-            property=schema.TextLine(title=_("National Id"), required=False)
         ),
-        Field(name="gender", # [user-req]
-            modes="view edit add listing",
+        F(name="gender",
+            label="Gender",
             localizable=[
-                show("view edit"), 
+                show("view edit add"),
                 show("listing"),
             ],
-            property=schema.Choice(title=_("Gender"),
-                source=vocabulary.gender
-            ),
-            edit_widget=widgets.CustomRadioWidget,
-            add_widget=widgets.CustomRadioWidget
+            value_type="text",
+            render_type="radio",
+            vocabulary="gender",
         ),
-        Field(name="date_of_birth", # [user-req]
-            modes="view edit add listing",
+        F(name="date_of_birth",
+            label="Date of Birth",
             localizable=[
-                show("view edit"), 
+                show("view edit add"),
                 show("listing"),
             ],
-            property=schema.Date(title=_("Date of Birth")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
+            value_type="date",
+            render_type="date",
         ),
-        Field(name="birth_country", # [user-req]
-            modes="view edit add listing",
+        F(name="birth_country",
+            label="Country of Birth",
             localizable=[
-                show("view edit"), 
+                show("view edit add"),
                 hide("listing"),
             ],
-            property=schema.Choice(title=_("Country of Birth"),
-                source=vocabulary.country_factory,
-            )
+            value_type="text",
+            render_type="single_select",
+            vocabulary="country",
         ),
-        Field(name="birth_nationality", # [user-req]
-            modes="view edit add listing",
+        F(name="birth_nationality",
+            label="Nationality at Birth",
             localizable=[
-                show("view edit"), 
+                show("view edit add"),
                 hide("listing"),
             ],
-            property=schema.Choice(title=_("Nationality at Birth"),
-                source=vocabulary.country_factory,
-            ),
+            value_type="text",
+            render_type="single_select",
+            vocabulary="country",
         ),
-        Field(name="current_nationality", # [user-req]
-            modes="view edit add listing",
+        F(name="current_nationality",
+            label="Current Nationality",
             localizable=[
-                show("view edit"), 
+                show("view edit add"),
                 hide("listing"),
             ],
-            property=schema.Choice(title=_("Current Nationality"),
-                source=vocabulary.country_factory,
-            ),
+            value_type="text",
+            render_type="single_select",
+            vocabulary="country",
         ),
-        Field(name="date_of_death", # [user]
-            modes="view edit add listing",
+        F(name="marital_status",
+            label="Marital Status",
             localizable=[
-                show("view"),
-                hide("add listing"),
+                show("view edit add"),
+                hide("listing"),
             ],
-            property=schema.Date(title=_("Date of Death"), required=False),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="marital_status",
+        ),
+        F(name="date_of_death",
+            label="Date of Death",
+            localizable=[
+                show("view edit"),
+                hide("listing"),
+            ],
+            value_type="date",
+            render_type="date",
+        ),
+        F(name="image",
+            label="Image",
+            description="Picture of the person",
+            # !+LISTING_IMG(mr, apr-2011) TypeError, not JSON serializable
+            localizable=[
+                show("view edit add"),
+            ],
+            value_type="image",
+            render_type="image",
         ),
         LanguageField("language"), # [user-req]
-        Field(name="description", # [rtf]
-            modes="view edit add",
+        F(name="description",
+            label="Biographical notes",
             localizable=[
                 show("view edit add"),
             ],
-            property=schema.Text(title=_("Biographical notes"),
-                required=False
-            ),
-            view_widget=widgets.HTMLDisplay,
-            edit_widget=widgets.RichTextEditor,
-            add_widget=widgets.RichTextEditor
+            value_type="text",
+            render_type="rich_text",
         ),
-        Field(name="image", # [img]
-            # !+LISTING_IMG(mr, apr-2011) TypeError, not JSON serializable
-            modes="view edit add",
+        F(name="remarks",
+            label="Remarks",
             localizable=[
                 show("view edit add"),
             ],
-            property=schema.Bytes(title=_("Image"),
-                description=_("Picture of the person"),
-                required=False
-            ),
-            view_widget=widgets.ImageDisplayWidget,
-            edit_widget=widgets.ImageInputWidget,
+            value_type="text",
+            render_type="rich_text",
         ),
     ]
-    schema_invariants = [DeathBeforeLife]
+    schema_invariants = [constraints.DeathBeforeLife]
     custom_validators = [validations.email_validator]
 
 
 class UserDelegationDescriptor(ModelDescriptor):
     """Delegate rights to act on behalf of that user."""
+    order = 3 # top
     localizable = True
     display_name = _("Delegate to user")
     container_name = _("Delegations")
     
     fields = [
-        Field(name="delegation_id", # [user-req]
-            modes="view edit add listing",
-            property=schema.Choice(title=_("User"),
-                # !+vocabulary.UserSource ?
-                source=vocabulary.DatabaseSource(domain.User,
-                    token_field="user_id",
-                    title_field="fullname",
-                    value_field="user_id"
-                )
-            ),
-            listing_column=user_name_column("delegation_id", _("User"),
-                "delegation"),
-            listing_column_filter=user_name_column_filter,
+        F(name="delegation_id",
+            label="User",
+            required=True,
+            localizable=[
+                show("add"), # db-not-null-ui-add
+                show("view edit listing"),
+            ],
+            value_type="user",
+            render_type="single_select",
+            vocabulary="user",
         ),
     ]
 
+class GroupMembershipRoleDescriptor(ModelDescriptor):
+    """Role associated with a group membership
+    """
+    localizable = False
+    display_name = _("sub roles")
+    container_name = _("sub roles")
+    fields = [
+        F(name="role_id",
+          label="sub role",
+          description="the sub role this member will get",
+          required=True,
+          value_type="text",
+          render_type="single_select",
+          vocabulary="group_sub_role"
+          ),
+        F(name="is_global",
+          label="is global",
+          description="whether or not this role is granted globally",
+          required=True,
+          value_type="bool",
+          render_type="bool",
+          )
+        ]
 
 class GroupMembershipDescriptor(ModelDescriptor):
     localizable = False
     sort_on = ["user_id"]
     sort_dir = "asc"
-    SubstitutionSource = vocabulary.SubstitutionSource(
-        token_field="user_id",
-        title_field="fullname",
-        value_field="user_id"
-    )
-
+    
     fields = [
-        Field(name="start_date", # [user-req]
-            modes="view edit add listing",
+        F(name="start_date",
+            label="Start Date",
+            required=True,
+            localizable=[
+                show("add"), # db-not-null-ui-add
+                show("view edit listing"),
+            ],
+            value_type="date",
+            render_type="date",
+        ),
+        F(name="end_date",
+            label="End Date",
+            localizable=[
+                show("view edit add listing"),
+            ],
+            value_type="date",
+            render_type="date",
+        ),
+        F(name="active_p",
+            label="Active",
+            localizable=[
+                show("view edit add listing"),
+            ],
+            value_type="bool",
+            render_type="bool",
+        ),
+        LanguageField("language"), # [user-req]
+        F(name="substitution_type", #!+UNUSED? string100
+            label="Type of Substitution",
             localizable=[
                 show("view edit listing"),
             ],
-            property=schema.Date(title=_("Start Date")),
-            listing_column=day_column("start_date", _("Start Date")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
         ),
-        Field(name="end_date", # [user]
-            modes="view edit add listing",
+        F(name="replaced_id", #!+UNUSED? fk to a membership
+            label="Substituted by",
             localizable=[
-                show("view add edit listing"),
+                show("view edit listing"),
             ],
-            property=schema.Date(title=_("End Date"), required=False),
-            listing_column=day_column("end_date", _("End Date")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
+            value_type="text",
+            render_type="single_select",
+            vocabulary="substitution",
         ),
-        Field(name="active_p", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("edit"),
-                hide("view listing"),
-            ],
-            property=schema.Bool(title=_("Active"), default=True),
-        ),
-        LanguageField("language"), # [user-req]
-        Field(name="substitution_type", # [user]
-            modes="view edit listing",
-            localizable=[
-                hide("view edit listing"),
-            ],
-            property=schema.TextLine(
-                title=_("Type of Substitution"),
-                required=False
-            ),
-        ),
-        Field(name="replaced_id", # [user]
-            modes="view edit listing",
-            localizable=[
-                hide("view edit listing"),
-            ],
-            property=schema.Choice(
-                title=_("Substituted by"),
-                source=SubstitutionSource,
-                required=False
-            ),
-        ),
-        Field(name="status", label=_("Status"), # [sys]
-            modes="view listing",
+        F(name="status",
+            label="Status",
+            required=True,
             localizable=[
                 show("view listing"),
             ],
-            property=schema.Choice(title=_("Status"),
-                vocabulary=vocabulary.workflow_vocabulary_factory,
-            ),
-            listing_column=workflow_column("status", "Workflow status"),
+            value_type="status",
+            render_type="single_select",
+            vocabulary="workflow_states",
         ),
-        Field(name="status_date", label=_("Status date"), # [sys]
-            modes="view listing",
+        F(name="status_date",
+            label="Status Date",
+            required=True,
             localizable=[
                 show("view listing"),
             ],
-            property=schema.Date(title=_("Status Date"), required=True),
-            listing_column=day_column("status_date", _("Status date")),
+            value_type="date",
+            render_type="date",
         ),
-        #Field(name="membership_id",
-        #    label=_("Roles/Titles"),
-        #    modes="",
-        #    listing_column=current_titles_in_group_column("membership_id",
-        #        _("Roles/Titles")
-        #    )
-        #),
     ]
     schema_invariants = [
-        EndAfterStart,
-        ActiveAndSubstituted,
-        SubstitudedEndDate,
-        InactiveNoEndDate
+        constraints.EndAfterStart,
+        constraints.ActiveAndSubstituted,
+        constraints.SubstitudedEndDate,
+        constraints.InactiveNoEndDate
     ]
     custom_validators = [
         validations.validate_date_range_within_parent,
@@ -834,122 +447,106 @@ class GroupMembershipDescriptor(ModelDescriptor):
     ]
 
 
-''' !+TYPES_CUSTOM
-class MemberElectionTypeDescriptor(ModelDescriptor):
-    localizable = False
-    display_name = _("Member election type")
-    container_name = _("Member election types")
+# !+bungeni_custom, as part of descriptor config?
+_ORDER_BY_CONTAINER_NAMES = [
+    0, 1, 2, 3, 4, 5, 6, 7, 8 , 9, # occupy first 10, start this batch from 10
+    "agendaitems",
+    "bills",
+    "motions",
+    "questions",
+    "tableddocuments",
+    "preports",
+    "sessions",
+    "sittings",
+    "parliamentmembers",
+    "politicalgroups",
+    "committees",
+    "governments",
+    "title_types",
+]
 
-    fields = [
-        Field(name="member_election_type_name",
-            modes="view edit add listing",
-            property=schema.TextLine(title=_("Election Type"))
-        ),
-        LanguageField("language"), # [user-req]
-    ]
-'''
-
-class MpDescriptor(GroupMembershipDescriptor):
+class MemberOfParliamentDescriptor(GroupMembershipDescriptor):
+    order = _ORDER_BY_CONTAINER_NAMES.index("parliamentmembers")
     localizable = True
     display_name = _("Member of parliament")
     container_name = _("Members of parliament")
     sort_on = ["user_id"]
     fields = [
-        Field(name="user_id", # [user-req]
-            modes="view edit add listing",
+        F(name="user_id",
+            label="Name",
+            required=True,
             localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view listing"),
-                hide("edit"),
             ],
-            property=schema.Choice(title=_("Name"),
-                source=vocabulary.MembershipUserSource(
-                    token_field="user_id",
-                    title_field="fullname",
-                    value_field="user_id"
-                )
-            ),
-            listing_column=user_name_column("user_id", _("Name"), "user"),
-            listing_column_filter=user_name_column_filter,
-            edit_widget=widgets.AutoCompleteWidget(remote_data=True,
-                yui_maxResultsDisplayed=5),
-            add_widget=widgets.AutoCompleteWidget(remote_data=True)
+            value_type="user",
+            render_type="single_select",
+            vocabulary="member",
         ),
-        Field(name="member_election_type", # [user-req]
-            modes="view edit add listing",
+        F(name="member_election_type",
+            label="Election Type",
+            required=True,
             localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view edit listing"),
             ],
-            property=schema.Choice(title=_("Election Type"),
-                source=vocabulary.member_election_type
-            ),
-            listing_column=vocabulary_column("member_election_type",
-                "Election Type",
-                vocabulary.member_election_type
-            ),
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="member_election_type",
         ),
-        Field(name="election_nomination_date", # [user-req]
-            modes="view edit add listing",
+        F(name="election_nomination_date",
+            label="Election/Nomination Date",
+            required=False,
             localizable=[
-                show("view edit"),
-                hide("listing")
+                show("add"), # db-not-null-ui-add
+                show("view edit listing"),
             ],
-            property=schema.Date(title=_("Election/Nomination Date")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
+            value_type="date",
+            render_type="date",
         ),
     ]
     fields.extend(deepcopy(GroupMembershipDescriptor.fields))
     fields.extend([
-        Field(name="representation", # [user]
-            modes="view edit add listing",
-            localizable=[ 
+        F(name="representation",
+            label="Representation",
+            description="Select Representation",
+            localizable=[
+                show("add"), # db-not-null-ui-add
+                show("view edit"),
+                hide("listing"),
+            ],
+            value_type="text",
+            render_type="tree_text",
+            vocabulary="representation",
+        ),
+        F(name="party",
+            label="Political Party",
+            localizable=[
+                show("add"), # db-not-null-ui-add
+                show("view edit listing"),
+            ],
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="party",
+        ),
+        F(name="leave_reason",
+            label="Leave Reason",
+            localizable=[
                 show("view edit add"),
                 hide("listing"),
             ],
-            property=VocabularyTextField(title=_("Representation"),
-                description=_("Select Representation"),
-                vocabulary=vocabulary.representation,
-                required=False,
-            ),
-            edit_widget=widgets.TreeVocabularyWidget,
-            add_widget=widgets.TreeVocabularyWidget,
-            view_widget=widgets.TermsDisplayWidget,
         ),
-        Field(name="party", # [user-req]
-            modes="view edit add listing",
-            localizable=[ 
-                show("view edit listing"), 
-            ],
-            property=schema.Choice(title=_("Political Party"),
-                source=vocabulary.party,
-            ),
-            listing_column=vocabulary_column("party",
-                "Political Party",
-                vocabulary.party
-            ),
-        ),
-        Field(name="leave_reason", # [user]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit add"),
-                hide("listing")
-            ],
-            property=schema.Text(title=_("Leave Reason"), required=False)
-        ),
-        Field(name="notes", # [rtf]
-            modes="view edit add",
+        F(name="notes",
+            label="Notes",
             localizable=[
                 show("view edit add"),
             ],
-            property=schema.Text(title=_("Notes"), required=False),
-            view_widget=widgets.HTMLDisplay,
-            edit_widget=widgets.RichTextEditor,
-            add_widget=widgets.RichTextEditor
+            value_type="text",
+            render_type="rich_text",
         ),
     ])
-
     schema_invariants = GroupMembershipDescriptor.schema_invariants + [
-       MpStartBeforeElection]
+       constraints.MpStartBeforeElection]
 
 
 class PoliticalGroupMemberDescriptor(GroupMembershipDescriptor):
@@ -957,267 +554,218 @@ class PoliticalGroupMemberDescriptor(GroupMembershipDescriptor):
     localizable = True
     display_name = _("member")
     container_name = _("members")
-
+    
     fields = [
-        Field(name="user_id", # [user-req]
-            modes="view add listing",
+        F(name="user_id",
+            label="Name",
+            required=True,
             localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view listing"),
             ],
-            property=schema.Choice(title=_("Name"),
-                source=vocabulary.MemberOfParliamentSource("user_id",)
-            ),
-            listing_column=linked_mp_name_column("user_id", _("Name"), "user"),
-            listing_column_filter=linked_mp_name_column_filter,
-            view_widget=widgets.MemberURLDisplayWidget,
-            add_widget=widgets.AutoCompleteWidget(remote_data=True),
-            edit_widget=widgets.AutoCompleteWidget(remote_data=True)
+            value_type="member", # !+user: constrained by "parent group" OR vocabulary
+            render_type="single_select",
+            vocabulary="parliament_member",
         ),
     ]
     fields.extend(deepcopy(GroupMembershipDescriptor.fields))
     fields.extend([
-        Field(name="notes", # [rtf]
-            modes="view edit add",
+        F(name="notes",
+            label="Notes",
             localizable=[
                 show("view edit add"),
             ],
-            property=schema.Text(title=_("Notes"), required=False),
-            view_widget=widgets.HTMLDisplay,
-            edit_widget=widgets.RichTextEditor,
-            add_widget=widgets.RichTextEditor,
+            value_type="text",
+            render_type="rich_text",
         ),
     ])
 
 
 class GroupDescriptor(ModelDescriptor):
-    localizable = True
+    localizable = True # !+ARCHETYPE_LOCALIZATION
     display_name = _("Group")
     container_name = _("Groups")
     sort_on = ["group_id"]
     sort_dir = "asc"
     _combined_name_title = "%s [%s]" % (_("Full Name"), _("Short Name"))
+    default_field_order = [
+        "full_name",
+        "short_name",
+        "acronym",
+        "combined_name",
+        "language",
+        "start_date",
+        "end_date",
+        "status",
+        "description",
+    ]
     fields = [
-        Field(name="full_name", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit"),
-                hide("listing"),
-            ],
-            property=schema.TextLine(title=_("Full Name")),
-            #listing_column=name_column("full_name", _("Full Name"))
-        ),
-        Field(name="short_name", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit"),
-                hide("listing"),
-            ],
-            property=schema.TextLine(title=_("Short Name")),
-            #listing_column=name_column("short_name", _("Name"))
-        ),
-        Field(name="acronym", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit"),
-                hide("listing"),
-            ],
-            property=schema.TextLine(title=_("Acronym"), required=False),
-            #listing_column=name_column("short_name", _("Name"))
-        ),
-        Field(name="combined_name", # [derived]
-            modes="listing",
-            localizable=[
-                show("listing"),
-            ],
-            property=schema.TextLine(title=_combined_name_title),
-            listing_column=combined_name_column("full_name",
-                _combined_name_title),
-            listing_column_filter=combined_name_column_filter,
-        ),
-        LanguageField("language"), # [user-req]
-        Field(name="description", # [rtf]
-            modes="view edit add",
-            localizable=[
-                show("view edit add"),
-            ],
-            property=schema.Text(title=_("Description") , required=False),
-            view_widget=widgets.HTMLDisplay,
-            edit_widget=widgets.RichTextEditor,
-            add_widget=widgets.RichTextEditor,
-        ),
-        Field(name="start_date", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit listing"),
-            ],
-            property=schema.Date(title=_("Start Date")),
-            listing_column=day_column("start_date", _("Start Date")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
-        ),
-        Field(name="end_date",
-            modes="view edit add listing", # [user]
+        F(name="full_name",
+            label="Full Name",
             localizable=[
                 show("view edit add listing"),
             ],
-            property=schema.Date(title=_("End Date"), required=False),
-            listing_column=day_column("end_date", _("End Date")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
         ),
-        Field(name="status", label=_("Status"), # [sys]
-            modes="view listing",
+        F(name="short_name",
+            label="Short Name",
+            required=True,
+            localizable=[
+                show("add"), # db-not-null-ui-add
+                show("view edit listing"),
+            ],
+        ),
+        F(name="acronym",
+            label="Acronym",
+            localizable=[
+                show("view edit add listing"),
+            ],
+        ),
+        F(name="combined_name", # [derived]
+            label="Full Name [Short Name]",
+            localizable=[
+                show("listing"),
+            ],
+            value_type="combined_name",
+        ),
+        LanguageField("language"), # [user-req]
+        F(name="description",
+            label="Description",
+            localizable=[
+                show("view edit add"),
+            ],
+            value_type="text",
+            render_type="rich_text",
+        ),
+        F(name="start_date",
+            label="Start Date",
+            required=True,
+            localizable=[
+                show("view edit add listing"),
+            ],
+            value_type="date",
+            render_type="date",
+        ),
+        F(name="end_date",
+            label="End Date",
+            localizable=[
+                show("view edit add listing"),
+            ],
+            value_type="date",
+            render_type="date",
+        ),
+        F(name="status",
+            label="Status",
+            required=True,
             localizable=[
                 show("view listing"),
             ],
-            property=schema.Choice(title=_("Status"),
-                vocabulary=vocabulary.workflow_vocabulary_factory,
-            ),
-            listing_column=workflow_column("status", "Workflow status"),
+            value_type="status",
+            render_type="single_select",
+            vocabulary="workflow_states",
         ),
     ]
-    schema_invariants = [EndAfterStart]
+    schema_invariants = [constraints.EndAfterStart]
     custom_validators = [validations.validate_date_range_within_parent]
 
 
 class ParliamentDescriptor(GroupDescriptor):
+    order = 1 # top
     localizable = True
     display_name = _("Parliament")
     container_name = _("Parliaments")
     sort_on = ["start_date"]
+    default_field_order = [
+        "full_name",
+        "short_name",
+        "identifier", #"acronym",
+        #"combined_name",
+        "language",
+        "election_date",
+        "start_date",
+        "end_date",
+        #"status",
+        "description",
+    ]
     fields = [
-        Field(name="full_name", # [user-req]
-            description=_("Parliament name"),
-            modes="view edit add listing",
-            localizable=[
-                show("view edit listing"),
-            ],
-            property=schema.TextLine(title=_("Name")),
-            listing_column=name_column("full_name", "Name"),
-        ),
-        Field(name="short_name", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit listing"),
-            ],
-            property=schema.TextLine(title=_("Short Name"),
-                description=_("Shorter name for the parliament"),
-            ),
-        ),
-        Field(name="identifier", # [user-req]
-            modes="view edit add",
-            localizable=[
-                show("view edit"),
-            ],
-            property=schema.TextLine(title=_("Parliament Identifier"),
-                description=_("Unique identifier or number for this Parliament"),
-                required=False
-            ),
-        ),
-        LanguageField("language"), # [user-req]
-        Field(name="description", # [rtf]
-            modes="view edit add",
-            localizable=[
-                show("view edit add"),
-            ],
-            property=schema.Text(title=_("Description"), required=False),
-            view_widget=widgets.HTMLDisplay,
-            edit_widget=widgets.RichTextEditor,
-            add_widget=widgets.RichTextEditor,
-        ),
-        Field(name="election_date",
-            property=schema.Date(title=_("Election Date"),
-                description=_("Date of the election"),
-            ),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
-        ),
-        Field(name="start_date", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit listing"),
-            ],
-            property=schema.Date(title=_("In power from"),
-                description=_("Date of the swearing in"),
-            ),
-            listing_column=day_column("start_date", _("In power from")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
-        ),
-        Field(name="end_date", # [user]
-            modes="view edit add listing",
+        F(name="full_name",
+            label="Parliament Name",
             localizable=[
                 show("view edit add listing"),
             ],
-            property=schema.Date(title=_("In power till"),
-                description=_("Date of the dissolution"),
-                required=False
-            ),
-            listing_column=day_column("end_date", _("In power till")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
+        ),
+        F(name="short_name",
+            label="Short Name",
+            description="Shorter name for the parliament",
+            required=True,
+            localizable=[
+                show("add"), # db-not-null-ui-add
+                show("view edit listing"),
+            ],
+        ),
+        F(name="identifier",
+            label="Parliament Identifier",
+            description="Unique identifier or number for this Parliament",
+            localizable=[
+                show("view edit add listing"),
+            ],
+        ),
+        LanguageField("language"), # [user-req]
+        F(name="description",
+            label="Description",
+            localizable=[
+                show("view edit add"),
+            ],
+            value_type="text",
+            render_type="rich_text",
+        ),
+        F(name="election_date",
+            label="Election Date",
+            description="Date of the election",
+            required=True,
+            localizable=[
+                show("add"), # db-not-null-ui-add
+                show("view edit listing"),
+            ],
+            value_type="date",
+            render_type="date",
+        ),
+        F(name="start_date",
+            label="In power from",
+            description="Date of the swearing in",
+            required=True,
+            localizable=[
+                show("add"), # db-not-null-ui-add
+                show("view edit listing"),
+            ],
+            value_type="date",
+            render_type="date",
+        ),
+        F(name="end_date",
+            label="In power till",
+            description="Date of the dissolution",
+            localizable=[
+                show("view edit add listing"),
+            ],
+            value_type="date",
+            render_type="date",
         ),
     ]
     schema_invariants = [
-        EndAfterStart,
-        ElectionAfterStart
+        constraints.EndAfterStart,
+        constraints.ElectionAfterStart
     ]
     custom_validators = [validations.validate_parliament_dates]
 
 
-''' !+TYPES_CUSTOM
-class CommitteeTypeStatusDescriptor(ModelDescriptor):
-    localizable = False
-    display_name = _("Committee type status")
-    container_name = _("Committee type statuses")
-
-    fields = [
-        Field(name="committee_type_status_name",
-            modes="view edit add listing",
-            property=schema.TextLine(title=_("Committee type status"))
-        ),
-        LanguageField("language"), # [user-req]
-    ]
-
-class CommitteeTypeDescriptor(ModelDescriptor):
-    localizable = False
-    display_name = _("Committee type")
-    container_name = _("Committee types")
-    
-    fields = [
-        Field(name="committee_type", # [user-req]
-            modes="view edit add listing",
-            property=schema.TextLine(title=_("Committee Type"))
-        ),
-        Field(name="description", # [user-req]
-            modes="view edit add listing",
-            property=schema.Text(title=_("description"))
-        ),
-        Field(name="life_span", # [user-req]
-            modes="view edit add listing",
-            property = schema.TextLine(title=_("life span"))
-        ),
-        Field(name="committee_type_status_id", # [user-req]
-            modes="view edit add listing",
-            property=schema.Choice(title=_("Status"),
-                source=vocabulary.CommitteeTypeStatus
-            ),
-            listing_column = dc_getter("committee_type_status_id",
-                _("Status"), "committee_type_status"
-            )
-        ),
-        LanguageField("language"), # [user-req]
-    ]
-'''
-
 class CommitteeDescriptor(GroupDescriptor):
+    order = _ORDER_BY_CONTAINER_NAMES.index("committees")
     localizable = True
     display_name = _("Profile")
     container_name = _("Committees")
     
     fields = deepcopy(GroupDescriptor.fields)
     get_field(fields, "start_date").localizable = [
-        show("view edit"),
+        show("view edit add"),
         hide("listing")
     ]
     get_field(fields, "end_date").localizable = [
@@ -1226,112 +774,99 @@ class CommitteeDescriptor(GroupDescriptor):
     ]
     
     fields.extend([
-        Field(name="identifier", # [user-req]
-            modes="view edit add",
+        F(name="identifier",
+            label="Committee Identifier",
+            description="Unique identifier or number for this Committee",
             localizable=[
-                show("view edit"),
+                show("view edit add"),
             ],
-            property=schema.TextLine(title=_("Committee Identifier"),
-                description=_("Unique identifier or number for this Committee"),
-                required=False
-            ),
         ),
-        Field(name="sub_type", # [user-req]
-            modes="view edit add listing",
-            localizable=[ 
-                show("view edit listing"), 
+        F(name="sub_type", # group field, only used in committee
+            label="Committee Type",
+            localizable=[
+                show("view edit add listing"),
             ],
-            property=schema.Choice(title=_("Committee Type"),
-                source=vocabulary.committee_type,
-            ),
-            listing_column=vocabulary_column("sub_type",
-                "Committee Type",
-                vocabulary.committee_type
-            ),
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="committee_type",
         ),
-        Field(name="group_continuity", # [user-req]
-            modes="view edit add listing",
-            localizable=[ 
-                show("view edit listing"), 
+        F(name="group_continuity",
+            label="Committee Status Type",
+            required=True,
+            localizable=[
+                show("add"), # db-not-null-ui-add
+                show("view edit listing"),
             ],
-            property=schema.Choice(title=_("Committee Status Type"),
-                source=vocabulary.committee_continuity,
-            ),
-            listing_column=vocabulary_column("group_continuity",
-                "Committee Status Type",
-                vocabulary.committee_continuity
-            ),
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="committee_continuity",
         ),
-        Field(name="num_members", # [user]
-            modes="view edit add listing",
+        F(name="num_members",
+            label="Number of members",
             localizable=[
                 show("view edit add"),
                 hide("listing")
             ],
-            property=schema.Int(title=_("Number of members"), required=False),
+            value_type="number",
+            render_type="number",
         ),
-        Field(name="min_num_members", # [user]
-            modes="view edit add listing",
+        F(name="min_num_members",
+            label="Minimum Number of members",
             localizable=[
                 show("view edit add"),
                 hide("listing")
             ],
-            property=schema.Int(title=_("Minimum Number of Members"),
-                required=False
-            )
+            value_type="number",
+            render_type="number",
         ),
-        Field(name="quorum", # [user]
-            modes="view edit add listing",
+        F(name="quorum",
+            label="Quorum",
             localizable=[
                 show("view edit add"),
                 hide("listing")
             ],
-            property=schema.Int(title=_("Quorum"), required=False)
+            value_type="number",
+            render_type="number",
         ),
-        Field(name="num_clerks", # [user]
-            modes="view edit add listing",
+        F(name="num_clerks",
+            label="Number of clerks",
             localizable=[
                 show("view edit add"),
                 hide("listing")
             ],
-            property=schema.Int(title=_("Number of clerks"), required=False)
+            value_type="number",
+            render_type="number",
         ),
-        Field(name="num_researchers", # [user]
-            modes="view edit add listing",
+        F(name="num_researchers",
+            label="Number of researchers",
             localizable=[
                 show("view edit add"),
                 hide("listing")
             ],
-            property=schema.Int(title=_("Number of researchers"),
-                required=False
-            )
+            value_type="number",
+            render_type="number",
         ),
-        Field(name="proportional_representation", # [user]
-            modes="view edit add listing",
+        F(name="proportional_representation",
+            label="Proportional representation",
             localizable=[
                 show("view edit add"),
                 hide("listing")
             ],
-            property=schema.Bool(title=_("Proportional representation"),
-                default=True,
-                required=False
-            )
+            value_type="bool",
+            render_type="bool",
         ),
-        Field(name="reinstatement_date", # [user]
-            modes="view edit add listing",
+        F(name="reinstatement_date",
+            label="Reinstatement Date",
             localizable=[
                 show("view edit add"),
                 hide("listing")
             ],
-            property=schema.Date(title=_("Reinstatement Date"),
-                required=False
-            ),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
+            value_type="date",
+            render_type="date",
         ),
     ])
     schema_invariants = [
-        EndAfterStart,
+        constraints.EndAfterStart,
         #DissolutionAfterReinstatement
     ]
     custom_validators = [validations.validate_date_range_within_parent]
@@ -1341,162 +876,115 @@ class CommitteeMemberDescriptor(GroupMembershipDescriptor):
     localizable = True
     display_name = _("Member")
     container_name = _("Members")
-
+    
     fields = [
-        Field(name="user_id", # [user-req]
-            modes="view add listing",
+        F(name="user_id",
+            label="Name",
+            required=True,
             localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view listing"),
             ],
-            property=schema.Choice(title=_("Name"),
-                source=vocabulary.MemberOfParliamentSource("user_id")
-            ),
-            listing_column=user_name_column("user_id", _("Name"), "user"),
-            listing_column_filter=user_name_column_filter,
-            add_widget = widgets.AutoCompleteWidget(remote_data=True),
-            edit_widget = widgets.AutoCompleteWidget(remote_data=True)
+            value_type="user",
+            render_type="single_select",
+            vocabulary="parliament_member",
         ),
     ]
     fields.extend(deepcopy(GroupMembershipDescriptor.fields))
     fields.extend([
-        Field(name="notes", # [rtf]
-            modes="view edit add",
+        F(name="notes",
+            label="Notes",
             localizable=[
                 show("view edit add"),
             ],
-            property=schema.TextLine(title=_("Notes"), required=False),
-            view_widget=widgets.HTMLDisplay,
-            edit_widget=widgets.RichTextEditor,
-            add_widget=widgets.RichTextEditor,
+            value_type="text",
+            render_type="rich_text",
         ),
     ])
 
-''' !+TYPES_CUSTOM
-class AddressTypeDescriptor(ModelDescriptor):
-    localizable = False
-    display_name = _("Address type")
-    container_name = _("Address types")
-
-    fields = [
-        Field(name="address_type_name", # [user-req]
-            modes="view edit add listing",
-            property=schema.TextLine(title=_("Address Type"))
-        ),
-        LanguageField("language"), # [user-req]
-    ]
-
-class PostalAddressTypeDescriptor(ModelDescriptor):
-    localizable = False
-    display_name = _("Postal address type")
-    container_name = _("Postal address types")
-
-    fields = [
-        Field(name="postal_address_type_name",
-            modes="view edit add listing",
-            property=schema.TextLine(title=_("Postal address type name"))
-        ),
-        LanguageField("language"), # [user-req]
-    ]
-'''
 
 class AddressDescriptor(ModelDescriptor):
     localizable = False
     display_name = _("Address")
     container_name = _("Addresses")
-
+    
     fields = [
-        Field(name="logical_address_type", # [user-req]
-            modes="view edit add listing",
+        F(name="logical_address_type",
+            label="Address Type",
+            required=True,
             localizable=[
-                show("view edit listing"), 
+                show("add"), # db-not-null-ui-add
+                show("view edit listing"),
             ],
-            # !+i18n(mr, nov-2011) shouldn't title be translated later?
-            property=schema.Choice(title=_("Address Type"),
-                source=vocabulary.logical_address_type,
-            ),
-            listing_column=vocabulary_column("logical_address_type", 
-                "Address Type",
-                vocabulary.logical_address_type
-            ),
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="logical_address_type",
         ),
-        Field(name="postal_address_type", # [user-req]
-            modes="view edit add listing",
-            localizable=[ 
-                show("view edit listing"), 
-            ],
-            property=schema.Choice(title=_("Postal Address Type"),
-                source=vocabulary.postal_address_type,
-            ),
-        ),
-        Field(name="street", # [user-req]
-            modes="view edit add listing",
+        F(name="postal_address_type",
+            label="Postal Address Type",
+            required=True,
             localizable=[
-                show("view edit"),
+                show("add"), # db-not-null-ui-add
+                show("view edit listing"),
+            ],
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="postal_address_type",
+        ),
+        F(name="street",
+            label="Street",
+            localizable=[
+                show("view edit add"),
                 hide("listing"),
             ],
-            property=schema.Text(title=_("Street"), required=True),
-            edit_widget=zope.formlib.widgets.TextAreaWidget,
-            add_widget=zope.formlib.widgets.TextAreaWidget,
+            value_type="text",
+            render_type="text_box",
         ),
-        Field(name="city", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit listing"),
-            ],
-            property=schema.TextLine(title=_("City"), required=True)
-        ),
-        Field(name="zipcode", # [user-req]
-            label=_("Zip Code"),
-            modes="view edit add listing",
-            localizable=[
-                show("view edit listing"),
-            ],
-        ),
-        Field(name="country_id", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit listing"),
-            ],
-            property=schema.Choice(title=_("Country"),
-                source=vocabulary.country_factory,
-                required=True
-            ),
-        ),
-        Field(name="phone", # [user]
-            modes="view edit add listing",
+        F(name="city",
+            label="City",
             localizable=[
                 show("view edit add listing"),
             ],
-            property=schema.Text(title=_("Phone Number(s)"),
-                description=_("Enter one phone number per line"),
-                required=False
-            ),
-            edit_widget=zope.formlib.widgets.TextAreaWidget,
-            add_widget=zope.formlib.widgets.TextAreaWidget,
-            #view_widget=zope.formlib.widgets.ListDisplayWidget,
         ),
-        Field(name="fax", # [user-req]
-            modes="view edit add listing",
+        F(name="zipcode",
+            label="Zip Code",
             localizable=[
                 show("view edit add listing"),
             ],
-            property=schema.Text(title=_("Fax Number(s)"),
-                description=_("Enter one fax number per line"),
-                required=False
-            ),
-            edit_widget=zope.formlib.widgets.TextAreaWidget,
-            add_widget=zope.formlib.widgets.TextAreaWidget,
         ),
-        Field(name="email", # [user-req]
-            modes="view edit add listing",
+        F(name="country_id",
+            label="Country",
             localizable=[
                 show("view edit add listing"),
             ],
-            property=schema.TextLine(title=_("Email"),
-                description=_("Email address"),
-                constraint=constraints.check_email,
-                required=False
-            ),
+            value_type="text",
+            render_type="single_select",
+            vocabulary="country",
+        ),
+        F(name="phone",
+            label="Phone Number(s)",
+            description="Enter one phone number per line",
+            localizable=[
+                show("view edit add listing"),
+            ],
+            value_type="text", # !+ phone ?
+            render_type="text_box",
+        ),
+        F(name="fax",
+            label="Fax Number(s)",
+            description="Enter one fax number per line",
+            localizable=[
+                show("view edit add listing"),
+            ],
+            value_type="text", # !+ phone ?
+            render_type="text_box",
+        ),
+        F(name="email",
+            label="Email",
+            description="Email address",
+            localizable=[
+                show("view edit add listing"),
+            ],
         ),
         #Field(name="im_id",
         #    property=schema.TextLine(title=_("Instant Messenger Id"),
@@ -1514,79 +1002,79 @@ class UserAddressDescriptor(AddressDescriptor):
     fields = deepcopy(AddressDescriptor.fields)
 
 class TitleTypeDescriptor(ModelDescriptor):
+    order = _ORDER_BY_CONTAINER_NAMES.index("title_types")
     localizable = True
     display_name = _("Title types")
     container_name = _("Title types")
     fields = [
-        Field(name="title_name",
-            modes="view edit add listing",
-            property=schema.TextLine(title=_("Name"),
-                description=_("Name"),
-                required=True,
-            ),
+        F(name="title_name",
+            label="Name",
+            required=True,
+            localizable=[
+                show("add"), # db-not-null-ui-add
+                show("view edit listing"),
+            ],
         ),
-        Field(name="role_id", label=_("Role associated with title"),
-            modes="view edit add listing",
-            property=schema.Choice(title=_("Role"),
-                description=_("Role associated with this title"),
-                vocabulary=vocabulary.group_sub_role_factory,
-                required=False,
-            ),
+        F(name="user_unique",
+            label="Only one user may have this title",
+            description="Limits persons with this title to one",
+            localizable=[
+                show("view edit add listing"),
+            ],
+            value_type="text", # in schema bool w. default=False
+            render_type="single_select",
+            vocabulary="yes_no", 
         ),
-        Field(name="user_unique",
-            modes="view edit add listing",
-            property=schema.Choice(title=_("Only one user may have this title"), 
-                description=_("Limits persons with this title to one"),
-                default=False,
-                source=vocabulary.bool_yes_no
-            ),
-        ),
-        Field(name="sort_order",
-            modes="view edit add listing",
-            property=schema.Int(title=_("Sort Order"), 
-                description=_("The order in which members with this title "
-                    "will appear relative to other members"),
-                required=True
-            ),
+        F(name="sort_order",
+            label="Sort Order",
+            description="The order in which members with this title " \
+                "will appear relative to other members",
+            required=True,
+            localizable=[
+                show("view edit add listing"),
+            ],
+            value_type="number",
+            render_type="number",
         ),
         LanguageField("language"), # [user-req]
     ]
     #custom_validators = [ validations.validate_sub_role_unique ]
+
 class MemberTitleDescriptor(ModelDescriptor):
     localizable = True
     display_name = _("Title")
     container_name = _("Titles")
-
+    
     fields = [
-        Field(name="title_type_id", label=_("Title"),
-            modes="view edit add listing",
+        F(name="title_type_id",
+            label="Title",
+            required=True,
             localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view edit listing"),
             ],
-            property=schema.Choice(title=_("Title"),
-                source=vocabulary.TitleTypes(),
-                ),
-            listing_column=member_title_column("title_name", _("Title")),
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="group_title_types",
         ),
-        Field(name="start_date", # [user-req]
-            modes="view edit add listing",
+        F(name="start_date",
+            label="Start Date",
+            required=True,
             localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view edit listing"),
             ],
-            property=schema.Date(title=_("Start Date"), required=True),
-            listing_column=day_column("start_date", _("Start Date")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
+            value_type="date",
+            render_type="date",
         ),
-        Field(name="end_date", # [user]
-            modes="view edit add listing",
+        F(name="end_date",
+            label="End Date",
+            description="Date of the dissolution",
             localizable=[
                 show("view edit add listing"),
             ],
-            property=schema.Date(title=_("End Date"), required=False),
-            listing_column=day_column("end_date", _("End Date")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
+            value_type="date",
+            render_type="date",
         ),
         LanguageField("language"), # [user-req]
     ]
@@ -1594,7 +1082,7 @@ class MemberTitleDescriptor(ModelDescriptor):
     #      if f["name"] not in ("role_title_id",) ]
 
     schema_invariants = [
-        EndAfterStart,
+        constraints.EndAfterStart,
     ]
     custom_validators = [
         validations.validate_date_range_within_parent,
@@ -1608,97 +1096,85 @@ class CommitteeStaffDescriptor(GroupMembershipDescriptor):
     container_name = _("Staff")
 
     fields = [
-        Field(name="user_id", # [user-req]
-            modes="view add listing",
+        F(name="user_id",
+            label="Name",
+            required=True,
             localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view listing"),
             ],
-            property=schema.Choice(title=_("Name"),
-                source=vocabulary.UserNotMPSource(
-                    token_field="user_id",
-                    title_field="fullname",
-                    value_field="user_id"
-                )
-            ),
-            listing_column=user_name_column("user_id", _("Name"), "user"),
-            listing_column_filter=user_name_column_filter,
-            add_widget=widgets.AutoCompleteWidget(remote_data=True),
-            edit_widget=widgets.AutoCompleteWidget(remote_data=True)
+            value_type="user",
+            render_type="single_select",
+            vocabulary="user_not_mp",
         ),
     ]
     fields.extend(deepcopy(GroupMembershipDescriptor.fields))
     fields.extend([
-        Field(name="notes", # [rtf]
-            modes="view edit add",
+        F(name="notes",
+            label="Notes",
             localizable=[
                 show("view edit add"),
             ],
-            property=schema.Text(title=_("Notes"), required=False),
-            view_widget=widgets.HTMLDisplay,
-            edit_widget=widgets.RichTextEditor,
-            add_widget=widgets.RichTextEditor,
+            value_type="text",
+            render_type="rich_text",
         ),
     ])
 
 
 class PoliticalGroupDescriptor(GroupDescriptor):
+    order = _ORDER_BY_CONTAINER_NAMES.index("politicalgroups")
     localizable = True
     display_name = _("political group")
     container_name = _("political groups")
     
     fields = deepcopy(GroupDescriptor.fields)
     fields.extend([
-        Field(
-            name="identifier", # [user-req]
-            modes="view edit add",
-            localizable=[
-                show("view edit"),
-            ],
-            property=schema.TextLine(title=_("Identifier"),
-                description=_("Unique identifier or number for this political group"),
-                required=False
-            )
-        ),
-        Field(name="logo_data", # [img]
-            modes="view edit add",
+        F(name="identifier",
+            label="Identifier",
+            description="Unique identifier or number for this political group",
             localizable=[
                 show("view edit add"),
             ],
-            property=schema.Bytes(title=_("Logo"), required=False),
-            view_widget=widgets.ImageDisplayWidget,
-            edit_widget=widgets.ImageInputWidget
+        ),
+        F(name="logo_data",
+            label="Logo",
+            # !+LISTING_IMG(mr, apr-2011) TypeError, not JSON serializable
+            localizable=[
+                show("view edit add"),
+            ],
+            value_type="image",
+            render_type="image",
         ),
     ])
-    schema_invariants = [EndAfterStart]
+    schema_invariants = [constraints.EndAfterStart]
     custom_validators = [validations.validate_date_range_within_parent]
 
 
 class OfficeDescriptor(GroupDescriptor):
+    order = 2 # top
     localizable = True
     display_name = _("Office")
     container_name = _("Offices")
     
     fields = [
-        Field(name="identifier", # [user-req]
-            modes="view edit add",
+        F(name="identifier",
+            label="Office Identifier",
+            description="Unique identifier or number for this Office",
             localizable=[
-                show("view edit"),
+                show("view edit add"),
             ],
-            property=schema.TextLine(title=_("Office Identifier"),
-                description=_("Unique identifier or number for this Office"),
-                required=False
-            ),
         ),
-        Field(name="office_role", # [user-req]
-            modes="view edit add listing",
+        F(name="office_role",
+            label="Role",
+            description="Role given to members of this office",
             localizable=[
-                show("view edit listing"),
+                show("view edit add listing"),
             ],
-            property=schema.Choice(title=_("Role"),
-                description=_("Role given to members of this office"),
-                vocabulary=vocabulary.office_role_factory
-            ),
-        )
+            value_type="text",
+            render_type="single_select",
+            vocabulary="office_role",
+        ),
+
     ]
     fields.extend(deepcopy(GroupDescriptor.fields))
     custom_validators = [validations.validate_date_range_within_parent]
@@ -1710,35 +1186,27 @@ class OfficeMemberDescriptor(GroupMembershipDescriptor):
     container_name = _("Office Members")
     
     fields = [
-        Field(name="user_id", # [user-req]
-            modes="view add listing",
+        F(name="user_id",
+            label="Name",
+            required=True,
             localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view listing"),
             ],
-            property=schema.Choice(title=_("Name"),
-                source=vocabulary.UserNotMPSource(
-                    token_field="user_id",
-                    title_field="fullname",
-                    value_field="user_id"
-                )
-            ),
-            listing_column=user_name_column("user_id", _("Name"), "user"),
-            listing_column_filter=user_name_column_filter,
-            add_widget=widgets.AutoCompleteWidget(remote_data=True),
-            edit_widget=widgets.AutoCompleteWidget(remote_data=True)
-        )
+            value_type="user",
+            render_type="single_select",
+            vocabulary="user_not_mp",
+        ),
     ]
     fields.extend(deepcopy(GroupMembershipDescriptor.fields))
     fields.extend([
-        Field(name="notes", # [user]
-            modes="view edit add listing",
+        F(name="notes",
+            label="Notes",
             localizable=[
                 show("view edit add listing"),
             ],
-            property=schema.Text(title=_("Notes"), required=False),
-            view_widget=widgets.HTMLDisplay,
-            edit_widget=widgets.RichTextEditor,
-            add_widget=widgets.RichTextEditor,
+            value_type="text",
+            render_type="rich_text",
         ),
     ])
 
@@ -1750,17 +1218,15 @@ class MinistryDescriptor(GroupDescriptor):
 
     fields = deepcopy(GroupDescriptor.fields)
     fields.extend([
-        Field(name="identifier", # [user-req]
-            modes="view edit add",
+        F(name="identifier",
+            label="Ministry Identifier",
+            description="Unique identifier or number for this Ministry",
             localizable=[
-                show("view edit"),
+                show("view edit add"),
             ],
-            property=schema.TextLine(title=_("Ministry Identifier"),
-                description=_("Unique identifier or number for this Ministry")
-            ),
         ),
     ])
-    schema_invariants = [EndAfterStart]
+    schema_invariants = [constraints.EndAfterStart]
     custom_validators = [validations.validate_date_range_within_parent]
 
 
@@ -1770,59 +1236,50 @@ class MinisterDescriptor(GroupMembershipDescriptor):
     container_name = _("Ministers")
 
     fields = [
-        Field(name="user_id", # [user-req]
-            modes="view add listing",
+        F(name="user_id",
+            label="Name",
+            required=True,
             localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view listing"),
             ],
-            property=schema.Choice(title=_("Name"),
-                source=vocabulary.UserSource(
-                    token_field="user_id",
-                    title_field="fullname",
-                    value_field="user_id"
-                )
-            ),
-            listing_column=user_name_column("user_id", _("Name"), "user"),
-            listing_column_filter=user_name_column_filter,
-            add_widget = widgets.AutoCompleteWidget(remote_data=True),
-            edit_widget = widgets.AutoCompleteWidget(remote_data=True)
-        )
+            value_type="user",
+            render_type="single_select",
+            vocabulary="user",
+        ),
     ]
     fields.extend(deepcopy(GroupMembershipDescriptor.fields))
     fields.extend([
-        Field(name="notes", # [img]
-            modes="view edit add",
+        F(name="notes",
+            label="Notes",
             localizable=[
                 show("view edit add"),
             ],
-            property=schema.Text(title=_("Notes"), required=False),
-            view_widget=widgets.HTMLDisplay,
-            edit_widget=widgets.RichTextEditor,
-            add_widget=widgets.RichTextEditor,
+            value_type="text",
+            render_type="rich_text",
         ),
     ])
 
 
 class GovernmentDescriptor(GroupDescriptor):
+    order = _ORDER_BY_CONTAINER_NAMES.index("governments")
     localizable = True
     display_name = _("Government")
     container_name = _("Governments")
     sort_on = ["start_date"]
     fields = deepcopy(GroupDescriptor.fields)
     fields.extend([
-        Field(name="identifier", # [user-req]
-            modes="view edit add",
+        F(name="identifier",
+            label="Government Identifier",
+            description="Unique identifier or number for this Government",
             localizable=[
-                show("view edit"),
+                show("view edit add"),
             ],
-            property=schema.TextLine(title=_("Government Identifier"),
-                description=_("Unique identifier or number for this Government"),
-                required=False
-            ),
         ),
     ])
-    schema_invariants = [EndAfterStart]
+    schema_invariants = [constraints.EndAfterStart]
     custom_validators = [validations.validate_government_dates]
+
 
 class AttachmentDescriptor(ModelDescriptor):
     localizable = True
@@ -1833,85 +1290,83 @@ class AttachmentDescriptor(ModelDescriptor):
         #"head_id",
         "type",
         "title",
-        "description",
         "data",
         "name",
         "mimetype",
         "status",
         "status_date",
         "language",
+        "description",
     ]
     fields = [
-        Field(name="type", # [user-req]
-            modes="view edit add listing",
+        F(name="type",
+            label="Attachment Type",
+            required=True,
             localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view edit listing"),
             ],
-            property=schema.Choice(title=_("Attachment Type"),
-                source=vocabulary.attachment_type,
-            ),
-            listing_column=vocabulary_column("type", 
-                "File Type",
-                vocabulary.attachment_type,
-            ),
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="attachment_type",
         ),
-        Field(name="title", # [user-req]
-            modes="view edit add listing",
+        F(name="title",
+            label="Title",
             localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view edit listing"),
             ],
-            property=schema.TextLine(title=_("Title")),
-            edit_widget=widgets.TextWidget,
-            add_widget=widgets.TextWidget,
         ),
-        Field(name="description", # [rtf]
-            modes="view edit add",
+        F(name="description",
+            label="Description",
             localizable=[
                 show("view edit add"),
             ],
-            property=schema.Text(title=_("Description"), required=False),
-            view_widget=widgets.HTMLDisplay,
-            edit_widget=widgets.RichTextEditor,
-            add_widget=widgets.RichTextEditor,
+            value_type="text",
+            render_type="rich_text",
         ),
-        Field(name="data", # [file]
-            modes="view edit add",
+        F(name="data",
+            label="File",
+            description="Upload a file",
             localizable=[
-                show("view edit"),
+                show("view edit add"),
             ],
-            property=schema.Bytes(title=_("File")),
-            description=_("Upload a file"),
-            edit_widget=widgets.FileEditWidget,
-            add_widget=widgets.FileAddWidget,
-            view_widget=widgets.FileDisplayWidget,
+            value_type="file",
+            render_type="file",
         ),
-        Field(name="name", label="", # [user-req]
-            modes="edit add",
-            edit_widget=widgets.NoInputWidget,
-            add_widget=widgets.NoInputWidget,
-        ),
-        Field(name="mimetype", label="", # [user-req]
-            modes="edit add",
-            edit_widget=widgets.NoInputWidget,
-            add_widget=widgets.NoInputWidget,
-        ),
-        Field(name="status", label=_("Status"), # [user-req]
-            modes="view listing",
+        F(name="name",
+            label="Name",
             localizable=[
-                show("view listing"),
+                show("view edit add listing"),
             ],
-            property=schema.Choice(title=_("Status"),
-                vocabulary=vocabulary.workflow_vocabulary_factory,
-            ),
-            listing_column=workflow_column("status", "Workflow status"),
+            value_type="text",
+            render_type="no_input",
         ),
-        Field(name="status_date", label=_("Status date"), # [sys]
-            modes="view listing",
+        F(name="mimetype",
+            label="MIME Type",
+            localizable=[
+                show("view edit add listing"),
+            ],
+            value_type="text",
+            render_type="no_input",
+        ),
+        F(name="status",
+            label="Status",
+            required=True,
             localizable=[
                 show("view listing"),
             ],
-            property=schema.Date(title=_("Status date"), required=False),
-            listing_column=day_column("status_date", _("Status date")),
+            value_type="status",
+            render_type="single_select",
+            vocabulary="workflow_states",
+        ),
+        F(name="status_date",
+            label="Status Date",
+            localizable=[
+                show("view listing"),
+            ],
+            value_type="date",
+            render_type="date",
         ),
         LanguageField("language"), # [user-req]
     ]
@@ -1934,39 +1389,39 @@ class AttachedFileVersionDescriptor(ModelDescriptor):
 '''
 
 class DocDescriptor(ModelDescriptor):
-    localizable = False
+    localizable = True # !+ARCHETYPE_LOCALIZATION
+    
     default_field_order = [
-        "short_title",
-        "long_title",
+        "title",
+        "type_number",
         "acronym",
         "description",
-        "body",
-        "language",
-        #"type",
+        "language", # DB_REQUIRED
+        #"type", # DB_REQUIRED
         "doc_type",
         #"doc_procedure",
-        "type_number",
-        #"doc_id",
+        #"doc_id", # DB_REQUIRED
         "parliament_id",
-        "owner_id",
+        "owner_id", # DB_REQUIRED
         "registry_number",
         "uri",
         #"group_id", # !+group_id only exposed in specific custom doc types
         "status",
-        "status_date",
+        "status_date", # DB_REQUIRED
         #"amc_signatories",
         #"amc_attachments",
         #"amc_events",
         "submission_date",
+        "subject",
+        "coverage",
+        "geolocation",
+        "body",
         #"admissable_date",
         #"signatories", 
         #"attachments",
         #"events",
-        # subject
-        # coverage
-        # geolocation
         # head_id
-        "timestamp",
+        "timestamp", # DB_REQUIRED
     ]
     sort_on = ["status_date", "type_number"]
     sort_dir = "desc"
@@ -1974,272 +1429,278 @@ class DocDescriptor(ModelDescriptor):
         # amc_signatories
         # amc_attachments
         # amc_events
-        Field(name="submission_date", # [derived]
-            modes="view listing",
-            localizable=[ show("view listing"), ],
-            property=schema.Date(title=_("Submission Date"), required=False),
-            listing_column=day_column("submission_date", _("Submission Date")),
+        F(name="submission_date",
+            label="Submission Date",
+            localizable=[
+                show("view"), 
+                hide("listing"),
+            ],
+            value_type="date",
+            render_type="date",
         ),
+
         #   admissible_date
         # owner
         # signatories
         # attachments
         # events
         # doc_id
-        Field(name="parliament_id", # [sys]
-            modes="view listing",
-            localizable=[ hide("view listing"), ],
-            property=schema.Choice(title=_("Parliament"),
-                source=vocabulary.DatabaseSource(domain.Parliament,
-                    token_field="parliament_id",
-                    title_field="short_name", # !+ GROUP_DOC
-                    value_field="parliament_id"
-                ),
-            ),
-        ),
-        Field(name="owner_id", # [user-req]
-            modes="view edit add listing",
+        F(name="parliament_id",
+            label="Parliament",
+            required=True,
             localizable=[
-                show("edit"),
+                hide("view listing"),
+            ],
+            value_type="text",
+            render_type="single_select",
+            vocabulary="parliament",
+        ),
+        F(name="owner_id",
+            label="Moved by",
+            description="Select the user who moved the document",
+            required=True,
+            localizable=[
+                show("add"), # db-not-null-ui-add
+                show("edit"), # !+ displayed in view-mode... how to control this from config?
                 hide("view listing", "bungeni.Anonymous"),
             ],
-            property=schema.Choice(title=_("Moved by"),
-                description=_("Select the user who moved the document"),
-                # "legal" parliamentary documents may only be moved by an MP
-                source=vocabulary.MemberOfParliamentDelegationSource("owner_id"),
-            ),
-            listing_column=linked_mp_name_column("owner_id", _("Name"), "owner"),
-            listing_column_filter=linked_mp_name_column_filter,
-            add_widget=widgets.MemberDropDownWidget,
-            view_widget=widgets.MemberURLDisplayWidget,
+            value_type="member", # !+user: constrained by "parent group" OR vocabulary
+            render_type="single_select",
+            vocabulary="parliament_member_delegation",
         ),
         # type
-        Field(name="doc_type", # [user-req]
-            modes="view edit add listing",
-            localizable=[ 
-                show("view edit listing"), 
+        F(name="doc_type",
+            label="Document Type",
+            required=True,
+            localizable=[
+                show("view edit add listing"), 
             ],
-            property=schema.Choice(title=_("Document Type"),
-                source=vocabulary.doc_type,
-            ),
-            listing_column=vocabulary_column("doc_type",
-                "Document Type",
-                vocabulary.doc_type
-            ),
+            value_type="vocabulary", # !+user: constrained by "parent group" OR vocabulary
+            render_type="single_select",
+            vocabulary="doc_type",
         ),
         # doc_procedure
-        Field(name="type_number", # [sys]
-            modes="view listing",
-            localizable=[ 
-                show("view listing"),
-            ],
-            property=schema.Int(title=_("Sequential Number"), required=False),
-        ),
-        Field(name="registry_number", # [user]
-            modes="view edit listing",
+        F(name="type_number",
+            label="Number",
             localizable=[
-                show("view"),
-                hide("edit listing"),
+                show("view listing"), 
             ],
-            property=schema.Int(title=_("Registry number"), required=False),
+            value_type="number",
+            render_type="number",
         ),
-        Field(name="uri", # [user]
-            modes="view edit listing",
-            localizable=[ 
-                show("view edit"), 
-                hide("listing"), 
-            ],
-            property=schema.Text(title=_("URI"), required=False),
-        ),
-        Field(name="acronym",
-            modes="view edit add listing",
+        F(name="registry_number",
+            label="Registry Number",
             localizable=[
-                show("view edit add listing"),
+                show("view listing"), 
+                hide("edit"), 
             ],
         ),
-        Field(name="short_title", # [user-req]
-            modes="view edit add listing",
+        F(name="uri",
+            label="URI",
             localizable=[
+                show("view"), 
+                hide("edit listing"), 
+                # !+ should hide-in-edit mean -> if show-in-view then show in view-mode?
+            ],
+        ),
+        F(name="acronym",
+            label="Acronym",
+            localizable=[
+                show("view edit add"),
+                hide("listing"),
+            ],
+        ),
+        F(name="title",
+            label="Title",
+            required=True,
+            localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view edit listing"),
             ],
-            property=schema.TextLine(title=_("Title")),
-            #!+view_widget=widgets.ComputedTitleWidget,
-            edit_widget=widgets.TextWidget,
-            add_widget=widgets.TextWidget,
+            value_type="text",
+            render_type="text_box",
         ),
-        Field(name="long_title", # [user]
-            modes="view edit add",
+        F(name="description",
+            label="Description",
+            localizable=[
+                show("view edit add"),
+                hide("listing"),
+            ],
+            value_type="text",
+            render_type="text_box",
+        ),
+        LanguageField("language"), # [user-req]
+        F(name="subject",
+            label="Subject Terms",
+            description="Select Subjects",
+            localizable=[
+                hide("view edit add listing"),
+            ],
+        ),
+        F(name="coverage",
+            label="Coverage",
+            description="Select Coverage",
+            localizable=[
+                hide("view edit add listing"),
+            ],
+        ),
+        F(name="geolocation",
+            label="Geolocation",
+            description="Select Geolocation",
+            localizable=[
+                hide("view edit add listing"),
+            ],
+        ),
+        F(name="body",
+            label="Body",
+            required=True,
             localizable=[
                 show("view edit add"),
             ],
-            property=schema.TextLine(title=_("Summary"), required=False),
-            edit_widget=widgets.LongTextWidget,
-            add_widget=widgets.LongTextWidget,
+            value_type="text",
+            render_type="rich_text",
         ),
-        Field(name="description",
-            modes="view edit add listing",
-            localizable=[
-                show("view edit add listing"),
-            ],
-        ),
-        LanguageField("language"), # [user-req]
-        Field(name="body", # [rtf]
-            modes="view edit add",
-            localizable=[ show("view"), ],
-            property=schema.Text(title=_("Text")),
-            view_widget=widgets.HTMLDisplay,
-            edit_widget=widgets.RichTextEditor,
-            add_widget=widgets.RichTextEditor,
-        ),
-        Field(name="status", label=_("Status"), # [sys]
-            modes="view listing",
+        F(name="status",
+            label="Status",
+            required=True,
             localizable=[
                 show("view listing"),
             ],
-            property=schema.Choice(title=_("Status"),
-                vocabulary=vocabulary.workflow_vocabulary_factory,
-            ),
-            listing_column=workflow_column("status", "Workflow status"),
+            value_type="status",
+            render_type="single_select",
+            vocabulary="workflow_states",
         ),
-        Field(name="status_date", label=_("Status date"), # [sys]
-            modes="view listing",
+        F(name="status_date",
+            label="Status Date",
+            required=True,
             localizable=[
                 show("view listing"),
             ],
-            property=schema.Date(title=_("Status Date"), required=False),
-            listing_column=day_column("status_date", _("Status date")),
+            value_type="date",
+            render_type="date",
         ),
         # !+group_id only exposed in specific custom doc types
-        #Field(name="group_id", # [user]
-        #    modes="view edit add listing",
-        #    localizable=[ 
-        #        show("view edit listing"), 
+        #F(name="group_id",
+        #    label="Group",
+        #    localizable=[
+        #        show("view edit add listing"), 
         #    ],
-        #    property=schema.Choice(title=_("Group"),
-        #        source=vocabulary.MinistrySource("ministry_id"), # !+PLACEHOLDER_GROUP_SOURCE
-        #        required=False
-        #    ),
+        #    value_type="text",
+        #    render_type="single_select",
+        #    vocabulary="group",
         #),
-        # subject
-        # coverage
-        # geolocation
         # head_id
-        Field(name="timestamp", # [sys]
-            modes="edit",
-            localizable=[ show("edit"), ],
-            property=schema.Datetime(title=_(""), required=False),
-            edit_widget=widgets.HiddenTimestampWidget,
+        F(name="timestamp",
+           label = u"", # !+ must have "empty" label... as no value is shown!
+           localizable=[
+                show("edit"),
+            ],
+            value_type="timestamp",
+            render_type="datetime",
         ),
     ]
 
 
 class EventDescriptor(DocDescriptor):
+    
     localizable = True
     display_name = _("Event")
     container_name = _("Events")
     
+    # !+ phase out default_field_order...
     fields = deepcopy(DocDescriptor.fields)
-    fields.append(
-        Field(name="group_id", # [user]
-            modes="view edit add listing",
-            localizable=[ 
+    insert_field_after(fields, "owner_id",
+        F(name="group_id",
+            label="Group",
+            localizable=[
+                show("view edit add listing"),
+            ],
+            value_type="text",
+            render_type="single_select",
+            vocabulary="group",
+        ))
+    default_field_order = DocDescriptor.default_field_order[:]
+    default_field_order.insert(
+        default_field_order.index("owner_id") + 1, "group_id")
+    replace_field(fields, 
+        # "non-legal" parliamentary documents may be added by any user
+        # !+GROUP_AS_OWNER(mr, apr-2012) for Event, a common case would be
+        # to be able to set a group (of the office/group member creating the 
+        # event) as the owner (but Group is not yet polymorphic with User). 
+        # For now we limit the owner of an Event to be simply the current 
+        # logged in user:
+        F(name="owner_id",
+            label="Owner",
+            required=True,
+            localizable=[
+                show("add"), # db-not-null-ui-add
+                show("edit"), # !+ displayed in view-mode... how to control this from config?
+                hide("view listing", "bungeni.Anonymous"),
+            ],
+            value_type="user", # !+user: constrained by "parent group" OR vocabulary
+            render_type="single_select",
+            vocabulary="owner_or_login",
+        ))
+    replace_field(fields, 
+        F(name="doc_type",
+            label="Event Type",
+            required=True,
+            localizable=[
                 show("view edit add listing"), 
             ],
-            property=schema.Choice(title=_("Group"),
-                source=vocabulary.GroupSource( 
-                    token_field="group_id",
-                    title_field="short_name",
-                    value_field="group_id",
-                ),
-                required=False,
-            ),
-        ),
-    )
-    with get_field(fields, "owner_id") as f:
-        # "non-legal" parliamentary documents may be added by any user
-        f.property = schema.Choice(title=_("Owner"), 
-            # !+GROUP_AS_OWNER(mr, apr-2012) for Event, a common case would be
-            # to be able to set a group (of the office/group member creating the 
-            # event) as the owner (but Group is not yet polymorphic with User). 
-            # For now we limit the owner of an Event to be simply the current 
-            # logged in user:
-            source=vocabulary.OwnerOrLoggedInUserSource(
-                token_field="user_id",
-                title_field="fullname",
-                value_field="user_id")
-        )
-        # !+f.localizable changing localizable modes AFTER Field is initialized
-        # gives mismatch error when descriptors are (re-)loaded, e.g. 
-        #f.localizable = [ hide("view edit add listing"), ]
-        f.listing_column = user_name_column("owner_id", _("Name"), "owner")
-        f.listing_column_filter = listing_column_filter=user_name_column_filter
-        f.view_widget = None
-        # !+ select or autocomplete... ?
-        #f.edit_widget=widgets.AutoCompleteWidget(remote_data=True,
-        #        yui_maxResultsDisplayed=5),
-        #f.add_widget=widgets.AutoCompleteWidget()
-    with get_field(fields, "doc_type") as f:
-        # "non-legal" parliamentary documents may be added by any user
-        f.property = schema.Choice(title=_("Event Type"),
-                source=vocabulary.event_type,
-        )
-        listing_column=vocabulary_column("event_type",
-            "Event Type",
-            vocabulary.event_type
-        )
-    del f # remove f from class namespace
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="event_type",
+        ))
 
 
 # !+AuditLogView(mr, nov-2011) change listings do not respect this
 class ChangeDescriptor(ModelDescriptor):
     localizable = False
     fields = [
-        Field(name="audit_id", # [sys]
-            modes="view listing",
+        F(name="audit_id",
             localizable=[ hide("view listing"), ],
         ),
-        Field(name="user_id",
-            modes="view listing",
-            localizable=[ show("view listing"), ],
-            property=schema.Choice(title=_("User"), 
-                source=vocabulary.UserSource(
-                    token_field="user_id",
-                    title_field="fullname",
-                    value_field="user_id")),
-            view_widget=None,
-            listing_column=user_name_column("user_id", _("Name"), "user"),
-            listing_column_filter=user_name_column_filter,
+        F(name="user_id",
+            label="User",
+            required=True,
+            localizable=[
+                show("view listing"),
+            ],
+            value_type="user",
+            render_type="single_select",
+            vocabulary="user",
         ),
-        Field(name="action",
-            modes="view listing",
+        F(name="action",
             localizable=[ show("view listing"), ],
         ),
-        Field(name="seq",
-            modes="view listing",
-            localizable=[ show("view listing"), ],
-        ), 
-        Field(name="procedure",
-            modes="view listing",
+        F(name="seq",
             localizable=[ show("view listing"), ],
         ),
-        Field(name="date_audit", # [sys]
-            modes="view listing",
-            localizable=[ hide("view listing"), ],
-            property=schema.Date(title=u"Audit Date", required=True),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget,
-            listing_column=datetime_column("date_audit", "Date Audit"),
-        ),
-        Field(name="date_active", # [user]
-            modes="view listing",
+        F(name="procedure",
             localizable=[ show("view listing"), ],
-            property=schema.Date(title=u"Active Date", required=True),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget,
-            listing_column=datetime_column("date_active", "Date Active"),
+        ),
+        F(name="date_audit",
+           label="Date Audit",
+           required=True,
+           localizable=[
+                hide("view listing"),
+            ],
+            value_type="datetime",
+            render_type="datetime",
+        ),
+        F(name="date_active",
+           label="Date Active",
+           required=True,
+           localizable=[
+                show("view listing"),
+            ],
+            value_type="datetime",
+            render_type="datetime",
         ),
     ]
     default_field_order = [
+        #"audit_id",
         "user_id",
         "action",
         "seq",
@@ -2261,82 +1722,58 @@ class VersionDescriptor(ChangeDescriptor):
 '''
 class DocVersionDescriptor(VersionDescriptor):
     """Base UI Descriptor for Doc archetype."""
-    localizable = True
+    localizable = True #!+VERSION_CLASS_PER_TYPE that "inherits" UI desc?
     default_field_order = \
-        deepcopy(VersionDescriptor.default_field_order) + \
-        deepcopy(DocDescriptor.default_field_order)
+        VersionDescriptor.default_field_order[:] + \
+        DocDescriptor.default_field_order[:]
     fields = \
         deepcopy(VersionDescriptor.fields) + \
         deepcopy(DocDescriptor.fields)
-    with get_field(fields, "status") as f:
-        f.modes = "view listing"
-        f.localizable = [ show("view listing"), ]
-        f.property = schema.Text(title=_("Status"))
-    del f # remove f from class namespace
+
 
 class AttachmentVersionDescriptor(VersionDescriptor):
     """UI Descriptor for Attachment archetype."""
     localizable = True
     default_field_order = \
-        deepcopy(VersionDescriptor.default_field_order) + \
-        list(deepcopy(AttachmentDescriptor.default_field_order))
+        VersionDescriptor.default_field_order[:] + \
+        AttachmentDescriptor.default_field_order[:]
     fields = \
         deepcopy(VersionDescriptor.fields) + \
         deepcopy(AttachmentDescriptor.fields)
-    with get_field(fields, "status") as f:
-        f.modes = "view listing"
-        f.localizable = [ show("view listing"), ]
-        f.property = schema.Text(title=_("Status"))
-    del f # remove f from class namespace
 
 
 class HeadingDescriptor(ModelDescriptor):
+    order = 3 # top
     localizable = True
     display_name = _("Heading")
     container_name = _("Headings")
     
     fields = [
-        Field(name="text", # [user-req]
-            modes="view edit add listing",
+        F(name="text",
+            label="Title",
+            required=True,
             localizable=[
-                show("view edit listing"),
+                show("add"), # db-not-null-ui-add
+                show("view edit"),
+                hide("listing"),
             ],
-            property=schema.TextLine(title=_("Title")),
-            edit_widget=widgets.TextWidget,
-            add_widget=widgets.TextWidget,
         ),
         LanguageField("language"), # [user-req]
     ]
 
 
 class AgendaItemDescriptor(DocDescriptor):
+    order = _ORDER_BY_CONTAINER_NAMES.index("agendaitems")
     localizable = True
     display_name = _("Agenda item")
     container_name = _("Agenda items")
     
     fields = deepcopy(DocDescriptor.fields)
-    fields.append(AdmissibleDateField()) # [sys]
-    get_field(fields, "submission_date").localizable = [
-        show("view"),
-        hide("listing")
-    ]
-    get_field(fields, "admissible_date").localizable = [
-        show("view"),
-        hide("listing"),
-    ]
-    default_field_order = [
-        "parliament_id",
-        "short_title",
-        "long_title",
-        "registry_number",
-        "owner_id",
-        "status",
-        "status_date",
-        "language",
-        "body",
-        "submission_date",
-        "admissible_date"
-    ]
+    insert_field_after(fields, "submission_date", AdmissibleDateField())
+    default_field_order = DocDescriptor.default_field_order[:]
+    default_field_order.insert(
+        default_field_order.index("submission_date") + 1, "admissible_date")
+
 
 ''' !+VERSION_CLASS_PER_TYPE
 class AgendaItemVersionDescriptor(VersionDescriptor):
@@ -2347,43 +1784,28 @@ class AgendaItemVersionDescriptor(VersionDescriptor):
 '''
 
 class MotionDescriptor(DocDescriptor):
+    order = _ORDER_BY_CONTAINER_NAMES.index("motions")
     localizable = True
     display_name = _("Motion")
     container_name = _("Motions")
     fields = deepcopy(DocDescriptor.fields)
-    fields.extend([
-        AdmissibleDateField(),
-        Field(name="notice_date", # [sys]
-            modes="view listing",
-            localizable=[ 
-                show("view listing"),
+    insert_field_after(fields, "submission_date", AdmissibleDateField())
+    insert_field_after(fields, "admissible_date", 
+        F(name="notice_date",
+            label="Notice Date",
+            localizable=[
+                show("view"), 
+                hide("listing"),
             ],
-            property=schema.Date(title=_("Notice Date"), required=False),
-        ),
-    ])
-    get_field(fields, "admissible_date").localizable = [
-        show("view"),
-        hide("listing"),
-    ]
-    get_field(fields, "submission_date").localizable = [
-        show("view"),
-        hide("listing")
-    ]
-    default_field_order = [
-			"parliament_id",
-			"short_title",
-			"long_title",
-			"type_number",
-			"owner_id",
-			"status",
-			"status_date",
-			"language",
-			"body",
-			"submission_date",
-			"admissible_date",
-			"notice_date",
-			"registry_number",
-    ]
+            value_type="date",
+            render_type="date",
+        ))
+    default_field_order= DocDescriptor.default_field_order[:]
+    default_field_order.insert(
+        default_field_order.index("submission_date") + 1, "admissible_date")
+    default_field_order.insert(
+        default_field_order.index("submission_date") + 2, "notice_date")
+
 
 ''' !+VERSION_CLASS_PER_TYPE
 class MotionVersionDescriptor(VersionDescriptor):
@@ -2401,92 +1823,70 @@ class MotionChangeDescriptor(ChangeDescriptor):
     fields = deepcopy(ChangeDescriptor.fields)
 '''
 
-''' !+TYPES_CUSTOM
-class BillTypeDescriptor(ModelDescriptor):
-    localizable = False
-    display_name = _("Bill Type")
-    container_name = _("Bill types")
-
-    fields = [
-        Field(name="bill_type_name", # [user-req]
-            modes="view edit add listing",
-            localizable=[ 
-                show("view edit listing"), 
-            ],
-            property=schema.TextLine(title=_("Bill Type"))
-        ),
-        LanguageField(name="language"),
-    ]
-'''
 
 class BillDescriptor(DocDescriptor):
+    order = _ORDER_BY_CONTAINER_NAMES.index("bills")
     localizable = True
     display_name = _("Bill")
     container_name = _("Bills")
 
     fields = deepcopy(DocDescriptor.fields)
-    # remove "doc_type"
-    fields[:] = [ f for f in fields if f.name not in ("doc_type",) ]
-    # tweak...
-    with get_field(fields, "body") as f:
-        f.label = _("Statement of Purpose")
-        f.property = schema.Text(title=_("Statement of Purpose"), required=False)
-    del f # remove f from class namespace
-    get_field(fields, "submission_date").localizable = [
-        show("view"),
-        hide("listing")
-    ]
-    fields.extend([
-        Field(name="doc_type", # [user-req]
-            modes="view edit add listing",
-            localizable=[ 
-                show("view edit listing"), 
+    replace_field(fields, 
+        F(name="doc_type",
+            label="Bill Type",
+            required=True,
+            localizable=[
+                show("view edit add listing"), 
             ],
-            property=schema.Choice(title=_("Bill Type"),
-                source=vocabulary.bill_type,
-            ),
-            listing_column=vocabulary_column("doc_type",
-                "Bill Type",
-                vocabulary.bill_type
-            ),
-        ),
-        Field(name="group_id", # [user]
-            modes="view edit add listing",
-            localizable=[ 
-                show("view edit add listing"),
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="bill_type",
+        ))
+    replace_field(fields, 
+        F(name="body",
+            label="Statement of Purpose",
+            required=False,
+            localizable=[
+                show("view edit add"),
             ],
-            property=schema.Choice(title=_("Ministry"),
-                source=vocabulary.MinistrySource("ministry_id"),
-                required=False
-            ),
-        ),
-        Field(name="publication_date", # [user]
-            modes="view listing",
+            value_type="text",
+            render_type="rich_text",
+        ))
+    default_field_order = DocDescriptor.default_field_order[:]
+    insert_field_after(fields, "submission_date", 
+        F(name="publication_date",
+            label="Publication Date",
             localizable=[
                 show("view listing"),
             ],
-            property=schema.Date(title=_("Publication Date"), required=False),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget ,
-            listing_column=day_column("publication_date", "Publication Date"),
-        ),
-    ])
-    
-    default_field_order = [
-        "parliament_id",
-        "short_title",
-        "long_title",
-        "owner_id",
-        "status",
-        "status_date",
-        "language",
-        "body",
-        "submission_date",
-        "doc_type",
-        "group_id",
-        "publication_date",
-        "registry_number",
-    ]
+            value_type="date",
+            render_type="date",
+        ))
+    default_field_order.insert(
+        default_field_order.index("submission_date") + 1, "publication_date")
+    insert_field_after(fields, "publication_date", 
+        F(name="short_title",
+            label="Statement of Purpose",
+            required=True,
+            localizable=[
+                show("view edit add listing"),
+            ],
+        ))
+    default_field_order.insert(
+        default_field_order.index("publication_date") + 1, "short_title")
+    insert_field_after(fields, "short_title", 
+        F(name="group_id",
+            label="Ministry",
+            localizable=[
+                show("view edit add listing"),
+            ],
+            value_type="group",
+            render_type="single_select",
+            vocabulary="ministry",
+        ))
+    default_field_order.insert(
+        default_field_order.index("short_title") + 1, "group_id")
+
 
 ''' !+VERSION_CLASS_PER_TYPE
 class BillVersionDescriptor(VersionDescriptor):
@@ -2496,150 +1896,99 @@ class BillVersionDescriptor(VersionDescriptor):
     fields = deepcopy(VersionDescriptor.fields)
 '''
 
-''' !+TYPES_CUSTOM
-class QuestionTypeDescriptor(ModelDescriptor):
-    localizable = False
-    display_name = _("Question type")
-    container_name = _("Question types")
-
-    fields = [
-        Field(name="question_type_name",
-            modes="view edit add listing",
-            property=schema.TextLine(title=_("Question Type"))
-        ),
-        LanguageField("language"),
-    ]
-
-class ResponseTypeDescriptor(ModelDescriptor):
-    localizable = False
-    display_name = _("Response type")
-    container_name = _("Response types")
-
-    fields = [
-        Field(name="response_type_name",
-            modes="view edit add listing",
-            property=schema.TextLine(title=_("Response Type"))
-        ),
-        LanguageField("language"),
-    ]
-'''
 
 class QuestionDescriptor(DocDescriptor):
+    order = _ORDER_BY_CONTAINER_NAMES.index("questions")
     localizable = True
     display_name = _("Question")
     container_name = _("Questions")
     
     fields = deepcopy(DocDescriptor.fields)
-    # remove "doc_type"
-    fields[:] = [ f for f in fields if f.name not in ("doc_type",) ]
+    replace_field(fields, 
+        F(name="doc_type",
+            label="Question Type",
+            description="Choose the type of question",
+            required=True,
+            localizable=[
+                show("view edit add listing"), 
+            ],
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="question_type",
+        ))
+    replace_field(fields, 
+        F(name="subject",
+            label="Subject Terms",
+            description="Select Subjects",
+            localizable=[
+                show("view edit add"),
+                hide("listing"),
+            ],
+            value_type="text",
+            render_type="tree_text",
+            vocabulary="subject_terms",
+        ))
+    default_field_order = DocDescriptor.default_field_order[:]
+    insert_field_after(fields, "description",
+        F(name="response_type",
+            label="Response Type",
+            description="Choose the type of response expected for this question",
+            localizable=[
+                show("view edit add listing"),
+            ],
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="response_type",
+        ))
+    default_field_order.insert(
+        default_field_order.index("description") + 1, "response_type")
+    insert_field_after(fields, "response_type",
+        F(name="response_text",
+            label="Response",
+            localizable=[
+                show("view edit"),
+            ],
+            value_type="text",
+            render_type="rich_text",
+        ))
+    default_field_order.insert(0, "response_text")
+    insert_field_after(fields, "submission_date", AdmissibleDateField())
+    default_field_order.insert(
+        default_field_order.index("submission_date") + 1, "admissible_date")
+    insert_field_after(fields, "admissible_date",
+        F(name="group_id",
+            label="Ministry",
+            required=True,
+            localizable=[
+                show("view edit add listing"),
+            ],
+            value_type="group",
+            render_type="single_select",
+            vocabulary="ministry", 
+        ))
+    default_field_order.insert(
+        default_field_order.index("admissible_date") + 1, "group_id")
+    insert_field_after(fields, "group_id",
+        F(name="ministry_submit_date",
+            label="Date submitted to ministry",
+            localizable=[
+                show("view"),
+                hide("listing"),
+            ],
+            value_type="date",
+            render_type="date",
+        ))
+    default_field_order.insert(
+        default_field_order.index("group_id") + 1, "ministry_submit_date")
+    ''' !+SUPPLEMENT
     fields.extend([
         #Field(name="supplement_parent_id",
         #    label=_("Initial/supplementary question"),
         #    modes="",
         #    view_widget=widgets.SupplementaryQuestionDisplay,
         #),
-        Field(name="group_id", # [user-req]
-            modes="view edit add listing",
-            localizable=[ 
-                show("view edit listing"), 
-            ],
-            property=schema.Choice(title=_("Ministry"),
-                source=vocabulary.MinistrySource("ministry_id"),
-            ),
-            listing_column=ministry_column("ministry_id" , _("Ministry")),
-        ),
-        AdmissibleDateField(), # [sys]
-        Field(name="ministry_submit_date", # [user]
-            modes="view listing",
-            localizable=[ 
-                show("view"),
-                hide("listing"),
-            ],
-            property=schema.Date(title=_("Submitted to ministry"),
-                required=False
-            ),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget,
-        ),
-        Field(name="doc_type", # [user-req]
-            modes="view edit add listing",
-            localizable=[ 
-                show("view edit listing"),
-            ],
-            property=schema.Choice(title=_("Question Type"),
-                description=_("Choose the type of question"),
-                source=vocabulary.question_type,
-            ),
-            listing_column=vocabulary_column("doc_type",
-                "Question Type",
-                vocabulary.question_type
-            ),
-        ),
-        Field(name="response_type", # [user-req]
-            modes="view edit add listing",
-            localizable=[ 
-                show("view edit"),
-                hide("listing")
-            ],
-            property=schema.Choice(title=_("Response Type"),
-                description=_(
-                    "Choose the type of response expected for this question"),
-                source=vocabulary.response_type
-            ),
-            listing_column=vocabulary_column("response_type",
-                "Response Type",
-                vocabulary.response_type
-            ),
-        ),
-        Field(name="response_text", # [user-req]
-            modes="edit",
-            property=schema.Text(title=_("Response"),
-                description=_("Response to the Question"),
-                required=False
-            ),
-            view_widget=widgets.HTMLDisplay,
-            edit_widget=widgets.RichTextEditor,
-        ),
-        Field(name="subject", # [user]
-            modes="view edit add listing",
-            localizable=[ 
-                show("view edit add"),
-                hide("listing"),
-            ],
-            property=VocabularyTextField(title=_("Subject Terms"),
-                description=_("Select Subjects"),
-                vocabulary=vocabulary.subject_terms,
-                required = False,
-            ),
-            edit_widget=widgets.TreeVocabularyWidget,
-            add_widget=widgets.TreeVocabularyWidget,
-            view_widget=widgets.TermsDisplayWidget,
-        ),
     ])
-    get_field(fields, "admissible_date").localizable = [
-        show("view"),
-        hide("listing"),
-    ]
-    default_field_order = [
-        "response_text",        
-        "parliament_id",
-        "short_title",
-        "long_title",
-        "type_number",
-        "owner_id",
-        "status",
-        "status_date",
-        "doc_type",
-        "response_type",
-        "language",
-        "body",
-        "submission_date",
-        "group_id",
-        "admissible_date",
-        "ministry_submit_date",
-        "subject",
-        "registry_number",
-    ]
+    '''
     custom_validators = []
 
 ''' !+VERSION_CLASS_PER_TYPE
@@ -2651,35 +2000,16 @@ class QuestionVersionDescriptor(VersionDescriptor):
 '''
 
 class TabledDocumentDescriptor(DocDescriptor):
+    order = _ORDER_BY_CONTAINER_NAMES.index("tableddocuments")
     localizable = True
     display_name = _("Tabled document")
     container_name = _("Tabled documents")
     fields = deepcopy(DocDescriptor.fields)
-    fields.extend([
-        AdmissibleDateField(), # [sys]
-    ])
-    get_field(fields, "submission_date").localizable = [
-        show("view"),
-        hide("listing")
-    ]
-    get_field(fields, "admissible_date").localizable = [
-        show("view"),
-        hide("listing"),
-    ]
-    default_field_order = [
-        "parliament_id",
-        "short_title",
-        "long_title",
-        "type_number",
-        "owner_id",
-        "status",
-        "status_date",
-        "language",
-        "body",
-        "submission_date",
-        "admissible_date",
-        "registry_number",
-    ]
+    insert_field_after(fields, "submission_date", AdmissibleDateField())
+    default_field_order = DocDescriptor.default_field_order[:]
+    default_field_order.insert(
+        default_field_order.index("submission_date") + 1, "admissible_date")
+
 
 ''' !+VERSION_CLASS_PER_TYPE
 class TabledDocumentVersionDescriptor(VersionDescriptor):
@@ -2694,120 +2024,102 @@ class VenueDescriptor(ModelDescriptor):
     display_name = _("Venue")
     container_name = _("Venues")
     fields = [
-        Field(name="short_name", # [user-req]
-            modes="view edit add listing",
-            localizable=[ 
+        F(name="short_name",
+            label="Title",
+            required=True,
+            localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view edit listing"),
             ],
-            property=schema.TextLine(title=_("Title")),
         ),
-        Field(name="description", # [user-req]
-            modes="view edit add listing",
+        F(name="description",
+            label="Description",
             localizable=[
-                show("view edit"),
+                show("view edit add"),
                 hide("listing"),
             ],
-            property=schema.Text(title=_("description"))
+            value_type="text",
+            render_type="text_box",
         ),
         LanguageField("language"),
     ]
 
+
 class SittingDescriptor(ModelDescriptor):
+    order = _ORDER_BY_CONTAINER_NAMES.index("sittings")
     localizable = True
     display_name = _("Sitting")
     container_name = _("Sittings")
     fields = [
-        Field(name="short_name",
-            modes="view edit add listing",
-            localizable=[
-                show("view edit listing")
-            ],
-            property=schema.TextLine(title=_(u"Name of activity")),
-        ),
-        LanguageField("language"),
-        Field(name="start_date", # [user-req]
-            modes="view add listing",
-            localizable=[
-                show("view listing"),
-            ],
-            property=schema.Datetime(title=_("Date")),
-            listing_column=date_from_to_column("start_date", _("Start")),
-            # !+CustomListingURL(mr, oct-2010) the listing of this type has
-            # been replaced by the custom SittingsViewlet -- but it
-            # should still be possible use the generic container listing in
-            # combination with a further customized listing_column -- for an
-            # example of this see how the listing of the column "owner_id"
-            # is configured in: descriptor.DocDescriptor
-
-            # !+CustomListingURL(miano, nov-2010)
-            # Since the custom listing column function was missing
-            # the sitting listing was broken in archive.
-            # Reverted to fix the issue.
-            # This listing does not need to be customised because it is
-            # only used in the archive.
-            edit_widget=widgets.DateTimeWidget,
-            add_widget=widgets.DateTimeWidget,
-        ),
-        Field(name="end_date", # [user-req]
-            modes="view add listing",
-            localizable=[
-                show("view listing"),
-            ],
-            property=schema.Datetime(title=_("End")),
-            #listing_column=time_column("end_date", _("End Date")),
-            edit_widget=widgets.DateTimeWidget,
-            add_widget=widgets.DateTimeWidget,
-        ),
-        Field(name="venue_id", # [user]
-            modes="view edit add listing",
+        F(name="short_name",
+            label="Name of activity",
+            required=True,
             localizable=[
                 show("view edit add listing"),
             ],
-            property=schema.Choice(title=_("Venue"),
-                source=vocabulary.DatabaseSource(domain.Venue,
-                    token_field="venue_id",
-                    title_field="short_name",
-                    value_field="venue_id"
-                ),
-                required=False
-            ),
-            listing_column=dc_property_column("venue", _(u"Venue")),
         ),
-        Field(name="activity_type",
-            modes="view edit add",
+        LanguageField("language"),
+        # !+DURATION, should probably be a single "compound" field, with a 
+        # dedicated and rendering/listing logic.
+        F(name="start_date",
+            label="Date",
+            required=True,
             localizable=[
-                show("view edit add")
+                show("view add listing"),
             ],
-            property=schema.Choice(title=_(u"Activity Type"),
-                description=_(u"Sitting Activity Type"),
-                vocabulary=vocabulary.sitting_activity_types,
-                required=False
-            ),
+            value_type="duration", # in listing "consumes" also "end_date"
+            render_type="datetime",
         ),
-        Field(name="meeting_type",
-            modes="view edit add",
+        F(name="end_date",
+            label="End",
+            required=True,
             localizable=[
-                show("view edit add")
+                show("view add listing"),
             ],
-            property=schema.Choice(title=_(u"Meeting Type"),
-                description=_(u"Sitting Meeting Type"),
-                vocabulary=vocabulary.sitting_meeting_types,
-                required=False
-            ),
+            value_type="datetime", # in listing "consumed" by "start_date"
+            render_type="datetime",
         ),
-        Field(name="convocation_type",
-            modes="view edit add",
+        F(name="venue_id",
+            label="Venue",
             localizable=[
-                show("view edit add")
+                show("view edit add listing"),
             ],
-            property=schema.Choice(title=_(u"Convocation Type"),
-                description=_(u"Sitting Convocation Type"),
-                vocabulary=vocabulary.sitting_convocation_types,
-                required=False
-            ),
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="venue", 
+        ),
+        F(name="activity_type",
+            label="Activity Type",
+            description="Sitting Activity Type",
+            localizable=[
+                show("view edit add"),
+            ],
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="sitting_activity_types", 
+        ),
+        F(name="meeting_type",
+            label="Meeting Type",
+            description="Sitting Meeting Type",
+            localizable=[
+                show("view edit add"),
+            ],
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="sitting_meeting_types", 
+        ),
+        F(name="convocation_type",
+            label="Convocation Type",
+            description="Sitting Convocation Type",
+            localizable=[
+                show("view edit add"),
+            ],
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="sitting_convocation_types", 
         ),
     ]
-    schema_invariants = [EndAfterStart]
+    schema_invariants = [constraints.EndAfterStart]
     custom_validators = [
         validations.validate_date_range_within_parent,
         validations.validate_start_date_equals_end_date,
@@ -2817,184 +2129,126 @@ class SittingDescriptor(ModelDescriptor):
 
 
 class SessionDescriptor(ModelDescriptor):
+    order = _ORDER_BY_CONTAINER_NAMES.index("sessions")
     localizable = True
     display_name = _("Parliamentary session")
     container_name = _("Parliamentary sessions")
     sort_on = ["start_date", ]
     sort_dir = "desc"
     fields = [
-        Field(name="short_name", # [user-req]
-            modes="view edit add listing",
+        F(name="short_name",
+            label="Short Name",
+            required=True,
             localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view edit listing"),
             ],
-            property=schema.TextLine(title=_("Short Name")),
         ),
-        Field(name="full_name", # [user-req]
-            modes="view edit add listing",
+        F(name="full_name",
+            label="Full Name",
+            required=True,
             localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view edit"),
                 hide("listing"),
             ],
-            property=schema.TextLine(title=_("Full Name"))
         ),
-        Field(name="start_date", # [user-req]
-            modes="view edit add listing",
+        F(name="start_date",
+            label="Start Date",
+            required=True,
             localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view edit listing"),
             ],
-            property=schema.Date(title=_("Start Date")),
-            listing_column=day_column("start_date", _("Start Date")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
+            value_type="date",
+            render_type="date",
         ),
-        Field(name="end_date", # [user-req]
-            modes="view edit add listing",
+        F(name="end_date",
+            label="End Date",
+            required=True,
             localizable=[
+                show("add"), # "logical" required (even if db allows null)
                 show("view edit listing"),
             ],
-            property=schema.Date(title=_("End Date")),
-            listing_column=day_column("end_date", _("End Date")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
+            value_type="date",
+            render_type="date",
         ),
         LanguageField("language"),
-        Field(name="notes", label=_("Notes"), # [rtf]
-            modes="view edit add",
+        F(name="notes",
+            label="Notes",
             localizable=[
                 show("view edit add"),
             ],
-        )
+        ),
     ]
-    schema_invariants = [EndAfterStart]
+    schema_invariants = [constraints.EndAfterStart]
     custom_validators = [validations.validate_date_range_within_parent]
 
 
-#class DebateDescriptor (ModelDescriptor):
-#    display_name = _("Debate")
-#    container_name = _("Debate")
-
-#    fields = [
-#        Field(name="sitting_id", modes=""),
-#        Field(name="debate_id", modes=""),
-#        Field(name="short_name",
-#                label=_("Short Name"),
-#                modes="view edit add listing",
-#                listing_column=name_column("short_name",
-#                    _("Name"))),
-#        Field(name="body_text", label=_("Transcript"),
-#              property = schema.Text(title="Transcript"),
-#              view_widget=widgets.HTMLDisplay,
-#              edit_widget=widgets.RichTextEditor,
-#              add_widget=widgets.RichTextEditor,
-#             ),
-#        ]
-
-
-class AttendanceDescriptor(ModelDescriptor):
+class SittingAttendanceDescriptor(ModelDescriptor):
     localizable = True
     display_name = _("Sitting attendance")
     container_name = _("Sitting attendances")
     sort_on = ["member_id"]
     fields = [
-        Field(name="member_id", # [user-req]
-            modes="view edit add listing",
+        F(name="member_id",
+            label="Member of Parliament",
+            required=True,
             localizable=[
-                show("view edit listing"),
+                show("add"), # db-not-null-ui-add
+                show("view listing"),
             ],
-            property=schema.Choice(title=_("Member of Parliament"),
-                source=vocabulary.SittingAttendanceSource(
-                    token_field="user_id",
-                    title_field="fullname",
-                    value_field="member_id"
-                )
-            ),
-            listing_column=user_name_column("member_id", _("Name"), "user"),
-            listing_column_filter=user_name_column_filter,
+            value_type="user",
+            render_type="single_select",
+            vocabulary="sitting_attendance",
         ),
-        Field(name="attendance_type", # [user-req]
-            modes="view edit add listing",
+        F(name="attendance_type",
+            label="Attendance",
+            required=True,
             localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view edit listing"),
             ],
-            property=schema.Choice(title=_("Attendance"),
-                source=vocabulary.attendance_type,
-            ),
-            listing_column=vocabulary_column("attendance_type",
-                "Attendance",
-                vocabulary.attendance_type
-            ),
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="attendance_type",
         ),
     ]
 
-
-''' !+TYPES_CUSTOM
-class AttendanceTypeDescriptor(ModelDescriptor):
-    localizable = False
-    display_name = _("Attendance types")
-    container_name = _("Attendance types")
-    fields = [
-        Field(name="attendance_type", # [user-req]
-            modes="view edit add listing",
-            localizable=[
-                show("view edit listing"),
-            ],
-            property=schema.TextLine(title=_("Attendance type"))
-        ),
-       LanguageField("language"),
-    ]
-'''
 
 class SignatoryDescriptor(ModelDescriptor):
     localizable = True
     display_name = _("Signatory")
     container_name = _("Signatories")
     fields = [
-        Field(name="signatory_id",
-            modes="listing",
-            localizable = [show("listing", "bungeni.Signatory bungeni.Owner")],
-            property = schema.TextLine(title=_("View")),
-            listing_column = simple_view_column("signatory_id", 
-                _(u"review"), _(u"view"), _(u"review")
-            ),
-        ),
-        Field(name="user_id", # [user-req]
-            modes="view add listing",
-            localizable=[
-                show("view listing"),
-            ],
-            property=schema.Choice(title=_("Signatory"),
-                source=vocabulary.MemberOfParliamentSignatorySource(
-                    "user_id"
-                ),
-            ),
-            listing_column=linked_mp_name_column("user_id",
-                _("Signatory"),
-                "user"
-            ),
-            listing_column_filter=linked_mp_name_column_filter,
-            view_widget=widgets.MemberURLDisplayWidget,
-            add_widget=widgets.AutoCompleteWidget(remote_data=True),
-            edit_widget=widgets.AutoCompleteWidget(remote_data=True)
-        ),
-        Field(name="political_party",
-            modes="listing",
-            property=schema.TextLine(title=_(u"political party")),
-            listing_column=user_party_column("political_party",
-                _(u"political party"), _(u"no party")
-            )
-        ),
-        Field(name="status",
-            modes="view listing",
+        F(name="status",
+            label="Signature Status",
+            required=True,
             localizable = [
                 show("view listing", 
-                    "bungeni.Signatory bungeni.Owner bungeni.Clerk")
+                    roles="bungeni.Owner bungeni.Signatory")
             ],
-            property=schema.Choice(title=_("Signature status"), 
-                vocabulary=vocabulary.workflow_vocabulary_factory,
-                required=True
-            ),
-            listing_column = workflow_column("status", "Signature Status"),
+            value_type="status",
+            render_type="single_select",
+            vocabulary="workflow_states",
+        ),
+        F(name="user_id",
+            label="Signatory",
+            required=True,
+            localizable=[
+                show("add"), # db-not-null-ui-add
+                show("view listing"),
+            ],
+            value_type="member",
+            render_type="single_select",
+            vocabulary="signatory",
+        ),
+        F(name="party", # property on domain model
+            label="Political Party",
+            localizable=[ show("listing"), ],
+            value_type="text",
+            render_type="single_select",
+            vocabulary="party",
         ),
     ]
 
@@ -3005,66 +2259,26 @@ class CountryDescriptor(ModelDescriptor):
     container_name = _("Countries")
     fields = [
         LanguageField("language"),
-        Field(name="country_id", # [user-req]
-            modes="view edit add",
+        F(name="country_id",
+            label="Country Code",
+            description="Two letter ISO Code for this country e.g. DZ for Algeria",
+            required=True,
             localizable=[
-                show("view edit"),
-            ],
-            property=schema.TextLine(title=_("Country Code"),
-                description=_(
-                    "Two letter ISO Code for this country e.g. DZ for Algeria")
-            )
-        ),
-        Field(name="country_name", # [user-req]
-            modes="view edit add listing",
-            localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view edit listing"),
             ],
-            property=schema.TextLine(title=_("Country"),
-                description=_("Name of the Country")
-            ),
+        ),
+        F(name="country_name",
+            label="Country",
+            description="Name of the Country",
+            required=True,
+            localizable=[
+                show("add"), # db-not-null-ui-add
+                show("view edit listing"),
+            ],
         ),
     ]
 
-
-################
-# Hansard
-################
-
-''' !+UNUSED_Rota(mr, feb-2011)
-class RotaDescriptor(ModelDescriptor):
-    fields = [
-        # !+ Field(name="reporter_id") ??
-        Field(name="identifier",
-            modes="view edit add listing",
-        ), # !+ title=_("Rota Identifier"),
-        Field(name="start_date",
-            modes="view edit add listing",
-            label=_("Start Date"),
-            listing_column=day_column("start_date", _("Start Date")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
-        ),
-        Field(name="end_date",
-            modes="view edit add listing",
-            label=_("End Date"),
-            listing_column=day_column("end_date", _("End Date")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget
-        ),
-    ]
-    schema_invariants = [EndAfterStart]
-'''
-
-''' !+UNUSED_DocumentSource(mr, feb-2011)
-class DocumentSourceDescriptor(ModelDescriptor):
-    display_name = _("Document source")
-    container_name = _("Document sources")
-
-    fields = [
-        Field(name="document_source", label=_("Document Source")),
-    ]
-'''
 
 class ItemScheduleDescriptor(ModelDescriptor):
     localizable = True
@@ -3077,43 +2291,40 @@ class ItemScheduleDescriptor(ModelDescriptor):
     # for now providing viewlets with a list of addable objects. TODO:
     # TODO: validate scheduled items
     fields = [
-        Field(name="item_id", # [user-req]
-            modes="view edit add listing",
+        F(name="item_id",
+            label="Item",
+            required=True,
             localizable=[
+                show("edit add"), # db-not-null-ui-add, pk
                 show("view listing"),
             ],
-            property=schema.Int(title=_("Item")),
+            value_type="number",
+            render_type="number",
         ),
-        Field(name="item_title", # [derived]
-            modes="view listing",
+        F(name="item_title", # derived @item_title
+            label="Title",
             localizable=[
                 show("view listing")
             ],
-            property=schema.TextLine(title=_("Title"), required=False),
-            listing_column = scheduled_item_title_column("title", _(u"Title"))
         ),
-        Field(name="item_mover", # [derived]
-            modes="view listing",
+        F(name="item_mover", # derived @item_mover
+            label="Mover",
             localizable=[
                 show("view listing")
             ],
-            property=schema.TextLine(title=_("Mover"), required=False),
-            listing_column = scheduled_item_mover_column("mover", _(u"Mover"))
         ),
-        Field(name="item_type",
-            modes="view edit add listing",
+        F(name="item_type",
+            label="Item Type",
             localizable=[
-                show("view listing")
-            ],
-            property=schema.TextLine(title=_("Item Type")),
-        ),
-        Field(name="item_uri", # [derived]
-            modes="view listing",
-            localizable=[
+                show("edit add"), # db-not-null-ui-add, pk
                 show("view listing"),
             ],
-            property=schema.TextLine(title=_("uri"), required=False),
-            listing_column=scheduled_item_uri_column("uri", _(u"Item URI"))
+        ),
+        F(name="item_uri", # derived @item_uri
+            label="Item URI",
+            localizable=[
+                show("view listing")
+            ],
         ),
     ]
 
@@ -3122,22 +2333,24 @@ class EditorialNoteDescriptor(ModelDescriptor):
     display_name = _("Editorial Note")
     container_name = "Editorial Notes"
     fields = [
-        Field(name="editorial_note_id",
-            modes="view edit add listing",
+        F(name="editorial_note_id",
+            label="Item",
+            required=True,
             localizable=[
-                show("view listing")
+                show("edit add"), # db-not-null-ui-add, pk
+                show("view listing"),
             ],
-            property=schema.Int(title=_("Item"))
+            value_type="number",
+            render_type="number",
         ),
-        Field(name="text", 
-            modes="view edit add listing",
+        F(name="text",
+            label="Text",
+            required=True,
             localizable=[
                 show("view edit add listing")
             ],
-            property=schema.Text(title=_(u"Text")),
-            view_widget=widgets.HTMLDisplay,
-            edit_widget=widgets.RichTextEditor,
-            add_widget=widgets.RichTextEditor,
+            value_type="text",
+            render_type="rich_text",
         ),
         LanguageField("language")
     ]
@@ -3149,15 +2362,15 @@ class ItemScheduleDiscussionDescriptor(ModelDescriptor):
     
     fields = [
         LanguageField("language"),
-        Field(name="body", label=_("Minutes"), # [rtf]
-            modes="view edit add listing",
+        F(name="body",
+            label="Minutes",
+            required=True,
             localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view edit listing"),
             ],
-            property=schema.Text(title=_("Minutes")),
-            view_widget=widgets.HTMLDisplay,
-            edit_widget=widgets.RichTextEditor,
-            add_widget=widgets.RichTextEditor,
+            value_type="text",
+            render_type="rich_text",
         ),
         #Field(name="sitting_time",
         #    label=_("Sitting time"),
@@ -3168,36 +2381,40 @@ class ItemScheduleDiscussionDescriptor(ModelDescriptor):
 
 
 class ReportDescriptor(DocDescriptor):
+    order = _ORDER_BY_CONTAINER_NAMES.index("preports")
     localizable = True
     display_name = _("Report")
     container_name = _("Reports")
     sort_on = ["end_date"] + DocDescriptor.sort_on
     fields = [
         LanguageField("language"),
-        Field(name="short_title", label=_("Publications type"), # [user-req]
-            modes="view edit add listing",
+        F(name="title",
+            label="Publications type",
+            required=True,
             localizable=[
+                show("add"), # db-not-null-ui-add
                 show("view edit listing"),
             ],
+            value_type="text",
+            render_type="text_box",
         ),
-        Field(name="status_date", label=_("Published Date"), # [user-req]
-            modes="view edit add listing",
+        F(name="status_date",
+            label="Published Date",
+            required=True,
             localizable=[
-                show("view edit listing"),
+                show("view listing"),
             ],
-            listing_column=datetime_column("status_date", _("Published Date")),
-            edit_widget=widgets.DateWidget,
-            add_widget=widgets.DateWidget,
+            value_type="date",
+            render_type="date",
         ),
-        Field(name="body", label=_("Text"), # [rtf]
-            modes="view edit add",
+        F(name="body",
+            label="Text",
+            required=True,
             localizable=[
-                show("view edit"),
+                show("view edit add"),
             ],
-            property=schema.Text(title=_("Text")),
-            view_widget=widgets.HTMLDisplay,
-            edit_widget=widgets.RichTextEditor,
-            add_widget=widgets.RichTextEditor,
+            value_type="text",
+            render_type="rich_text",
         ),
     ]
     default_field_order = [ f.name for f in fields ]
@@ -3208,80 +2425,3 @@ class Report4SittingDescriptor(ReportDescriptor):
     fields = deepcopy(ReportDescriptor.fields)
 
 
-# catalyze above descriptors
-def catalyse_descriptors():
-    """Catalyze descriptors above. 
-    Relate each descriptor to a domain type via naming convention:
-    - if no domain type exists with that name, ignore
-    !+ this is probably catalyzing some descriptors unnecessarily... 
-    !+ if there is a need to be finer grained or for an explicit declaration
-    of what descriptors should be catalyzed, a flag may be added e.g. a 
-    catalyze:bool attribute could be added on Descriptor class.
-    """
-    import sys
-    import inspect
-    # mapping of unconventional descriptor prefixes to domain type names
-    # !+RENAME_TO_CONVENTION
-    non_conventional = {
-        "Attendance": "SittingAttendance",
-        "Mp": "MemberOfParliament",
-        "Session": "ParliamentSession",
-    }
-    def descriptor_classes():
-        """A generator of descriptor classes in this module, preserving the
-        order of definition.
-        """
-        from bungeni.alchemist.model import IModelDescriptor
-        module = sys.modules[__name__]
-        # dir() returns names in alphabetical order
-        decorated = []
-        for key in dir(module):
-            cls = getattr(module, key)
-            try:
-                assert IModelDescriptor.implementedBy(cls)
-                # we decorate with the source code line number for the cls
-                decorated.append((inspect.getsourcelines(cls)[1], cls))
-            except (TypeError, AttributeError, AssertionError):
-                debug.log_exc(sys.exc_info(), log_handler=log.debug)
-        # we yield each cls in order of definition
-        for cls in [ cls for (line_num, cls) in sorted(decorated) ]:
-            yield cls
-    
-    from bungeni.alchemist.catalyst import catalyst
-    from bungeni.core.workflows import adapters
-    for descriptor in descriptor_classes():
-        descriptor_name = descriptor.__name__
-        assert descriptor_name.endswith("Descriptor")
-        desc_prefix = descriptor_name[0:-len("Descriptor")]
-        kls_name = non_conventional.get(desc_prefix, desc_prefix)
-        try:
-            kls = getattr(domain, kls_name)
-            # !+ mv out of try/except
-            catalyst(None, kls, descriptor, echo=True)
-        except (Exception,):
-            # no corresponding domain class, ignore 
-            # e.g. Address, Model, ...
-            debug.log_exc(sys.exc_info(), log_handler=log.warn)
-            continue
-        # TYPE_REGISTRY, add descriptor
-        type_key = naming.un_camel(kls_name)
-        ti = capi.get_type_info(type_key, None)
-        if ti is None:
-            # non-workflowed type, add TI entry
-            ti = adapters.TI(None, queryModelInterface(kls))
-            ti.domain_model = kls
-            adapters.TYPE_REGISTRY.append((type_key, ti))
-        else:
-            assert ti.domain_model is kls
-        ti.descriptor = descriptor
-    
-    m = ("\n\nDone all workflow/descriptor related setup... running with:\n  " + 
-        "\n  ".join(sorted([ "%s: %s" % (name, ti)
-                for name, ti in adapters.TYPE_REGISTRY ])) + 
-        "\n")
-    log.debug(m)
-
-# !+catalyse_descriptors(mr, jul-2011), fails when this is called here 
-#catalyse_descriptors()
-
-#

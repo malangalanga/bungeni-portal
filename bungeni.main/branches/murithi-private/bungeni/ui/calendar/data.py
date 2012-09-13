@@ -33,7 +33,8 @@ def get_schedulable_types():
         (type_key, dict(
             title=type_info.descriptor.container_name,
             domain_model=type_info.domain_model,
-            workflow=type_info.workflow
+            workflow=type_info.workflow,
+            display_name=type_info.descriptor.display_name
         ))
         for (type_key, type_info) in schedulable_types
     ])
@@ -146,30 +147,34 @@ class SchedulableItemsGetter(object):
         date_formatter = date.getLocaleFormatter(common.get_request(), "date",
             "medium"
         )
-        items_json = dict(
-            items = [
-                dict(
-                    item_type = self.item_type,
-                    item_id = orm.object_mapper(item).primary_key_from_instance(
-                        item
-                    )[0],
-                    item_title = IDCDescriptiveProperties(item).title,
-                    status = IWorkflow(item).get_state(item.status).title,
-                    status_date = ( date_formatter.format(item.submission_date) 
-                        if hasattr(item, "submission_date") else None
-                    ),
-                    registry_number = ( item.registry_number if
-                        hasattr(item, "registry_number") else None
-                    ),
-                    item_mover = ( IDCDescriptiveProperties(item.owner).title if
-                        hasattr(item, "owner") else None
-                    ),
-                    item_uri = IDCDescriptiveProperties(item).uri
-                )
-                for item in self.query()
-            ]
+        items = [
+            dict(
+                item_type = self.item_type,
+                item_id = orm.object_mapper(item).primary_key_from_instance(
+                    item
+                )[0],
+                item_title = IDCDescriptiveProperties(item).title,
+                status = IWorkflow(item).get_state(item.status).title,
+                status_date = ( date_formatter.format(item.submission_date) 
+                    if (hasattr(item, "submission_date") and 
+                        getattr(item, "submission_date")
+                    )
+                    else None
+                ),
+                registry_number = ( item.registry_number if
+                    hasattr(item, "registry_number") else None
+                ),
+                item_mover = ( IDCDescriptiveProperties(item.owner).title if
+                    hasattr(item, "owner") else None
+                ),
+                item_uri = IDCDescriptiveProperties(item).uri
+            )
+            for item in self.query()
+        ]
+        items = sorted(items, key=lambda item:item.get("status_date"),
+            reverse=True
         )
-        return json.dumps(items_json)
+        return json.dumps(dict(items=items))
 
 
 class ExpandedSitting(object):

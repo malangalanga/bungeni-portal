@@ -10,18 +10,19 @@
 
 $Id$
 """
+log = __import__("logging").getLogger("bungeni.core.translation")
+
 from copy import copy
 
 from zope import component
 from zope.security.proxy import removeSecurityProxy
-
+from zope.security.interfaces import NoInteraction
 from zope.app.schema.vocabulary import IVocabularyFactory
 from zope.interface import implements
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.publisher.interfaces.http import IHTTPRequest
 from zope.i18n import translate
-
 from zope.publisher.browser import BrowserLanguages
 from zope.i18n.locales import locales
 
@@ -65,9 +66,12 @@ class LanguageVocabulary(object):
     implements(IVocabularyFactory)
 
     def __call__(self, context):
-        request = common.get_request()
+        try:
+            request = common.get_request()
+        except NoInteraction:
+            request = None
         def get_locale_lang(code):
-            if hasattr(request, "locale"):
+            if request and hasattr(request, "locale"):
                 return request.locale.displayNames.languages.get(code)
             return None
         languages = get_all_languages()
@@ -89,7 +93,7 @@ component.provideUtility(language_vocabulary_factory, IVocabularyFactory,
 class CurrentLanguageVocabulary(LanguageVocabulary):
     def __call__(self, context):
         language = get_language(context)
-        languages = get_all_languages(filter=[language])
+        languages = get_all_languages([language])
         items = [ (l, languages[l].get("name", l)) for l in languages ]
         items = [ SimpleTerm(i[0], i[0], i[1]) for i in items ]
         return SimpleVocabulary(items)
@@ -174,9 +178,16 @@ def translate_obj(context, lang=None):
     into the specified language or that defined in the request
     -> copy of the object translated into language of the request
     """
-    if lang is None:
-        lang = get_request_language()
     trusted = removeSecurityProxy(context)
+    if lang is None:
+        try:
+            lang = get_request_language()
+        except NoInteraction:
+            log.warn("Returning original object %s. No request was found and"
+                " no target language was provided to get translation.",
+                trusted
+            )
+            return trusted
     translation = get_translation_for(trusted, lang)
     obj = copy(trusted)
     for field_translation in translation:
