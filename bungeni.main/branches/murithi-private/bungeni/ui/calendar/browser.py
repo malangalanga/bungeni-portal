@@ -9,6 +9,7 @@ $Id$
 
 log = __import__("logging").getLogger("bungeni.ui.calendar")
 
+from copy import copy
 import time
 import datetime
 timedelta = datetime.timedelta
@@ -70,6 +71,8 @@ from bungeni.utils.capi import capi
 
 # Filter key names prefix - for available items listings
 FILTER_PREFIX = "filter_"
+
+DT_FORMAT = "%Y-%m-%d %H:%M"
 
 class TIME_SPAN:
     daily = _(u"Daily")
@@ -651,80 +654,63 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
     def handle_insert(self, action, data):
         session = Session()
         self.template_data = []
-        trusted = removeSecurityProxy(ISchedulingContext(self.context))
+        trusted = removeSecurityProxy(ISchedulingContext(self.context))        
+        initial_sitting = None
+        data["venue_id"] = unicode(data["venue"])
+        data["headless"] = "true"
+        self.request.form["venue_id"] = unicode(data["venue"])
+        self.request.form["headless"] = "true"
+        add_form = AddForm(trusted.get_group().sittings, self.request)
+        add_form.update()
+        if not add_form.errors:
+            initial_sitting = add_form.created_object
+        else:
+            log.error(add_form.errors)
+            return self.insert_sitting_failure_handler(action, data,
+                add_form.errors
+            )
         if ("rec_type" in data.keys()) and (data["rec_type"] not in [None, "none"]):
-            # !+ DATETIME(miano, dec-2010) the datetime widget above returns
-            # aware datetime objects while the current database setup only 
-            # supports naive objects. The lines below(and in subsequent actions)
-            # convert them to naive datetimes
+            # create recurring sittings
             length = data["event_length"]
             sitting_length = timedelta(seconds=length)
             base_sitting_length = sitting_length + timedelta(hours=1)
-            initial_sitting = None
-            recurrent_sittings = []
             dates = self.generate_dates(data)
+            initial_sitting.recurring_type = data.get("rec_type")
+            initial_sitting.recurring_id = 0
+            initial_sitting.sitting_length = length
             for count, date in enumerate(dates):
-                sitting = domain.Sitting()
-                sitting.group_id = trusted.group_id
-                sitting.short_name = data.get("short_name", None)
-                sitting.start_date = date
-                sitting.language = data["language"]
-                sitting.venue_id = data["venue"]
-                sitting.activity_type = data.get("activity_type", None)
-                sitting.meeting_type = data.get("meeting_type", None)
-                sitting.convocation_type = data.get("convocation_type", None)
                 if not count:
-                    sitting.end_date = dates[len(dates)-1] + base_sitting_length
-                    sitting.recurring_type = data.get("rec_type")
-                    sitting.recurring_id = 0
-                    sitting.sitting_length = length
-                    session.add(sitting)
-                    session.flush()
-                    initial_sitting = sitting
-                else:
-                    end_date = date + sitting_length
-                    sitting.end_date = end_date
-                    sitting.sitting_length = int(time.mktime(date.timetuple()))
-                    sitting.recurring_id = initial_sitting.sitting_id
-                    session.add(sitting)
-                    recurrent_sittings.append(sitting)
-            session.flush()
-            for s in ([initial_sitting] + recurrent_sittings):
-                notify(ObjectCreatedEvent(s))
-                self.template_data.append({
-                        "sitting_id": s.sitting_id, 
-                        "action": "inserted",
-                        "ids": data["ids"],
-                    })
-            self.request.response.setHeader("Content-type", "text/xml")
-            return self.xml_template()
-        else:
-            sitting = domain.Sitting()
-            sitting.short_name = data.get("short_name", None)
-            sitting.start_date = data["start_date"].replace(tzinfo=None)
-            sitting.end_date = data["end_date"].replace(tzinfo=None)
-            sitting.recurring_type = data["rec_type"]
-            sitting.sitting_length = data.get("event_length")
-            sitting.recurring_id = data.get("event_pid")
-            sitting.group_id = trusted.group_id
-            sitting.language = data["language"]
-            sitting.venue_id = data["venue"]
-            sitting.activity_type = data.get("activity_type", None)
-            sitting.meeting_type = data.get("meeting_type", None)
-            sitting.convocation_type = data.get("convocation_type", None)
-            session.add(sitting)
-            session.flush()
-            notify(ObjectCreatedEvent(sitting))
-            sitting_action = "inserted"
-            if data["rec_type"] == "none":
-                sitting_action = "deleted"
-            self.template_data.append({
-                    "sitting_id": sitting.sitting_id, 
-                    "action": sitting_action,
-                    "ids": data["ids"],
-                })
-            self.request.response.setHeader("Content-type", "text/xml")
-            return self.xml_template()
+                    #we've already added the initial sitting
+                    initial_sitting.end_date = (dates[len(dates)-1] + 
+                        base_sitting_length)
+                    session.merge(initial_sitting)
+                    continue
+                
+                sitting_data = copy(data)
+                sitting_data["start_date"] = date.strftime(DT_FORMAT)
+                sitting_data["end_date"] = (date + sitting_length).strftime(DT_FORMAT)
+                
+                request_copy = copy(self.request)
+                request_copy.form = sitting_data
+                add_form = AddForm(trusted.get_group().sittings, request_copy)
+                add_form.update()
+                log.error(add_form.errors)
+                if not add_form.errors:
+                    # use finishConstruction API here
+                    obj = add_form.created_object                    
+                    obj.sitting_length = int(time.mktime(date.timetuple()))
+                    obj.recurring_id = initial_sitting.sitting_id
+                    session.merge(obj)
+        sitting_action = "inserted"
+        if data["rec_type"] == "none":
+            sitting_action = "deleted"
+        self.template_data.append({
+                "sitting_id": initial_sitting.sitting_id, 
+                "action": sitting_action,
+                "ids": data["ids"],
+            })
+        self.request.response.setHeader("Content-type", "text/xml")
+        return self.xml_template()
           
     def update_sitting_failure_handler(self, action, data, errors):
         error_string = u""
@@ -835,7 +821,7 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
                 error_string += error.message + "\n"
             else:
                 error_string += error.__str__() + "\n"  
-        return "%s \n%s" % (error_message, error_string)  
+        return "%s \n%s" % (_(u"Error deleting sitting"), error_string)  
         
     @form.action(u"delete", failure="delete_sitting_failure_handler")
     def handle_delete(self, action, data):

@@ -148,7 +148,6 @@ class BaseForm(formlib.form.FormBase):
         else:
             # view api
             super(BaseForm, self).__init__(context, request)
-        
         if str(self.request.get("headless", "")).lower() in TRUE_VALS:
             self.setPrefix(NO_PREFIX)
 
@@ -164,17 +163,6 @@ class BaseForm(formlib.form.FormBase):
         next_url = self._next_url = self.request.get("next_url", None)
         if next_url == "...":
             self._next_url = self.request.get("HTTP_REFERER", "")
-
-    def __call__(self):
-        #session = Session()
-        # XXX control the display order of the submit buttons 
-        # the order seems to be determined by the self.actions.actions 
-        # tuple of zope.formlib.form.Action instances
-        print "XXX Order of Form Submit Buttons:", [ (a.name, a.label)
-                                                for a in self.actions.actions ]
-        call = super(BaseForm, self).__call__()
-        #session.close()
-        return call
 
     @property
     def widget_groups(self):
@@ -375,6 +363,7 @@ class AddForm(BaseForm, catalyst.AddForm):
     def createAndAdd(self, data):
         added_obj = super(AddForm, self).createAndAdd(data)
         cascade_modifications(added_obj)
+        self.created_object = added_obj
         return added_obj
     
     @formlib.form.action(

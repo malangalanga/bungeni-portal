@@ -240,7 +240,12 @@ def serialization_notifications_callback(channel, method, properties, body):
         session = Session()
         obj = session.query(domain_model).get(obj_key)
         if obj:
-            publish_to_xml(obj)
+            try:
+                publish_to_xml(obj)
+            except Exception, e:
+                log.error("Unable to publish object to XML %s : %s",
+                    obj, e
+                )
             channel.basic_ack(delivery_tag=method.delivery_tag)
         else:
             log.error("Could not query object of type %s with key %s. "

@@ -98,7 +98,7 @@ def validate_start_date_equals_end_date(action, data, context, container):
     if start_date and end_date:
         start = as_date(start_date) 
         end = as_date(end_date)
-        if start != end:
+        if (start != end) and (not data.get("rec_type")):
             errors.append(Invalid(
                     _(u"End date must be equal to start date"),
                     "end_date"))
