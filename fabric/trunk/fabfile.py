@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from modules import bungeni
 from fabric.api import *
-
+from fabric.context_managers import settings
 
 def essentials():
     """
@@ -760,8 +760,10 @@ def reset_all():
     """
     Resets Bungeni, eXist XML db and the message queue
     """
-    # RabbitMQ is reset first to prevent the bungeni serialization thread from crashing 
-    rabbitmq_reset()
-    db_load_mindata()
-    exist_reset()
+    # RabbitMQ is reset first to prevent the bungeni serialization thread from crashing
+    with settings(warn_only=True):
+        rabbitmq_reset()
+        db_load_mindata()
+        exist_reset()
+
 
