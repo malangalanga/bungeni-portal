@@ -632,7 +632,7 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
     def generate_dates(self, data):
         trusted = removeSecurityProxy(ISchedulingContext(self.context))
         recurrence_start_date = data["start_date"].replace(tzinfo=None)
-        recurrence_end_date = data["end_date"].replace(tzinfo=None)
+        recurrence_end_date = data["rec_end_date"].replace(tzinfo=None)
         group = trusted.get_group()
         # If group is none then there is a big problem
         assert group is not None
@@ -653,9 +653,17 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
     @form.action(u"insert", failure="insert_sitting_failure_handler")
     def handle_insert(self, action, data):
         session = Session()
+        data["rec_end_date"] = data["end_date"]
         self.template_data = []
         trusted = removeSecurityProxy(ISchedulingContext(self.context))        
         initial_sitting = None
+        length = data["event_length"]
+        if length:
+            sitting_length = timedelta(seconds=length)
+            data["end_date"] = data["start_date"] + sitting_length
+            self.request.form["end_date"] = data["end_date"].strftime(
+                DT_FORMAT
+            )
         data["venue_id"] = unicode(data["venue"])
         data["headless"] = "true"
         self.request.form["venue_id"] = unicode(data["venue"])
@@ -671,8 +679,6 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
             )
         if ("rec_type" in data.keys()) and (data["rec_type"] not in [None, "none"]):
             # create recurring sittings
-            length = data["event_length"]
-            sitting_length = timedelta(seconds=length)
             base_sitting_length = sitting_length + timedelta(hours=1)
             dates = self.generate_dates(data)
             initial_sitting.recurring_type = data.get("rec_type")
@@ -681,8 +687,8 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
             for count, date in enumerate(dates):
                 if not count:
                     #we've already added the initial sitting
-                    initial_sitting.end_date = (dates[len(dates)-1] + 
-                        base_sitting_length)
+                    initial_sitting.recurring_end_date = (
+                        dates[len(dates)-1] + base_sitting_length)
                     session.merge(initial_sitting)
                     continue
                 
@@ -726,6 +732,7 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
     def handle_update(self, action, data):
         session = Session()
         self.template_data = []
+        data["rec_end_date"] = data["end_date"]
         trusted = removeSecurityProxy(ISchedulingContext(self.context))
         if ("rec_type" in data.keys()) and (data["rec_type"] is not None):
             # updating recurring events - we assume existing events fall
@@ -748,7 +755,8 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
                     sitting = siblings[count]
                 sitting.start_date = date
                 if not count:
-                    sitting.end_date = dates[len(dates)-1] + base_sitting_length
+                    sitting.recurring_end_date = dates[len(dates)-1] + base_sitting_length
+                    sitting.end_date = date + sitting_length
                     sitting.recurring_type = data.get("rec_type")
                     sitting.recurring_id = 0
                     sitting.sitting_length = length
