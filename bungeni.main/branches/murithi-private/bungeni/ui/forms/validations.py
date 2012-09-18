@@ -13,7 +13,11 @@ Validators API:
 log = __import__("logging").getLogger("bungeni.ui.forms.validations")
 
 import datetime
+
+from zope.security import checkPermission
+from zope.security.proxy import removeSecurityProxy
 from zope.interface import Invalid
+
 import sqlalchemy as rdb
 from bungeni.alchemist import Session
 from bungeni.models import interfaces
@@ -24,9 +28,9 @@ from bungeni.ui.i18n import _
 from bungeni.ui.utils import queries
 from bungeni.ui.calendar.utils import generate_dates
 from bungeni.ui.calendar.utils import datetimedict
-from zope.security.proxy import removeSecurityProxy
 from interfaces import Modified
 
+from bungeni.utils.capi import capi
 
 # utils
 
@@ -454,7 +458,6 @@ def validate_member_titles(action, data, context, container):
 
 def validate_venues(action, data, context, container):
     """A venue can only be booked for one sitting at once."""
-    
     errors = []
     start = data.get("start_date")
     end = data.get("end_date")
@@ -611,4 +614,20 @@ def diff_validator(form, context, data):
                 if context.__dict__[name] != value:
                     errors.append(Modified(_(u"Value was changed!"), name))
     return logged_errors(errors, "diff_validator")
+
+
+def delete_validator(form, action, data):
+    """For good measure we check the permission associated with
+    the current type
+    """
+    type_id = capi.get_type_info(form.context).workflow_key
+    delete_permission = "bungeni.%s.Delete" % type_id
+    if checkPermission(delete_permission, form.context):
+        return []
+    else:
+        return logged_errors(
+            [Invalid(_(u"You have no right to delete this object"))], 
+            "delete_validator"
+        )
+    
 

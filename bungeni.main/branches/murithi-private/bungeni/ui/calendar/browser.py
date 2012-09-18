@@ -57,7 +57,7 @@ from bungeni.ui.utils import misc, url, date
 from bungeni.ui.menu import get_actions
 from bungeni.ui.widgets import LanguageLookupWidget
 from bungeni.ui.container import ContainerJSONListingRaw
-from bungeni.ui.forms.common import AddForm
+from bungeni.ui.forms.common import AddForm, DeleteForm
 from bungeni.ui.reporting import generators
 
 from bungeni.models import domain
@@ -833,21 +833,28 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
         
     @form.action(u"delete", failure="delete_sitting_failure_handler")
     def handle_delete(self, action, data):
-        session = Session()
         self.template_data = []
-        sitting = session.query(domain.Sitting).get(data["ids"])
-        # set extra data needed by template
+        trusted = removeSecurityProxy(ISchedulingContext(self.context))
+        container = trusted.get_group().sittings
+        sitting = container.get(int(data["ids"]))
         self.template_data = []
         if sitting is not None:
-            self.request.response.setHeader("Content-type", "text/xml")
-            self.template_data.append({
-                    "sitting_id": sitting.sitting_id, 
-                    "action": "deleted",
-                    "ids": data["ids"],
-                })
-            session.delete(sitting)
-            session.flush()
-            return self.xml_template()
+            self.request.form["headless"] = "true"
+            delete_form = DeleteForm(sitting, self.request)
+            delete_form.update()
+            if not delete_form.errors:
+                self.template_data.append({
+                        "sitting_id": sitting.sitting_id, 
+                        "action": "deleted",
+                        "ids": data["ids"],
+                    })
+            else:
+                log.error(delete_form.errors)
+                return self.delete_sitting_failure_handler(action, data,
+                    delete_form.errors
+                )
+        self.request.response.setHeader("Content-type", "text/xml")
+        return self.xml_template()
 
 class DhtmlxCalendarSittings(BrowserView):
     """This view returns xml of the sittings for the week and group 

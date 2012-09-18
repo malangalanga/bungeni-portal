@@ -46,6 +46,7 @@ from bungeni.models.interfaces import IVersion, IBungeniContent, \
 from bungeni.models import domain
 from bungeni.models.utils import get_db_user_id
 from bungeni.ui.forms.fields import filterFields
+from bungeni.ui.forms.validations import delete_validator
 from bungeni.ui.interfaces import IBungeniSkin, IFormEditLayer, \
     IGenenerateVocabularyDefault, IWorkspaceMyDocumentsSectionLayer
 from bungeni.ui.i18n import _
@@ -801,7 +802,8 @@ class DeleteForm(PageForm):
 
     @formlib.form.action(_(u"Delete"),
                          name="delete",
-                         condition=_can_delete_item)
+                         condition=_can_delete_item,
+                         validator=delete_validator)
     def handle_delete(self, action, data):
         count = self.delete_subobjects()
         container = self.context.__parent__
@@ -834,8 +836,9 @@ class DeleteForm(PageForm):
         if next_url is None:
             next_url = url.absoluteURL(container, self.request) + \
                        "/?portal_status_message=%d items deleted" % count
-
-        self.request.response.redirect(next_url)
+        
+        if not self.request.get("headless"):
+            self.request.response.redirect(next_url)
         
     @formlib.form.action(_(u"Cancel"), name="cancel",
                          validator=ui.null_validator)
