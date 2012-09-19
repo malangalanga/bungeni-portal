@@ -829,13 +829,20 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
                 error_string += error.message + "\n"
             else:
                 error_string += error.__str__() + "\n"  
-        return "%s \n%s" % (_(u"Error deleting sitting"), error_string)  
+        #return "%s \n%s" % (_(u"Error deleting sitting"), error_string)  
+        self.template_data.append(
+            dict(action="inserted", ids=data["ids"], sitting_id=data["ids"])
+        )
+        self.request.response.setHeader("Content-type", "text/xml")
+        return self.xml_template()
         
     @form.action(u"delete", failure="delete_sitting_failure_handler")
     def handle_delete(self, action, data):
         self.template_data = []
-        trusted = removeSecurityProxy(ISchedulingContext(self.context))
-        container = trusted.get_group().sittings
+        if ISchedulingContext.providedBy(self.context):
+            container = removeSecurityProxy(self.context.__parent__).sittings
+        else:
+            container = self.context.publishTraverse(self.request, "sittings")
         sitting = container.get(int(data["ids"]))
         self.template_data = []
         if sitting is not None:
