@@ -1,0 +1,23 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+           xmlns:cmf="http://namespaces.zope.org/cmf"
+           i18n_domain="bungeni.FacultyStaffExtender">
+
+    <include package="archetypes.schemaextender" />
+    
+    <genericsetup:registerProfile
+        name="default"
+        title="FacultyStaffDirectory extender"
+        directory="profiles/default"
+        description="Extensions of the Product.FacultyStaffDirectory product"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+    />
+    
+    <cmf:registerDirectory name="bungeni_FacultyStaffExtender_templates"/>
+    
+    <adapter
+        name="bungeni-FacultyStaffDirectoryExtender"
+        factory=".extender.FacultyStaffDirectoryExtender"
+        provides="archetypes.schemaextender.interfaces.ISchemaModifier" />
+
+</configure>
