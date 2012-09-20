@@ -1,6 +1,6 @@
 from Products.FacultyStaffDirectory.interfaces.facultystaffdirectory import IFacultyStaffDirectory
 from archetypes.schemaextender.interfaces import ISchemaModifier, IBrowserLayerAwareExtender
-from bungeni.FacultyStaffExtender.interfaces import IFacultyStaffExtenderLayer
+from bungenicms.FacultyStaffExtender.interfaces import IFacultyStaffExtenderLayer
 from zope.component import adapts
 from zope.interface import implements
 

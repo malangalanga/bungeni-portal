@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<object name="portal_skins">
+    <object name="bungenicms_FacultyStaffExtender_templates"
+        meta_type="Filesystem Directory View"
+        directory="bungenicms.FacultyStaffExtender:skins/bungenicms_FacultyStaffExtender_templates"/>    
+    <skin-path name="*">
+        <layer name="bungenicms_FacultyStaffExtender_templates" 
+               insert-after="custom"/>
+    </skin-path>    
+</object>

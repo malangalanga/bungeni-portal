@@ -3,12 +3,12 @@ from setuptools import setup
 from setuptools import find_packages
 
 version = open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 
-    'bungeni', 'FacultyStaffExtender', 'version.txt')).read().strip()
+    'bungenicms', 'FacultyStaffExtender', 'version.txt')).read().strip()
     
 shortdesc = 'Product to customize Products.FacultyStaffDirectory'
 readme = open(os.path.join(os.path.dirname(__file__), 'README.txt')).read() + "\n" + open(os.path.join(os.path.dirname(__file__), 'HISTORY.txt')).read()
 
-setup(name='bungeni.FacultyStaffExtender',
+setup(name='bungenicms.FacultyStaffExtender',
       version=version,
       description=shortdesc,
       long_description=readme,
@@ -24,7 +24,7 @@ setup(name='bungeni.FacultyStaffExtender',
       url='http://www.parliaments.info/',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
-      namespace_packages=['bungeni'],
+      namespace_packages=['bungenicms'],
       include_package_data=True,
       zip_safe=False,
       install_requires=[
