@@ -46,7 +46,6 @@ from bungeni.models.interfaces import IVersion, IBungeniContent, \
 from bungeni.models import domain
 from bungeni.models.utils import get_db_user_id
 from bungeni.ui.forms.fields import filterFields
-from bungeni.ui.forms.validations import delete_validator
 from bungeni.ui.interfaces import IBungeniSkin, IFormEditLayer, \
     IGenenerateVocabularyDefault, IWorkspaceMyDocumentsSectionLayer
 from bungeni.ui.i18n import _
@@ -802,8 +801,7 @@ class DeleteForm(PageForm):
 
     @formlib.form.action(_(u"Delete"),
                          name="delete",
-                         condition=_can_delete_item,
-                         validator=delete_validator)
+                         condition=_can_delete_item)
     def handle_delete(self, action, data):
         count = self.delete_subobjects()
         container = self.context.__parent__

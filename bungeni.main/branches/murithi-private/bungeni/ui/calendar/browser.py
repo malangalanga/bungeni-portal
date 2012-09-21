@@ -657,13 +657,9 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
         self.template_data = []
         trusted = removeSecurityProxy(ISchedulingContext(self.context))        
         initial_sitting = None
-        length = data["event_length"]
-        if length:
-            sitting_length = timedelta(seconds=length)
-            data["end_date"] = data["start_date"] + sitting_length
-            self.request.form["end_date"] = data["end_date"].strftime(
-                DT_FORMAT
-            )
+        length = data["event_length"]             
+        if data.get("rec_type") not in [None, "none"]:
+            data["end_date"] = data["start_date"] + timedelta(length)
         data["venue_id"] = unicode(data["venue"])
         data["headless"] = "true"
         self.request.form["venue_id"] = unicode(data["venue"])
@@ -673,13 +669,14 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
         if not add_form.errors:
             initial_sitting = add_form.created_object
         else:
-            log.error(add_form.errors)
             return self.insert_sitting_failure_handler(action, data,
                 add_form.errors
             )
         if ("rec_type" in data.keys()) and (data["rec_type"] not in [None, "none"]):
             # create recurring sittings
-            base_sitting_length = sitting_length + timedelta(hours=1)
+            #base_sitting_length = sitting_length + timedelta(hours=1)
+            sitting_length = timedelta(seconds=length)
+            base_sitting_length = timedelta(seconds=length) + timedelta(hours=1)
             dates = self.generate_dates(data)
             initial_sitting.recurring_type = data.get("rec_type")
             initial_sitting.recurring_id = 0
@@ -700,16 +697,24 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
                 request_copy.form = sitting_data
                 add_form = AddForm(trusted.get_group().sittings, request_copy)
                 add_form.update()
-                log.error(add_form.errors)
                 if not add_form.errors:
                     # use finishConstruction API here
                     obj = add_form.created_object                    
                     obj.sitting_length = int(time.mktime(date.timetuple()))
                     obj.recurring_id = initial_sitting.sitting_id
                     session.merge(obj)
+        else:
+            initial_sitting.recurring_type = data.get("rec_type")
+            initial_sitting.recurring_id = data.get("event_pid", 0)
+            if data.get("event_length"):
+                initial_sitting.sitting_length = data.get("event_length")
+            session.merge(initial_sitting)
+            wfc = IWorkflowController(initial_sitting)
+            wfc.fireAutomatic()
         sitting_action = "inserted"
         if data["rec_type"] == "none":
             sitting_action = "deleted"
+            session.merge(initial_sitting)
         self.template_data.append({
                 "sitting_id": initial_sitting.sitting_id, 
                 "action": sitting_action,
@@ -764,6 +769,7 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
                     end_date = date + sitting_length
                     sitting.end_date = end_date
                     sitting.sitting_length = int(time.mktime(date.timetuple()))
+                    sitting.recurring_type = None
                 #apply changes to parent and siblings new or existing
                 sitting.short_name = data.get("short_name", None)
                 sitting.venue_id = data["venue"]
@@ -856,7 +862,6 @@ class DhtmlxCalendarSittingsEdit(form.PageForm):
                         "ids": data["ids"],
                     })
             else:
-                log.error(delete_form.errors)
                 return self.delete_sitting_failure_handler(action, data,
                     delete_form.errors
                 )
@@ -880,8 +885,9 @@ class DhtmlxCalendarSittings(BrowserView):
         self.__parent__ = context
           
     def get_sessions(self):
-        sessions = [ removeSecurityProxy(session) for session in
-            Session().query(domain.Session).all()
+        sessions = [ removeSecurityProxy(session) for key, session in 
+            self.context.get_group().sessions.items()
+            if checkPermission("zope.View", session)
         ]
         colours = utils.generate_event_colours(len(sessions))
         for (index, sess) in enumerate(sessions):
