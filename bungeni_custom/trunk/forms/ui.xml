@@ -1,567 +1,567 @@
 <ui roles="bungeni.CommitteeMember bungeni.Minister bungeni.Owner bungeni.Clerk.HeadClerk bungeni.Signatory bungeni.Anonymous bungeni.MP bungeni.Authenticated bungeni.Speaker bungeni.PoliticalGroupMember bungeni.Admin bungeni.Government bungeni.Clerk.QuestionClerk bungeni.Translator bungeni.Clerk">
 
     <descriptor name="agenda_item" order="10">
-        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="type_number" displayable="view listing" localizable="view listing">
+        <field name="type_number" label="Number" required="false" value_type="number" render_type="number">
             <show modes="view listing" />
         </field>
-        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="description" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="doc_type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="doc_type" label="Document Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="doc_type">
             <show modes="view edit add listing" />
         </field>
-        <field name="parliament_id" displayable="view listing" localizable="view listing">
+        <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select" vocabulary="parliament">
             <hide modes="view listing" />
         </field>
-        <field name="owner_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="owner_id" label="Moved by" description="Select the user who moved the document" required="true" value_type="member" render_type="single_select" vocabulary="parliament_member_delegation">
             <show modes="add" />
             <show modes="edit" />
             <hide modes="view listing" roles="bungeni.Anonymous" />
         </field>
-        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+        <field name="registry_number" label="Registry Number" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
             <hide modes="edit" />
         </field>
-        <field name="uri" displayable="view edit listing" localizable="view edit listing">
+        <field name="uri" label="URI" required="false" value_type="text" render_type="text_line">
             <show modes="view" />
             <hide modes="edit listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="submission_date" displayable="view listing" localizable="view listing">
+        <field name="submission_date" label="Submission Date" required="false" value_type="date" render_type="date">
             <show modes="view" />
             <hide modes="listing" />
         </field>
-        <field name="admissible_date" displayable="view listing" localizable="view listing">
+        <field name="admissible_date" label="Admissible Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="coverage" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="geolocation" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="body" displayable="view edit add" localizable="view edit add">
+        <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="timestamp" displayable="edit" localizable="edit">
+        <field name="timestamp" label="" required="false" value_type="timestamp" render_type="datetime">
             <show modes="edit" />
         </field>
     </descriptor>
 
     <descriptor name="attachment">
-        <field name="type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="type" label="Attachment Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="attachment_type">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="title" label="Title" required="false" value_type="text" render_type="text_line">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="data" displayable="view edit add" localizable="view edit add">
+        <field name="data" label="File" description="Upload a file" required="false" value_type="file" render_type="file">
             <show modes="view edit add" />
         </field>
-        <field name="name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="name" label="Name" required="false" value_type="text" render_type="no_input">
             <show modes="view edit add listing" />
         </field>
-        <field name="mimetype" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="mimetype" label="MIME Type" required="false" value_type="text" render_type="no_input">
             <show modes="view edit add listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Status Date" required="false" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
+        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
     </descriptor>
 
     <descriptor name="attachment_version">
-        <field name="user_id" displayable="view listing" localizable="view listing">
+        <field name="user_id" label="User" required="true" value_type="user" render_type="single_select" vocabulary="user">
             <show modes="view listing" />
         </field>
-        <field name="action" displayable="view listing" localizable="view listing">
+        <field name="action" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
         </field>
-        <field name="seq" displayable="view listing" localizable="view listing">
+        <field name="seq" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
         </field>
-        <field name="procedure" displayable="view listing" localizable="view listing">
+        <field name="procedure" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
         </field>
-        <field name="date_audit" displayable="view listing" localizable="view listing">
+        <field name="date_audit" label="Date Audit" required="true" value_type="datetime" render_type="datetime">
             <hide modes="view listing" />
         </field>
-        <field name="date_active" displayable="view listing" localizable="view listing">
+        <field name="date_active" label="Date Active" required="true" value_type="datetime" render_type="datetime">
             <show modes="view listing" />
         </field>
-        <field name="type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="type" label="Attachment Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="attachment_type">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="title" label="Title" required="false" value_type="text" render_type="text_line">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="data" displayable="view edit add" localizable="view edit add">
+        <field name="data" label="File" description="Upload a file" required="false" value_type="file" render_type="file">
             <show modes="view edit add" />
         </field>
-        <field name="name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="name" label="Name" required="false" value_type="text" render_type="no_input">
             <show modes="view edit add listing" />
         </field>
-        <field name="mimetype" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="mimetype" label="MIME Type" required="false" value_type="text" render_type="no_input">
             <show modes="view edit add listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Status Date" required="false" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
+        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="audit_id" displayable="view listing" localizable="view listing">
+        <field name="audit_id" required="false" value_type="text" render_type="text_line">
             <hide modes="view listing" />
         </field>
     </descriptor>
 
     <descriptor name="bill" order="11">
-        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="type_number" displayable="view listing" localizable="view listing">
+        <field name="type_number" label="Number" required="false" value_type="number" render_type="number">
             <show modes="view listing" />
         </field>
-        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="description" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="doc_type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="doc_type" label="Bill Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="bill_type">
             <show modes="view edit add listing" />
         </field>
-        <field name="parliament_id" displayable="view listing" localizable="view listing">
+        <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select" vocabulary="parliament">
             <hide modes="view listing" />
         </field>
-        <field name="owner_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="owner_id" label="Moved by" description="Select the user who moved the document" required="true" value_type="member" render_type="single_select" vocabulary="parliament_member_delegation">
             <show modes="add" />
             <show modes="edit" />
             <hide modes="view listing" roles="bungeni.Anonymous" />
         </field>
-        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+        <field name="registry_number" label="Registry Number" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
             <hide modes="edit" />
         </field>
-        <field name="uri" displayable="view edit listing" localizable="view edit listing">
+        <field name="uri" label="URI" required="false" value_type="text" render_type="text_line">
             <show modes="view" />
             <hide modes="edit listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="submission_date" displayable="view listing" localizable="view listing">
+        <field name="submission_date" label="Submission Date" required="false" value_type="date" render_type="date">
             <show modes="view" />
             <hide modes="listing" />
         </field>
-        <field name="publication_date" displayable="view listing" localizable="view listing">
+        <field name="publication_date" label="Publication Date" required="false" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="short_title" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="short_title" label="Statement of Purpose" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="group_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="group_id" label="Ministry" required="false" value_type="group" render_type="single_select" vocabulary="ministry">
             <show modes="view edit add listing" />
         </field>
-        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="coverage" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="geolocation" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="body" displayable="view edit add" localizable="view edit add">
+        <field name="body" label="Statement of Purpose" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="timestamp" displayable="edit" localizable="edit">
+        <field name="timestamp" label="" required="false" value_type="timestamp" render_type="datetime">
             <show modes="edit" />
         </field>
     </descriptor>
 
     <descriptor name="committee" order="20">
-        <field name="full_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="full_name" label="Full Name" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="short_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="combined_name" displayable="listing" localizable="listing">
+        <field name="combined_name" label="Full Name [Short Name]" required="false" value_type="combined_name" render_type="text_line">
             <show modes="listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
+        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="identifier" displayable="view edit add" localizable="view edit add">
+        <field name="identifier" label="Committee Identifier" description="Unique identifier or number for this Committee" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
         </field>
-        <field name="sub_type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="sub_type" label="Committee Type" required="false" value_type="vocabulary" render_type="single_select" vocabulary="committee_type">
             <show modes="view edit add listing" />
         </field>
-        <field name="group_continuity" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="group_continuity" label="Committee Status Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="committee_continuity">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="num_members" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="num_members" label="Number of members" required="false" value_type="number" render_type="number">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="min_num_members" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="min_num_members" label="Minimum Number of members" required="false" value_type="number" render_type="number">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="quorum" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="quorum" label="Quorum" required="false" value_type="number" render_type="number">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="num_clerks" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="num_clerks" label="Number of clerks" required="false" value_type="number" render_type="number">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="num_researchers" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="num_researchers" label="Number of researchers" required="false" value_type="number" render_type="number">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="proportional_representation" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="proportional_representation" label="Proportional representation" required="false" value_type="bool" render_type="bool">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="reinstatement_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="reinstatement_date" label="Reinstatement Date" required="false" value_type="date" render_type="date">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
     </descriptor>
 
     <descriptor name="committee_member">
-        <field name="user_id" displayable="view add listing" localizable="view add listing">
+        <field name="user_id" label="Name" required="true" value_type="user" render_type="single_select" vocabulary="parliament_member">
             <show modes="add" />
             <show modes="view listing" />
         </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="active_p" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="active_p" label="Active" required="false" value_type="bool" render_type="bool">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
+        <field name="substitution_type" label="Type of Substitution" required="false" value_type="text" render_type="text_line">
             <show modes="view edit listing" />
         </field>
-        <field name="replaced_id" displayable="view edit listing" localizable="view edit listing">
+        <field name="replaced_id" label="Substituted by" required="false" value_type="text" render_type="single_select" vocabulary="substitution">
             <show modes="view edit listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="notes" displayable="view edit add" localizable="view edit add">
+        <field name="notes" label="Notes" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
     </descriptor>
 
     <descriptor name="committee_staff">
-        <field name="user_id" displayable="view add listing" localizable="view add listing">
+        <field name="user_id" label="Name" required="true" value_type="user" render_type="single_select" vocabulary="user_not_mp">
             <show modes="add" />
             <show modes="view listing" />
         </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="active_p" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="active_p" label="Active" required="false" value_type="bool" render_type="bool">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
+        <field name="substitution_type" label="Type of Substitution" required="false" value_type="text" render_type="text_line">
             <show modes="view edit listing" />
         </field>
-        <field name="replaced_id" displayable="view edit listing" localizable="view edit listing">
+        <field name="replaced_id" label="Substituted by" required="false" value_type="text" render_type="single_select" vocabulary="substitution">
             <show modes="view edit listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="notes" displayable="view edit add" localizable="view edit add">
+        <field name="notes" label="Notes" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
     </descriptor>
 
     <descriptor name="country">
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="country_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="country_id" label="Country Code" description="Two letter ISO Code for this country e.g. DZ for Algeria" required="true" value_type="text" render_type="text_line">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="country_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="country_name" label="Country" description="Name of the Country" required="true" value_type="text" render_type="text_line">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
     </descriptor>
 
     <descriptor name="doc">
-        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="type_number" displayable="view listing" localizable="view listing">
+        <field name="type_number" label="Number" required="false" value_type="number" render_type="number">
             <show modes="view listing" />
         </field>
-        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="description" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="doc_type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="doc_type" label="Document Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="doc_type">
             <show modes="view edit add listing" />
         </field>
-        <field name="parliament_id" displayable="view listing" localizable="view listing">
+        <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select" vocabulary="parliament">
             <hide modes="view listing" />
         </field>
-        <field name="owner_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="owner_id" label="Moved by" description="Select the user who moved the document" required="true" value_type="member" render_type="single_select" vocabulary="parliament_member_delegation">
             <show modes="add" />
             <show modes="edit" />
             <hide modes="view listing" roles="bungeni.Anonymous" />
         </field>
-        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+        <field name="registry_number" label="Registry Number" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
             <hide modes="edit" />
         </field>
-        <field name="uri" displayable="view edit listing" localizable="view edit listing">
+        <field name="uri" label="URI" required="false" value_type="text" render_type="text_line">
             <show modes="view" />
             <hide modes="edit listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="submission_date" displayable="view listing" localizable="view listing">
+        <field name="submission_date" label="Submission Date" required="false" value_type="date" render_type="date">
             <show modes="view" />
             <hide modes="listing" />
         </field>
-        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="coverage" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="geolocation" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="body" displayable="view edit add" localizable="view edit add">
+        <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="timestamp" displayable="edit" localizable="edit">
+        <field name="timestamp" label="" required="false" value_type="timestamp" render_type="datetime">
             <show modes="edit" />
         </field>
     </descriptor>
 
     <descriptor name="doc_version">
-        <field name="user_id" displayable="view listing" localizable="view listing">
+        <field name="user_id" label="User" required="true" value_type="user" render_type="single_select" vocabulary="user">
             <show modes="view listing" />
         </field>
-        <field name="action" displayable="view listing" localizable="view listing">
+        <field name="action" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
         </field>
-        <field name="seq" displayable="view listing" localizable="view listing">
+        <field name="seq" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
         </field>
-        <field name="procedure" displayable="view listing" localizable="view listing">
+        <field name="procedure" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
         </field>
-        <field name="date_audit" displayable="view listing" localizable="view listing">
+        <field name="date_audit" label="Date Audit" required="true" value_type="datetime" render_type="datetime">
             <hide modes="view listing" />
         </field>
-        <field name="date_active" displayable="view listing" localizable="view listing">
+        <field name="date_active" label="Date Active" required="true" value_type="datetime" render_type="datetime">
             <show modes="view listing" />
         </field>
-        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="type_number" displayable="view listing" localizable="view listing">
+        <field name="type_number" label="Number" required="false" value_type="number" render_type="number">
             <show modes="view listing" />
         </field>
-        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="description" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="doc_type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="doc_type" label="Document Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="doc_type">
             <show modes="view edit add listing" />
         </field>
-        <field name="parliament_id" displayable="view listing" localizable="view listing">
+        <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select" vocabulary="parliament">
             <hide modes="view listing" />
         </field>
-        <field name="owner_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="owner_id" label="Moved by" description="Select the user who moved the document" required="true" value_type="member" render_type="single_select" vocabulary="parliament_member_delegation">
             <show modes="add" />
             <show modes="edit" />
             <hide modes="view listing" roles="bungeni.Anonymous" />
         </field>
-        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+        <field name="registry_number" label="Registry Number" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
             <hide modes="edit" />
         </field>
-        <field name="uri" displayable="view edit listing" localizable="view edit listing">
+        <field name="uri" label="URI" required="false" value_type="text" render_type="text_line">
             <show modes="view" />
             <hide modes="edit listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="submission_date" displayable="view listing" localizable="view listing">
+        <field name="submission_date" label="Submission Date" required="false" value_type="date" render_type="date">
             <show modes="view" />
             <hide modes="listing" />
         </field>
-        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="coverage" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="geolocation" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="body" displayable="view edit add" localizable="view edit add">
+        <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="timestamp" displayable="edit" localizable="edit">
+        <field name="timestamp" label="" required="false" value_type="timestamp" render_type="datetime">
             <show modes="edit" />
         </field>
-        <field name="audit_id" displayable="view listing" localizable="view listing">
+        <field name="audit_id" required="false" value_type="text" render_type="text_line">
             <hide modes="view listing" />
         </field>
     </descriptor>
 
     <descriptor name="editorial_note">
-        <field name="editorial_note_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="editorial_note_id" label="Item" required="true" value_type="number" render_type="number">
             <show modes="edit add" />
             <show modes="view listing" />
         </field>
-        <field name="text" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="text" label="Text" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
@@ -569,184 +569,184 @@
     </descriptor>
 
     <descriptor name="event">
-        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="type_number" displayable="view listing" localizable="view listing">
+        <field name="type_number" label="Number" required="false" value_type="number" render_type="number">
             <show modes="view listing" />
         </field>
-        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="description" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="doc_type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="doc_type" label="Event Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="event_type">
             <show modes="view edit add listing" />
         </field>
-        <field name="parliament_id" displayable="view listing" localizable="view listing">
+        <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select" vocabulary="parliament">
             <hide modes="view listing" />
         </field>
-        <field name="owner_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="owner_id" label="Owner" required="true" value_type="user" render_type="single_select" vocabulary="owner_or_login">
             <show modes="add" />
             <show modes="edit" />
             <hide modes="view listing" roles="bungeni.Anonymous" />
         </field>
-        <field name="group_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="group_id" label="Group" required="false" value_type="text" render_type="single_select" vocabulary="group">
             <show modes="view edit add listing" />
         </field>
-        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+        <field name="registry_number" label="Registry Number" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
             <hide modes="edit" />
         </field>
-        <field name="uri" displayable="view edit listing" localizable="view edit listing">
+        <field name="uri" label="URI" required="false" value_type="text" render_type="text_line">
             <show modes="view" />
             <hide modes="edit listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="submission_date" displayable="view listing" localizable="view listing">
+        <field name="submission_date" label="Submission Date" required="false" value_type="date" render_type="date">
             <show modes="view" />
             <hide modes="listing" />
         </field>
-        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="coverage" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="geolocation" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="body" displayable="view edit add" localizable="view edit add">
+        <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="timestamp" displayable="edit" localizable="edit">
+        <field name="timestamp" label="" required="false" value_type="timestamp" render_type="datetime">
             <show modes="edit" />
         </field>
     </descriptor>
 
     <descriptor name="government" order="21">
-        <field name="full_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="full_name" label="Full Name" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="short_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="combined_name" displayable="listing" localizable="listing">
+        <field name="combined_name" label="Full Name [Short Name]" required="false" value_type="combined_name" render_type="text_line">
             <show modes="listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
+        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="identifier" displayable="view edit add" localizable="view edit add">
+        <field name="identifier" label="Government Identifier" description="Unique identifier or number for this Government" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
         </field>
     </descriptor>
 
     <descriptor name="group_address">
-        <field name="logical_address_type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="logical_address_type" label="Address Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="logical_address_type">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="postal_address_type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="postal_address_type" label="Postal Address Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="postal_address_type">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="street" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="street" label="Street" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="city" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="city" label="City" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="zipcode" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="zipcode" label="Zip Code" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="country_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="country_id" label="Country" required="false" value_type="text" render_type="single_select" vocabulary="country">
             <show modes="view edit add listing" />
         </field>
-        <field name="phone" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="phone" label="Phone Number(s)" description="Enter one phone number per line" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
         </field>
-        <field name="fax" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="fax" label="Fax Number(s)" description="Enter one fax number per line" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
         </field>
-        <field name="email" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="email" label="Email" description="Email address" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
     </descriptor>
 
     <descriptor name="group">
-        <field name="full_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="full_name" label="Full Name" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="short_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="combined_name" displayable="listing" localizable="listing">
+        <field name="combined_name" label="Full Name [Short Name]" required="false" value_type="combined_name" render_type="text_line">
             <show modes="listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
+        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
     </descriptor>
 
     <descriptor name="heading" order="3">
-        <field name="text" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="text" label="Title" required="true" value_type="text" render_type="text_line">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
@@ -754,108 +754,108 @@
     </descriptor>
 
     <descriptor name="item_schedule">
-        <field name="item_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="item_id" label="Item" required="true" value_type="number" render_type="number">
             <show modes="edit add" />
             <show modes="view listing" />
         </field>
-        <field name="item_title" displayable="view listing" localizable="view listing">
+        <field name="item_title" label="Title" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
         </field>
-        <field name="item_mover" displayable="view listing" localizable="view listing">
+        <field name="item_mover" label="Mover" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
         </field>
-        <field name="item_type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="item_type" label="Item Type" required="false" value_type="text" render_type="text_line">
             <show modes="edit add" />
             <show modes="view listing" />
         </field>
-        <field name="item_uri" displayable="view listing" localizable="view listing">
+        <field name="item_uri" label="Item URI" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
         </field>
     </descriptor>
 
     <descriptor name="item_schedule_discussion">
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="body" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="body" label="Minutes" required="true" value_type="text" render_type="rich_text">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
     </descriptor>
 
     <descriptor name="member_of_parliament" order="18">
-        <field name="user_id" displayable="view add listing" localizable="view add listing">
+        <field name="user_id" label="Name" required="true" value_type="user" render_type="single_select" vocabulary="member">
             <show modes="add" />
             <show modes="view listing" />
         </field>
-        <field name="member_election_type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="member_election_type" label="Election Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="member_election_type">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="election_nomination_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="election_nomination_date" label="Election/Nomination Date" required="false" value_type="date" render_type="date">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="active_p" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="active_p" label="Active" required="false" value_type="bool" render_type="bool">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
+        <field name="substitution_type" label="Type of Substitution" required="false" value_type="text" render_type="text_line">
             <show modes="view edit listing" />
         </field>
-        <field name="replaced_id" displayable="view edit listing" localizable="view edit listing">
+        <field name="replaced_id" label="Substituted by" required="false" value_type="text" render_type="single_select" vocabulary="substitution">
             <show modes="view edit listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="representation" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="representation" label="Representation" description="Select Representation" required="false" value_type="text" render_type="tree_text" vocabulary="representation">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="party" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="party" label="Political Party" required="false" value_type="vocabulary" render_type="single_select" vocabulary="party">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="leave_reason" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="leave_reason" label="Leave Reason" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="notes" displayable="view edit add" localizable="view edit add">
+        <field name="notes" label="Notes" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
     </descriptor>
 
     <descriptor name="member_title">
-        <field name="title_type_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="title_type_id" label="Title" required="true" value_type="vocabulary" render_type="single_select" vocabulary="group_title_types">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="end_date" label="End Date" description="Date of the dissolution" required="false" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
@@ -863,619 +863,619 @@
     </descriptor>
 
     <descriptor name="minister">
-        <field name="user_id" displayable="view add listing" localizable="view add listing">
+        <field name="user_id" label="Name" required="true" value_type="user" render_type="single_select" vocabulary="user">
             <show modes="add" />
             <show modes="view listing" />
         </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="active_p" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="active_p" label="Active" required="false" value_type="bool" render_type="bool">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
+        <field name="substitution_type" label="Type of Substitution" required="false" value_type="text" render_type="text_line">
             <show modes="view edit listing" />
         </field>
-        <field name="replaced_id" displayable="view edit listing" localizable="view edit listing">
+        <field name="replaced_id" label="Substituted by" required="false" value_type="text" render_type="single_select" vocabulary="substitution">
             <show modes="view edit listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="notes" displayable="view edit add" localizable="view edit add">
+        <field name="notes" label="Notes" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
     </descriptor>
 
     <descriptor name="ministry">
-        <field name="full_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="full_name" label="Full Name" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="short_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="combined_name" displayable="listing" localizable="listing">
+        <field name="combined_name" label="Full Name [Short Name]" required="false" value_type="combined_name" render_type="text_line">
             <show modes="listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
+        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="identifier" displayable="view edit add" localizable="view edit add">
+        <field name="identifier" label="Ministry Identifier" description="Unique identifier or number for this Ministry" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
         </field>
     </descriptor>
 
     <descriptor name="motion" order="12">
-        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="type_number" displayable="view listing" localizable="view listing">
+        <field name="type_number" label="Number" required="false" value_type="number" render_type="number">
             <show modes="view listing" />
         </field>
-        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="description" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="doc_type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="doc_type" label="Document Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="doc_type">
             <show modes="view edit add listing" />
         </field>
-        <field name="parliament_id" displayable="view listing" localizable="view listing">
+        <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select" vocabulary="parliament">
             <hide modes="view listing" />
         </field>
-        <field name="owner_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="owner_id" label="Moved by" description="Select the user who moved the document" required="true" value_type="member" render_type="single_select" vocabulary="parliament_member_delegation">
             <show modes="add" />
             <show modes="edit" />
             <hide modes="view listing" roles="bungeni.Anonymous" />
         </field>
-        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+        <field name="registry_number" label="Registry Number" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
             <hide modes="edit" />
         </field>
-        <field name="uri" displayable="view edit listing" localizable="view edit listing">
+        <field name="uri" label="URI" required="false" value_type="text" render_type="text_line">
             <show modes="view" />
             <hide modes="edit listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="submission_date" displayable="view listing" localizable="view listing">
+        <field name="submission_date" label="Submission Date" required="false" value_type="date" render_type="date">
             <show modes="view" />
             <hide modes="listing" />
         </field>
-        <field name="admissible_date" displayable="view listing" localizable="view listing">
+        <field name="admissible_date" label="Admissible Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="notice_date" displayable="view listing" localizable="view listing">
+        <field name="notice_date" label="Notice Date" required="false" value_type="date" render_type="date">
             <show modes="view" />
             <hide modes="listing" />
         </field>
-        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="coverage" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="geolocation" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="body" displayable="view edit add" localizable="view edit add">
+        <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="timestamp" displayable="edit" localizable="edit">
+        <field name="timestamp" label="" required="false" value_type="timestamp" render_type="datetime">
             <show modes="edit" />
         </field>
     </descriptor>
 
     <descriptor name="office" order="2">
-        <field name="full_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="full_name" label="Full Name" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="short_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="combined_name" displayable="listing" localizable="listing">
+        <field name="combined_name" label="Full Name [Short Name]" required="false" value_type="combined_name" render_type="text_line">
             <show modes="listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
+        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="identifier" displayable="view edit add" localizable="view edit add">
+        <field name="identifier" label="Office Identifier" description="Unique identifier or number for this Office" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
         </field>
-        <field name="office_role" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="office_role" label="Role" description="Role given to members of this office" required="false" value_type="text" render_type="single_select" vocabulary="office_role">
             <show modes="view edit add listing" />
         </field>
     </descriptor>
 
     <descriptor name="office_member">
-        <field name="user_id" displayable="view add listing" localizable="view add listing">
+        <field name="user_id" label="Name" required="true" value_type="user" render_type="single_select" vocabulary="user_not_mp">
             <show modes="add" />
             <show modes="view listing" />
         </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="active_p" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="active_p" label="Active" required="false" value_type="bool" render_type="bool">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
+        <field name="substitution_type" label="Type of Substitution" required="false" value_type="text" render_type="text_line">
             <show modes="view edit listing" />
         </field>
-        <field name="replaced_id" displayable="view edit listing" localizable="view edit listing">
+        <field name="replaced_id" label="Substituted by" required="false" value_type="text" render_type="single_select" vocabulary="substitution">
             <show modes="view edit listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="notes" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="notes" label="Notes" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add listing" />
         </field>
     </descriptor>
 
     <descriptor name="parliament" order="1">
-        <field name="full_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="full_name" label="Parliament Name" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="short_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="short_name" label="Short Name" description="Shorter name for the parliament" required="true" value_type="text" render_type="text_line">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="identifier" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="identifier" label="Parliament Identifier" description="Unique identifier or number for this Parliament" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="election_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="election_date" label="Election Date" description="Date of the election" required="true" value_type="date" render_type="date">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="start_date" label="In power from" description="Date of the swearing in" required="true" value_type="date" render_type="date">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="end_date" label="In power till" description="Date of the dissolution" required="false" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
+        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
     </descriptor>
 
     <descriptor name="political_group" order="19">
-        <field name="full_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="full_name" label="Full Name" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="short_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="combined_name" displayable="listing" localizable="listing">
+        <field name="combined_name" label="Full Name [Short Name]" required="false" value_type="combined_name" render_type="text_line">
             <show modes="listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
+        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="identifier" displayable="view edit add" localizable="view edit add">
+        <field name="identifier" label="Identifier" description="Unique identifier or number for this political group" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
         </field>
-        <field name="logo_data" displayable="view edit add" localizable="view edit add">
+        <field name="logo_data" label="Logo" required="false" value_type="image" render_type="image">
             <show modes="view edit add" />
         </field>
     </descriptor>
 
     <descriptor name="political_group_member">
-        <field name="user_id" displayable="view add listing" localizable="view add listing">
+        <field name="user_id" label="Name" required="true" value_type="member" render_type="single_select" vocabulary="parliament_member">
             <show modes="add" />
             <show modes="view listing" />
         </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="active_p" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="active_p" label="Active" required="false" value_type="bool" render_type="bool">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="substitution_type" displayable="view edit listing" localizable="view edit listing">
+        <field name="substitution_type" label="Type of Substitution" required="false" value_type="text" render_type="text_line">
             <show modes="view edit listing" />
         </field>
-        <field name="replaced_id" displayable="view edit listing" localizable="view edit listing">
+        <field name="replaced_id" label="Substituted by" required="false" value_type="text" render_type="single_select" vocabulary="substitution">
             <show modes="view edit listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="notes" displayable="view edit add" localizable="view edit add">
+        <field name="notes" label="Notes" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
     </descriptor>
 
     <descriptor name="question" order="13">
-        <field name="response_text" displayable="view edit" localizable="view edit">
+        <field name="response_text" label="Response" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit" />
         </field>
-        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="type_number" displayable="view listing" localizable="view listing">
+        <field name="type_number" label="Number" required="false" value_type="number" render_type="number">
             <show modes="view listing" />
         </field>
-        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="description" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="response_type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="response_type" label="Response Type" description="Choose the type of response expected for this question" required="false" value_type="vocabulary" render_type="single_select" vocabulary="response_type">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="doc_type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="doc_type" label="Question Type" description="Choose the type of question" required="true" value_type="vocabulary" render_type="single_select" vocabulary="question_type">
             <show modes="view edit add listing" />
         </field>
-        <field name="parliament_id" displayable="view listing" localizable="view listing">
+        <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select" vocabulary="parliament">
             <hide modes="view listing" />
         </field>
-        <field name="owner_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="owner_id" label="Moved by" description="Select the user who moved the document" required="true" value_type="member" render_type="single_select" vocabulary="parliament_member_delegation">
             <show modes="add" />
             <show modes="edit" />
             <hide modes="view listing" roles="bungeni.Anonymous" />
         </field>
-        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+        <field name="registry_number" label="Registry Number" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
             <hide modes="edit" />
         </field>
-        <field name="uri" displayable="view edit listing" localizable="view edit listing">
+        <field name="uri" label="URI" required="false" value_type="text" render_type="text_line">
             <show modes="view" />
             <hide modes="edit listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="submission_date" displayable="view listing" localizable="view listing">
+        <field name="submission_date" label="Submission Date" required="false" value_type="date" render_type="date">
             <show modes="view" />
             <hide modes="listing" />
         </field>
-        <field name="admissible_date" displayable="view listing" localizable="view listing">
+        <field name="admissible_date" label="Admissible Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="group_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="group_id" label="Ministry" required="true" value_type="group" render_type="single_select" vocabulary="ministry">
             <show modes="view edit add listing" />
         </field>
-        <field name="ministry_submit_date" displayable="view listing" localizable="view listing">
+        <field name="ministry_submit_date" label="Date submitted to ministry" required="false" value_type="date" render_type="date">
             <show modes="view" />
             <hide modes="listing" />
         </field>
-        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="tree_text" vocabulary="subject_terms">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="coverage" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="geolocation" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="body" displayable="view edit add" localizable="view edit add">
+        <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="timestamp" displayable="edit" localizable="edit">
+        <field name="timestamp" label="" required="false" value_type="timestamp" render_type="datetime">
             <show modes="edit" />
         </field>
     </descriptor>
 
     <descriptor name="report4_sitting" order="15">
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="title" label="Publications type" required="true" value_type="text" render_type="text_box">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Published Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="body" displayable="view edit add" localizable="view edit add">
+        <field name="body" label="Text" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
     </descriptor>
 
     <descriptor name="report" order="15">
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="title" label="Publications type" required="true" value_type="text" render_type="text_box">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Published Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="body" displayable="view edit add" localizable="view edit add">
+        <field name="body" label="Text" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
     </descriptor>
 
     <descriptor name="session" order="16">
-        <field name="short_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="full_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="full_name" label="Full Name" required="true" value_type="text" render_type="text_line">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="start_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="end_date" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="end_date" label="End Date" required="true" value_type="date" render_type="date">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="notes" displayable="view edit add" localizable="view edit add">
+        <field name="notes" label="Notes" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
         </field>
     </descriptor>
 
     <descriptor name="signatory">
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Signature Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" roles="bungeni.Owner bungeni.Signatory" />
         </field>
-        <field name="user_id" displayable="view add listing" localizable="view add listing">
+        <field name="user_id" label="Signatory" required="true" value_type="member" render_type="single_select" vocabulary="signatory">
             <show modes="add" />
             <show modes="view listing" />
         </field>
-        <field name="party" displayable="listing" localizable="listing">
+        <field name="party" label="Political Party" required="false" value_type="text" render_type="single_select" vocabulary="party">
             <show modes="listing" />
         </field>
     </descriptor>
 
     <descriptor name="sitting_attendance">
-        <field name="member_id" displayable="view add listing" localizable="view add listing">
+        <field name="member_id" label="Member of Parliament" required="true" value_type="user" render_type="single_select" vocabulary="sitting_attendance">
             <show modes="add" />
             <show modes="view listing" />
         </field>
-        <field name="attendance_type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="attendance_type" label="Attendance" required="true" value_type="vocabulary" render_type="single_select" vocabulary="attendance_type">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
     </descriptor>
 
     <descriptor name="sitting" order="17">
-        <field name="short_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="short_name" label="Name of activity" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="start_date" displayable="view add listing" localizable="view add listing">
+        <field name="start_date" label="Date" required="true" value_type="duration" render_type="datetime">
             <show modes="view add listing" />
         </field>
-        <field name="end_date" displayable="view add listing" localizable="view add listing">
+        <field name="end_date" label="End" required="true" value_type="datetime" render_type="datetime">
             <show modes="view add listing" />
         </field>
-        <field name="venue_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="venue_id" label="Venue" required="false" value_type="vocabulary" render_type="single_select" vocabulary="venue">
             <show modes="view edit add listing" />
         </field>
-        <field name="activity_type" displayable="view edit add" localizable="view edit add">
+        <field name="activity_type" label="Activity Type" description="Sitting Activity Type" required="false" value_type="vocabulary" render_type="single_select" vocabulary="sitting_activity_types">
             <show modes="view edit add" />
         </field>
-        <field name="meeting_type" displayable="view edit add" localizable="view edit add">
+        <field name="meeting_type" label="Meeting Type" description="Sitting Meeting Type" required="false" value_type="vocabulary" render_type="single_select" vocabulary="sitting_meeting_types">
             <show modes="view edit add" />
         </field>
-        <field name="convocation_type" displayable="view edit add" localizable="view edit add">
+        <field name="convocation_type" label="Convocation Type" description="Sitting Convocation Type" required="false" value_type="vocabulary" render_type="single_select" vocabulary="sitting_convocation_types">
             <show modes="view edit add" />
         </field>
     </descriptor>
 
     <descriptor name="tabled_document" order="14">
-        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="type_number" displayable="view listing" localizable="view listing">
+        <field name="type_number" label="Number" required="false" value_type="number" render_type="number">
             <show modes="view listing" />
         </field>
-        <field name="acronym" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="description" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="doc_type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="doc_type" label="Document Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="doc_type">
             <show modes="view edit add listing" />
         </field>
-        <field name="parliament_id" displayable="view listing" localizable="view listing">
+        <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select" vocabulary="parliament">
             <hide modes="view listing" />
         </field>
-        <field name="owner_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="owner_id" label="Moved by" description="Select the user who moved the document" required="true" value_type="member" render_type="single_select" vocabulary="parliament_member_delegation">
             <show modes="add" />
             <show modes="edit" />
             <hide modes="view listing" roles="bungeni.Anonymous" />
         </field>
-        <field name="registry_number" displayable="view edit listing" localizable="view edit listing">
+        <field name="registry_number" label="Registry Number" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
             <hide modes="edit" />
         </field>
-        <field name="uri" displayable="view edit listing" localizable="view edit listing">
+        <field name="uri" label="URI" required="false" value_type="text" render_type="text_line">
             <show modes="view" />
             <hide modes="edit listing" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="status_date" displayable="view listing" localizable="view listing">
+        <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="submission_date" displayable="view listing" localizable="view listing">
+        <field name="submission_date" label="Submission Date" required="false" value_type="date" render_type="date">
             <show modes="view" />
             <hide modes="listing" />
         </field>
-        <field name="admissible_date" displayable="view listing" localizable="view listing">
+        <field name="admissible_date" label="Admissible Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="subject" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="coverage" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="geolocation" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="body" displayable="view edit add" localizable="view edit add">
+        <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="timestamp" displayable="edit" localizable="edit">
+        <field name="timestamp" label="" required="false" value_type="timestamp" render_type="datetime">
             <show modes="edit" />
         </field>
     </descriptor>
 
     <descriptor name="title_type" order="22">
-        <field name="title_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="title_name" label="Name" required="true" value_type="text" render_type="text_line">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="user_unique" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="user_unique" label="Only one user may have this title" description="Limits persons with this title to one" required="false" value_type="text" render_type="single_select" vocabulary="yes_no">
             <show modes="view edit add listing" />
         </field>
-        <field name="sort_order" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="sort_order" label="Sort Order" description="The order in which members with this title will appear relative to other members" required="true" value_type="number" render_type="number">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
@@ -1483,127 +1483,127 @@
     </descriptor>
 
     <descriptor name="user_address">
-        <field name="logical_address_type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="logical_address_type" label="Address Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="logical_address_type">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="postal_address_type" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="postal_address_type" label="Postal Address Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="postal_address_type">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="street" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="street" label="Street" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="city" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="city" label="City" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="zipcode" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="zipcode" label="Zip Code" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="country_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="country_id" label="Country" required="false" value_type="text" render_type="single_select" vocabulary="country">
             <show modes="view edit add listing" />
         </field>
-        <field name="phone" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="phone" label="Phone Number(s)" description="Enter one phone number per line" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
         </field>
-        <field name="fax" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="fax" label="Fax Number(s)" description="Enter one fax number per line" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
         </field>
-        <field name="email" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="email" label="Email" description="Email address" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
     </descriptor>
 
     <descriptor name="user_delegation" order="3">
-        <field name="delegation_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="delegation_id" label="User" required="true" value_type="user" render_type="single_select" vocabulary="user">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
     </descriptor>
 
     <descriptor name="user" order="4">
-        <field name="user_id" displayable="view listing" localizable="view listing">
+        <field name="user_id" label="Name" required="true" value_type="user" render_type="no_input">
             <hide modes="view" />
             <show modes="listing" />
         </field>
-        <field name="salutation" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="salutation" label="Salutation" description="e.g. Mr. Mrs, Prof. etc." required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="title" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="title" label="Title" description="e.g. Chief Advisor, etc." required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="first_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="first_name" label="First Name" required="false" value_type="text" render_type="text_line">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="middle_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="middle_name" label="Middle Name" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="last_name" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="last_name" label="Last Name" required="false" value_type="text" render_type="text_line">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="email" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="email" label="Email" description="Email address" required="true" value_type="email" render_type="text_line">
             <show modes="add" />
             <show modes="view edit listing" />
         </field>
-        <field name="login" displayable="view add listing" localizable="view add listing">
+        <field name="login" label="Login" description="Must contain only letters, numbers, a period (.) and underscore (_). Should start with a letter and be between 3 and 20 characters long" required="false" value_type="login" render_type="text_line">
             <show modes="add" />
             <show modes="view" />
             <hide modes="listing" />
         </field>
-        <field name="_password" displayable="add" localizable="add">
+        <field name="_password" label="Initial password" required="false" value_type="password" render_type="text_line">
             <show modes="add" />
         </field>
-        <field name="status" displayable="view listing" localizable="view listing">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="national_id" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="national_id" label="National Id" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="gender" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="gender" label="Gender" required="false" value_type="text" render_type="radio" vocabulary="gender">
             <show modes="view edit add" />
             <show modes="listing" />
         </field>
-        <field name="date_of_birth" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="date_of_birth" label="Date of Birth" required="false" value_type="date" render_type="date">
             <show modes="view edit add" />
             <show modes="listing" />
         </field>
-        <field name="birth_country" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="birth_country" label="Country of Birth" required="false" value_type="text" render_type="single_select" vocabulary="country">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="birth_nationality" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="birth_nationality" label="Nationality at Birth" required="false" value_type="text" render_type="single_select" vocabulary="country">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="current_nationality" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="current_nationality" label="Current Nationality" required="false" value_type="text" render_type="single_select" vocabulary="country">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="marital_status" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="marital_status" label="Marital Status" required="false" value_type="vocabulary" render_type="single_select" vocabulary="marital_status">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="date_of_death" displayable="view edit listing" localizable="view edit listing">
+        <field name="date_of_death" label="Date of Death" required="false" value_type="date" render_type="date">
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="image" displayable="view edit add" localizable="view edit add">
+        <field name="image" label="Image" description="Picture of the person" required="false" value_type="image" render_type="image">
             <show modes="view edit add" />
         </field>
-        <field name="language" displayable="view edit add listing" localizable="view edit add listing">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="description" displayable="view edit add" localizable="view edit add">
+        <field name="description" label="Biographical notes" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="remarks" displayable="view edit add" localizable="view edit add">
+        <field name="remarks" label="Remarks" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
     </descriptor>
