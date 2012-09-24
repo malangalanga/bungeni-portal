@@ -1138,7 +1138,8 @@ class PloneTasks:
                     with cd("parts/svneggs"):      
                         run("svn up -rHEAD ./apkn.repository ./apkn.templates" \
                                 " ./bungenicms.plonepas ./bungenicms.policy" \
-                                " ./bungenicms.theme ./bungenicms.workspaces") 
+                                " ./bungenicms.theme ./bungenicms.workspaces" \
+                                " ./bungenicms.FacultyStaffExtender") 
                     with cd("parts/svnproducts"):
                         run("svn up -rHEAD ./BungeniHelpCenter")            
         else:
@@ -1252,7 +1253,8 @@ class PloneTasks:
                     with cd("parts/svneggs"):      
                         run("svn up -rHEAD ./apkn.repository ./apkn.templates" \
                                 " ./bungenicms.plonepas ./bungenicms.policy" \
-                                " ./bungenicms.theme ./bungenicms.workspaces")  
+                                " ./bungenicms.theme ./bungenicms.workspaces" \
+                                " ./bungenicms.FacultyStaffExtender")   
                     with cd("parts/svnproducts"):
                         run("svn up -rHEAD ./BungeniHelpCenter")                                
         else:
