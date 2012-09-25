@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <workflow title="Group sitting workflow"
     description="Workflow for a group sitting."
-    tags="draft public agendaprivate workspace published publishedminutes"
+    tags="draft private public agendaprivate workspace published publishedminutes"
     >
     
     <!-- features -->
@@ -121,6 +121,17 @@
         <deny permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Anonymous" />
     </state>
     
+    <state id="archived" title="Archive" tags="private" like_state="sitting">
+        <!-- sitting -->
+        <deny permission="zope.View" role="bungeni.Owner" />
+        <deny permission="zope.View" role="bungeni.Signatory" />
+        <deny permission="zope.View" role="bungeni.MP" />
+        <deny permission="zope.View" role="bungeni.Minister" />
+        <deny permission="zope.View" role="bungeni.Anonymous" />
+        <deny permission="bungeni.sitting.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.sitting.Delete" role="bungeni.Clerk" />    
+    </state>
+    
     <transition title="Create Sitting"
         source=""
         destination="sitting"
@@ -197,6 +208,12 @@
         trigger="manual"
         roles="bungeni.Clerk bungeni.Speaker"
         require_confirmation="true"
+    />
+    <transition title="Auto Archive"
+        source="sitting"
+        destination="archived"
+        condition="sitting_dummy"
+        trigger="automatic"
     />
 </workflow>
 

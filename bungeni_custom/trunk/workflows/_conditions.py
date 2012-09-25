@@ -38,6 +38,7 @@ from bungeni.core.workflows._conditions import (
     has_venue,
     has_agenda,
     agenda_finalized,
+    sitting_dummy,
     
     # question
     is_written_response,
