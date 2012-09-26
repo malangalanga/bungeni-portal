@@ -13,10 +13,10 @@ SET search_path = public, pg_catalog;
 
 
 --
--- Data for Name: countries; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY countries (country_id, iso_name, country_name, iso3, numcode, language) FROM stdin;
+COPY country (country_id, iso_name, country_name, iso3, numcode, language) FROM stdin;
 AF	AFGHANISTAN	Afghanistan	AFG	4	en
 AL	ALBANIA	Albania	ALB	8	en
 DZ	ALGERIA	Algeria	DZA	12	en
@@ -260,10 +260,10 @@ ZW	ZIMBABWE	Zimbabwe	ZWE	716	en
 
 
 --
--- Data for Name: venues; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: venue; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY venues (short_name, description, language) FROM stdin;
+COPY venue (short_name, description, language) FROM stdin;
 Plenary	\N	en
 Green Room	\N	en
 Blue Room	\N	en
