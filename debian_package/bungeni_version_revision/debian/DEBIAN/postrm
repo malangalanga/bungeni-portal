@@ -22,6 +22,8 @@ set -e
 #    configure)
 echo "Removing bungeni group and user..."
 deluser bungeni
+echo "Removing supervisor startup scripts..."
+update-rc.d bungeni_services remove
 #    ;;
 #
 #    abort-upgrade|abort-remove|abort-deconfigure)

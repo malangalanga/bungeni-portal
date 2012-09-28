@@ -3,6 +3,7 @@
 SUPERVISORD=/opt/bungeni/bungeni_apps/python27/bin/supervisord
 PIDFILE=/opt/bungeni/bungeni_apps/pid/supervisord.pid
 OPTS="-c /opt/bungeni/bungeni_apps/config/supervisord.conf"
+DAEMON_USER="bungeni"
 
 test -x $SUPERVISORD || exit 0
 
@@ -13,12 +14,12 @@ export PATH="${PATH:+$PATH:}/usr/local/bin:/usr/sbin:/sbin"
 case "$1" in
   start)
     log_begin_msg "Starting Supervisor daemon manager..."
-    start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $SUPERVISORD -- $OPTS || log_end_msg 1
+    start-stop-daemon -u$DAEMON_USER --start --quiet --pidfile $PIDFILE --exec $SUPERVISORD -- $OPTS || log_end_msg 1
     log_end_msg 0
     ;;
   stop)
     log_begin_msg "Stopping Supervisor daemon manager..."
-    start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE || log_end_msg 1
+    start-stop-daemon -u$DAEMON_USER--stop --quiet --oknodo --pidfile $PIDFILE || log_end_msg 1
     log_end_msg 0
     ;;
 
