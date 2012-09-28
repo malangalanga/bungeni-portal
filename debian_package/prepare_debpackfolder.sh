@@ -1,21 +1,23 @@
 #!/bin/bash
 
-die () {
-    echo >&2 "$@"
-    exit 1
-}
 
-set -x verbose
+#set -x verbose
 
-[ "$#" -eq 2 ] || die "2 parameters required : 1 release name argument required and 1 path to a bungeni pre-built tar.gz archive , $# provided"
+EXPECTED_ARGS=2
 
+if [ $# -ne $EXPECTED_ARGS ] 
+then
+ echo "Usage: `basename $0` <release name> <pre-built-bungeni.tar.gz>"
+ exit 65
+fi
 
 BUNGENI_REL="bungeni_1.0+$1"
 BUNGENI_TAR=$2
+echo "found bungeni in $BUNGENI_TAR"
 
 cp -R bungeni_version_revision $BUNGENI_REL
 
-find ./$BUNGENI_REL -name '.svn' -print0 | xargs rm -rf
+find ./$BUNGENI_REL -name '.svn' -print0 | xargs -0 rm -rf
 
 tar xvf $BUNGENI_TAR --directory=./$BUNGENI_REL/debian
 
