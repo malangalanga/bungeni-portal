@@ -1455,10 +1455,13 @@ class BungeniTasks:
         if not current_release:
             abort("no release parameter specified in setup.ini")
         elif current_release["bungeni"] == "HEAD" :
-            self.tasks.src_update(current_release["bungeni"])
             with cd(self.cfg.user_bungeni):
+            	run("svn up -rHEAD `ls | grep -v src | grep -v portal | grep -v plone`")
                 with cd("src"):
                     run("svn up -rHEAD ./bungeni.main ./bungeni_custom ./ploned.ui")
+            #self.tasks.src_update(current_release["bungeni"])
+            #with cd(self.cfg.user_bungeni):
+            #    with cd("src"):
         else:
             self.tasks.src_update(current_release["bungeni"])
 
