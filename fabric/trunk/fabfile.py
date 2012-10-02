@@ -50,6 +50,15 @@ def setup_pylibs():
     bungenipre.required_pylibs()
     #bungenipre.install_appy()
 
+
+def setup_docsplit():
+    """
+    Installs docsplit
+    """
+    
+    bungenipre = bungeni.Presetup()
+    bungenipre.docsplit_install()
+
     
 def build_python():
     """
@@ -71,6 +80,7 @@ def presetup():
     essentials()
     build_python()
     setup_pylibs() 
+    setup_docsplit()
 
 
 def bungeni_setup():

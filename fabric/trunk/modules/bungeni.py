@@ -586,6 +586,44 @@ class Presetup:
                     run(self.cfg.python26 + " setup.py build_ext -i")
                     run(self.cfg.python26 + " setup.py install")
 
+    
+    def docsplit_install(self):
+        """
+        Install docsplit using rubygems
+        """
+        
+        # [1.] First we need to have ruby executable directory in our PATH
+        print "PATH Before:"
+        run("echo $PATH")
+        
+        # This will return a list of chars
+        exe_dir = run("ruby -r rubygems -e 'p Gem.path'")
+                        
+        # Process the output
+        raw_str = "".join(exe_dir)
+        processed_str = ''.join( c for c in raw_str if c not in '["]' )
+        split_str = processed_str.strip().split(',')
+        
+        if (split_str is not None) and (len(split_str) > 0):
+            for path in split_str:
+                if '/var/lib/gems' in str(path):
+                    ruby_path = path.strip() + "/bin"
+                    print "Adding '%s' to $PATH variable" % ruby_path
+                    sudo("echo 'export PATH=$PATH:%s' | tee --append ~/.bashrc" % ruby_path)
+                
+        print "PATH after:"
+        run("echo $PATH")
+        
+        # [2.] Install docsplit
+        print "Installing docsplit"
+        cmd = sudo("gem install docsplit")
+        
+        if 'gem installed' in cmd:
+            print "Docsplit installed successfully."
+        else:
+            print "There was a problem while installing Docsplit"
+    
+    
     def __setuptools(self, pybin, pyhome):
         if os.path.isfile(pybin):
             with cd(pyhome):
