@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset>
-
+    
     <!--The comment below is required by deliverance proxy.-->
-	<!-- deliverance-proxy -->
-
+    <!-- deliverance-proxy -->
+    
     <match path="regex:.*/(emptypage)$" abort="1" />
     <match path="regex:.*/(preview)$" abort="1" />                     
     <match environ="QUERY_STRING: wildcard:headless=*" abort="1" />    
@@ -22,19 +22,25 @@
     <match path="regex:^/(business/committees)/obj-([0-9])+(/)?(view)?$"
         class="load-committee-tab" />
     <match path="regex:^/(members/political-groups)/obj-([0-9])+(/)?(view)?$"
-        class="load-political-group-tab" />                                    
+        class="load-political-group-tab" />     
+    <match path="regex:^/(business|members)?"
+        class="unload-bungeni" />    
     <match path="exact:/"
         class="frontpage" />
     <match path="exact:/front-page"
         class="frontpage" />
     <match path="/" class="primary" />
-
+    
+    <rule class="unload-bungeni">                    
+        <drop href="/business" content="#portal-globalnav > li" />
+        <drop href="/members" content="#portal-globalnav > li" />
+    </rule>
     
     <rule class="load-plone-navigation">        
         <!-- language selector -->
         <append theme="//head"
-                content="//head"
-                nocontent="ignore" />        
+            content="//head"
+            nocontent="ignore" />        
         <replace href="/"
             content="#portal-languageselector"
             theme="#portal-languageselector"/>   
@@ -45,33 +51,37 @@
             content="children:#portal-personaltools"
             theme="children:#portal-personaltools"/> 
         <drop theme="children:#portal-personaltools li.navigation" />                  
-                        
+        
         <!-- navigation -->
-        <prepend href="/"
-            content="#portal-globalnav > li"
-            theme="children:#portal-globalnav > ul" />
         <append content="#portal-globalnav > li:not(:first-child)"
-            theme="children:#portal-globalnav > ul" />
+            theme="children:#portal-globalnav > ul" />     
         <drop href="/plone"
             content="#portal-globalnav > li:first-child"/>             
-        <append href="/exist" content="#portal-globalnav > li:not(:first-child)"
+        <prepend href="/exist" content="#portal-globalnav > li:not(:first-child)"
             theme="children:#portal-globalnav > ul" />         
-        <drop theme="#processing_indicatron" />          
+        <prepend href="/"
+            content="#portal-globalnav > li:first-child"
+            theme="children:#portal-globalnav > ul" />           
+        <drop theme="#processing_indicatron" />   
+        
+        <drop href="/business" content="#portal-globalnav > li" />
+        <drop href="/members" content="#portal-globalnav > li" />        
     </rule>
-
+    
     <rule class="load-exist-navigation">        
+        
         <append theme="//head"
             content="//head"
             nocontent="ignore" />        
         
-        <!-- navigation -->
-        <prepend href="/"
-            content="#portal-globalnav > li"
-            theme="children:#portal-globalnav > ul" />
+        <!-- navigation -->        
         <append content="#portal-globalnav > li:not(:first-child)"
-            theme="children:#portal-globalnav > ul" />
+            theme="children:#portal-globalnav > ul" />      
         <drop href="/exist"
-            content="#portal-globalnav > li:first-child"/>
+            content="#portal-globalnav > li:first-child"/>     
+        <prepend href="/"
+            content="#portal-globalnav > li:first-child"
+            theme="children:#portal-globalnav > ul" />            
         <prepend content="ul#portal-personaltools li"
             theme="children:#portal-globalnav ul.level1" /> 
         <!-- add plone navigation -->
@@ -79,7 +89,7 @@
         <append href="/bungeni"
             content="ul#portal-personaltools li.navigation"
             theme="children:#portal-globalnav ul"
-        />
+        />      
         
         <!-- bungeni login link -->
         <append href="/bungeni"
@@ -89,9 +99,10 @@
         
         <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
             theme="children:#portal-globalnav > ul" />
-        <drop theme="#processing_indicatron" />
+        <drop theme="#processing_indicatron" /> 
+        <drop content="attributes(class):#portal-globalnav li:first-child" />          
     </rule>
-
+    
     <rule class="load-workspace-navigation">    
         <pyquery pyref=
             "portal.theme.static.themes.rules:add_member_workspace_links"
@@ -100,16 +111,17 @@
             "portal.theme.static.themes.rules:add_group_workspace_links"
         />              
     </rule>  
-
+    
     
     <rule class="load-member-content">    
         <pyquery pyref=
             "portal.theme.static.themes.rules:add_member_public_links"
         />  
     </rule>                         
-
-
+    
+    
     <rule class="load-bungeni-navigation">
+        
         <!-- Add the plone login overlay... -->
         <prepend href="/plone"
             content="script[src *= 'popupforms.js']"
@@ -117,54 +129,60 @@
         <prepend href="/plone"
             content="script[src *= 'jquerytools']"
             theme="children:/html/head" />                 
-    
+        
         <append content="children:#portal-column-one"
             theme="children:#portal-column-one"
         />        
         <!-- navigation -->
         <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
             theme="children:#portal-globalnav > ul" />
-
-        <append href="/exist" content="#portal-globalnav > li:not(:first-child)"
+        
+        <prepend href="/exist" content="#portal-globalnav > li:not(:first-child)"
             theme="children:#portal-globalnav > ul" />         
     </rule>
     
     <rule class="load-member-tab">
         <pyquery pyref=
-                 "portal.theme.static.themes.rules:add_space_tab"
-                 pyarg-space_type="member"
+            "portal.theme.static.themes.rules:add_space_tab"
+            pyarg-space_type="member"
         /> 
     </rule>
     
     <rule class="load-committee-tab">
         <pyquery pyref=
-                 "portal.theme.static.themes.rules:add_space_tab"
-                 pyarg-space_type="committee"
+            "portal.theme.static.themes.rules:add_space_tab"
+            pyarg-space_type="committee"
         /> 
     </rule>
     
     <rule class="load-political-group-tab">
         <pyquery pyref=
-                 "portal.theme.static.themes.rules:add_space_tab"
-                 pyarg-space_type="political-group"
+            "portal.theme.static.themes.rules:add_space_tab"
+            pyarg-space_type="political-group"
         /> 
     </rule>         
     
     
     <rule class="frontpage">
         <append href="/plone"
-                theme="//head"
-                content="//head"
-                nocontent="ignore" />                
+            theme="//head"
+            content="//head"
+            nocontent="ignore" />                
         <replace content="#portal-logo" theme="#portal-logo" />
         <replace content="#portal-siteactions" theme="#portal-siteactions" />
         <drop href="/plone"
             content="#portal-breadcrumbs" />
-        <drop content="#portal-search" />                      
-
-    <!-- menu -->
+        <drop content="#portal-search" /> 
+        
+        <!-- drop bungeni- business and members -->
+        <drop href="/business" content="#portal-globalnav > li" />
+        <drop href="/members" content="#portal-globalnav > li" />        
+        
+        <!-- menu -->
         <drop href="/plone"
             content="#portal-globalnav > li:first-child"/>
+        <drop href="/exist"
+            content="#portal-globalnav > li:first-child"/>        
         <append href="/bungeni"
             content="#portal-globalnav > li:first-child"
             theme="children:#portal-globalnav > ul" />
@@ -179,32 +197,33 @@
             theme="children:.main-content"
         />
         <drop content="#portal-column-content" />
-   
+        
         <replace content="#portal-personaltools" theme="#portal-personaltools" />
         <append href="/bungeni"
             content="ul#portal-personaltools li.navigation"
             theme="children:#portal-globalnav ul.level1"
         />
-
+        
         <!--main content -->
         
         <replace href="/plone"
             content="#portal-column-content"
             theme="#portal-column-content" />
-
+        
         <pyquery pyref=
             "portal.theme.static.themes.rules:add_menu_items"
         />
         <drop content="#portal-column-content" /> 
-
+        
         <append href="/exist"
             content="ul#portal-personaltools li"
             theme="children:#portal-personaltools ul"
         />      
     </rule>  
-
+    
     
     <rule class="primary">
+        
         <append theme="//head" content="//head/meta" nocontent="ignore" />
         <!-- menu -->
         <prepend content="#portal-globalnav > li"
@@ -237,7 +256,7 @@
         <append content="children:#portal-breadcrumbs"
             theme="children:#portal-breadcrumbs"
         />
-
+        
         <!-- search -->
         <append content="children:#portal-search"
             theme="children:#portal-search"
@@ -247,7 +266,7 @@
         <replace content=".portalMessage"
             theme="children:.workspace_add_parliamentary_content"
         />     
-
+        
         <!-- content -->
         <append content="children:#portal-column-content"
             theme="children:#portal-column-content"
@@ -264,7 +283,7 @@
         />
         <!--<pyquery pyref=
             "portal.theme.static.themes.rules:enable_text_editor"/>-->
-
-</rule>
+        
+    </rule>
 </ruleset>
 

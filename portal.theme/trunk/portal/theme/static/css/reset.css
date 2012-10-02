@@ -146,23 +146,26 @@ div#portal-globalnav ul.level0 {
     position: absolute !important;
     margin: 0;
     padding: 0;
-    width: auto;
+    min-width:inherit;
+    width: 100%;
     white-space: nowrap;
     line-height: 20px;
+    overflow:hidden;
     bottom:0;
 }
 div#portal-globalnav ul.level0 li {
     position: relative;
-    display: block !important;    
+    display: inline !important;    
     float: left;
-    height: 25px;
-    margin-bottom: 0;    
+    height: 24px;
+    margin-bottom: 0;   
+    white-space: nowrap;
 }
 div#portal-globalnav ul.level0 li a { 
     padding: 0 1em;
     margin: 0 .25em 0 0;
     height: 22px;
-    display: block !important;
+    display: inline !important;
     float: left !important;
 }
 div#portal-globalnav ul.level0 li.selected a {
@@ -1182,18 +1185,19 @@ div.main-column #collage h2 {
     margin: 0 auto;
     width:100%;
     text-align:center;
-    height:133px;
+    height:127px;
+    white-space:nowrap;
 }
 .template-portal #header-in-left {
     margin: 0;
     width:30%;
-    height:133px;
+    height:127px;
     float:left;
 }
 .template-portal #header-in-right {
     margin: 0;
     width:30%;
-    height:133px;
+    height:127px;
     float:right;
 }
 .template-portal #top-layer {
@@ -1227,13 +1231,14 @@ div.main-column #collage h2 {
 .template-portal #portal-logo-wrapper {
     margin-left:auto;
     margin-right:auto;   
-    height:105px;
+    height:75px;
     position:relative;
+    white-space:nowrap;
 }
 .template-portal #portal-logo {
     display: block;
     margin: 5px 0 0 0;
-    height: 106px;
+    height: 75px;
 }
 .template-portal a#portal-logo img.ws-left,.template-portal a#portal-logo img.ws-right {
 	display:none;
@@ -1280,6 +1285,9 @@ div.main-column #collage h2 {
 -------------------------------------------------------------- */
 .template-portal .contentActions {
     margin-top: 0em;
+}
+.template-portal .contentActions {
+    margin-bottom: 0;
 }
 /* login-box styles
 -------------------------------------------------------------- */
@@ -1337,7 +1345,7 @@ div.main-column #collage h2 {
 .template-workspace #header-wrapper {
     margin: 0 auto;
     width:98%;
-    height:100px;
+    height:130px;
     padding-right:10px;
     margin-right:0px;
 }
@@ -1512,13 +1520,13 @@ dl.portlet.portletNavigationTree {
 /* portal-globalnav
 -------------------------------------------------------------- */
 .template-workspace div#portal-globalnav ul.level1 {
-	width: 99.97%;
+	width: 99.5%;
 }
 .section-bungeni-workspace div#portal-globalnav ul.level1 {
-    width: 99.97%;
+    width: 99.5%;
 }
 .section-bungeni-admin div#portal-globalnav ul.level1 {
-    width: 99.97%;
+    width: 99.5%;
 }
 
 /* Content
@@ -1677,6 +1685,9 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
      */
     height: 100%;
 }
+.template-workspace #portal-logo-wrapper {
+    margin-top:4px;
+}
 .template-workspace #visual-table-wrapper {
     position: relative;
     padding: 0 1.4em 0 0;
@@ -1690,6 +1701,12 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
      */
     height: auto;
     min-height: 100%;
+}
+.template-workspace.template-portal-eXist #visual-table-wrapper {
+    margin-top:6px;
+}
+.template-workspace.template-portal-eXist #portal-breadcrumbs {
+    width:99.50%;
 }
 .template-workspace span#corner-a,
 .template-workspace span#corner-b {
