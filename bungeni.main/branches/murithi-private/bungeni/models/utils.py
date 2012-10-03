@@ -449,6 +449,28 @@ def obj2dict(obj, depth, parent=None, include=[], exclude=[], lang=None):
                                 )
                                 continue
             result[property.key] = value
+ 
+ 
+    #optional dc properties serialization
+    try:
+        dc_adapter = IDCDescriptiveProperties(obj, None)
+        if dc_adapter:
+            dc_props = dict()
+            dc_keys = {}
+            dc_keys.update(dc_adapter.__class__.__dict__)
+            for (key, value) in dc_keys.iteritems():
+                if (not key.startswith("_")) and (not hasattr(value, "__call__")):
+                    try:
+                        dc_props[key] = getattr(dc_adapter, key)
+                    except Exception, e:
+                        log.error("Failed to load dc property %s on %s"
+                            " Error: %s", key, dc_adapter, e
+                        )
+            result["dcproperties"] = dc_props
+    except Exception, e:
+        log.error(e)
+        log.error("Unable to get dc adapter for %s", obj.__class__)
+    
     return result
 
 

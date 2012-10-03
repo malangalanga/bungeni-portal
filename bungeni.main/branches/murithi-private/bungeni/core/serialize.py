@@ -18,8 +18,10 @@ from tempfile import NamedTemporaryFile as tmp
 import simplejson
 
 import zope.component
+import zope.security.management
 from zope.security.proxy import removeSecurityProxy
 from zope.lifecycleevent import IObjectModifiedEvent, IObjectCreatedEvent
+from zope.publisher.browser import TestRequest
 
 from sqlalchemy.orm import class_mapper, object_mapper
 from sqlalchemy.types import Binary
@@ -40,6 +42,7 @@ from bungeni.core.notifications import (get_mq_connection,
 from bungeni.models import interfaces, domain
 from bungeni.models.utils import obj2dict, get_permissions_dict
 from bungeni.utils import register, naming
+from bungeni.utils.capi import capi
 
 import transaction
 import pika
@@ -235,17 +238,16 @@ def serialization_notifications_callback(channel, method, properties, body):
     obj_data = simplejson.loads(body)
     obj_type = obj_data.get("obj_type")
     domain_model = getattr(domain, obj_type, None)
+    request = TestRequest(
+        environ={"HTTP_ACCEPT_LANGUAGE": capi.default_language}
+    )
+    zope.security.management.newInteraction(request)
     if domain_model:
         obj_key = valueKey(obj_data.get("obj_key"))
         session = Session()
         obj = session.query(domain_model).get(obj_key)
         if obj:
-            try:
-                publish_to_xml(obj)
-            except Exception, e:
-                log.error("Unable to publish object to XML %s : %s",
-                    obj, e
-                )
+            publish_to_xml(obj)
             channel.basic_ack(delivery_tag=method.delivery_tag)
         else:
             log.error("Could not query object of type %s with key %s. "
@@ -261,6 +263,7 @@ def serialization_notifications_callback(channel, method, properties, body):
         log.error("Failed to get class in bungeni.models.domain named %s",
             obj_type
         )
+    zope.security.management.endInteraction()
 
 def serialization_worker():
     connection = get_mq_connection()

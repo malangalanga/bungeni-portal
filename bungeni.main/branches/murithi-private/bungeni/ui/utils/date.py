@@ -10,6 +10,8 @@ from bungeni.ui.utils import date
 $Id: utils.py 6292 2010-03-22 12:33:25Z mario.ruggier $
 """
 
+from zope.i18n.locales import locales
+
 import datetime
 import re
 from bungeni.ui.utils import common
@@ -66,8 +68,14 @@ def getLocaleFormatter(
     """See: zope.i18n.locales.LocaleDates.getFormatter
     """
     if request is None:
-        request = common.get_request()
-    return request.locale.dates.getFormatter(category, length)
+        try:
+            request = common.get_request()
+        except:
+            request = None
+    if request and hasattr(request, "locale"):
+        return request.locale.dates.getFormatter(category, length)
+    else:
+        return locales.getLocale("en").dates.getFormatter(category, length)
 
  
 def parseDateTime(s):
