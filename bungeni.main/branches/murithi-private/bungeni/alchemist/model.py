@@ -34,7 +34,8 @@ from bungeni.alchemist.interfaces import (
 )
 
 from bungeni.ui.utils import common 
-
+from bungeni.ui.i18n import _
+from bungeni.utils import naming
 
 # ore.alchemist.model
 
@@ -149,6 +150,27 @@ def hide(modes=None, roles=None):
 
 # Field
 
+# Notes:
+#
+# Field parameters, if specified, should be in the following order:
+#   name, label, description, localizable, property, 
+#   listing_column, view_widget, edit_widget, add_widget, search_widget
+#
+#   !+FIELD_PERMISSIONS(mr, nov-2010) view_permission/edit_permission params
+#   are deprecated -- when applied to any field (that corresponds to an
+#   attribute of the domain's class), the domain.zcml setting for that same
+#   class attribute will anyway take precedence.
+#
+# property
+# by default, property itself is None
+# if not None, then the property's default values for schema.Field init params:
+#   title="", description="", __name__="",
+#   required=True, readonly=False, constraint=None, default=None
+#
+# required
+# - Field.property.required: by default required=True for all schema.Field
+# - !+Field.required(mr, oct-2010) OBSOLETED.
+
 class IModelDescriptorField(interface.Interface):
     # name
     # label
@@ -207,7 +229,7 @@ class Field(object):
     
     # A field in a descriptor must be displayable in at least one of these modes
     _modes = ["view", "edit", "add", "listing"] #!+"search"]
-    @classmethod 
+    @classmethod
     def validated_modes(cls, modes, nullable=False):
         return validated_set("modes", cls._modes, modes, nullable=nullable)
     
@@ -218,7 +240,7 @@ class Field(object):
         "bungeni.Anonymous", # unauthenticated user, anonymous
         "bungeni.Signatory",
     ]
-    @classmethod 
+    @classmethod
     def validated_roles(cls, roles, nullable=False):
         return validated_set("roles", cls._roles, roles, nullable=nullable)
     
@@ -235,6 +257,8 @@ class Field(object):
     label = ""       # str : title for field
     description = "" # str : description for field
     
+    _decl = None # seq((str:name, value)): cache of original (xml) decl attr values
+    
     # displayable modes
     def modes():
         doc = "Field.modes property, list of defaulted/validated displayable modes"
@@ -247,7 +271,7 @@ class Field(object):
             del self._modes
         return locals()
     modes = property(**modes())
-
+    
     # the default list of show/hide localization directives -- by default
     # a field is NOT localizable in any mode and for any role.
     localizable = None # [ either(show, hide) ]
@@ -300,7 +324,8 @@ class Field(object):
     
     def __init__(self, 
             name=None, label=None, description=None, 
-            modes=None, localizable=None, property=None,
+            #modes=None, #!+inferred from localizable
+            localizable=None, property=None,
             listing_column=None, listing_column_filter=None,
             view_widget=None, edit_widget=None, add_widget=None, 
             search_widget=None,
@@ -318,20 +343,14 @@ class Field(object):
         CONVENTION: not specifying a parameter or specifying it as None
         are interpreted to be equivalent.
         """
-        
-        # !+modes_localizable_refactor - eliminate modes/displayable param/attr
-        # infer the list of displayable modes from the modes specified in the 
-        # list of localizables
-        # !+ for displayable but not-localizable (e.g. "add" for when column is
-        #    not nullable) add a db-column-validation on load of each field
-        # !+ for now, bridge to old behaviour, to be able to proceed as 
-        # previous, by just setting the modes parameter
-        if modes is None:
-            if localizable is None:
-                localizable = [show(modes=self.__class__._modes[:])]
-            modes = [ mode for loc in localizable for mode in loc.modes ]
-            # !+ ensure unique, normalized order
-        
+        # !+LOCALIZATION_AND_SCHEMA_INTEGRITY for displayable but not-localizable
+        # (e.g. "add" for when column is not nullable) add a db-column-validation 
+        # on load of each field or catch and handle in a user-friendly way any 
+        # IntegrityErrors downstream
+        if localizable is None:
+            localizable = [show(modes=self.__class__._modes[:])]
+        modes = [ mode for loc in localizable for mode in loc.modes ]
+        # !+ ensure unique, normalized order
         
         # set attribute values
         kw = vars()
@@ -368,13 +387,12 @@ class Field(object):
             assert "listing" in self.modes, \
                 "Field [%s] sets listing_column_filter but no listing mode" % (
                     self.name)
-        # !+modes_localizable_refactor
         # the default list of show/hide localization directives
         if self.localizable is None:
             self.localizable = []
         self.validate_localizable()
     
-    def validate_localizable(self, reference_localizable_modes=None):
+    def validate_localizable(self): #+reference_localizable_modes=None):
         self._localizable_modes = set() # reset cache of localizable modes
         for loc in self.localizable:
             # if modes is still None, we now default to this field's modes
@@ -391,26 +409,7 @@ class Field(object):
             assert (count + len(loc.modes) == len(self._localizable_modes)), \
                 "Field [%s] duplicates mode in localizable directive: %s" % (
                     self.name, loc)
-        for mode in self._localizable_modes:
-            if reference_localizable_modes is not None:
-                # only modes listed here may be localized
-                assert mode in reference_localizable_modes, \
-                    "Field [%s] may only localize mode [%s] if mode is " \
-                    "localizable i.e. one of: %s." % (
-                        self.name, mode, reference_localizable_modes)
-                # must localize all localizable modes
-                assert len(reference_localizable_modes) == \
-                    len(self._localizable_modes), \
-                        "Field [%s] localizable modes mismatch:" \
-                        "\nB: %s\nC: %s" % (
-                            self.name, reference_localizable_modes, 
-                            list(self._localizable_modes))
-            else:
-                # only displayable modes
-                assert mode in self.modes, \
-                    "Field [%s] may only localize mode [%s] if mode is " \
-                    "displayable i.e. one of: %s." % (
-                        self.name, mode, self.modes)
+        # !+LOCALIZATION_AND_SCHEMA_INTEGRITY add db-column-validation here?
     
     def is_displayable(self, mode, user_roles):
         """Does this field pass localization directives for this mode?
@@ -451,19 +450,32 @@ class Field(object):
 
 # Model
 
+class classproperty(object):
+    "A read-only class property descriptor."
+    def __init__(self, getter):
+        self.getter = getter
+    def __get__(self, instance, cls):
+        return self.getter(cls)
+
 class MDType(type):
     """Meta class for ModelDescriptor"""
     
     def __init__(self, name, bases, attrs):
         super(MDType, self).__init__(name, bases, attrs)
+        if self.fields is None:
+            self.fields = []
+        self.fields_by_name = {}
+        self.sanity_check_fields()
         self.update_default_field_order()
+        # declare display/container names as i18n msgids (for extraction)
+        naming.MSGIDS.add(self.display_name)
+        naming.MSGIDS.add(self.container_name)
     
     def update_default_field_order(self):
         """Apply default_field_order to class's fields list, any unmentioned 
         fields preserve their current order but will follow the specified fields.
         """
-        fields_by_name = dict([ (f.name, f) for f in self.fields ])
-        ordered_fields = [ fields_by_name[name] 
+        ordered_fields = [ self.fields_by_name[name]
             for name in self.default_field_order ]
         other_fields = [ f for f in self.fields 
             if f not in ordered_fields ]
@@ -491,9 +503,11 @@ class ModelDescriptor(object):
     # editable table listing !+
     #edit_grid = True 
     
-    # for subclasses to reset
-    fields = [] # [Field] - may be explicit, defined in place, constructed via 
-    # copying plus extending, etc.
+    fields = None # [Field] - may be explicit, defined in place, constructed via 
+    # copying plus extending, etc. Every sub-class must define own list instance.
+    fields_by_name = None # {field.name: field} - a cache for internal use, 
+    # initialized on class construction, must be kept "in sync" with fields
+    
     default_field_order = () # [field.name] - explicit default ordering 
     # (before Descriptor is localized) by field name, for all fields in 
     # this ModelDescriptor.
@@ -514,82 +528,95 @@ class ModelDescriptor(object):
     # sort_dir = desc | asc
     sort_dir = "desc"
     
+    '''!+NO_NEED_TO_INSTANTIATE
     def __call__(self, iface):
-        """Models are also adapters for the underlying objects
+        """Models (classes) are also adapters for the underlying objects.
         """
-        return self
+        return self.__class__
+    '''
     
     def __init__(self):
-        # !+NO_NEED_TO_INSTANTIATE(mr, jun-2011) there is really no longer 
-        # any need to singleton-instantiate each ModelDescriptor class, 
+        # !+NO_NEED_TO_INSTANTIATE(mr, jun-2011) there is no need
+        # to singleton-instantiate each ModelDescriptor class,
         # just use the class definition directly!
-        log.info("Initializing ModelDescriptor: %s" % self)
-        self._fields_by_name = {}
-        self.sanity_check_fields()
-        log.warn("!+NO_NEED_TO_INSTANTIATE: %s" % (self))
+        raise NotImplementedError(
+            "May not initialize a ModelDescriptor class: %s" % self)
     
-    def sanity_check_fields(self):
+    @classmethod
+    def sanity_check_fields(cls):
         """Do necessary checks on all specified Field instances.
+        Also updates internally used fields_by_name mapping.
         """
-        self._fields_by_name.clear()
-        for f in self.__class__.fields:
+        cls.fields_by_name.clear()
+        for f in cls.fields:
             name = f["name"]
-            assert name not in self._fields_by_name, \
+            assert name not in cls.fields_by_name, \
                 "[%s] Can't have two fields with same name [%s]" % (
-                    self.__class__.__name__, name)
-            self._fields_by_name[name] = f
-        # !+DESCRIPTOR_VALIDATION(mr, nov-2010) a descriptor may specify a 
-        # field with a name that does not correspond to an attribute on the 
-        # model -- this may be useful, but we do not use it, and any such
-        # occurance is most likely a code error... should we check for such
-        # situations?
+                    cls.__name__, name)
+            cls.fields_by_name[name] = f
     
-    # we use self._fields_by_name to define the following methods as this 
+    # we use cls.fields_by_name to define the following methods as this
     # makes the implementation simpler and faster.
     
-    def get(self, name, default=None):
-        #print '!+ModelDescriptor.get("%s")' % (name), self
-        return self._fields_by_name.get(name, default)
+    @classmethod
+    def get(cls, name, default=None):
+        #print '!+ModelDescriptor.get("%s")' % (name), cls
+        return cls.fields_by_name.get(name, default)
     
-    def keys(self):
-        #print "!+ModelDescriptor.keys", self
-        return self._fields_by_name.keys()
+    @classmethod
+    def keys(cls):
+        #print "!+ModelDescriptor.keys", cls
+        return cls.fields_by_name.keys()
     
-    def values(self):
-        #print "!+ModelDescriptor.values", self
-        return self._fields_by_name.values()
+    @classmethod
+    def values(cls):
+        #print "!+ModelDescriptor.values", cls
+        return cls.fields_by_name.values()
     
-    def __getitem__(self, name):
-        #print "!+ModelDescriptor.__getitem__", self
-        return self._fields_by_name[name]
+    @classmethod
+    def __getitem__(cls, name):
+        #print "!+ModelDescriptor.__getitem__", cls
+        return cls.fields_by_name[name]
     
-    def __contains__(self, name):
-        #print "!+ModelDescriptor.__contains__", self
-        return name in self._fields_by_name
+    @classmethod
+    def __contains__(cls, name):
+        #print "!+ModelDescriptor.__contains__", cls
+        return name in cls.fields_by_name
     
-    def _mode_columns(self, mode):
+    @classmethod
+    def _mode_columns(cls, mode):
         # request-relevant roles to determine displayabe fields in this mode
         request_context_roles = common.get_request_context_roles(None)
-        return [ field for field in self.__class__.fields 
+        return [ field for field in cls.fields 
             if field.is_displayable(mode, request_context_roles) ]
     
     # !+_mode_fields(mr, jan-2012)
     # !+listing_field_names(mr, jan-2012) !
     
-    @property
-    def listing_columns(self):
-        return [ f.name for f in self._mode_columns("listing") ]
-    @property
-    def search_columns(self): 
-        return self._mode_columns("search")
-    @property
-    def edit_columns(self):
-        return self._mode_columns("edit")
-    @property
-    def add_columns(self):
-        return self._mode_columns("add")
-    @property
-    def view_columns(self):
-        return self._mode_columns("view")
+    @classproperty
+    def listing_columns(cls):
+        return [ f.name for f in cls._mode_columns("listing") ]
+    @classproperty
+    def search_columns(cls): 
+        return cls._mode_columns("search")
+    @classproperty
+    def edit_columns(cls):
+        return cls._mode_columns("edit")
+    @classproperty
+    def add_columns(cls):
+        return cls._mode_columns("add")
+    @classproperty
+    def view_columns(cls):
+        return cls._mode_columns("view")
     
+    # fallback values for descriptor display_name and container_name
+    
+    @classproperty
+    def display_name(cls):
+        cls_name = naming.cls_name_from_descriptor_cls_name(cls.__name__)
+        return _(naming.split_camel(cls_name)) # !+unicode
+    @classproperty
+    def container_name(cls):
+        return _(naming.plural(cls.display_name)) # !+unicode
+
 

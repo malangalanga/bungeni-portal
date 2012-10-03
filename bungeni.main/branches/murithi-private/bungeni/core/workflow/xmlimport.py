@@ -13,12 +13,12 @@ import os
 
 from lxml import etree
 from zope.dottedname.resolve import resolve
-from zope.i18nmessageid import Message
 from bungeni.core.workflow import interfaces
 from bungeni.core.workflow.states import GRANT, DENY
 from bungeni.core.workflow.states import Feature, State, Transition, Workflow
 from bungeni.core.workflow.states import assert_distinct_permission_scopes
 from bungeni.utils.capi import capi, bungeni_custom_errors
+from bungeni.utils import naming
 from bungeni.ui.utils import debug
 from bungeni.utils.misc import strip_none, as_bool
 
@@ -126,7 +126,7 @@ def load(path_custom_workflows, name):
     file_path = os.path.join(path_custom_workflows, "%s.xml" % (name))
     return _load(etree.fromstring(open(file_path).read()), name)
 
-def _load(workflow, name, domain="bungeni"):
+def _load(workflow, name):
     """ (workflow:etree_doc, name:str) -> Workflow
     """
     # !+ @title, @description
@@ -279,8 +279,10 @@ def _load(workflow, name, domain="bungeni"):
             # splice any remaining like_permissions at beginning of permissions
             permissions[0:0] = like_permissions
         # states
+        state_title = strip_none(s.get("title"))
+        naming.MSGIDS.add(state_title)
         states.append(
-            State(state_id, Message(strip_none(s.get("title")), domain),
+            State(state_id, state_title,
                 strip_none(s.get("note")),
                 actions, permissions, tags,
                 as_bool(strip_none(s.get("permissions_from_parent")) or "false"),
@@ -389,7 +391,8 @@ def _load(workflow, name, domain="bungeni"):
                         t.get("require_confirmation")))
         # multiple-source transitions are really multiple "transition paths"
         for source in sources:
-            args = (Message(title, domain), source, destination)
+            naming.MSGIDS.add(title)
+            args = (title, source, destination)
             transitions.append(Transition(*args, **kw))
             log.debug("[%s] adding transition [%s-%s] [%s]" % (
                 name, source or "", destination, kw))

@@ -1,17 +1,17 @@
 var timeline_mapping = {
     "default":{
-        x_unit: "hour",
-        x_step: 6,
-        x_size: 20,
-        x_start: 1,
-        x_date:"%j%a",
+        x_unit: "day",
+        x_step: 1,
+        x_size: 7,
+        x_start: 0,
+        x_date:"%l, %j %M",
     },
     "month":{
         x_unit:"day",
         x_step: 1,
         x_size: 31,
         x_start: 0,
-        x_date: "%d-%M",
+        x_date: "%j",
     },
     "week":{
         x_unit:"day",
@@ -32,7 +32,7 @@ var timeline_mapping = {
         x_step: 4,
         x_size: 6,
         x_start: 1,
-        x_date:"%D, %j%a",
+        x_date:"%D, %j-%M %h%a",
     }
 }
 
@@ -176,4 +176,30 @@ function re_render_event(old_id, new_id){
     event["status"] = "sitting";
     scheduler.clear_event(new_id);
     scheduler.render_event(event);
+}
+
+/*
+ * @function row_marked
+ * @description handler for a 'row marked' event following an update
+ * we display a message highlighting sittings(events) on calendar requiring
+ * attention
+ */
+function row_marked(id, state, mode, invalid){
+    if(invalid){
+        $.blockUI({
+            message: (cal_globals.error_messages[mode] || 
+                cal_globals.error_messages.default),
+            css: { 
+                border: 'none', 
+                padding: '15px', 
+                backgroundColor: '#773F3B', 
+                '-webkit-border-radius': '10px', 
+                '-moz-border-radius': '10px', 
+                opacity: .7, 
+                color: '#fff' 
+            },
+            timeout: 3000,
+         });
+    }
+    return true;
 }

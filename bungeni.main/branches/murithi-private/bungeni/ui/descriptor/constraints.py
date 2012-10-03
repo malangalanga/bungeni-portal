@@ -34,12 +34,12 @@ class FailedRegexMatch(zope.schema.ValidationError):
 class RegexChecker(object):
     """Regex constraint factory"""
     def __init__(self, regex, e_message):
-        assert type(regex) in [str, unicode]
+        assert isinstance(regex, basestring)
         self.regex = regex
         self.e_message = e_message
     
     def __call__(self, value):
-        if type(value) in [str, unicode]:
+        if isinstance(value, basestring):
             if re.match(self.regex, value) is None:
                 raise FailedRegexMatch(self.e_message)
                 return False
@@ -122,10 +122,10 @@ def MpStartBeforeElection(obj):
             "start_date"
         )
 
-def DeathBeforeLife(User):
+def DeathBeforeLife(user):
     """Check if date of death is after date of birth."""
-    if User.date_of_death is None: return
-    if User.date_of_death < User.date_of_birth:
+    if user.date_of_death is None: return
+    if user.date_of_death < User.date_of_birth:
         raise Invalid(_("Check dates: death must follow birth"),
             "date_of_death",
             "date_of_birth"

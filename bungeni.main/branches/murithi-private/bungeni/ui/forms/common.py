@@ -148,6 +148,7 @@ class BaseForm(formlib.form.FormBase):
         else:
             # view api
             super(BaseForm, self).__init__(context, request)
+        
         if str(self.request.get("headless", "")).lower() in TRUE_VALS:
             self.setPrefix(NO_PREFIX)
 
@@ -164,6 +165,17 @@ class BaseForm(formlib.form.FormBase):
         if next_url == "...":
             self._next_url = self.request.get("HTTP_REFERER", "")
 
+    def __call__(self):
+        #session = Session()
+        # XXX control the display order of the submit buttons 
+        # the order seems to be determined by the self.actions.actions 
+        # tuple of zope.formlib.form.Action instances
+        print "XXX Order of Form Submit Buttons:", [ (a.name, a.label)
+                                                for a in self.actions.actions ]
+        call = super(BaseForm, self).__call__()
+        #session.close()
+        return call
+
     @property
     def widget_groups(self):
         groups = {}
@@ -175,6 +187,12 @@ class BaseForm(formlib.form.FormBase):
             group = groups.setdefault(iface, [])
             group.append(widget)
         return groups
+    
+    @property
+    def is_headless(self):
+        """Boolean flag if form has been submitted in headless mode
+        """
+        return str(self.request.get("headless", "")).lower() in TRUE_VALS
 
     def update(self):
         self.status = self.request.get("portal_status_message", self.status)
@@ -185,7 +203,10 @@ class BaseForm(formlib.form.FormBase):
 
     def filter_fields(self):
         return self.form_fields
-
+    
+    def get_form_fields(self):
+        return ui.setUpFields(self.domain_model, self.mode)
+    
     def validate(self, action, data):
         """Validation that require context must be called here,
         invariants may be defined in the descriptor."""
@@ -361,10 +382,10 @@ class AddForm(BaseForm, catalyst.AddForm):
         }
 
     def createAndAdd(self, data):
-        added_obj = super(AddForm, self).createAndAdd(data)
-        cascade_modifications(added_obj)
-        self.created_object = added_obj
-        return added_obj
+        ob = super(AddForm, self).createAndAdd(data)
+        self.created_object = ob
+        cascade_modifications(ob)
+        return ob
     
     @formlib.form.action(
         _(u"Save and view"),
@@ -567,8 +588,7 @@ class TranslateForm(AddForm):
             if field.__name__ not in self.translatable_field_names():
                 field.for_display = True
                 field.custom_widget = self.model_descriptor.get(
-                    field.__name__
-                ).view_widget
+                    field.__name__).view_widget
 
     def validate(self, action, data):
         return formlib.form.getWidgetsData(self.widgets, self.prefix, data)
@@ -834,8 +854,9 @@ class DeleteForm(PageForm):
         if next_url is None:
             next_url = url.absoluteURL(container, self.request) + \
                        "/?portal_status_message=%d items deleted" % count
-        
-        if not self.request.get("headless"):
+        if self.is_headless:
+            log.info("Deleting in headless mode - No redirection")
+        else:
             self.request.response.redirect(next_url)
         
     @formlib.form.action(_(u"Cancel"), name="cancel",

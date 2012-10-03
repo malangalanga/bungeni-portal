@@ -15,23 +15,24 @@ from zope.securitypolicy.interfaces import IRole
 from zope.configuration import xmlconfig
 
 from bungeni.alchemist.model import (
-    #ModelDescriptor, 
+    queryModelInterface,
+    #ModelDescriptor,
     IModelDescriptor,
     Field,
     show, hide,
-    norm_sorted, 
+    #norm_sorted,
 )
+from bungeni.ui.descriptor import field
 from bungeni.utils.capi import capi, bungeni_custom_errors
 from bungeni.ui.utils import debug
 from bungeni.utils import naming
-from bungeni.utils.misc import xml_attr_str
+from bungeni.utils.misc import xml_attr_str, xml_attr_bool
 
 # constants 
 
 from bungeni.ui.descriptor import descriptor as DESCRIPTOR_MODULE
 
 CUSTOM_PATH = capi.get_path_for("forms", "ui.xml")
-DESCRIPTOR_CLASSNAME_POSTFIX = "Descriptor"
 
 ROLES_DEFAULT = " ".join(Field._roles)
 INDENT = " " * 4
@@ -51,6 +52,7 @@ def write_custom(old_content, content):
     open(CUSTOM_PATH, "w").write(content.encode("utf-8"))
 
 def check_reload_localization(event):
+    """Called once_per_request on IBeforeTraverseEvent events (ui.publication)."""
     if capi.is_modified_since(CUSTOM_PATH):
         localize_descriptors()
 
@@ -80,8 +82,7 @@ def localizable_descriptor_classes(module):
 # Localize descriptors from {bungeni_custom}/forms/ui.xml.
 
 def get_localizable_descriptor_class(module, type_key):
-    cls_name = naming.camel(type_key)
-    descriptor_cls_name = "%s%s" % (cls_name, DESCRIPTOR_CLASSNAME_POSTFIX)
+    descriptor_cls_name = naming.descriptor_cls_name_from_type_key(type_key)
     assert hasattr(module, descriptor_cls_name), \
         "Unknown descriptor [%s]" % (descriptor_cls_name)
     cls = getattr(module, descriptor_cls_name) # raises AttributeError
@@ -92,6 +93,7 @@ def get_localizable_descriptor_class(module, type_key):
             descriptor_cls_name)
     return cls
 
+''' !+UNUSED
 def reorder_fields(cls, ordered_field_names, field_by_name):
     """Reorder descriptor class fields.
     """
@@ -113,6 +115,7 @@ def is_stale_info(bval, cval, message):
         log.warn(message)
         return True
     return False
+'''
 
 @bungeni_custom_errors
 def localize_descriptors():
@@ -127,38 +130,67 @@ def localize_descriptors():
     # and reset global "constant"
     ROLES_DEFAULT = " ".join(Field._roles)
     
-    STALE_INFO = False
+    import bungeni.alchemist
+    import ore.alchemist.sa2zs
+    def reset_zope_schema_properties_on_model_interface(descriptor_cls):
+        __module__ = "bungeni.models.interfaces"
+        type_key = naming.type_key_from_descriptor_cls_name(descriptor_cls.__name__)
+        domain_model = capi.get_type_info(type_key).domain_model
+        sast = ore.alchemist.sa2zs.SQLAlchemySchemaTranslator()
+        domain_table = bungeni.alchemist.utils.get_local_table(domain_model)
+        # zope.schema field property map
+        zsfp_map = sast.generateFields(domain_table, descriptor_cls)
+        # apply manually overridden field properties
+        sast.applyProperties(zsfp_map, descriptor_cls)
+        # stuff back onto domain_interface
+        domain_interface = queryModelInterface(domain_model)
+        assert len(domain_interface.names()) == len(zsfp_map)
+        for name in domain_interface.names():
+            assert name in zsfp_map
+            # !+ zsfp == descriptor_cls.fields_by_name[name].property
+            zsfp = zsfp_map[name]
+            # !+property.__name__ needed downstream by 
+            # zope.formlib.form.FormField __init__() does assert name !?!
+            zsfp.__name__ = name
+            # !+ cannot simply set the property directly on domain_interface:
+            #   domain_interface[f.name] = zsfp
+            # as this gives: 
+            #   *** TypeError: 'InterfaceClass' object does not support item assignment
+            # So we have to do workaround it !!
+            domain_interface._InterfaceClass__attrs[name] = zsfp 
+            domain_interface.changed(name)
+    '''!+ reset_zope_schema_properties_on_model_interface
+    Initially field.property IS domain_interface[f.name], and so if field config
+    changes then the domain_interface has to be "kept ijn sync". 
+    
+    Above does it the "alchemist" way, but it could certainly be a lot simpler 
+    and faster, at least for "repeat" syncing with changed fields. Examples:
+    
+    a) (if we ignore the issue of not being able to directly set property on 
+    domain_interface) this could simply be done with something like:
+    
+        for f in cls.fields:
+            if f.property is not None:
+                domain_interface[f.name] = f.property
+    
+    b) it may (should!) be possible to make this completely dynamic... that is 
+    to give the IIModelInterface interfaces the intelligence to always 
+    dynamically pull the field.property directly!
+    '''
     for edescriptor in xml.findall("descriptor"):
         type_key = xml_attr_str(edescriptor, "name")
         order = xml_attr_str(edescriptor, "order")
+        # !+capi.get_type_info(type_key).descriptor_model
         cls = get_localizable_descriptor_class(DESCRIPTOR_MODULE, type_key)
         if order is not None:
             cls.order = int(order)
-        field_elems = edescriptor.findall("field")
-        field_by_name = {}
-        reorder_fields(cls, 
-            [ fe.get("name") for fe in field_elems ], 
-            field_by_name)
-        for f_elem in field_elems:
-            fname = xml_attr_str(f_elem, "name")
-            f = field_by_name[fname]
-            # check if info-only field attributes are out of sync with bungeni
-            # @displayable, from f.modes:tuple
-            c_displayable_modes = f_elem.get("displayable").split()
-            if is_stale_info(set(f.modes), set(c_displayable_modes),
-                "STALE INFO ATTR [%s.%s.modes]\n B: %s\n C: %s" % (
-                    type_key, fname, f.modes, c_displayable_modes)):
-                f._SERIALIZE_modes = f.modes[:]
-                STALE_INFO = True
-            # @localizable, from f._localizable_modes:set
-            c_localizable_modes = set(f_elem.get("localizable", "").split())
-            if is_stale_info(f._localizable_modes, c_localizable_modes,
-                "STALE INFO ATTR [%s.%s.localizable]\n B: %s\n C: %s" % (
-                    type_key, fname, f._localizable_modes, c_localizable_modes)):
-                f._SERIALIZE_localizable_modes = list(f._localizable_modes)
-                STALE_INFO = True
-            
-            clocs = [] # custom_localizable_directives
+        
+        # rebuild (in desired order) all fields from newly loaded configuration
+        # !+ what about "removed" fields from a sys-descriptor config?
+        fields = []
+        for f_elem in edescriptor.findall("field"):
+            # custom_localizable_directives
+            clocs = []
             for cloc_elem in f_elem.getchildren():
                 modes = xml_attr_str(cloc_elem, "modes")
                 roles = xml_attr_str(cloc_elem, "roles") # ROLES_DEFAULT
@@ -168,23 +200,25 @@ def localize_descriptors():
                     clocs.append(hide(modes=modes, roles=roles))
                 else:
                     assert False, "Unknown directive [%s/%s] %s" % (
-                        type_key, fname, cloc_elem.tag)
-            if clocs:
-                f.localizable[:] = clocs
-                try: 
-                    f.validate_localizable(
-                        reference_localizable_modes=list(c_localizable_modes))
-                except Exception, e:
-                    # make error message more useful
-                    raise e.__class__("Descriptor [%s] %s" % (type_key, e.message))
-    
-    if STALE_INFO:
-        # Re-sync info-only attributes, by re-serializing AFTER that all 
-        # descriptor classes have been localized
-        write_custom(read_custom(),
-            "\n".join(serialize_module(DESCRIPTOR_MODULE)))
-        # re-localize, to ensure consistency
-        localize_descriptors()
+                        type_key, xml_attr_str(f_elem, "name"), cloc_elem.tag)
+            
+            fields.append(field.F(
+                    name=xml_attr_str(f_elem, "name"),
+                    label=xml_attr_str(f_elem, "label"),
+                    description=xml_attr_str(f_elem, "description"),
+                    required=xml_attr_bool(f_elem, "required"),
+                    localizable=clocs,
+                    value_type=xml_attr_str(f_elem, "value_type"),
+                    render_type=xml_attr_str(f_elem, "render_type"),
+                    vocabulary=xml_attr_str(f_elem, "vocabulary")
+                ))
+        
+        # replace contents of descriptor cls fields list, retaining list instance
+        cls.fields[:] = fields
+        # validate/update descriptor model
+        cls.sanity_check_fields()
+        # push back on alchemist model interface
+        reset_zope_schema_properties_on_model_interface(cls)
     
     log.warn("LOCALIZING DESCRIPTORS...\n           ...DONE [in %s seconds]" % (
         time()-start_time))
@@ -231,41 +265,34 @@ def serialize_field(f, depth=2):
     """
     _acc = []
     field_localizable_modes = []
-    
-    # @modes
-    display_modes = " ".join(f.modes)
-    if hasattr(f, "_SERIALIZE_modes"):
-        display_modes = " ".join(f._SERIALIZE_modes)
-        del f._SERIALIZE_modes
-    
+        
     # @localizable
     for loc in f.localizable:
         _acc.extend(serialize_loc(loc, depth+1, field_localizable_modes))
-    localizable_modes = " ".join(
-        norm_sorted(field_localizable_modes, Field._modes))
-    if hasattr(f, "_SERIALIZE_localizable_modes"):
-        localizable_modes = " ".join(
-            norm_sorted(f._SERIALIZE_localizable_modes, Field._modes))
-        del f._SERIALIZE_localizable_modes
+    
+    # serialize decl attrs
+    attr_strs = []
+    attr_tmpl = '%s="%s"'
+    for name, value in f._decl:
+        if value is not None:
+            if isinstance(value, bool):
+                attr_strs.append(attr_tmpl % (name, str(value).lower()))
+            elif isinstance(value, basestring):
+                attr_strs.append(attr_tmpl % (name, value))
+            else:
+                raise ValueError("Field [name=%s] _decl attribute [%s] "
+                    "is NOT serialized as an XML attribute" % (
+                        f.name, attr_tmpl % (name, value)))
+    decl_attrs = " ".join(attr_strs)
     
     acc = []
     ind = INDENT * depth
     if _acc:
-        if localizable_modes:
-            acc.append('%s<field name="%s" displayable="%s" localizable="%s">' % (
-                ind, f.name, display_modes, localizable_modes))
-        else:
-            acc.append('%s<field name="%s" displayable="%s">' % (
-                ind, f.name, display_modes))
+        acc.append('%s<field %s>' % (ind, decl_attrs))
         acc.extend(_acc)
         acc.append('%s</field>' % (ind))
     else:
-        if localizable_modes:
-            acc.append('%s<field name="%s" displayable="%s" localizable="%s" />' % (
-                ind, f.name, display_modes, localizable_modes))
-        else:
-            acc.append('%s<field name="%s" displayable="%s" />' % (
-                ind, f.name, display_modes))
+        acc.append('%s<field %s />' % (ind, decl_attrs))
     return acc
 
 def serialize_cls(cls, depth=1):
@@ -273,8 +300,7 @@ def serialize_cls(cls, depth=1):
     
     Assumption: cls (subclass of ModelDescriptor) is localizable.
     """
-    assert cls.__name__.endswith(DESCRIPTOR_CLASSNAME_POSTFIX)
-    type_key = naming.un_camel(cls.__name__[0:-len(DESCRIPTOR_CLASSNAME_POSTFIX)])
+    type_key = naming.type_key_from_descriptor_cls_name(cls.__name__)
     order = cls.order
     
     _acc = []
@@ -324,10 +350,14 @@ def dump_i18n_message_ids():
     for internationalization.
     """
     from os import path
-    from bungeni.ui.descriptor.field import F
     msgids_py_source_file_path = path.join(
-        path.dirname(path.abspath(__file__)), "_field_msgids.py")
-    msgids_py_source = "\n".join([ '_(%r)' % msgid for msgid in sorted(F.msgids) ])
+        path.dirname(path.abspath(__file__)), "_dumped_msgids.py")
+    msgids_py_source_preamble = [
+        "# automatically generated: dump_i18n_message_ids",
+        "from bungeni.ui.i18n import _", 
+        ""]
+    msgids_py_source = "\n".join(msgids_py_source_preamble + [
+            "_(%r)" % msgid for msgid in sorted(naming.MSGIDS) ])
     open(msgids_py_source_file_path, "w").write(msgids_py_source.encode("utf-8"))
     print "Descriptor Field message IDs:", msgids_py_source_file_path
     print msgids_py_source
@@ -341,3 +371,4 @@ if __name__ == "__main__":
     if persisted != regenerated:
         write_custom(persisted, regenerated)
     dump_i18n_message_ids()
+
