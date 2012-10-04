@@ -37,7 +37,7 @@ echo "Now run will attempt to execute run.sh in the $BUNGENI_REL_FOLDER"
 read -p "Are you sure (Yy) ? " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-   cd $BUNGENI_REL_FOLDER && ./run.sh
+   cd $BUNGENI_REL_FOLDER && ./run.sh $BUNGENI_ARCH
 fi
 
 
