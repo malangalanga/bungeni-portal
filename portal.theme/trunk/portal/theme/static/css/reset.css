@@ -1495,6 +1495,10 @@ div.main-column #collage h2 {
     float: left;
 }
 
+.section-bungeni-admin .portletItem.lastItem {
+    width:190px;
+}
+
 dl.portlet.portletNavigationTree {
     width:300px !important;
 }
@@ -1963,10 +1967,14 @@ div#region-content {
     /*top: 1.6em;*/
 }
 .template-portal-eXist div#main-wrapper {
-    width: 100%;
+    width: 96%;
+    font-size:110%;
 }
 .template-portal-eXist div#region-content {
     width: 100%;
+}
+.template-portal-eXist #doc-content-area {
+    width: 755px;
 }
 .template-portal-eXist #search-form-global .header-links {
     margin-right:2px;
@@ -1982,18 +1990,31 @@ div#region-content {
 .template-portal-eXist div#main-wrapper {
     margin: 0 auto 0 auto;
 }
-.template-portal .documentActions {
+.template-portal-eXist .documentActions {
     border-top: 0 none;
 }
-.template-portal div.main-column h1 {
+.template-portal-eXist div.main-column h1 {
     margin: 0 auto;
     width: 100% !important;
 }
-.template-portal div.main-column h1 {
+.template-portal-eXist div.main-column h1 {
     text-align: left;
 }
-.template-portal .documentDescription, 
-.template-portal .description {
+.template-portal-eXist div#region-content h4 {
+    margin-bottom:5px;
+}
+.template-portal-eXist div#doc-content-area br {
+    display: block;
+    margin: 10px 0;
+    line-height:22px;
+    content: "";
+}
+.template-portal-eXist div#doc-content-area ul {
+    padding-left:20px;
+    list-style-type:circle;
+}
+.template-portal-eXist .documentDescription, 
+.template-portal-eXist .description {
     font-size:100% !important;
 }
 

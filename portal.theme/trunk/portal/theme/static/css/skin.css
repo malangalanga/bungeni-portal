@@ -6,7 +6,7 @@
  * you can overwrite this section in the specific sections of (template-portal, template-workspace and template-portal-exist) 
  *
  */
- 
+
 /* Top-layer
 -------------------------------------------------------------- */
 #top-layer {
@@ -1862,8 +1862,26 @@ div.main-column #collage h2 {
     display: none;
 }
 
+.template-portal-eXist #top-layer ul#portal-personaltools li a {
+    font-family:Verdana, sans-serif;
+    font-size:12px;
+}
+.template-portal-eXist #top-layer ul#portal-languageselector li a {
+    font-family:Verdana, sans-serif;
+    font-size:12px;
+}
+
 /* Listing - version
 -------------------------------------------------------------- */
+.template-portal-eXist table.listing th, 
+.template-portal-eXist table.timeline th, 
+.template-portal-eXist table.listingdescription th {
+    background:#ccc !important;
+}
+.template-portal-eXist table.listing td, 
+.template-portal-eXist table.listingdescription td {
+    border-right: 1px solid #ccc;
+}
 .template-portal-eXist  ul.doc-versions {
     display:block;
     list-style-type:none;
@@ -2054,6 +2072,12 @@ div.main-column #collage h2 {
     width:215px;
     padding-left:3px;
     padding-right:3px;
+}
+
+
+.template-portal-eXist div#portal-globalnav ul.level1 li a {
+    font-family:Verdana, sans-serif;
+    font-size:12px;
 }
 
 /* DHTMLX Calendar
