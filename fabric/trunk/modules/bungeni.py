@@ -410,7 +410,7 @@ class BungeniConfigs:
         self.user_rabbitmq_build_path = self.user_build_root + "/rabbitmq"
         # Jython installation folder
         self.jython_install_url = self.cfg.get_config("glue-script", "download_url")
-        self.user_jython = self.user_bungeni + "/jython"
+        self.user_jython = self.user_install_root + "/jython"
         self.jython_download_command = self.get_download_command(self.jython_install_url)
         self.jython_download_file = self.utils.get_basename(self.jython_install_url)
         self.user_jython_build_path = self.user_bungeni + "/jython"
@@ -685,6 +685,7 @@ class Presetup:
         sup_pycfg = PythonConfigs(self.cfg,"supervisor")
         template_map = {
             "user_bungeni": self.cfg.user_bungeni,
+            "user_jython": self.cfg.user_jython,
             "user_plone": self.cfg.user_plone,
             "user_portal": self.cfg.user_portal,
             "app_host": self.cfg.app_host,
@@ -1939,13 +1940,13 @@ class GlueScriptTasks:
 
     def setup_jython(self):
         """
-        Downloads generic jython jar file from www.jython.org and installs 
-        in the said folder.
+        Downloads generic jython jar file from dist.bungeni.org and installs 
+        in the given folder.
         """
-        run("mkdir -p %(jython_build_path)s" %
-                       {"jython_build_path":self.cfg.user_jython_build_path})
-        run("rm -rf %(jython_build_path)s/*" % 
-                       {"jython_build_path":self.cfg.user_jython_build_path})
+        run("mkdir -p %(user_jython)s" %
+                       {"user_jython":self.cfg.user_jython})
+        run("rm -rf %(user_jython)s/*" % 
+                       {"user_jython":self.cfg.user_jython})
         with cd(self.cfg.user_build_root):
             run(self.cfg.jython_download_command)
             # jython auto-install instructions require an empty install folder so we had to 
@@ -1976,6 +1977,7 @@ class GlueScriptTasks:
     def glue_setup_config(self):
         template_map = {
             "user_bungeni": self.cfg.user_bungeni,
+            "user_jython": self.cfg.user_jython,
             "user_glue": self.cfg.user_glue,
             }
         templates = Templates(self.cfg)
