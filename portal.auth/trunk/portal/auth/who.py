@@ -11,7 +11,7 @@ from repoze.who.interfaces import IAuthenticator
 from repoze.who.interfaces import IMetadataProvider
 
 from bungeni.alchemist import Session
-from sqlalchemy.exceptions import UnboundExecutionError
+from sqlalchemy.exc import UnboundExecutionError
 import sqlalchemy as rdb
 from sqlalchemy.orm import eagerload, lazyload
 
