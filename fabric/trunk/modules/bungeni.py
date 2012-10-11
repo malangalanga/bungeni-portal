@@ -1497,7 +1497,7 @@ class BungeniTasks:
             with cd(self.cfg.user_bungeni):
             	run("svn up -rHEAD `ls | grep -v src | grep -v portal | grep -v plone`")
                 with cd("src"):
-                    run("svn up -rHEAD ./bungeni.main ./bungeni_custom ./ploned.ui")
+                    run("svn up -rHEAD ./bungeni.main ./bungeni_custom ./ploned.ui ./portal.auth")
             #self.tasks.src_update(current_release["bungeni"])
             #with cd(self.cfg.user_bungeni):
             #    with cd("src"):
