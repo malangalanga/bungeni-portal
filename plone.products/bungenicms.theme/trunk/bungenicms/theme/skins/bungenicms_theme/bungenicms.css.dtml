@@ -236,6 +236,7 @@ p.bodyparagraph {
 #content ul.tabs {
     list-style: none;
     margin: 0;
+    border: none;
 }
 
 #content ul.tabs li.wysiwygTab-selector {
@@ -343,6 +344,11 @@ p.bodyparagraph {
     background:#7e7e7e;
     bottom:0;
     -webkit-background-clip: padding-box;
+}
+
+#content div.pane-container div.pane {
+    border-top: 1px solid #999999;
+    clear: both;
 }
 
 .main #breadcrumbs-you-are-here {
