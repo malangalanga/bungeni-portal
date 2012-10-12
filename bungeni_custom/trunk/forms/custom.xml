@@ -222,7 +222,8 @@
 
     <descriptor name="question" archetype="doc" order="13">
         <field name="response_text" label="Response" required="false" value_type="text" render_type="rich_text">
-            <show modes="view edit" />
+            <show modes="view" />
+            <show modes="edit" /><!-- !+DECL roles="bungeni.Minister" -->
         </field>
         <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
             <show modes="add" />
