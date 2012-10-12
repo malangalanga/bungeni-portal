@@ -149,8 +149,8 @@ class OsEssentials:
         return self.installMethods[dist_id]
 
     installMethods = {
-        "Ubuntu": "apt-get install -y ",
-        "Debian": "apt-get install -y ",
+        "Ubuntu": "apt-get install -y  --allow-unauthenticated ",
+        "Debian": "apt-get install -y  --allow-unauthenticated ",
         "Suse": "yum install ",
         "Redhat": "rpm -Uvh ",
         }
