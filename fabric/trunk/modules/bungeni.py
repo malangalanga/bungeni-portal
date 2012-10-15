@@ -1777,11 +1777,15 @@ class XmldbTasks:
         Generate the ant script to install the XMLUI framework in eXist
         """
         templates = Templates(self.cfg)
-        ant_script_tmpl = "xmldb_store_fw.xml.tmpl"
+        ant_script_fw_tmpl = "xmldb_store_fw.xml.tmpl"
+        ant_script_indexes_tmpl = "xmldb_store_collection_indexes.xml.tmpl"
         import shutil
-        ant_setup_script = templates.name_from_template(ant_script_tmpl)
-        shutil.copy2(templates.template_folder + "/" + ant_script_tmpl,
-                self.cfg.user_config + "/" + ant_setup_script)
+        ant_setup_fw_script = templates.name_from_template(ant_script_fw_tmpl)
+        ant_setup_indexes_script = templates.name_from_template(ant_script_indexes_tmpl)
+        shutil.copy2(templates.template_folder + "/" + ant_script_fw_tmpl,
+                self.cfg.user_config + "/" + ant_setup_fw_script)
+        shutil.copy2(templates.template_folder + "/" + ant_script_indexes_tmpl,
+                self.cfg.user_config + "/" + ant_setup_indexes_script)
 
     def ant_demo_setup_config(self):
         """
@@ -1860,6 +1864,13 @@ class XmldbTasks:
         """
         with cd(self.cfg.user_config):
             self.ant_run("xmldb_store_fw.xml")
+
+    def ant_indexes_install(self):
+        """
+        Stores collection index configuration files on eXist /db/system via ant.
+        """
+        with cd(self.cfg.user_config):
+            self.ant_run("xmldb_store_collection_indexes.xml")
 
     def ant_demo_install(self):
         """

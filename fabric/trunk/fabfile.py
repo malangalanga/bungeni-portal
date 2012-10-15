@@ -647,6 +647,7 @@ def exist_fw_install():
     tasks.download_fw()
     tasks.ant_prop_config()
     tasks.ant_fw_setup_config()
+    tasks.ant_indexes_install()
     tasks.ant_fw_install()
 
 def exist_load_demodata():

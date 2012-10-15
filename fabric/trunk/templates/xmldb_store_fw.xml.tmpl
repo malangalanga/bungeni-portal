@@ -25,13 +25,6 @@
             </fileset>
         </xdb:store>
         
-        <echo message="Enforcing ui-config storage. Random bug led to this file not being properly read by common.xqm"/>
-        <xdb:store uri="${fw-uri}" user="${user}" password="${password}">
-            <fileset dir="${exist-docs}/framework/bungeni">
-                <include name="ui-config.xml"/>
-            </fileset>
-        </xdb:store>        
-        
         <echo message="Setting execute permission for main controller."/>
         <xdb:chmod uri="${fw-uri}/bungeni" resource="controller.xql" mode="other=+execute" user="${user}" password="${password}"/>
         
@@ -40,18 +33,6 @@
         
         <echo message="Setting execute permission for rest-api library."/>
         <xdb:chmod uri="${fw-uri}" resource="rest-api.xql" mode="other=+execute" user="${user}" password="${password}"/>
-        
-        <echo message="Loading index file for bungeni-collection to eXist."/>
-        <xdb:store uri="${sys-uri}/config/db/framework" createcollection="true" createsubcollections="true" user="${user}" password="${password}">
-            <fileset dir="${exist-docs}/system/config/db/framework">
-                <include name="*.xconf"/>
-            </fileset>
-        </xdb:store>
-        <xdb:store uri="${sys-uri}/config/db/bungeni-xml" createcollection="true" createsubcollections="true" user="${user}" password="${password}">
-            <fileset dir="${exist-docs}/system/config/db/bungeni-xml">
-                <include name="*.xconf"/>
-            </fileset>
-        </xdb:store>
     </target>
  
     <target name="show-properties">
