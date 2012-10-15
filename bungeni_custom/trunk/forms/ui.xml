@@ -314,9 +314,6 @@
         <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="timestamp" label="" required="false" value_type="timestamp" render_type="datetime">
-            <show modes="edit" />
-        </field>
     </descriptor>
 
     <descriptor name="doc_version">
@@ -398,9 +395,6 @@
         </field>
         <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
-        </field>
-        <field name="timestamp" label="" required="false" value_type="timestamp" render_type="datetime">
-            <show modes="edit" />
         </field>
         <field name="audit_id" required="false" value_type="text" render_type="text_line">
             <hide modes="view listing" />
