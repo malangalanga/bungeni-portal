@@ -1222,7 +1222,6 @@ div.main-column #collage h2 {
     padding: 0 0 0 .5em;
 }
 .template-portal #visual-table-wrapper {
-    text-align: left;
     margin: 0 auto !important;   
     padding: 0;
     height: auto;
@@ -1655,6 +1654,9 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
     clear:both;
     width:85%;
 }
+.template-workspace.section-bungeni-workspace #popup-load dl.portalMessage {
+    width:100%;
+}
 .template-workspace.section-bungeni-business dl.portalMessage {
     margin:0 auto;
     margin-top:-30px;
@@ -1967,14 +1969,10 @@ div#region-content {
     /*top: 1.6em;*/
 }
 .template-portal-eXist div#main-wrapper {
-    width: 96%;
-    font-size:110%;
+    width: 100%;
 }
 .template-portal-eXist div#region-content {
     width: 100%;
-}
-.template-portal-eXist #doc-content-area {
-    width: 755px;
 }
 .template-portal-eXist #search-form-global .header-links {
     margin-right:2px;
@@ -1990,31 +1988,18 @@ div#region-content {
 .template-portal-eXist div#main-wrapper {
     margin: 0 auto 0 auto;
 }
-.template-portal-eXist .documentActions {
+.template-portal .documentActions {
     border-top: 0 none;
 }
-.template-portal-eXist div.main-column h1 {
+.template-portal div.main-column h1 {
     margin: 0 auto;
     width: 100% !important;
 }
-.template-portal-eXist div.main-column h1 {
+.template-portal div.main-column h1 {
     text-align: left;
 }
-.template-portal-eXist div#region-content h4 {
-    margin-bottom:5px;
-}
-.template-portal-eXist div#doc-content-area br {
-    display: block;
-    margin: 10px 0;
-    line-height:22px;
-    content: "";
-}
-.template-portal-eXist div#doc-content-area ul {
-    padding-left:20px;
-    list-style-type:circle;
-}
-.template-portal-eXist .documentDescription, 
-.template-portal-eXist .description {
+.template-portal .documentDescription, 
+.template-portal .description {
     font-size:100% !important;
 }
 

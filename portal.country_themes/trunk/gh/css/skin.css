@@ -544,7 +544,7 @@ div#portal-globalnav ul.level1 li a {
     color:#A4C1D2 !important;
 }
 div#portal-globalnav ul.level1 li a:hover {
-    color: #B7CDDB;
+    color: #E1E1E1;
     text-decoration: underline;
     border: 0 none;
 }
@@ -552,10 +552,7 @@ div#portal-globalnav ul.level1 li.selected a {
     background: transparent;
     border: 0 none;
     font-weight: normal;
-    color: #d50005 !important;
-}
-.template-portal div#portal-globalnav ul.level1 li.selected a {
-	color:#B7CDDB !important;
+    color: #E1E1E1 !important;
 }
 
 /*
@@ -1091,6 +1088,7 @@ div.main-column #collage h2 {
 
 .template-portal #header-wrapper {
     background: transparent;
+    border-bottom: 18px solid transparent;
 }
 
 .template-portal #header-in-left {
@@ -1165,7 +1163,6 @@ div.main-column #collage h2 {
 .template-portal .contentActions {
     background: none repeat scroll 0 0 #FFFFFF;
     border:1px solid transparent;
-    border-bottom: 1px solid #B8B4A0;
 }
 /*
  * portal-searchbox
@@ -1213,6 +1210,9 @@ div.main-column #collage h2 {
  /*
  * formPanel styles
  */
+.formPanel {
+    border: none;
+}
 .template-portal dl.portalMessage {
     border: 1px solid #800;
     color: #333;
@@ -1582,6 +1582,9 @@ div.dhx_cal_navline div.active {
 }
 .template-workspace div#portal-globalnav ul.level1 li.selected a {
     color: #B7CDDB !important;
+}
+.section-bungeni-workspace div#portal-globalnav ul.level1 li a {
+    color:#fff !important;
 }
 .section-bungeni-workspace div#portal-globalnav ul.level1 li.selected a {
     color:#3f3f3f !important;
