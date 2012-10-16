@@ -33,8 +33,17 @@
       <div id="portal-logo-wrapper">
         <a id="portal-logo" href="/">
           <img src="images/workspace_parliament.png" class="ws-left" alt="Your Parliament banner here" />
-          <img src="/static/images/workspace_logo.png" class="ws-right" alt="The Workspace logo" />
+          <img src="images/workspace_logo.png" class="ws-right" alt="The Workspace logo" />
         </a>
+        <!-- global navigation -->
+        <div id="portal-globalnav">
+          <ul class="level0">
+            <!-- top-level navigation -->
+          </ul>
+          <ul class="level1">
+            <!-- second-level navigation -->
+          </ul>
+        </div>        
       </div>
     </div>
     <!-- end of header-wrapper -->
@@ -44,29 +53,23 @@
       <div id="main-body-table" class="clearfix">
         
         <div class="main-column" class="clearfix">
-          <ul id="portal-siteactions"> </ul>
-          <div id="portal-searchbox"></div>
-          <!-- global navigation -->
-          <div id="portal-globalnav">
-            <ul class="level0">
-              <!-- top-level navigation -->
-            </ul>
-            <ul class="level1">
-              <!-- second-level navigation -->
-            </ul>
-          </div>
-          <div style="clear:both"></div>
-          <div id="portal-globalnav-bottom">
-            <!-- nothing here -->
-          </div>
           <!-- breadcrumbs -->
           <div id="portal-breadcrumbs" class="main"></div>
+          
+          <ul id="portal-siteactions"> </ul>
+          <!-- !+NOTE (ao, not in use!)-->
+          <!--div id="portal-searchbox"></div-->
+          
+          <div style="clear:both"></div>
+          <div id="portal-globalnav-bottom"></div>
+          
           <!-- search -->
           <div id="portal-search"></div>
           <!-- Message Info -->
           <div class="portalMessage"></div>
           <!-- main content-->
           <div id="portal-columns">
+            <div id="popup-load"/>
             <div id="portal-column-one"> </div>
             <div id="portal-column-content"> </div>
             <div id="portal-column-two"></div>

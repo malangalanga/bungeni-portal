@@ -147,11 +147,11 @@ div#portal-globalnav ul.level0 {
     margin: 0;
     padding: 0;
     min-width:inherit;
-    width: 100%;
+    width: auto;
     white-space: nowrap;
     line-height: 20px;
     overflow:hidden;
-    bottom:0;
+    bottom:0;  
 }
 div#portal-globalnav ul.level0 li {
     position: relative;
@@ -1497,10 +1497,6 @@ div.main-column #collage h2 {
 .section-bungeni-admin .portletItem.lastItem {
     width:190px;
 }
-
-dl.portlet.portletNavigationTree {
-    width:300px !important;
-}
 .workspace-under-consideration {
     clear:both;
     margin-left:400px;
@@ -1969,7 +1965,8 @@ div#region-content {
     /*top: 1.6em;*/
 }
 .template-portal-eXist div#main-wrapper {
-    width: 100%;
+    width: 96%;
+    margin: 0 auto 0 auto;    
 }
 .template-portal-eXist div#region-content {
     width: 100%;
@@ -1985,9 +1982,6 @@ div#region-content {
 .template-portal-eXist #portal-breadcrumbs {
     width: 100%;
 }
-.template-portal-eXist div#main-wrapper {
-    margin: 0 auto 0 auto;
-}
 .template-portal .documentActions {
     border-top: 0 none;
 }
@@ -1998,9 +1992,26 @@ div#region-content {
 .template-portal div.main-column h1 {
     text-align: left;
 }
-.template-portal .documentDescription, 
-.template-portal .description {
-    font-size:100% !important;
+.template-portal-eXist div#region-content h4 {
+    margin-bottom:5px;
+}
+.template-portal-eXist div#doc-content-area br {
+    display: block;
+    margin: 10px 0;
+    line-height:22px;
+    content: "";
+}
+.template-portal-eXist div#doc-content-area ul {
+    padding-left:20px;
+    list-style-type:circle;
+}
+.template-portal-eXist #region-content .list-block,
+.template-portal-eXist #region-content ul.ls-row li {
+    text-align:left !important;
+}
+
+.template-portal-eXist ul.doc-versions {
+    padding: 0;
 }
 
 /* DHTMLX Calendar

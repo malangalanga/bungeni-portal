@@ -77,6 +77,9 @@
     z-index: 2;
 	clear:both;
 }
+#portal-searchbox {
+    margin: -0.5em 0 3em 0 !important;
+}
 #portal-searchbox input.searchButton {
     height: 17px;
 }
@@ -143,23 +146,26 @@ div#portal-globalnav ul.level0 {
     position: absolute !important;
     margin: 0;
     padding: 0;
-    width: auto;
+    min-width:inherit;
+    width: 100%;
     white-space: nowrap;
     line-height: 20px;
+    overflow:hidden;
     bottom:0;
 }
 div#portal-globalnav ul.level0 li {
     position: relative;
-    display: block !important;    
+    display: inline !important;    
     float: left;
-    height: 25px;
-    margin-bottom: 0;    
+    height: 24px;
+    margin-bottom: 0;   
+    white-space: nowrap;
 }
 div#portal-globalnav ul.level0 li a { 
     padding: 0 1em;
     margin: 0 .25em 0 0;
     height: 22px;
-    display: block !important;
+    display: inline !important;
     float: left !important;
 }
 div#portal-globalnav ul.level0 li.selected a {
@@ -519,13 +525,13 @@ div#region-content div#content > div:first-child {
     margin: .15em 0 1em;
     height: 1.8em;
     padding: 0;
-    z-index:auto;
 }
 .contentActions a {
     padding: 0 .5em;
 }
 .contentActions li {
     float: right;
+    z-index: 4;
     height: 1.8em;
     line-height: 1.8em;
 }
@@ -541,6 +547,7 @@ div#region-content div#content > div:first-child {
 .actionMenu .actionMenuContent {
     width: 100%;
     right: 0;
+    z-index: 999999 !important;
     position: absolute;
 }
 .actionMenu .actionMenuContent ul {
@@ -573,7 +580,6 @@ dl#context_actions.actionMenu.deactivated .actionMenuContent {
     padding: 0;
     top: auto;
     left: auto;
-    z-index:auto;
 }
 dl#context_actions.actionMenu .actionMenuContent ul {
     margin: 0;
@@ -673,7 +679,7 @@ table.listingdescription,
 .stx table,
 .yui-skin-sam .yui-dt table {
     margin: 0 auto;
-    width: 95%;
+    width: 100%;
 }
 table.listingdescription[style] {
     width: 95% !important;
@@ -1179,18 +1185,19 @@ div.main-column #collage h2 {
     margin: 0 auto;
     width:100%;
     text-align:center;
-    height:133px;
+    height:127px;
+    white-space:nowrap;
 }
 .template-portal #header-in-left {
     margin: 0;
     width:30%;
-    height:133px;
+    height:127px;
     float:left;
 }
 .template-portal #header-in-right {
     margin: 0;
     width:30%;
-    height:133px;
+    height:127px;
     float:right;
 }
 .template-portal #top-layer {
@@ -1215,7 +1222,6 @@ div.main-column #collage h2 {
     padding: 0 0 0 .5em;
 }
 .template-portal #visual-table-wrapper {
-    text-align: left;
     margin: 0 auto !important;   
     padding: 0;
     height: auto;
@@ -1224,13 +1230,14 @@ div.main-column #collage h2 {
 .template-portal #portal-logo-wrapper {
     margin-left:auto;
     margin-right:auto;   
-    height:105px;
+    height:75px;
     position:relative;
+    white-space:nowrap;
 }
 .template-portal #portal-logo {
     display: block;
     margin: 5px 0 0 0;
-    height: 106px;
+    height: 75px;
 }
 .template-portal a#portal-logo img.ws-left,.template-portal a#portal-logo img.ws-right {
 	display:none;
@@ -1277,6 +1284,9 @@ div.main-column #collage h2 {
 -------------------------------------------------------------- */
 .template-portal .contentActions {
     margin-top: 0em;
+}
+.template-portal .contentActions {
+    margin-bottom: 0;
 }
 /* login-box styles
 -------------------------------------------------------------- */
@@ -1334,7 +1344,7 @@ div.main-column #collage h2 {
 .template-workspace #header-wrapper {
     margin: 0 auto;
     width:98%;
-    height:100px;
+    height:130px;
     padding-right:10px;
     margin-right:0px;
 }
@@ -1366,6 +1376,7 @@ div.main-column #collage h2 {
     margin: 0;
     padding:0;
     float:left;
+
 }
 
 .template-workspace #top-layer ul#portal-personaltools {
@@ -1482,6 +1493,14 @@ div.main-column #collage h2 {
     width: 16em;
     float: left;
 }
+
+.section-bungeni-admin .portletItem.lastItem {
+    width:190px;
+}
+.workspace-under-consideration {
+    clear:both;
+    margin-left:400px;
+}
 /* hides the portlet header. */
 
 /* DocumentActions & contentActions
@@ -1500,13 +1519,13 @@ div.main-column #collage h2 {
 /* portal-globalnav
 -------------------------------------------------------------- */
 .template-workspace div#portal-globalnav ul.level1 {
-	width: 99.97%;
+	width: 99.5%;
 }
 .section-bungeni-workspace div#portal-globalnav ul.level1 {
-    width: 99.97%;
+    width: 99.5%;
 }
 .section-bungeni-admin div#portal-globalnav ul.level1 {
-    width: 99.97%;
+    width: 99.5%;
 }
 
 /* Content
@@ -1631,6 +1650,9 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
     clear:both;
     width:85%;
 }
+.template-workspace.section-bungeni-workspace #popup-load dl.portalMessage {
+    width:100%;
+}
 .template-workspace.section-bungeni-business dl.portalMessage {
     margin:0 auto;
     margin-top:-30px;
@@ -1665,6 +1687,9 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
      */
     height: 100%;
 }
+.template-workspace #portal-logo-wrapper {
+    margin-top:4px;
+}
 .template-workspace #visual-table-wrapper {
     position: relative;
     padding: 0 1.4em 0 0;
@@ -1678,6 +1703,12 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
      */
     height: auto;
     min-height: 100%;
+}
+.template-workspace.template-portal-eXist #visual-table-wrapper {
+    margin-top:6px;
+}
+.template-workspace.template-portal-eXist #portal-breadcrumbs {
+    width:99.50%;
 }
 .template-workspace span#corner-a,
 .template-workspace span#corner-b {
@@ -1855,7 +1886,6 @@ div.overlay div.close span {
 .yui-skin-sam #scheduler-layout .yui-dt-liner {
     padding: 0 4px 0 10px !important;
 }
-
 .yui-skin-sam #text-records-dialog .yui-dt-first th,
 .yui-skin-sam #scheduler-layout .yui-dt-first th {
     padding: 0;
@@ -1935,7 +1965,8 @@ div#region-content {
     /*top: 1.6em;*/
 }
 .template-portal-eXist div#main-wrapper {
-    width: 100%;
+    width: 96%;
+    margin: 0 auto 0 auto;    
 }
 .template-portal-eXist div#region-content {
     width: 100%;
@@ -1951,9 +1982,6 @@ div#region-content {
 .template-portal-eXist #portal-breadcrumbs {
     width: 100%;
 }
-.template-portal-eXist div#main-wrapper {
-    margin: 0 auto 0 auto;
-}
 .template-portal .documentActions {
     border-top: 0 none;
 }
@@ -1964,9 +1992,31 @@ div#region-content {
 .template-portal div.main-column h1 {
     text-align: left;
 }
-.template-portal .documentDescription, 
-.template-portal .description {
-    font-size:100% !important;
+.template-portal-eXist div#region-content h4 {
+    margin-bottom:5px;
+}
+.template-portal-eXist div#doc-content-area br {
+    display: block;
+    margin: 10px 0;
+    line-height:22px;
+    content: "";
+}
+.template-portal-eXist div#doc-content-area ul {
+    padding-left:20px;
+    list-style-type:circle;
+}
+.template-portal-eXist #region-content .list-block,
+.template-portal-eXist #region-content ul.ls-row li {
+    text-align:left !important;
+}
+
+/* DHTMLX Calendar
+-------------------------------------------------------------- */
+.template-portal-eXist .dhtmlx_calendar_exist {
+    width: 100%;
+    height: 660px;
+    position: relative;
+    top: 10px;
 }
 
 /* member's section in eXist UI

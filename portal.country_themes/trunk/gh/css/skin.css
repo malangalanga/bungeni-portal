@@ -533,6 +533,9 @@ div#portal-globalnav ul.level0 li a:hover {
  div#portal-globalnav-bottom {
  	border:0;
 }
+div#portal-globalnav-bottom:empty{
+    display:none
+}
 div#portal-globalnav ul.level1 {
     border-top: 0 none;
     background: #214E69;
@@ -1340,9 +1343,9 @@ div.main-column #collage h2 {
 .template-workspace.section-bungeni-members .dhx_cal_container,
 .template-workspace.section-bungeni-members .dhx_scale_bar,
 .template-workspace.section-bungeni-members .dhx_scale_hour,
-.template-portal .dhx_cal_container,
-.template-portal .dhx_scale_bar,
-.template-portal .dhx_scale_hour {
+.template-portal .dhtmlx_calendar_main .dhx_cal_container,
+.template-portal .dhtmlx_calendar_main .dhx_scale_bar,
+.template-portal .dhtmlx_calendar_main .dhx_scale_hour {
     background: #fe8c8c;
     border-color: #B8B4A0;
     color:#000 !important;
@@ -1363,14 +1366,14 @@ div.dhx_cal_navline div.active {
 .template-workspace.section-bungeni-business .dhx_cal_data,
 .template-workspace.section-bungeni-members .dhx_cal_header,
 .template-workspace.section-bungeni-members .dhx_cal_data,
-.template-portal .dhx_cal_header,
-.template-portal .dhx_cal_data{
+.template-portal .dhtmlx_calendar_main .dhx_cal_header,
+.template-portal .dhtmlx_calendar_main .dhx_cal_data{
     border-color: #B8B4A0;
 }
 .template-workspace.section-bungeni-archive .dhx_cal_tab,
 .template-workspace.section-bungeni-business .dhx_cal_tab,
 .template-workspace.section-bungeni-members .dhx_cal_tab,
-.template-portal .dhx_cal_tab {
+.template-portal .dhtmlx_calendar_main .dhx_cal_tab {
     background-image:url(../images/white_tab2.png);
 }
 .template-workspace.section-bungeni-archive .dhx_cal_prev_button,
@@ -1382,33 +1385,33 @@ div.dhx_cal_navline div.active {
 .template-workspace.section-bungeni-members .dhx_cal_prev_button,
 .template-workspace.section-bungeni-members .dhx_cal_next_button,
 .template-workspace.section-bungeni-members .dhx_cal_today_button,
-.template-portal .dhx_cal_prev_button,
-.template-portal .dhx_cal_next_button,
-.template-portal .dhx_cal_today_button {
+.template-portal .dhtmlx_calendar_main .dhx_cal_prev_button,
+.template-portal .dhtmlx_calendar_main .dhx_cal_next_button,
+.template-portal .dhtmlx_calendar_main .dhx_cal_today_button {
     background-image:url(../images/orange_buttons.png);
 }
 .template-workspace.section-bungeni-archive .dhx_cal_tab.active,
 .template-workspace.section-bungeni-business .dhx_cal_tab.active,
 .template-workspace.section-bungeni-members .dhx_cal_tab.active,
-.template-portal .dhx_cal_tab.active {
+.template-portal .dhtmlx_calendar_main .dhx_cal_tab.active {
     background-image:url(../images/orange_tab.png);
 }
 .template-workspace.section-bungeni-archive .dhx_scale_holder_now,
 .template-workspace.section-bungeni-business .dhx_scale_holder_now,
 .template-workspace.section-bungeni-members .dhx_scale_holder_now,
-.template-portal .dhx_scale_holder_now {
+.template-portal .dhtmlx_calendar_main .dhx_scale_holder_now {
     background-image:url(../images/databg_now3.png);
 }
 .template-workspace.section-bungeni-archive .dhx_now .dhx_month_head,
 .template-workspace.section-bungeni-business .dhx_now .dhx_month_head,
 .template-workspace.section-bungeni-members .dhx_now .dhx_month_head,
-.template-portal .dhx_now .dhx_month_head {
+.template-portal .dhtmlx_calendar_main .dhx_now .dhx_month_head {
     background:#f5c276;
 }
 .template-workspace.section-bungeni-archive .dhx_now .dhx_month_body,
 .template-workspace.section-bungeni-business .dhx_now .dhx_month_body,
 .template-workspace.section-bungeni-members .dhx_now .dhx_month_body,
-.template-portal .dhx_now .dhx_month_body {
+.template-portal .dhtmlx_calendar_main .dhx_now .dhx_month_body {
     background:#f6d6a6;
 }
 
@@ -1966,6 +1969,37 @@ div.dhx_cal_navline div.active {
     display: none;
 }
 
+.template-portal-eXist #top-layer ul#portal-personaltools li a {
+    font-family:Verdana, sans-serif;
+    font-size:12px;
+}
+.template-portal-eXist #top-layer ul#portal-languageselector li a {
+    font-family:Verdana, sans-serif;
+    font-size:12px;
+}
+.template-portal-eXist div#main-wrapper {
+    font-size:110%;  
+}
+.template-portal-eXist a.big-dbl-arrow {
+    text-decoration:none;
+    color:#D50005;
+}
+.template-portal-eXist a.big-dbl-arrow:hover {
+    color:#CC6637;
+}
+.template-portal-eXist .hanging-menu {
+    width:80px !important;
+    left: 10px;
+}
+.template-portal-eXist .documentDescription, 
+.template-portal-eXist .description {
+    font-size:100% !important;
+}
+.template-portal-eXist div#portal-globalnav ul.level1 li a {
+    font-family:Verdana, sans-serif;
+    font-size:12px;
+}
+
 /* Listing - version
 -------------------------------------------------------------- */
 .template-portal-eXist  ul.doc-versions {
@@ -2158,6 +2192,21 @@ div.dhx_cal_navline div.active {
     width:215px;
     padding-left:3px;
     padding-right:3px;
+}
+
+/* DHTMLX Calendar
+-------------------------------------------------------------- */
+
+.template-portal-eXist .dhx_cal_container,
+.template-portal-eXist .dhx_scale_bar,
+.template-portal-eXist .dhx_scale_hour {
+    background:inherit;
+}
+.template-portal-eXist .dhx_cal_tab.active {
+    text-shadow: none;
+}
+.template-portal-eXist .dhx_cal_tab.active {
+    color: #ffffff;
 }
 
 /* Whatson datepicker
