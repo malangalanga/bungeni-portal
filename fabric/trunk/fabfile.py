@@ -630,11 +630,6 @@ def exist_install():
    stop_exist("IGNORE_ERROR")
    tasks = bungeni.XmldbTasks()
    tasks.setup_exist()
-   # install in deployment mode by Default 
-   # you will need to explicitly switch to Development mode to access 
-   # XML UI
-   tasks.switchto_deploy_mode()
-
 
 def exist_fw_install():
     """
@@ -728,26 +723,6 @@ def exist_stack_update():
     gtasks = bungeni.GlueScriptTasks()
     gtasks.setup_glue()
     gtasks.glue_setup_config()
-
-
-def exist_dev_mode():
-    """
-    Switch eXist to Developer mode, will restart eXist automatically
-    """
-    stop_exist("IGNORE_ERR")
-    tasks = bungeni.XmldbTasks()
-    tasks.switchto_dev_mode()
-    start_exist("IGNORE_ERR")
-
-
-def exist_deploy_mode():
-    """
-    Switch eXist to Deployment mode, will restart eXist automatically
-    """
-    stop_exist("IGNORE_ERR")
-    tasks = bungeni.XmldbTasks()
-    tasks.switchto_deploy_mode()
-    start_exist("IGNORE_ERR")
 
 def exist_presetup():
     """

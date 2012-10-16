@@ -645,7 +645,9 @@ class Presetup:
         """
         
         sup_pycfg = PythonConfigs(self.cfg,"supervisor")
-        run(sup_pycfg.python_home + "/bin/easy_install supervisor"
+        # 16-10-2012 ; supervisor 3.0b1 doesnt daemonize with fabric
+        # reverting back to 3.0a10
+        run(sup_pycfg.python_home + "/bin/easy_install supervisor==3.0a10"
             )
             
     def pika(self):
@@ -1742,20 +1744,6 @@ class XmldbTasks:
             run("tar --strip-components=1 -xvf %(exist_download_file)s -C %(user_exist)s" %
                          {"user_exist":self.cfg.user_exist,
                           "exist_download_file":self.cfg.exist_download_file})
-
-    
-    def switchto_dev_mode(self):
-        with cd(self.cfg.user_exist):
-            with cd("webapp/WEB-INF"):
-                run("cp web_customize.xml.tmpl web.xml")
-                print("Changed to devmode. You will need to restart the eXist service now.")
-
-
-    def switchto_deploy_mode(self):
-        with cd(self.cfg.user_exist):
-            with cd("webapp/WEB-INF"):
-                run("cp web_deploy.xml.tmpl web.xml")
-                print("Changed to deployment mode. You will need to restart the eXist service now.")
 
 
     def ant_prop_config(self):
