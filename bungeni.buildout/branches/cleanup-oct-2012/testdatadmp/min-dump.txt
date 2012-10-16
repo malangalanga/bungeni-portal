@@ -1,0 +1,277 @@
+--
+-- PostgreSQL database dump
+--
+
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
+
+SET search_path = public, pg_catalog;
+
+
+
+--
+-- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY country (country_id, iso_name, country_name, iso3, numcode, language) FROM stdin;
+AF	AFGHANISTAN	Afghanistan	AFG	4	en
+AL	ALBANIA	Albania	ALB	8	en
+DZ	ALGERIA	Algeria	DZA	12	en
+AS	AMERICAN SAMOA	American Samoa	ASM	16	en
+AD	ANDORRA	Andorra	AND	20	en
+AO	ANGOLA	Angola	AGO	24	en
+AI	ANGUILLA	Anguilla	AIA	660	en
+AQ	ANTARCTICA	Antarctica	\N	\N	en
+AG	ANTIGUA AND BARBUDA	Antigua and Barbuda	ATG	28	en
+AR	ARGENTINA	Argentina	ARG	32	en
+AM	ARMENIA	Armenia	ARM	51	en
+AW	ARUBA	Aruba	ABW	533	en
+AU	AUSTRALIA	Australia	AUS	36	en
+AT	AUSTRIA	Austria	AUT	40	en
+AZ	AZERBAIJAN	Azerbaijan	AZE	31	en
+BS	BAHAMAS	Bahamas	BHS	44	en
+BH	BAHRAIN	Bahrain	BHR	48	en
+BD	BANGLADESH	Bangladesh	BGD	50	en
+BB	BARBADOS	Barbados	BRB	52	en
+BY	BELARUS	Belarus	BLR	112	en
+BE	BELGIUM	Belgium	BEL	56	en
+BZ	BELIZE	Belize	BLZ	84	en
+BJ	BENIN	Benin	BEN	204	en
+BM	BERMUDA	Bermuda	BMU	60	en
+BT	BHUTAN	Bhutan	BTN	64	en
+BO	BOLIVIA	Bolivia	BOL	68	en
+BA	BOSNIA AND HERZEGOVINA	Bosnia and Herzegovina	BIH	70	en
+BW	BOTSWANA	Botswana	BWA	72	en
+BV	BOUVET ISLAND	Bouvet Island	\N	\N	en
+BR	BRAZIL	Brazil	BRA	76	en
+IO	BRITISH INDIAN OCEAN TERRITORY	British Indian Ocean Territory	\N	\N	en
+BN	BRUNEI DARUSSALAM	Brunei Darussalam	BRN	96	en
+BG	BULGARIA	Bulgaria	BGR	100	en
+BF	BURKINA FASO	Burkina Faso	BFA	854	en
+BI	BURUNDI	Burundi	BDI	108	en
+KH	CAMBODIA	Cambodia	KHM	116	en
+CM	CAMEROON	Cameroon	CMR	120	en
+CA	CANADA	Canada	CAN	124	en
+CV	CAPE VERDE	Cape Verde	CPV	132	en
+KY	CAYMAN ISLANDS	Cayman Islands	CYM	136	en
+CF	CENTRAL AFRICAN REPUBLIC	Central African Republic	CAF	140	en
+TD	CHAD	Chad	TCD	148	en
+CL	CHILE	Chile	CHL	152	en
+CN	CHINA	China	CHN	156	en
+CX	CHRISTMAS ISLAND	Christmas Island	\N	\N	en
+CC	COCOS (KEELING) ISLANDS	Cocos (Keeling) Islands	\N	\N	en
+CO	COLOMBIA	Colombia	COL	170	en
+KM	COMOROS	Comoros	COM	174	en
+CG	CONGO	Congo	COG	178	en
+CD	CONGO, THE DEMOCRATIC REPUBLIC OF THE	Congo, the Democratic Republic of the	COD	180	en
+CK	COOK ISLANDS	Cook Islands	COK	184	en
+CR	COSTA RICA	Costa Rica	CRI	188	en
+CI	COTE D'IVOIRE	Cote D'Ivoire	CIV	384	en
+HR	CROATIA	Croatia	HRV	191	en
+CU	CUBA	Cuba	CUB	192	en
+CY	CYPRUS	Cyprus	CYP	196	en
+CZ	CZECH REPUBLIC	Czech Republic	CZE	203	en
+DK	DENMARK	Denmark	DNK	208	en
+DJ	DJIBOUTI	Djibouti	DJI	262	en
+DM	DOMINICA	Dominica	DMA	212	en
+DO	DOMINICAN REPUBLIC	Dominican Republic	DOM	214	en
+EC	ECUADOR	Ecuador	ECU	218	en
+EG	EGYPT	Egypt	EGY	818	en
+SV	EL SALVADOR	El Salvador	SLV	222	en
+GQ	EQUATORIAL GUINEA	Equatorial Guinea	GNQ	226	en
+ER	ERITREA	Eritrea	ERI	232	en
+EE	ESTONIA	Estonia	EST	233	en
+ET	ETHIOPIA	Ethiopia	ETH	231	en
+FK	FALKLAND ISLANDS (MALVINAS)	Falkland Islands (Malvinas)	FLK	238	en
+FO	FAROE ISLANDS	Faroe Islands	FRO	234	en
+FJ	FIJI	Fiji	FJI	242	en
+FI	FINLAND	Finland	FIN	246	en
+FR	FRANCE	France	FRA	250	en
+GF	FRENCH GUIANA	French Guiana	GUF	254	en
+PF	FRENCH POLYNESIA	French Polynesia	PYF	258	en
+TF	FRENCH SOUTHERN TERRITORIES	French Southern Territories	\N	\N	en
+GA	GABON	Gabon	GAB	266	en
+GM	GAMBIA	Gambia	GMB	270	en
+GE	GEORGIA	Georgia	GEO	268	en
+DE	GERMANY	Germany	DEU	276	en
+GH	GHANA	Ghana	GHA	288	en
+GI	GIBRALTAR	Gibraltar	GIB	292	en
+GR	GREECE	Greece	GRC	300	en
+GL	GREENLAND	Greenland	GRL	304	en
+GD	GRENADA	Grenada	GRD	308	en
+GP	GUADELOUPE	Guadeloupe	GLP	312	en
+GU	GUAM	Guam	GUM	316	en
+GT	GUATEMALA	Guatemala	GTM	320	en
+GN	GUINEA	Guinea	GIN	324	en
+GW	GUINEA-BISSAU	Guinea-Bissau	GNB	624	en
+GY	GUYANA	Guyana	GUY	328	en
+HT	HAITI	Haiti	HTI	332	en
+HM	HEARD ISLAND AND MCDONALD ISLANDS	Heard Island and Mcdonald Islands	\N	\N	en
+VA	HOLY SEE (VATICAN CITY STATE)	Holy See (Vatican City State)	VAT	336	en
+HN	HONDURAS	Honduras	HND	340	en
+HK	HONG KONG	Hong Kong	HKG	344	en
+HU	HUNGARY	Hungary	HUN	348	en
+IS	ICELAND	Iceland	ISL	352	en
+IN	INDIA	India	IND	356	en
+ID	INDONESIA	Indonesia	IDN	360	en
+IR	IRAN, ISLAMIC REPUBLIC OF	Iran, Islamic Republic of	IRN	364	en
+IQ	IRAQ	Iraq	IRQ	368	en
+IE	IRELAND	Ireland	IRL	372	en
+IL	ISRAEL	Israel	ISR	376	en
+IT	ITALY	Italy	ITA	380	en
+JM	JAMAICA	Jamaica	JAM	388	en
+JP	JAPAN	Japan	JPN	392	en
+JO	JORDAN	Jordan	JOR	400	en
+KZ	KAZAKHSTAN	Kazakhstan	KAZ	398	en
+KE	KENYA	Kenya	KEN	404	en
+KI	KIRIBATI	Kiribati	KIR	296	en
+KP	KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF	Korea, Democratic People's Republic of	PRK	408	en
+KR	KOREA, REPUBLIC OF	Korea, Republic of	KOR	410	en
+KW	KUWAIT	Kuwait	KWT	414	en
+KG	KYRGYZSTAN	Kyrgyzstan	KGZ	417	en
+LA	LAO PEOPLE'S DEMOCRATIC REPUBLIC	Lao People's Democratic Republic	LAO	418	en
+LV	LATVIA	Latvia	LVA	428	en
+LB	LEBANON	Lebanon	LBN	422	en
+LS	LESOTHO	Lesotho	LSO	426	en
+LR	LIBERIA	Liberia	LBR	430	en
+LY	LIBYAN ARAB JAMAHIRIYA	Libyan Arab Jamahiriya	LBY	434	en
+LI	LIECHTENSTEIN	Liechtenstein	LIE	438	en
+LT	LITHUANIA	Lithuania	LTU	440	en
+LU	LUXEMBOURG	Luxembourg	LUX	442	en
+MO	MACAO	Macao	MAC	446	en
+MK	MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF	Macedonia, the Former Yugoslav Republic of	MKD	807	en
+MG	MADAGASCAR	Madagascar	MDG	450	en
+MW	MALAWI	Malawi	MWI	454	en
+MY	MALAYSIA	Malaysia	MYS	458	en
+MV	MALDIVES	Maldives	MDV	462	en
+ML	MALI	Mali	MLI	466	en
+MT	MALTA	Malta	MLT	470	en
+MH	MARSHALL ISLANDS	Marshall Islands	MHL	584	en
+MQ	MARTINIQUE	Martinique	MTQ	474	en
+MR	MAURITANIA	Mauritania	MRT	478	en
+MU	MAURITIUS	Mauritius	MUS	480	en
+YT	MAYOTTE	Mayotte	\N	\N	en
+MX	MEXICO	Mexico	MEX	484	en
+FM	MICRONESIA, FEDERATED STATES OF	Micronesia, Federated States of	FSM	583	en
+MD	MOLDOVA, REPUBLIC OF	Moldova, Republic of	MDA	498	en
+MC	MONACO	Monaco	MCO	492	en
+MN	MONGOLIA	Mongolia	MNG	496	en
+MS	MONTSERRAT	Montserrat	MSR	500	en
+MA	MOROCCO	Morocco	MAR	504	en
+MZ	MOZAMBIQUE	Mozambique	MOZ	508	en
+MM	MYANMAR	Myanmar	MMR	104	en
+NA	NAMIBIA	Namibia	NAM	516	en
+NR	NAURU	Nauru	NRU	520	en
+NP	NEPAL	Nepal	NPL	524	en
+NL	NETHERLANDS	Netherlands	NLD	528	en
+AN	NETHERLANDS ANTILLES	Netherlands Antilles	ANT	530	en
+NC	NEW CALEDONIA	New Caledonia	NCL	540	en
+NZ	NEW ZEALAND	New Zealand	NZL	554	en
+NI	NICARAGUA	Nicaragua	NIC	558	en
+NE	NIGER	Niger	NER	562	en
+NG	NIGERIA	Nigeria	NGA	566	en
+NU	NIUE	Niue	NIU	570	en
+NF	NORFOLK ISLAND	Norfolk Island	NFK	574	en
+MP	NORTHERN MARIANA ISLANDS	Northern Mariana Islands	MNP	580	en
+NO	NORWAY	Norway	NOR	578	en
+OM	OMAN	Oman	OMN	512	en
+PK	PAKISTAN	Pakistan	PAK	586	en
+PW	PALAU	Palau	PLW	585	en
+PS	PALESTINIAN TERRITORY, OCCUPIED	Palestinian Territory, Occupied	\N	\N	en
+PA	PANAMA	Panama	PAN	591	en
+PG	PAPUA NEW GUINEA	Papua New Guinea	PNG	598	en
+PY	PARAGUAY	Paraguay	PRY	600	en
+PE	PERU	Peru	PER	604	en
+PH	PHILIPPINES	Philippines	PHL	608	en
+PN	PITCAIRN	Pitcairn	PCN	612	en
+PL	POLAND	Poland	POL	616	en
+PT	PORTUGAL	Portugal	PRT	620	en
+PR	PUERTO RICO	Puerto Rico	PRI	630	en
+QA	QATAR	Qatar	QAT	634	en
+RE	REUNION	Reunion	REU	638	en
+RO	ROMANIA	Romania	ROM	642	en
+RU	RUSSIAN FEDERATION	Russian Federation	RUS	643	en
+RW	RWANDA	Rwanda	RWA	646	en
+SH	SAINT HELENA	Saint Helena	SHN	654	en
+KN	SAINT KITTS AND NEVIS	Saint Kitts and Nevis	KNA	659	en
+LC	SAINT LUCIA	Saint Lucia	LCA	662	en
+PM	SAINT PIERRE AND MIQUELON	Saint Pierre and Miquelon	SPM	666	en
+VC	SAINT VINCENT AND THE GRENADINES	Saint Vincent and the Grenadines	VCT	670	en
+WS	SAMOA	Samoa	WSM	882	en
+SM	SAN MARINO	San Marino	SMR	674	en
+ST	SAO TOME AND PRINCIPE	Sao Tome and Principe	STP	678	en
+SA	SAUDI ARABIA	Saudi Arabia	SAU	682	en
+SN	SENEGAL	Senegal	SEN	686	en
+CS	SERBIA AND MONTENEGRO	Serbia and Montenegro	\N	\N	en
+SC	SEYCHELLES	Seychelles	SYC	690	en
+SL	SIERRA LEONE	Sierra Leone	SLE	694	en
+SG	SINGAPORE	Singapore	SGP	702	en
+SK	SLOVAKIA	Slovakia	SVK	703	en
+SI	SLOVENIA	Slovenia	SVN	705	en
+SB	SOLOMON ISLANDS	Solomon Islands	SLB	90	en
+SO	SOMALIA	Somalia	SOM	706	en
+ZA	SOUTH AFRICA	South Africa	ZAF	710	en
+GS	SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS	South Georgia and the South Sandwich Islands	\N	\N	en
+ES	SPAIN	Spain	ESP	724	en
+LK	SRI LANKA	Sri Lanka	LKA	144	en
+SD	SUDAN	Sudan	SDN	736	en
+SR	SURINAME	Suriname	SUR	740	en
+SJ	SVALBARD AND JAN MAYEN	Svalbard and Jan Mayen	SJM	744	en
+SZ	SWAZILAND	Swaziland	SWZ	748	en
+SE	SWEDEN	Sweden	SWE	752	en
+CH	SWITZERLAND	Switzerland	CHE	756	en
+SY	SYRIAN ARAB REPUBLIC	Syrian Arab Republic	SYR	760	en
+TW	TAIWAN, PROVINCE OF CHINA	Taiwan, Province of China	TWN	158	en
+TJ	TAJIKISTAN	Tajikistan	TJK	762	en
+TZ	TANZANIA, UNITED REPUBLIC OF	Tanzania, United Republic of	TZA	834	en
+TH	THAILAND	Thailand	THA	764	en
+TL	TIMOR-LESTE	Timor-Leste	\N	\N	en
+TG	TOGO	Togo	TGO	768	en
+TK	TOKELAU	Tokelau	TKL	772	en
+TO	TONGA	Tonga	TON	776	en
+TT	TRINIDAD AND TOBAGO	Trinidad and Tobago	TTO	780	en
+TN	TUNISIA	Tunisia	TUN	788	en
+TR	TURKEY	Turkey	TUR	792	en
+TM	TURKMENISTAN	Turkmenistan	TKM	795	en
+TC	TURKS AND CAICOS ISLANDS	Turks and Caicos Islands	TCA	796	en
+TV	TUVALU	Tuvalu	TUV	798	en
+UG	UGANDA	Uganda	UGA	800	en
+UA	UKRAINE	Ukraine	UKR	804	en
+AE	UNITED ARAB EMIRATES	United Arab Emirates	ARE	784	en
+GB	UNITED KINGDOM	United Kingdom	GBR	826	en
+US	UNITED STATES	United States	USA	840	en
+UM	UNITED STATES MINOR OUTLYING ISLANDS	United States Minor Outlying Islands	\N	\N	en
+UY	URUGUAY	Uruguay	URY	858	en
+UZ	UZBEKISTAN	Uzbekistan	UZB	860	en
+VU	VANUATU	Vanuatu	VUT	548	en
+VE	VENEZUELA	Venezuela	VEN	862	en
+VN	VIET NAM	Viet Nam	VNM	704	en
+VG	VIRGIN ISLANDS, BRITISH	Virgin Islands, British	VGB	92	en
+VI	VIRGIN ISLANDS, U.S.	Virgin Islands, U.s.	VIR	850	en
+WF	WALLIS AND FUTUNA	Wallis and Futuna	WLF	876	en
+EH	WESTERN SAHARA	Western Sahara	ESH	732	en
+YE	YEMEN	Yemen	YEM	887	en
+ZM	ZAMBIA	Zambia	ZMB	894	en
+ZW	ZIMBABWE	Zimbabwe	ZWE	716	en
+\.
+
+
+--
+-- Data for Name: venue; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY venue (short_name, description, language) FROM stdin;
+Plenary	\N	en
+Green Room	\N	en
+Blue Room	\N	en
+Red Room	\N	en
+\.
+
+
+--
+-- PostgreSQL database dump complete
+--
+
