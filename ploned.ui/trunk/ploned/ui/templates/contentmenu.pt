@@ -55,6 +55,7 @@
                        tal:condition="subMenuItem/action"
                        tal:attributes="href subMenuItem/url|subMenuItem/action;
                                        title subMenuItem/description;
+                                       rel  subMenuItem/extra/rel|string:rel;
                                        id subMenuItem/extra/id | nothing;
                                        class subMenuItem/selected"
                        i18n:attributes="title">

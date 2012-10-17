@@ -14,7 +14,9 @@
         abort="1" />
     <match path="regex:.*(.jpg|.png|.gif|.js|.css|.ico|.xml|.xsl)$" abort="1"/>
     <match path="regex:.*/(preview)$" abort="1" />                     
-    <match environ="QUERY_STRING: wildcard:headless=*" abort="1" />      
+    <match environ="QUERY_STRING: wildcard:headless=*" abort="1" />   
+    <match environ="QUERY_STRING: wildcard:transition_id=*" abort="1" />     
+    <match path="regex:.*/(popup_change_workflow_state)$" abort="1" />
     <match path="/plone/" class="load-plone-navigation" />
     <match path="regex:^/(workspace|business|members|archive|admin)/?"
         class="load-bungeni-navigation" />
@@ -196,6 +198,11 @@
         <append content="children:#portal-breadcrumbs"
             theme="children:#portal-breadcrumbs"
         />
+        
+        <!-- workflow-popup -->
+        <append content="children:#popup-load"
+            theme="children:#popup-load"
+        />        
 
         <!-- search -->
         <append content="children:#portal-search"
