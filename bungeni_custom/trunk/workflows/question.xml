@@ -24,23 +24,23 @@
       <parameter name="assignable_roles" value="bungeni.Clerk.QuestionClerk"/>
     </feature>
     <!-- global grants -->
-    <grant permission="bungeni.question.View" role="bungeni.Owner" />
-    <grant permission="bungeni.question.View" role="bungeni.Signatory" />
-    <grant permission="bungeni.question.Edit" role="bungeni.Owner" />
+    <grant permission="bungeni.question.View" role="bungeni.Owner" /><!--!+NOT_GLOBAL-->
+    <grant permission="bungeni.question.View" role="bungeni.Signatory" /><!--!+NOT_GLOBAL-->
+    <grant permission="bungeni.question.Edit" role="bungeni.Owner" /><!--!+NOT_GLOBAL-->
     <grant permission="bungeni.question.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.question.Add" role="bungeni.MP" />
-    <grant permission="bungeni.question.Delete" role="bungeni.Owner" />
+    <grant permission="bungeni.question.Delete" role="bungeni.Owner" /><!--!+NOT_GLOBAL-->
     
     
     <state id="working_draft" title="Working Draft" tags="draft private">
         <!-- question -->
-        <grant permission="zope.View" role="bungeni.Clerk" />
-        <deny permission="zope.View" role="bungeni.Speaker" />
-        <deny permission="zope.View" role="bungeni.Owner" />
-        <deny permission="zope.View" role="bungeni.Signatory" />
-        <deny permission="zope.View" role="bungeni.MP" />
-        <deny permission="zope.View" role="bungeni.Minister" />
-        <deny permission="zope.View" role="bungeni.Anonymous" />
+        <grant permission="bungeni.question.View" role="bungeni.Clerk" />
+        <deny permission="bungeni.question.View" role="bungeni.Speaker" />
+        <deny permission="bungeni.question.View" role="bungeni.Owner" />
+        <deny permission="bungeni.question.View" role="bungeni.Signatory" />
+        <deny permission="bungeni.question.View" role="bungeni.MP" />
+        <deny permission="bungeni.question.View" role="bungeni.Minister" />
+        <deny permission="bungeni.question.View" role="bungeni.Anonymous" />
         <grant permission="bungeni.question.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.question.Edit" role="bungeni.Speaker" />
         <deny permission="bungeni.question.Edit" role="bungeni.Owner" />
@@ -87,8 +87,8 @@
     <state id="draft" title="Draft" like_state="working_draft" 
         tags="draft private">
         <!-- question -->
-        <deny permission="zope.View" role="bungeni.Clerk" />
-        <grant permission="zope.View" role="bungeni.Owner" />
+        <deny permission="bungeni.question.View" role="bungeni.Clerk" />
+        <grant permission="bungeni.question.View" role="bungeni.Owner" />
         <deny permission="bungeni.question.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.question.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.question.Delete" role="bungeni.Clerk" />
@@ -110,7 +110,7 @@
     <state id="submitted_signatories" title="Submitted to Signatories"
         version="true" like_state="draft" tags="actionmp">
         <!-- question -->
-        <grant permission="zope.View" role="bungeni.Signatory" />
+        <grant permission="bungeni.question.View" role="bungeni.Signatory" />
         <deny permission="bungeni.question.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.question.Delete" role="bungeni.Owner" />
         <!-- attachment -->
@@ -136,8 +136,8 @@
         version="true" like_state="submitted_signatories" 
         tags="actionclerk">
         <!-- question -->
-        <grant permission="zope.View" role="bungeni.Clerk" />
-        <grant permission="zope.View" role="bungeni.Speaker" />
+        <grant permission="bungeni.question.View" role="bungeni.Clerk" />
+        <grant permission="bungeni.question.View" role="bungeni.Speaker" />
         <!-- signatory -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
         
@@ -172,11 +172,11 @@
         like_state="submitted"
         tags="public approved oral written">
         <!-- question -->
-        <grant permission="zope.View" role="bungeni.Owner" />
-        <grant permission="zope.View" role="bungeni.Signatory" />
-        <grant permission="zope.View" role="bungeni.MP" />
-        <grant permission="zope.View" role="bungeni.Minister" />
-        <grant permission="zope.View" role="bungeni.Anonymous" />
+        <grant permission="bungeni.question.View" role="bungeni.Owner" />
+        <grant permission="bungeni.question.View" role="bungeni.Signatory" />
+        <grant permission="bungeni.question.View" role="bungeni.MP" />
+        <grant permission="bungeni.question.View" role="bungeni.Minister" />
+        <grant permission="bungeni.question.View" role="bungeni.Anonymous" />
     </state>
     
     <state id="inadmissible" title="Inadmissible" 
