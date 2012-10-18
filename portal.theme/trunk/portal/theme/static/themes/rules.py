@@ -1,4 +1,5 @@
 import httplib
+import urllib2
 from pyquery import PyQuery as pq
 from urlparse import urlsplit, urlparse
 
@@ -75,10 +76,23 @@ def add_member_workspace_links(content, theme, resource_fetcher, log):
         
 def add_group_workspace_links(content, theme, resource_fetcher, log):
     """
-    Add a groups 'web space' links to the workspace groups links.
+    Add a groups 'web space' content to the workspace group view.
     """
-    
-    group_table_contents = content("#workspace-table-my_groups")
+    link_url = content("#portal-breadcrumbs a").pop(4).values()[0]
+    if "group-political_group" or "group-committee" in link_url:
+        group_url = link_url.replace("workspace/groups/my-groups","plone/groups")
+        group_url = group_url.replace("-",".")
+        group_url = group_url + "web_space"
+        group_admin_url = group_url + "/folder_contents"
+        if check_url(group_url):
+            content(".contentActions").remove()
+            content(".enableFormTabbing").remove()
+            url_response = urllib2.urlopen(group_url)    
+            space_content = pq(url_response.read())
+            content(".title").after(space_content("#content"))
+            content(".tabs").after("<ul><li><a href=" + group_admin_url + ">" +\
+                "Add content</a></li><ul>")
+            theme("head").html().replace("http://localhost:8080/plone", group_url)
 
     
 def add_member_public_links(content, theme, resource_fetcher, log):

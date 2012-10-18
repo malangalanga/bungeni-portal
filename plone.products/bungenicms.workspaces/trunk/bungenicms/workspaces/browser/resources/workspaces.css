@@ -1,6 +1,8 @@
-.template-memberspace_view  .containers {
+.containers {
     float:left;
     clear: both;
+    margin-right: 2em;
+    margin-top: -2em;
 }
 
 .template-memberspace_view  .containers h2 {
@@ -18,18 +20,23 @@
     margin-right: 5em;
 }
 
-.template-memberspace_view  #flowpanes {
+#flowpanes {
     background: none repeat scroll 0 0 #DEE7EC;
     border: 2px solid #024395;
+    margin-left: 11.5em !important;
+    margin-top: 4em !important;
 
 }
-.template-memberspace_view #flowpanes dt a {
+#flowpanes dt a {
     color: black !important;
 }
 
-.template-memberspace_view  dd {
+#flowpanes  dd {
     color: grey;
     margin-bottom: 12px !important;
 }
 
+#content .containers ul.tabs a {
+    border-radius: 0 0 0 0 !important;
+}
 
