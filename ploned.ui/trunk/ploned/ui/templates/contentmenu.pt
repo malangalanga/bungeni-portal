@@ -20,8 +20,7 @@
                tal:define="hideChildren menuItem/extra/hideChildren | nothing;
                            id menuItem/extra/id | nothing;
                            link_id python:hideChildren and id or ''"
-               tal:omit-tag="not:menuItem/action"
-               tal:attributes="href menuItem/url|menuItem/action;
+               tal:attributes="href menuItem/url|menuItem/action|string:javascript:void();
                                title menuItem/description;
                                id link_id"
                i18n:attributes="title;">
@@ -55,8 +54,8 @@
                        tal:condition="subMenuItem/action"
                        tal:attributes="href subMenuItem/url|subMenuItem/action;
                                        title subMenuItem/description;
-                                       id subMenuItem/extra/id | nothing;
-                                       class subMenuItem/selected"
+                                       id subMenuItem/extra/id|nothing;
+                                       class subMenuItem/extra/class|nothing;"
                        i18n:attributes="title">
                         <img width="16"
                              height="16"
