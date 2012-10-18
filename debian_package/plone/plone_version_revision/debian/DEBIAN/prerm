@@ -1,0 +1,8 @@
+#!/bin/sh
+# pre remove script for plone
+set -e
+
+echo "stopping services"
+service  bungeni_services stop
+
+exit 0

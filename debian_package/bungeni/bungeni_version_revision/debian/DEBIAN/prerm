@@ -1,0 +1,8 @@
+#!/bin/sh
+# postinst script for bungeni
+set -e
+
+echo "Stopping services"
+service  bungeni_services stop
+
+exit 0

@@ -1,0 +1,8 @@
+#!/bin/sh
+# postinst script for plone
+set -e
+
+echo "setting plone ownership to bungeni user"
+chown -R bungeni:bungeni /opt/bungeni/bungeni_apps/bungeni/plone
+
+exit 0
