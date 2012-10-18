@@ -7,6 +7,9 @@
     <match path="regex:.*/(emptypage)$" abort="1" />
     <match path="regex:.*/(preview)$" abort="1" />                     
     <match environ="QUERY_STRING: wildcard:headless=*" abort="1" />    
+    <match environ="QUERY_STRING: wildcard:transition_id=*" abort="1" />    
+    <match path="regex:.*/(popup_change_workflow_state)$" abort="1" />
+    <match path="regex:.*/(popout)$" abort="1" />
     <match path="regex:.*/(addcontentselector)$"
         abort="1" />   
     <match path="regex:.*/(fullviewmindmap)$"
@@ -255,6 +258,11 @@
         <!-- breadcrumbs -->
         <append content="children:#portal-breadcrumbs"
             theme="children:#portal-breadcrumbs"
+        />
+        
+        <!-- workflow-popup -->
+        <append content="children:#popup-load"
+            theme="children:#popup-load"
         />
         
         <!-- search -->
