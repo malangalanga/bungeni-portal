@@ -1,16 +1,21 @@
 #!/bin/bash
 
-EXPECTED_ARGS=3
+EXPECTED_ARGS=1
 
 if [ $# -ne $EXPECTED_ARGS ] 
 then
- echo "Usage: `basename $0` <version> <release> <archtype>"
+ echo "Usage: `basename $0`<archtype>"
  exit 65
 fi
 
-PLONE_ZIP_FILE="plone_$1+$2.tar.gz"
+echo "Getting plone revision information..."
+PLONE_DIR="/opt/bungeni/bungeni_apps/bungeni/plone"
+PLONE_VERSION=$(grep "Plone" $PLONE_DIR/versions.cfg | awk "NR==2" | cut -d "=" -f2 | tr -d '\r|[:space:]')
+PLONE_REVISION=$(svn info $PLONE_DIR |grep Revision: |cut -c11-)
+PLONE_REVISION_DATE=$(svn info $PLONE_DIR |grep 'Last Changed Date:' |cut -d " " -f4)
+PLONE_ZIP_FILE="plone_$PLONE_VERSION+$PLONE_REVISION-$PLONE_REVISION_DATE.tar.gz"
 
 echo "Zipping plone"
-tar cvzf plone/$PLONE_ZIP_FILE /opt/bungeni/bungeni_apps/bungeni/plone
+tar cvzf plone/$PLONE_ZIP_FILE $PLONE_DIR
 
-cd plone && ./prepare_debpackfolder.sh $1+$2 $PLONE_ZIP_FILE $3
+cd plone && ./prepare_debpackfolder.sh $PLONE_VERSION+$PLONE_REVISION-$PLONE_REVISION_DATE $PLONE_ZIP_FILE $1
