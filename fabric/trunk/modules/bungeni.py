@@ -410,8 +410,10 @@ class BungeniConfigs:
         self.user_rabbitmq_build_path = self.user_build_root + "/rabbitmq"
         # Jython installation folder
         self.jython_install_url = self.cfg.get_config("glue-script", "download_url")
+        self.polib_install_url = self.cfg.get_config("glue-script", "polib_url")
         self.user_jython = self.user_install_root + "/jython"
         self.jython_download_command = self.get_download_command(self.jython_install_url)
+        self.polib_download_command = self.get_download_command(self.polib_install_url)
         self.jython_download_file = self.utils.get_basename(self.jython_install_url)
         self.user_jython_build_path = self.user_bungeni + "/jython"
         # Glue-script installation folder
@@ -1957,6 +1959,22 @@ class GlueScriptTasks:
                          {"java" : self.cfg.java_home,
                           "user_jython":self.cfg.user_jython,
                           "jython_download_file":self.cfg.jython_download_file})
+
+    def setup_jython_polib(self):
+        """
+        Installs polib in jython used in translating .po files into XML catalogues
+        """
+        with cd(self.cfg.user_jython + "/bin"):
+            run(self.cfg.polib_download_command)
+            run(self.cfg.user_jython + "/bin/jython ez_setup.py")
+            run(self.cfg.user_jython + "/bin/easy_install polib")
+
+    def setup_i18n_catalogues(self):
+        """
+        Downloads .po files, converts them to XML and installs to eXist.
+        """
+        run("%(java)s/bin/java -cp %(user_jython)s/jython.jar:%(user_glue)s/lib/jaxen/jaxen.jar:%(user_glue)s/lib/xerces/xercesImpl.jar:%(user_glue)s/lib/saxon/saxon9he.jar:%(user_glue)s/lib/dom4j/dom4j-1.6.1.jar:%(user_glue)s/lib/log4j/log4j.jar:/lib/bungeni/editorplugininterface.jar:%(user_glue)s/lib/transformer/odttransformer.jar:%(user_glue)s/lib/commons-lang/commons-lang-2.3.jar:%(user_glue)s/lib/jsoup/jsoup-1.6.1.jar:%(user_glue)s/lib/zip4j/zip4j_1.2.8.jar:%(user_glue)s/lib/sardine/sardine.jar:%(user_glue)s/lib/sardine/httpclient-4.1.2.jar:%(user_glue)s/lib/sardine/httpcore-4.1.3.jar:%(user_glue)s/lib/sardine/slf4j-api-1.6.2.jar:%(user_glue)s/lib/sardine/commons-logging-1.1.1.jar:%(user_glue)s/lib/sardine/commons-codec-1.4.jar org.python.util.jython %(user_glue)s/src/glue.py -c %(user_config)s/glue.ini -p" % {"java":self.cfg.java_home,"user_jython":self.cfg.user_jython,
+        "user_glue":self.cfg.user_glue,"user_config":self.cfg.user_config})
 
     def setup_glue(self):
         """

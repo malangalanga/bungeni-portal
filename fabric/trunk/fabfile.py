@@ -644,6 +644,8 @@ def exist_fw_install():
     tasks.ant_fw_setup_config()
     tasks.ant_indexes_install()
     tasks.ant_fw_install()
+    gluetasks = bungeni.GlueScriptTasks()
+    gluetasks.setup_i18n_catalogues()
 
 def exist_load_demodata():
     """
@@ -705,6 +707,7 @@ def glue_install():
     """
     tasks = bungeni.GlueScriptTasks()
     tasks.setup_jython()
+    tasks.setup_jython_polib()
     tasks.setup_glue()
     tasks.glue_setup_config()
 
