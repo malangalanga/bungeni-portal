@@ -90,15 +90,7 @@
     </rule>                         
 
 
-    <rule class="load-bungeni-navigation">
-        <!-- Add the plone login overlay... -->
-        <prepend href="/plone"
-            content="script[src *= 'popupforms.js']"
-            theme="children:/html/head" />           
-        <prepend href="/plone"
-            content="script[src *= 'jquerytools']"
-            theme="children:/html/head" />                 
-    
+    <rule class="load-bungeni-navigation">              
         <append content="children:#portal-column-one"
             theme="children:#portal-column-one"
         />        
