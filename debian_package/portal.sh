@@ -1,13 +1,5 @@
 #!/bin/bash
 
-EXPECTED_ARGS=1
-
-if [ $# -ne $EXPECTED_ARGS ] 
-then
- echo "Usage: `basename $0` <archtype>"
- exit 65
-fi
-
 echo "Getting portal revision information..."
 PORTAL_DIR="/opt/bungeni/bungeni_apps/bungeni/portal"
 PORTAL_VERSION=$(grep "Deliverance" $PORTAL_DIR/versions.cfg | cut -d "=" -f2 | tr -d '[:space:]')
@@ -18,4 +10,12 @@ PORTAL_ZIP_FILE="portal_$PORTAL_VERSION+$PORTAL_REVISION-$PORTAL_REVISION_DATE.t
 echo "Zipping portal"
 tar cvzf portal/$PORTAL_ZIP_FILE $PORTAL_DIR
 
-cd portal && ./prepare_debpackfolder.sh $PORTAL_VERSION+$PORTAL_REVISION-$PORTAL_REVISION_DATE $PORTAL_ZIP_FILE $1
+echo "Get Architecture Type"
+if [ $(getconf LONG_BIT) == 64 ]
+then
+	ARCHTYPE="amd64"
+else
+	ARCHTYPE="i386"
+fi
+
+cd portal && ./prepare_debpackfolder.sh $PORTAL_VERSION+$PORTAL_REVISION-$PORTAL_REVISION_DATE $PORTAL_ZIP_FILE $ARCHTYPE
