@@ -4,7 +4,7 @@ EXPECTED_ARGS=1
 
 if [ $# -ne $EXPECTED_ARGS ] 
 then
- echo "Usage: `basename $0`<archtype>"
+ echo "Usage: `basename $0` <archtype>"
  exit 65
 fi
 

@@ -9,7 +9,8 @@ then
 fi
 
 echo "reading bungeni dependencies"
-BUNGENI_DEPENDS=$(cat /opt/bungeni/exec/distro.ini | awk -v "RS=\n\n" -F "=" '/12.04/ {print $2}' | sed 's/#.*//' | tr -d '\n' | tr -s ' ' ', ' | sed 's/^.//')
+OS_VERSION=$(lsb_release -a | grep Release: | cut -c9- | tr -d "[:space:]")
+BUNGENI_DEPENDS=$(cat /opt/bungeni/exec/distro.ini | awk -v "RS=\n\n" -F "=" '/'$OS_VERSION'/ {print $2}' | sed 's/#.*//' | tr -d '\n' | tr -s ' ' ', ' | sed 's/^.//')
 
 BUNGENI_RELVER=(${1//+/ })
 BUNGENI_VER="${BUNGENI_RELVER[0]}"
