@@ -8,4 +8,4 @@ echo bungeni:bungeni | sudo chpasswd
 mkdir -p /opt/bungeni
 chown -R bungeni:bungeni /opt/bungeni
 usermod -d /opt/bungeni bungeni
-
+usermod -s /bin/bash bungeni
