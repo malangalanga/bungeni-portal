@@ -17,10 +17,16 @@
  
     <!-- upload data -->
     <target name="upload-exist-demo-data">
-        <echo message="Loading XQ Framework Demo data to eXist."/>
+        <echo message="Loading XQ Framework Demo Documents to eXist."/>
         <xdb:store uri="${on-uri}" createcollection="true" createsubcollections="true" user="${user}" password="${password}">
-            <fileset dir="${exist-docs}/bungeni-xml">
+            <fileset dir="${exist-docs}${exist-demo-xml}">
                 <include name="*.xml"/>
+            </fileset>
+        </xdb:store>
+        <echo message="Loading XQ Framework Demo Attachments to eXist."/>
+        <xdb:store uri="${atts-uri}" createcollection="true" createsubcollections="true" user="${user}" password="${password}">
+            <fileset dir="${exist-docs}${exist-demo-atts}">
+                <include name="*"/>
             </fileset>
         </xdb:store>
     </target>

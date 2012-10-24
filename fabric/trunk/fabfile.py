@@ -659,6 +659,16 @@ def exist_load_demodata():
     tasks.ant_demo_setup_config()
     tasks.ant_demo_install()
 
+def exist_load_i18n():
+    """
+    Loads i18n catalogues retrieved from Bungeni .po files
+    """
+    start_exist("IGNORE_ERROR")
+    import time
+    time.sleep(5)
+    gluetasks = bungeni.GlueScriptTasks()
+    gluetasks.setup_i18n_catalogues()
+
 def exist_reset():
     """
     Reset data in eXist repository
