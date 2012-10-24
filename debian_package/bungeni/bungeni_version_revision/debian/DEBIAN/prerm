@@ -2,7 +2,10 @@
 # postinst script for bungeni
 set -e
 
-echo "Stopping services"
+echo "Stopping services.."
 service  bungeni_services stop
+
+while ps -A | grep supervisord; do sleep 1; done
+echo "Bungeni services stopped."
 
 exit 0
