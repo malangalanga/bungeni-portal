@@ -17,13 +17,13 @@
     
     <state id="draft" title="Draft Event" tags="draft private">
         <!-- event -->
-        <deny permission="zope.View" role="bungeni.Clerk" />
-        <deny permission="zope.View" role="bungeni.Speaker" />
-        <grant permission="zope.View" role="bungeni.Owner" />
-        <deny permission="zope.View" role="bungeni.Signatory" />
-        <deny permission="zope.View" role="bungeni.MP" />
-        <deny permission="zope.View" role="bungeni.Minister" />
-        <deny permission="zope.View" role="bungeni.Anonymous" />
+        <deny permission="bungeni.attachment.View" role="bungeni.Clerk" />
+        <deny permission="bungeni.attachment.View" role="bungeni.Speaker" />
+        <grant permission="bungeni.attachment.View" role="bungeni.Owner" />
+        <deny permission="bungeni.attachment.View" role="bungeni.Signatory" />
+        <deny permission="bungeni.attachment.View" role="bungeni.MP" />
+        <deny permission="bungeni.attachment.View" role="bungeni.Minister" />
+        <deny permission="bungeni.attachment.View" role="bungeni.Anonymous" />
         <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
         <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
@@ -39,11 +39,11 @@
     
     <state id="internal" title="Published Internal" like_state="draft">
         <!-- attachment -->
-        <grant permission="zope.View" role="bungeni.Clerk" />
-        <grant permission="zope.View" role="bungeni.Speaker" />
-        <grant permission="zope.View" role="bungeni.Signatory" />
-        <grant permission="zope.View" role="bungeni.MP" />
-        <grant permission="zope.View" role="bungeni.Minister" />
+        <grant permission="bungeni.attachment.View" role="bungeni.Clerk" />
+        <grant permission="bungeni.attachment.View" role="bungeni.Speaker" />
+        <grant permission="bungeni.attachment.View" role="bungeni.Signatory" />
+        <grant permission="bungeni.attachment.View" role="bungeni.MP" />
+        <grant permission="bungeni.attachment.View" role="bungeni.Minister" />
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
         <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />

@@ -24,13 +24,10 @@
       <parameter name="assigner_roles" value="bungeni.Clerk.HeadClerk"/>
       <parameter name="assignable_roles" value="bungeni.Clerk.QuestionClerk"/>
     </feature>
+    
     <!-- global grants -->
-    <grant permission="bungeni.question.View" role="bungeni.Owner" /><!--!+NOT_GLOBAL-->
-    <grant permission="bungeni.question.View" role="bungeni.Signatory" /><!--!+NOT_GLOBAL-->
-    <grant permission="bungeni.question.Edit" role="bungeni.Owner" /><!--!+NOT_GLOBAL-->
     <grant permission="bungeni.question.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.question.Add" role="bungeni.MP" />
-    <grant permission="bungeni.question.Delete" role="bungeni.Owner" /><!--!+NOT_GLOBAL-->
     
     
     <state id="working_draft" title="Working Draft" tags="draft private">

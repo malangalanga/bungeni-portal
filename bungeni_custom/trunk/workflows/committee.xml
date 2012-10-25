@@ -15,11 +15,11 @@
     
     <state id="draft" title="Draft - Committee not yet Active">
         <!-- committee -->
-        <grant permission="zope.View" role="bungeni.Clerk" />
-        <deny permission="zope.View" role="bungeni.Speaker" />
-        <deny permission="zope.View" role="bungeni.MP" />
-        <deny permission="zope.View" role="bungeni.Minister" />
-        <deny permission="zope.View" role="bungeni.Anonymous" /> 
+        <grant permission="bungeni.committee.View" role="bungeni.Clerk" />
+        <deny permission="bungeni.committee.View" role="bungeni.Speaker" />
+        <deny permission="bungeni.committee.View" role="bungeni.MP" />
+        <deny permission="bungeni.committee.View" role="bungeni.Minister" />
+        <deny permission="bungeni.committee.View" role="bungeni.Anonymous" /> 
         <grant permission="bungeni.committee.Delete" role="bungeni.Owner" />
         <!-- agenda_item -->
         <deny permission="bungeni.agenda_item.Add" role="bungeni.CommitteeMember" />
@@ -29,10 +29,10 @@
         like_state="draft" 
         tags="public">
         <!-- committee -->
-        <grant permission="zope.View" role="bungeni.Speaker" />
-        <grant permission="zope.View" role="bungeni.MP" />
-        <grant permission="zope.View" role="bungeni.Minister" />
-        <grant permission="zope.View" role="bungeni.Anonymous" />
+        <grant permission="bungeni.committee.View" role="bungeni.Speaker" />
+        <grant permission="bungeni.committee.View" role="bungeni.MP" />
+        <grant permission="bungeni.committee.View" role="bungeni.Minister" />
+        <grant permission="bungeni.committee.View" role="bungeni.Anonymous" />
         <deny permission="bungeni.committee.Delete" role="bungeni.Owner" />
         <!-- agenda_item -->
         <grant permission="bungeni.agenda_item.Add" role="bungeni.CommitteeMember" />

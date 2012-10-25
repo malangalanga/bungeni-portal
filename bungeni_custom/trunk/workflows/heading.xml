@@ -14,24 +14,24 @@
     
     <state id="inactive" title="Inactive heading obsolete">
         <!-- heading -->
-        <grant permission="zope.View" role="bungeni.Clerk" />
-        <grant permission="zope.View" role="bungeni.Speaker" />
-        <deny permission="zope.View" role="bungeni.Owner" />
-        <deny permission="zope.View" role="bungeni.Signatory" />
-        <deny permission="zope.View" role="bungeni.MP" />
-        <deny permission="zope.View" role="bungeni.Minister" />
-        <deny permission="zope.View" role="bungeni.Anonymous" /> 
+        <grant permission="bungeni.heading.View" role="bungeni.Clerk" />
+        <grant permission="bungeni.heading.View" role="bungeni.Speaker" />
+        <deny permission="bungeni.heading.View" role="bungeni.Owner" />
+        <deny permission="bungeni.heading.View" role="bungeni.Signatory" />
+        <deny permission="bungeni.heading.View" role="bungeni.MP" />
+        <deny permission="bungeni.heading.View" role="bungeni.Minister" />
+        <deny permission="bungeni.heading.View" role="bungeni.Anonymous" /> 
     </state>
     
     <state id="public" title="Public" 
         like_state="inactive"
         tags="public tobescheduled">
         <!-- heading -->
-        <grant permission="zope.View" role="bungeni.Owner" />
-        <grant permission="zope.View" role="bungeni.Signatory" />
-        <grant permission="zope.View" role="bungeni.MP" />
-        <grant permission="zope.View" role="bungeni.Minister" />
-        <grant permission="zope.View" role="bungeni.Anonymous" />
+        <grant permission="bungeni.heading.View" role="bungeni.Owner" />
+        <grant permission="bungeni.heading.View" role="bungeni.Signatory" />
+        <grant permission="bungeni.heading.View" role="bungeni.MP" />
+        <grant permission="bungeni.heading.View" role="bungeni.Minister" />
+        <grant permission="bungeni.heading.View" role="bungeni.Anonymous" />
     </state>
     
     

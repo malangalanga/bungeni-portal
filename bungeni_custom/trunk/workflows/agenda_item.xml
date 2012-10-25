@@ -19,11 +19,7 @@
     <feature name="download" enabled="true" />
     
     <!-- global grants -->
-    <grant permission="bungeni.agenda_item.View" role="bungeni.Owner" /><!--!+NOT_GLOBAL-->
-    <grant permission="bungeni.agenda_item.View" role="bungeni.Signatory" /><!--!+NOT_GLOBAL-->
-    <grant permission="bungeni.agenda_item.Edit" role="bungeni.Owner" /><!--!+NOT_GLOBAL-->
     <grant permission="bungeni.agenda_item.Add" role="bungeni.Clerk" />
-    <grant permission="bungeni.agenda_item.Delete" role="bungeni.Owner" /><!--!+NOT_GLOBAL-->
     
     
     <state id="working_draft" title="Working Draft" tags="draft private">

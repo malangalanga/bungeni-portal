@@ -15,13 +15,13 @@
     
     <state id="draft" title="Draft Address" tags="draft private">
         <!-- address -->
-        <deny permission="zope.View" role="bungeni.Clerk" />
-        <deny permission="zope.View" role="bungeni.Speaker" />
-        <grant permission="zope.View" role="bungeni.Owner" />
-        <deny permission="zope.View" role="bungeni.Signatory" />
-        <deny permission="zope.View" role="bungeni.MP" />
-        <deny permission="zope.View" role="bungeni.Minister" />
-        <deny permission="zope.View" role="bungeni.Anonymous" />
+        <deny permission="bungeni.address.View" role="bungeni.Clerk" />
+        <deny permission="bungeni.address.View" role="bungeni.Speaker" />
+        <grant permission="bungeni.address.View" role="bungeni.Owner" />
+        <deny permission="bungeni.address.View" role="bungeni.Signatory" />
+        <deny permission="bungeni.address.View" role="bungeni.MP" />
+        <deny permission="bungeni.address.View" role="bungeni.Minister" />
+        <deny permission="bungeni.address.View" role="bungeni.Anonymous" />
         <deny permission="bungeni.address.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.address.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.address.Delete" role="bungeni.Clerk" />
@@ -38,12 +38,12 @@
         note="Visible to bungeni users"
         >
         <!-- address -->
-        <grant permission="zope.View" role="bungeni.Clerk" />
-        <grant permission="zope.View" role="bungeni.Speaker" />
-        <grant permission="zope.View" role="bungeni.Signatory" />
-        <grant permission="zope.View" role="bungeni.MP" />
-        <grant permission="zope.View" role="bungeni.Minister" />
-        <grant permission="zope.View" role="bungeni.Anonymous" />
+        <grant permission="bungeni.address.View" role="bungeni.Clerk" />
+        <grant permission="bungeni.address.View" role="bungeni.Speaker" />
+        <grant permission="bungeni.address.View" role="bungeni.Signatory" />
+        <grant permission="bungeni.address.View" role="bungeni.MP" />
+        <grant permission="bungeni.address.View" role="bungeni.Minister" />
+        <grant permission="bungeni.address.View" role="bungeni.Anonymous" />
         <grant permission="bungeni.address.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.address.Delete" role="bungeni.Clerk" />
     </state>

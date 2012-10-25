@@ -21,12 +21,8 @@
     <feature name="download" enabled="true" />
     
     <!-- global grants -->
-    <grant permission="bungeni.tabled_document.View" role="bungeni.Owner" /><!--!+NOT_GLOBAL-->
-    <grant permission="bungeni.tabled_document.View" role="bungeni.Signatory" /><!--!+NOT_GLOBAL-->
-    <grant permission="bungeni.tabled_document.Edit" role="bungeni.Owner" /><!--!+NOT_GLOBAL-->
     <grant permission="bungeni.tabled_document.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.tabled_document.Add" role="bungeni.MP" />
-    <grant permission="bungeni.tabled_document.Delete" role="bungeni.Owner" /><!--!+NOT_GLOBAL-->
     
     
     <state id="working_draft" title="Working Draft" tags="draft private">

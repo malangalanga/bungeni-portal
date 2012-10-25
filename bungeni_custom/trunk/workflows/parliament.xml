@@ -15,13 +15,13 @@
     
     <state id="draft" title="Draft - Parliament not yet Active">
         <!-- parliament -->
-        <grant permission="zope.View" role="bungeni.Clerk" />
-        <deny permission="zope.View" role="bungeni.Speaker" />
-        <deny permission="zope.View" role="bungeni.Owner" />
-        <deny permission="zope.View" role="bungeni.Signatory" />
-        <deny permission="zope.View" role="bungeni.MP" />
-        <deny permission="zope.View" role="bungeni.Minister" />
-        <deny permission="zope.View" role="bungeni.Anonymous" />
+        <grant permission="bungeni.parliament.View" role="bungeni.Clerk" />
+        <deny permission="bungeni.parliament.View" role="bungeni.Speaker" />
+        <deny permission="bungeni.parliament.View" role="bungeni.Owner" />
+        <deny permission="bungeni.parliament.View" role="bungeni.Signatory" />
+        <deny permission="bungeni.parliament.View" role="bungeni.MP" />
+        <deny permission="bungeni.parliament.View" role="bungeni.Minister" />
+        <deny permission="bungeni.parliament.View" role="bungeni.Anonymous" />
         <grant permission="bungeni.parliament.Delete" role="bungeni.Owner" />
         <!-- groupmember -->
         <deny permission="bungeni.groupmember.Edit" role="bungeni.Clerk" />
@@ -33,12 +33,12 @@
         like_state="draft"
         tags="public">
         <!-- parliament -->
-        <grant permission="zope.View" role="bungeni.Speaker" />
-        <grant permission="zope.View" role="bungeni.Owner" />
-        <grant permission="zope.View" role="bungeni.Signatory" />
-        <grant permission="zope.View" role="bungeni.MP" />
-        <grant permission="zope.View" role="bungeni.Minister" />
-        <grant permission="zope.View" role="bungeni.Anonymous" />
+        <grant permission="bungeni.parliament.View" role="bungeni.Speaker" />
+        <grant permission="bungeni.parliament.View" role="bungeni.Owner" />
+        <grant permission="bungeni.parliament.View" role="bungeni.Signatory" />
+        <grant permission="bungeni.parliament.View" role="bungeni.MP" />
+        <grant permission="bungeni.parliament.View" role="bungeni.Minister" />
+        <grant permission="bungeni.parliament.View" role="bungeni.Anonymous" />
         <deny permission="bungeni.parliament.Delete" role="bungeni.Owner" />
         <!-- groupmember -->
         <grant permission="bungeni.groupmember.Edit" role="bungeni.Clerk" />

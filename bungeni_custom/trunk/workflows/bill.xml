@@ -21,16 +21,9 @@
     <feature name="download" enabled="true" />
     
     <!-- global grants -->
-    <grant permission="bungeni.bill.View" role="bungeni.Clerk" /><!--!+NOT_GLOBAL-->
-    <grant permission="bungeni.bill.View" role="bungeni.Speaker" /><!--!+NOT_GLOBAL-->
-    <grant permission="bungeni.bill.View" role="bungeni.Owner" /><!--!+NOT_GLOBAL-->
-    <grant permission="bungeni.bill.View" role="bungeni.Signatory" /><!--!+NOT_GLOBAL-->
-    <grant permission="bungeni.bill.Edit" role="bungeni.Clerk" /><!--!+NOT_GLOBAL-->
-    <grant permission="bungeni.bill.Edit" role="bungeni.Speaker" /><!--!+NOT_GLOBAL-->
-    <grant permission="bungeni.bill.Edit" role="bungeni.Owner" /><!--!+NOT_GLOBAL-->
+    <grant permission="bungeni.bill.Edit" role="bungeni.Speaker" />
     <grant permission="bungeni.bill.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.bill.Add" role="bungeni.MP" />
-    <grant permission="bungeni.bill.Delete" role="bungeni.Owner" /><!--!+NOT_GLOBAL-->
     
     
     <state id="working_draft" title="Working Draft" tags="draft private">
