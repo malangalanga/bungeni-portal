@@ -10,6 +10,7 @@ fi
 
 echo "reading bungeni dependencies"
 OS_VERSION=$(lsb_release -a | grep Release: | cut -c9- | tr -d "[:space:]")
+BUNGENI_OTHER_DEPENDS="fabric,"
 BUNGENI_DEPENDS=$(cat /opt/bungeni/exec/distro.ini | awk -v "RS=\n\n" -F "=" '/'$OS_VERSION'/ {print $2}' | sed 's/#.*//' | tr -d '\n' | tr -s ' ' ', ' | sed 's/^.//')
 
 BUNGENI_RELVER=(${1//+/ })
@@ -30,7 +31,7 @@ echo "Setting version in control file"
 
 sed -i "s/__BUNGENI_VER__/$BUNGENI_REL/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
 sed -i "s/__ARCH__/$BUNGENI_ARCH/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
-sed -i "s/__DEPENDS__/$BUNGENI_DEPENDS/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
+sed -i "s/__DEPENDS__/$BUNGENI_OTHER_DEPENDS$BUNGENI_DEPENDS/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
 
 echo "Adding bungeni to debian package"
 
