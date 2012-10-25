@@ -251,6 +251,7 @@ class BungeniConfigs:
            self.cfg.get_config("global","system_root"),
            " && pwd"
         ]))
+        self.system_home = system_root_expanded
         self.apps_dir = self.cfg.get_config("global","apps_dir")
         self.apps_tmp = self.cfg.get_config("global","apps_tmp")
         self.user_build_root = system_root_expanded + "/" + self.apps_tmp
@@ -710,6 +711,7 @@ class Presetup:
             "user_glue": self.cfg.user_glue,
             "glue_interval": self.cfg.glue_interval,
             "python": sup_pycfg.python_home,
+            "system_home" : self.cfg.system_home,
             }
         run("mkdir -p %s" % self.cfg.user_config)
         run("mkdir -p %s" % self.cfg.user_logs)
