@@ -22,7 +22,7 @@
     <feature name="workspace" enabled="true" />
     <feature name="notification" enabled="true" />
     <feature name="download" enabled="true" />
-    
+    <feature name="group_assignment" enabled="true" />
     <!-- global grants -->
     <grant permission="bungeni.motion.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.motion.Add" role="bungeni.MP" />
@@ -37,12 +37,14 @@
         <deny permission="bungeni.motion.View" role="bungeni.MP" />
         <deny permission="bungeni.motion.View" role="bungeni.Minister" />
         <deny permission="bungeni.motion.View" role="bungeni.Anonymous" />
+        <deny permission="bungeni.motion.View" role="bungeni.CommitteeMember" />
         <grant permission="bungeni.motion.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.motion.Edit" role="bungeni.Speaker" />
         <deny permission="bungeni.motion.Edit" role="bungeni.Owner" />
         <deny permission="bungeni.motion.Edit" role="bungeni.MP" />
         <deny permission="bungeni.motion.Edit" role="bungeni.Minister" />
         <deny permission="bungeni.motion.Edit" role="bungeni.Anonymous" />
+        <deny permission="bungeni.motion.Edit" role="bungeni.CommitteeMember" />
         <grant permission="bungeni.motion.Delete" role="bungeni.Clerk" />
         <deny permission="bungeni.motion.Delete" role="bungeni.Speaker" />
         <deny permission="bungeni.motion.Delete" role="bungeni.Owner" />
@@ -82,6 +84,12 @@
         <grant permission="bungeni.event.Add" role="bungeni.Speaker" />
         <grant permission="bungeni.event.Delete" role="bungeni.Clerk" />
         <grant permission="bungeni.event.Delete" role="bungeni.Speaker" />
+        <!-- group_assignment -->
+        <deny permission="bungeni.group_assignment.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.group_assignment.View" role="bungeni.Clerk" />
+        <deny permission="bungeni.group_assignment.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.group_assignment.Delete" role="bungeni.Clerk" />
+        
     </state>
     
     <state id="draft" title="Draft" 
@@ -160,6 +168,12 @@
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />        
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.motion.View" role="bungeni.CommitteeMember" />
+        <grant permission="bungeni.motion.Edit" role="bungeni.CommitteeMember" />
+        <grant permission="bungeni.group_assignment.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.group_assignment.View" role="bungeni.Clerk" />
+        <grant permission="bungeni.group_assignment.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.group_assignment.Delete" role="bungeni.Clerk" />
     </state>
     
     <state id="clarification_required" title="Requires Clarification to Receive"
@@ -223,6 +237,7 @@
         <grant permission="bungeni.motion.View" role="bungeni.MP" />
         <grant permission="bungeni.motion.View" role="bungeni.Minister" />
         <grant permission="bungeni.motion.View" role="bungeni.Anonymous" />
+        
     </state>
     
     <state id="schedule_pending" title="Schedule pending"
