@@ -419,19 +419,6 @@
        include="codebase/ext/dhtmlxscheduler_pdf.js"
        />
   </resourceLibrary>
-  <resourceLibrary name="dhtmlxscheduler-tooltip"
-                   require="dhtmlxscheduler">
-    <directory
-       zcml:condition="have devmode"
-       source="resources"
-       include="sources/ext/dhtmlxscheduler_tooltip.js"
-       />
-    <directory
-       zcml:condition="not-have devmode"
-       source="resources"
-       include="codebase/ext/dhtmlxscheduler_tooltip.js"
-       />
-  </resourceLibrary>
   <resourceLibrary name="dhtmlxscheduler-mobile">
     <directory
        zcml:condition="have devmode"
