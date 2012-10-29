@@ -15,7 +15,7 @@ BUNGENI_REVISION_DATE=$(svn info $BUNGENI_APPS_HOME/bungeni |grep 'Last Changed 
 BUNGENI_ZIP_FILE="bungeni_$1+$BUNGENI_REVISION-$BUNGENI_REVISION_DATE.tar.gz"
 
 echo "Zipping bungeni"
-tar cvzf bungeni/$BUNGENI_ZIP_FILE /opt/bungeni --exclude=$BUNGENI_APPS_HOME/exist* --exclude=$BUNGENI_APPS_HOME/glue* --exclude=$BUNGENI_APPS_HOME/jython* --exclude=$BUNGENI_APPS_HOME/bungeni/plone* --exclude=$BUNGENI_APPS_HOME/bungeni/portal* --exclude=$BUNGENI_APPS_HOME/.* --exclude=$BUNGENI_APPS_HOME/config/xml*
+tar cvzf bungeni/$BUNGENI_ZIP_FILE /opt/bungeni --exclude=$BUNGENI_APPS_HOME/exist* --exclude=$BUNGENI_APPS_HOME/glue* --exclude=$BUNGENI_APPS_HOME/jython* --exclude=$BUNGENI_APPS_HOME/bungeni/plone* --exclude=$BUNGENI_APPS_HOME/bungeni/portal* --exclude=$BUNGENI_APPS_HOME/.* --exclude=$BUNGENI_APPS_HOME/config/xml* --exclude=/opt/bungeni/.bungenitmp*
 
 echo "Get Architecture Type"
 if [ $(getconf LONG_BIT) == 64 ]
