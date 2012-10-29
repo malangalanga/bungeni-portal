@@ -432,4 +432,32 @@
        include="codebase/ext/dhtmlxscheduler_tooltip.js"
        />
   </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-mobile">
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/mobile/dhxscheduler_mobile_debug.js
+        codebase/mobile/dhxscheduler_mobile_debug.css"
+       />
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="codebase/mobile/dhxscheduler_mobile.js
+        codebase/mobile/dhxscheduler_mobile.css"
+       />
+  </resourceLibrary>
+  <resourceLibrary name="dhtmlxscheduler-mobile-recurring">
+    <directory
+       zcml:condition="have devmode"
+       source="resources"
+       include="codebase/mobile/dhxscheduler_mobile_rec_debug.js
+        codebase/mobile/dhxscheduler_mobile_rec_debug.css"
+       />
+    <directory
+       zcml:condition="not-have devmode"
+       source="resources"
+       include="codebase/mobile/dhxscheduler_mobile_rec.js
+        codebase/mobile/dhxscheduler_mobile_rec.css"
+       />
+  </resourceLibrary>
 </configure>

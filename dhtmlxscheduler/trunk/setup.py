@@ -18,7 +18,7 @@ def read(*rnames):
 
 setuptools.setup(
     name = 'zdhtmlxscheduler',
-    version = "1.0.0",
+    version = "1.0.2",
     author='Miano Njoka',
     author_email='miano@parliaments.info',
     description = "Zope3 Package of DHTMLX Scheduler",
