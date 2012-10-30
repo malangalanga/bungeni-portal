@@ -11,10 +11,12 @@ Kapil Thangavelu
 """
 log = __import__("logging").getLogger("ploned.ui.menu")
 
+import sys
 import zope.component
 
 from zope.security.proxy import removeSecurityProxy
 from zope.security import checkPermission
+from zope.security.interfaces import Unauthorized
 
 from zope.interface import providedBy, Interface
 from zope.browsermenu.interfaces import IBrowserSubMenuItem
@@ -23,6 +25,7 @@ from zope.browsermenu.interfaces import IBrowserMenu
 from zope.app.component.hooks import getSite
 
 from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.pagetemplate.engine import Engine
 #from bungeni.ui import z3evoque
 
 from bungeni.ui.utils import url, debug
@@ -50,7 +53,25 @@ def make_absolute(action, local_url, site_url):
     if action.startswith("/"):
         return "%s/%s" % (site_url, action[1:])
     return "%s/%s" % (local_url, action)
-    
+
+def check_availability(menu_item):
+    """check availability of a menu against its permission and filter"""
+    available = True
+    if menu_item.permission is not None:
+        available = checkPermission(menu_item.permission, menu_item.context)
+    if menu_item.filter is not None:
+        try:
+            available = menu_item.filter(Engine.getContext(
+                context = menu_item.context,
+                nothing = None,
+                request = menu_item.request,
+                modules = sys.modules,
+                ))
+        except Unauthorized:
+            available = False
+    return available
+        
+
 class PloneBrowserMenu(BrowserMenu):
     """This menu class implements the ``getMenuItems`` to conform with
     Plone templates.
@@ -62,7 +83,7 @@ class PloneBrowserMenu(BrowserMenu):
             (obj, request), self.getMenuItemType()))
         # filter out all items which you do not have the permissions for
         result = [ item for name, item in menu if
-            checkPermission(item.permission, obj) ]
+            check_availability(item) ]
         # Now order the result. This is not as easy as it seems.
         # (1) Look at the interfaces and put the more specific menu entries
         #     to the front. 
