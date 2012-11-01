@@ -378,7 +378,9 @@
             <show modes="view edit add" />
         </field>
     </descriptor>
-
+    
+    
+    <!-- !+Report4Sitting - not a custom type? and archetype is not "report"? -->
     <descriptor name="report4_sitting" archetype="report" order="31">
         <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
             <show modes="add" />

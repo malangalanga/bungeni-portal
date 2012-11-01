@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <workflow title="Report Workflow"
     description="A report"
+    tags="public"
+    modes="view edit add delete"
     >
     
     <!-- features -->
@@ -8,12 +10,12 @@
     <feature name="version" enabled="true" />
     <feature name="download" enabled="true" />
     
-    <!-- global grants !+NAMING why plural "reports"? -->
-    <grant permission="bungeni.reports.Edit" role="bungeni.Clerk" />
-    <grant permission="bungeni.reports.Edit" role="bungeni.Speaker" /> 
+    <!-- global grants -->
+    <grant permission="bungeni.report.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.report.Edit" role="bungeni.Speaker" /> 
     
     
-    <state id="published" title="Published">
+    <state id="published" title="Published" tags="public">
         <grant permission="zope.View" role="bungeni.Authenticated" /> 
         <grant permission="zope.View" role="bungeni.Anonymous" />
         <!-- !+PERM_NOT_REG deny permission="bungeni.report.Edit" role="bungeni.Authenticated" /-->
