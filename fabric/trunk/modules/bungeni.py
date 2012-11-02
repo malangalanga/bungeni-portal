@@ -117,13 +117,9 @@ class OsEssentials:
     def __parse_config(self, dist_id, dist_rel):
         pkgs = self.distro.get(dist_id, dist_rel)
         lipkgs = pkgs.splitlines()
-
         # remove blank entries in list
-
         lipkgs = filter(lambda x: len(x) > 0, lipkgs)
-
         # remove items that start with #
-
         lipkgs = filter(lambda x: not x.startswith("#"), lipkgs)
         return lipkgs
 
@@ -147,6 +143,36 @@ class OsEssentials:
         """
 
         return self.installMethods[dist_id]
+
+    def get_platform_arch(self):
+        """
+        Returns the current platform archicture - 32 or 64 depending
+        on the platform
+        """
+        platarch = run("getconf LONG_BIT")
+        return platarch
+
+
+    def get_platform_suffix(self):
+        """
+        Debian uses amd64 i386 as the file suffix to name directories
+        for multiplatform packages - this api returns the appropriate
+        suffix based on the platform architecture
+        """
+        map_plat_suffix = {"32":"i386", "64":"amd64"}
+        return map_plat_suffix.get(self.get_platform_arch())
+
+
+    def get_distro_jdk(self, dist_id, dist_rel):
+        """
+        Gets the jdk package used by the distro
+        We dont use the default jdk anymore because it is not possible
+        to control the default jdk - so we install specific openjdk JRE and get 
+        its home and use it as the default jre for the installation
+        """
+        lipackages = self.get_reqd_libs(dist_id, dist_rel)
+        lijdkpackage = [jpack for jpack in lipackages if jpack.find('jre') <> -1 ]
+        return lijdkpackage[0]
 
     installMethods = {
         "Ubuntu": "apt-get install -y  --allow-unauthenticated ",
@@ -429,7 +455,15 @@ class BungeniConfigs:
             return "cp %(file_path)s ." % {"file_path": strURL}
 
     def jre_home(self):
-        return run('echo `readlink -f /usr/bin/java | sed "s:/bin/java::"`')
+        """
+        Returns the home folder of the used Java runtime engine
+        """
+        #return run('echo `readlink -f /usr/bin/java | sed "s:/bin/java::"`')
+        osent = OsEssentials()
+        osinfo = OsInfo(self.distro_override)
+        java_package = osent.get_distro_jdk(osinfo.release_id, osinfo.release_no)
+        return self.cfg.get_config("java", java_package) + "-" + osent.get_platform_suffix()
+      
 
     def used_pythons(self):
         pys = []
