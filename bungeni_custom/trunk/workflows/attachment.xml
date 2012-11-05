@@ -12,7 +12,7 @@
     <feature name="version" enabled="true" /><!-- !+SHOULD be enabled (both 
     audit and version) if parent documents are to be able to include such 
     changes in their audit/version log -->
-    <feature name="attachment" enabled="false" /><!-- !+MUST be disabled -->
+    <!-- !+attachments may NOT recursivley support other attachments -->
     
     
     <state id="draft" title="Draft Event" tags="draft private">
