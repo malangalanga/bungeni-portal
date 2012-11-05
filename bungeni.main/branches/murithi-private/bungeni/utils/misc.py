@@ -17,11 +17,17 @@ log = __import__("logging").getLogger("bungeni.utils.misc")
 def xml_attr_bool(elem, attr_name, default=False):
     return as_bool(strip_none(elem.get(attr_name)) or str(default))
 
+def xml_attr_int(elem, attr_name, default=None):
+    value = strip_none(elem.get(attr_name)) or default
+    if value is not None:
+        value = int(value)
+    return value
+
 def xml_attr_str(elem, attr_name, default=None):
     return strip_none(elem.get(attr_name)) or default
 
 
-# string / conversion
+# string / conversion / comparison
 
 def strip_none(s):
     """Ensure non-empty whitespace-stripped string, else None.
@@ -41,6 +47,16 @@ def as_bool(s):
     elif _s == "false":
         return False
     raise TypeError("Invalid bool: %s" % s)
+
+import difflib
+def unified_diff(old_str, new_str, old_name="OLD", new_name="NEW"):
+    """Return a unified diff of two strings.
+    """
+    return "".join(difflib.unified_diff(
+                old_str.splitlines(1), 
+                new_str.splitlines(1), 
+                fromfile=old_name, 
+                tofile=new_name))
 
 
 # list
@@ -62,4 +78,28 @@ def replace_keyed_item(seq, replacement_item, key="name"):
             return
     raise LookupError("No matching item [%s=%r] found in seq: %s" % (
         key, replacement_item[key], seq))
+
+# io
+
+def read_file(file_path):
+    return open(file_path, "r").read().decode("utf-8")
+
+def check_overwrite_file(file_path, content):
+    """Write content to file_path if necessary (that is if there are changes),
+    creating it if does not exist. Log a "diff" to preceding content.
+    """
+    try:
+        persisted = read_file(file_path)
+        exists = True
+    except IOError:
+        persisted = '<NO-SUCH-FILE path="%s" />\n' % (file_path)
+        exists = False
+    if persisted != content:
+        if exists:
+            print "*** OVERWRITING file: %s" % (file_path)
+        else:
+            print "*** CREATING file: %s" % (file_path)
+        print unified_diff(persisted, content, file_path, "NEW")            
+        open(file_path, "w").write(content.encode("utf-8"))
+
 

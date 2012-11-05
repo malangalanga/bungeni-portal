@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
-    xmlns:z3c="http://namespaces.zope.org/z3c"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="bungeni">
     
@@ -20,7 +19,7 @@
         file=20, event=21, signatory=22
         title=30
         sitting=40, agenda_item=41, attendance=42
-        groupmember=61, pgroupmember=61, committeemember=62, officemember=63
+        groupmember=61, pgroupmember=61, committee_member=62, office_member=63
         ministry=70
         address=80
     -->
@@ -118,6 +117,7 @@
     <!-- CONTENT SUBMENUS -->
     <browser:subMenuItem menu="plone_contentmenu"
         for="bungeni.core.interfaces.IWorkspaceContainer"
+        layer=".interfaces.IWorkspaceMyDocumentsSectionLayer"
         title="Add parliamentary content..."
         action="workspace_add_content"
         permission="zope.View"
@@ -189,7 +189,7 @@
         for="bungeni.models.interfaces.ICommittee"
         title="Add committee member..."
         action="./committeemembers/add"
-        permission="bungeni.committeemember.Add"
+        permission="bungeni.committee_member.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="62"
     />
@@ -197,7 +197,7 @@
         for="bungeni.models.interfaces.ICommittee"
         title="Add staff..."
         action="./committeestaff/add"
-        permission="bungeni.committeestaff.Add"
+        permission="bungeni.committee_staff.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="63"
     />
@@ -215,7 +215,7 @@
         title="Delete committee staff"
         order="99"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
-        permission="bungeni.committeestaff.Delete"
+        permission="bungeni.committee_staff.Delete"
     />
     <browser:menuItem menu="additems"
         for="bungeni.models.interfaces.ICommittee"
@@ -316,6 +316,14 @@
         order="30"
     />
     <browser:menuItem menu="additems"
+        for="bungeni.models.interfaces.IBungeniGroupMembership"
+        title="Add subrole..."
+        action="./subroles/add"
+        permission="bungeni.groupmemberrole.Add"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        order="31"
+    />
+    <browser:menuItem menu="additems"
         for="bungeni.models.interfaces.IGroupMembershipRoleContainer"
         title="Add member role..."
         action="./add"
@@ -339,22 +347,24 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="22"
     />
-    <browser:menuItem menu="context_actions" 
-        for="bungeni.models.interfaces.IEvent"
-        action="delete"
-        title="Delete event"
-        order="99"
-        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
-        permission="bungeni.event.Delete"
-    />
+    
     <browser:menuItem menu="context_actions" 
         for="bungeni.models.interfaces.IEvent"
         action="edit"
-        title="Edit event"
+        title="Edit Event"
         order="10"
-        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         permission="bungeni.event.Edit"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
     />
+    <browser:menuItem menu="context_actions" 
+        for="bungeni.models.interfaces.IEvent"
+        action="delete"
+        title="Delete Event"
+        order="99"
+        permission="bungeni.event.Delete"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+    />
+    
     <browser:menuItem menu="context_actions"
         for="bungeni.models.interfaces.IHeading"
         title="Edit heading"
@@ -448,7 +458,7 @@
         for="bungeni.models.interfaces.IOffice"
         title="Add office member..."
         action="./officemembers/add"
-        permission="bungeni.officemember.Add"
+        permission="bungeni.office_member.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="63"
     />
@@ -468,13 +478,14 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="80"
     />
+    
     <browser:menuItem menu="context_actions"
         for="bungeni.models.interfaces.IOfficeMember"
         action="edit"
         title="Edit office member"
         order="10"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
-        permission="bungeni.officemember.Edit"
+        permission="bungeni.office_member.Edit"
     />
     <browser:menuItem menu="context_actions"
         for="bungeni.models.interfaces.IOfficeMember"
@@ -482,7 +493,7 @@
         title="Delete office member"
         order="99"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
-        permission="bungeni.officemember.Delete"
+        permission="bungeni.office_member.Delete"
     />
     <!-- Navigation -->
     
@@ -565,7 +576,7 @@
         for="bungeni.models.interfaces.IMemberOfParliamentContainer"
         title="Add MP..."
         action="./add"
-        permission="bungeni.mp.Add"
+        permission="bungeni.member_of_parliament.Add"
         layer=".interfaces.IAdminSectionLayer"
     />
     <browser:menuItem menu="context_actions"
@@ -574,7 +585,7 @@
         title="Edit MP"
         order="10"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
-        permission="bungeni.mp.Edit"
+        permission="bungeni.member_of_parliament.Edit"
     />
     <browser:menuItem menu="context_actions"
         for="bungeni.models.interfaces.IMemberOfParliament"
@@ -582,7 +593,7 @@
         title="Delete MP"
         order="99"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
-        permission="bungeni.mp.Delete"
+        permission="bungeni.member_of_parliament.Delete"
     />
       
     <browser:menuItem menu="plone_contentmenu"
@@ -617,7 +628,7 @@
         for="bungeni.models.interfaces.ICommitteeMemberContainer"
         title="Add committee member..."
         action="./add"
-        permission="bungeni.committeemember.Add"
+        permission="bungeni.committee_member.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
     />
     <browser:menuItem menu="context_actions"
@@ -626,7 +637,7 @@
         title="Edit committee member"
         order="10"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
-        permission="bungeni.committeemember.Edit"
+        permission="bungeni.committee_member.Edit"
     />
     <browser:menuItem menu="context_actions"
         for="bungeni.models.interfaces.ICommitteeMember"
@@ -634,13 +645,13 @@
         title="Delete committee member"
         order="99"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
-        permission="bungeni.mp.Delete"
+        permission="bungeni.member_of_parliament.Delete"
     />
     <browser:menuItem menu="plone_contentmenu"
         for="bungeni.models.interfaces.ICommitteeStaffContainer"
         title="Add committee staff..."
         action="./add"
-        permission="bungeni.committeestaff.Add"
+        permission="bungeni.committee_staff.Add"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
     />
     <browser:menuItem menu="plone_contentmenu"
@@ -985,6 +996,15 @@
      order="11"
      />
 
+    <!-- scheduling agenda items -->
+    <browser:menuItem menu="plone_contentmenu"
+        for="bungeni.core.schedule.PrincipalGroupSchedulingContext"
+        title="Add agenda item..."
+        action="./agendaitems/add"
+        permission="bungeni.agenda_item.Add"
+        layer=".interfaces.IWorkspaceSectionLayer"
+    />
+
     <!-- MENU ITEMS -->
     
     <!-- context_add_parliamentary_content sub-menu -->
@@ -1018,34 +1038,6 @@
         action="tableddocuments/add"
         permission="bungeni.tabled_document.Add"
     />
-    
-    <!-- Workspace add menu items -->
-    <!-- !+should be only one menu item and parametrized by type_key -->
-    <browser:menuItem menu="workspace_add_parliamentary_content"
-        for="*"
-        title="Bill"
-        action="../../draft/add_bill"
-        permission="bungeni.bill.Add"
-    />
-    <browser:menuItem menu="workspace_add_parliamentary_content"
-        for="*"
-        title="Motion"
-        action="../../draft/add_motion"
-        permission="bungeni.motion.Add"
-    />
-    <browser:menuItem menu="workspace_add_parliamentary_content"
-        for="*"
-        title="Question"
-        action="../../draft/add_question"
-        permission="bungeni.question.Add"
-    />
-    <browser:menuItem menu="workspace_add_parliamentary_content"
-        for="*"
-        title="Tabled document"
-        action="../../draft/add_tabled_document"
-        permission="bungeni.tabled_document.Add"
-    />
-    
     
     <!--browser:menuItem
      for="bungeni.alchemist.interfaces.IAlchemistContainer"
@@ -1131,7 +1123,7 @@
         title="Assignment"
         action="context_assignment"
         order="1"
-        permission="bungeni.assignment.View"
+        permission="zope.View"
         submenu="context_assignment"
     />
     <!-- NOTE: action value on a subMenuItem becomes the id of the HTML
@@ -1166,9 +1158,19 @@
     <browser:menuItem menu="context_actions"
         for="bungeni.models.interfaces.IFeatureSignatory"
         action="signatory-review" 
+        title="Sign Document"
+        layer=".interfaces.IWorkspaceMyDocumentsSectionLayer"
+        permission="bungeni.signatory.Act"
+        filter="context/allow_signature_add"
+        order="30"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IFeatureSignatory"
+        action="signatory-review" 
         title="Review signature"
         layer=".interfaces.IWorkspaceSectionLayer"
         permission="bungeni.signatory.Act"
+        filter="context/allow_signature_review"
         order="30"
     />
     <browser:menuItem menu="context_actions"
@@ -1177,7 +1179,7 @@
         title="Sign Document"
         layer=".interfaces.IWorkspaceUnderConsiderationSectionLayer"
         permission="bungeni.signatory.Append"
-        filter="context/allow_signatures"
+        filter="context/allow_signature_add"
         order="30"
     />
     <browser:menuItem menu="context_actions"
@@ -1196,18 +1198,6 @@
         permission="zope.View"
         order="21"
     />
-    
-    <!-- bill context actions -->
-    <browser:menuItems menu="context_actions"
-        for="bungeni.models.interfaces.IBill"
-        layer=".interfaces.IWorkspaceOrAdminSectionLayer">
-        <browser:menuItem action="edit" title="Edit bill" order="10"
-            permission="bungeni.bill.Edit"
-        />
-        <browser:menuItem action="delete" title="Delete bill" order="99"
-            permission="bungeni.bill.Delete"
-        />
-    </browser:menuItems>
     
     <browser:menuItem menu="context_actions"
         for="bungeni.models.interfaces.IBungeniUser"
@@ -1239,68 +1229,6 @@
         />
     </browser:menuItems>
 
-    <!-- question context actions -->
-    <browser:menuItems menu="context_actions"
-        for="bungeni.models.interfaces.IQuestion"
-        layer=".interfaces.IWorkspaceOrAdminSectionLayer">
-        <browser:menuItem action="edit" title="Edit question" order="10"
-            permission="bungeni.question.Edit"
-        />
-        <browser:menuItem action="delete" title="Delete question" order="99"
-            permission="bungeni.question.Delete"
-        />
-        <browser:menuItem action="respond" title="Respond to question" order="11"
-            permission="bungeni.response.Edit"
-        />
-    </browser:menuItems>
-    <browser:menuItem menu="context_actions"
-        for="bungeni.models.interfaces.IMotion"
-        action="edit"
-        title="Edit motion"
-        order="10"
-        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
-        permission="bungeni.motion.Edit"
-    />
-    <browser:menuItem menu="context_actions"
-        for="bungeni.models.interfaces.IMotion"
-        action="delete"
-        title="Delete motion"
-        order="99"
-        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
-        permission="bungeni.motion.Delete"
-    />
-    <browser:menuItem menu="context_actions"
-        for="bungeni.models.interfaces.ITabledDocument"
-        action="edit"
-        title="Edit tabled document"
-        order="10"
-        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
-        permission="bungeni.tabled_document.Edit"
-    />
-    <browser:menuItem menu="context_actions"
-        for="bungeni.models.interfaces.ITabledDocument"
-        action="delete"
-        title="Delete tabled document"
-        order="99"
-        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
-        permission="bungeni.tabled_document.Delete"
-     />
-     <browser:menuItem menu="context_actions"
-        for="bungeni.models.interfaces.IAgendaItem"
-        action="edit"
-        title="Edit agenda item"
-        order="10"
-        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
-        permission="bungeni.agenda_item.Edit"
-    />
-    <browser:menuItem menu="context_actions"
-        for="bungeni.models.interfaces.IAgendaItem"
-        action="delete"
-        title="Delete agenda item"
-        order="99"
-        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
-        permission="bungeni.agenda_item.Delete"
-    />
     <browser:menuItem menu="context_actions"
         for="bungeni.models.interfaces.IParliament"
         action="edit"
@@ -1457,7 +1385,7 @@
         for="bungeni.core.interfaces.ISchedulingContext"
         action="create-report"
         title="Create reports"
-        permission="bungeni.reports.Edit"
+        permission="bungeni.report.Edit"
         layer=".interfaces.IWorkspaceSchedulingSectionLayer"
         order="40"
     />
@@ -1470,23 +1398,63 @@
      order="30"
       /-->
     <browser:menuItem menu="context_assignment"
-        for="bungeni.models.interfaces.IFeatureAssignment"
-        action="assignment"
+        for="bungeni.models.interfaces.IFeatureUserAssignment"
+        action="user-assignment"
         title="View Assignment"
-        permission="bungeni.assignment.View"
+        permission="bungeni.user_assignment.View"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="1"
     />
 
    <browser:menuItem menu="context_assignment"
-        for="bungeni.models.interfaces.IFeatureAssignment"
-        action="edit-assignment"
+        for="bungeni.models.interfaces.IFeatureUserAssignment"
+        action="edit-user-assignment"
         title="Edit Assignment"
-        permission="bungeni.assignment.Edit"
+        permission="bungeni.user_assignment.Edit"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="2"
     />
-
+    
+   <browser:menuItem menu="context_assignment"
+        for="bungeni.models.interfaces.IFeatureGroupAssignment"
+        action="group_assignments"
+        title="Group Assignment"
+        permission="bungeni.group_assignment.View"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        order="3"
+    />
+    <!-- group assignment -->
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IGroupDocumentAssignment"
+        action="view"
+        title="View"
+        order="0"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.group_assignment.View"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IGroupDocumentAssignment"
+        action="edit"
+        title="Edit group assignment"
+        order="10"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.group_assignment.Edit"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IGroupDocumentAssignment"
+        action="delete"
+        title="Delete group assignment"
+        order="99"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.group_assignment.Delete"
+    />
+    <browser:menuItem menu="plone_contentmenu"
+        for="bungeni.models.interfaces.IGroupDocumentAssignmentContainer"
+        title="Add group assignment..."
+        action="./add"
+        permission="bungeni.group_assignment.Add"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+    />
    <browser:viewlet
      name="login"
      for="*"

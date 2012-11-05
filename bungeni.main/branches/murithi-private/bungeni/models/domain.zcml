@@ -84,14 +84,11 @@
         all other non-base attributes (properties or xtended attributes defined
             by specific sub-types) must be declared by each sub-type as needed.
         -->
-        <require permission="zope.View"
-            set_attributes="timestamp"
-        /><!-- !+TIMESTAMP(mr, jul-2011) granting edit on timestamp to anyone 
-        with view privilege, as an item, while not essentially being editable 
-        may still be affected by the user's action e.g transited to another 
-        state without "any modifications". Previous to circa r8460, this was 
-        not an issue, and the user was being allowed to set timestamp even if
-        no edit permission on the item.
+        <!-- !+TIMESTAMP(mr, jul-2011) we do not set-protect timestamp - it 
+        is a system-managed field so we let the "system" take care to set it 
+        as necessary i.e. whenever this needs to be set, the application code 
+        must do what is necessary to set it (irrespective of security protection
+        of this field).
         -->
     </class>
     
@@ -125,187 +122,17 @@
         />
     </class>
     
-    
-    <class class=".domain.Bill">
-        <require like_class=".domain.Doc" />
-        <require permission="zope.View"
-            attributes="
-                ministry_id
-                short_title
-                publication_date
-            "
-        />
-        <require permission="bungeni.bill.Edit"
-            set_attributes="
-                doc_type
-                doc_procedure
-                type_number
-                registry_number
-                uri
-                acronym
-                short_title
-                title
-                description
-                language
-                body
-                status
-                status_date
-                group_id
-                subject
-                coverage
-                geolocation
-                head_id
-            "
-        />
-    </class>
-    
-    
+    <!-- !+DECL tmp special case -->
     <class class=".domain.Question">
         <require like_class=".domain.Doc" />
-        <require permission="zope.View"
-            attributes="
-                admissible_date
-                ministry_submit_date
-                ministry_id
-                response_type
-            "
-        />
         <require permission="bungeni.response.View"
             attributes="response_text"
         />
-        <require permission="bungeni.question.Edit"
-            set_attributes="
-                doc_type
-                doc_procedure
-                type_number
-                registry_number
-                uri
-                acronym
-                title
-                description
-                language
-                body
-                status
-                status_date
-                group_id
-                subject
-                coverage
-                geolocation
-                head_id
-                
-                response_type
-            "
-        />
-        <!-- !+WORKFLOW_TRANSITION(ah, jan-2011) to be reviewed for now we 
-            use the permission used for running transition  -->
-        <!--require permission="bungeni.question.wf.completed.admissible"
-            set_attributes="type_number"
-        /-->
         <require permission="bungeni.response.Edit"
             set_attributes="response_text" 
         />
     </class>
     
-    <class class=".domain.Motion">
-        <require like_class=".domain.Doc" />
-        <require permission="zope.View"
-            attributes="
-                admissible_date
-                notice_date
-            "
-        />
-        <require permission="bungeni.motion.Edit"
-            set_attributes="
-                doc_type
-                doc_procedure
-                type_number
-                registry_number
-                uri
-                acronym
-                title
-                description
-                language
-                body
-                status
-                status_date
-                group_id
-                subject
-                coverage
-                geolocation
-                head_id
-            "
-        />
-        <!-- !+WORKFLOW_TRANSITION(ah, jan-2011) was bungeni.historical.Edit 
-            we use instead the permission used in the "approve" transition -->
-        <!--require permission="bungeni.motion.wf.completed.admissible"
-            set_attributes="type_number"
-        /-->
-    </class>
-    
-    <class class=".domain.AgendaItem">
-        <require like_class=".domain.Doc" />
-        <require permission="zope.View"
-            attributes="
-                admissible_date
-            "
-        />
-        <require permission="bungeni.agenda_item.Edit"
-            set_attributes="
-                doc_type
-                doc_procedure
-                type_number
-                registry_number
-                uri
-                acronym
-                title
-                description
-                language
-                body
-                status
-                status_date
-                group_id
-                subject
-                coverage
-                geolocation
-                head_id
-            "
-        />
-    </class>
-    
-    <class class=".domain.TabledDocument">
-        <require like_class=".domain.Doc" />
-        <require permission="zope.View"
-            attributes="
-                admissible_date
-            "
-        />
-        <require permission="bungeni.tabled_document.Edit"
-            set_attributes="
-                doc_type
-                doc_procedure
-                type_number
-                registry_number
-                uri
-                acronym
-                title
-                description
-                language
-                body
-                status
-                status_date
-                group_id
-                subject
-                coverage
-                geolocation
-                head_id
-            "
-        />
-        <!-- !+WORKFLOW_TRANSITION(ah, jan-2011) was bungeni.historical.Edit 
-            we use instead the permission used in the transition -->
-        <!-- require permission="bungeni.tabled_document.wf.completed.admissible"
-            set_attributes="tabled_document_number"
-        /-->
-    </class>
     
     <class class=".domain.Heading">
         <require permission="bungeni.heading.Edit"
@@ -532,7 +359,20 @@
             "
         />
     </class>
-    
+    <class class=".domain.GroupDocumentAssignment">
+        <require permission="zope.View"
+            attributes="
+                group_id
+                doc_id
+            "
+        />
+        <require permission="bungeni.group_assignment.Edit"
+            set_attributes="
+                group_id
+                doc_id
+            "
+        />
+    </class>
     <!-- group memberships -->
     
     <class class=".domain.GroupMembership">

@@ -10,13 +10,25 @@ log = __import__("logging").getLogger("bungeni.alchemist")
 from sqlalchemy.orm import class_mapper
 
 
-# conveniences on capi.get_type_info
+# type_info - conveniences on capi.get_type_info
 # - discriminator may be as specified in: core.type_info._get
 # - raises KeyError if not matched
 
 def get_descriptor(discriminator):
     from bungeni.utils.capi import capi
     return capi.get_type_info(discriminator).descriptor_model
+
+def get_interface(discriminator):
+    from bungeni.utils.capi import capi
+    return capi.get_type_info(discriminator).interface
+
+def get_derived_table_schema(discriminator):
+    from bungeni.utils.capi import capi
+    return capi.get_type_info(discriminator).derived_table_schema
+
+def get_workflow(discriminator):
+    from bungeni.utils.capi import capi
+    return capi.get_type_info(discriminator).workflow
 
 
 # sqlalchemy 
@@ -29,4 +41,14 @@ def get_local_table(kls):
     """
     return class_mapper(kls).local_table
 
+
+# misc
+
+def inisetattr(obj, name, value):
+    """A once-only setattr (ensure any subsequent attempts to set are to 
+    the same value."""
+    if getattr(obj, name, None) is not None:
+        assert getattr(obj, name) is value
+    else:
+        setattr(obj, name, value)
 

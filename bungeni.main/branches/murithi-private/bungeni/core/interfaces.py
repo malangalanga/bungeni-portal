@@ -1,4 +1,5 @@
 from zope import interface, schema
+from zope.component.interfaces import IObjectEvent, ObjectEvent
 from zope.location.interfaces import ILocation
 from zope.container.interfaces import IContainer
 from zope.container.interfaces import IContentContainer
@@ -81,6 +82,8 @@ class IWorkspaceUnderConsideration(interface.Interface):
     """Marker inteface for workspace under consideration"""
 class IWorkspaceTrackedDocuments(interface.Interface):
     """Marker inteface for workspace tracked documents"""
+class IWorkspaceGroups(interface.Interface):
+    """Marker interfaces for workspace groups tab"""
 
 ''' !+OBSOLETE_VERSIONING
 #####################
@@ -221,6 +224,9 @@ class IWorkspaceUnderConsiderationContainer(IWorkspaceContainer):
     """
 class IWorkspaceTrackedDocumentsContainer(IWorkspaceContainer):
     """Marker interface for tracked documents container"""
+
+class IWorkspaceGroupsContainer(IWorkspaceContainer):
+    """Marker interfaces for groups container"""
 
 class IWorkspaceTabsUtility(interface.Interface):
     def get_role_domains(role, tab):
@@ -368,3 +374,18 @@ class INotificationsUtility(interface.Interface):
 class IBungeniMailer(interface.Interface):
     """Interface for mailer utility
     """
+
+
+class INotificationEvent(IObjectEvent):
+    """A notification event whose `object` property is a dictionary.
+    
+    Dictionary format:
+        `{
+            "subject": "Message subject",
+            "body": "Message content",
+            "recipients": [] #list of email address,
+        }`
+    """
+
+class NotificationEvent(ObjectEvent):
+    interface.implements(INotificationEvent)

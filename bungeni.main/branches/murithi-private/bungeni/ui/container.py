@@ -13,7 +13,7 @@ from zope.publisher.browser import BrowserPage
 from zope.schema.interfaces import IText, IDate, IDatetime
 from zc.resourcelibrary import need
 from zope.app.pagetemplate import ViewPageTemplateFile
-from bungeni.alchemist import model, utils
+from bungeni.alchemist import utils
 from bungeni.alchemist import container
 from bungeni.alchemist.interfaces import IAlchemistContainer
 
@@ -161,10 +161,11 @@ class ContainerJSONBrowserView(BrowserPage):
         super(ContainerJSONBrowserView, self).__init__(context, request)
         self.domain_model = proxy.removeSecurityProxy(
             self.context).domain_model
-        self.domain_interface = model.queryModelInterface(self.domain_model)
-        self.domain_annotation = utils.get_descriptor(self.domain_interface)
+        ti = capi.get_type_info(self.domain_model)
+        derived_table_schema = ti.derived_table_schema
+        self.domain_annotation = ti.descriptor_model
         self.fields = tuple(container.getFields(
-            self.context, self.domain_interface, self.domain_annotation))
+            self.context, derived_table_schema, self.domain_annotation))
         # table keys
         self.table = orm.class_mapper(self.domain_model).mapped_table
         self.utk = dict(
@@ -424,7 +425,7 @@ class ContainerJSONListing(ContainerJSONBrowserView):
             column_name = params[1]
             query = lc_filter_query(query, filter_string, self.sort_dir_func, column_name)
         if sort_on_expressions:
-            query = query.order_by(sort_on_expressions)
+            query = query.order_by(*sort_on_expressions)
         #add optional filters, used by sub classes
         query = self.query_add_filters(query)
         # get total number of items before applying an offset and limit

@@ -173,7 +173,7 @@ class _AuditorFactory(object):
         if hasattr(ob, "status_date"):
             ob.status_date = change_data["date_active"] or datetime.now()
         # as a "base" description, use human readable workflow state title
-        #wf = IWorkflow(ob) # !+ adapters.get_workflow(ob)
+        #wf = IWorkflow(ob)
         #description = wf.get_state(event.destination).title # misc.get_wf_state
         return self._object_changed("workflow", ob, 
                 date_active=change_data["date_active"],
@@ -346,6 +346,7 @@ class _AuditorFactory(object):
 
 
 # module-level dedicated auditor singleton instance per auditable class
+# !+type_info should we add audit_model and auditor?
 
 def get_auditor(ob):
     """Get the module-level dedicated auditor singleton instance for the 
@@ -360,7 +361,8 @@ def set_auditor(kls):
     name = kls.__name__
     auditor_name = "%sAuditor" % (name)
     log.debug("Setting AUDITOR %s [for type %s]" % (auditor_name, name))
-    audit_kls = getattr(domain, "%sAudit" % (name))
+    from bungeni.alchemist.catalyst import MODEL_MODULE
+    audit_kls = getattr(MODEL_MODULE, "%sAudit" % (name))
     audit_tbl = getattr(schema, domain.get_audit_table_name(kls))
     # !+debug check of repeat calls
     auditor = globals().get(auditor_name)
@@ -377,9 +379,4 @@ def set_auditor(kls):
     # /debug check of repeat calls
     globals()[auditor_name] = _AuditorFactory(audit_tbl, audit_kls)
 
-# !+ITER_TYPE_INFO
-for kls in domain.feature_audit.DECORATED:
-    set_auditor(kls)
-
-#
 

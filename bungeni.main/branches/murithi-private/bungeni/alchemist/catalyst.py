@@ -2,29 +2,21 @@
 # Copyright (C) 2010 - Africa i-Parliaments - http://www.parliaments.info/
 # Licensed under GNU GPL v2 - http://www.gnu.org/licenses/gpl-2.0.txt
 
-"""Bungeni Alchemist catalyst - [
-    alchemist.catalyst.ui
-]
+"""Bungeni Alchemist catalyst
 
 $Id$
 """
 log = __import__("logging").getLogger("bungeni.alchemist")
 
 
-# used directly in bungeni
+# List everything from this module intended for package-external use.
 __all__ = [
-    "AddForm",      # redefn -> alchemist.catalyst.ui
-    "DisplayForm",  # redefn -> alchemist.catalyst.ui
-    "EditForm",     # redefn -> alchemist.catalyst.ui
-    "catalyse_descriptors"
-    #"catalyst",     # redefn -> alchemist.catalyst.zcml !+ALCHEMIST_INTERNAL
-    #"ApplySecurity",      # redefn -> alchemist.catalyst.domain !+ALCHEMIST_INTERNAL
-    #"GenerateDomainInterface" # redefn -> alchemist.catalyst.zcml !+ALCHEMIST_INTERNAL
-    #"GenerateContainer", # redefn -> alchemist.catalyst.container !+ALCHEMIST_INTERNAL
-    #"GenerateCollectionTraversal" # redefn -> alchemist.catalyst.zcml !+ALCHEMIST_INTERNAL
-    #"sa2zs",        # alias -> ore.alchemist !+ALCHEMIST_INTERNAL
+    "catalyse_system_descriptors"
+    #"SQLAlchemySchemaTranslator", # alias -> ore.alchemist.sa2zs
+    #"transmute",        # alias -> ore.alchemist.sa2zs !+ALCHEMIST_INTERNAL
 ]
-from ore.alchemist import sa2zs
+from ore.alchemist.sa2zs import SQLAlchemySchemaTranslator
+from ore.alchemist.sa2zs import transmute
 
 # from bungeni.alchemist, used only here
 
@@ -38,101 +30,40 @@ from bungeni.alchemist.container import AlchemistContainer
 from bungeni.alchemist.traversal import CollectionTraverser, ManagedContainerDescriptor
 from bungeni.alchemist import utils
 
-###
-
-import logging
-import types
+#
 
 from zope import interface, component
-from zope.dottedname.resolve import resolve
-from zope.publisher.interfaces import IPublisherRequest, IPublishTraverse
-from zope.security.proxy import removeSecurityProxy
 from zope.app.security.protectclass import (
         protectName, # !+remove
         protectSetAttribute, 
         protectLikeUnto
 )
-from zope import formlib
-
+from zope.publisher.interfaces import IPublisherRequest, IPublishTraverse
 from z3c.traverser.interfaces import ITraverserPlugin
 from z3c.traverser.traverser import PluggableTraverser
 
 from sqlalchemy import orm
-
-import bungeni.alchemist.ui
-import bungeni.models.interfaces
-import bungeni.ui.content
-
-
-class BaseForm(object):
-    name_template = "%sForm"
-    template = formlib.namedtemplate.NamedTemplate("alchemist.form")
-    
-    additional_form_fields = formlib.form.Fields()
-    
-    status = None
-    mode = None
-    
-    @property
-    def domain_model(self):
-        return removeSecurityProxy(self.context).__class__
-    
-    @property
-    def model_schema(self):
-        return tuple(interface.implementedBy(self.domain_model))[0]
-    
-    def get_form_fields(self):
-        return bungeni.alchemist.ui.setUpFields(self.domain_model, self.mode)
-    
-    def _get_form_fields(self):
-        try:
-            fields = self.__dict__["form_fields"]
-        except KeyError:
-            fields = self.__dict__["form_fields"] = self.get_form_fields()
-        return fields
-    
-    def _set_form_fields(self, form_fields):
-        self.__dict__["form_fields"] = form_fields
-    
-    form_fields = property(_get_form_fields, _set_form_fields)
+from bungeni.utils import naming
+# target modules
+import bungeni.models.interfaces as INTERFACE_MODULE
+import bungeni.models.domain as MODEL_MODULE
+import bungeni.models.domain as CONTAINER_MODULE
+#import bungeni.ui.content as UI_MODULE
 
 
-class AddForm(BaseForm, bungeni.alchemist.ui.Add):
-    mode = "add"
-    defaults = {}
+def catalyse_system_descriptors(module):
+    """Catalyze system descriptor classes (with by-name-convention associated 
+    model class) in specified module.
     
-    @property
-    def domain_model(self):
-        return removeSecurityProxy(self.context).domain_model
-    
-    def update(self):
-        for name, value in self.defaults.items():
-            self.form_fields[name].field.default = value
-        super(AddForm, self).update()
-
-class EditForm(BaseForm, bungeni.alchemist.ui.EditForm):
-    mode = "edit"
-
-class DisplayForm(bungeni.alchemist.ui.ContentDisplayForm):
-    pass
-
-
-def catalyse_descriptors(module):
-    """Catalyze descriptor classes in specified module. 
-    Relate each descriptor to a domain type via naming convention:
-    - if no domain type exists with that name, ignore
-    !+ this is probably catalyzing some descriptors unnecessarily... 
-    !+ if there is a need to be finer grained or for an explicit declaration
-    of what descriptors should be catalysed, a flag may be added e.g. a 
-    catalyse:bool attribute could be added on Descriptor class or xml defn.
+    Called when ui.descriptor is initially imported, so before descriptors for 
+    custom types have been created (that happens on first call to 
+    localization.localize_descriptors on application created event).
     """
     import sys
     import inspect
     from bungeni.alchemist.model import IModelDescriptor
     from bungeni.models import domain
-    from bungeni.core.workflow.interfaces import IWorkflowed
     from bungeni.utils.capi import capi
-    from bungeni.utils import naming
     from bungeni.ui.utils import debug
     
     def descriptor_classes():
@@ -153,154 +84,66 @@ def catalyse_descriptors(module):
         for cls in [ cls for (line_num, cls) in sorted(decorated) ]:
             yield cls
     
-    for descriptor in descriptor_classes():
-        descriptor_name = descriptor.__name__
-        assert descriptor_name.endswith("Descriptor")
-        kls_name = descriptor_name[0:-len("Descriptor")]
+    def is_model_mapped(domain_model):
+        # try get mapper to force UnmappedClassError
         try:
-            # need a dedicated domain type
-            kls = getattr(domain, kls_name) # AttributeError
-            # only catalyze mapped domain types
-            kls_mapper = orm.class_mapper(kls) # force UnmappedClassError
-        except (AttributeError, orm.exc.UnmappedClassError):
-            # no corresponding domain class, ignore e.g. Model
-            # unmapped class e.g. Address
-            debug.log_exc(sys.exc_info(), log_handler=log.warn)
-            continue
-        # catalyse each (domain_model, descriptor) pair
-        ctx = CatalystContext()
-        #setup_log(ctx) #!+INI
-        catalyst(ctx, kls, descriptor)
-        # type_info, register the descriptor
-        type_key = naming.polymorphic_identity(kls)
-        ti = capi.get_type_info(type_key)
-        # non-workflowed types had not had domain_model set as yet...
-        if (not IWorkflowed.implementedBy(kls) 
-                or ti.domain_model is None # otherwise report4_sitting fails...
-            ):
-            # non-workflowed type - domain_model not set as yet...
-            #assert ti.domain_model is None, "%s domain_model %s is %s not None" % (
-            #    type_key, ti.domain_model, kls)
-            ti.domain_model = kls
-        assert ti.domain_model is kls, "%s domain_model %s is not %s" % (
-                type_key, ti.domain_model, kls)
-        ti.descriptor_model = descriptor
+            orm.class_mapper(domain_model)
+            return True
+        except orm.exc.UnmappedClassError:
+            # unmapped class e.g. Address, Version
+            return False
     
-    m = "\n\nDone all workflow/descriptor setup... running with:\n\n%s\n\n" % (
+    for descriptor_model in descriptor_classes():
+        descriptor_name = descriptor_model.__name__
+        type_key = naming.type_key("descriptor_class_name", descriptor_name)
+        # Associate each descriptor to the dedicated domain type via naming 
+        # convention, and only catalysze (descriptor, model) pairs 
+        # for which the domain type is mapped. Otherwise, ignore.
+        domain_model = getattr(domain, naming.model_name(type_key), None)
+        if not (domain_model and is_model_mapped(domain_model)):
+            log.warn("Not catalysing: %s", descriptor_name)
+            continue
+        # type_info, register descriptor_model, domain_model
+        ti = capi.get_type_info(type_key)
+        utils.inisetattr(ti, "domain_model", domain_model)
+        utils.inisetattr(ti, "descriptor_model", descriptor_model)
+        # catalyse each (domain_model, descriptor_model) pair
+        catalyse(ti)
+    
+    # !+remove?
+    m = "\n\nDone all setup of system types... running with:\n\n%s\n\n" % (
             "\n\n".join(sorted(
                 [ "%s: %s" % (key, ti) for key, ti in capi.iter_type_info() ])
             ))
     log.debug(m)
 
-def setup_log(ctx):
-    ctx.logger = log
-    logging.basicConfig()
-    formatter = logging.Formatter("ALCHEMIST: %(module)s -> %(message)s")
-    console = logging.StreamHandler()
-    console.setLevel(logging.DEBUG)
-    console.setFormatter(formatter)
-    ctx.logger.addHandler(console)
-    ctx.logger.setLevel(logging.DEBUG)
-    #console.propagate = False       
-    ctx.logger.propagate = False  
-    
 
-# alchemist.catalyst.zcml 
-
-class CatalystContext(object):
-    """Context object to hold configuration settings and generated objects.
+def catalyse(ti):
+    """Called from catalyse_system_descriptors here (for system descriptors) 
+    AND from ui.descriptor.localization.new_descriptor_cls for custom types.
     """
-    descriptor = None
-    domain_model = None
-    domain_interface = None
-    mapper = None
-    interface_module = None
-    container_module = None
-    container_class = None
-    ui_module = None
-    views = None
-    relation_viewlets = None
-    logger = None
-    echo = False #!+INI True
+    type_key = naming.polymorphic_identity(ti.domain_model)
+    log.info(" ----- CATALYSE: %s -----", type_key) 
+    log.debug("ti = %s", ti)
+    generate_table_schema_interface(ti)
+    apply_security(ti)
+    generate_container_class(ti)
+    generate_collection_traversal(ti)
+    return ti
 
 
-def catalyst(ctx,
-        kls,
-        descriptor, 
-        #view_module=None, # !+?
-        interface_module=bungeni.models.interfaces,
-        #container_module=None, # !+?
-        ui_module=bungeni.ui.content,
-    ):
-    ctx.descriptor = descriptor
-    ctx.domain_model = kls
-    ctx.mapper = orm.class_mapper(kls)
-    ctx.interface_module = interface_module
-    ctx.container_module = None # !+container_module(mr, jul-2011), expected
-    # to be defined by alchemist.catalyst.container.GenerateContainer
-    ctx.ui_module = ui_module
-    
-    ctx.views = {} # keyed by view type (add|edit)
-    ctx.relation_viewlets = {} # keyed by relation name
-    
-    #ctx.logger.debug("context=%s, class=%s, descriptor=%s, echo=%s" % ( #!+INI
-    log.debug("context=%s, class=%s, descriptor=%s, echo=%s" % (
-            ctx, kls, descriptor, ctx.echo))
-    
-    # create a domain interface if it doesn't already exist 
-    # this also creates an adapter between the interface and desc.
-    GenerateDomainInterface(ctx)
-    
-    # setup security
-    ApplySecurity(ctx)
-    
-    # create a container class 
-    GenerateContainer(ctx)
-    
-    # generate collection traversal 
-    GenerateCollectionTraversal(ctx)
-    
-    return ctx
-
-
-def ApplySecurity(ctx):
-    for c in ctx.domain_model.__bases__:
-        if c is object:
-            continue
-        protectLikeUnto(ctx.domain_model, c)
-    attributes = set(
-        [ n for n,d in ctx.domain_interface.namesAndDescriptions(1) ])
-    attributes = attributes.union(
-        set([ f.get("name") for f in ctx.descriptor.fields ]))
-    descriptor = ctx.descriptor
-    for n in attributes:
-        model_field = descriptor.get(n)
-        p = model_field and model_field.view_permission or "zope.Public"
-        protectName(ctx.domain_model, n, p )
-    for n in attributes:
-        model_field = descriptor.get(n)
-        p = model_field and model_field.edit_permission or "zope.Public" # "zope.ManageContent"
-        protectSetAttribute(ctx.domain_model, n, p)
-    for k, v in ctx.domain_model.__dict__.items():
-        if (isinstance(v, ManagedContainerDescriptor) or 
-                isinstance(v, orm.attributes.InstrumentedAttribute)
-            ):
-            protectName(ctx.domain_model, k, "zope.Public")
-
-
-def GenerateDomainInterface(ctx):
-    #!+NO_NEED_TO_INSTANTIATE
-    # when called from zcml, most likely we'll get a class not an instance
-    # if it is a class go ahead and call instantiate it
-    #if isinstance(ctx.descriptor, type):
-    #    ctx.descriptor = ctx.descriptor()
-    
-    assert ctx.interface_module, "No interface module."
-    
-    #!+alchemist.catalyst.domain.getDomainInterfaces
+def generate_table_schema_interface(ti):
+    '''!+DO_NOT_REORDER_USER_APPLIED_INTERFACES
     def get_domain_interfaces(domain_model):
         """Return the domain bases for an interface as well as a filtered 
-        implements only list.
+        implements only list (base interfaces removed).
+        
+        Note that for 2nd level (mapped) domain classes i.e. those that inherit
+        from another domain class e.g. Event(Doc), Office(Group), 
+        OfficeMember(GroupMembership), an IIModelInterface-providing 
+        I*TableSchema interface had already been created (for base class) and 
+        assigned to the super class--and that interface will match as one of 
+        the domain_base interfaces here.
         """
         domain_bases = []
         domain_implements = []
@@ -311,188 +154,234 @@ def GenerateDomainInterface(ctx):
                 domain_implements.append(iface)
         domain_bases = tuple(domain_bases) or (IAlchemistContent,)
         return domain_bases, domain_implements
-    bases, implements = get_domain_interfaces(ctx.domain_model)
+    bases, implements = get_domain_interfaces(ti.domain_model)
+    '''
     
-    # interface for domain model
-    interface_name = "I%s" % (ctx.domain_model.__name__)
-    if ctx.echo: #!+INI
-        ctx.logger.debug("%s: generated interface %s.%s " % (
-            ctx.domain_model.__name__, ctx.interface_module.__name__,
-            interface_name))
+    # derived_table_schema:
+    # - ALWAYS dynamically generated
+    # - directlyProvides IIModelInterface (by virtue of IAlchemistContent)
+    type_key = naming.polymorphic_identity(ti.domain_model)
+    # use the class's mapper select table as input for the transformation
+    table_schema_interface_name = naming.table_schema_interface_name(type_key)
+    domain_table = utils.get_local_table(ti.domain_model)
     
-    def get_model_interface(domain_model):
-        """Get dedicated interface (name convention) that is marked as a domain
-        model interface (provides IIModelInterface) AND is implemented by the
-        domain class.
-        """
-        interface_name = "I%s" % (domain_model.__name__) #!+naming
-        for iface in interface.implementedBy(domain_model):
-            if iface.__name__ == interface_name:
-                if IIModelInterface.providedBy(iface):
-                    #!+AUDIT_TESTS passes here in audit doctests (only?)
-                    #raise Exception("!+%s provides %s!!"  % (iface, IIModelInterface))
-                    return iface
-    # if the domain model already implements a model interface, use it
-    # instead of generating a new one
-    domain_interface = get_model_interface(ctx.domain_model)
-    if domain_interface is None:
-        # use the class's mapper select table as input for the transformation
-        domain_table = utils.get_local_table(ctx.domain_model)
-        domain_interface = sa2zs.transmute(
-            domain_table,
-            annotation=ctx.descriptor,
-            interface_name=interface_name,
-            __module__=ctx.interface_module.__name__,
-            bases=bases)
+    derived_table_schema = transmute(
+        domain_table,
+        annotation=ti.descriptor_model,
+        interface_name=table_schema_interface_name,
+        __module__=INTERFACE_MODULE.__name__,
+        #_generated_by="bungeni.alchemist.catalyst.generate_table_schema_interface"
+        #bases=bases)
+        bases=(IAlchemistContent,))
     
-    # if we're replacing an existing interface, make sure the new
-    # interface implements it
-    old = getattr(ctx.interface_module, interface_name, None)
-    if old is not None:
-        if old not in implements:
-            implements.append(old)
-        #assert old is not domain_interface #!+AUDIT_TESTS fails
-    # !+RETAIN_SAME_INTERFACE_CLASS determine whether a same-named interface 
-    # already exists e.g. getattr(ctx.interface_module, interface_name) and
-    # whether domain_model provides it... if so, then "splice" extra info from
-    # auto-generated interface into the predefined one... 
-    # ELSE adopt policy that if provided, then it must be fully defined 
-    # (total resposibility of user, never auto-modified!).
-    implements.insert(0, domain_interface)
-    interface.classImplementsOnly(ctx.domain_model, *implements)
-    setattr(ctx.interface_module, interface_name, domain_interface)
-    ctx.domain_interface = domain_interface
-    # ensure interfaces are unique, preserving the order
-    #implements = [ ifc for i,ifc in enumerate(implements) 
-    #               if implements.index(ifc)==i ]
-    #
-    # XXX: Oooh, strangely the above does not work... it turns out that 
-    # implements contains seemingly repeated interfaces e.g. the first and last 
-    # interfaces are both "<InterfaceClass bungeni.models.interfaces.IReport>"
-    # but, they are not the same! So, to compare unique we use the string
-    # representation of each interface:
-    # str_implements = map(str, implements)
-    # implements = [ ifc for i,ifc in enumerate(implements) 
-    #                if str_implements.index(str(ifc))==i ]
-    # Ooops making the interfaces unique breaks other things downstream :(
+    # apply, register on type_info, set on module
+    interface.classImplements(ti.domain_model, derived_table_schema)
+    utils.inisetattr(ti, "derived_table_schema", derived_table_schema)
+    setattr(INTERFACE_MODULE, table_schema_interface_name, derived_table_schema)
+    log.info("generate_table_schema_interface: %s", derived_table_schema)
+    
+    # defensive sanity check - that derived_table_schema is precisely the FIRST
+    # resolving IIModelInterface-providing interface implemented by domain_model
+    # !+ this failing does not necessarily mean an incorrectness
+    for iface in interface.implementedBy(ti.domain_model):
+        if IIModelInterface.providedBy(iface):
+            assert iface is derived_table_schema, (ti.domain_model, 
+                iface, id(iface), 
+                derived_table_schema, id(derived_table_schema))
+            break
+    
+    '''!+DO_NOT_REORDER_USER_APPLIED_INTERFACES
+    # prepend derived_table_schema, register on type_info, set on INTERFACE_MODULE
+    implements.insert(0, derived_table_schema)
 
+    # if a conventionally-named domain interface exists, domain model must implement it
+    model_interface_name = naming.model_interface_name(type_key)
+    model_interface = getattr(INTERFACE_MODULE, model_interface_name, None)
+    if model_interface is not None:
+        assert model_interface in implements, model_interface        
+    
+    # apply implemented interfaces
+    interface.classImplementsOnly(ti.domain_model, *implements)
+    '''
 
-# alchemist.catalyst.container
-def GenerateContainer(ctx, 
-            container_name=None, 
-            container_iname=None,
-            base_interfaces=()
-        ):
-        """Generate a zope3 container class for a domain model.
-        """
-        # create container
-        container_name = container_name or \
-            "%sContainer" % (ctx.domain_model.__name__)
-        
-        # allow passing in dotted python path
-        if isinstance(ctx.container_module, basestring):
-            ctx.container_module = resolve(ctx.container_module)
-        # if not present use the domain class's module
-        elif ctx.container_module is None:
-            ctx.container_module = resolve(ctx.domain_model.__module__)
-        
-        # sanity check we have a module for the container
-        assert isinstance(ctx.container_module, types.ModuleType), "Invalid Container"
-        
-        # logging variables
-        msg = (ctx.domain_model.__name__, 
-            ctx.container_module.__name__, container_name)
-        
-        # if we already have a container class, exit                
-        if getattr(ctx.container_module, container_name, None):
-            if ctx.echo:
-                ctx.logger.debug("%s: found container %s.%s, skipping" % msg)
-            ctx.container_class = getattr(ctx.container_module, container_name)
-            return
-        
-        if ctx.echo:
-            ctx.logger.debug("%s: generated container %s.%s" % msg)
-        
-        # if we already have a container class, exit
-        container_class = type(container_name,
-            (AlchemistContainer,),
-            dict(_class=ctx.domain_model, 
-                __module__=ctx.container_module.__name__)
-        )
-        setattr(ctx.container_module, container_name, container_class)
-        
-        # save container class on catalyst context
-        ctx.container_class = container_class
-        
-        # interface for container
-        container_iname = container_iname or "I%s" % container_name
-        
-        # if we already have a container interface class, skip creation
-        container_interface = getattr(ctx.interface_module, container_iname, None)
-        msg = (ctx.domain_model.__name__, 
-            ctx.container_module.__name__, container_iname)
-        if container_interface is not None:
-            assert issubclass(container_interface, IAlchemistContainer)
-            if ctx.echo:
-                ctx.logger.debug("%s: skipping container interface %s.%s for" % msg)
+    
+def apply_security(ti):
+    domain_model, descriptor_model = ti.domain_model, ti.descriptor_model
+    type_key = naming.polymorphic_identity(domain_model)
+    log.debug("APPLY SECURITY: %s %s", type_key, domain_model)
+    # first, "inherit" security settings of super classes i.e. equivalent of 
+    # something like <require like_class=".domain.Doc" />
+    for c in domain_model.__bases__:
+        if c is object:
+            continue
+        log.debug("    LIKE_CLASS: %s", c)
+        protectLikeUnto(domain_model, c)
+    
+    # !+DECL permissions here--for CUSTOM types only, and SINCE r9946--override
+    # what is defined in domain.zcml, as opposed to vice-versa (probably 
+    # because CUSTOM types are setup at a later stage). 
+    # So (for CUSTOM types only?) we use the parametrized 
+    # bungeni.{type_key}.{Mode} as the view/edit permission:
+    pv_type = "zope.Public" # view permission, for type
+    pe_type = "zope.Public" # edit permission, for type
+    if descriptor_model.scope == "custom":
+        pv_type = "bungeni.%s.View" % (type_key)
+        pe_type = "bungeni.%s.Edit" % (type_key)
+    
+    # !+SCHEMA_FIELDS(mr, oct-2012) all this seems superfluous anyway, as is 
+    # (always?) overwritten further down? Switch to base loop on superset of 
+    # names (dir(cls)?) and then decide ONCE on various criteria how to
+    # protect the name.
+    _view_protected = set() # remember names protected for view
+    _edit_protected = set() # remember names protected for edit
+    
+    # sorted (for clearer logging) list of attr names that are BOTH defined
+    # by the db mapped-table schema AND have a dedicated UI Field.
+    dts_attrs = [ n for n in ti.derived_table_schema.names(all=True) ]
+    df_attrs = [ f.get("name") for f in descriptor_model.fields ]
+    attrs = sorted(set(dts_attrs).union(set(df_attrs)))
+    
+    log.debug("    DTS+Fields: %s, %s", 
+        ti.derived_table_schema.__name__, descriptor_model.__name__)
+    for n in attrs:
+        # !+DECL special cases, do not override domain.zcml...
+        if n in ("response_text",):
+            continue
+        _view_protected.add(n); _edit_protected.add(n)
+        pv = pv_type
+        pe = pe_type
+        model_field = descriptor_model.get(n)
+        if model_field:
+            if descriptor_model.scope != "custom":
+                # !+DECL proceed as before for now
+                pv = model_field.view_permission # always "zope.Public"
+                pe = model_field.edit_permission # always "zope.ManageContent"
+        # !+DECL parametrize all permissions by type AND mode, ensure to grant
+        # to appropriate roles. What about non-workflows or non-catalyzed types?
+        protectName(domain_model, n, pv)
+        protectSetAttribute(domain_model, n, pe)
+        DTS = n in dts_attrs and "dts" or "   "
+        DF = n in df_attrs and "df" or "  "
+        log.debug("         %s %s [%s]  view:%s  edit:%s  %x",
+                DTS, DF, n, pv, pe, id(model_field))
+        if n not in domain_model.__dict__:
+            log.debug("           ---- [%s] !+SCHEMA_FIELDS not in %s.__dict__",
+                    n, domain_model)
+    
+    # container attributes (never a UI Field for these)
+    log.debug("      __dict__: %s" % (domain_model))
+    for k in sorted(domain_model.__dict__.keys()):
+        # !+ if IManagedContainer.providedBy(v): ?
+        v = domain_model.__dict__[k]
+        if isinstance(v, ManagedContainerDescriptor):
+            if k in _view_protected:
+                log.debug("           ---- %s RESETTING...", k)
+            _view_protected.add(k)
+            log.debug("        managed %s view:%s" % (k, "zope.Public"))
+        elif isinstance(v, orm.attributes.InstrumentedAttribute):     
+            if k in _view_protected:
+                log.debug("           ---- %s RESETTING...", k)
+            _view_protected.add(k)
+            log.debug("   instrumented [%s]  view:%s", k, "zope.Public")
         else:
-            if ctx.echo:
-                ctx.logger.debug("%s: generated container interface %s.%s" % msg)
-            # ensure that our base interfaces include alchemist container 
-            if base_interfaces:
-                assert isinstance(base_interfaces, tuple)
-                found = False
-                for bi in base_interfaces:
-                    found = issubclass(bi, IAlchemistContainer)
-                    if found: break
-                if not found:
-                    base_interfaces = base_interfaces + (IAlchemistContainer,)
-            else:
-                base_interfaces = (IAlchemistContainer,)
-            
-            # create interface
-            container_interface = interface.interface.InterfaceClass(
-                container_iname,
-                bases=base_interfaces,
-                __module__=ctx.interface_module.__name__
-            )
-            # store container interface for catalyst
-            ctx.container_interface = container_interface
-            setattr(ctx.interface_module, container_iname, container_interface)
-        
-        # setup security
-        for n,d in container_interface.namesAndDescriptions(1):
-            protectName(container_class, n, "zope.Public")
-        
-        if not container_interface.implementedBy(container_class):
-            interface.classImplements(container_class, container_interface)
-        ctx.container_interface = container_interface
+            log.debug("           ---- [%s] !+SCHEMA_FIELD IN __dict__ but NOT "
+                "instrumented OR managed", k)
+            continue
+        if k not in attrs:
+            log.debug("           ---- [%s] !+SCHEMA_FIELDS not in attrs", k)
+        protectName(domain_model, k, "zope.Public") #!+pv_type
+    
+    # Dump permission_id required to getattr/setattr for "custom" types.
+    # We only dump the security settings for "custom" types as it only these 
+    # are processed AFTER that domain.zcml has been executed (for other types,
+    # loaded earlier during app startup, it is the settings in domain.zcml 
+    # (executed later during app startup) that ends up applying.
+    if descriptor_model.scope == "custom":
+        from zope.security import proxy, checker
+        dmc = checker.getChecker(proxy.ProxyFactory(domain_model()))
+        log.debug("       checker: %s", dmc)
+        for n in sorted(_view_protected.union(["response_text"])):
+            g = dmc.get_permissions.get(n)
+            s = dmc.set_permissions.get(n) #dmc.setattr_permission_id(n)
+            log.debug("                [%s]  get:%s  set:%s",
+                    n, getattr(g, "__name__", g), s)
 
 
-# alchemist.catalyst.zcml
-def GenerateCollectionTraversal(ctx):
+def generate_container_class(ti):
+    """Generate a zope3 container class for a domain model.
+    """
+    type_key = naming.polymorphic_identity(ti.domain_model)
+    container_name = naming.container_class_name(type_key)
+    container_iname = naming.container_interface_name(type_key)
+    base_interfaces = (IAlchemistContainer,)
+    
+    # logging variables
+    msg = (ti.domain_model.__name__, CONTAINER_MODULE.__name__, container_name)
+    
+    # container class - if we already have one, exit                
+    if getattr(CONTAINER_MODULE, container_name, None):
+        log.info("generate_container_class [model=%s] found container %s.%s, skipping" % msg)
+        ti.container_class = getattr(CONTAINER_MODULE, container_name)
+        return
+    
+    container_class = type(container_name,
+        (AlchemistContainer,),
+        dict(_class=ti.domain_model, 
+            __module__=CONTAINER_MODULE.__name__)
+    )
+    # set on CONTAINER_MODULE, register on type_info
+    setattr(CONTAINER_MODULE, container_name, container_class)
+    ti.container_class = container_class
+    log.info("generate_container_class [model=%s] generated container %s.%s" % msg)
+    
+    # container interface - if we already have one, skip creation 
+    # !+ should always be newly created?
+    container_iface = getattr(INTERFACE_MODULE, container_iname, None)
+    msg = (ti.domain_model.__name__, CONTAINER_MODULE.__name__, container_iname)
+    if container_iface is not None:
+        assert issubclass(container_iface, IAlchemistContainer)
+        log.info("generate_container_class [model=%s] skipping container interface %s.%s for" % msg)
+    else:
+        container_iface = interface.interface.InterfaceClass(
+            container_iname,
+            bases=base_interfaces,
+            __module__=INTERFACE_MODULE.__name__
+        )
+        # set on INTERFACE_MODULE, register on type_info
+        setattr(INTERFACE_MODULE, container_iname, container_iface)
+        ti.container_interface = container_iface
+        log.info("generate_container_class [model=%s] generated container interface %s.%s" % msg)
+    
+    # setup security
+    for n, d in container_iface.namesAndDescriptions(all=True):
+        protectName(container_class, n, "zope.Public")
+    # apply implementedBy
+    if not container_iface.implementedBy(container_class):
+        interface.classImplements(container_class, container_iface)
+
+
+def generate_collection_traversal(ti):
     
     def get_collection_names(domain_model):
         return [ k for k, v in domain_model.__dict__.items()
             if IManagedContainer.providedBy(v) ]
     
-    collection_names = get_collection_names(ctx.domain_model)
+    collection_names = get_collection_names(ti.domain_model)
     if not collection_names:
         return
     
     # Note: the templated CollectionTraverser TYPE returned by this is
-    # instantiated multiple times in case of inheritance of catalyzed 
-    # descriptors e.g. for Motion, it is instantiated once for 
-    # ParliamentaryItemDescriptor and once for MotionDescriptor.
+    # instantiated per "inherited and catalysed" descriptor e.g. for Motion, 
+    # it is instantiated once for DocDescriptor and once for MotionDescriptor.
     traverser = CollectionTraverser(*collection_names)
     
     # provideSubscriptionAdapter(factory, adapts=None, provides=None)
     component.provideSubscriptionAdapter(traverser, 
-        adapts=(ctx.domain_interface, IPublisherRequest), 
+        adapts=(ti.derived_table_schema, IPublisherRequest), 
         provides=ITraverserPlugin)
     # provideAdapter(factory, adapts=None, provides=None, name="")
     component.provideAdapter(PluggableTraverser,
-        adapts=(ctx.domain_interface, IPublisherRequest),
+        adapts=(ti.derived_table_schema, IPublisherRequest),
         provides=IPublishTraverse)
 
 

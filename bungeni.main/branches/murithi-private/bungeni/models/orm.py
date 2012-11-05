@@ -15,78 +15,7 @@ from sqlalchemy.orm import mapper, class_mapper, relation, column_property, \
 
 import schema
 import domain
-import interfaces
 from bungeni.utils.naming import polymorphic_identity
-
-# Features
-
-def configurable_mappings(kls):
-    """Configuration mappings for declarative-model types.
-    """
-    name = kls.__name__
-    mapper_add_relation_vertical_properties(kls)
-    
-    # auditable, determine properties, map audit class/table
-    if interfaces.IFeatureAudit.implementedBy(kls):
-        # either defined manually or created dynamically in domain.feature_audit()
-        audit_kls = getattr(domain, "%sAudit" % (name))
-        # assumption: audit_kls only uses single inheritance (at least for 
-        # those created dynamically in domain.feature_audit())
-        base_audit_kls = audit_kls.__bases__[0] 
-        assert issubclass(base_audit_kls, domain.Audit), \
-            "Audit class %s is not a proper subclass of %s" % (
-                audit_kls, domain.Audit)
-        # mapper for the audit_cls for this kls, if it was created dynamically
-        if kls in domain.feature_audit.CREATED_AUDIT_CLASS_FOR:
-            mapper(audit_kls,
-                inherits=base_audit_kls,
-                polymorphic_identity=polymorphic_identity(kls)
-            )
-        # propagate any extended attributes on head kls also to its audit_kls
-        for vp_name, vp_type in kls.extended_properties:
-            mapper_add_relation_vertical_property(audit_kls, vp_name, vp_type)
-    
-    # add any properties to the head kls itself
-    def mapper_add_configurable_properties(kls):
-        kls_mapper = class_mapper(kls)
-        def configurable_properties(kls, mapper_properties):
-            """Add properties, as per configured features for a domain type.
-            """
-            # auditable
-            if interfaces.IFeatureAudit.implementedBy(kls):
-                # kls.changes <-> change.audit.audit_head=doc:
-                # doc[@TYPE] <-- TYPE_audit <-> audit <-> change
-                
-                # get head table for kls, and its audit table.
-                tbl = kls_mapper.mapped_table
-                audit_tbl = getattr(schema, "%s_audit" % (tbl.name))
-                
-                # get tbl PK column
-                assert len(tbl.primary_key) == 1
-                # !+ASSUMPTION_SINGLE_COLUMN_PK(mr, may-2012)
-                pk_col = [ c for c in tbl.primary_key ][0]
-                mapper_properties["changes"] = relation(domain.Change,
-                    primaryjoin=rdb.and_(
-                        pk_col == audit_tbl.c.get(pk_col.name),
-                    ),
-                    secondary=audit_tbl,
-                    secondaryjoin=rdb.and_(
-                        audit_tbl.c.audit_id == schema.change.c.audit_id,
-                    ),
-                    lazy=True,
-                    order_by=schema.change.c.audit_id.desc(),
-                    cascade="all",
-                    passive_deletes=False, # SA default
-                )
-            # versionable
-            if interfaces.IFeatureVersion.implementedBy(kls):
-                pass
-            return mapper_properties
-        for key, prop in configurable_properties(kls, {}).items():
-            kls_mapper.add_property(key, prop)
-    mapper_add_configurable_properties(kls)
-
-# /Features
 
 
 # Users
@@ -439,8 +368,7 @@ mapper(domain.Doc, schema.doc,
             ),
             secondary=schema.doc_audit,
             secondaryjoin=rdb.and_(
-                schema.doc_audit.c.audit_id == schema.audit.c.audit_id,
-                schema.audit.c.audit_id == schema.change.c.audit_id,
+                schema.doc_audit.c.audit_id == schema.change.c.audit_id,
                 # !+NO_INHERIT_VERSION needs this
                 schema.change.c.action == "version",
             ),
@@ -455,7 +383,22 @@ mapper(domain.Doc, schema.doc,
             #backref="agenda_items",
             lazy=False,
             uselist=False,
+        ),
+        "group_assignment": relation(domain.GroupDocumentAssignment,
+            primaryjoin=schema.doc.c.doc_id == schema.group_document_assignment.c.doc_id,
+            lazy=False,
+            uselist=True,
         )
+    }
+)
+
+mapper(domain.GroupDocumentAssignment, schema.group_document_assignment,
+    properties={
+        "group": relation(domain.Group,
+            primaryjoin=schema.group_document_assignment.c.group_id ==
+                schema.group.c.group_id,
+            uselist=False,
+            lazy=False),
     }
 )
 
@@ -629,8 +572,7 @@ mapper(domain.Attachment, schema.attachment,
             ),
             secondary=schema.attachment_audit,
             secondaryjoin=rdb.and_(
-                schema.attachment_audit.c.audit_id == schema.audit.c.audit_id,
-                schema.audit.c.audit_id == schema.change.c.audit_id,
+                schema.attachment_audit.c.audit_id == schema.change.c.audit_id,
                 # !+NO_INHERIT_VERSION needs this
                 schema.change.c.action == "version",
             ),
@@ -675,8 +617,7 @@ mapper(domain.Heading, schema.heading,
 
 mapper(domain.ItemSchedule, schema.item_schedule,
     properties={
-        "sitting": relation(domain.Sitting, uselist=False
-        ),
+        "sitting": relation(domain.Sitting, uselist=False, lazy=False),
     }
 )
 
@@ -781,14 +722,14 @@ mapper(domain.SittingReport, schema.sitting_report,
 # !+Report4Sitting domain.Report4Sitting inherits from domain.Report, it is 
 # mapped to the ASSOCIATION table schema.sitting_report ?!!
 mapper(domain.Report4Sitting, schema.sitting_report,
-    inherits=domain.Report
+    inherits=domain.SittingReport
 )
 
 mapper(domain.ObjectTranslation, schema.translation)
 
 
 # !+IChange-vertical-properties special case: 
-# class is NOT workflowed, and in any case has no dynamic_features
+# class is NOT workflowed, and in any case has no available_dynamic_features
 mapper_add_relation_vertical_properties(domain.Change)
 
 

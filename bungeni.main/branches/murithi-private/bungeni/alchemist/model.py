@@ -13,10 +13,7 @@ log = __import__("logging").getLogger("bungeni.alchemist")
 
 # used directly in bungeni
 __all__ = [
-    "queryModelInterface",      # redefn -> ore.alchemist.model
     "ModelDescriptor",          # redefn -> ore.alchemist.model
-    "IModelDescriptorField",    # redefn -> ore.alchemist.interfaces
-    
     "Field",
     "show",
     "hide",
@@ -24,44 +21,14 @@ __all__ = [
 ]
 
 
-from zope import interface, schema
-from zope.interface.interfaces import IInterface
-
+from zope import interface
 from bungeni.alchemist.interfaces import (
-    IAlchemistContent,
-    IIModelInterface,
-    IModelDescriptor
+    IModelDescriptor,
+    IModelDescriptorField
 )
-
 from bungeni.ui.utils import common 
 from bungeni.ui.i18n import _
 from bungeni.utils import naming
-
-# ore.alchemist.model
-
-
-def queryModelInterface(cls):
-    """This queries the domain model class for the exclusively alchemist
-    IIModelInterface interface. If cls is already such an interface it itself 
-    is returned.
-    """
-    # !+queryModel(mr, jun-2012) replace with capi.get_type_info().interface?
-    if not IInterface.providedBy(cls):
-        candidates = list(interface.implementedBy(cls))
-        ifaces = filter(IIModelInterface.providedBy, candidates)
-        #import pdb; pdb.set_trace()
-        if not ifaces:
-            for i in candidates:
-                if issubclass(i, IAlchemistContent):
-                    ifaces.append(i)
-        assert ifaces, "No Model Interface on Domain Object [%s]" % (cls)
-        if ifaces:
-            assert len(ifaces)==1, "Multiple Model Interfaces on Domain Object"
-        #import pdb; pdb.set_trace()
-        return ifaces[0]
-    else:
-        assert IIModelInterface.providedBy(cls), "Invalid Interface"
-        return cls
 
 
 # local utils
@@ -169,60 +136,6 @@ def hide(modes=None, roles=None):
 #
 # required
 # - Field.property.required: by default required=True for all schema.Field
-# - !+Field.required(mr, oct-2010) OBSOLETED.
-
-class IModelDescriptorField(interface.Interface):
-    # name
-    # label
-    # description
-    modes = schema.ASCIILine(
-        title=u"View Usage Modes for Field",
-        description=u"Whitespace separated string of different modes."
-    )
-    # property
-    listing_column = schema.Object(interface.Interface,
-        title=u"A Custom Column Widget for Listing Views",
-        required=False
-    )
-    listing_column_filter = schema.Object(interface.Interface,
-        title=u"A function that filters a listing column on a value",
-        required=False
-    )
-    # !+LISTING_WIDGET(mr, nov-2010) why inconsistently named "listing_column"?
-    view_widget = schema.Object(interface.Interface,
-        title=u"A Custom Widget Factory for Read Views",
-        required=False
-    )
-    edit_widget = schema.Object(interface.Interface,
-        title=u"A Custom Widget Factory for Write Views",
-        required=False,
-    )
-    add_widget = schema.Object(interface.Interface,
-        title=u"A Custom Widget Factory for Add Views",
-        required=False
-    )
-    search_widget = schema.Object(interface.Interface,
-        title=u"A Custom Search Widget Factory",
-        required=False
-    )
-    ''' !+FIELD_PERMISSIONS(mr, nov-2010) these params are deprecated -- when 
-    applied to any field (that corresponds to an attribute of the domain's 
-    class), the domain.zcml setting for that same class attribute will anyway 
-    take precedence.
-
-    view_permission = schema.ASCIILine(
-        title=u"Read Permission",
-        description=u"If the user does not have this permission this field "
-            "will not appear in read views",
-        required=False
-    )
-    edit_permission = schema.ASCIILine(
-        title=u"Read Permission",
-        description=u"If the user does not have this permission this field "
-            "will not appear in write views",
-        required=False
-    )
-    '''
 
 class Field(object):
     interface.implements(IModelDescriptorField)
@@ -491,14 +404,21 @@ class ModelDescriptor(object):
     We use class attribute fields=[Field] directly i.e. Field instances on 
     the class itself, implying there is no instance.fields=[Field] attribute.
     
-    Always retrieve the *same* descriptor *instance* for a model class via:
-        alchemist.utils.get_descriptor(model_interface or ...)
+    Retrieve the descriptor model (class) for a model class via:
+        alchemist.utils.get_descriptor(type_info_discriminator)
     """
     __metaclass__ = MDType
     interface.implements(IModelDescriptor)
     
     # Is this descriptor exposed for localization? 
     localizable = False
+    
+    # descriptor scope:
+    #   system: a support type provided by system
+    #   archetype: an archetype (may base custom types on it) provided by system
+    #   custom: a custom type (also a "custom archetype" as may base other 
+    #       custom types on it) provided by the user
+    scope = "system"
     
     # editable table listing !+
     #edit_grid = True 
@@ -512,8 +432,8 @@ class ModelDescriptor(object):
     # (before Descriptor is localized) by field name, for all fields in 
     # this ModelDescriptor.
     
-    properties = () # !+USED?
-    schema_order = () # !+USED?
+    #properties = () # !+UNUSED
+    schema_order = () # !+UNUSED but needed by ore/alchemist/sa2zs.py
     schema_invariants = ()
     
     # a means to specify relative order to be used as needed by the usage 
@@ -534,7 +454,6 @@ class ModelDescriptor(object):
         """
         return self.__class__
     '''
-    
     def __init__(self):
         # !+NO_NEED_TO_INSTANTIATE(mr, jun-2011) there is no need
         # to singleton-instantiate each ModelDescriptor class,
@@ -549,11 +468,10 @@ class ModelDescriptor(object):
         """
         cls.fields_by_name.clear()
         for f in cls.fields:
-            name = f["name"]
-            assert name not in cls.fields_by_name, \
+            assert f.name not in cls.fields_by_name, \
                 "[%s] Can't have two fields with same name [%s]" % (
-                    cls.__name__, name)
-            cls.fields_by_name[name] = f
+                    cls.__name__, f.name)
+            cls.fields_by_name[f.name] = f
     
     # we use cls.fields_by_name to define the following methods as this
     # makes the implementation simpler and faster.
@@ -613,7 +531,8 @@ class ModelDescriptor(object):
     
     @classproperty
     def display_name(cls):
-        cls_name = naming.cls_name_from_descriptor_cls_name(cls.__name__)
+        cls_name = naming.model_name(
+            naming.type_key("descriptor_class_name", cls.__name__))
         return _(naming.split_camel(cls_name)) # !+unicode
     @classproperty
     def container_name(cls):

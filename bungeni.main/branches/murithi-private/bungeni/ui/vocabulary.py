@@ -349,7 +349,8 @@ class GroupSubRoleFactory(BaseVocabularyFactory):
     def __call__(self, context):
         terms = []
         while not IBungeniGroup.providedBy(context):
-            context = context.__parent__
+            context = (getattr(context, "group", None) or 
+                getattr(context, "__parent__", None))
             if not context:
                 raise NotImplementedError("Context does not implement IBungeniGroup")
         trusted = removeSecurityProxy(context)
@@ -536,7 +537,16 @@ member_of_parliament = rdb.join(schema.user_group_membership,
 ).join(schema.parliament,
     schema.user_group_membership.c.group_id ==
         schema.parliament.c.parliament_id)
-mapper(MemberOfParliament, member_of_parliament)
+
+mapper(MemberOfParliament, member_of_parliament,
+    properties = {
+        "user_id":[
+            schema.user_group_membership.c.user_id, schema.user.c.user_id
+        ],
+        "user_active_p":[schema.user.c.active_p],
+        "user_language":[schema.user.c.language],    
+    }    
+)
 
 class MemberOfParliamentImmutableSource(SpecializedSource):
     """If a user is already assigned to the context 
@@ -774,8 +784,8 @@ class MinistrySource(SpecializedSource):
                 ob = session.query(domain.Group).get(ministry_id)
                 terms.append(
                     vocabulary.SimpleTerm(
-                        value = getattr(obj, "group_id"), 
-                        token = getattr(obj, "group_id"),
+                        value = getattr(ob, "group_id"), 
+                        token = getattr(ob, "group_id"),
                         title = get_translated_group_label(ob)
                 ))
         return vocabulary.SimpleVocabulary(terms)

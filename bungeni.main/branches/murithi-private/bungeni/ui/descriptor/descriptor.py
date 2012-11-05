@@ -315,8 +315,8 @@ class GroupMembershipRoleDescriptor(ModelDescriptor):
     """Role associated with a group membership
     """
     localizable = False
-    #display_name = "sub roles"
-    #container_name = "sub roles"
+    display_name = "sub roles"
+    container_name = "sub roles"
     fields = [
         F(name="role_id",
           label="sub role",
@@ -862,6 +862,24 @@ class CommitteeMemberDescriptor(GroupMembershipDescriptor):
     ])
 
 
+class GroupDocumentAssignmentDescriptor(ModelDescriptor):
+    localizable = False
+    display_name = "Group document assignment" # !+
+    container_name = "Group document assignment" # !+
+    fields = [
+        F(name="group_id",
+            label="Group",
+            required=True,
+            localizable=[
+                show("add"), # db-not-null-ui-add
+                show("view edit listing"),
+            ],
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="group",
+        ),
+    ]
+
 class AddressDescriptor(ModelDescriptor):
     localizable = False
     display_name = "Address" # !+
@@ -1329,6 +1347,7 @@ class AttachedFileVersionDescriptor(ModelDescriptor):
 
 class DocDescriptor(ModelDescriptor):
     localizable = True # !+ARCHETYPE_LOCALIZATION
+    scope = "archetype"
     
     default_field_order = [
         "title",
@@ -1360,7 +1379,6 @@ class DocDescriptor(ModelDescriptor):
         #"attachments",
         #"events",
         # head_id
-        "timestamp", # DB_REQUIRED
     ]
     sort_on = ["status_date", "type_number"]
     sort_dir = "desc"
@@ -1529,42 +1547,33 @@ class DocDescriptor(ModelDescriptor):
         #    vocabulary="group",
         #),
         # head_id
-        F(name="timestamp",
-           label = u"", # !+ must have "empty" label... as no value is shown!
-           localizable=[
-                show("edit"),
-            ],
-            value_type="timestamp",
-            render_type="datetime",
-        ),
     ]
 
-
 class EventDescriptor(DocDescriptor):
-    
     localizable = True
+    scope = "archetype"
     
     # !+ phase out default_field_order...
     fields = deepcopy(DocDescriptor.fields)
     insert_field_after(fields, "owner_id",
-        F(name="group_id",
-            label="Group",
-            localizable=[
-                show("view edit add listing"),
-            ],
-            value_type="text",
-            render_type="single_select",
-            vocabulary="group",
-        ))
+    F(name="group_id",
+        label="Group",
+        localizable=[
+            show("view edit add listing"),
+        ],
+        value_type="text",
+        render_type="single_select",
+        vocabulary="group",
+    ))
     default_field_order = DocDescriptor.default_field_order[:]
     default_field_order.insert(
         default_field_order.index("owner_id") + 1, "group_id")
-    replace_field(fields, 
+    replace_field(fields,
         # "non-legal" parliamentary documents may be added by any user
         # !+GROUP_AS_OWNER(mr, apr-2012) for Event, a common case would be
-        # to be able to set a group (of the office/group member creating the 
-        # event) as the owner (but Group is not yet polymorphic with User). 
-        # For now we limit the owner of an Event to be simply the current 
+        # to be able to set a group (of the office/group member creating the
+        # event) as the owner (but Group is not yet polymorphic with User).
+        # For now we limit the owner of an Event to be simply the current
         # logged in user:
         F(name="owner_id",
             label="Owner",
@@ -1578,12 +1587,12 @@ class EventDescriptor(DocDescriptor):
             render_type="single_select",
             vocabulary="owner_or_login",
         ))
-    replace_field(fields, 
+    replace_field(fields,
         F(name="doc_type",
             label="Event Type",
             required=True,
             localizable=[
-                show("view edit add listing"), 
+                show("view edit add listing"),
             ],
             value_type="vocabulary",
             render_type="single_select",
@@ -1696,240 +1705,12 @@ class HeadingDescriptor(ModelDescriptor):
         LanguageField("language"), # [user-req]
     ]
 
-
-class AgendaItemDescriptor(DocDescriptor):
-    order = _ORDER_BY_CONTAINER_NAMES.index("agendaitems")
-    localizable = True
-    
-    fields = deepcopy(DocDescriptor.fields)
-    insert_field_after(fields, "submission_date", AdmissibleDateField())
-    default_field_order = DocDescriptor.default_field_order[:]
-    default_field_order.insert(
-        default_field_order.index("submission_date") + 1, "admissible_date")
-
-
-''' !+VERSION_CLASS_PER_TYPE
-class AgendaItemVersionDescriptor(VersionDescriptor):
-    localizable = True
-    fields = deepcopy(VersionDescriptor.fields)
-'''
-
-class MotionDescriptor(DocDescriptor):
-    order = _ORDER_BY_CONTAINER_NAMES.index("motions")
-    localizable = True
-    fields = deepcopy(DocDescriptor.fields)
-    insert_field_after(fields, "submission_date", AdmissibleDateField())
-    insert_field_after(fields, "admissible_date", 
-        F(name="notice_date",
-            label="Notice Date",
-            localizable=[
-                show("view"), 
-                hide("listing"),
-            ],
-            value_type="date",
-            render_type="date",
-        ))
-    default_field_order= DocDescriptor.default_field_order[:]
-    default_field_order.insert(
-        default_field_order.index("submission_date") + 1, "admissible_date")
-    default_field_order.insert(
-        default_field_order.index("submission_date") + 2, "notice_date")
-
-''' !+VERSION_CLASS_PER_TYPE
-class MotionVersionDescriptor(VersionDescriptor):
-    localizable = True
-    fields = deepcopy(VersionDescriptor.fields)
-'''
-
 ''' !+AuditLogView(mr, nov-2011)
 class MotionChangeDescriptor(ChangeDescriptor):
     localizable = True
     fields = deepcopy(ChangeDescriptor.fields)
 '''
 
-
-class BillDescriptor(DocDescriptor):
-    order = _ORDER_BY_CONTAINER_NAMES.index("bills")
-    localizable = True
-    
-    fields = deepcopy(DocDescriptor.fields)
-    replace_field(fields, 
-        F(name="doc_type",
-            label="Bill Type",
-            required=True,
-            localizable=[
-                show("view edit add listing"), 
-            ],
-            value_type="vocabulary",
-            render_type="single_select",
-            vocabulary="bill_type",
-        ))
-    replace_field(fields, 
-        F(name="body",
-            label="Statement of Purpose",
-            required=False,
-            localizable=[
-                show("view edit add"),
-            ],
-            value_type="text",
-            render_type="rich_text",
-        ))
-    default_field_order = DocDescriptor.default_field_order[:]
-    insert_field_after(fields, "submission_date", 
-        F(name="publication_date",
-            label="Publication Date",
-            localizable=[
-                show("view listing"),
-            ],
-            value_type="date",
-            render_type="date",
-        ))
-    default_field_order.insert(
-        default_field_order.index("submission_date") + 1, "publication_date")
-    insert_field_after(fields, "publication_date", 
-        F(name="short_title",
-            label="Statement of Purpose",
-            required=True,
-            localizable=[
-                show("view edit add listing"),
-            ],
-        ))
-    default_field_order.insert(
-        default_field_order.index("publication_date") + 1, "short_title")
-    insert_field_after(fields, "short_title", 
-        F(name="group_id",
-            label="Ministry",
-            localizable=[
-                show("view edit add listing"),
-            ],
-            value_type="group",
-            render_type="single_select",
-            vocabulary="ministry",
-        ))
-    default_field_order.insert(
-        default_field_order.index("short_title") + 1, "group_id")
-
-
-''' !+VERSION_CLASS_PER_TYPE
-class BillVersionDescriptor(VersionDescriptor):
-    localizable = True
-    fields = deepcopy(VersionDescriptor.fields)
-'''
-
-
-class QuestionDescriptor(DocDescriptor):
-    order = _ORDER_BY_CONTAINER_NAMES.index("questions")
-    localizable = True
-    
-    fields = deepcopy(DocDescriptor.fields)
-    replace_field(fields, 
-        F(name="doc_type",
-            label="Question Type",
-            description="Choose the type of question",
-            required=True,
-            localizable=[
-                show("view edit add listing"), 
-            ],
-            value_type="vocabulary",
-            render_type="single_select",
-            vocabulary="question_type",
-        ))
-    replace_field(fields, 
-        F(name="subject",
-            label="Subject Terms",
-            description="Select Subjects",
-            localizable=[
-                show("view edit add"),
-                hide("listing"),
-            ],
-            value_type="text",
-            render_type="tree_text",
-            vocabulary="subject_terms",
-        ))
-    default_field_order = DocDescriptor.default_field_order[:]
-    insert_field_after(fields, "description",
-        F(name="response_type",
-            label="Response Type",
-            description="Choose the type of response expected for this question",
-            localizable=[
-                show("view edit add listing"),
-            ],
-            value_type="vocabulary",
-            render_type="single_select",
-            vocabulary="response_type",
-        ))
-    default_field_order.insert(
-        default_field_order.index("description") + 1, "response_type")
-    insert_field_after(fields, "response_type",
-        F(name="response_text",
-            label="Response",
-            localizable=[
-                show("view edit"),
-            ],
-            value_type="text",
-            render_type="rich_text",
-        ))
-    default_field_order.insert(0, "response_text")
-    insert_field_after(fields, "submission_date", AdmissibleDateField())
-    default_field_order.insert(
-        default_field_order.index("submission_date") + 1, "admissible_date")
-    insert_field_after(fields, "admissible_date",
-        F(name="group_id",
-            label="Ministry",
-            required=True,
-            localizable=[
-                show("view edit add listing"),
-            ],
-            value_type="group",
-            render_type="single_select",
-            vocabulary="ministry", 
-        ))
-    default_field_order.insert(
-        default_field_order.index("admissible_date") + 1, "group_id")
-    insert_field_after(fields, "group_id",
-        F(name="ministry_submit_date",
-            label="Date submitted to ministry",
-            localizable=[
-                show("view"),
-                hide("listing"),
-            ],
-            value_type="date",
-            render_type="date",
-        ))
-    default_field_order.insert(
-        default_field_order.index("group_id") + 1, "ministry_submit_date")
-    ''' !+SUPPLEMENT
-    fields.extend([
-        #Field(name="supplement_parent_id",
-        #    label=_("Initial/supplementary question"),
-        #    modes="",
-        #    view_widget=widgets.SupplementaryQuestionDisplay,
-        #),
-    ])
-    '''
-    custom_validators = []
-
-''' !+VERSION_CLASS_PER_TYPE
-class QuestionVersionDescriptor(VersionDescriptor):
-    localizable = True
-    fields = deepcopy(VersionDescriptor.fields)
-'''
-
-class TabledDocumentDescriptor(DocDescriptor):
-    order = _ORDER_BY_CONTAINER_NAMES.index("tableddocuments")
-    localizable = True
-    fields = deepcopy(DocDescriptor.fields)
-    insert_field_after(fields, "submission_date", AdmissibleDateField())
-    default_field_order = DocDescriptor.default_field_order[:]
-    default_field_order.insert(
-        default_field_order.index("submission_date") + 1, "admissible_date")
-
-
-''' !+VERSION_CLASS_PER_TYPE
-class TabledDocumentVersionDescriptor(VersionDescriptor):
-    localizable = True
-    fields = deepcopy(VersionDescriptor.fields)
-'''
 
 class VenueDescriptor(ModelDescriptor):
     localizable = False
@@ -2278,48 +2059,4 @@ class ItemScheduleDiscussionDescriptor(ModelDescriptor):
         #    modes="view edit add listing",
         #),
     ]
-
-
-class ReportDescriptor(DocDescriptor):
-    order = _ORDER_BY_CONTAINER_NAMES.index("preports")
-    localizable = True
-    sort_on = ["end_date"] + DocDescriptor.sort_on
-    fields = [
-        LanguageField("language"),
-        F(name="title",
-            label="Publications type",
-            required=True,
-            localizable=[
-                show("add"), # db-not-null-ui-add
-                show("view edit listing"),
-            ],
-            value_type="text",
-            render_type="text_box",
-        ),
-        F(name="status_date",
-            label="Published Date",
-            required=True,
-            localizable=[
-                show("view listing"),
-            ],
-            value_type="date",
-            render_type="date",
-        ),
-        F(name="body",
-            label="Text",
-            required=True,
-            localizable=[
-                show("view edit add"),
-            ],
-            value_type="text",
-            render_type="rich_text",
-        ),
-    ]
-    default_field_order = [ f.name for f in fields ]
-
-
-class Report4SittingDescriptor(ReportDescriptor):
-    localizable = True
-    fields = deepcopy(ReportDescriptor.fields)
-
 

@@ -9,19 +9,20 @@ $Id$
 log = __import__("logging").getLogger("bungeni.core.serialize")
 
 import os
+import math
 from StringIO import StringIO
 from zipfile import ZipFile
-from threading import Thread
+from threading import Thread, Timer
 
 from xml.etree.cElementTree import Element, ElementTree
 from tempfile import NamedTemporaryFile as tmp
 import simplejson
 
 import zope.component
-import zope.security.management
+import zope.app.component
 from zope.security.proxy import removeSecurityProxy
+import zope.event
 from zope.lifecycleevent import IObjectModifiedEvent, IObjectCreatedEvent
-from zope.publisher.browser import TestRequest
 
 from sqlalchemy.orm import class_mapper, object_mapper
 from sqlalchemy.types import Binary
@@ -32,21 +33,27 @@ from bungeni.alchemist import Session
 from bungeni.core.workflow.states import (get_object_state_rpm, 
     get_head_object_state_rpm
 )
-from bungeni.core.interfaces import IMessageQueueConfig
+from bungeni.core.interfaces import IMessageQueueConfig, NotificationEvent
 from bungeni.core.workflow.interfaces import (IWorkflow, IStateController,
     IWorkflowed, IWorkflowController, InvalidStateError
 )
 from bungeni.core.notifications import (get_mq_connection, 
     post_commit_publish
 )
-from bungeni.models import interfaces, domain
+from bungeni.models import interfaces, domain, settings
 from bungeni.models.utils import obj2dict, get_permissions_dict
-from bungeni.utils import register, naming
-from bungeni.utils.capi import capi
+from bungeni.utils import register, naming, core
 
 import transaction
 import pika
 
+# timer delays in setting up serialization workers
+INITIAL_DELAY = 10
+MAX_DELAY = 300
+TIMER_DELAYS = {
+    "serialize_setup": INITIAL_DELAY
+}
+                
 def setupStorageDirectory(part_target="xml_db"):
     """ Returns path to store xml files.
     """
@@ -182,6 +189,12 @@ def publish_to_xml(context):
             delivery_mode=2
         )
     )
+    
+    #clean up - remove any files if zip was created
+    if files:
+        prev_xml_file = "%s.%s" %(file_path, "xml")
+        if os.path.exists(prev_xml_file):
+            os.remove(prev_xml_file)
 
 
 def serialize(data, name="object"):
@@ -234,20 +247,51 @@ SERIALIZE_OUTPUT_QUEUE = "bungeni_serialization_output_queue"
 SERIALIZE_OUTPUT_EXCHANGE = "bungeni_serialization_output_exchange"
 SERIALIZE_OUTPUT_ROUTING_KEY = "bungeni_serialization_output"
 
+SERIALIZE_FAILURE_TEMPLATE = """
+There was an error while serializing a document: 
+
+Object:
+%(obj)s
+
+Original AMQP message: 
+%(message)s
+
+Error:
+%(error)s
+
+- Bungeni
+"""
+
+def notify_serialization_failure(template, **kw):
+    email_settings = settings.EmailSettings(core.get_application())
+    recipients = [ email_settings.default_sender ]    
+    if template:
+        body_text = template % kw
+    else:
+        body_text = kw.get("body")
+    msg_event = NotificationEvent({
+        "recipients" : recipients,
+        "body" : body_text, 
+        "subject" : kw.get("subject", "Serialization Failure")
+    })
+    zope.event.notify(msg_event)
+
+
 def serialization_notifications_callback(channel, method, properties, body):
     obj_data = simplejson.loads(body)
     obj_type = obj_data.get("obj_type")
     domain_model = getattr(domain, obj_type, None)
-    request = TestRequest(
-        environ={"HTTP_ACCEPT_LANGUAGE": capi.default_language}
-    )
-    zope.security.management.newInteraction(request)
     if domain_model:
         obj_key = valueKey(obj_data.get("obj_key"))
         session = Session()
         obj = session.query(domain_model).get(obj_key)
         if obj:
-            publish_to_xml(obj)
+            try:
+                publish_to_xml(obj)
+            except Exception, e:
+                notify_serialization_failure(SERIALIZE_FAILURE_TEMPLATE,
+                    obj=obj, message=obj_data, error=e
+                )
             channel.basic_ack(delivery_tag=method.delivery_tag)
         else:
             log.error("Could not query object of type %s with key %s. "
@@ -263,7 +307,6 @@ def serialization_notifications_callback(channel, method, properties, body):
         log.error("Failed to get class in bungeni.models.domain named %s",
             obj_type
         )
-    zope.security.management.endInteraction()
 
 def serialization_worker():
     connection = get_mq_connection()
@@ -275,6 +318,49 @@ def serialization_worker():
                           queue=SERIALIZE_QUEUE)
     channel.start_consuming()
 
+
+class SerializeThread(Thread):
+    """This thread will respawn after n seconds if it crashes
+    """
+    is_running = True
+    daemon = True
+    def run(self):
+        while self.is_running:
+            try:
+                super(SerializeThread, self).run()
+            except Exception, e:
+                log.error("Exception in thread %s: %s", self.name, e)
+                delay = TIMER_DELAYS[self.name]
+                if delay > MAX_DELAY:
+                    num_attempts = int(math.log((delay/10), 2));
+                    log.error("Giving up re-spawning serialization " 
+                        "worker after %d seconds (%d attempts).", 
+                        delay, num_attempts
+                    )
+                    notify_serialization_failure(None,
+                        subject="Notice - Bungeni Serialization Workers",
+                        body="""Unable to restart serialization worker.
+                    Please check the Bungeni logs."""
+                    )
+                else:
+                    log.info("Attempting to respawn serialization "
+                        "consumer in %d seconds", delay
+                    )
+                    next_delay = delay * 2
+                    timer = Timer(delay, init_thread, [], 
+                        {"delay": next_delay })
+                    timer.daemon = True
+                    timer.start()
+                self.is_running = False
+                del TIMER_DELAYS[self.name]
+
+def init_thread(*args, **kw):
+    log.info("Initializing serialization consumer thread...")
+    delay = kw.get("delay", INITIAL_DELAY)
+    task_thread = SerializeThread(target=serialization_worker)
+    task_thread.start()
+    TIMER_DELAYS[task_thread.name] = delay
+
 @register.handler(adapts=(IWorkflowed, IObjectCreatedEvent))
 @register.handler(adapts=(IWorkflowed, IObjectModifiedEvent))
 def queue_object_serialization(obj, event):
@@ -285,13 +371,30 @@ def queue_object_serialization(obj, event):
         log.warn("Could not get rabbitmq connection. Will not send "
             "AMQP message for this change."
         )
+        log.warn("Publishing XML directly - this will slow things down")
+        try:
+            publish_to_xml(obj)
+        except Exception, e:
+            notify_serialization_failure(SERIALIZE_FAILURE_TEMPLATE,
+                obj=obj, message="", error=e
+            )
+            notify_serialization_failure(None, 
+                body="Failed to find running RabbitMQ",
+                subject="Notice - RabbitMQ"
+            )
+        notify_serialization_failure(None, 
+            body="Failed to find running RabbitMQ",
+            subject="Notice - RabbitMQ"
+        )
         return
     wf_state = None
     try:
         wfc = IWorkflowController(obj)
         wf_state = wfc.state_controller.get_state()
     except InvalidStateError:
-        log.error("Could not get workflow state for object %s.", obj)
+        #this is probably a draft document - skip queueing
+        log.warning("Could not get workflow state for object %s. "
+            "State: %s", obj, wf_state)
         return
     if wf_state and (
         wfc.state_controller.get_status() in 
@@ -325,6 +428,21 @@ def serialization_notifications():
     mq_utility = zope.component.getUtility(IMessageQueueConfig)
     connection = get_mq_connection()
     if not connection:
+        #delay
+        delay = TIMER_DELAYS["serialize_setup"]
+        if delay > MAX_DELAY:
+            log.error("Could not set up amqp workers - No rabbitmq " 
+            "connection found after %d seconds.", delay)
+        else:
+            log.info("Attempting to setup serialization AMQP consumers "
+                "in %d seconds", delay
+            )
+            timer = Timer(TIMER_DELAYS["serialize_setup"],
+                serialization_notifications
+            )
+            timer.daemon = True
+            timer.start()
+            TIMER_DELAYS["serialize_setup"] *= 2
         return
     channel = connection.channel()
     #create exchange
@@ -343,6 +461,4 @@ def serialization_notifications():
         exchange=SERIALIZE_OUTPUT_EXCHANGE,
         routing_key=SERIALIZE_OUTPUT_ROUTING_KEY)
     for i in range(mq_utility.get_number_of_workers()):
-        task_thread = Thread(target=serialization_worker)
-        task_thread.daemon = True
-        task_thread.start()
+        init_thread()

@@ -32,9 +32,11 @@ from bungeni.core.content import Section, AdminSection, AkomaNtosoSection, \
 from bungeni.core.content import QueryContent
 from bungeni.core.i18n import _
 from bungeni.core.workspace import (WorkspaceContainer,
-                                    WorkspaceUnderConsiderationContainer,
-                                    WorkspaceTrackedDocumentsContainer,
-                                    load_workspaces)
+    WorkspaceUnderConsiderationContainer,
+    WorkspaceTrackedDocumentsContainer,
+    WorkspaceGroupsContainer,
+    WorkspaceSchedulableContainer,
+    load_workspaces)
 from bungeni.core.notifications import load_notifications
 from bungeni.core.emailnotifications import email_notifications
 from bungeni.core.serialize import serialization_notifications
@@ -211,12 +213,34 @@ class AppSetup(object):
             marker=interfaces.ICommitteeAddContext,
             description=_(u"Committee schedules")
         )
+        workspace["scheduling"]["documents"] = WorkspaceSchedulableContainer(
+            name=_(u"schedulable items"),
+            title=_(u"schedulable items"),
+            description=_(u"documents available for scheduling")
+        )
         workspace["scheduling"]["sittings"] = QueryContent(
             container_getter(get_current_parliament, "sittings"),
             title=_(u"Sittings"),
             description=_(u"Plenary Sittings")
         )
+        workspace["scheduling"]["agendaitems"] = QueryContent(
+            container_getter(get_current_parliament, "agendaitems"),
+            title=_(u"Agenda items"),
+            marker=interfaces.IAgendaItemAddContext,
+            description=_(u"Manage agenda items"))
         
+        workspace["groups"] = WorkspaceSection(
+            title=_(u"Groups"),
+            description=_(u"Bungeni Groups"),
+            default_name="my-groups",
+            marker=interfaces.IWorkspaceGroups,
+        )
+        
+        workspace["groups"]["my-groups"] = WorkspaceGroupsContainer(
+            name="my-groups",
+            title=_(u"My Groups"),
+            description=_(u"Groups that the user is a member of"),
+        )
         #!+TIMING
         #!+AUTO CONTAINERS SCHEDULING(mb, April-2012)
         # type_info missing container name
@@ -228,6 +252,7 @@ class AppSetup(object):
                 to_locatable_container(info.domain_model, 
                     workspace["scheduling"][container_name]
                 )
+        
         
         # Proof-of-concept: support for selective inclusion in breadcrumb trail:
         # a view marked with an attribute __crumb__=False is NOT included in 
@@ -336,18 +361,18 @@ class AppSetup(object):
             description=_(u"View current parliament members (MPs)"))
         
         alsoProvides(members, interfaces.ISearchableSection)
-
+        
         members[u"political-groups"] = QueryContent(
             container_getter(get_current_parliament, "politicalgroups"),
             title=_(u"Political groups"),
             description=_(u"View current political groups"))
-
+        
         # archive
         records = archive[u"browse"] = Section(
             title=_(u"Browse archives"),
             description=_(u"Browse records from the archive"),
             default_name="browse-archive")
-
+        
         documents = archive["documents"] = Section(
             title=_(u"Documents"),
             description=_(u"Browse documents in the archive"),
@@ -356,7 +381,7 @@ class AppSetup(object):
         # archive/records
         documents[u"bills"] = domain.BillContainer()
         to_locatable_container(domain.Bill, documents[u"bills"])
-
+        
         documents[u"motions"] = domain.MotionContainer()
         to_locatable_container(domain.Motion, documents[u"motions"])
         
@@ -365,7 +390,7 @@ class AppSetup(object):
         
         documents[u"agendaitems"] = domain.AgendaItemContainer()
         to_locatable_container(domain.AgendaItem, documents[u"agendaitems"])
-
+        
         documents[u"tableddocuments"] = domain.TabledDocumentContainer()
         to_locatable_container(domain.TabledDocument, 
             documents[u"tableddocuments"]
