@@ -16,8 +16,8 @@
     
     
     <state id="published" title="Published" tags="public">
-        <grant permission="zope.View" role="bungeni.Authenticated" /> 
-        <grant permission="zope.View" role="bungeni.Anonymous" />
+        <grant permission="bungeni.report.View" role="bungeni.Authenticated" /> 
+        <grant permission="bungeni.report.View" role="bungeni.Anonymous" />
         <!-- !+PERM_NOT_REG deny permission="bungeni.report.Edit" role="bungeni.Authenticated" /-->
     </state>
     
