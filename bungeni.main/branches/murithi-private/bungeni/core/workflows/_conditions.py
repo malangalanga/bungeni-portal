@@ -89,16 +89,9 @@ def is_oral_response(context):
     return context.response_type == "oral"
 
 def response_allow_submit(context):
-    # The "submit_response" workflow transition should NOT be displayed when 
-    # the UI is displaying the question in "edit" mode (as this transition
-    # will cause deny of bungeni.Question.Edit to the Minister).
-    request = common.get_request()
-    if IFormEditLayer.providedBy(request):
-        return False
-    if context.response_text is None:
-        return False
-    else:
+    if context.response:
         return True
+    return False
 
 
 # user

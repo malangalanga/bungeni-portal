@@ -22,6 +22,7 @@ from sqlalchemy import sql
 from bungeni.alchemist import Session
 
 from bungeni.models import domain
+from bungeni.models.interfaces import IEventContainer, IQuestion
 from bungeni.models import schema as model_schema
 from bungeni.core.i18n import _
 from bungeni.ui.forms import validations
@@ -38,6 +39,10 @@ from zope.formlib.interfaces import IDisplayWidget
 from zope.schema.interfaces import IText, ITextLine
 from bungeni.ui.widgets import IDiffDisplayWidget
 from bungeni.ui.htmldiff import htmldiff
+from bungeni.ui.interfaces import IBungeniSkin
+from bungeni.ui.utils import url
+
+from bungeni.utils import register
 
 
 FormTemplate = namedtemplate.NamedTemplateImplementation(
@@ -84,23 +89,34 @@ def flag_changed_widgets(widgets, context, data):
         else:
             widget.changed = True
     return []
-
-class ResponseEditForm(EditForm):
-    """ Answer a Question
-    UI for ministry to input response
-    Display the question when adding the answer.
+        
+@register.view(IEventContainer, layer=IBungeniSkin, name="add-response",
+    protect={"bungeni.response.Edit": register.VIEW_DEFAULT_ATTRS})
+class ResponseEventAddForm(AddForm):
+    """ Answer a question as an event to a question.
     """
-    CustomValidations = validations.null_validator
-
+    exclude_fields = ["doc_type", "group_id", "acronym"]
     
-class ResponseAddForm(AddForm):
-    """
-    Answer a Question
-    UI for ministry to input response
-    Display the question when adding the answer.
-    """
-    CustomValidation = validations.null_validator
-
+    def finishConstruction(self, ob):
+        ob.doc_type = "response"
+    
+    @property
+    def type_name(self):
+        return _("Response")
+    
+    def filter_fields(self):
+        fields = super(ResponseEventAddForm, self).filter_fields()
+        return fields.omit(*self.exclude_fields)
+    
+    def __call__(self):
+        response = removeSecurityProxy(self.context.__parent__).response
+        if response:
+            self.request.response.redirect(
+                url.absoluteURL(response, self.request))
+        else:
+            return super(ResponseEventAddForm, self).__call__()
+    
+    CustomValidation = validations.single_response
     
 class ItemScheduleContainerReorderForm(ReorderForm):
     """Specialization of the general reorder form for item

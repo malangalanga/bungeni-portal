@@ -869,10 +869,17 @@ class Question(AdmissibleMixin, Doc):
     @property
     def ministry_submit_date(self):
         return self._get_workflow_date("response_pending")
-    
+
+    @property
+    def response(self):
+        responses = [ resp for resp in self.events.batch(
+            filter=(Event.doc_type=="response"))]
+        if len(responses):
+            return responses[0]
+        return None
+
     extended_properties = [
         ("response_type", vp.Text),
-        ("response_text", vp.TranslatedText),
     ]
 instrument_extended_properties(Question, "doc")
 #QuestionAudit

@@ -315,26 +315,6 @@ class DocMinutesViewlet(browser.BungeniItemsViewlet):
         self.items = self._get_items()
         super(DocMinutesViewlet, self).update()
 
-class WrittenQuestionResponseViewlet(browser.BungeniViewlet):
-
-    mode = "view"
-    for_display = True
-    form_name = _(u"Response")
-    render = ViewPageTemplateFile("templates/written-question-response.pt")
-
-    def __init__(self, context, request, view, manager):
-        self.request = request
-        self.context = context
-        self.manager = manager
-        self.question = removeSecurityProxy(context)
-        # Check type of question. Only written questions get this viewlet
-        if self.question.response_type == "oral":
-            self.for_display = False
-        else:
-            if self.question.response_text in (None, ""):
-                self.for_display = False
-
-
 class OfficesHeldViewlet(browser.BungeniItemsViewlet):
 
     render = ViewPageTemplateFile("templates/offices-held-viewlet.pt")

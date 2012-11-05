@@ -245,8 +245,6 @@ def apply_security(ti):
         ti.derived_table_schema.__name__, descriptor_model.__name__)
     for n in attrs:
         # !+DECL special cases, do not override domain.zcml...
-        if n in ("response_text",):
-            continue
         _view_protected.add(n); _edit_protected.add(n)
         pv = pv_type
         pe = pe_type
@@ -300,7 +298,7 @@ def apply_security(ti):
         from zope.security import proxy, checker
         dmc = checker.getChecker(proxy.ProxyFactory(domain_model()))
         log.debug("       checker: %s", dmc)
-        for n in sorted(_view_protected.union(["response_text"])):
+        for n in sorted(_view_protected):
             g = dmc.get_permissions.get(n)
             s = dmc.set_permissions.get(n) #dmc.setattr_permission_id(n)
             log.debug("                [%s]  get:%s  set:%s",

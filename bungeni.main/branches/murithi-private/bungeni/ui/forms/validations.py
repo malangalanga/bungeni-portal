@@ -13,11 +13,7 @@ Validators API:
 log = __import__("logging").getLogger("bungeni.ui.forms.validations")
 
 import datetime
-
-from zope.security import checkPermission
-from zope.security.proxy import removeSecurityProxy
 from zope.interface import Invalid
-
 import sqlalchemy as rdb
 from bungeni.alchemist import Session
 from bungeni.models import interfaces
@@ -28,9 +24,9 @@ from bungeni.ui.i18n import _
 from bungeni.ui.utils import queries
 from bungeni.ui.calendar.utils import generate_dates
 from bungeni.ui.calendar.utils import datetimedict
+from zope.security.proxy import removeSecurityProxy
 from interfaces import Modified
 
-from bungeni.utils.capi import capi
 
 # utils
 
@@ -102,7 +98,7 @@ def validate_start_date_equals_end_date(action, data, context, container):
     if start_date and end_date:
         start = as_date(start_date) 
         end = as_date(end_date)
-        if (start != end) and (not data.get("rec_type")):
+        if start != end:
             errors.append(Invalid(
                     _(u"End date must be equal to start date"),
                     "end_date"))
@@ -488,11 +484,9 @@ def validate_member_titles(action, data, context, container):
 
 def validate_venues(action, data, context, container):
     """A venue can only be booked for one sitting at once."""
+    
     errors = []
     start = data.get("start_date")
-    #check if this is an update to a recurring event(ignore venue check)
-    if action.form.request.get("rec_type") != None:
-        return []
     end = data.get("end_date")
     if interfaces.ISitting.providedBy(context):
         sitting = context
@@ -648,3 +642,14 @@ def diff_validator(form, context, data):
                     errors.append(Modified(_(u"Value was changed!"), name))
     return logged_errors(errors, "diff_validator")
 
+
+def single_response(form, context, data):
+    """Ensure that no response currently exists in the current context
+    """
+    errors = []
+    ctx = removeSecurityProxy(context)
+    responses = [bcc for bcc in 
+        ctx.batch(filter=(ctx.domain_model.doc_type=="response"))]
+    if len(responses)>0:
+        errors.append(Invalid(_(u"This document already has a response")))
+    return logged_errors(errors, "single_response")

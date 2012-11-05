@@ -446,6 +446,14 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         order="21"
     />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IQuestion"
+        action="./events/add-response"
+        title="Respond"
+        order="99"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.response.Edit"
+    />
     <browser:menuItem menu="additems"
         for="bungeni.models.interfaces.ITabledDocument"
         title="Add event..."
@@ -595,7 +603,6 @@
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         permission="bungeni.member_of_parliament.Delete"
     />
-      
     <browser:menuItem menu="plone_contentmenu"
         for="bungeni.models.interfaces.IOfficeContainer"
         title="Add office..."
