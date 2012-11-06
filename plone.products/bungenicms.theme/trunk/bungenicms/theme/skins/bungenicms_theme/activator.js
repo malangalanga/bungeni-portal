@@ -9,3 +9,8 @@ jq('.activator').hover(function() {
     }, 350);
 });
 };
+
+// Make all external links to open in a new window
+$(function() {
+    $("a[href^='http']").attr('target','_blank');
+});
