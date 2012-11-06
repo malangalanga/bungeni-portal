@@ -147,11 +147,11 @@ div#portal-globalnav ul.level0 {
     margin: 0;
     padding: 0;
     min-width:inherit;
-    width: 100%;
+    width: auto;
     white-space: nowrap;
     line-height: 20px;
     overflow:hidden;
-    bottom:0;
+    bottom:0;  
 }
 div#portal-globalnav ul.level0 li {
     position: relative;
@@ -1869,6 +1869,9 @@ div.overlay div.close span {
     width:auto;
     margin-left:0;
 }
+.yui-skin-sam div.yui-dt-bd {
+    width:300px;
+}
 #scheduler-layout table {
     width:auto;
     margin-left:0;
@@ -1916,6 +1919,8 @@ div.overlay div.close span {
 .yui-skin-sam .schedule-available-item-filters .yui-menu-button button {
     padding-right: 20px !important;
 }
+.yui-skin-sam #scheduler-layout th.yui-dt-col-item_type,
+.yui-skin-sam #scheduler-layout .yui-dt-first,
 .yui-skin-sam #scheduler-layout .yui-dt0-col-row_controls {
     max-width:115px !important;
 } 
@@ -1995,19 +2000,26 @@ div#region-content {
 .template-portal-eXist div#region-content h4 {
     margin-bottom:5px;
 }
+.template-portal-eXist #region-content .mem-desc br,
 .template-portal-eXist div#doc-content-area br {
     display: block;
     margin: 10px 0;
     line-height:22px;
     content: "";
 }
+.template-portal-eXist #region-content .mem-desc ul,
 .template-portal-eXist div#doc-content-area ul {
     padding-left:20px;
     list-style-type:circle;
 }
+.template-portal-eXist #region-content .mem-desc div,
 .template-portal-eXist #region-content .list-block,
 .template-portal-eXist #region-content ul.ls-row li {
     text-align:left !important;
+}
+
+.template-portal-eXist ul.doc-versions {
+    padding: 0;
 }
 
 /* DHTMLX Calendar
