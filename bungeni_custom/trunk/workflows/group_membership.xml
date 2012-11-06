@@ -12,8 +12,8 @@
         note="Visible to bungeni users"
         >
         <!-- membership -->
-        <grant permission="bungeni.groupmember.View" role="bungeni.Authenticated" />
-        <deny permission="bungeni.groupmember.View" role="bungeni.Anonymous" />
+        <grant permission="bungeni.group_membership.View" role="bungeni.Authenticated" />
+        <deny permission="bungeni.group_membership.View" role="bungeni.Anonymous" />
     </state>
     
     <!-- !+inactive(mr, aug-2011) review usage and rename across the board 

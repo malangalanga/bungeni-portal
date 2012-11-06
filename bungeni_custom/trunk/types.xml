@@ -37,21 +37,21 @@
     <doc name="report" enabled="true" />
     
     <group name="office" workflow="group" enabled="true">
-        <member name="office_member" workflow="membership" enabled="true" />
+        <member name="office_member" workflow="group_membership" enabled="true" />
     </group>
     <group name="political_group" workflow="group" enabled="true">
-        <member name="political_group_member" workflow="membership" enabled="true" />
+        <member name="political_group_member" workflow="group_membership" enabled="true" />
     </group>
     <group name="ministry" workflow="group" enabled="true">
-        <member name="minister" workflow="membership" enabled="true" />
+        <member name="minister" workflow="group_membership" enabled="true" />
     </group>
     <group name="committee" enabled="true">
-        <member name="committee_member" workflow="membership" enabled="true" />
-        <member name="committee_staff" workflow="membership" enabled="true" />
+        <member name="committee_member" workflow="group_membership" enabled="true" />
+        <member name="committee_staff" workflow="group_membership" enabled="true" />
     </group>
     <group name="government" workflow="group" enabled="true" />
     <group name="parliament" enabled="true">
-        <member name="member_of_parliament" workflow="membership" enabled="true" />
+        <member name="member_of_parliament" workflow="group_membership" enabled="true" />
     </group>
 
 </types>

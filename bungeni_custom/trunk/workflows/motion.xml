@@ -65,6 +65,7 @@
         <deny permission="bungeni.signatory.Delete" role="bungeni.Minister" />
         <deny permission="bungeni.signatory.Delete" role="bungeni.Anonymous" />
         <!-- attachment -->
+        <grant permission="bungeni.attachment.View" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
         <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />

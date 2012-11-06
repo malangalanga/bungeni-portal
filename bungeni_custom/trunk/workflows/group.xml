@@ -16,10 +16,10 @@
         <deny permission="bungeni.group.View" role="bungeni.Minister" />
         <deny permission="bungeni.group.View" role="bungeni.Anonymous" />
         <!-- !+PERM_NOT_REG grant permission="bungeni.group.Delete" role="bungeni.Owner" /-->
-        <!-- groupmember -->
-        <deny permission="bungeni.groupmember.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.groupmember.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.groupmember.Delete" role="bungeni.Clerk" />
+        <!-- group_membership -->
+        <deny permission="bungeni.group_membership.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.group_membership.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.group_membership.Delete" role="bungeni.Clerk" />
         <!-- address -->
         <grant permission="bungeni.address.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.address.Edit" role="bungeni.Owner" />
@@ -38,19 +38,19 @@
         <grant permission="bungeni.group.View" role="bungeni.Minister" />
         <grant permission="bungeni.group.View" role="bungeni.Anonymous" />
         <!-- !+PERM_NOT_REG deny permission="bungeni.group.Delete" role="bungeni.Owner" /-->
-        <!-- groupmember -->
-        <grant permission="bungeni.groupmember.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.groupmember.Add" role="bungeni.Clerk" />
-        <grant permission="bungeni.groupmember.Delete" role="bungeni.Clerk" />
+        <!-- group_membership -->
+        <grant permission="bungeni.group_membership.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.group_membership.Add" role="bungeni.Clerk" />
+        <grant permission="bungeni.group_membership.Delete" role="bungeni.Clerk" />
     </state>
     
     <state id="dissolved" title="Group is Dissolved" 
         like_state="active"
         tags="public">
-        <!-- groupmember -->
-        <deny permission="bungeni.groupmember.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.groupmember.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.groupmember.Delete" role="bungeni.Clerk" />
+        <!-- group_membership -->
+        <deny permission="bungeni.group_membership.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.group_membership.Add" role="bungeni.Clerk" />
+        <deny permission="bungeni.group_membership.Delete" role="bungeni.Clerk" />
         <!-- address -->
         <deny permission="bungeni.address.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.address.Edit" role="bungeni.Owner" />
