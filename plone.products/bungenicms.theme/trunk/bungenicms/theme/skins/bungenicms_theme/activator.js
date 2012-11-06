@@ -12,5 +12,6 @@ jq('.activator').hover(function() {
 
 // Make all external links to open in a new window
 $(function() {
-    $("a[href^='http']").attr('target','_blank');
+    var h = window.location.host.toLowerCase();
+    $("a[href^='http']:not(a[href^='http://" + h + "']):not(a[href^='http://www." + h + "']), a[href$='.pdf']").attr("target", "_blank");
 });
