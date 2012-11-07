@@ -459,13 +459,13 @@ def stop_plone(mode="ABORT_ON_ERROR"):
     service.stop_service("plone", mode)
 
 
-def start_postgres():
-    """
-    Start postgres
-    """
+#def start_postgres():
+    #"""
+    #Start postgres
+    #"""
 
-    service = bungeni.Services()
-    service.start_service("postgres")
+    #service = bungeni.Services()
+    #service.start_service("postgres")
 
 def start_exist(mode="ABORT_ON_ERROR"):
     """
@@ -753,7 +753,27 @@ def exist_java_home():
     """
     cfgs = bungeni.BungeniConfigs()
     print cfgs.java_home
-
+    
+def postgres_install():
+	"""
+	Build and install postgres
+	"""
+	postgres = bungeni.PostgresTask()
+	postgres.build_install_postgres();
+	
+def postgres_setup():
+	"""
+	Setup postgres user and data file
+	"""
+	postgres = bungeni.PostgresTask()
+	postgres.setup_postgres();
+	
+def postgres_start():
+	"""
+	Start postgres main instance
+	"""
+	postgres = bungeni.PostgresTask()
+	postgres.start_postgres();
 
 def reset_all():
     """

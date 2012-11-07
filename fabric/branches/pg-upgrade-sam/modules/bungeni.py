@@ -392,8 +392,8 @@ class BungeniConfigs:
         self.portal_web_server_port = self.cfg.get_config("portal",
                 "web_server_port")
         # others :  postgresql, xapian
-        self.postgresql_local_url = self.cfg.get_config("postgresql",
-                "local_url")
+        #self.postgresql_local_url = self.cfg.get_config("postgresql",
+        #        "local_url")
         self.xapian_local_url = self.cfg.get_config("xapian",
                 "local_url")
         self.xapian_bindings_local_url = \
@@ -447,6 +447,12 @@ class BungeniConfigs:
         self.glue_repo = self.cfg.get_config("glue-script", "repo")
         self.user_glue = self.user_install_root + "/glue"
         self.glue_interval = self.cfg.get_config("glue-script", "interval")
+        #PostgreSQL installation folder
+        self.postgres_local_url = self.cfg.get_config("postgresql","local_url")
+        self.postgres_version = self.cfg.get_config("postgresql","version")
+        self.postgres_arch_type = self.cfg.get_config("postgresql","arch_type")
+        self.postgres_data_dir = self.cfg.get_config("postgresql","data_dir")
+        self.postgres_bin_dir = self.cfg.get_config("postgresql","bin_dir")
 
     def get_download_command(self, strURL):
         if strURL.startswith("http") or strURL.startswith("ftp"):
@@ -2138,4 +2144,46 @@ class CustomTasks:
         f_wf_xml = open(wf_xml_file, "w")
         f_wf_xml.write(str_repl_xml.encode('UTF-8'))
 
-                                        
+class PostgresTask:
+	def __init__(self):
+		self.cfg = BungeniConfigs()
+		#print(dir(self.cfg));
+		#exit()
+		
+	def build_install_postgres(self):
+		tar_file = "%(location_url)s/%(version)s.%(arch_type)s" % {
+			"location_url":self.cfg.postgres_local_url, 
+			"version":self.cfg.postgres_version, 
+			"arch_type":self.cfg.postgres_arch_type} 
+			
+		build_folder = "~/%(apps_dir)s/%(apps_tmp)s/%(version)s" % {
+			"apps_dir":self.cfg.apps_dir,
+			"apps_tmp":self.cfg.apps_tmp, 
+			"version":self.cfg.postgres_version}
+		
+		with cd("~/bungeni_apps"):
+			run("mkdir -p "+self.cfg.apps_tmp)
+			run("mkdir -p postgres")
+			sudo("tar xzf %(tar)s --directory=%(apps_tmp)s" % {"tar":tar_file, "apps_tmp":self.cfg.apps_tmp})
+			
+			with cd("postgres"):
+				sudo("sh %(build_folder)s/configure" % {"build_folder":build_folder})
+				sudo("make %(build_folder)s" % {"build_folder":build_folder})
+				sudo("make install %(build_folder)s" % {"build_folder":build_folder})
+		
+	def setup_postgres(self):
+		run("adduser postgres")
+		
+		#create postgres data dir and change owner
+		run("mkdir -p "+ self.cfg.postgres_data_dir)
+		run("chown postgres "+ self.cfg.postgres_data_dir)
+		
+	def start_postgres(self):
+		#mount db
+		sudo("-u postgres "+ self.cfg.postgres_bin_dir +" initdb -D "+ self.cfg.postgres_data_dir)
+		
+		#start db instance
+		sudo("-u postgres "+ self.cfg.postgres_bin_dir +" postmaster -D "+ self.cfg.postgres_data_dir)
+		
+		
+
