@@ -462,7 +462,15 @@ class BungeniConfigs:
         osent = OsEssentials()
         osinfo = OsInfo(self.distro_override)
         java_package = osent.get_distro_jdk(osinfo.release_id, osinfo.release_no)
-        return self.cfg.get_config("java", java_package) + "-" + osent.get_platform_suffix()
+        java_home_path = self.cfg.get_config("java", java_package)
+        path_dir_suffix = "-" + osent.get_platform_suffix()
+        if os.path.exists(java_home_path + path_dir_suffix):
+            return java_home_path + path_dir_suffix
+        else:
+            if os.path.exists(java_home_path):
+                return java_home_path
+        abort("Unsupported Java Installation - cannot determine java home")
+        return "UNSUPPORTED_JAVA_HOME"                   
       
 
     def used_pythons(self):
