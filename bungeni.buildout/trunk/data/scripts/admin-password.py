@@ -1,11 +1,14 @@
+import  sqlalchemy as rdb
+from zope import component
+from zope.configuration import xmlconfig
+
 from bungeni.core.i18n import _
 from bungeni.alchemist import Session
 from bungeni.models import domain
-import  sqlalchemy as rdb
-from zope import component
 from bungeni.alchemist.interfaces import IDatabaseEngine
 from sqlalchemy import create_engine
 from bungeni.models.schema import metadata
+from bungeni_custom import sys
 
 # !+MODEL_MAPPING(mr, oct-2011) import bungeni.models.orm is needed to ensure 
 # that mappings of domain classes to schema tables is executed.
@@ -41,7 +44,7 @@ def add_admin(login, password, email_address):
     user = domain.User()
     # The names are hardcorded so that they unambigously refer
     # to the administrator ie. the logs will show "System Administrator" and not
-    # 'John Doe'. 
+    # "John Doe". 
     user.first_name = _(u"System")
     user.last_name = _(u"Administrator")
     user.login = login
@@ -70,10 +73,9 @@ def main():
     email_address = raw_input(_("Enter Email Address "))
     add_admin(login, password, email_address)
     
-if __name__ == '__main__':
-    db = create_engine('postgres://localhost/bungeni', echo=False)
-    component.provideUtility( db, IDatabaseEngine, 'bungeni-db' )
-    metadata.bind = db
+if __name__ == "__main__":
+    context = xmlconfig.file("db.zcml", package=sys)
+    metadata.bind = component.getUtility(IDatabaseEngine, "bungeni-db")
     if admin_exists():
         print _(u"Administrator account exists already")
     else:

@@ -1,19 +1,23 @@
 """
 some database value population scripts
 """
-
+from zope import component
+from zope.configuration import xmlconfig
 from bungeni.alchemist import Session
 from bungeni.alchemist import security
+from bungeni.alchemist.interfaces import IDatabaseEngine
 from bungeni import models
 from bungeni.models import schema
-
+from bungeni_custom import sys
 # load the workflows--adjusts the model with features as per each workflow
 from bungeni.core.workflows import adapters
 
 #from marginalia import schema as marginalia_schema
 from sqlalchemy import create_engine
 
-schema.metadata.bind = db = create_engine('postgres://localhost/bungeni')
+context = xmlconfig.file("db.zcml", package=sys)
+schema.metadata.bind = db = component.getUtility(IDatabaseEngine, "bungeni-db")
+
 schema.metadata.drop_all()
 schema.metadata.create_all()
 
