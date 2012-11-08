@@ -11,7 +11,7 @@
     <viewlet name="plone.global_sections" />
   </order>
   <order manager="plone.abovecontent" skinname="Bungeni CMS theme">
-    <viewlet name="bungenicmstheme.path_bar" />
+    <viewlet name="plone.path_bar" />
     <viewlet name="bungenicmstheme.searchbox" insert-after="plone.path_bar" />    
   </order>
   <order manager="plone.contentviews" skinname="Bungeni CMS theme">  
@@ -36,10 +36,6 @@
   <hidden manager="plone.portalheader" skinname="Bungeni CMS theme">
     <viewlet name="plone.personal_bar"/>
     <viewlet name="plone.searchbox"/>    
-  </hidden>
-  
-  <hidden manager="plone.abovecontent" skinname="Bungeni CMS theme">
-    <viewlet name="plone.path_bar"/>
-  </hidden>    
+  </hidden>  
   
 </object>

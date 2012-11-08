@@ -137,11 +137,14 @@ div.main-column h3 {
     padding:0;
 }
 div#portal-globalnav {
-    width: 100%;
-    position: relative;
+    position: absolute;
     padding:0; 
     height: 25px;
 }
+.site-plone div#portal-globalnav {
+    width: 80% !important;
+}
+
 div#portal-globalnav ul.level0 {
     position: absolute !important;
     margin: 0;
@@ -196,6 +199,8 @@ div#portal-globalnav ul.level0 li a:hover {
 div#portal-globalnav ul.level1 {
     position: absolute;
     top:2.2em;
+    height: 18px;
+    width: auto !important;
     left:0px;
     height: 18px;
     margin: 0 0 0 0;
@@ -211,6 +216,8 @@ div#portal-globalnav ul.level1 li {
     display: block;
 }
 
+div#portal-globalnav ul.level1 li a {
+	padding: 0 10px !important;
 div#portal-globalnav ul.level1 li a {
 	padding: 0 15px !important;
 	line-height:18px;
@@ -1703,6 +1710,10 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
      */
     height: auto;
     min-height: 100%;
+}
+.site-plone.template-workspace div#visual-table-wrapper {
+    margin: 0.68em 0 0 1.4em !important;
+
 }
 .template-workspace.template-portal-eXist #visual-table-wrapper {
     margin-top:6px;

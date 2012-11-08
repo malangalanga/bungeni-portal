@@ -65,8 +65,11 @@
         <replace href="/"
             content="children:#portal-personaltools"
             theme="children:#portal-personaltools"/> 
-        <drop theme="children:#portal-personaltools li.navigation" />                  
-        
+        <drop theme="children:#portal-personaltools li.navigation" />
+        <drop content="children:#personaltools-login" />
+        <drop content="children:#user-name" /> 
+        <drop content="children:#personaltools-logout" />
+
         <!-- navigation -->
         <prepend href="/"
             content="#portal-globalnav > li:first-child"

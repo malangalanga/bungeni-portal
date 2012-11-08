@@ -109,10 +109,7 @@ class CatalogNavigationTabs(BrowserView):
                         'url'        : item_url,
                         'description': item.Description}
                 result.append(data)
-        return result
-        
-class PathBarViewlet(common.PathBarViewlet):
-    index = ViewPageTemplateFile('path_bar.pt')      
+        return result           
     
 class SearchBoxViewlet(common.SearchBoxViewlet):
     index = ViewPageTemplateFile('searchbox.pt')     
