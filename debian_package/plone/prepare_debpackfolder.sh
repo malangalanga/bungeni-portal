@@ -16,23 +16,18 @@ PLONE_TAR=$2
 PLONE_ARCH=$3
 PLONE_DEB="${PLONE_REL_FOLDER}_${3}.deb"
 
-echo "found plone in $PLONE_TAR"
-
+echo "[Plone $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Setting up debian package folder."
 cp -R plone_version_revision $PLONE_REL_FOLDER
-
 find ./$PLONE_REL_FOLDER -name '.svn' -print0 | xargs -0 rm -rf
 
-echo "Setting version in control file"
-
+echo "[Plone $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Setting version in control file."
 sed -i "s/__PLONE_VER__/$PLONE_REL/g" ./$PLONE_REL_FOLDER/debian/DEBIAN/control
 sed -i "s/__ARCH__/$PLONE_ARCH/g" ./$PLONE_REL_FOLDER/debian/DEBIAN/control
 
-echo "Adding plone to debian package"
+echo "[Plone $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Extracting to debian package folder..."
+tar xf $PLONE_TAR --directory=./$PLONE_REL_FOLDER/debian
 
-tar xvf $PLONE_TAR --directory=./$PLONE_REL_FOLDER/debian
-
-echo "Now run will attempt to execute run.sh in the $PLONE_REL_FOLDER"
-
+echo "[Plone $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Now run will attempt to execute run.sh in the $PLONE_REL_FOLDER"
 read -p "Are you sure (Yy) ? " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
 then

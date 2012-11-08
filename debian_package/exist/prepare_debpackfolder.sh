@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 #set -x verbose
 
 EXPECTED_ARGS=3
@@ -19,24 +18,18 @@ EXIST_TAR=$2
 EXIST_ARCH=$3
 EXIST_DEB="${EXIST_REL_FOLDER}_${3}.deb"
 
-echo "found exist in $EXIST_TAR"
-
+echo "[Exist $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Setting up debian package folder."
 cp -R exist-db_version_revision $EXIST_REL_FOLDER
-
-#find ./$EXIST_REL_FOLDER -name '.svn' -print0 | xargs -0 rm -rf
 rm -rf `find ./$EXIST_REL_FOLDER -type d -name .svn`
 
-echo "Setting version in control file"
-
+echo "[Exist $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Setting version in control file."
 sed -i "s/__EXIST_VER__/$EXIST_REL/g" ./$EXIST_REL_FOLDER/debian/DEBIAN/control
 sed -i "s/__ARCH__/$EXIST_ARCH/g" ./$EXIST_REL_FOLDER/debian/DEBIAN/control
 
-echo "Adding exist to debian package"
+echo "[Exist $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Extracting to debian package folder..."
+tar xf $EXIST_TAR --directory=./$EXIST_REL_FOLDER/debian
 
-tar xvf $EXIST_TAR --directory=./$EXIST_REL_FOLDER/debian
-
-echo "Now run will attempt to execute run.sh in the $EXIST_REL_FOLDER"
-
+echo "[Exist $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Now run will attempt to execute run.sh in the $EXIST_REL_FOLDER"
 read -p "Are you sure (Yy) ? " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
 then

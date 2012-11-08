@@ -8,7 +8,7 @@ then
  exit 65
 fi
 
-echo "reading bungeni dependencies"
+echo "[Bungeni $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Reading bungeni dependencies info..."
 OS_VERSION=$(lsb_release -a | grep Release: | cut -c9- | tr -d "[:space:]")
 BUNGENI_OTHER_DEPENDS="fabric,"
 BUNGENI_DEPENDS=$(cat /opt/bungeni/exec/distro.ini | awk -v "RS=\n\n" -F "=" '/'$OS_VERSION'/ {print $2}' | sed 's/#.*//' | tr -d '\n' | tr -s ' ' ', ' | sed 's/^.//')
@@ -21,23 +21,19 @@ BUNGENI_TAR=$2
 BUNGENI_ARCH=$3
 BUNGENI_DEB="${BUNGENI_REL_FOLDER}_${3}.deb"
 
-echo "found bungeni in $BUNGENI_TAR"
-
+echo "[Bungeni $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Setting debian package folder."
 cp -R bungeni_version_revision $BUNGENI_REL_FOLDER
-
 find ./$BUNGENI_REL_FOLDER -name '.svn' -print0 | xargs -0 rm -rf
 
-echo "Setting version in control file"
-
+echo "[Bungeni $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Setting verion in control file."
 sed -i "s/__BUNGENI_VER__/$BUNGENI_REL/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
 sed -i "s/__ARCH__/$BUNGENI_ARCH/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
 sed -i "s/__DEPENDS__/$BUNGENI_OTHER_DEPENDS$BUNGENI_DEPENDS/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
 
-echo "Adding bungeni to debian package"
+echo "[Bungeni $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Extracting to debian package folder..."
+tar xf $BUNGENI_TAR --directory=./$BUNGENI_REL_FOLDER/debian
 
-tar xvf $BUNGENI_TAR --directory=./$BUNGENI_REL_FOLDER/debian
-
-echo "Now run will attempt to execute run.sh in the $BUNGENI_REL_FOLDER"
+echo "[Bungeni $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Now run will attempt to execute run.sh in the $BUNGENI_REL_FOLDER"
 
 read -p "Are you sure (Yy) ? " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]

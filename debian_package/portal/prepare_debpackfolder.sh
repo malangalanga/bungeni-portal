@@ -16,23 +16,18 @@ PORTAL_TAR=$2
 PORTAL_ARCH=$3
 PORTAL_DEB="${PORTAL_REL_FOLDER}_${3}.deb"
 
-echo "found portal in $PORTAL_TAR"
-
+echo "[Portal $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Setting up debian package..."
 cp -R portal_version_revision $PORTAL_REL_FOLDER
+find ./$PORTAL_REL_FOLDER/ -name '.svn' -print0 | xargs -0 rm -rf 
 
-echo "Setting version in control file"
-
+echo "[Portal $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Setting version control info."
 sed -i "s/__PORTAL_VER__/$PORTAL_REL/g" ./$PORTAL_REL_FOLDER/debian/DEBIAN/control
 sed -i "s/__ARCH__/$PORTAL_ARCH/g" ./$PORTAL_REL_FOLDER/debian/DEBIAN/control
 
-echo "Adding portal to debian package"
+echo "[Portal $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Extracting to debian package folder..."
+tar xf $PORTAL_TAR --directory=./$PORTAL_REL_FOLDER/debian
 
-tar xvf $PORTAL_TAR --directory=./$PORTAL_REL_FOLDER/debian
-
-find ./$PORTAL_REL_FOLDER/ -name '.svn' -print0 | xargs -0 rm -rf 
-
-echo "Now run will attempt to execute run.sh in the $PORTAL_REL_FOLDER"
-
+echo "[Portal $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Now run will attempt to execute run.sh in the $PORTAL_REL_FOLDER"
 read -p "Are you sure (Yy) ? " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
