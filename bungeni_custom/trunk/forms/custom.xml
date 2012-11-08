@@ -380,6 +380,39 @@
     </descriptor>
     
     
+    <descriptor name="test_doc" archetype="doc" order="40">
+        <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
+            <show modes="add" />
+            <show modes="view edit listing" />
+        </field>
+        <field name="type_number" label="Number" required="false" value_type="number" render_type="number">
+            <show modes="view listing" />
+        </field>
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
+            <show modes="add" />
+            <show modes="view edit" />
+            <hide modes="listing" />
+        </field>
+        <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select" vocabulary="parliament">
+            <hide modes="view listing" />
+        </field>
+        <field name="owner_id" label="Moved by" description="Select the user who moved the document" required="true" value_type="member" render_type="single_select" vocabulary="parliament_member_delegation">
+            <show modes="add" />
+            <show modes="edit" />
+            <hide modes="view listing" roles="bungeni.Anonymous" />
+        </field>
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
+            <show modes="view listing" />
+        </field>
+        <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
+            <show modes="view listing" />
+        </field>
+        <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
+            <show modes="view edit add" />
+        </field>
+    </descriptor>
+    
+    
     <!-- !+Report4Sitting - not a custom type? and archetype is not "report"? -->
     <descriptor name="report4_sitting" archetype="report" order="31">
         <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">

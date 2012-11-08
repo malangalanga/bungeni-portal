@@ -1,11 +1,14 @@
 <?xml version="1.0"?>
 <workflow title="Event Workflow"
-    description="Workflow for attached files"
+    description="Workflow for base Event"
     tags="draft private public"
     modes="view edit add delete"
     >
     
-    <!-- sub-item: NO global grants -->
+    <!-- sub-item, so NO "global" grants here -> these are the responsibility 
+    of the "owning" document's workflow e.g. it is that workflow that must
+    declare who (and in which states) has the permission 'bungeni.event.Add'.
+    -->
     
     <!-- features -->
     <feature name="audit" enabled="true" />

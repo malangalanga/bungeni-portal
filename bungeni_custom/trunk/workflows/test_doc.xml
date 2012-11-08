@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<workflow title="Motion Workflow" 
-    description="A Motion"
+<workflow title="Test Doc Workflow" 
+    description="Test workflow for a custom Doc type"
     tags="draft private public
         approved tobescheduled scheduled
         actionclerk actionmp
@@ -20,38 +20,38 @@
     </feature>
     <feature name="schedule" enabled="true" />
     <feature name="workspace" enabled="true" />
-    <feature name="notification" enabled="true" />
+    <feature name="notification" enabled="false" />
     <feature name="download" enabled="true" />
     <feature name="group_assignment" enabled="true" />
     
     <!-- global grants -->
-    <grant permission="bungeni.motion.Add" role="bungeni.Clerk" />
-    <grant permission="bungeni.motion.Add" role="bungeni.MP" />
+    <grant permission="bungeni.test_doc.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.test_doc.Add" role="bungeni.MP" />
     
     
     <state id="working_draft" title="Working Draft" tags="draft private">
         <!-- motion -->
-        <grant permission="bungeni.motion.View" role="bungeni.Clerk" />
-        <deny permission="bungeni.motion.View" role="bungeni.Speaker" />
-        <deny permission="bungeni.motion.View" role="bungeni.Owner" />
-        <deny permission="bungeni.motion.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.motion.View" role="bungeni.MP" />
-        <deny permission="bungeni.motion.View" role="bungeni.Minister" />
-        <deny permission="bungeni.motion.View" role="bungeni.Anonymous" />
-        <deny permission="bungeni.motion.View" role="bungeni.CommitteeMember" />
-        <grant permission="bungeni.motion.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.motion.Edit" role="bungeni.Speaker" />
-        <deny permission="bungeni.motion.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.motion.Edit" role="bungeni.MP" />
-        <deny permission="bungeni.motion.Edit" role="bungeni.Minister" />
-        <deny permission="bungeni.motion.Edit" role="bungeni.Anonymous" />
-        <deny permission="bungeni.motion.Edit" role="bungeni.CommitteeMember" />
-        <grant permission="bungeni.motion.Delete" role="bungeni.Clerk" />
-        <deny permission="bungeni.motion.Delete" role="bungeni.Speaker" />
-        <deny permission="bungeni.motion.Delete" role="bungeni.Owner" />
-        <deny permission="bungeni.motion.Delete" role="bungeni.MP" />
-        <deny permission="bungeni.motion.Delete" role="bungeni.Minister" />
-        <deny permission="bungeni.motion.Delete" role="bungeni.Anonymous" />
+        <grant permission="bungeni.test_doc.View" role="bungeni.Clerk" />
+        <deny permission="bungeni.test_doc.View" role="bungeni.Speaker" />
+        <deny permission="bungeni.test_doc.View" role="bungeni.Owner" />
+        <deny permission="bungeni.test_doc.View" role="bungeni.Signatory" />
+        <deny permission="bungeni.test_doc.View" role="bungeni.MP" />
+        <deny permission="bungeni.test_doc.View" role="bungeni.Minister" />
+        <deny permission="bungeni.test_doc.View" role="bungeni.Anonymous" />
+        <deny permission="bungeni.test_doc.View" role="bungeni.CommitteeMember" />
+        <grant permission="bungeni.test_doc.Edit" role="bungeni.Clerk" />
+        <deny permission="bungeni.test_doc.Edit" role="bungeni.Speaker" />
+        <deny permission="bungeni.test_doc.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.test_doc.Edit" role="bungeni.MP" />
+        <deny permission="bungeni.test_doc.Edit" role="bungeni.Minister" />
+        <deny permission="bungeni.test_doc.Edit" role="bungeni.Anonymous" />
+        <deny permission="bungeni.test_doc.Edit" role="bungeni.CommitteeMember" />
+        <grant permission="bungeni.test_doc.Delete" role="bungeni.Clerk" />
+        <deny permission="bungeni.test_doc.Delete" role="bungeni.Speaker" />
+        <deny permission="bungeni.test_doc.Delete" role="bungeni.Owner" />
+        <deny permission="bungeni.test_doc.Delete" role="bungeni.MP" />
+        <deny permission="bungeni.test_doc.Delete" role="bungeni.Minister" />
+        <deny permission="bungeni.test_doc.Delete" role="bungeni.Anonymous" />
         <!-- signatory -->
         <grant permission="bungeni.signatory.Add" role="bungeni.Clerk" />
         <deny permission="bungeni.signatory.Add" role="bungeni.Speaker" />
@@ -66,7 +66,6 @@
         <deny permission="bungeni.signatory.Delete" role="bungeni.Minister" />
         <deny permission="bungeni.signatory.Delete" role="bungeni.Anonymous" />
         <!-- attachment -->
-        <grant permission="bungeni.attachment.View" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
         <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
@@ -98,12 +97,12 @@
         like_state="working_draft" 
         tags="draft private">
         <!-- motion -->
-        <deny permission="bungeni.motion.View" role="bungeni.Clerk" />
-        <grant permission="bungeni.motion.View" role="bungeni.Owner" />
-        <deny permission="bungeni.motion.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.motion.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.motion.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.motion.Delete" role="bungeni.Owner" />
+        <deny permission="bungeni.test_doc.View" role="bungeni.Clerk" />
+        <grant permission="bungeni.test_doc.View" role="bungeni.Owner" />
+        <deny permission="bungeni.test_doc.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.test_doc.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.test_doc.Delete" role="bungeni.Clerk" />
+        <grant permission="bungeni.test_doc.Delete" role="bungeni.Owner" />
         <!-- signatory -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
@@ -121,9 +120,9 @@
         like_state="draft"
         tags="actionmp">
         <!-- motion -->
-        <grant permission="bungeni.motion.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.motion.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.motion.Delete" role="bungeni.Owner" />
+        <grant permission="bungeni.test_doc.View" role="bungeni.Signatory" />
+        <deny permission="bungeni.test_doc.Edit" role="bungeni.Owner" />
+        <deny permission="bungeni.test_doc.Delete" role="bungeni.Owner" />
         <!-- signatory -->
         <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
         <!-- attachment -->
@@ -135,7 +134,7 @@
     <state id="redraft" title="Redraft" like_state="draft"
         note="document under review before resubmission"
         version="true">
-        <deny permission="bungeni.motion.Delete" role="bungeni.Owner" />
+        <deny permission="bungeni.test_doc.Delete" role="bungeni.Owner" />
         <!-- attachment -->
         <grant permission="bungeni.attachment.Delete" role="bungeni.Owner" />
     </state>
@@ -151,8 +150,8 @@
         like_state="submitted_signatories"
         tags="actionclerk">
         <!-- motion -->
-        <grant permission="bungeni.motion.View" role="bungeni.Clerk" />
-        <grant permission="bungeni.motion.View" role="bungeni.Speaker" />
+        <grant permission="bungeni.test_doc.View" role="bungeni.Clerk" />
+        <grant permission="bungeni.test_doc.View" role="bungeni.Speaker" />
         <!-- signatory -->
         <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
         <!-- attachment -->
@@ -163,15 +162,15 @@
         like_state="submitted"
         tags="actionclerk">
         <!-- motion -->
-        <grant permission="bungeni.motion.Edit" role="bungeni.Clerk" />
+        <grant permission="bungeni.test_doc.Edit" role="bungeni.Clerk" />
         <!-- signatory -->
         <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
         <!-- attachment -->
         <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />        
         <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.motion.View" role="bungeni.CommitteeMember" />
-        <grant permission="bungeni.motion.Edit" role="bungeni.CommitteeMember" />
+        <grant permission="bungeni.test_doc.View" role="bungeni.CommitteeMember" />
+        <grant permission="bungeni.test_doc.Edit" role="bungeni.CommitteeMember" />
         <grant permission="bungeni.group_assignment.Add" role="bungeni.Clerk" />
         <grant permission="bungeni.group_assignment.View" role="bungeni.Clerk" />
         <grant permission="bungeni.group_assignment.Edit" role="bungeni.Clerk" />
@@ -183,7 +182,7 @@
         like_state="submitted"
         tags="actionmp">
         <!-- motion -->
-        <grant permission="bungeni.motion.Edit" role="bungeni.Owner" />
+        <grant permission="bungeni.test_doc.Edit" role="bungeni.Owner" />
         <!-- signatory -->
         <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
         <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
@@ -196,7 +195,7 @@
         version="true"
         like_state="submitted">
         <!-- motion -->
-        <grant permission="bungeni.motion.Edit" role="bungeni.Speaker" />
+        <grant permission="bungeni.test_doc.Edit" role="bungeni.Speaker" />
         <!-- signatory -->
         <grant permission="bungeni.signatory.Delete" role="bungeni.Speaker" />
         <!-- attachment -->
@@ -232,13 +231,13 @@
         like_state="submitted"
         tags="public approved">
         <!-- motion -->
-        <grant permission="bungeni.motion.View" role="bungeni.Clerk" />
-        <grant permission="bungeni.motion.View" role="bungeni.Speaker" />
-        <grant permission="bungeni.motion.View" role="bungeni.Owner" />
-        <grant permission="bungeni.motion.View" role="bungeni.Signatory" />
-        <grant permission="bungeni.motion.View" role="bungeni.MP" />
-        <grant permission="bungeni.motion.View" role="bungeni.Minister" />
-        <grant permission="bungeni.motion.View" role="bungeni.Anonymous" />
+        <grant permission="bungeni.test_doc.View" role="bungeni.Clerk" />
+        <grant permission="bungeni.test_doc.View" role="bungeni.Speaker" />
+        <grant permission="bungeni.test_doc.View" role="bungeni.Owner" />
+        <grant permission="bungeni.test_doc.View" role="bungeni.Signatory" />
+        <grant permission="bungeni.test_doc.View" role="bungeni.MP" />
+        <grant permission="bungeni.test_doc.View" role="bungeni.Minister" />
+        <grant permission="bungeni.test_doc.View" role="bungeni.Anonymous" />
         
     </state>
     
