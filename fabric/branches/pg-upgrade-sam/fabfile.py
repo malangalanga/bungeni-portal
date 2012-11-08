@@ -759,7 +759,15 @@ def postgres_install():
 	Build and install postgres
 	"""
 	postgres = bungeni.PostgresTasks()
-	postgres.build_install_postgres();
+	postgres.build_postgres()
+
+def postgres_setupdb():
+	"""
+	Build and install postgres
+	"""
+	postgres = bungeni.PostgresTasks()
+	postgres.setup_database()
+
 	
 def reset_all():
     """

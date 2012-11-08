@@ -450,6 +450,7 @@ class BungeniConfigs:
         #PostgreSQL installation folder
         self.postgres_install_url = self.cfg.get_config("postgresql","download_url")
         self.postgres_download_command = self.get_download_command(self.postgres_install_url)
+        self.postgres_db = self.cfg.get_config("postgresql", "bungeni-db-name")
         self.postgres_build_path = self.user_build_root + "/postgres"
         self.postgres_install_path = self.user_install_root + "/postgres"
         self.user_postgres = self.postgres_install_path
@@ -2151,13 +2152,27 @@ class CustomTasks:
         f_wf_xml.write(str_repl_xml.encode('UTF-8'))
 
 class PostgresTasks:
+    """
+    Install and Setup Postgres
+    """
+    
     def __init__(self):
         self.cfg = BungeniConfigs()
+        # init db
+        self.pg_ctl = 
+         "%(postgres_bin)s/pg_ctl -D %(postgres_data)s -l %(postgres_tmp_log)s " %
+          {
+          "postgres_bin":self.cfg.postgres_bin_path, 
+          "postgres_data":self.cfg.user_postgres_data,
+          "postgres_tmp_log":self.cfg.user_postgres_data + "/tmp.log",
+          }        
         
-    def build_install_postgres(self):
+    def build_postgres(self):
+        """
+        Build postgres from Source
+        """
         run("mkdir -p "+ self.cfg.postgres_build_path)
         run("mkdir -p "+ self.cfg.postgres_install_path)
-
         with cd(self.cfg.postgres_build_path):
             run(self.cfg.postgres_download_command)
             run("tar xvf %(postgres_download_file)s.tar.gz" % {"postgres_download_file":self.cfg.postgres_src_dir})
@@ -2166,4 +2181,78 @@ class PostgresTasks:
                 run("./configure --prefix=%(postgres_home)s" % {"postgres_home": self.cfg.user_postgres})
                 run("make")
                 run("make install")
+
+   def setup_database(self):
+       """
+       Initialize & Setup the Bungeni databases
+       """
+       # create the folder
+       run("mkdir -p " + self.cfg.user_postgres_data)
+       # initialize
+       run(
+        "%(postgres_bin)s/initdb --pgdata=%(postgres_data)s" %
+        {
+         "postgres_bin":self.cfg.postgres_bin_path,
+         "postgres_data":self.cfg.user_postgres_data,
+        }
+       )
+       run(
+        "%(pg_ctl)s start" %
+         {
+         "pg_ctl":self.pg_ctl,
+         }
+       )
+       run("sleep 5")
+       self.__setup_model()
+       run(
+        "%(pg_ctl)s stop" %
+         {
+         "pg_ctl":self.pg_ctl,
+         }
+       )
+
+    def __drop_db(self, db_name):
+       run(
+        "%(postgres_bin)s/dropdb %(bungeni_db)s" %
+        {
+         "postgres_bin":self.cfg.postgres_bin_path,
+         "bungeni_db":db_name,
+        } 
+       )
+       
+    def __create_db(self, db_name):
+       run(
+        "%(postgres_bin)s/createdb %(bungeni_db)s" %
+        {
+         "postgres_bin":self.cfg.postgres_bin_path,
+         "bungeni_db":db_name,
+        } 
+       )
+
+    def __setup_model(self):
+       # create the db and test-db
+       self.__create_db(self, self.cfg.postgres_db)
+       self.__create_db(self, self.cfg.postgres_db + "-test")
+       # setup the schema
+       """
+       run(
+        "%(user_python)s/bin/python %(setup_schema)s" %
+        {
+         "user_python":self.cfg.user_python,
+         "setup_schema":self.cfg.user_bungeni + "/data/scripts/setup-schema.py",
+        }
+       )
+       """   
+
+    def reset_database(self):
+       """
+       Reset the database schema, bring it back to its original state.
+       WARNING : Will lose data with this command
+       """
+       run(self.__drop_db(self.cfg.postgres_db))
+       run(self.__drop_db(self.cfg.postgres_db + "-test"))
+       self.__setup_model()
+
+   
+   
         
