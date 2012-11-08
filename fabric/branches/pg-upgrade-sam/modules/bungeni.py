@@ -448,11 +448,17 @@ class BungeniConfigs:
         self.user_glue = self.user_install_root + "/glue"
         self.glue_interval = self.cfg.get_config("glue-script", "interval")
         #PostgreSQL installation folder
-        self.postgres_local_url = self.cfg.get_config("postgresql","local_url")
-        self.postgres_version = self.cfg.get_config("postgresql","version")
-        self.postgres_arch_type = self.cfg.get_config("postgresql","arch_type")
-        self.postgres_data_dir = self.cfg.get_config("postgresql","data_dir")
-        self.postgres_bin_dir = self.cfg.get_config("postgresql","bin_dir")
+        self.postgres_install_url = self.cfg.get_config("postgresql","download_url")
+        self.postgres_download_command = self.get_download_command(self.postgres_install_url)
+        self.postgres_build_path = self.user_build_root + "/postgres"
+        self.postgres_install_path = self.user_install_root + "/postgres"
+        self.user_postgres = self.postgres_install_path
+        self.postgres_data_path = self.user_install_root + "/postgres-data"
+        self.user_postgres_data = self.postgres_data_path
+        self.postgres_bin_path = self.postgres_install_path + "/bin"
+        self.postgres_src_dir = \
+            self.utils.get_basename_prefix(self.postgres_install_url)
+
 
     def get_download_command(self, strURL):
         if strURL.startswith("http") or strURL.startswith("ftp"):
@@ -473,12 +479,12 @@ class BungeniConfigs:
 
     def used_pythons(self):
         pys = []
-	pys.append(self.cfg.get_config("bungeni","python"))
-	pys.append(self.cfg.get_config("portal","python"))
-	pys.append(self.cfg.get_config("plone","python"))
-	pys.append(self.cfg.get_config("supervisor","python"))
-	used_pys = set(pys)
-	return used_pys
+        pys.append(self.cfg.get_config("bungeni","python"))
+        pys.append(self.cfg.get_config("portal","python"))
+        pys.append(self.cfg.get_config("plone","python"))
+        pys.append(self.cfg.get_config("supervisor","python"))
+        used_pys = set(pys)
+        return used_pys
 
     
 class PythonConfigs:
@@ -490,7 +496,7 @@ class PythonConfigs:
         self.python_home = self.get_python_home(config_name)
         self.python = self.python_home + "/bin/python"
         self.python_packages = self.python_home + "/lib/python" + \
-	    self.python_ver + "/site-packages"
+        self.python_ver + "/site-packages"
 
     def get_python_home(self, config_name):
         selected_python = self.cfgreader.get_config(config_name,"python")
@@ -558,15 +564,15 @@ class Presetup:
             run(self.cfg.python27_download_command)
             run("tar xvf " + self.cfg.python27_download_file)
             with cd(self.cfg.python27_src_dir):
-		   #
-		   # All other platforms revert to the normal build
-		   #
-		   run("CPPFLAGS=-I/usr/include/openssl "
-		       "LDFLAGS=-L/usr/lib/ssl "
-		       "./configure --prefix=%(python_home)s USE=sqlite --enable-unicode=ucs4"
-		        % {"python_home":self.cfg.user_python27_home})
-		   run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
-		   run("make install")
+			#
+			# All other platforms revert to the normal build
+			#
+			run("CPPFLAGS=-I/usr/include/openssl "
+				"LDFLAGS=-L/usr/lib/ssl "
+				"./configure --prefix=%(python_home)s USE=sqlite --enable-unicode=ucs4"
+				% {"python_home":self.cfg.user_python27_home})
+			run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
+			run("make install")
 
     def build_py26(self):
         """
@@ -1541,7 +1547,7 @@ class BungeniTasks:
             abort("no release parameter specified in setup.ini")
         elif current_release["bungeni"] == "HEAD" :
             with cd(self.cfg.user_bungeni):
-            	run("svn up -rHEAD `ls | grep -v src | grep -v portal | grep -v plone`")
+                run("svn up -rHEAD `ls | grep -v src | grep -v portal | grep -v plone`")
                 with cd("src"):
                     run("svn up -rHEAD ./bungeni.main ./bungeni_custom ./ploned.ui ./portal.auth")
             #self.tasks.src_update(current_release["bungeni"])
@@ -2144,46 +2150,20 @@ class CustomTasks:
         f_wf_xml = open(wf_xml_file, "w")
         f_wf_xml.write(str_repl_xml.encode('UTF-8'))
 
-class PostgresTask:
-	def __init__(self):
-		self.cfg = BungeniConfigs()
-		#print(dir(self.cfg));
-		#exit()
-		
-	def build_install_postgres(self):
-		tar_file = "%(location_url)s/%(version)s.%(arch_type)s" % {
-			"location_url":self.cfg.postgres_local_url, 
-			"version":self.cfg.postgres_version, 
-			"arch_type":self.cfg.postgres_arch_type} 
-			
-		build_folder = "~/%(apps_dir)s/%(apps_tmp)s/%(version)s" % {
-			"apps_dir":self.cfg.apps_dir,
-			"apps_tmp":self.cfg.apps_tmp, 
-			"version":self.cfg.postgres_version}
-		
-		with cd("~/bungeni_apps"):
-			run("mkdir -p "+self.cfg.apps_tmp)
-			run("mkdir -p postgres")
-			sudo("tar xzf %(tar)s --directory=%(apps_tmp)s" % {"tar":tar_file, "apps_tmp":self.cfg.apps_tmp})
-			
-			with cd("postgres"):
-				sudo("sh %(build_folder)s/configure" % {"build_folder":build_folder})
-				sudo("make %(build_folder)s" % {"build_folder":build_folder})
-				sudo("make install %(build_folder)s" % {"build_folder":build_folder})
-		
-	def setup_postgres(self):
-		run("adduser postgres")
-		
-		#create postgres data dir and change owner
-		run("mkdir -p "+ self.cfg.postgres_data_dir)
-		run("chown postgres "+ self.cfg.postgres_data_dir)
-		
-	def start_postgres(self):
-		#mount db
-		sudo("-u postgres "+ self.cfg.postgres_bin_dir +" initdb -D "+ self.cfg.postgres_data_dir)
-		
-		#start db instance
-		sudo("-u postgres "+ self.cfg.postgres_bin_dir +" postmaster -D "+ self.cfg.postgres_data_dir)
-		
-		
+class PostgresTasks:
+    def __init__(self):
+        self.cfg = BungeniConfigs()
+        
+    def build_install_postgres(self):
+        run("mkdir -p "+ self.cfg.postgres_build_path)
+        run("mkdir -p "+ self.cfg.postgres_install_path)
 
+        with cd(self.cfg.postgres_build_path):
+            run(self.cfg.postgres_download_command)
+            run("tar xvf %(postgres_download_file)s.tar.gz" % {"postgres_download_file":self.cfg.postgres_src_dir})
+            
+            with cd(self.cfg.postgres_src_dir):
+                run("./configure --prefix=%(postgres_home)s" % {"postgres_home": self.cfg.user_postgres})
+                run("make")
+                run("make install")
+        

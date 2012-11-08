@@ -758,23 +758,9 @@ def postgres_install():
 	"""
 	Build and install postgres
 	"""
-	postgres = bungeni.PostgresTask()
+	postgres = bungeni.PostgresTasks()
 	postgres.build_install_postgres();
 	
-def postgres_setup():
-	"""
-	Setup postgres user and data file
-	"""
-	postgres = bungeni.PostgresTask()
-	postgres.setup_postgres();
-	
-def postgres_start():
-	"""
-	Start postgres main instance
-	"""
-	postgres = bungeni.PostgresTask()
-	postgres.start_postgres();
-
 def reset_all():
     """
     Resets Bungeni, eXist XML db and the message queue
