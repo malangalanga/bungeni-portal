@@ -15,11 +15,13 @@
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
     
+    <!-- global grants -->
+    <grant permission="bungeni.event.View" role="bungeni.Owner" />
+    
     <state id="draft" title="Draft Event" tags="draft private">
         <!-- event -->
         <deny permission="bungeni.event.View" role="bungeni.Clerk" />
         <deny permission="bungeni.event.View" role="bungeni.Speaker" />
-        <grant permission="bungeni.event.View" role="bungeni.Owner" />
         <deny permission="bungeni.event.View" role="bungeni.Signatory" />
         <deny permission="bungeni.event.View" role="bungeni.MP" />
         <deny permission="bungeni.event.View" role="bungeni.Minister" />

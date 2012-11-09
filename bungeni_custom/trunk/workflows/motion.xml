@@ -80,6 +80,11 @@
         <deny permission="bungeni.attachment.Delete" role="bungeni.Speaker" />
         <grant permission="bungeni.attachment.Delete" role="bungeni.Owner" />
         <!-- event -->
+        <grant permission="bungeni.event.View" role="bungeni.Clerk" />
+        <grant permission="bungeni.event.View" role="bungeni.Speaker" />
+        <grant permission="bungeni.event.View" role="bungeni.Signatory" />
+        <grant permission="bungeni.event.View" role="bungeni.MP" />
+        <grant permission="bungeni.event.View" role="bungeni.Minister" />
         <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
         <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
         <grant permission="bungeni.event.Add" role="bungeni.Clerk" />
@@ -91,7 +96,6 @@
         <deny permission="bungeni.group_assignment.View" role="bungeni.Clerk" />
         <deny permission="bungeni.group_assignment.Edit" role="bungeni.Clerk" />
         <deny permission="bungeni.group_assignment.Delete" role="bungeni.Clerk" />
-        
     </state>
     
     <state id="draft" title="Draft" 
