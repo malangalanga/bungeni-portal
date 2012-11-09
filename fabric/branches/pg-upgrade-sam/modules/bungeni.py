@@ -2157,15 +2157,7 @@ class PostgresTasks:
     """
     
     def __init__(self):
-        self.cfg = BungeniConfigs()
-        # init db
-        self.pg_ctl = 
-         "%(postgres_bin)s/pg_ctl -D %(postgres_data)s -l %(postgres_tmp_log)s " %
-          {
-          "postgres_bin":self.cfg.postgres_bin_path, 
-          "postgres_data":self.cfg.user_postgres_data,
-          "postgres_tmp_log":self.cfg.user_postgres_data + "/tmp.log",
-          }        
+        self.cfg = BungeniConfigs()    
         
     def build_postgres(self):
         """
@@ -2181,58 +2173,69 @@ class PostgresTasks:
                 run("./configure --prefix=%(postgres_home)s" % {"postgres_home": self.cfg.user_postgres})
                 run("make")
                 run("make install")
+                
+    def __get_pg_command(self, command_name, **kwargs):
+        pg_ctl_options = "-D %(postgres_data)s -l %(postgres_tmp_log)s " % {
+            "postgres_data":self.cfg.user_postgres_data,
+            "postgres_tmp_log":self.cfg.user_postgres_data + "/tmp.log",} 
 
-   def setup_database(self):
-       """
-       Initialize & Setup the Bungeni databases
-       """
-       # create the folder
-       run("mkdir -p " + self.cfg.user_postgres_data)
-       # initialize
-       run(
-        "%(postgres_bin)s/initdb --pgdata=%(postgres_data)s" %
-        {
-         "postgres_bin":self.cfg.postgres_bin_path,
-         "postgres_data":self.cfg.user_postgres_data,
-        }
-       )
-       run(
-        "%(pg_ctl)s start" %
-         {
-         "pg_ctl":self.pg_ctl,
-         }
-       )
-       run("sleep 5")
-       self.__setup_model()
-       run(
-        "%(pg_ctl)s stop" %
-         {
-         "pg_ctl":self.pg_ctl,
-         }
-       )
+        return ({"pg_initdb":"%(postgres_bin)s/initdb --pgdata=%(postgres_data)s" % {
+                    "postgres_bin":self.cfg.postgres_bin_path, 
+                    "postgres_data":self.cfg.user_postgres_data,},
+                "pg_start":"%(postgres_bin)s/pg_ctl start %(postgres_options)s" % {
+                    "postgres_bin":self.cfg.postgres_bin_path,
+                    "postgres_options":pg_ctl_options},
+                "pg_stop":"%(postgres_bin)s/pg_ctl stop %(postgres_options)s" % {
+                    "postgres_bin":self.cfg.postgres_bin_path,
+                    "postgres_options":pg_ctl_options},
+                "pg_sleep":"sleep 2",
+                "pg_createdb":"%(postgres_bin)s/createdb %(bungeni_db)s" % {
+                    "postgres_bin":self.cfg.postgres_bin_path,
+                    "bungeni_db":kwargs.get("db_name"),},
+                "pg_dropdb":"%(postgres_bin)s/dropdb %(bungeni_db)s" % {
+                    "postgres_bin":self.cfg.postgres_bin_path,
+                    "bungeni_db":kwargs.get("db_name"),}
+                }).get(command_name)
 
-    def __drop_db(self, db_name):
-       run(
-        "%(postgres_bin)s/dropdb %(bungeni_db)s" %
-        {
-         "postgres_bin":self.cfg.postgres_bin_path,
-         "bungeni_db":db_name,
-        } 
-       )
+    def setup_database(self):
+        """
+        Initialize & Setup the Bungeni databases
+        """
+        # create the folder
+        run("mkdir -p " + self.cfg.user_postgres_data)
        
-    def __create_db(self, db_name):
-       run(
-        "%(postgres_bin)s/createdb %(bungeni_db)s" %
-        {
-         "postgres_bin":self.cfg.postgres_bin_path,
-         "bungeni_db":db_name,
-        } 
-       )
-
+        # initialize 1
+        run(self.__get_pg_command("pg_initdb"))
+        run("%(start)s && %(sleep)s && %(createdb)s && %(createtestdb)s && %(stop)s" % {
+            "start":self.__get_pg_command("pg_start"),
+            "sleep":self.__get_pg_command("pg_sleep"),
+            "createdb":self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db),
+            "createtestdb":self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db + "-test"),
+            "stop":self.__get_pg_command("pg_stop")})    
+        
+        """
+        initialize 1 does not break but initialize 2 breaks
+        """
+        # initialize 2
+        #run(self.__get_pg_command("pg_initdb"))
+        #run(self.__get_pg_command("pg_start"))
+        #run(self.__get_pg_command("pg_sleep"))
+        #run(self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db))
+        #run(self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db + "-test"))
+        #run(self.__get_pg_command("pg_stop"))
+       
+    def __create_databases(self):
+        run(self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db))
+        run(self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db + "-test"))
+        
+    def __drop_databases(self):
+        run(self.__get_pg_command("pg_dropdb", db_name=self.cfg.postgres_db))
+        run(self.__get_pg_command("pg_dropdb", db_name=self.cfg.postgres_db + "-test"))
+        
     def __setup_model(self):
        # create the db and test-db
-       self.__create_db(self, self.cfg.postgres_db)
-       self.__create_db(self, self.cfg.postgres_db + "-test")
+       self.__create_databases()
+       
        # setup the schema
        """
        run(
@@ -2249,8 +2252,7 @@ class PostgresTasks:
        Reset the database schema, bring it back to its original state.
        WARNING : Will lose data with this command
        """
-       run(self.__drop_db(self.cfg.postgres_db))
-       run(self.__drop_db(self.cfg.postgres_db + "-test"))
+       self.__drop_databases()
        self.__setup_model()
 
    
