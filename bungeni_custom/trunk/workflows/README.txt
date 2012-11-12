@@ -23,6 +23,7 @@ grammar {
         attribute description { text },
         attribute tags { text }?, # declare any system defined tags used in workflow
         attribute note { text }?,
+        attribute permission_actions { text }?, # space-separated permission actions
         
         element feature {...}*,
         element grant {...}*,
