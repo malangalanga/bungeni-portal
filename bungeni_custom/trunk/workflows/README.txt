@@ -24,6 +24,8 @@ grammar {
         attribute tags { text }?, # declare any system defined tags used in workflow
         attribute note { text }?,
         attribute permission_actions { text }?, # space-separated permission actions
+        # each being of the form [type_key].{Action} -- when the default for the 
+        # optional type_key being the "primary" type_key for this workflow.
         
         element feature {...}*,
         element grant {...}*,

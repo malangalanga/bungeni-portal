@@ -2,8 +2,12 @@
 <workflow title="Signatory Workflow"
     description="Workflow for Signatory documents"
     tags="public workspace terminal"
-    permission_actions="View Edit Add Delete"
+    permission_actions=".View .Edit .Add .Delete .Act .Append"
     >
+    <!-- 
+        Act: Consent or reject signature request
+        Append: Append signature to a document
+    -->
     
     <!-- features -->
     <feature name="audit" enabled="true" />
@@ -15,7 +19,7 @@
     <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
     <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
     <grant permission="bungeni.signatory.Act" role="bungeni.Signatory" />
-    
+    <grant permission="bungeni.signatory.Append" role="bungeni.MP" />
     
     <state id="awaiting_consent" title="Awaiting Consent" tags="workspace">
         <!-- signatory -->

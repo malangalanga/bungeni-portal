@@ -2,11 +2,31 @@
 <workflow title="Group Workflow"
     description="Workflow for Parliamentary Groups"
     tags="public"
-    permission_actions="View Edit Add Delete"
+    permission_actions="
+        .View .Edit .Add .Delete
+        government.View government.Edit government.Add government.Delete
+        ministry.View ministry.Edit ministry.Add ministry.Delete
+        office.View office.Edit office.Add office.Delete
+        political_group.View political_group.Edit political_group.Add political_group.Delete
+    "
     >
     
     <feature name="address" enabled="true" />
     
+    <!-- global grants -->
+    <grant permission="bungeni.government.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.government.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.government.Delete" role="bungeni.Clerk" />  
+    <grant permission="bungeni.ministry.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.ministry.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.ministry.Delete" role="bungeni.Clerk" />  
+    <grant permission="bungeni.office.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.office.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.office.Delete" role="bungeni.Clerk" />  
+    <grant permission="bungeni.political_group.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.political_group.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.political_group.Delete" role="bungeni.Clerk" />
+
     
     <state id="draft" title="Draft - Group not yet Active">
         <!-- group -->
