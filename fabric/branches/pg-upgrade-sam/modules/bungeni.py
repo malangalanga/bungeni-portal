@@ -738,8 +738,10 @@ class Presetup:
         template_map = {
             "user_bungeni": self.cfg.user_bungeni,
             "user_jython": self.cfg.user_jython,
-            "user_plone": self.cfg.user_plone,
-            "user_portal": self.cfg.user_portal,
+            "user_plone" : self.cfg.user_plone,
+            "user_portal" : self.cfg.user_portal,
+            "user_postgres" : self.cfg.user_postgres,
+            "user_postgres_data" : self.cfg.user_postgres_data,
             "app_host": self.cfg.app_host,
             "supervisor_host": self.cfg.supervisor_host,
             "supervisor_port": self.cfg.supervisor_port,
@@ -1583,17 +1585,22 @@ class BungeniTasks:
                             % (self.cfg.postgresql_bin,
                             self.pycfg.python), "-Novvvvv", self.cfg.bungeni_buildout_config)
 
+    
     def reset_db(self):
+        pgtasks = PostgresTasks()
+        pgtasks.__drop_databases()
+        """
         with cd(self.cfg.user_bungeni):
             run("./parts/postgresql/bin/dropdb bungeni")
             run("./parts/postgresql/bin/createdb bungeni")
-
+        """
 
     def reset_schema(self):
+        pgtasks = PostgresTasks()
+        pgtasks.reset_database()
         with cd(self.cfg.user_bungeni):
-            run("./bin/reset-db")
             run("rm -rf ./parts/xml_db/*")
-
+    
 
     def load_demo_data(self):
        """
@@ -1601,9 +1608,15 @@ class BungeniTasks:
        """
 
        with cd(self.cfg.user_bungeni):
-           demo_dmp = self.__dump_update(self.data_dump_file)
-           run("./bin/psql bungeni < %s"
-                % demo_dmp)
+            out = run(
+                "%(postgres_bin)/psql %(postgres_db)s < %(data_dump)s" % 
+                {
+                    "postgres_bin":self.cfg.postgres_bin_path,
+                    "postgres_db":self.cfg.postgres_db,
+                    "data_dump":self.data_dump_file,
+                }
+            )       
+            print(out)
 
     def dump_data(self, output_path):
         """
@@ -1629,8 +1642,14 @@ class BungeniTasks:
 
     def load_min_data(self):
         with cd(self.cfg.user_bungeni):
-            min_dump = self.__dump_update(self.min_dump_file)
-            out = run("./bin/psql bungeni < %s" % min_dump)
+            out = run(
+                "%(postgres_bin)/psql %(postgres_db)s < %(min_dump)s" % 
+                {
+                    "postgres_bin":self.cfg.postgres_bin_path,
+                    "postgres_db":self.cfg.postgres_db,
+                    "min_dump":self.min_dump_file,
+                }
+            )
             # may have out.failed=False/succeeded=True/return_code=0, so all 
             # OK -- but may still have a stderr! If such is the case, for 
             # load_min_data, we want to fail and correct the issue:
@@ -1681,7 +1700,7 @@ class BungeniTasks:
                 run("tar --strip-components=2 -zvxf ../testdatadmp/%s" % large_att_gz)
                 run("rm ../testdatadmp/%s" % large_att_gz)
 
-
+    """
     def  __dump_update(self, dump_file):
         with cd(self.cfg.user_bungeni):
            dict_dump_update = {
@@ -1692,13 +1711,13 @@ class BungeniTasks:
                 }
            run("%(db_dump_update_script)s %(data_dump_file)s %(output_file)s undesa %(output_user)s" % dict_dump_update)
            return self.data_dump_folder + "/dmp_upd.txt"
-
+    """
 
 
     def local_config(self):
         template_map = {
             "bungeni_local_index": self.cfg.bungeni_local_index,
-            "postgresql_local_url": self.cfg.postgresql_local_url,
+            "postgresql_local_url": self.cfg.postgres_install_url,
             "xapian_local_url": self.cfg.xapian_local_url,
             "xapian_bindings_local_url": self.cfg.xapian_bindings_local_url,
             }
@@ -2212,6 +2231,7 @@ class PostgresTasks:
             "createdb":self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db),
             "createtestdb":self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db + "-test"),
             "stop":self.__get_pg_command("pg_stop")})    
+        self.__setup_model()
         
         """
         initialize 1 does not break but initialize 2 breaks
@@ -2234,10 +2254,10 @@ class PostgresTasks:
         
     def __setup_model(self):
        # create the db and test-db
-       self.__create_databases()
+       # self.__create_databases()
        
        # setup the schema
-       """
+       
        run(
         "%(user_python)s/bin/python %(setup_schema)s" %
         {
@@ -2245,8 +2265,7 @@ class PostgresTasks:
          "setup_schema":self.cfg.user_bungeni + "/data/scripts/setup-schema.py",
         }
        )
-       """   
-
+       
     def reset_database(self):
        """
        Reset the database schema, bring it back to its original state.
@@ -2254,7 +2273,3 @@ class PostgresTasks:
        """
        self.__drop_databases()
        self.__setup_model()
-
-   
-   
-        

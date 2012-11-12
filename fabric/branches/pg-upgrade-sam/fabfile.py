@@ -565,8 +565,8 @@ def db_load_mindata():
     """
 
     __db_load_services_stop()
-    tasks = bungeni.BungeniTasks()
-    tasks.reset_schema()
+    tasks = bungeni.PostgresTasks()
+    tasks.reset_database()
     tasks.load_min_data()
     __db_load_services_start()
 
