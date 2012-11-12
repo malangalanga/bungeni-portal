@@ -1,0 +1,32 @@
+#!/bin/bash
+
+#create a locale messages directory for provided locale and initializes catalog
+
+LOCALE_REGEX="^([[:lower:]]{2}|[[:lower:]]{2}-[[:lower:]]{2})$"
+locale=$1
+
+if [[ $locale =~ $LOCALE_REGEX ]]; 
+then 
+    target_dir=%(locale_dir)s/$locale/LC_MESSAGES
+    po_file=$target_dir/%(domain)s.po
+    if [ -f $po_file ]
+    then
+        echo "Message catalog for $locale already exists."
+        exit
+    fi
+    if [ ! -d $target_dir ]
+    then
+        echo "Trying to generate locale directory at: $target_dir"
+        mkdir -p $target_dir
+    fi
+    pot_file=%(locale_dir)s/%(domain)s.pot
+    if [ ! -f $po_file ]
+    then
+        echo "Initializing message catalog for $locale"
+        msginit -i $pot_file -o $po_file -l $locale --no-translator 
+    fi
+    exit
+fi
+
+echo "USAGE: $0 {{LOCALE_CODE}}"
+echo "LOCALE_CODE may be a two letter language code e.g. en or code-REGION code e.g. en-ke or fr-rw (case sensitive)"

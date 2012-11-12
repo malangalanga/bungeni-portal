@@ -1,0 +1,2 @@
+#!/bin/bash
+%(parts-directory)s/postgresql/bin/pg_ctl -D %(parts-directory)s/db -l %(directory)s/logs/pg.log $@

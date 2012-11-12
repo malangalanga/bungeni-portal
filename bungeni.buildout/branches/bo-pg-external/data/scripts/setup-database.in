@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# setup the database data
+%(parts-directory)s/postgresql/bin/initdb --pgdata=%(parts-directory)s/db 
+
+# start the database server
+%(bin-directory)s/pg_ctl start 
+
+# we sleep so the database can finish starting
+echo "Sleeping for Database Server Startup"
+sleep 2
+
+# create the app database
+echo "Creating Bungeni Database"
+%(parts-directory)s/postgresql/bin/createdb bungeni
+
+# create the test database
+echo "Creating Bungeni Test Database"
+%(parts-directory)s/postgresql/bin/createdb bungeni-test
+
+
+echo "Loading Bungeni Schema"
+# create the database schema
+%(bin-directory)s/python %(directory)s/data/scripts/setup-schema.py
+
+# stop the database server 
+%(bin-directory)s/pg_ctl stop
