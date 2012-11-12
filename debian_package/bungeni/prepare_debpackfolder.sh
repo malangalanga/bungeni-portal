@@ -1,5 +1,10 @@
 #!/bin/bash
 
+. ../_bashtasklog.sh
+. ../_debpackfunctions.sh
+
+#set -x verbose
+
 EXPECTED_ARGS=3
 
 if [ $# -ne $EXPECTED_ARGS ] 
@@ -8,37 +13,51 @@ then
  exit 65
 fi
 
-echo "[Bungeni $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Reading bungeni dependencies info..."
-OS_VERSION=$(lsb_release -a | grep Release: | cut -c9- | tr -d "[:space:]")
-BUNGENI_OTHER_DEPENDS="fabric,"
-BUNGENI_DEPENDS=$(cat /opt/bungeni/exec/distro.ini | awk -v "RS=\n\n" -F "=" '/'$OS_VERSION'/ {print $2}' | sed 's/#.*//' | tr -d '\n' | tr -s ' ' ', ' | sed 's/^.//')
+if [ ! -z $CURR_DEB_LOG ] ; then
+	new bashtasklog logger -t -w 50 -l $CURR_DEB_LOG
+else
+	new bashtasklog logger
+fi
 
-BUNGENI_RELVER=(${1//+/ })
-BUNGENI_VER="${BUNGENI_RELVER[0]}"
-BUNGENI_REL="$BUNGENI_VER+${BUNGENI_RELVER[1]}"
-BUNGENI_REL_FOLDER="bungeni_$BUNGENI_REL"
+
+logger.printTask "[Bungeni] Reading bungeni dependencies info..."
+printf "\n\n"
+
+BUNGENI_OTHER_DEPENDS="fabric"
+BUNGENI_DISTRO_INI=$(getini ../deb.ini global ini)
+BUNGENI_DEPENDS=$(getbungenideps ${BUNGENI_DISTRO_INI})
+
+BUNGENI_RELEASE_NAME=(${1//+/ })
+BUNGENI_VER="${BUNGENI_RELEASE_NAME[0]}"
+BUNGENI_REL="$BUNGENI_VER+${BUNGENI_RELEASE_NAME[1]}"
+BUNGENI_REL_FOLDER="bungeni_${BUNGENI_REL}"
 BUNGENI_TAR=$2
 BUNGENI_ARCH=$3
-BUNGENI_DEB="${BUNGENI_REL_FOLDER}_${3}.deb"
+BUNGENI_DEB="${BUNGENI_REL_FOLDER}_${BUNGENI_ARCH}.deb"
 
-echo "[Bungeni $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Setting debian package folder."
+logger.printTask "[Bungeni] Setting debian package folder."
 cp -R bungeni_version_revision $BUNGENI_REL_FOLDER
 find ./$BUNGENI_REL_FOLDER -name '.svn' -print0 | xargs -0 rm -rf
 
-echo "[Bungeni $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Setting verion in control file."
-sed -i "s/__BUNGENI_VER__/$BUNGENI_REL/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
-sed -i "s/__ARCH__/$BUNGENI_ARCH/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
-sed -i "s/__DEPENDS__/$BUNGENI_OTHER_DEPENDS$BUNGENI_DEPENDS/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
+logger.printTask "[Bungeni] Setting verion in control file."
+sed -i "s/__BUNGENI_VER__/${BUNGENI_REL}/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
+sed -i "s/__ARCH__/${BUNGENI_ARCH}/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
+sed -i "s/__DEPENDS__/${BUNGENI_OTHER_DEPENDS},${BUNGENI_DEPENDS}/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
 
-echo "[Bungeni $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Extracting to debian package folder..."
-tar xf $BUNGENI_TAR --directory=./$BUNGENI_REL_FOLDER/debian
+logger.printTask "[Bungeni] Unzipping..."
+printf "\n\n"
+{
+	tar xf $BUNGENI_TAR --directory=./$BUNGENI_REL_FOLDER/debian
+	} >> /dev/null
 
-echo "[Bungeni $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Now run will attempt to execute run.sh in the $BUNGENI_REL_FOLDER"
+logger.printTask "[Bungeni] Now run will attempt to execute run.sh in the ${BUNGENI_REL_FOLDER}"
+printf "\n"
 
 read -p "Are you sure (Yy) ? " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-   cd $BUNGENI_REL_FOLDER && ./run.sh $BUNGENI_ARCH
+	printf "\n\n"
+	cd $BUNGENI_REL_FOLDER && ./run.sh $BUNGENI_ARCH
 fi
 
 mv $BUNGENI_DEB ../../

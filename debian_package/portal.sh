@@ -1,21 +1,38 @@
 #!/bin/bash
 
-echo "[Portal $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Getting revision information..."
-BUILD_DATE=$(date +"%Y%m%d")
-PORTAL_DIR="/opt/bungeni/bungeni_apps/bungeni/portal"
-PORTAL_VERSION=$(grep "Deliverance" $PORTAL_DIR/versions.cfg | cut -d "=" -f2 | tr -d '[:space:]')
-PORTAL_REVISION=$(svn info $PORTAL_DIR |grep Revision: |cut -c11-)
-PORTAL_ZIP_FILE="portal_$PORTAL_VERSION+$PORTAL_REVISION-$BUILD_DATE.tar.gz"
+. _bashtasklog.sh
+. _debpackfunctions.sh
 
-echo "[Portal $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Zipping..."
-tar czf portal/$PORTAL_ZIP_FILE $PORTAL_DIR
-
-echo "[Portal $(date +%Y-%m-%d)][$(date +%H:%M:%S)] Get architecture type."
-if [ $(getconf LONG_BIT) == 64 ]
-then
-	ARCHTYPE="amd64"
+if [ ! -z $CURR_DEB_LOG ] ; then
+	new bashtasklog logger -t -w 50 -l $CURR_DEB_LOG
 else
-	ARCHTYPE="i386"
+	new bashtasklog logger
+	CURR_DEB_LOG=/dev/null
 fi
 
-cd portal && ./prepare_debpackfolder.sh $PORTAL_VERSION+$PORTAL_REVISION-$BUILD_DATE $PORTAL_ZIP_FILE $ARCHTYPE
+logger.printTask "[Portal] Getting revision information..."
+
+PORTAL_CFG=$(getini deb.ini portal cfg)
+PORTAL_VERSION=$(getproperty ${PORTAL_CFG} Deliverance)
+logger.printTask "[Portal] Version ${PLONE_VERSION}"
+
+PORTAL_DIR=$(getini deb.ini portal dir)
+PORTAL_REVISION=$(getrevinfo ${PORTAL_DIR})
+logger.printTask "[Portal] Revision ${PORTAL_REVISION}"
+
+PORTAL_BUILD_DATE=$(getdate)
+PORTAL_RELEASE_NAME="${PORTAL_VERSION}+${PORTAL_REVISION}-${PORTAL_BUILD_DATE}"
+PORTAL_ZIP_FILE="portal_${PORTAL_RELEASE_NAME}.tar.gz"
+
+OS_ARCH_TYPE=$(getarchtype)
+logger.printTask "[Portal] Architecture Type ${OS_ARCH_TYPE}"
+
+logger.printTask "[Portal] Zipping..."
+{
+	printf "\n\n"
+		
+	tar czf portal/$PORTAL_ZIP_FILE $PORTAL_DIR
+	} &>> $CURR_DEB_LOG
+
+logger.printTask "[Portal] Preparing debian pack folder..."
+cd portal && ./prepare_debpackfolder.sh $PORTAL_RELEASE_NAME $PORTAL_ZIP_FILE $OS_ARCH_TYPE
