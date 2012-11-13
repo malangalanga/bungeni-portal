@@ -565,29 +565,22 @@ def db_load_mindata():
     """
 
     __db_load_services_stop()
-    tasks = bungeni.PostgresTasks()
-    # drop databases
-    tasks.drop_dbs()
-    # recreate databases
-    tasks.create_dbs()
-    # load schema
-    tasks.load_schema()
-    # load minimum data
-    tasks.reset_database()
+    tasks = bungeni.BungeniTasks()
+    tasks.reset_schema()
     tasks.load_min_data()
     __db_load_services_start()
 
 
-def db_load_largedata():
-    """
-    Load large metadata
-    """
-    __db_load_services_stop()
-    tasks = bungeni.BungeniTasks()
-    tasks.reset_db()
-    tasks.load_large_data()
-    tasks.restore_large_attachments()
-    __db_load_services_start()
+#def db_load_largedata():
+#    """
+#    Load large metadata
+#    """
+#    __db_load_services_stop()
+#    tasks = bungeni.BungeniTasks()
+#    tasks.reset_db()
+#    tasks.load_large_data()
+#    tasks.restore_large_attachments()
+#    __db_load_services_start()
 
 
 def db_make_empty():
@@ -768,19 +761,19 @@ def postgres_install():
 	postgres = bungeni.PostgresTasks()
 	postgres.build_postgres()
 
-def postgres_setupdb():
-	"""
-	Setup postgres database
-	"""
-	postgres = bungeni.PostgresTasks()
-	postgres.setup_database()
-
-def postgres_resetdb():
-	"""
-	Reset postgres database
-	"""
-	postgres = bungeni.PostgresTasks()
-	postgres.reset_database()
+#def postgres_setupdb():
+#	"""
+#	Setup postgres database
+#	"""
+#	postgres = bungeni.PostgresTasks()
+#	postgres.setup_database()
+#
+#def postgres_resetdb():
+#	"""
+#	Reset postgres database
+#	"""
+#	postgres = bungeni.PostgresTasks()
+#	postgres.reset_database()
 
 	
 def reset_all():

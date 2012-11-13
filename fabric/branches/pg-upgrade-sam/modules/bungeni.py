@@ -398,8 +398,6 @@ class BungeniConfigs:
                 "local_url")
         self.xapian_bindings_local_url = \
             self.cfg.get_config("xapian-bindings", "local_url")
-        self.postgresql_bin = self.user_bungeni \
-            + "/parts/postgresql/bin"
         self.db_dump_update_script = self.utils.get_fab_path() \
             + "/scripts/upd-dbdump.sh"
         #custom 
@@ -1212,7 +1210,7 @@ class PloneTasks:
                            self.cfg.user_plone)
         self.exists_check = [self.cfg.user_bungeni,
                              self.cfg.user_bungeni + "/bin/paster",
-                             self.cfg.postgresql_bin]
+                             self.cfg.postgres_bin_path]
         if not self.tasks.build_exists(self.exists_check):
             abort(red("The Plone buildout requires an existing bungeni buildout"
                   ))
@@ -1249,7 +1247,7 @@ class PloneTasks:
        """
 
        self.tasks.buildout("PATH=%s:$PATH PYTHON=%s"
-                            % (self.cfg.postgresql_bin,
+                            % (self.cfg.postgres_bin_path,
                             self.pycfg.python), "",
                             self.cfg.plone_buildout_config,
                             self.cfg.plone_additional_buildout_config)
@@ -1260,7 +1258,7 @@ class PloneTasks:
        """
 
        self.tasks.buildout("PATH=%s:$PATH PYTHON=%s"
-                            % (self.cfg.postgresql_bin,
+                            % (self.cfg.postgres_bin_path,
                             self.pycfg.python), "-N",
                             self.cfg.plone_buildout_config,
                             self.cfg.plone_additional_buildout_config)
@@ -1271,7 +1269,7 @@ class PloneTasks:
        """
 
        self.tasks.buildout("PATH=%s:$PATH PYTHON=%s"
-                            % (self.cfg.postgresql_bin,
+                            % (self.cfg.postgres_bin_path,
                             self.pycfg.python), "-N",
                             self.cfg.plone_buildout_config)                            
 
@@ -1286,7 +1284,7 @@ class PloneTasks:
        """
        self.local_config()
        self.tasks.check_versions("PATH=%s:$PATH PYTHON=%s"
-                           % (self.cfg.postgresql_bin,
+                           % (self.cfg.postgres_bin_path,
                            self.pycfg.python), "-Novvvvv", self.cfg.plone_buildout_config)
 
 
@@ -1569,21 +1567,21 @@ class BungeniTasks:
 
        self.local_config()
        self.tasks.buildout("PATH=%s:$PATH PYTHON=%s"
-                           % (self.cfg.postgresql_bin,
+                           % (self.cfg.postgres_bin_path,
                            self.pycfg.python), "",
                            self.cfg.bungeni_buildout_config)
 
     def build_opt(self):
         self.local_config()
         self.tasks.buildout("PATH=%s:$PATH PYTHON=%s"
-                            % (self.cfg.postgresql_bin,
+                            % (self.cfg.postgres_bin_path,
                             self.pycfg.python), "-N",
                             self.cfg.bungeni_buildout_config)
 
     def check_versions(self):
         self.local_config()
         self.tasks.check_versions("PATH=%s:$PATH PYTHON=%s"
-                            % (self.cfg.postgresql_bin,
+                            % (self.cfg.postgres_bin_path,
                             self.pycfg.python), "-Novvvvv", self.cfg.bungeni_buildout_config)
 
 
@@ -1645,13 +1643,20 @@ class BungeniTasks:
             )       
             print(out)
 
+
     def dump_data(self, output_path):
         """
         Dumps the bungeni database data into a text file 
         """
 
         with cd(self.cfg.user_bungeni):
-            run("./parts/postgresql/bin/pg_dump bungeni -a -O --disable-triggers > " + output_path)
+            run(
+                "%(postgres_bin)s/pg_dump bungeni -a -O --disable-triggers > %(output)s" %
+                {
+                    "postgres_bin" : self.cfg.postgres_bin_path,
+                    "output" : output_path
+                }
+            )
 
 
     def restore_attachments(self):
@@ -1755,7 +1760,8 @@ class BungeniTasks:
 
     def setupdb(self):
        """
-       Setup the postgresql db - this needs to be run just once for the lifetime of the installation
+       Setup the postgresql db - this needs to be run just once for the 
+       lifetime of the installation
        """
        pg = PostgresTasks()
        
@@ -1783,6 +1789,10 @@ class BungeniTasks:
        
 
     def load_schema(self):
+	    """
+        Sets up the Bungeni Schema using the setup-schema python script
+        The python used for this script is the "bungeni python"    
+	    """
         with cd(self.user_bungeni):
             run(
               "./bin/python ./data/scripts/setup-schema.py"
