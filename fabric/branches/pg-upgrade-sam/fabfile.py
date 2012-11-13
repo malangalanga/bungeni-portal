@@ -763,10 +763,17 @@ def postgres_install():
 
 def postgres_setupdb():
 	"""
-	Build and install postgres
+	Setup postgres database
 	"""
 	postgres = bungeni.PostgresTasks()
 	postgres.setup_database()
+
+def postgres_resetdb():
+	"""
+	Reset postgres database
+	"""
+	postgres = bungeni.PostgresTasks()
+	postgres.reset_database()
 
 	
 def reset_all():

@@ -2177,7 +2177,7 @@ class PostgresTasks:
     
     def __init__(self):
         self.cfg = BungeniConfigs()   
-        #self.sup_pycfg = PythonConfigs(self.cfg, "bungeni")  
+        self.sup_pycfg = PythonConfigs(self.cfg, "bungeni")  
         
     def build_postgres(self):
         """
@@ -2217,7 +2217,7 @@ class PostgresTasks:
                     "bungeni_db":kwargs.get("db_name"),},
                 #"pg_setup_schema":"%(user_python)s %(setup_schema)s" %{
 				"pg_setup_schema":"/opt/bungeni/bungeni_apps/bungeni/bin/python %(setup_schema)s" %{
-					#"user_python":self.sup_pycfg.python,
+					#"user_python":self.sup_pycfg.python_home,
 					"setup_schema":self.cfg.user_bungeni + "/data/scripts/setup-schema.py",},
                 }).get(command_name)
 
@@ -2230,6 +2230,8 @@ class PostgresTasks:
        
         # initialize
         run(self.__get_pg_command("pg_initdb"))
+        
+        # actual db setup
         run("%(start)s && %(sleep)s && %(create_db)s && %(create_test_db)s && %(setup_schema)s && %(stop)s" % {
             "start":self.__get_pg_command("pg_start"),
             "sleep":self.__get_pg_command("pg_sleep"),
@@ -2237,14 +2239,20 @@ class PostgresTasks:
             "create_test_db":self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db + "-test"),
             "setup_schema":self.__get_pg_command("pg_setup_schema"),	
             "stop":self.__get_pg_command("pg_stop")})    
-        
-    #def __drop_databases(self):
-        #run(self.__get_pg_command("pg_dropdb", db_name=self.cfg.postgres_db))
-        #run(self.__get_pg_command("pg_dropdb", db_name=self.cfg.postgres_db + "-test"))
        
     def reset_database(self):
        """
        Reset the database schema, bring it back to its original state.
        WARNING : Will lose data with this command
        """
-       self.__drop_databases()
+       run("%(start)s && %(sleep)s && %(drop_databases)s && %(create_databases)s && %(setup_schema)s && %(stop)s" % {
+            "start":self.__get_pg_command("pg_start"),
+            "sleep":self.__get_pg_command("pg_sleep"),
+            "drop_databases":"%(drop_db)s && %(drop_test_db)s" % {
+                "drop_db":self.__get_pg_command("pg_dropdb", db_name=self.cfg.postgres_db),
+                "drop_test_db":self.__get_pg_command("pg_dropdb", db_name=self.cfg.postgres_db + "-test"),},
+            "create_databases":"%(create_db)s && %(create_test_db)s" % {
+                "create_db":self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db),
+                "create_test_db":self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db + "-test"),},
+            "setup_schema":self.__get_pg_command("pg_setup_schema"),	
+            "stop":self.__get_pg_command("pg_stop")})
