@@ -13,18 +13,18 @@
     
     <feature name="address" enabled="true" />
     
-    <!-- global grants -->
-    <grant permission="bungeni.government.Add" role="bungeni.Clerk" />
+    <!-- global grants !+shared_workflow -->
     <grant permission="bungeni.government.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.government.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.government.Delete" role="bungeni.Clerk" />  
-    <grant permission="bungeni.ministry.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.ministry.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.ministry.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.ministry.Delete" role="bungeni.Clerk" />  
-    <grant permission="bungeni.office.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.office.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.office.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.office.Delete" role="bungeni.Clerk" />  
-    <grant permission="bungeni.political_group.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.political_group.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.political_group.Add" role="bungeni.Clerk" />
     <grant permission="bungeni.political_group.Delete" role="bungeni.Clerk" />
 
     
@@ -35,6 +35,11 @@
         <deny permission="bungeni.group.View" role="bungeni.MP" />
         <deny permission="bungeni.group.View" role="bungeni.Minister" />
         <deny permission="bungeni.group.View" role="bungeni.Anonymous" />
+        <!-- !+shared_workflow other group-type Views -->
+        <grant permission="bungeni.government.View" role="bungeni.Clerk" />
+        <grant permission="bungeni.ministry.View" role="bungeni.Clerk" />
+        <grant permission="bungeni.office.View" role="bungeni.Clerk" />
+        <grant permission="bungeni.political_group.View" role="bungeni.Clerk" />
         <!-- !+PERM_NOT_REG grant permission="bungeni.group.Delete" role="bungeni.Owner" /-->
         <!-- group_membership -->
         <deny permission="bungeni.group_membership.Edit" role="bungeni.Clerk" />
