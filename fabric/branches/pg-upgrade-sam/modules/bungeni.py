@@ -2230,11 +2230,11 @@ class PostgresTasks:
        
         # initialize
         run(self.__get_pg_command("pg_initdb"))
-        run("%(start)s && %(sleep)s && %(createdb)s && %(createtestdb)s && %(stop)s" % {
+        run("%(start)s && %(sleep)s && %(create_db)s && %(create_test_db)s && %(setup_schema)s && %(stop)s" % {
             "start":self.__get_pg_command("pg_start"),
             "sleep":self.__get_pg_command("pg_sleep"),
-            "createdb":self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db),
-            "createtestdb":self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db + "-test"),
+            "create_db":self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db),
+            "create_test_db":self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db + "-test"),
             "setup_schema":self.__get_pg_command("pg_setup_schema"),	
             "stop":self.__get_pg_command("pg_stop")})    
         
