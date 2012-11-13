@@ -2176,7 +2176,8 @@ class PostgresTasks:
     """
     
     def __init__(self):
-        self.cfg = BungeniConfigs()    
+        self.cfg = BungeniConfigs()   
+        #self.sup_pycfg = PythonConfigs(self.cfg, "bungeni")  
         
     def build_postgres(self):
         """
@@ -2213,7 +2214,11 @@ class PostgresTasks:
                     "bungeni_db":kwargs.get("db_name"),},
                 "pg_dropdb":"%(postgres_bin)s/dropdb %(bungeni_db)s" % {
                     "postgres_bin":self.cfg.postgres_bin_path,
-                    "bungeni_db":kwargs.get("db_name"),}
+                    "bungeni_db":kwargs.get("db_name"),},
+                #"pg_setup_schema":"%(user_python)s %(setup_schema)s" %{
+				"pg_setup_schema":"/opt/bungeni/bungeni_apps/bungeni/bin/python %(setup_schema)s" %{
+					#"user_python":self.sup_pycfg.python,
+					"setup_schema":self.cfg.user_bungeni + "/data/scripts/setup-schema.py",},
                 }).get(command_name)
 
     def setup_database(self):
@@ -2223,48 +2228,19 @@ class PostgresTasks:
         # create the folder
         run("mkdir -p " + self.cfg.user_postgres_data)
        
-        # initialize 1
+        # initialize
         run(self.__get_pg_command("pg_initdb"))
         run("%(start)s && %(sleep)s && %(createdb)s && %(createtestdb)s && %(stop)s" % {
             "start":self.__get_pg_command("pg_start"),
             "sleep":self.__get_pg_command("pg_sleep"),
             "createdb":self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db),
             "createtestdb":self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db + "-test"),
+            "setup_schema":self.__get_pg_command("pg_setup_schema"),	
             "stop":self.__get_pg_command("pg_stop")})    
-        self.__setup_model()
         
-        """
-        initialize 1 does not break but initialize 2 breaks
-        """
-        # initialize 2
-        #run(self.__get_pg_command("pg_initdb"))
-        #run(self.__get_pg_command("pg_start"))
-        #run(self.__get_pg_command("pg_sleep"))
-        #run(self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db))
-        #run(self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db + "-test"))
-        #run(self.__get_pg_command("pg_stop"))
-       
-    def __create_databases(self):
-        run(self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db))
-        run(self.__get_pg_command("pg_createdb", db_name=self.cfg.postgres_db + "-test"))
-        
-    def __drop_databases(self):
-        run(self.__get_pg_command("pg_dropdb", db_name=self.cfg.postgres_db))
-        run(self.__get_pg_command("pg_dropdb", db_name=self.cfg.postgres_db + "-test"))
-        
-    def __setup_model(self):
-       # create the db and test-db
-       # self.__create_databases()
-       
-       # setup the schema
-       
-       run(
-        "%(user_python)s/bin/python %(setup_schema)s" %
-        {
-         "user_python":self.cfg.user_python,
-         "setup_schema":self.cfg.user_bungeni + "/data/scripts/setup-schema.py",
-        }
-       )
+    #def __drop_databases(self):
+        #run(self.__get_pg_command("pg_dropdb", db_name=self.cfg.postgres_db))
+        #run(self.__get_pg_command("pg_dropdb", db_name=self.cfg.postgres_db + "-test"))
        
     def reset_database(self):
        """
@@ -2272,4 +2248,3 @@ class PostgresTasks:
        WARNING : Will lose data with this command
        """
        self.__drop_databases()
-       self.__setup_model()
