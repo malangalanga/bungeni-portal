@@ -1596,11 +1596,11 @@ class BungeniTasks:
 
 
     def reset_xapian_index(self):
-        with cd(self.user_bungeni):
+        with cd(self.cfg.user_bungeni):
             run("rm -rf ./parts/index")
     
     def reset_xmldb_data(self):
-        with cd(self.user_bungeni):
+        with cd(self.cfg.user_bungeni):
             run("rm -rf ./parts/xml_db/*")
             
     def reset_schema(self):
