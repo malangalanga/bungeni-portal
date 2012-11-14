@@ -16,20 +16,12 @@
     
     
     <state id="draft" title="Draft Event" tags="draft private">
-        <!-- event -->
-        <deny permission="bungeni.attachment.View" role="bungeni.Clerk" />
-        <deny permission="bungeni.attachment.View" role="bungeni.Speaker" />
-        <grant permission="bungeni.attachment.View" role="bungeni.Owner" />
-        <deny permission="bungeni.attachment.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.attachment.View" role="bungeni.MP" />
-        <deny permission="bungeni.attachment.View" role="bungeni.Minister" />
-        <deny permission="bungeni.attachment.View" role="bungeni.Anonymous" />
-        <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
-        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
-        <deny permission="bungeni.attachment.Delete" role="bungeni.Speaker" />
-        <grant permission="bungeni.attachment.Delete" role="bungeni.Owner" />
+        <allow permission=".View" roles="Owner" />
+        <deny permission=".View" roles="Clerk Speaker Signatory MP Minister Anonymous" />
+        <allow permission=".Edit" roles="Owner" />
+        <deny permission=".Edit" roles="Clerk Speaker" />
+        <allow permission=".Delete" roles="Owner" />
+        <deny permission=".Delete" roles="Clerk Speaker" />
     </state>
     
     <state id="attached" title="Attachment"
@@ -38,25 +30,16 @@
     />
     
     <state id="internal" title="Published Internal" like_state="draft">
-        <!-- attachment -->
-        <grant permission="bungeni.attachment.View" role="bungeni.Clerk" />
-        <grant permission="bungeni.attachment.View" role="bungeni.Speaker" />
-        <grant permission="bungeni.attachment.View" role="bungeni.Signatory" />
-        <grant permission="bungeni.attachment.View" role="bungeni.MP" />
-        <grant permission="bungeni.attachment.View" role="bungeni.Minister" />
-        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
-        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
-        <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.attachment.Delete" role="bungeni.Speaker" />
-        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner" />
+        <allow permission=".View" roles="Clerk Speaker Signatory MP Minister" />
+        <allow permission=".Edit" roles="Clerk Speaker" />
+        <deny permission=".Edit" roles="Owner" />
+        <allow permission=".Delete" roles="Clerk Speaker" />
+        <deny permission=".Delete" roles="Owner" />
     </state>
     
     <!-- !+inactive(mr, aug-2011) review usage and rename across the board -->
     <state id="inactive" title="Inactive file" like_state="internal">
-        <!-- attachment -->
-        <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
+        <deny permission=".Edit" roles="Clerk Speaker" />
         <!-- !+delete also deny? -->
     </state>
     
@@ -79,21 +62,21 @@
         source="draft"
         destination="attached"
         trigger="manual"
-        roles="bungeni.Owner"
+        roles="Owner"
     />
     
     <transition title="Publish Internal"
         source="draft"
         destination="internal"
         trigger="manual"
-        roles="bungeni.Owner"
+        roles="Owner"
     />
     
     <transition title="Re-publish"
         source="internal"
         destination="attached"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Owner"
+        roles="Clerk Owner"
     />
     
     <!-- 
@@ -106,7 +89,7 @@
         destination="internal"
         condition="context_parent_is_not_public"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Owner"
+        roles="Clerk Owner"
     />
     
     <transition title="Deactivate"
@@ -114,7 +97,7 @@
         destination="inactive"
         condition="context_parent_is_not_public"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Owner"
+        roles="Clerk Owner"
         require_confirmation="true"
     />
 

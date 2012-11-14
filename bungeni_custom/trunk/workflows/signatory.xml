@@ -15,43 +15,32 @@
     <feature name="attachment" enabled="false" />
     
     <!-- global grants -->
-    <grant permission="bungeni.signatory.Edit" role="bungeni.Owner" />
-    <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
-    <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
-    <grant permission="bungeni.signatory.Act" role="bungeni.Signatory" />
-    <grant permission="bungeni.signatory.Append" role="bungeni.MP" />
+    <allow permission=".Edit" roles="Owner" />
+    <allow permission=".Add" roles="Owner" />
+    <allow permission=".Delete" roles="Clerk" />
+    <allow permission=".Act" roles="Signatory" />
+    <allow permission=".Append" roles="MP" />
     
     <state id="awaiting_consent" title="Awaiting Consent" tags="workspace">
-        <!-- signatory -->
-        <grant permission="bungeni.signatory.View" role="bungeni.Clerk" />
-        <grant permission="bungeni.signatory.View" role="bungeni.Speaker" />
-        <grant permission="bungeni.signatory.View" role="bungeni.Owner" />
-        <grant permission="bungeni.signatory.View" role="bungeni.Signatory" />
-        <grant permission="bungeni.signatory.View" role="bungeni.MP" />
-        <grant permission="bungeni.signatory.View" role="bungeni.Minister" />
-        <deny permission="bungeni.signatory.View" role="bungeni.Anonymous" />
-        <deny permission="bungeni.signatory.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory MP Minister" />
+        <deny permission=".View" roles="Anonymous" />
+        <deny permission=".Edit" roles="Clerk" />
+        <allow permission=".Delete" roles="Owner" />
     </state>
-
+    
     <state id="consented" title="Signature Consented" 
         like_state="awaiting_consent"
         tags="workspace public">
-        <grant permission="bungeni.signatory.View" role="bungeni.Anonymous" />
-        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
+        <allow permission=".View" roles="Anonymous" />
+        <deny permission=".Delete" roles="Owner" />
     </state>
 
     <state id="rejected" title="Signature Rejected" 
         like_state="consented"
         tags="terminal">
-        <deny permission="bungeni.signatory.View" role="bungeni.Speaker" />
-        <deny permission="bungeni.signatory.View" role="bungeni.Clerk" />
-        <deny permission="bungeni.signatory.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.signatory.View" role="bungeni.MP" />
-        <deny permission="bungeni.signatory.View" role="bungeni.Minister" />
-        <deny permission="bungeni.signatory.View" role="bungeni.Anonymous" />
+        <deny permission=".View" roles="Clerk Speaker Owner Signatory MP Minister Anonymous" />
     </state>
-
+    
     <state id="withdrawn" title="Signature Withdrawn" 
         like_state="rejected"
         tags="terminal"
@@ -75,7 +64,7 @@
         source="awaiting_consent"
         destination="consented"
         trigger="manual"
-        roles="bungeni.Owner"
+        roles="Owner"
         require_confirmation="true"
         condition="pi_allow_signature"
     />
@@ -84,7 +73,7 @@
         source="awaiting_consent"
         destination="rejected"
         trigger="manual"
-        roles="bungeni.Owner"
+        roles="Owner"
         require_confirmation="true"
         condition="pi_allow_signature_actions"
     />
@@ -93,7 +82,7 @@
         source="consented"
         destination="withdrawn"
         trigger="manual"
-        roles="bungeni.Owner"
+        roles="Owner"
         require_confirmation="true"
         condition="pi_allow_signature_actions"
     />

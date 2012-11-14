@@ -6,32 +6,20 @@
     >
 
     <!-- global grants -->
-    <grant permission="bungeni.heading.Edit" role="bungeni.Clerk" />
-    <grant permission="bungeni.heading.Edit" role="bungeni.Speaker" />
-    <grant permission="bungeni.heading.Add" role="bungeni.Clerk" />
-    <grant permission="bungeni.heading.Add" role="bungeni.Speaker" />
+    <allow permission=".Edit" roles="Clerk Speaker" />
+    <allow permission=".Add" roles="Clerk Speaker" />
     
     
     <state id="inactive" title="Inactive heading obsolete">
         <!-- heading -->
-        <grant permission="bungeni.heading.View" role="bungeni.Clerk" />
-        <grant permission="bungeni.heading.View" role="bungeni.Speaker" />
-        <deny permission="bungeni.heading.View" role="bungeni.Owner" />
-        <deny permission="bungeni.heading.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.heading.View" role="bungeni.MP" />
-        <deny permission="bungeni.heading.View" role="bungeni.Minister" />
-        <deny permission="bungeni.heading.View" role="bungeni.Anonymous" /> 
+        <allow permission=".View" roles="Clerk Speaker" />
+        <deny permission=".View" roles="Owner Signatory MP Minister Anonymous" />
     </state>
     
     <state id="public" title="Public" 
         like_state="inactive"
         tags="public tobescheduled">
-        <!-- heading -->
-        <grant permission="bungeni.heading.View" role="bungeni.Owner" />
-        <grant permission="bungeni.heading.View" role="bungeni.Signatory" />
-        <grant permission="bungeni.heading.View" role="bungeni.MP" />
-        <grant permission="bungeni.heading.View" role="bungeni.Minister" />
-        <grant permission="bungeni.heading.View" role="bungeni.Anonymous" />
+        <allow permission=".View" roles="Owner Signatory MP Minister Anonymous" />
     </state>
     
     
@@ -45,7 +33,7 @@
         source="public"
         destination="inactive"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Speaker"
+        roles="Clerk Speaker"
         require_confirmation="true"
     />
     
@@ -53,7 +41,7 @@
         source="inactive"
         destination="public"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Speaker"
+        roles="Clerk Speaker"
         require_confirmation="true"
     />
 

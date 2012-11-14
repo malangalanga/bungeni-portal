@@ -11,125 +11,80 @@
     <feature name="attachment" enabled="false" />
     
     <!-- global grants -->
-    <grant permission="bungeni.sitting.View" role="bungeni.Clerk" />
-    <grant permission="bungeni.sitting.Add" role="bungeni.Clerk" />
-    <grant permission="bungeni.sittingschedule.View" role="bungeni.Clerk" />
-    <grant permission="bungeni.sittingattendance.Edit" role="bungeni.Clerk" />
-    <grant permission="bungeni.sittingattendance.Add" role="bungeni.Clerk" />
-    <grant permission="bungeni.sittingattendance.Delete" role="bungeni.Clerk" />
+    <allow permission=".View" roles="Clerk" />
+    <allow permission=".Add" roles="Clerk" />
+    <allow permission="sittingschedule.View" roles="Clerk" />
+    <allow permission="sittingattendance.Edit" roles="Clerk" />
+    <allow permission="sittingattendance.Add" roles="Clerk" />
+    <allow permission="sittingattendance.Delete" roles="Clerk" />
     
     
     <state id="sitting" title="Sitting" tags="draft public agendaprivate">
-        <!-- sitting -->
-        <grant permission="bungeni.sitting.View" role="bungeni.Speaker" />
-        <grant permission="bungeni.sitting.View" role="bungeni.Owner" />
-        <grant permission="bungeni.sitting.View" role="bungeni.Signatory" />
-        <grant permission="bungeni.sitting.View" role="bungeni.MP" />
-        <grant permission="bungeni.sitting.View" role="bungeni.Minister" />
-        <grant permission="bungeni.sitting.View" role="bungeni.Anonymous" />
-        <grant permission="bungeni.sitting.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.sitting.Delete" role="bungeni.Clerk" />
-        <!-- sittingschedule -->
-        <deny permission="bungeni.sittingschedule.View" role="bungeni.Speaker" />
-        <deny permission="bungeni.sittingschedule.View" role="bungeni.Owner" />
-        <deny permission="bungeni.sittingschedule.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.sittingschedule.View" role="bungeni.MP" />
-        <deny permission="bungeni.sittingschedule.View" role="bungeni.Minister" />
-        <deny permission="bungeni.sittingschedule.View" role="bungeni.Anonymous" />
-        <deny permission="bungeni.sittingschedule.Edit" role="bungeni.Clerk" />
-        <!-- sittingschedule.item -->
-        <deny permission="bungeni.sittingschedule.item.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.sittingschedule.item.Delete" role="bungeni.Clerk" />
-        <!-- sittingschedule.itemdiscussion -->
-        <grant permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Clerk" />
-        <deny permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Speaker" />
-        <deny permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Owner" />
-        <deny permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.MP" />
-        <deny permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Minister" />
-        <deny permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Anonymous" />
-        <deny permission="bungeni.sittingschedule.itemdiscussion.Edit" role="bungeni.Clerk" />
+        <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
+        <allow permission=".Edit" roles="Clerk" />
+        <allow permission=".Delete" roles="Clerk" />
+        <deny permission="sittingschedule.View" roles="Speaker Owner Signatory MP Minister Anonymous" />
+        <deny permission="sittingschedule.Edit" roles="Clerk" />
+        <deny permission="sittingschedule.item.Add" roles="Clerk" />
+        <deny permission="sittingschedule.item.Delete" roles="Clerk" />
+        <allow permission="sittingschedule.itemdiscussion.View" roles="Clerk" />
+        <deny permission="sittingschedule.itemdiscussion.View" roles="Speaker Owner Signatory MP Minister Anonymous" />
+        <deny permission="sittingschedule.itemdiscussion.Edit" roles="Clerk" />
     </state>
     
     <state id="draft_agenda" title="Draft Agenda" 
         like_state="sitting"
         tags="draft public workspace agendaprivate">
-        <!-- sittingschedule -->
-        <grant permission="bungeni.sittingschedule.Edit" role="bungeni.Clerk" />
-        <!-- sittingschedule.item -->
-        <grant permission="bungeni.sittingschedule.View" role="bungeni.Speaker" />
-        <grant permission="bungeni.sittingschedule.item.Add" role="bungeni.Clerk" />
-        <grant permission="bungeni.sittingschedule.item.Delete" role="bungeni.Clerk" />
-        <!-- sittingschedule.itemdiscussion -->
-        <grant permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Speaker" />
+        <allow permission="sittingschedule.Edit" roles="Clerk" />
+        <allow permission="sittingschedule.View" roles="Speaker" />
+        <allow permission="sittingschedule.item.Add" roles="Clerk" />
+        <allow permission="sittingschedule.item.Delete" roles="Clerk" />
+        <allow permission="sittingschedule.itemdiscussion.View" roles="Speaker" />
     </state>
     
     <state id="published_agenda" title="Published Agenda" 
         like_state="draft_agenda"
         tags="public published workspace">
         <!-- sitting -->
-        <deny permission="bungeni.sitting.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.sitting.Delete" role="bungeni.Clerk" />
-        <!-- sittingschedule -->
-        <grant permission="bungeni.sittingschedule.View" role="bungeni.Speaker" />
-        <grant permission="bungeni.sittingschedule.View" role="bungeni.Owner" />
-        <grant permission="bungeni.sittingschedule.View" role="bungeni.Signatory" />
-        <grant permission="bungeni.sittingschedule.View" role="bungeni.MP" />
-        <grant permission="bungeni.sittingschedule.View" role="bungeni.Minister" />
-        <grant permission="bungeni.sittingschedule.View" role="bungeni.Anonymous" />
-        <deny permission="bungeni.sittingschedule.Edit" role="bungeni.Clerk" />
+        <deny permission=".Edit" roles="Clerk" />
+        <deny permission=".Delete" roles="Clerk" />
+        <allow permission="sittingschedule.View" roles="Speaker Owner Signatory MP Minister Anonymous" />
+        <deny permission="sittingschedule.Edit" roles="Clerk" />
     </state>
-
+    
     <state id="published_agenda_internal" title="Published Agenda Internal" 
         like_state="published_agenda"
         tags="public agendaprivate workspace">
-        <!-- sittingschedule -->
-        <deny permission="bungeni.sittingschedule.View" role="bungeni.Anonymous" />
+        <deny permission="sittingschedule.View" roles="Anonymous" />
     </state>
     
     <state id="draft_minutes" title="Draft Minutes" 
         like_state="published_agenda"
         tags="draft public workspace">
-        <!-- sitting -->
-        <grant permission="bungeni.sitting.Edit" role="bungeni.Clerk" />
-        <!-- sittingschedule -->
-        <grant permission="bungeni.sittingschedule.Edit" role="bungeni.Clerk" />
-        <!-- sittingschedule.itemdiscussion -->
-        <grant permission="bungeni.sittingschedule.itemdiscussion.Edit" role="bungeni.Clerk" />
+        <allow permission=".Edit" roles="Clerk" />
+        <allow permission="sittingschedule.Edit" roles="Clerk" />
+        <allow permission="sittingschedule.itemdiscussion.Edit" roles="Clerk" />
     </state>
     
     <state id="published_minutes" title="Published Minutes" 
         like_state="published_agenda"
         tags="public published publishedminutes">
-        <!-- sittingschedule.item -->
-        <deny permission="bungeni.sittingschedule.item.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.sittingschedule.item.Delete" role="bungeni.Clerk" />
-        <!-- sittingschedule.itemdiscussion -->
-        <grant permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Speaker" />
-        <grant permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Owner" />
-        <grant permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Signatory" />
-        <grant permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.MP" />
-        <grant permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Minister" />
-        <grant permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Anonymous" />
-        <deny permission="bungeni.sittingschedule.itemdiscussion.Edit" role="bungeni.Clerk" />
+        <deny permission="sittingschedule.item.Add" roles="Clerk" />
+        <deny permission="sittingschedule.item.Delete" roles="Clerk" />
+        <allow permission="sittingschedule.itemdiscussion.View" roles="Speaker Owner Signatory MP Minister Anonymous" />
+        <deny permission="sittingschedule.itemdiscussion.Edit" roles="Clerk" />
     </state>
     
     <state id="published_minutes_internal" title="Published Minutes Internal" 
         like_state="published_minutes"
         tags="public">
-        <!-- sittingschedule.itemdiscussion -->
-        <deny permission="bungeni.sittingschedule.itemdiscussion.View" role="bungeni.Anonymous" />
+        <deny permission="sittingschedule.itemdiscussion.View" roles="Anonymous" />
     </state>
     
     <state id="archived" title="Archive" tags="private" like_state="sitting">
-        <!-- sitting -->
-        <deny permission="bungeni.sitting.View" role="bungeni.Owner" />
-        <deny permission="bungeni.sitting.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.sitting.View" role="bungeni.MP" />
-        <deny permission="bungeni.sitting.View" role="bungeni.Minister" />
-        <deny permission="bungeni.sitting.View" role="bungeni.Anonymous" />
-        <deny permission="bungeni.sitting.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.sitting.Delete" role="bungeni.Clerk" />    
+        <deny permission=".View" roles="Owner Signatory MP Minister Anonymous" />
+        <deny permission=".Edit" roles="Clerk" />
+        <deny permission=".Delete" roles="Clerk" />    
     </state>
     
     <transition title="Create Sitting"
@@ -144,7 +99,7 @@
         destination="draft_agenda"
         condition=""
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Speaker"
+        roles="Clerk Speaker"
     />
     
     <transition title="Finalize Agenda"
@@ -152,7 +107,7 @@
         destination="published_agenda"
         condition="has_agenda"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Speaker"
+        roles="Clerk Speaker"
         require_confirmation="false"
     />
 
@@ -161,7 +116,7 @@
         destination="published_agenda_internal"
         condition="has_agenda"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Speaker"
+        roles="Clerk Speaker"
         require_confirmation="false"
     />
 
@@ -170,7 +125,7 @@
         destination="draft_agenda"
         condition=""
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Speaker"
+        roles="Clerk Speaker"
         require_confirmation="true"
     />
     
@@ -179,7 +134,7 @@
         destination="draft_minutes"
         condition=""
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Speaker"
+        roles="Clerk Speaker"
         require_confirmation="false"
     />
     
@@ -188,7 +143,7 @@
         destination="published_minutes"
         condition="agenda_finalized"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Speaker"
+        roles="Clerk Speaker"
         require_confirmation="false"
     />
 
@@ -197,7 +152,7 @@
         destination="published_minutes_internal"
         condition="agenda_finalized"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Speaker"
+        roles="Clerk Speaker"
         require_confirmation="false"
     />
     
@@ -206,7 +161,7 @@
         destination="draft_minutes"
         condition=""
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Speaker"
+        roles="Clerk Speaker"
         require_confirmation="true"
     />
     <transition title="Auto Archive"

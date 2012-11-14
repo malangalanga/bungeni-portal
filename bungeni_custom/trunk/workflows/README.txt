@@ -28,7 +28,7 @@ grammar {
         # optional type_key being the "primary" type_key for this workflow.
         
         element feature {...}*,
-        element grant {...}*,
+        element allow {...}*,
         element state {...}*,
         element transition {...}*,
     }
@@ -110,7 +110,7 @@ RNC definition for <state> XML element:
         attribute permissions_from_parent { boolean="false" }?
         attribute obsolete { boolean="false" }?,
         
-        (element grant {...} | element deny {...} )*,
+        (element allow {...} | element deny {...} )*,
         element notification {...}*
     }
 
@@ -173,7 +173,7 @@ and being an MP, Clerk, etc, and the security model does not take into account.
 For example, in the case of Attachment, denying the "zope.View" permission 
 for "bungeni.Authenticated" and granting it for "bungeni.MP":
 
-    <grant permission="zope.View" role="bungeni.MP" />
+    <allow permission="zope.View" role="bungeni.MP" />
     <deny permission="zope.View" role="bungeni.Authenticated" /> 
 
 a) for "bungeni.Authenticated" this is superfluous as it is denied in all 

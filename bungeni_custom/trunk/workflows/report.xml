@@ -11,14 +11,11 @@
     <feature name="download" enabled="true" />
     
     <!-- global grants -->
-    <grant permission="bungeni.report.Edit" role="bungeni.Clerk" />
-    <grant permission="bungeni.report.Edit" role="bungeni.Speaker" /> 
+    <allow permission=".Edit" roles="Clerk Speaker" />
     
     
     <state id="published" title="Published" tags="public">
-        <grant permission="bungeni.report.View" role="bungeni.Authenticated" /> 
-        <grant permission="bungeni.report.View" role="bungeni.Anonymous" />
-        <!-- !+PERM_NOT_REG deny permission="bungeni.report.Edit" role="bungeni.Authenticated" /-->
+        <allow permission=".View" roles="Authenticated Anonymous" />
     </state>
     
     

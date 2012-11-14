@@ -11,15 +11,14 @@
     <state id="internal" title="Published Internal"
         note="Visible to bungeni users"
         >
-        <!-- membership -->
-        <grant permission="bungeni.group_membership.View" role="bungeni.Authenticated" />
-        <deny permission="bungeni.group_membership.View" role="bungeni.Anonymous" />
+        <allow permission=".View" roles="Authenticated" />
+        <deny permission=".View" roles="Anonymous" />
     </state>
     
     <!-- !+inactive(mr, aug-2011) review usage and rename across the board 
     <state id="inactive" title="Inactive address" like_state="internal">
-        <deny permission="zope.View" role="bungeni.Authenticated" /> 
-        <deny permission="zope.View" role="bungeni.Anonymous" /> 
+        <deny permission="zope.View" roles="Authenticated" /> 
+        <deny permission="zope.View" roles="Anonymous" /> 
     </state>
     -->
     
@@ -36,7 +35,7 @@
         destination="internal"
         condition="user_may_edit_context_parent"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Owner"
+        roles="Clerk Owner"
     />
     
     <transition title="Re-publish"
@@ -44,7 +43,7 @@
         destination="attached"
         condition="user_may_edit_context_parent"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Owner"
+        roles="Clerk Owner"
     />
     
     <!--
@@ -53,7 +52,7 @@
         destination="inactive"
         condition="user_may_edit_context_parent"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Owner"
+        roles="Clerk Owner"
         require_confirmation="true"
     />
     -->

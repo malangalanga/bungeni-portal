@@ -8,41 +8,30 @@
     <feature name="address" enabled="true" />
     
     <!-- global grants -->
-    <grant permission="bungeni.committee.Edit" role="bungeni.Clerk" />
-    <grant permission="bungeni.committee.Add" role="bungeni.Clerk" />
-    <grant permission="bungeni.committee.Delete" role="bungeni.Clerk" />
+    <allow permission=".Edit" roles="Clerk" />
+    <allow permission=".Add" roles="Clerk" />
+    <allow permission=".Delete" roles="Clerk" />
     
     
     <state id="draft" title="Draft - Committee not yet Active">
-        <!-- committee -->
-        <grant permission="bungeni.committee.View" role="bungeni.Clerk" />
-        <deny permission="bungeni.committee.View" role="bungeni.Speaker" />
-        <deny permission="bungeni.committee.View" role="bungeni.MP" />
-        <deny permission="bungeni.committee.View" role="bungeni.Minister" />
-        <deny permission="bungeni.committee.View" role="bungeni.Anonymous" /> 
-        <grant permission="bungeni.committee.Delete" role="bungeni.Owner" />
-        <!-- agenda_item -->
-        <deny permission="bungeni.agenda_item.Add" role="bungeni.CommitteeMember" />
+        <allow permission=".View" roles="Clerk" />
+        <deny permission=".View" roles="Speaker MP Minister Anonymous" />
+        <allow permission=".Delete" roles="Owner" />
+        <deny permission="agenda_item.Add" roles="CommitteeMember" />
     </state>
 
     <state id="active" title="Active Committee" 
         like_state="draft" 
         tags="public">
-        <!-- committee -->
-        <grant permission="bungeni.committee.View" role="bungeni.Speaker" />
-        <grant permission="bungeni.committee.View" role="bungeni.MP" />
-        <grant permission="bungeni.committee.View" role="bungeni.Minister" />
-        <grant permission="bungeni.committee.View" role="bungeni.Anonymous" />
-        <deny permission="bungeni.committee.Delete" role="bungeni.Owner" />
-        <!-- agenda_item -->
-        <grant permission="bungeni.agenda_item.Add" role="bungeni.CommitteeMember" />
+        <allow permission=".View" roles="Speaker MP Minister Anonymous" />
+        <deny permission=".Delete" roles="Owner" />
+        <allow permission="agenda_item.Add" roles="CommitteeMember" />
     </state>
   
     <state id="dissolved" title="Committee is Dissolved" 
         like_state="active"
         tags="public">
-        <!-- agenda_item -->
-        <deny permission="bungeni.agenda_item.Add" role="bungeni.CommitteeMember" />
+        <deny permission="agenda_item.Add" roles="CommitteeMember" />
     </state>
     
     
@@ -56,7 +45,7 @@
         source="draft dissolved"
         destination="active"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Speaker"
+        roles="Clerk Speaker"
         require_confirmation="true"
     />
     
@@ -65,7 +54,7 @@
         destination="dissolved"
         condition="has_end_date"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Speaker"
+        roles="Clerk Speaker"
         require_confirmation="true"
     />
     
@@ -73,7 +62,7 @@
         source="active dissolved"
         destination="draft"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Speaker"
+        roles="Clerk Speaker"
         require_confirmation="true"
     />
 

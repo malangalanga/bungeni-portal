@@ -21,189 +21,132 @@
     <feature name="notification" enabled="true" />
     <feature name="download" enabled="true" />
     <feature name="user_assignment" enabled="true">
-      <parameter name="assigner_roles" value="bungeni.Clerk.HeadClerk"/>
-      <parameter name="assignable_roles" value="bungeni.Clerk.QuestionClerk"/>
+      <parameter name="assigner_roles" value="Clerk.HeadClerk"/>
+      <parameter name="assignable_roles" value="Clerk.QuestionClerk"/>
     </feature>
     
     <!-- global grants -->
-    <grant permission="bungeni.question.Add" role="bungeni.Clerk" />
-    <grant permission="bungeni.question.Add" role="bungeni.MP" />
+    <allow permission=".Add" roles="Clerk MP" />
     
     
     <state id="working_draft" title="Working Draft" tags="draft private">
-        <!-- question -->
-        <grant permission="bungeni.question.View" role="bungeni.Clerk" />
-        <deny permission="bungeni.question.View" role="bungeni.Speaker" />
-        <deny permission="bungeni.question.View" role="bungeni.Owner" />
-        <deny permission="bungeni.question.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.question.View" role="bungeni.MP" />
-        <deny permission="bungeni.question.View" role="bungeni.Minister" />
-        <deny permission="bungeni.question.View" role="bungeni.Anonymous" />
-        <grant permission="bungeni.question.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.question.Edit" role="bungeni.Speaker" />
-        <deny permission="bungeni.question.Edit" role="bungeni.Owner" />
-        <grant permission="bungeni.question.Delete" role="bungeni.Clerk" />
-        <deny permission="bungeni.question.Delete" role="bungeni.Speaker" />
-        <deny permission="bungeni.question.Delete" role="bungeni.Owner" />
-        <!-- attachment -->
-        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
-        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
-        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.attachment.Add" role="bungeni.Speaker" />
-        <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
-        <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
-        <deny permission="bungeni.attachment.Delete" role="bungeni.Speaker" />
-        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner" />
-        <!-- event -->
-        <grant permission="bungeni.event.View" role="bungeni.Clerk" />
-        <grant permission="bungeni.event.View" role="bungeni.Speaker" />
-        <grant permission="bungeni.event.View" role="bungeni.Signatory" />
-        <grant permission="bungeni.event.View" role="bungeni.MP" />
-        <grant permission="bungeni.event.View" role="bungeni.Minister" />
-        <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
-        <grant permission="bungeni.event.Add" role="bungeni.Clerk" />
-        <grant permission="bungeni.event.Add" role="bungeni.Speaker" />
-        <grant permission="bungeni.event.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.event.Delete" role="bungeni.Speaker" />
-        <!-- response -->
-        <deny permission="bungeni.response.View" role="bungeni.Clerk" />
-        <deny permission="bungeni.response.View" role="bungeni.Speaker" />
-        <deny permission="bungeni.response.View" role="bungeni.Owner" />
-        <deny permission="bungeni.response.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.response.View" role="bungeni.MP" />
-        <deny permission="bungeni.response.View" role="bungeni.Minister" />
-        <deny permission="bungeni.response.View" role="bungeni.Anonymous" />
-        <deny permission="bungeni.response.Edit" role="bungeni.Signatory" />
-        <deny permission="bungeni.response.Edit" role="bungeni.Minister" />
-        <!-- signatories -->
-        <grant permission="bungeni.signatory.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
-        <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
-        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
-        <!-- user assignment -->
-        <deny permission="bungeni.user_assignment.View" role="bungeni.Clerk.HeadClerk" />
-        <deny permission="bungeni.user_assignment.Edit" role="bungeni.Clerk.HeadClerk" />
+        <allow permission=".View" roles="Clerk" />
+        <deny permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
+        <allow permission=".Edit" roles="Clerk" />
+        <deny permission=".Edit" roles="Speaker Owner" />
+        <allow permission=".Delete" roles="Clerk" />
+        <deny permission=".Delete" roles="Speaker Owner" />
+        <allow permission="attachment.Edit" roles="Clerk" />
+        <deny permission="attachment.Edit" roles="Speaker Owner" />
+        <allow permission="attachment.Add" roles="Clerk" />
+        <deny permission="attachment.Add" roles="Speaker Owner" />
+        <allow permission="attachment.Delete" roles="Clerk" />
+        <deny permission="attachment.Delete" roles="Speaker Owner" />
+        <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
+        <allow permission="event.Edit" roles="Clerk Speaker" />
+        <allow permission="event.Add" roles="Clerk Speaker" />
+        <allow permission="event.Delete" roles="Clerk Speaker" />
+        <deny permission="response.View" roles="Clerk Speaker Owner Signatory MP Minister Anonymous" />
+        <deny permission="response.Edit" roles="Signatory Minister" />
+        <allow permission="signatory.Add" roles="Clerk" />
+        <deny permission="signatory.Add" roles="Owner" />
+        <allow permission="signatory.Delete" roles="Clerk" />
+        <deny permission="signatory.Delete" roles="Owner" />
+        <deny permission="user_assignment.View" roles="Clerk.HeadClerk" />
+        <deny permission="user_assignment.Edit" roles="Clerk.HeadClerk" />
     </state>
     
     <state id="draft" title="Draft" like_state="working_draft" 
         tags="draft private">
-        <!-- question -->
-        <deny permission="bungeni.question.View" role="bungeni.Clerk" />
-        <grant permission="bungeni.question.View" role="bungeni.Owner" />
-        <deny permission="bungeni.question.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.question.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.question.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.question.Delete" role="bungeni.Owner" />
-        <!-- attachment -->
-        <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.attachment.Add" role="bungeni.Clerk" />
-        <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
-        <deny permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.attachment.Delete" role="bungeni.Owner" />
-        <!-- signatories -->
-        <deny permission="bungeni.signatory.Add" role="bungeni.Clerk" />
-        <grant permission="bungeni.signatory.Add" role="bungeni.Owner" />
-        <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner" />
+        <deny permission=".View" roles="Clerk" />
+        <allow permission=".View" roles="Owner" />
+        <deny permission=".Edit" roles="Clerk" />
+        <allow permission=".Edit" roles="Owner" />
+        <deny permission=".Delete" roles="Clerk" />
+        <allow permission=".Delete" roles="Owner" />
+        <deny permission="attachment.Edit" roles="Clerk" />
+        <allow permission="attachment.Edit" roles="Owner" />
+        <deny permission="attachment.Add" roles="Clerk" />
+        <allow permission="attachment.Add" roles="Owner" />
+        <deny permission="attachment.Delete" roles="Clerk" />
+        <allow permission="attachment.Delete" roles="Owner" />
+        <deny permission="signatory.Add" roles="Clerk" />
+        <allow permission="signatory.Add" roles="Owner" />
+        <deny permission="signatory.Delete" roles="Clerk" />
+        <allow permission="signatory.Delete" roles="Owner" />
     </state>
 
     <state id="submitted_signatories" title="Submitted to Signatories"
         version="true" like_state="draft" tags="actionmp">
-        <!-- question -->
-        <grant permission="bungeni.question.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.question.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.question.Delete" role="bungeni.Owner" />
-        <!-- attachment -->
-        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.attachment.Add" role="bungeni.Owner" />
-        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner" />
-        <!-- signatory -->
-        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner" />
+        <allow permission=".View" roles="Signatory" />
+        <deny permission=".Edit" roles="Owner" />
+        <deny permission=".Delete" roles="Owner" />
+        <deny permission="attachment.Edit" roles="Owner" />
+        <deny permission="attachment.Add" roles="Owner" />
+        <deny permission="attachment.Delete" roles="Owner" />
+        <deny permission="signatory.Delete" roles="Owner" />
     </state>
 
     <state id="redraft" title="Redraft" version="True" like_state="draft"
         note="document under review before resubmission">
-        <deny permission="bungeni.question.Delete" role="bungeni.Owner" />
+        <deny permission=".Delete" roles="Owner" />
     </state>
 
     <state id="withdrawn_signatory" title="Dropped" 
         like_state="submitted_signatories">
-        <!-- signatories -->
-        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
+        <deny permission="signatory.Add" roles="Owner" />
     </state>
 
     <state id="submitted" title="Submitted to clerk" 
         version="true" like_state="submitted_signatories" 
         tags="actionclerk">
         <!-- question -->
-        <grant permission="bungeni.question.View" role="bungeni.Clerk" />
-        <grant permission="bungeni.question.View" role="bungeni.Speaker" />
-        <!-- signatory -->
-        <deny permission="bungeni.signatory.Add" role="bungeni.Owner" />
-        
+        <allow permission=".View" roles="Clerk Speaker" />
+        <deny permission="signatory.Add" roles="Owner" />
     </state>
 
     <state id="received" title="Received by clerk"
         like_state="submitted" tags="actionclerk">
-        <!-- question -->
-        <grant permission="bungeni.question.Edit" role="bungeni.Clerk" />
-        <!-- attachment -->
-        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk" />
-        <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk" />
-        <!-- user assignment -->
-        <grant permission="bungeni.user_assignment.View" role="bungeni.Clerk.HeadClerk" />
-        <grant permission="bungeni.user_assignment.Edit" role="bungeni.Clerk.HeadClerk" />
+        <allow permission=".Edit" roles="Clerk" />
+        <allow permission="attachment.Edit" roles="Clerk" />
+        <allow permission="attachment.Add" roles="Clerk" />
+        <allow permission="attachment.Delete" roles="Clerk" />
+        <allow permission="user_assignment.View" roles="Clerk.HeadClerk" />
+        <allow permission="user_assignment.Edit" roles="Clerk.HeadClerk" />
     </state>
     
     <state id="completed" title="Submitted to the Speaker"
         version="true" 
         like_state="submitted">
-        <!-- question -->
-        <grant permission="bungeni.question.Edit" role="bungeni.Speaker" />
-        <!-- attachment -->
-        <grant permission="bungeni.attachment.Edit" role="bungeni.Speaker" />
-        <grant permission="bungeni.attachment.Add" role="bungeni.Speaker" />
-        <grant permission="bungeni.attachment.Delete" role="bungeni.Speaker" />
+        <allow permission=".Edit" roles="Speaker" />
+        <allow permission="attachment.Edit" roles="Speaker" />
+        <allow permission="attachment.Add" roles="Speaker" />
+        <allow permission="attachment.Delete" roles="Speaker" />
     </state>
     
     <state id="admissible" title="Admissible"
         version="true"
         like_state="submitted"
         tags="public approved oral written">
-        <!-- question -->
-        <grant permission="bungeni.question.View" role="bungeni.Owner" />
-        <grant permission="bungeni.question.View" role="bungeni.Signatory" />
-        <grant permission="bungeni.question.View" role="bungeni.MP" />
-        <grant permission="bungeni.question.View" role="bungeni.Minister" />
-        <grant permission="bungeni.question.View" role="bungeni.Anonymous" />
+        <allow permission=".View" roles="Owner Signatory MP Minister Anonymous" />
     </state>
     
     <state id="inadmissible" title="Inadmissible" 
         like_state="submitted" 
         tags="terminal fail">
-        <!-- event -->
-        <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
-        <deny permission="bungeni.event.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.event.Add" role="bungeni.Speaker" />
-        <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
-        <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
+        <deny permission="event.Edit" roles="Clerk Speaker" />
+        <deny permission="event.Add" roles="Clerk Speaker" />
+        <deny permission="event.Delete" roles="Clerk Speaker" />
     </state>
     
     <state id="clarification_required" title="Requires Clarification to Receive"
         version="true"
         like_state="submitted" 
         tags="actionmp">
-        <!-- question -->
-        <grant permission="bungeni.question.Edit" role="bungeni.Owner" />
-        <!-- attachment -->
-        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner" />
-        <grant permission="bungeni.attachment.Add" role="bungeni.Owner" />
-        <grant permission="bungeni.attachment.Delete" role="bungeni.Owner" />
+        <allow permission=".Edit" roles="Owner" />
+        <allow permission="attachment.Edit" roles="Owner" />
+        <allow permission="attachment.Add" roles="Owner" />
+        <allow permission="attachment.Delete" roles="Owner" />
     </state>
     
     <state id="incomplete" title="Require Clarification to Approve"
@@ -230,38 +173,24 @@
     <state id="response_pending" title="Pending response" 
         like_state="admissible"
         tags="public written">
-        <!-- response -->
-        <grant permission="bungeni.response.View" role="bungeni.Minister" />
-        <grant permission="bungeni.response.Edit" role="bungeni.Minister" />
+        <allow permission="response.View" roles="Minister" />
+        <allow permission="response.Edit" roles="Minister" />
     </state>
     
     <state id="response_submitted" title="Response submitted" 
         like_state="response_pending"
         tags="public actionclerk">
-        <!-- response -->
-        <deny permission="bungeni.response.Edit" role="bungeni.Minister" />
-        <grant permission="bungeni.response.View" role="bungeni.Clerk" />
-        <grant permission="bungeni.response.View" role="bungeni.Speaker" />
+        <deny permission="response.Edit" roles="Minister" />
+        <allow permission="response.View" roles="Clerk Speaker" />
     </state>
     
     <state id="response_completed" title="Response completed" 
         like_state="admissible"
         tags="public terminal succeed">
-        <!-- event -->
-        <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
-        <deny permission="bungeni.event.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.event.Add" role="bungeni.Speaker" />
-        <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
-        <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
-        <!-- response -->
-        <grant permission="bungeni.response.View" role="bungeni.Clerk" />
-        <grant permission="bungeni.response.View" role="bungeni.Speaker" />
-        <grant permission="bungeni.response.View" role="bungeni.Owner" />
-        <grant permission="bungeni.response.View" role="bungeni.Signatory" />
-        <grant permission="bungeni.response.View" role="bungeni.MP" />
-        <grant permission="bungeni.response.View" role="bungeni.Minister" />
-        <grant permission="bungeni.response.View" role="bungeni.Anonymous" />
+        <deny permission="event.Edit" roles="Clerk Speaker" />
+        <deny permission="event.Add" roles="Clerk Speaker" />
+        <deny permission="event.Delete" roles="Clerk Speaker" />
+        <allow permission="response.View" roles="Clerk Speaker Owner Signatory MP Minister Anonymous" />
     </state>
     
     <state id="deferred" title="Deferred" 
@@ -272,13 +201,9 @@
     <state id="debated" title="Debated" 
         like_state="admissible"
         tags="public terminal succeed">
-        <!-- event -->
-        <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
-        <deny permission="bungeni.event.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.event.Add" role="bungeni.Speaker" />
-        <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
-        <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
+        <deny permission="event.Edit" roles="Clerk Speaker" />
+        <deny permission="event.Add" roles="Clerk Speaker" />
+        <deny permission="event.Delete" roles="Clerk Speaker" />
     </state>
 
     <state id="elapsed" title="Elapsed" like_state="debated"
@@ -291,13 +216,9 @@
     
     <state id="withdrawn_internal" title="Withdrawn" like_state="submitted" 
         tags="terminal fail">
-        <!-- event -->
-        <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
-        <deny permission="bungeni.event.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.event.Add" role="bungeni.Speaker" />
-        <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
-        <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
+        <deny permission="event.Edit" roles="Clerk Speaker" />
+        <deny permission="event.Add" roles="Clerk Speaker" />
+        <deny permission="event.Delete" roles="Clerk Speaker" />
     </state>
     
     <state id="withdrawn" title="Withdrawn" like_state="debated" 
@@ -325,7 +246,7 @@
         destination="submitted"
         condition="pi_signatories_check"
         trigger="manual"
-        roles="bungeni.Owner"
+        roles="Owner"
         order="1"
     />
 
@@ -334,7 +255,7 @@
         destination="submitted"
         condition="pi_signatories_check"
         trigger="manual"
-        roles="bungeni.Clerk"
+        roles="Clerk"
         order="1"
     />
 
@@ -343,7 +264,7 @@
         destination="submitted_signatories"
         condition="pi_has_signatories"
         trigger="manual"
-        roles="bungeni.Owner"
+        roles="Owner"
         order="1"
     />
 
@@ -352,7 +273,7 @@
         destination="redraft"
         condition="user_is_context_owner"
         trigger="manual"
-        roles="bungeni.Owner"
+        roles="Owner"
     />
 
     <transition title="Drop"
@@ -361,7 +282,7 @@
         grouping_unique_sources="withdrawn"
         condition="user_is_context_owner"
         trigger="manual"
-        roles="bungeni.Owner"
+        roles="Owner"
     />
     
     <transition title="Receive"
@@ -369,7 +290,7 @@
         destination="received"
         condition=""
         trigger="manual"
-        roles="bungeni.Clerk"
+        roles="Clerk"
         order="2"
     />
     
@@ -378,7 +299,7 @@
         destination="clarification_required"
         condition=""
         trigger="manual"
-        roles="bungeni.Clerk"
+        roles="Clerk"
         order="3"
         require_confirmation="true"
     />
@@ -396,7 +317,7 @@
         destination="completed"
         condition=""
         trigger="manual"
-        roles="bungeni.Clerk"
+        roles="Clerk"
         order="4"
         note="The Question has all the formal requirements; forwarded to the
             Speaker's Office as well as to the Ministry for pre-viewing (but
@@ -408,7 +329,7 @@
         destination="admissible"
         condition=""
         trigger="manual"
-        roles="bungeni.Speaker"
+        roles="Speaker"
         order="6"
     />
     
@@ -417,7 +338,7 @@
         destination="inadmissible"
         condition=""
         trigger="manual"
-        roles="bungeni.Speaker"
+        roles="Speaker"
         order="7"
         require_confirmation="true"
     />
@@ -427,7 +348,7 @@
         destination="incomplete"
         condition=""
         trigger="manual"
-        roles="bungeni.Speaker"
+        roles="Speaker"
         order="8"
         require_confirmation="true"
     />
@@ -437,7 +358,7 @@
         destination="completed"
         condition=""
         trigger="manual"
-        roles="bungeni.Clerk"
+        roles="Clerk"
         order="9"
     />
     
@@ -446,7 +367,7 @@
         destination="submitted"
         condition=""
         trigger="manual"
-        roles="bungeni.Owner"
+        roles="Owner"
         order="10"
     />
     
@@ -455,7 +376,7 @@
         destination="schedule_pending"
         condition="is_oral_response"
         trigger="manual"
-        roles="bungeni.Clerk"
+        roles="Clerk"
         order="11"
     />
     
@@ -463,7 +384,7 @@
         source="scheduled"
         destination="schedule_pending"
         trigger="system"
-        roles="bungeni.Clerk"
+        roles="Clerk"
     />
     
     <transition title="Schedule"
@@ -471,7 +392,7 @@
         destination="scheduled"
         condition="is_scheduled"
         trigger="system"
-        roles="bungeni.Clerk"
+        roles="Clerk"
         order="12"
     />
     
@@ -480,7 +401,7 @@
         destination="response_pending"
         condition="is_written_response"
         trigger="manual"
-        roles="bungeni.Clerk"
+        roles="Clerk"
         order="13"
         note="Written-response questions are never scheduled but must be 
             answered directly by the Ministry."
@@ -491,7 +412,7 @@
         destination="response_submitted"
         condition="response_allow_submit"
         trigger="manual"
-        roles="bungeni.Minister"
+        roles="Minister"
         order="15"
     />
     
@@ -500,7 +421,7 @@
         destination="response_pending"
         condition=""
         trigger="manual"
-        roles="bungeni.Clerk"
+        roles="Clerk"
         order="16"
     />
     
@@ -508,7 +429,7 @@
         source="response_submitted"
         destination="response_completed"
         trigger="manual"
-        roles="bungeni.Clerk"
+        roles="Clerk"
         order="17"
     />
     
@@ -517,7 +438,7 @@
         destination="elapsed"
         condition=""
         trigger="manual"
-        roles="bungeni.Clerk"
+        roles="Clerk"
         order="18"
         require_confirmation="true"
     />
@@ -527,7 +448,7 @@
         destination="deferred"
         condition=""
         trigger="manual"
-        roles="bungeni.Clerk"
+        roles="Clerk"
         order="19"
         note="Oral question, postpone scheduling."
     />
@@ -537,7 +458,7 @@
         destination="dropped"
         condition=""
         trigger="manual"
-        roles="bungeni.Clerk"
+        roles="Clerk"
         order="22"
     />
     
@@ -546,7 +467,7 @@
         destination="adjourned"
         condition=""
         trigger="manual"
-        roles="bungeni.Clerk"
+        roles="Clerk"
         order="23"
     />
     
@@ -554,7 +475,7 @@
         source="scheduled"
         destination="debated"
         trigger="manual"
-        roles="bungeni.Clerk"
+        roles="Clerk"
         order="25"
     />
     
@@ -564,7 +485,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Owner"
+        roles="Clerk Owner"
         order="26"
         require_confirmation="true"
         note="The MP can withdraw his question at any stage where it can 
@@ -577,7 +498,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Owner"
+        roles="Clerk Owner"
         order="27"
         require_confirmation="true"
     />

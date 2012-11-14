@@ -10,18 +10,12 @@
     
     
     <state id="draft" title="Draft Address" tags="draft private">
-        <!-- address -->
-        <deny permission="bungeni.address.View" role="bungeni.Clerk" />
-        <deny permission="bungeni.address.View" role="bungeni.Speaker" />
-        <grant permission="bungeni.address.View" role="bungeni.Owner" />
-        <deny permission="bungeni.address.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.address.View" role="bungeni.MP" />
-        <deny permission="bungeni.address.View" role="bungeni.Minister" />
-        <deny permission="bungeni.address.View" role="bungeni.Anonymous" />
-        <deny permission="bungeni.address.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.address.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.address.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.address.Delete" role="bungeni.Owner" />
+        <allow permission=".View" roles="Owner" />
+        <deny permission=".View" roles="Clerk Speaker Signatory MP Minister Anonymous" />
+        <deny permission=".Edit" roles="Clerk" />
+        <allow permission=".Edit" roles="Owner" />
+        <deny permission=".Delete" roles="Clerk" />
+        <allow permission=".Delete" roles="Owner" />
     </state>
     
     <state id="attached" title="Address"
@@ -33,22 +27,15 @@
         like_state="draft"
         note="Visible to bungeni users"
         >
-        <!-- address -->
-        <grant permission="bungeni.address.View" role="bungeni.Clerk" />
-        <grant permission="bungeni.address.View" role="bungeni.Speaker" />
-        <grant permission="bungeni.address.View" role="bungeni.Signatory" />
-        <grant permission="bungeni.address.View" role="bungeni.MP" />
-        <grant permission="bungeni.address.View" role="bungeni.Minister" />
-        <grant permission="bungeni.address.View" role="bungeni.Anonymous" />
-        <grant permission="bungeni.address.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.address.Delete" role="bungeni.Clerk" />
+        <allow permission=".View" roles="Clerk Speaker Signatory MP Minister Anonymous" />
+        <allow permission=".Edit" roles="Clerk" />
+        <allow permission=".Delete" roles="Clerk" />
     </state>
     
     <!-- !+inactive(mr, aug-2011) review usage and rename across the board 
     -->
     <state id="inactive" title="Inactive address" like_state="internal">
-        <deny permission="bungeni.address.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.address.Edit" role="bungeni.Owner" />
+        <deny permission=".Edit" roles="Clerk Owner" />
     </state>
     
     <!-- !+IDENTICAL_TRANSITIONS(mr, sep-2011) attachment, address, event -->
@@ -69,21 +56,21 @@
         source="draft"
         destination="attached"
         trigger="manual"
-        roles="bungeni.Owner"
+        roles="Owner"
     />
     
     <transition title="Publish Internal"
         source="draft"
         destination="internal"
         trigger="manual"
-        roles="bungeni.Owner"
+        roles="Owner"
     />
     
     <transition title="Re-publish"
         source="internal"
         destination="attached"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Owner"
+        roles="Clerk Owner"
     />
     
     <!-- 
@@ -96,7 +83,7 @@
         destination="internal"
         condition="context_parent_is_not_public"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Owner"
+        roles="Clerk Owner"
     />
     
     <transition title="Deactivate"
@@ -104,7 +91,7 @@
         destination="inactive"
         condition="context_parent_is_not_public"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Owner"
+        roles="Clerk Owner"
         require_confirmation="true"
     />
 

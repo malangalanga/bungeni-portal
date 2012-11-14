@@ -7,7 +7,7 @@
     
     <!-- sub-item, so NO "global" grants here -> these are the responsibility 
     of the "owning" document's workflow e.g. it is that workflow that must
-    declare who (and in which states) has the permission 'bungeni.event.Add'.
+    declare who (and in which states) has the permission '.Add'.
     -->
     
     <!-- features -->
@@ -16,22 +16,14 @@
     <feature name="attachment" enabled="true" />
     
     <!-- global grants -->
-    <grant permission="bungeni.event.View" role="bungeni.Owner" />
+    <allow permission=".View" roles="Owner" />
     
     <state id="draft" title="Draft Event" tags="draft private">
-        <!-- event -->
-        <deny permission="bungeni.event.View" role="bungeni.Clerk" />
-        <deny permission="bungeni.event.View" role="bungeni.Speaker" />
-        <deny permission="bungeni.event.View" role="bungeni.Signatory" />
-        <deny permission="bungeni.event.View" role="bungeni.MP" />
-        <deny permission="bungeni.event.View" role="bungeni.Minister" />
-        <deny permission="bungeni.event.View" role="bungeni.Anonymous" />
-        <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
-        <grant permission="bungeni.event.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.event.Delete" role="bungeni.Clerk" />
-        <deny permission="bungeni.event.Delete" role="bungeni.Speaker" />
-        <grant permission="bungeni.event.Delete" role="bungeni.Owner" />
+        <deny permission=".View" roles="Clerk Speaker Signatory MP Minister Anonymous" />
+        <deny permission=".Edit" roles="Clerk Speaker" />
+        <allow permission=".Edit" roles="Owner" />
+        <deny permission=".Delete" roles="Clerk Speaker" />
+        <allow permission=".Delete" roles="Owner" />
     </state>
     
     <state id="attached" title="Event" 
@@ -40,18 +32,12 @@
     />
     
     <state id="internal" title="Published Internal" like_state="draft">
-        <!-- event -->
-        <grant permission="bungeni.event.View" role="bungeni.Clerk" />
-        <grant permission="bungeni.event.View" role="bungeni.Speaker" />
-        <grant permission="bungeni.event.View" role="bungeni.Signatory" />
-        <grant permission="bungeni.event.View" role="bungeni.MP" />
-        <grant permission="bungeni.event.View" role="bungeni.Minister" />
-        <grant permission="bungeni.event.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.event.Edit" role="bungeni.Speaker" />
-        <deny permission="bungeni.event.Edit" role="bungeni.Owner" />
-        <grant permission="bungeni.event.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.event.Delete" role="bungeni.Speaker" />
-        <deny permission="bungeni.event.Delete" role="bungeni.Owner" />
+        <allow permission=".View" roles="Clerk Speaker Signatory MP Minister" />
+        <allow permission=".Edit" roles="Clerk" />
+        <allow permission=".Edit" roles="Speaker" />
+        <deny permission=".Edit" roles="Owner" />
+        <allow permission=".Delete" roles="Clerk Speaker" />
+        <deny permission=".Delete" roles="Owner" />
     </state>
     
     <!-- !+inactive(mr, aug-2011) review usage and rename across the board
@@ -59,9 +45,7 @@
         consider using "dropped", "obsoleted", "removed"...
     -->
     <state id="inactive" title="Inactive event" like_state="internal">
-        <!-- event -->
-        <deny permission="bungeni.event.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.event.Edit" role="bungeni.Speaker" />
+        <deny permission=".Edit" roles="Clerk Speaker" />
         <!-- !+delete also deny? -->
     </state>
     
@@ -90,21 +74,21 @@
         source="draft"
         destination="attached"
         trigger="manual"
-        roles="bungeni.Owner"
+        roles="Owner"
     />
     
     <transition title="Publish Internal"
         source="draft"
         destination="internal"
         trigger="manual"
-        roles="bungeni.Owner"
+        roles="Owner"
     />
     
     <transition title="Re-publish"
         source="internal"
         destination="attached"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Owner"
+        roles="Clerk Owner"
     />
     
     <!-- 
@@ -117,7 +101,7 @@
         destination="internal"
         condition="context_parent_is_not_public"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Owner"
+        roles="Clerk Owner"
     />
     
     <transition title="Deactivate"
@@ -125,7 +109,7 @@
         destination="inactive"
         condition="context_parent_is_not_public"
         trigger="manual"
-        roles="bungeni.Clerk bungeni.Owner"
+        roles="Clerk Owner"
         require_confirmation="true"
     />
 

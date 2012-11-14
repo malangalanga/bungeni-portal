@@ -8,29 +8,21 @@
     
     
     <state id="A" title="Active User">
-        <grant permission="bungeni.delegation.Edit" role="bungeni.Owner" />
-        <grant permission="bungeni.delegation.Add" role="bungeni.Owner" />
-        <grant permission="bungeni.user.Edit" role="bungeni.Authenticated" />
-        <!-- address -->
-        <grant permission="bungeni.address.Edit" role="bungeni.Clerk" />
-        <grant permission="bungeni.address.Edit" role="bungeni.Owner" />
-        <grant permission="bungeni.address.Add" role="bungeni.Clerk" />
-        <grant permission="bungeni.address.Add" role="bungeni.Owner" />
-        <grant permission="bungeni.address.Delete" role="bungeni.Clerk" />
-        <grant permission="bungeni.address.Delete" role="bungeni.Owner" />
+        <allow permission=".Edit" roles="Authenticated" />
+        <allow permission="delegation.Edit" roles="Owner" />
+        <allow permission="delegation.Add" roles="Owner" />
+        <allow permission="address.Edit" roles="Clerk Owner" />
+        <allow permission="address.Add" roles="Clerk Owner" />
+        <allow permission="address.Delete" roles="Clerk Owner" />
     </state>
     
     <state id="I" like_state="A" title="Inactive User">
-        <deny permission="bungeni.delegation.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.delegation.Add" role="bungeni.Owner" />
-        <deny permission="bungeni.user.Edit" role="bungeni.Authenticated" />
-        <!-- address -->
-        <deny permission="bungeni.address.Edit" role="bungeni.Clerk" />
-        <deny permission="bungeni.address.Edit" role="bungeni.Owner" />
-        <deny permission="bungeni.address.Add" role="bungeni.Clerk" />
-        <deny permission="bungeni.address.Add" role="bungeni.Owner" />
-        <deny permission="bungeni.address.Delete" role="bungeni.Clerk" />
-        <deny permission="bungeni.address.Delete" role="bungeni.Owner" />
+        <deny permission=".Edit" roles="Authenticated" />
+        <deny permission="delegation.Edit" roles="Owner" />
+        <deny permission="delegation.Add" roles="Owner" />
+        <deny permission="address.Edit" roles="Clerk Owner" />
+        <deny permission="address.Add" roles="Clerk Owner" />
+        <deny permission="address.Delete" roles="Clerk Owner" />
     </state>
     
     <state id="D" like_state="I" title="Deceased User" />
@@ -47,7 +39,7 @@
         destination="I"
         condition="not_has_date_of_death"
         trigger="manual"
-        roles="bungeni.Speaker"
+        roles="Speaker"
         require_confirmation="true"
     />
     
@@ -55,7 +47,7 @@
         source="I"
         destination="A"
         trigger="manual"
-        roles="bungeni.Speaker"
+        roles="Speaker"
         require_confirmation="true"
     />
     
@@ -64,7 +56,7 @@
         destination="D"
         condition="has_date_of_death"
         trigger="manual"
-        roles="bungeni.Speaker"
+        roles="Speaker"
         require_confirmation="true"
     />
     
@@ -72,7 +64,7 @@
         source="D"
         destination="A"
         trigger="manual"
-        roles="bungeni.Speaker"
+        roles="Speaker"
         require_confirmation="true"
     />
 
