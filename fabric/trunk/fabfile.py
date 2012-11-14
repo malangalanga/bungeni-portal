@@ -79,6 +79,7 @@ def presetup():
     
     essentials()
     build_python()
+    postgres_install()
     setup_pylibs() 
     setup_docsplit()
 
@@ -459,13 +460,13 @@ def stop_plone(mode="ABORT_ON_ERROR"):
     service.stop_service("plone", mode)
 
 
-def start_postgres():
-    """
-    Start postgres
-    """
+#def start_postgres():
+    #"""
+    #Start postgres
+    #"""
 
-    service = bungeni.Services()
-    service.start_service("postgres")
+    #service = bungeni.Services()
+    #service.start_service("postgres")
 
 def start_exist(mode="ABORT_ON_ERROR"):
     """
@@ -568,18 +569,6 @@ def db_load_mindata():
     tasks = bungeni.BungeniTasks()
     tasks.reset_schema()
     tasks.load_min_data()
-    __db_load_services_start()
-
-
-def db_load_largedata():
-    """
-    Load large metadata
-    """
-    __db_load_services_stop()
-    tasks = bungeni.BungeniTasks()
-    tasks.reset_db()
-    tasks.load_large_data()
-    tasks.restore_large_attachments()
     __db_load_services_start()
 
 
@@ -753,8 +742,15 @@ def exist_java_home():
     """
     cfgs = bungeni.BungeniConfigs()
     print cfgs.java_home
+    
+def postgres_install():
+    """
+    Build and install postgres
+    """
+    postgres = bungeni.PostgresTasks()
+    postgres.build_postgres()
 
-
+	
 def reset_all():
     """
     Resets Bungeni, eXist XML db and the message queue

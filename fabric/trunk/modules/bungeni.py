@@ -392,14 +392,12 @@ class BungeniConfigs:
         self.portal_web_server_port = self.cfg.get_config("portal",
                 "web_server_port")
         # others :  postgresql, xapian
-        self.postgresql_local_url = self.cfg.get_config("postgresql",
-                "local_url")
+        #self.postgresql_local_url = self.cfg.get_config("postgresql",
+        #        "local_url")
         self.xapian_local_url = self.cfg.get_config("xapian",
                 "local_url")
         self.xapian_bindings_local_url = \
             self.cfg.get_config("xapian-bindings", "local_url")
-        self.postgresql_bin = self.user_bungeni \
-            + "/parts/postgresql/bin"
         self.db_dump_update_script = self.utils.get_fab_path() \
             + "/scripts/upd-dbdump.sh"
         #custom 
@@ -447,6 +445,20 @@ class BungeniConfigs:
         self.glue_repo = self.cfg.get_config("glue-script", "repo")
         self.user_glue = self.user_install_root + "/glue"
         self.glue_interval = self.cfg.get_config("glue-script", "interval")
+        #PostgreSQL installation folder
+        self.postgres_install_url = self.cfg.get_config("postgresql","download_url")
+        self.postgres_download_command = self.get_download_command(self.postgres_install_url)
+        self.postgres_db = self.cfg.get_config("postgresql", "bungeni-db-name")
+        self.postgres_db_test = self.postgres_db + "-test"
+        self.postgres_build_path = self.user_build_root + "/postgres"
+        self.postgres_install_path = self.user_install_root + "/postgres"
+        self.user_postgres = self.postgres_install_path
+        self.postgres_data_path = self.user_install_root + "/postgres-data"
+        self.user_postgres_data = self.postgres_data_path
+        self.postgres_bin_path = self.postgres_install_path + "/bin"
+        self.postgres_src_dir = \
+            self.utils.get_basename_prefix(self.postgres_install_url)
+
 
     def get_download_command(self, strURL):
         if strURL.startswith("http") or strURL.startswith("ftp"):
@@ -475,12 +487,12 @@ class BungeniConfigs:
 
     def used_pythons(self):
         pys = []
-	pys.append(self.cfg.get_config("bungeni","python"))
-	pys.append(self.cfg.get_config("portal","python"))
-	pys.append(self.cfg.get_config("plone","python"))
-	pys.append(self.cfg.get_config("supervisor","python"))
-	used_pys = set(pys)
-	return used_pys
+        pys.append(self.cfg.get_config("bungeni","python"))
+        pys.append(self.cfg.get_config("portal","python"))
+        pys.append(self.cfg.get_config("plone","python"))
+        pys.append(self.cfg.get_config("supervisor","python"))
+        used_pys = set(pys)
+        return used_pys
 
     
 class PythonConfigs:
@@ -492,7 +504,7 @@ class PythonConfigs:
         self.python_home = self.get_python_home(config_name)
         self.python = self.python_home + "/bin/python"
         self.python_packages = self.python_home + "/lib/python" + \
-	    self.python_ver + "/site-packages"
+        self.python_ver + "/site-packages"
 
     def get_python_home(self, config_name):
         selected_python = self.cfgreader.get_config(config_name,"python")
@@ -560,15 +572,15 @@ class Presetup:
             run(self.cfg.python27_download_command)
             run("tar xvf " + self.cfg.python27_download_file)
             with cd(self.cfg.python27_src_dir):
-		   #
-		   # All other platforms revert to the normal build
-		   #
-		   run("CPPFLAGS=-I/usr/include/openssl "
-		       "LDFLAGS=-L/usr/lib/ssl "
-		       "./configure --prefix=%(python_home)s USE=sqlite --enable-unicode=ucs4"
-		        % {"python_home":self.cfg.user_python27_home})
-		   run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
-		   run("make install")
+			#
+			# All other platforms revert to the normal build
+			#
+			run("CPPFLAGS=-I/usr/include/openssl "
+				"LDFLAGS=-L/usr/lib/ssl "
+				"./configure --prefix=%(python_home)s USE=sqlite --enable-unicode=ucs4"
+				% {"python_home":self.cfg.user_python27_home})
+			run("CPPFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib/ssl make")
+			run("make install")
 
     def build_py26(self):
         """
@@ -733,8 +745,10 @@ class Presetup:
         template_map = {
             "user_bungeni": self.cfg.user_bungeni,
             "user_jython": self.cfg.user_jython,
-            "user_plone": self.cfg.user_plone,
-            "user_portal": self.cfg.user_portal,
+            "user_plone" : self.cfg.user_plone,
+            "user_portal" : self.cfg.user_portal,
+            "user_postgres" : self.cfg.user_postgres,
+            "user_postgres_data" : self.cfg.user_postgres_data,
             "app_host": self.cfg.app_host,
             "supervisor_host": self.cfg.supervisor_host,
             "supervisor_port": self.cfg.supervisor_port,
@@ -1204,7 +1218,7 @@ class PloneTasks:
                            self.cfg.user_plone)
         self.exists_check = [self.cfg.user_bungeni,
                              self.cfg.user_bungeni + "/bin/paster",
-                             self.cfg.postgresql_bin]
+                             self.cfg.postgres_bin_path]
         if not self.tasks.build_exists(self.exists_check):
             abort(red("The Plone buildout requires an existing bungeni buildout"
                   ))
@@ -1241,7 +1255,7 @@ class PloneTasks:
        """
 
        self.tasks.buildout("PATH=%s:$PATH PYTHON=%s"
-                            % (self.cfg.postgresql_bin,
+                            % (self.cfg.postgres_bin_path,
                             self.pycfg.python), "",
                             self.cfg.plone_buildout_config,
                             self.cfg.plone_additional_buildout_config)
@@ -1252,7 +1266,7 @@ class PloneTasks:
        """
 
        self.tasks.buildout("PATH=%s:$PATH PYTHON=%s"
-                            % (self.cfg.postgresql_bin,
+                            % (self.cfg.postgres_bin_path,
                             self.pycfg.python), "-N",
                             self.cfg.plone_buildout_config,
                             self.cfg.plone_additional_buildout_config)
@@ -1263,7 +1277,7 @@ class PloneTasks:
        """
 
        self.tasks.buildout("PATH=%s:$PATH PYTHON=%s"
-                            % (self.cfg.postgresql_bin,
+                            % (self.cfg.postgres_bin_path,
                             self.pycfg.python), "-N",
                             self.cfg.plone_buildout_config)                            
 
@@ -1278,7 +1292,7 @@ class PloneTasks:
        """
        self.local_config()
        self.tasks.check_versions("PATH=%s:$PATH PYTHON=%s"
-                           % (self.cfg.postgresql_bin,
+                           % (self.cfg.postgres_bin_path,
                            self.pycfg.python), "-Novvvvv", self.cfg.plone_buildout_config)
 
 
@@ -1515,18 +1529,6 @@ class BungeniTasks:
         self.deploy_ini()
 
 
-    """
-    def setup(self, version = "default"):
-        self.tasks.src_checkout()
-        if version == "HEAD":
-            with cd(self.cfg.user_bungeni):
-                with cd("src"):
-                    run("svn up -rHEAD ./bungeni.main ./bungeni_custom")
-        self.tasks.bootstrap(self.pycfg.python)
-        self.install_bungeni_custom()
-        self.deploy_ini()
-    """
-
     def deploy_ini(self):
         run("cp %(bungeni)s/deploy.ini %(deploy_ini)s" % {"bungeni"
             : self.cfg.user_bungeni, "deploy_ini"
@@ -1543,7 +1545,7 @@ class BungeniTasks:
             abort("no release parameter specified in setup.ini")
         elif current_release["bungeni"] == "HEAD" :
             with cd(self.cfg.user_bungeni):
-            	run("svn up -rHEAD `ls | grep -v src | grep -v portal | grep -v plone`")
+                run("svn up -rHEAD `ls | grep -v src | grep -v portal | grep -v plone`")
                 with cd("src"):
                     run("svn up -rHEAD ./bungeni.main ./bungeni_custom ./ploned.ui ./portal.auth")
             #self.tasks.src_update(current_release["bungeni"])
@@ -1561,34 +1563,65 @@ class BungeniTasks:
 
        self.local_config()
        self.tasks.buildout("PATH=%s:$PATH PYTHON=%s"
-                           % (self.cfg.postgresql_bin,
+                           % (self.cfg.postgres_bin_path,
                            self.pycfg.python), "",
                            self.cfg.bungeni_buildout_config)
 
     def build_opt(self):
         self.local_config()
         self.tasks.buildout("PATH=%s:$PATH PYTHON=%s"
-                            % (self.cfg.postgresql_bin,
+                            % (self.cfg.postgres_bin_path,
                             self.pycfg.python), "-N",
                             self.cfg.bungeni_buildout_config)
 
     def check_versions(self):
         self.local_config()
         self.tasks.check_versions("PATH=%s:$PATH PYTHON=%s"
-                            % (self.cfg.postgresql_bin,
+                            % (self.cfg.postgres_bin_path,
                             self.pycfg.python), "-Novvvvv", self.cfg.bungeni_buildout_config)
 
+
+    def __drop_bungenidb(self):
+        pg = PostgresTasks()
+        pg.dropdb(self.cfg.postgres_db)
+        pg.dropdb(self.cfg.postgres_db_test)
+
+    def __create_bungenidb(self):
+        pg = PostgresTasks()
+        pg.createdb(self.cfg.postgres_db)
+        pg.createdb(self.cfg.postgres_db_test)
+        
+        
+    
     def reset_db(self):
-        with cd(self.cfg.user_bungeni):
-            run("./parts/postgresql/bin/dropdb bungeni")
-            run("./parts/postgresql/bin/createdb bungeni")
+        """
+        Drops and Recreates the Bungeni database
+        """
+        # first drop 
+        self.__drop_bungenidb()
+        # then create
+        self.__create_bungenidb()
 
 
-    def reset_schema(self):
+    def reset_xapian_index(self):
         with cd(self.cfg.user_bungeni):
-            run("./bin/reset-db")
+            run("rm -rf ./parts/index")
+    
+    def reset_xmldb_data(self):
+        with cd(self.cfg.user_bungeni):
             run("rm -rf ./parts/xml_db/*")
-
+            
+    def reset_schema(self):
+        """
+        Drops and Recreates the Bungeni database AND 
+        Also loads the Schema
+        """
+        self.__drop_bungenidb()
+        self.reset_xapian_index()
+        self.reset_xmldb_data()
+        self.__create_bungenidb()
+        self.load_schema()
+    
 
     def load_demo_data(self):
        """
@@ -1596,9 +1629,16 @@ class BungeniTasks:
        """
 
        with cd(self.cfg.user_bungeni):
-           demo_dmp = self.__dump_update(self.data_dump_file)
-           run("./bin/psql bungeni < %s"
-                % demo_dmp)
+            out = run(
+                "%(postgres_bin)/psql %(postgres_db)s < %(data_dump)s" % 
+                {
+                    "postgres_bin":self.cfg.postgres_bin_path,
+                    "postgres_db":self.cfg.postgres_db,
+                    "data_dump":self.data_dump_file,
+                }
+            )       
+            print(out)
+
 
     def dump_data(self, output_path):
         """
@@ -1606,7 +1646,13 @@ class BungeniTasks:
         """
 
         with cd(self.cfg.user_bungeni):
-            run("./parts/postgresql/bin/pg_dump bungeni -a -O --disable-triggers > " + output_path)
+            run(
+                "%(postgres_bin)s/pg_dump bungeni -a -O --disable-triggers > %(output)s" %
+                {
+                    "postgres_bin" : self.cfg.postgres_bin_path,
+                    "output" : output_path
+                }
+            )
 
 
     def restore_attachments(self):
@@ -1624,8 +1670,14 @@ class BungeniTasks:
 
     def load_min_data(self):
         with cd(self.cfg.user_bungeni):
-            min_dump = self.__dump_update(self.min_dump_file)
-            out = run("./bin/psql bungeni < %s" % min_dump)
+            out = run(
+                "%(postgres_bin)/psql %(postgres_db)s < %(min_dump)s" % 
+                {
+                    "postgres_bin":self.cfg.postgres_bin_path,
+                    "postgres_db":self.cfg.postgres_db,
+                    "min_dump":self.min_dump_file,
+                }
+            )
             # may have out.failed=False/succeeded=True/return_code=0, so all 
             # OK -- but may still have a stderr! If such is the case, for 
             # load_min_data, we want to fail and correct the issue:
@@ -1676,7 +1728,7 @@ class BungeniTasks:
                 run("tar --strip-components=2 -zvxf ../testdatadmp/%s" % large_att_gz)
                 run("rm ../testdatadmp/%s" % large_att_gz)
 
-
+    """
     def  __dump_update(self, dump_file):
         with cd(self.cfg.user_bungeni):
            dict_dump_update = {
@@ -1687,13 +1739,13 @@ class BungeniTasks:
                 }
            run("%(db_dump_update_script)s %(data_dump_file)s %(output_file)s undesa %(output_user)s" % dict_dump_update)
            return self.data_dump_folder + "/dmp_upd.txt"
-
+    """
 
 
     def local_config(self):
         template_map = {
             "bungeni_local_index": self.cfg.bungeni_local_index,
-            "postgresql_local_url": self.cfg.postgresql_local_url,
+            "postgresql_local_url": self.cfg.postgres_install_url,
             "xapian_local_url": self.cfg.xapian_local_url,
             "xapian_bindings_local_url": self.cfg.xapian_bindings_local_url,
             }
@@ -1704,11 +1756,40 @@ class BungeniTasks:
 
     def setupdb(self):
        """
-       Setup the postgresql db - this needs to be run just once for the lifetime of the installation
+       Setup the postgresql db - this needs to be run just once for the 
+       lifetime of the installation
        """
+       pg = PostgresTasks()
+       
+       # create the postgres data folder
+       run("mkdir -p " + self.cfg.user_postgres_data)
+       # initialize
+       pg.initdb()
+       
+       # actual db setup
+       # start postgres
+       pg.ctl("start")
+   
+       #create the postgres dbs for bungeni
+       #main db
+       self.__create_bungenidb()
+        
+       # load the schema
+       self.load_schema()
+        
+       #stop pg
+       pg.ctl("stop")
+       
 
-       with cd(self.cfg.user_bungeni):
-            run("./bin/setup-database")
+    def load_schema(self):
+        """
+        Sets up the Bungeni Schema using the setup-schema python script
+        The python used for this script is the "bungeni python"    
+        """
+        with cd(self.cfg.user_bungeni):
+            run(
+              "./bin/python ./data/scripts/setup-schema.py"
+            )
 
     def update_deployini(self):
         self.tasks.update_ini(self.cfg.bungeni_deploy_ini, "server:main"
@@ -2146,4 +2227,103 @@ class CustomTasks:
         f_wf_xml = open(wf_xml_file, "w")
         f_wf_xml.write(str_repl_xml.encode('UTF-8'))
 
-                                        
+class PostgresTasks:
+    """
+    Install and Setup Postgres
+    
+    __pg_* functions all resolve to base pg actions
+    
+    """
+    
+    def __init__(self):
+        self.cfg = BungeniConfigs()   
+        self.sup_pycfg = PythonConfigs(self.cfg, "bungeni")  
+        
+    def build_postgres(self):
+        """
+        Build postgres from Source
+        """
+        run("mkdir -p "+ self.cfg.postgres_build_path)
+        run("mkdir -p "+ self.cfg.postgres_install_path)
+        with cd(self.cfg.postgres_build_path):
+            run(self.cfg.postgres_download_command)
+            run("tar xvf %(postgres_download_file)s.tar.gz" % {"postgres_download_file":self.cfg.postgres_src_dir})
+            
+            with cd(self.cfg.postgres_src_dir):
+                run("./configure --prefix=%(postgres_home)s" % {"postgres_home": self.cfg.user_postgres})
+                run("make")
+                run("make install")
+                
+  
+    def initdb(self):
+        """
+        Runs initdb to initialize the postgres data folder
+        """
+        run(
+            "%(postgres_bin)s/initdb --pgdata=%(postgres_data)s" % 
+            {
+             "postgres_bin":self.cfg.postgres_bin_path, 
+             "postgres_data":self.cfg.user_postgres_data,
+            }
+         )
+    
+    
+    def ctl_options(self):
+        """
+        Options for pg_ctl specifies pg_data folder and log file
+        """
+        return (
+          "-D %(postgres_data)s -l %(postgres_tmp_log)s" % 
+          {
+            "postgres_data" : self.cfg.user_postgres_data,
+            "postgres_tmp_log" : self.cfg.user_postgres_data + "/tmp.log",
+          }
+        )
+    
+    def ctl(self, start_or_stop):
+        """
+        Used only during setup_database 
+        For all other instances of starting pg use supervisor 
+        """
+        run(
+           "%(postgres_bin)s/pg_ctl %(start_or_stop)s %(postgres_options)s" % 
+           {
+            "postgres_bin" : self.cfg.postgres_bin_path,
+            "postgres_options" : self.ctl_options(),
+            "start_or_stop" : start_or_stop,
+           },
+           # This parameter prevents creation of a pseudo tty
+           # which mains the program proceeds only after pg has 
+           # been stopped or started 
+           pty=False
+        )
+
+
+    def dropdb(self, name):
+        """
+        Drops the database
+        """
+        run(
+            "%(postgres_bin)s/dropdb %(db_name)s" %
+            {
+            "postgres_bin" : self.cfg.postgres_bin_path,
+            "db_name" : name,
+            }
+        )
+    
+    def createdb(self, name):
+        """
+        Creates the database
+        """
+        run(
+            "%(postgres_bin)s/createdb %(db_name)s" %
+            {
+            "postgres_bin" : self.cfg.postgres_bin_path,
+            "db_name" : name,
+            }
+        )
+             
+
+
+       
+

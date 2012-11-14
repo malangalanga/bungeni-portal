@@ -62,7 +62,7 @@ autostart = false
 
 
 [program:postgres]
-command = %(user_bungeni)s/parts/postgresql/bin/postmaster -D %(user_bungeni)s/parts/db
+command = %(user_postgres)s/bin/postmaster -D %(user_postgres_data)s
 stdout_logfile = %(user_logs)s/postgres.log
 priority = 10
 redirect_stderr = true
