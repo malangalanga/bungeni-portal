@@ -1521,18 +1521,6 @@ class BungeniTasks:
         self.deploy_ini()
 
 
-    """
-    def setup(self, version = "default"):
-        self.tasks.src_checkout()
-        if version == "HEAD":
-            with cd(self.cfg.user_bungeni):
-                with cd("src"):
-                    run("svn up -rHEAD ./bungeni.main ./bungeni_custom")
-        self.tasks.bootstrap(self.pycfg.python)
-        self.install_bungeni_custom()
-        self.deploy_ini()
-    """
-
     def deploy_ini(self):
         run("cp %(bungeni)s/deploy.ini %(deploy_ini)s" % {"bungeni"
             : self.cfg.user_bungeni, "deploy_ini"
@@ -1587,13 +1575,13 @@ class BungeniTasks:
 
     def __drop_bungenidb(self):
         pg = PostgresTasks()
-        pgtasks.__pg_dropdb(self.cfg.postgres_db)
-        pgtasks.__pg_dropdb(self.cfg.postgres_db_test)
+        pg.dropdb(self.cfg.postgres_db)
+        pg.dropdb(self.cfg.postgres_db_test)
 
     def __create_bungenidb(self):
         pg = PostgresTasks()
-        pgtasks.__pg_createdb(self.cfg.postgres_db)
-        pgtasks.__pg_createdb(self.cfg.postgres_db_test)
+        pg.createdb(self.cfg.postgres_db)
+        pg.createdb(self.cfg.postgres_db_test)
         
         
     
@@ -1768,32 +1756,29 @@ class BungeniTasks:
        # create the postgres data folder
        run("mkdir -p " + self.cfg.user_postgres_data)
        # initialize
-       pg.__pg_initdb()
+       pg.initdb()
        
        # actual db setup
        # start postgres
-       pg.__pg_ctl("start")
+       pg.ctl("start")
    
-       #wait for it to start
-       run("sleep 5")
-      
        #create the postgres dbs for bungeni
        #main db
-       pg.create_db()
+       self.__create_bungenidb()
         
        # load the schema
        self.load_schema()
         
        #stop pg
-       self.__pg_ctl("stop")
+       pg.ctl("stop")
        
 
     def load_schema(self):
-	    """
+        """
         Sets up the Bungeni Schema using the setup-schema python script
         The python used for this script is the "bungeni python"    
-	    """
-        with cd(self.user_bungeni):
+        """
+        with cd(self.cfg.user_bungeni):
             run(
               "./bin/python ./data/scripts/setup-schema.py"
             )
@@ -2262,8 +2247,11 @@ class PostgresTasks:
                 run("make install")
                 
   
-    def __pg_initdb(self):
-         run(
+    def initdb(self):
+        """
+        Runs initdb to initialize the postgres data folder
+        """
+        run(
             "%(postgres_bin)s/initdb --pgdata=%(postgres_data)s" % 
             {
              "postgres_bin":self.cfg.postgres_bin_path, 
@@ -2272,33 +2260,41 @@ class PostgresTasks:
          )
     
     
-    def __pg_ctl_options(self):
+    def ctl_options(self):
         """
         Options for pg_ctl specifies pg_data folder and log file
         """
-        return 
-          "-D %(postgres_data)s -l %(postgres_tmp_log)s " % 
+        return (
+          "-D %(postgres_data)s -l %(postgres_tmp_log)s" % 
           {
-            "postgres_data":self.cfg.user_postgres_data,
-            "postgres_tmp_log":self.cfg.user_postgres_data + "/tmp.log",
+            "postgres_data" : self.cfg.user_postgres_data,
+            "postgres_tmp_log" : self.cfg.user_postgres_data + "/tmp.log",
           }
+        )
     
-    def __pg_ctl(self, start_or_stop):
+    def ctl(self, start_or_stop):
         """
         Used only during setup_database 
         For all other instances of starting pg use supervisor 
         """
         run(
-           "%(postgres_bin)s/pg_ctl %(start_or_stop_)s %(postgres_options)s" % 
+           "%(postgres_bin)s/pg_ctl %(start_or_stop)s %(postgres_options)s" % 
            {
             "postgres_bin" : self.cfg.postgres_bin_path,
-            "postgres_options" : self.__pg_ctl_options(),
+            "postgres_options" : self.ctl_options(),
             "start_or_stop" : start_or_stop,
-           }
+           },
+           # This parameter prevents creation of a pseudo tty
+           # which mains the program proceeds only after pg has 
+           # been stopped or started 
+           pty=False
         )
 
 
-    def __pg_dropdb(self, name):
+    def dropdb(self, name):
+        """
+        Drops the database
+        """
         run(
             "%(postgres_bin)s/dropdb %(db_name)s" %
             {
@@ -2307,7 +2303,10 @@ class PostgresTasks:
             }
         )
     
-    def __pg_createdb(self, name):
+    def createdb(self, name):
+        """
+        Creates the database
+        """
         run(
             "%(postgres_bin)s/createdb %(db_name)s" %
             {
