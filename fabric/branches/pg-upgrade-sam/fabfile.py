@@ -79,6 +79,7 @@ def presetup():
     
     essentials()
     build_python()
+    postgres_install()
     setup_pylibs() 
     setup_docsplit()
 
