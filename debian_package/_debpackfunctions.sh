@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #<ini_file> <ini_section> <ini_key>
-getini() 
-{	
+getini(){	
+	
 	echo $(cat $1 | awk -v "RS=\n\n" '/\['$2'\]/ {print $0}' | grep $3 | awk -F"=" '!/^($|#)/ {print $2}'|tr -d '\r|[:space:]')
 }
 
@@ -24,7 +24,7 @@ gettime(){
 
 gettimestamp(){
 	
-	echo $(date +"%Y%m%d-%H%M%S")	
+	echo $(date +"%Y-%m-%d_%H%M%S")	
 }
 
 getrevinfo(){

@@ -33,47 +33,47 @@ export CURR_DEB_LOG="${CURR_DIR}/deb-${CURR_TIMESTAMP}.log"
 new bashtasklog logger -t -w 50 -l $CURR_DEB_LOG
 
 logger.printTask "******************************************************************" 
-logger.printTask "[Builder] Started ..." 
+logger.printTask "[Builder] Started..." 
 
 	if [ ! -z $BUNGENI_VERSION ] ; then
-		logger.printTask "[Bungeni] Started" 
+		logger.printTask "[Bungeni] Start building.." 
 		yes | ./bungeni.sh $BUNGENI_VERSION
-		logger.printTask "[Bungeni] Finished" 
+		logger.printTask "[Bungeni] Finished." 
 	else
-		logger.printFail "[Bungeni][Exiting] Please set bungeni version in deb.ini file"
+		logger.printFail "[Bungeni][Exiting] Please set bungeni version in deb.ini file!"
 	fi
 logger.printTask "------------------------------------------------------------------" 
-logger.printTask "[ExistDb] Building ..." 
+logger.printTask "[ExistDb] Building..." 
 	if [ ! -d $EXIST_DIR ] ; then
-		logger.printFail "[ExistDb][Exiting] ExistDB directory does not exist"
+		logger.printFail "[ExistDb][Exiting] ExistDB directory does not exist!"
 	else
 		if [ ! -z $EXIST_RELEASE ] ; then
-			logger.printTask "[ExistDb] Started" 
+			logger.printTask "[ExistDb] Started.." 
 			yes | ./exist.sh $EXIST_RELEASE
-			logger.printTask "[ExistDb] Finished" 
+			logger.printTask "[ExistDb] Finished." 
 		else
-			logger.printFail "[ExistDb][Exiting] Please set exist release in deb.ini file"
+			logger.printFail "[ExistDb][Exiting] Please set exist release in deb.ini file!"
 		fi
 	fi
 logger.printTask "------------------------------------------------------------------" 
-logger.printTask "[Portal] Building ..." 
+logger.printTask "[Portal] Building..." 
 	if [ ! -d $PORTAL_DIR ] ; then
-		logger.printFail "[Portal] directory does not exist"
+		logger.printFail "[Portal] directory does not exist!"
 	else
-		logger.printTask "[Portal] Started" 
+		logger.printTask "[Portal] Started.." 
 		yes | ./portal.sh
-		logger.printTask "[Portal] Finished" \logger.printOk
+		logger.printTask "[Portal] Finished."
 	fi
 logger.printTask "------------------------------------------------------------------" 
-logger.printTask "[Plone] Building ..." 
+logger.printTask "[Plone] Building..." 
 	if [ ! -d $PLONE_DIR ] ; then
-		logger.printFail "[Plone] directory does not exist"
+		logger.printFail "[Plone] directory does not exist!"
 	else
-		logger.printTask "[Plone] Started" 
+		logger.printTask "[Plone] Started.." 
 		yes | ./plone.sh
-		logger.printTask "[Plone] Finished" 
+		logger.printTask "[Plone] Finished." 
 	fi		
-logger.printTask "[Builder] Finished" 
+logger.printTask "[Builder] Finished." 
 logger.printOk
 
 

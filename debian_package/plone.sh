@@ -14,11 +14,19 @@ logger.printTask "[Plone] Getting revision information..."
 
 PLONE_CFG=$(getini deb.ini plone cfg)
 PLONE_VERSION=$(getproperty ${PLONE_CFG} Plone)
-logger.printTask "[Plone] Version ${PLONE_VERSION}"
+if [ ! -z $PLONE_VERSION ] ; then
+	logger.printTask "[Plone] Version ${PLONE_VERSION}"
+else
+	logger.printFail "[Plone][Error] Version Unavailable"
+fi
 
 PLONE_DIR=$(getini deb.ini plone dir)
 PLONE_REVISION=$(getrevinfo ${PLONE_DIR})
-logger.printTask "[Plone] Revision ${PLONE_REVISION}"
+if [ ! -z $PLONE_REVISION ] ; then
+	logger.printTask "[Plone] Revision ${PLONE_REVISION}"
+else
+	logger.printFail "[Plone][Error] Revision Unavailable"
+fi
 
 PLONE_BUILD_DATE=$(getdate)
 PLONE_RELEASE_NAME="${PLONE_VERSION}+${PLONE_REVISION}-${PLONE_BUILD_DATE}"
@@ -31,7 +39,7 @@ logger.printTask "[Plone] Zipping..."
 {
 	printf "\n\n"
 		
-	tar czf plone/$PLONE_ZIP_FILE $PLONE_DIR
+	tar -czf plone/$PLONE_ZIP_FILE -T plone.include -X plone.exclude
 	} &>> $CURR_DEB_LOG
 
 logger.printTask "[Plone] Preparing debian pack folder..."

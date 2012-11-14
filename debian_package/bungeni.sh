@@ -19,14 +19,17 @@ else
 fi
 
 logger.printTask "[Bungeni] Getting version information..."
-BUNGENI_APPS_HOME=$(getini deb.ini global apps_home)
 BUNGENI_DIR=$(getini deb.ini bungeni dir)
-
-BUNGENI_REVISION=$(getrevinfo $BUNGENI_DIR)
-logger.printTask "[Bungeni] Revision ${BUNGENI_REVISION}"
 
 BUNGENI_VERSION=$1
 logger.printTask "[Bungeni] Version ${BUNGENI_VERSION}"
+
+BUNGENI_REVISION=$(getrevinfo $BUNGENI_DIR)
+if [ ! -z $BUNGENI_REVISION ] ; then
+	logger.printTask "[Bungeni] Revision ${BUNGENI_REVISION}"
+else
+	logger.printFail "[Bungeni] Revision Unavailable"
+fi
 
 BUNGENI_BUILD_DATE=$(getdate)
 BUNGENI_RELEASE_NAME="${BUNGENI_VERSION}+${BUNGENI_REVISION}-${BUNGENI_BUILD_DATE}"
@@ -39,16 +42,7 @@ logger.printTask "[Bungeni] Zipping ..."
 {
 	printf "\n\n"
 	
-	tar czf bungeni/$BUNGENI_ZIP_FILE /opt/bungeni \
-	--exclude=$BUNGENI_APPS_HOME/exist* \
-	--exclude=$BUNGENI_APPS_HOME/glue* \
-	--exclude=$BUNGENI_APPS_HOME/jython* \
-	--exclude=$BUNGENI_APPS_HOME/bungeni/plone* \
-	--exclude=$BUNGENI_APPS_HOME/bungeni/portal* \
-	--exclude=$BUNGENI_APPS_HOME/.* \
-	--exclude=$BUNGENI_APPS_HOME/config/xml* \
-	--exclude=/opt/bungeni/.bungenitmp* 
-	
+	tar -czf bungeni/$BUNGENI_ZIP_FILE -T bungeni.include -X bungeni.exclude
 	} &>> $CURR_DEB_LOG
 
 logger.printTask "[Bungeni] Preparing debian pack folder..."

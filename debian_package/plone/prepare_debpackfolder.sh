@@ -9,8 +9,8 @@ EXPECTED_ARGS=3
 
 if [ $# -ne $EXPECTED_ARGS ] 
 then
- echo "Usage: `basename $0` <release name> <pre-built-plone.tar.gz> <arch>"
- exit 65
+   echo "Usage: `basename $0` <release name> <pre-built-plone.tar.gz> <arch>"
+   exit 65
 fi
 
 if [ ! -z $CURR_DEB_LOG ] ; then

@@ -14,11 +14,19 @@ logger.printTask "[Portal] Getting revision information..."
 
 PORTAL_CFG=$(getini deb.ini portal cfg)
 PORTAL_VERSION=$(getproperty ${PORTAL_CFG} Deliverance)
-logger.printTask "[Portal] Version ${PLONE_VERSION}"
+if [ ! -z $PORTAL_VERSION ] ; then
+	logger.printTask "[Portal] Deliverance Version ${PORTAL_VERSION}"
+else
+	logger.printFail "[Portal] Deliverance Version Unavailable"
+fi
 
 PORTAL_DIR=$(getini deb.ini portal dir)
 PORTAL_REVISION=$(getrevinfo ${PORTAL_DIR})
-logger.printTask "[Portal] Revision ${PORTAL_REVISION}"
+if [ ! -z $PORTAL_REVISION ] ; then
+	logger.printTask "[Portal] Revision ${PORTAL_REVISION}"
+else
+	logger.printFail "[Portal] Revision Unavailable"
+fi
 
 PORTAL_BUILD_DATE=$(getdate)
 PORTAL_RELEASE_NAME="${PORTAL_VERSION}+${PORTAL_REVISION}-${PORTAL_BUILD_DATE}"
@@ -31,7 +39,7 @@ logger.printTask "[Portal] Zipping..."
 {
 	printf "\n\n"
 		
-	tar czf portal/$PORTAL_ZIP_FILE $PORTAL_DIR
+	tar -czf portal/$PORTAL_ZIP_FILE -T portal.include -X portal.exclude
 	} &>> $CURR_DEB_LOG
 
 logger.printTask "[Portal] Preparing debian pack folder..."
