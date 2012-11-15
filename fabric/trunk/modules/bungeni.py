@@ -1769,7 +1769,8 @@ class BungeniTasks:
        # actual db setup
        # start postgres
        pg.ctl("start")
-   
+       
+       run("sleep 10") 
        #create the postgres dbs for bungeni
        #main db
        self.__create_bungenidb()
@@ -2266,6 +2267,8 @@ class PostgresTasks:
              "postgres_data":self.cfg.user_postgres_data,
             }
          )
+
+	run("sed -i '$a\ max_prepared_transactions = 12' %(postgres_data)s/postgresql.conf" % {"postgres_data":self.cfg.user_postgres_data})
     
     
     def ctl_options(self):
