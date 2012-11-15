@@ -1630,7 +1630,7 @@ class BungeniTasks:
 
        with cd(self.cfg.user_bungeni):
             out = run(
-                "%(postgres_bin)/psql %(postgres_db)s < %(data_dump)s" % 
+                "%(postgres_bin)s/psql %(postgres_db)s < %(data_dump)s" % 
                 {
                     "postgres_bin":self.cfg.postgres_bin_path,
                     "postgres_db":self.cfg.postgres_db,
@@ -1671,7 +1671,7 @@ class BungeniTasks:
     def load_min_data(self):
         with cd(self.cfg.user_bungeni):
             out = run(
-                "%(postgres_bin)/psql %(postgres_db)s < %(min_dump)s" % 
+                "%(postgres_bin)s/psql %(postgres_db)s < %(min_dump)s" % 
                 {
                     "postgres_bin":self.cfg.postgres_bin_path,
                     "postgres_db":self.cfg.postgres_db,
