@@ -16,6 +16,10 @@
     <allow permission="sitting_attendance.Edit" roles="Clerk" />
     <allow permission="sitting_attendance.Add" roles="Clerk" />
     <allow permission="sitting_attendance.Delete" roles="Clerk" />
+    <allow permission="sitting_report.Add" roles="Clerk" />
+    <allow permission="sitting_report.Edit" roles="Clerk" />
+    <allow permission="sitting_report.View" roles="Anonymous" />
+    <allow permission="sitting_report.Delete" roles="Clerk" />
     
     
     <state id="sitting" title="Sitting" tags="draft public agendaprivate">

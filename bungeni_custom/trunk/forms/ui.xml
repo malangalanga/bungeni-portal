@@ -1045,6 +1045,25 @@
         </field>
     </descriptor>
 
+    <descriptor name="sitting_report">
+        <field name="sitting_id" label="Sitting" required="true" value_type="vocabulary" render_type="single_select" vocabulary="sitting">
+            <show modes="view listing" />
+            <hide modes="add" />
+        </field>
+        <field name="report_id" label="Report" required="true" value_type="vocabulary" render_type="single_select" vocabulary="report">
+            <show modes="view listing" />
+            <hide modes="add" />
+        </field>
+        <field name="body" label="Body" required="false" value_type="text" render_type="rich_text">
+            <show modes="view" />
+            <hide modes="edit add listing" />
+        </field>
+        <field name="status_date" label="Status Date" required="false" value_type="date" render_type="date">
+            <show modes="view listing" />
+            <hide modes="edit add" />
+        </field>
+    </descriptor>
+
     <descriptor name="title_type" order="22">
         <field name="title_name" label="Name" required="true" value_type="text" render_type="text_line">
             <show modes="add" />
