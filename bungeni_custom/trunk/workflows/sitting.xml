@@ -13,33 +13,32 @@
     <!-- global grants -->
     <allow permission=".View" roles="Clerk" />
     <allow permission=".Add" roles="Clerk" />
-    <allow permission="sittingschedule.View" roles="Clerk" />
-    <allow permission="sittingattendance.Edit" roles="Clerk" />
-    <allow permission="sittingattendance.Add" roles="Clerk" />
-    <allow permission="sittingattendance.Delete" roles="Clerk" />
+    <allow permission="sitting_attendance.Edit" roles="Clerk" />
+    <allow permission="sitting_attendance.Add" roles="Clerk" />
+    <allow permission="sitting_attendance.Delete" roles="Clerk" />
     
     
     <state id="sitting" title="Sitting" tags="draft public agendaprivate">
         <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
         <allow permission=".Edit" roles="Clerk" />
         <allow permission=".Delete" roles="Clerk" />
-        <deny permission="sittingschedule.View" roles="Speaker Owner Signatory MP Minister Anonymous" />
-        <deny permission="sittingschedule.Edit" roles="Clerk" />
-        <deny permission="sittingschedule.item.Add" roles="Clerk" />
-        <deny permission="sittingschedule.item.Delete" roles="Clerk" />
-        <allow permission="sittingschedule.itemdiscussion.View" roles="Clerk" />
-        <deny permission="sittingschedule.itemdiscussion.View" roles="Speaker Owner Signatory MP Minister Anonymous" />
-        <deny permission="sittingschedule.itemdiscussion.Edit" roles="Clerk" />
+        <deny permission="item_schedule.View" roles="Clerk Speaker Owner Signatory MP Minister Anonymous" />
+        <deny permission="item_schedule.Edit" roles="Clerk" />
+        <deny permission="item_schedule.Add" roles="Clerk" />
+        <deny permission="item_schedule.Delete" roles="Clerk" />
+        <allow permission="item_schedule_discussion.View" roles="Clerk" />
+        <deny permission="item_schedule_discussion.View" roles="Speaker Owner Signatory MP Minister Anonymous" />
+        <deny permission="item_schedule_discussion.Edit" roles="Clerk" />
     </state>
     
     <state id="draft_agenda" title="Draft Agenda" 
         like_state="sitting"
         tags="draft public workspace agendaprivate">
-        <allow permission="sittingschedule.Edit" roles="Clerk" />
-        <allow permission="sittingschedule.View" roles="Speaker" />
-        <allow permission="sittingschedule.item.Add" roles="Clerk" />
-        <allow permission="sittingschedule.item.Delete" roles="Clerk" />
-        <allow permission="sittingschedule.itemdiscussion.View" roles="Speaker" />
+        <allow permission="item_schedule.Edit" roles="Clerk" />
+        <allow permission="item_schedule.View" roles="Clerk Speaker" />
+        <allow permission="item_schedule.Add" roles="Clerk" />
+        <allow permission="item_schedule.Delete" roles="Clerk" />
+        <allow permission="item_schedule_discussion.View" roles="Speaker" />
     </state>
     
     <state id="published_agenda" title="Published Agenda" 
@@ -48,37 +47,37 @@
         <!-- sitting -->
         <deny permission=".Edit" roles="Clerk" />
         <deny permission=".Delete" roles="Clerk" />
-        <allow permission="sittingschedule.View" roles="Speaker Owner Signatory MP Minister Anonymous" />
-        <deny permission="sittingschedule.Edit" roles="Clerk" />
+        <allow permission="item_schedule.View" roles="Speaker Owner Signatory MP Minister Anonymous" />
+        <deny permission="item_schedule.Edit" roles="Clerk" />
     </state>
     
     <state id="published_agenda_internal" title="Published Agenda Internal" 
         like_state="published_agenda"
         tags="public agendaprivate workspace">
-        <deny permission="sittingschedule.View" roles="Anonymous" />
+        <deny permission="item_schedule.View" roles="Anonymous" />
     </state>
     
     <state id="draft_minutes" title="Draft Minutes" 
         like_state="published_agenda"
         tags="draft public workspace">
         <allow permission=".Edit" roles="Clerk" />
-        <allow permission="sittingschedule.Edit" roles="Clerk" />
-        <allow permission="sittingschedule.itemdiscussion.Edit" roles="Clerk" />
+        <allow permission="item_schedule.Edit" roles="Clerk" />
+        <allow permission="item_schedule_discussion.Edit" roles="Clerk" />
     </state>
     
     <state id="published_minutes" title="Published Minutes" 
         like_state="published_agenda"
         tags="public published publishedminutes">
-        <deny permission="sittingschedule.item.Add" roles="Clerk" />
-        <deny permission="sittingschedule.item.Delete" roles="Clerk" />
-        <allow permission="sittingschedule.itemdiscussion.View" roles="Speaker Owner Signatory MP Minister Anonymous" />
-        <deny permission="sittingschedule.itemdiscussion.Edit" roles="Clerk" />
+        <deny permission="item_schedule.Add" roles="Clerk" />
+        <deny permission="item_schedule.Delete" roles="Clerk" />
+        <allow permission="item_schedule_discussion.View" roles="Speaker Owner Signatory MP Minister Anonymous" />
+        <deny permission="item_schedule_discussion.Edit" roles="Clerk" />
     </state>
     
     <state id="published_minutes_internal" title="Published Minutes Internal" 
         like_state="published_minutes"
         tags="public">
-        <deny permission="sittingschedule.itemdiscussion.View" roles="Anonymous" />
+        <deny permission="item_schedule_discussion.View" roles="Anonymous" />
     </state>
     
     <state id="archived" title="Archive" tags="private" like_state="sitting">
