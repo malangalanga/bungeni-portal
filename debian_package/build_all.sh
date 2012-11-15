@@ -14,12 +14,14 @@ BUNGENI_APPS_HOME=$(getini deb.ini global apps_home)
 #release and version info
 BUNGENI_VERSION=$(getini deb.ini bungeni version)
 EXIST_RELEASE=$(getini deb.ini exist release)
+POSTGRES_VERSION=$(getini deb.ini postgresql version)
 
 #local dir info
 BUNGENI_DIR=$(getini deb.ini bungeni dir)
 EXIST_DIR=$(getini deb.ini exist dir)
 PLONE_DIR=$(getini deb.ini plone dir)
 PORTAL_DIR=$(getini deb.ini portal dir)
+POSTGRES_DIR=$(getini deb.ini postgres dir)
 
 if [ ! -d $BUNGENI_APPS_HOME ]; then
 	echo "Bungeni does not exists"
@@ -73,6 +75,15 @@ logger.printTask "[Plone] Building..."
 		yes | ./plone.sh
 		logger.printTask "[Plone] Finished." 
 	fi		
+logger.printTask "------------------------------------------------------------------" 
+logger.printTask "[PostgreSQL] Building..." 
+	if [ ! -d $POSTGRES_DIR ] ; then
+		logger.printFail "[PostgreSQL] directory does not exist!"
+	else
+		logger.printTask "[PostgreSQL] Started.." 
+		yes | ./postgresql.sh $POSTGRES_VERSION
+		logger.printTask "[PostgreSQL] Finished."
+	fi
 logger.printTask "[Builder] Finished." 
 logger.printOk
 

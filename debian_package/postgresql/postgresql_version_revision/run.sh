@@ -9,9 +9,9 @@ else
 	CURR_DEB_LOG=/dev/null
 fi
 
-logger.printTask "[Bungeni] Generating md5sums..."
+logger.printTask "[PostgreSQL] Generating md5sums..."
 {
-	printf "\n\n"
+	printf "\n"
 	
 	cd ./debian && find .  -type f -not -path "*.svn*"  | grep -v 'DEBIAN'  | xargs md5sum > ../md5sums
 	} &>> $CURR_DEB_LOG
@@ -20,7 +20,7 @@ cd ..
 sed -i 's|./opt|opt|g' md5sums
 mv md5sums debian/DEBIAN
 
-logger.printTask "[Bungeni] Building Debian Package..."
+logger.printTask "[PostgreSQL] Building Debian Package..."
 {
 	printf "\n\n"
 	
