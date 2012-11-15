@@ -23,9 +23,10 @@ grammar {
         attribute description { text },
         attribute tags { text }?, # declare any system defined tags used in workflow
         attribute note { text }?,
-        attribute permission_actions { text }?, # space-separated permission actions
-        # each being of the form [type_key].{Action} -- when the default for the 
-        # optional type_key being the "primary" type_key for this workflow.
+        attribute permission_actions { text }?, # a space-separated string of 
+        # type-relative permission actions i.e. each included action allowed to 
+        # be in the form [type_key].{Action}, with the optional type_key
+        # defaulting to the type_key of the type "owning" this workflow.
         
         element feature {...}*,
         element allow {...}*,
@@ -128,30 +129,15 @@ besides being invalid as part of a python name, is reserved by
 an XML document all element IDs should be unique, and Bungeni defines each 
 workflow as a single XML document.
 
-- permissions are organized by target type, with each set of assignments
-  for a target type being indicated within a comment to marke the start 
-  of each such section.
-
-- the order of attributes should respect:
-    id 
-    title
-    version=False
-    like_state
-    tags
-    note
-    permissions_from_parent=False
-    obsolete=False
-
-- within each target-section, the order of appearance of permission actions 
-  (for appropriate actions) is the following, with the most general, 
-  e.g. zope.*, appearing first:
+- permissions, the order of how they are specified is organized by target type
+- within each permission-target-section, the order of appearance of permission 
+  actions should have the following standard 4 appearing first:
     View
     Edit
     Add
     Delete
-
-- for each single permission, the order of assigment to each appropriate 
-  role follows the following order:
+- the @roles space-separated value should include roles in a consistent order,
+  with the following known ones first:
     <role id="bungeni.Clerk" title="Clerks Office" />
     <role id="bungeni.Speaker" title="Speaker Office" />
     <role id="bungeni.Owner" title="Owner" />
@@ -161,8 +147,15 @@ workflow as a single XML document.
     <role id="bungeni.Authenticated" title="All authenticated users" />
     <role id="bungeni.Anonymous" title="Bungeni Visitor" />
 
-    !+ for a motion, the MP is also the Owner.
-    !+ denying zope.View on a Role seems to deny every other permission ??
+- the order of state attributes should respect:
+    id 
+    title
+    version=False
+    like_state
+    tags
+    note
+    permissions_from_parent=False
+    obsolete=False
 
 - AVOID contradictory/superfluous permissions assignments:
 When defining permissons on states, should avoid potentially contradictory or
@@ -207,7 +200,7 @@ RNC definition for <transition> XML element:
         attribute grouping_unique_sources { text } # a transition grouping id
         attribute condition { test } ?,
         attribute trigger { "automatic" | "system" | "manual" },
-        attribute roles { text }, # "bungeni.Clerk ..."
+        attribute roles { text }, # "Clerk ..."
         attribute order { integer=0 },
         attribute require_confirmation { boolean="false" },
         attribute note { text },
@@ -244,7 +237,7 @@ and constrain that accumulative sources are unique.
     grouping_unique_sources=None # any grouping id
     condition=None
     trigger=MANUAL
-    roles=bungeni.Clerk
+    roles=Clerk
     #permission=CheckerPublic !+ bungeni.{module}.wf.{transition_id}
     order=0
     require_confirmation=False

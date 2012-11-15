@@ -2,40 +2,19 @@
 <workflow title="Group Workflow"
     description="Workflow for Parliamentary Groups"
     tags="public"
-    permission_actions="
-        .View .Edit .Add .Delete
-        government.View government.Edit government.Add government.Delete
-        ministry.View ministry.Edit ministry.Add ministry.Delete
-        office.View office.Edit office.Add office.Delete
-        political_group.View political_group.Edit political_group.Add political_group.Delete
-    "
+    permission_actions=".View .Edit .Add .Delete"
     >
     
     <feature name="address" enabled="true" />
     
-    <!-- global grants !+shared_workflow -->
-    <allow permission="government.Edit" roles="Clerk" />
-    <allow permission="government.Add" roles="Clerk" />
-    <allow permission="government.Delete" roles="Clerk" />  
-    <allow permission="ministry.Edit" roles="Clerk" />
-    <allow permission="ministry.Add" roles="Clerk" />
-    <allow permission="ministry.Delete" roles="Clerk" />  
-    <allow permission="office.Edit" roles="Clerk" />
-    <allow permission="office.Add" roles="Clerk" />
-    <allow permission="office.Delete" roles="Clerk" />  
-    <allow permission="political_group.Edit" roles="Clerk" />
-    <allow permission="political_group.Add" roles="Clerk" />
-    <allow permission="political_group.Delete" roles="Clerk" />
-
+    <!-- global grants -->
+    <allow permission=".Edit" roles="Clerk" />
+    <allow permission=".Add" roles="Clerk" />
+    <allow permission=".Delete" roles="Clerk" />
     
     <state id="draft" title="Draft - Group not yet Active">
         <allow permission=".View" roles="Clerk" />
         <deny permission=".View" roles="Speaker MP Minister Anonymous" />
-        <!-- !+shared_workflow other group-type Views -->
-        <allow permission="government.View" roles="Clerk" />
-        <allow permission="ministry.View" roles="Clerk" />
-        <allow permission="office.View" roles="Clerk" />
-        <allow permission="political_group.View" roles="Clerk" />
         <deny permission="group_membership.Edit" roles="Clerk" />
         <deny permission="group_membership.Add" roles="Clerk" />
         <deny permission="group_membership.Delete" roles="Clerk" />
