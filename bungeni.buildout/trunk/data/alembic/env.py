@@ -2,7 +2,10 @@ from __future__ import with_statement
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
-
+from zope import component
+from zope.configuration import xmlconfig
+from bungeni_custom import sys
+from bungeni.alchemist.interfaces import IDatabaseEngine
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -10,6 +13,11 @@ config = context.config
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
+
+#!+ALEMBIC(miano, nov 2012) In order not to have an sqlachemy.url
+# entry in alembic.ini, we get the config from bungeni_custom
+zcml_context = xmlconfig.file("db.zcml", package=sys)
+db = component.getUtility(IDatabaseEngine, "bungeni-db")
 
 # add your model's MetaData object here
 # for 'autogenerate' support
@@ -33,9 +41,7 @@ def run_migrations_offline():
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
-    context.configure(url=url)
-
+    context.configure(url=db.url)
     with context.begin_transaction():
         context.run_migrations()
 
@@ -46,10 +52,7 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    engine = engine_from_config(
-                config.get_section(config.config_ini_section),
-                prefix='sqlalchemy.',
-                poolclass=pool.NullPool)
+    engine = component.getUtility(IDatabaseEngine, "bungeni-db")
 
     connection = engine.connect()
     context.configure(
