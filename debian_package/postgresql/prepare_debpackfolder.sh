@@ -26,6 +26,7 @@ POSTGRES_REL_FOLDER="bungeni-postgresql_${POSTGRES_REL}"
 POSTGRES_TAR=$2
 POSTGRES_ARCH=$3
 POSTGRES_DEB="${POSTGRES_REL_FOLDER}_${POSTGRES_ARCH}.deb"
+POSTGRES_SIZE=$(getsize ../postgresql.exclude ../postgresql.include)
 
 logger.printTask "[PostgreSQL] Setting up debian package..."
 cp -R postgresql_version_revision $POSTGRES_REL_FOLDER
@@ -34,6 +35,7 @@ find ./$POSTGRES_REL_FOLDER/ -name '.svn' -print0 | xargs -0 rm -rf
 logger.printTask "[PostgreSQL] Setting version control info."
 sed -i "s/__POSTGRES_VER__/${POSTGRES_REL}/g" ./$POSTGRES_REL_FOLDER/debian/DEBIAN/control
 sed -i "s/__ARCH__/${POSTGRES_ARCH}/g" ./$POSTGRES_REL_FOLDER/debian/DEBIAN/control
+sed -i "s/__SIZE__/${POSTGRES_SIZE}/g" ./$POSTGRES_REL_FOLDER/debian/DEBIAN/control
 
 logger.printTask "[PostgreSQL] Unzipping..."
 printf "\n\n"

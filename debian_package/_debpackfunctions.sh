@@ -52,3 +52,9 @@ getbungenideps(){
 	
 	echo $(cat $1 | awk -v "RS=\n\n" -F "=" '/'$(getosver)'/ {print $2}' | sed 's/#.*//' | tr -d '\n' | tr -s ' ' ', ' | sed 's/^.//')
 }
+
+#<include> <exclude>
+getsize(){
+
+	echo $(du -sc $(tr '\n' ' ' < $1) -X $2 | tail -1 | awk -F " " '{print $1}')	
+}

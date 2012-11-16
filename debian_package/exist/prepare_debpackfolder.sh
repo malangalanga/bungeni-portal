@@ -26,6 +26,7 @@ EXIST_REL_FOLDER="bungeni-exist-db_${EXIST_REL}"
 EXIST_TAR=$2
 EXIST_ARCH=$3
 EXIST_DEB="${EXIST_REL_FOLDER}_${EXIST_ARCH}.deb"
+EXIST_SIZE=$(getsize ../exist.exclude ../exist.include)
 
 logger.printTask "[ExistDb] Setting up debian package folder."
 cp -R exist-db_version_revision $EXIST_REL_FOLDER
@@ -34,6 +35,7 @@ rm -rf `find ./${EXIST_REL_FOLDER} -type d -name .svn`
 logger.printTask "[ExistDb] Setting version in control file."
 sed -i "s/__EXIST_VER__/${EXIST_REL}/g" ./$EXIST_REL_FOLDER/debian/DEBIAN/control
 sed -i "s/__ARCH__/${EXIST_ARCH}/g" ./$EXIST_REL_FOLDER/debian/DEBIAN/control
+sed -i "s/__SIZE__/${EXIST_SIZE}/g" ./$EXIST_REL_FOLDER/debian/DEBIAN/control
 
 logger.printTask "[ExistDb] Unzipping..."
 printf "\n\n"

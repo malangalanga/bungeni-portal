@@ -26,6 +26,7 @@ PORTAL_REL_FOLDER="bungeni-portal_${PORTAL_REL}"
 PORTAL_TAR=$2
 PORTAL_ARCH=$3
 PORTAL_DEB="${PORTAL_REL_FOLDER}_${PORTAL_ARCH}.deb"
+PORTAL_SIZE=$(getsize ../portal.exclude ../portal.include)
 
 logger.printTask "[Portal] Setting up debian package..."
 cp -R portal_version_revision $PORTAL_REL_FOLDER
@@ -34,6 +35,7 @@ find ./$PORTAL_REL_FOLDER/ -name '.svn' -print0 | xargs -0 rm -rf
 logger.printTask "[Portal] Setting version control info."
 sed -i "s/__PORTAL_VER__/${PORTAL_REL}/g" ./$PORTAL_REL_FOLDER/debian/DEBIAN/control
 sed -i "s/__ARCH__/${PORTAL_ARCH}/g" ./$PORTAL_REL_FOLDER/debian/DEBIAN/control
+sed -i "s/__SIZE__/${PORTAL_SIZE}/g" ./$PORTAL_REL_FOLDER/debian/DEBIAN/control
 
 logger.printTask "[Portal] Unzipping..."
 printf "\n\n"

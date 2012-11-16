@@ -29,11 +29,12 @@ BUNGENI_DEPENDS=$(getbungenideps ${BUNGENI_DISTRO_INI})
 
 BUNGENI_RELEASE_NAME=(${1//+/ })
 BUNGENI_VER="${BUNGENI_RELEASE_NAME[0]}"
-BUNGENI_REL="$BUNGENI_VER+${BUNGENI_RELEASE_NAME[1]}"
+BUNGENI_REL="${BUNGENI_VER}+${BUNGENI_RELEASE_NAME[1]}"
 BUNGENI_REL_FOLDER="bungeni_${BUNGENI_REL}"
 BUNGENI_TAR=$2
 BUNGENI_ARCH=$3
 BUNGENI_DEB="${BUNGENI_REL_FOLDER}_${BUNGENI_ARCH}.deb"
+BUNGENI_SIZE=$(getsize ../bungeni.exclude ../bungeni.include)
 
 logger.printTask "[Bungeni] Setting debian package folder."
 cp -R bungeni_version_revision $BUNGENI_REL_FOLDER
@@ -43,6 +44,7 @@ logger.printTask "[Bungeni] Setting verion in control file."
 sed -i "s/__BUNGENI_VER__/${BUNGENI_REL}/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
 sed -i "s/__ARCH__/${BUNGENI_ARCH}/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
 sed -i "s/__DEPENDS__/${BUNGENI_OTHER_DEPENDS},${BUNGENI_DEPENDS}/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
+sed -i "s/__SIZE__/${BUNGENI_SIZE}/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
 
 logger.printTask "[Bungeni] Unzipping..."
 printf "\n\n"

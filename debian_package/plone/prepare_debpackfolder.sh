@@ -26,6 +26,7 @@ PLONE_REL_FOLDER="bungeni-plone_${PLONE_REL}"
 PLONE_TAR=$2
 PLONE_ARCH=$3
 PLONE_DEB="${PLONE_REL_FOLDER}_${PLONE_ARCH}.deb"
+PLONE_SIZE=$(getsize ../plone.exclude ../plone.include)
 
 logger.printTask "[Plone] Setting up debian package folder."
 cp -R plone_version_revision $PLONE_REL_FOLDER
@@ -34,6 +35,7 @@ find ./$PLONE_REL_FOLDER -name '.svn' -print0 | xargs -0 rm -rf
 logger.printTask "[Plone] Setting version in control file."
 sed -i "s/__PLONE_VER__/${PLONE_REL}/g" ./$PLONE_REL_FOLDER/debian/DEBIAN/control
 sed -i "s/__ARCH__/${PLONE_ARCH}/g" ./$PLONE_REL_FOLDER/debian/DEBIAN/control
+sed -i "s/__SIZE__/${PLONE_SIZE}/g" ./$PLONE_REL_FOLDER/debian/DEBIAN/control
 
 logger.printTask "[Plone] Unzipping..."
 printf "\n\n"
