@@ -24,131 +24,149 @@
     <feature name="download" enabled="true" />
     <feature name="group_assignment" enabled="true" />
     
+    
     <!-- global grants -->
     <allow permission=".Add" roles="Clerk MP" />
     
     
     <state id="working_draft" title="Working Draft" tags="draft private">
-        <!-- motion -->
         <allow permission=".View" roles="Clerk" />
-        <deny permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous CommitteeMember" />
         <allow permission=".Edit" roles="Clerk" />
-        <deny permission=".Edit" roles="Speaker Owner MP Minister Anonymous CommitteeMember" />
         <allow permission=".Delete" roles="Clerk" />
-        <deny permission=".Delete" roles="Speaker Owner MP Minister Anonymous" />
-        <!-- signatory -->
         <allow permission="signatory.Add" roles="Clerk" />
-        <deny permission="signatory.Add" roles="Speaker Owner MP Minister Anonymous" />
         <allow permission="signatory.Delete" roles="Clerk" />
-        <deny permission="signatory.Delete" roles="Speaker Owner MP Minister Anonymous" />
-        <!-- attachment -->
         <allow permission="attachment.View" roles="Clerk" />
         <allow permission="attachment.Edit" roles="Clerk" />
-        <deny permission="attachment.Edit" roles="Speaker Owner" />
         <allow permission="attachment.Add" roles="Clerk" />
-        <deny permission="attachment.Add" roles="Speaker Owner MP Minister Anonymous" />
-        <deny permission="attachment.Delete" roles="Clerk Speaker" />
         <allow permission="attachment.Delete" roles="Owner" />
-        <!-- event -->
         <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
         <allow permission="event.Edit" roles="Clerk Speaker" />
         <allow permission="event.Add" roles="Clerk Speaker" />
         <allow permission="event.Delete" roles="Clerk Speaker" />
-        <!-- group_assignment -->
-        <deny permission="group_assignment.Add" roles="Clerk" />
-        <deny permission="group_assignment.View" roles="Clerk" />
-        <deny permission="group_assignment.Edit" roles="Clerk" />
-        <deny permission="group_assignment.Delete" roles="Clerk" />
     </state>
     
-    <state id="draft" title="Draft" 
-        like_state="working_draft" 
-        tags="draft private">
-        <deny permission=".View" roles="Clerk" />
+    <!-- like_state="working_draft" -->
+    <state id="draft" title="Draft" tags="draft private">
         <allow permission=".View" roles="Owner" />
-        <deny permission=".Edit" roles="Clerk" />
         <allow permission=".Edit" roles="Owner" />
-        <deny permission=".Delete" roles="Clerk" />
         <allow permission=".Delete" roles="Owner" />
-        <deny permission="signatory.Add" roles="Clerk" />
         <allow permission="signatory.Add" roles="Owner" />
-        <deny permission="signatory.Delete" roles="Clerk" />
         <allow permission="signatory.Delete" roles="Owner" />
         <allow permission="attachment.Edit" roles="Owner" />
-        <deny permission="attachment.Edit" roles="Clerk" />
         <allow permission="attachment.Add" roles="Owner" />
-        <deny permission="attachment.Add" roles="Clerk" />
-    </state>
-    
-    <state id="submitted_signatories" title="Submitted to Signatories"
-        version="true" 
-        like_state="draft"
-        tags="actionmp">
-        <allow permission=".View" roles="Signatory" />
-        <deny permission=".Edit" roles="Owner" />
-        <deny permission=".Delete" roles="Owner" />
-        <deny permission="signatory.Delete" roles="Owner" />
-        <deny permission="attachment.Edit" roles="Owner" />
-        <deny permission="attachment.Add" roles="Owner" />
-        <deny permission="attachment.Delete" roles="Owner" />
-    </state>
-    
-    <state id="redraft" title="Redraft" like_state="draft"
-        note="document under review before resubmission"
-        version="true">
-        <deny permission=".Delete" roles="Owner" />
+        <allow permission="attachment.View" roles="Clerk" />
         <allow permission="attachment.Delete" roles="Owner" />
+        <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
+        <allow permission="event.Edit" roles="Clerk Speaker" />
+        <allow permission="event.Add" roles="Clerk Speaker" />
+        <allow permission="event.Delete" roles="Clerk Speaker" />
     </state>
     
+    <!-- like_state="draft" -->
+    <state id="submitted_signatories" title="Submitted to Signatories"
+            version="true" tags="actionmp"
+        >
+        <allow permission=".View" roles="Owner" />
+        <allow permission=".View" roles="Signatory" />
+        <allow permission="signatory.Add" roles="Owner" />
+        <allow permission="attachment.View" roles="Clerk" />
+        <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
+        <allow permission="event.Edit" roles="Clerk Speaker" />
+        <allow permission="event.Add" roles="Clerk Speaker" />
+        <allow permission="event.Delete" roles="Clerk Speaker" />
+    </state>
+    
+    <!-- like_state="draft" -->
+    <state id="redraft" title="Redraft"
+            note="document under review before resubmission"
+            version="true"
+        >
+        <allow permission=".View" roles="Owner" />
+        <allow permission=".Edit" roles="Owner" />
+        <allow permission="signatory.Add" roles="Owner" />
+        <allow permission="signatory.Delete" roles="Owner" />
+        <allow permission="attachment.Edit" roles="Owner" />
+        <allow permission="attachment.Add" roles="Owner" />
+        <allow permission="attachment.View" roles="Clerk" />
+        <allow permission="attachment.Delete" roles="Owner" />
+        <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
+        <allow permission="event.Edit" roles="Clerk Speaker" />
+        <allow permission="event.Add" roles="Clerk Speaker" />
+        <allow permission="event.Delete" roles="Clerk Speaker" />
+    </state>
+    
+    <!-- like_state="submitted_signatories" -->
     <state id="withdrawn_signatory" title="Dropped" 
-        like_state="submitted_signatories"
-        note="motion has been withdrawn before submission to house">
-        <deny permission="signatory.Add" roles="Owner" />        
+            note="motion has been withdrawn before submission to house"
+        >
+        <allow permission=".View" roles="Owner Signatory" />
+        <allow permission="attachment.View" roles="Clerk" />
+        <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
+        <allow permission="event.Edit" roles="Clerk Speaker" />
+        <allow permission="event.Add" roles="Clerk Speaker" />
+        <allow permission="event.Delete" roles="Clerk Speaker" />
     </state>
     
-    <state id="submitted" title="Submitted" 
-        version="true"
-        like_state="submitted_signatories"
-        tags="actionclerk">
-        <allow permission=".View" roles="Clerk Speaker" />
-        <deny permission="signatory.Add" roles="Owner" />
-        <deny permission="attachment.Delete" roles="Owner" />
+    <!-- like_state="submitted_signatories" -->
+    <state id="submitted" title="Submitted" version="true" tags="actionclerk">
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory" />
+        <allow permission="attachment.View" roles="Clerk" />
+        <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
+        <allow permission="event.Edit" roles="Clerk Speaker" />
+        <allow permission="event.Add" roles="Clerk Speaker" />
+        <allow permission="event.Delete" roles="Clerk Speaker" />
     </state>
     
-    <state id="received" title="Received by Clerks Office" 
-        like_state="submitted"
-        tags="actionclerk">
-        <allow permission=".View" roles="CommitteeMember" />
+    <!-- like_state="submitted" -->
+    <state id="received" title="Received by Clerks Office" tags="actionclerk">
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory CommitteeMember" />
         <allow permission=".Edit" roles="Clerk CommitteeMember" />
         <allow permission="signatory.Delete" roles="Clerk" />
+        <allow permission="attachment.View" roles="Clerk" />
         <allow permission="attachment.Edit" roles="Clerk" />        
         <allow permission="attachment.Add" roles="Clerk" />
         <allow permission="attachment.Delete" roles="Clerk" />
+        <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
+        <allow permission="event.Edit" roles="Clerk Speaker" />
+        <allow permission="event.Add" roles="Clerk Speaker" />
+        <allow permission="event.Delete" roles="Clerk Speaker" />
         <allow permission="group_assignment.Add" roles="Clerk" />
         <allow permission="group_assignment.View" roles="Clerk" />
         <allow permission="group_assignment.Edit" roles="Clerk" />
         <allow permission="group_assignment.Delete" roles="Clerk" />
     </state>
     
+    <!-- like_state="submitted" -->
     <state id="clarification_required" title="Requires Clarification to Receive"
-        version="true"
-        like_state="submitted"
-        tags="actionmp">
+            version="true" tags="actionmp"
+        >
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory" />
+        <allow permission="attachment.View" roles="Clerk" />
         <allow permission=".Edit" roles="Owner" />
         <allow permission="signatory.Add" roles="Owner" />
         <allow permission="signatory.Delete" roles="Owner" />
         <allow permission="attachment.Edit" roles="Owner" />
         <allow permission="attachment.Add" roles="Owner" />
+        <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
+        <allow permission="event.Edit" roles="Clerk Speaker" />
+        <allow permission="event.Add" roles="Clerk Speaker" />
+        <allow permission="event.Delete" roles="Clerk Speaker" />
     </state>
     
-    <state id="completed" title="Submitted to the Speaker"
-        version="true"
-        like_state="submitted">
+    <!-- like_state="submitted" -->
+    <state id="completed" title="Submitted to the Speaker" version="true">
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory" />
         <allow permission=".Edit" roles="Speaker" />
         <allow permission="signatory.Delete" roles="Speaker" />
+        <allow permission="attachment.View" roles="Clerk" />
         <allow permission="attachment.Edit" roles="Speaker" />
         <allow permission="attachment.Add" roles="Speaker" />
+        <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
+        <allow permission="event.Edit" roles="Clerk Speaker" />
+        <allow permission="event.Add" roles="Clerk Speaker" />
+        <allow permission="event.Delete" roles="Clerk Speaker" />
     </state>
+    
     
     <state id="incomplete" title="Requires Clarification to Approve"
         version="true"
@@ -156,12 +174,11 @@
         tags="actionclerk"
     />
     
-    <state id="withdrawn_internal" title="Withdrawn" 
-        like_state="submitted"
-        tags="terminal fail">
-        <deny permission="event.Edit" roles="Clerk Speaker" />
-        <deny permission="event.Add" roles="Clerk Speaker" />
-        <deny permission="event.Delete" roles="Clerk Speaker" />
+    <!-- like_state="submitted" -->
+    <state id="withdrawn_internal" title="Withdrawn" tags="terminal fail">
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory" />
+        <allow permission="attachment.View" roles="Clerk" />
+        <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
     </state>
     
     <state id="inadmissible" title="Inadmissible" 
@@ -169,11 +186,14 @@
         tags="terminal fail">
     </state>
     
-    <state id="admissible" title="Admissible" 
-        version="true"
-        like_state="submitted"
-        tags="public approved">
+    <!-- like_state="submitted" -->
+    <state id="admissible" title="Admissible" version="true" tags="public approved">
         <allow permission=".View" roles="Clerk Speaker Owner Signatory MP Minister Anonymous" />
+        <allow permission="attachment.View" roles="Clerk" />
+        <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
+        <allow permission="event.Edit" roles="Clerk Speaker" />
+        <allow permission="event.Add" roles="Clerk Speaker" />
+        <allow permission="event.Delete" roles="Clerk Speaker" />
     </state>
     
     <state id="schedule_pending" title="Schedule pending"
@@ -186,13 +206,11 @@
         tags="public scheduled">
     </state>
     
-    <state id="adopted" title="Adopted"
-        version="true"
-        like_state="admissible"
-        tags="public terminal succeed">
-        <deny permission="event.Edit" roles="Clerk Speaker" />
-        <deny permission="event.Add" roles="Clerk Speaker" />
-        <deny permission="event.Delete" roles="Clerk Speaker" />
+    <!-- like_state="admissible" -->
+    <state id="adopted" title="Adopted" version="true" tags="public terminal succeed">
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory MP Minister Anonymous" />
+        <allow permission="attachment.View" roles="Clerk" />
+        <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
     </state>
     
     <state id="adopted_amendments" title="Adopted with amendments"
