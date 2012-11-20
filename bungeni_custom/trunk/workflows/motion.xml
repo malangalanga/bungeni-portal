@@ -9,6 +9,10 @@
     permission_actions=".View .Edit .Add .Delete"
     >
     
+    <!-- global grants -->
+    <allow permission=".Add" roles="Clerk MP" />
+    
+    
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
@@ -89,10 +93,6 @@
             <allow permission="group_assignment.Delete" roles="Clerk" />
         </facet>
     </feature>
-    
-    
-    <!-- global grants -->
-    <allow permission=".Add" roles="Clerk MP" />
     
     
     <!-- workflow facets -->
@@ -205,10 +205,7 @@
     
     
     <state id="incomplete" title="Requires Clarification to Approve"
-        version="true"
-        like_state="received"
-        tags="actionclerk"
-    />
+        version="true" like_state="received" tags="actionclerk" />
     
     <!-- like_state="submitted" -->
     <state id="withdrawn_internal" title="Withdrawn" tags="terminal fail">
@@ -227,15 +224,9 @@
         <facet ref="attachment.view_Clerk" />
     </state>
     
-    <state id="schedule_pending" title="Schedule pending"
-        like_state="admissible"
-        tags="public tobescheduled"
-    />
+    <state id="schedule_pending" title="Schedule pending" like_state="admissible" tags="public tobescheduled" />
     
-    <state id="scheduled" title="Scheduled" 
-        like_state="admissible"
-        tags="public scheduled">
-    </state>
+    <state id="scheduled" title="Scheduled" like_state="admissible" tags="public scheduled" />
     
     <!-- like_state="admissible" -->
     <state id="adopted" title="Adopted" version="true" tags="public terminal succeed">
@@ -244,45 +235,24 @@
         <facet ref="event.view_internal" />
     </state>
     
-    <state id="adopted_amendments" title="Adopted with amendments"
-        version="true"
-        like_state="adopted"
-        tags="public terminal succeed"
-    />
+    <state id="adopted_amendments" title="Adopted with amendments" version="true" like_state="adopted"
+        tags="public terminal succeed" />
     
-    <state id="adjourned" title="Debate adjourned" 
-        like_state="admissible"
-        tags="public approved"
-        note="a motion was debated and the debate adjourned"
-    />
+    <state id="adjourned" title="Debate adjourned" like_state="admissible" tags="public approved"
+        note="a motion was debated and the debate adjourned" />
     
-    <state id="deferred" title="Deferred" 
-        like_state="admissible"
-        tags="public approved"
-        note="An admissable motion that cannot be debated.">
-    </state>
+    <state id="deferred" title="Deferred" like_state="admissible" tags="public approved"
+        note="An admissable motion that cannot be debated." />
     
-    <state id="elapsed" title="Elapsed" 
-        like_state="adopted" 
-        tags="public terminal fail"
-        note="A defered motion that was not debated"
-    />
+    <state id="elapsed" title="Elapsed" like_state="adopted" tags="public terminal fail"
+        note="A defered motion that was not debated" />
     
-    <state id="dropped" title="Dropped" 
-        like_state="adopted" 
-        tags="public terminal fail"
-        note="A motion was scheduled, but dropped e.g. becuase no show of MP."
-    />
+    <state id="dropped" title="Dropped" like_state="adopted" tags="public terminal fail"
+        note="A motion was scheduled, but dropped e.g. becuase no show of MP." />
     
-    <state id="rejected" title="Rejected" 
-        like_state="adopted"
-        tags="public terminal fail">
-    </state>
+    <state id="rejected" title="Rejected" like_state="adopted" tags="public terminal fail" />
     
-    <state id="withdrawn" title="Withdrawn" 
-        like_state="adopted"
-        tags="public terminal fail"
-    />
+    <state id="withdrawn" title="Withdrawn" like_state="adopted" tags="public terminal fail" />
     
     
     <transition title="Create Motion"

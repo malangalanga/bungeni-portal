@@ -10,13 +10,13 @@
     declare who (and in which states) has the permission '.Add'.
     -->
     
+    <!-- global grants -->
+    <allow permission=".View" roles="Owner" />
+    
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
-    
-    <!-- global grants -->
-    <allow permission=".View" roles="Owner" />
     
     <state id="draft" title="Draft Event" tags="draft private">
         <deny permission=".View" roles="Clerk Speaker Signatory MP Minister Anonymous" />

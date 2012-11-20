@@ -5,12 +5,13 @@
     permission_actions=".View .Edit .Add .Delete"
     >
     
-    <feature name="address" enabled="true" />
-    
     <!-- global grants -->
     <allow permission=".Edit" roles="Clerk" />
     <allow permission=".Add" roles="Clerk" />
     <allow permission=".Delete" roles="Clerk" />
+    
+    
+    <feature name="address" enabled="true" />
     
     
     <state id="draft" title="Draft - Committee not yet Active">

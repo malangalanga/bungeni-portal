@@ -9,17 +9,19 @@
         Append: Append signature to a document
     -->
     
-    <!-- features -->
-    <feature name="audit" enabled="true" />
-    <feature name="version" enabled="false" />
-    <feature name="attachment" enabled="false" />
-    
     <!-- global grants -->
     <allow permission=".Edit" roles="Owner" />
     <allow permission=".Add" roles="Owner" />
     <allow permission=".Delete" roles="Clerk" />
     <allow permission=".Act" roles="Signatory" />
     <allow permission=".Append" roles="MP" />
+    
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="false" />
+    <feature name="attachment" enabled="false" />
+    
     
     <state id="awaiting_consent" title="Awaiting Consent" tags="workspace">
         <allow permission=".View" roles="Clerk Speaker Owner Signatory MP Minister" />

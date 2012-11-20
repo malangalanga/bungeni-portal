@@ -9,6 +9,10 @@
     permission_actions=".View .Edit .Add .Delete"
     >
     
+    <!-- global grants -->
+    <allow permission=".Add" roles="Clerk MP" />
+    
+    
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
@@ -23,9 +27,6 @@
     <feature name="notification" enabled="false" />
     <feature name="download" enabled="true" />
     <feature name="group_assignment" enabled="true" />
-    
-    <!-- global grants -->
-    <allow permission=".Add" roles="Clerk MP" />
     
     
     <state id="working_draft" title="Working Draft" tags="draft private">

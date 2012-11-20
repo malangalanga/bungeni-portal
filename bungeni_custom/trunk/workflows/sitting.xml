@@ -5,11 +5,6 @@
     permission_actions=".View .Edit .Add .Delete"
     >
     
-    <!-- features -->
-    <feature name="audit" enabled="false" />
-    <feature name="version" enabled="false" />
-    <feature name="attachment" enabled="false" />
-    
     <!-- global grants -->
     <allow permission=".View" roles="Clerk" />
     <allow permission=".Add" roles="Clerk" />
@@ -20,6 +15,12 @@
     <allow permission="sitting_report.Edit" roles="Clerk" />
     <allow permission="sitting_report.View" roles="Anonymous" />
     <allow permission="sitting_report.Delete" roles="Clerk" />
+    
+    
+    <!-- features -->
+    <feature name="audit" enabled="false" />
+    <feature name="version" enabled="false" />
+    <feature name="attachment" enabled="false" />
     
     
     <state id="sitting" title="Sitting" tags="draft public agendaprivate">

@@ -5,13 +5,14 @@
     permission_actions=".View .Edit .Add .Delete"
     >
     
+    <!-- global grants -->
+    <allow permission=".Edit" roles="Clerk Speaker" />
+    
+    
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
     <feature name="download" enabled="true" />
-    
-    <!-- global grants -->
-    <allow permission=".Edit" roles="Clerk Speaker" />
     
     
     <state id="published" title="Published" tags="public">
