@@ -73,19 +73,23 @@ Features
 Enables/disables a feature on the workflowed type--may define additional 
 feature-specific settings (!+ as attributes or sub-elements).
 
+For list of currently known features (for different archetypes) see:
+bungeni/models/feauture.py
+
 RNC definition for <feature> XML element:
 
-    element state {
+    element feature {
         attribute name { text },
         attribute enabled { boolean="true" }?,
+        attribute note { text }?,
+        
+        element parameter {
+            attribute name { text },
+            attribute value { text }, # !+type?
+        }*,
     }
 
 - @name must be for a supported feature of the workflowed type. 
-Currently known features, 
-    for archetype "document":
-        audit
-        version # implies "audit"
-        attachment
 
 - if no <feature> element present for a named feature, then that feature is not
 *enabled*; if a <feature> element is present then it is by default enabled 
@@ -94,7 +98,7 @@ Currently known features,
 - the order of feature attributes should respect:
     name 
     enabled
-
+    note
 
 States
 ------
@@ -112,7 +116,9 @@ RNC definition for <state> XML element:
         attribute obsolete { boolean="false" }?,
         
         (element allow {...} | element deny {...} )*,
-        element notification {...}*
+        element facet {
+            ref { text }, # feature_name.facet_name
+        }*,
     }
 
 - the state ID should be a lowercase *adverb* (more or less) that describes 
