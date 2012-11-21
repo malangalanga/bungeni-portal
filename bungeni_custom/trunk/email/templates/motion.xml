@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<template html="false">
+  <block state="submitted">
+    <subject>
+      Motion has been submitted : <span tal:replace="item/title"/>
+    </subject>
+    <body>
+      The motion
+      <span tal:replace="item/title"/> was submitted on <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+  <block state="received">
+    <subject>
+      Motion has been received by the Clerk's Office : <span tal:replace="item/title"/>
+    </subject>
+    <body>
+      The motion
+      <span tal:replace="item/title"/> was received on <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+  <block state="inadmissible">
+    <subject>
+      Motion is inadmissible : <span tal:replace="item/title"/>
+    </subject>
+    <body>
+      The motion 
+      <span tal:replace="item/title"/> was declared inadmissible on <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+  <block state="clarification_required">
+    <subject>
+      Clarification required for motion : 
+      <span tal:replace="item/title"/>
+    </subject>
+    <body>
+      The motion 
+      <span tal:replace="item/title"/> requires clarification <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+  <block state="debated">
+    <subject>
+      Motion : 
+      <span tal:replace="item/title"/> has been debated
+    </subject>
+    <body>
+      The motion 
+      <span tal:replace="item/title"/> was debated on <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+  <block state="scheduled">
+    <subject>
+      Motion 
+      <span tal:replace="item/title"/> has been scheduled
+    </subject>
+    <body>
+      The motion 
+      <span tal:replace="item/title"/> was scheduled on 
+      <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+  <block state="defered">
+    <subject>
+      Motion 
+      <span tal:replace="item/title"/> has been deferred
+    </subject>
+    <body>
+      The motion 
+      <span tal:replace="item/title"/> was declared inadmissible on 
+      <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+</template>
