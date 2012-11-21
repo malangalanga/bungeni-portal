@@ -5,48 +5,53 @@
     permission_actions=".View .Edit .Add .Delete"
     >
     
-    <!-- sub-item, so NO "global" grants here -> these are the responsibility 
-    of the "owning" document's workflow e.g. it is that workflow that must
-    declare who (and in which states) has the permission '.Add'.
+    <!-- sub-item, so should have NO "global" grants here -> should be 
+    responsibility of the "owning" document's workflow e.g. it is that workflow
+    that must declare who (and in which states) has the permission '.Add'.
     -->
     
     <!-- global grants -->
     <allow permission=".View" roles="Owner" />
+    
     
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
     
-    <state id="draft" title="Draft Event" tags="draft private">
-        <deny permission=".View" roles="Clerk Speaker Signatory MP Minister Anonymous" />
-        <deny permission=".Edit" roles="Clerk Speaker" />
+    <!-- workflow facets -->
+    <facet name="all_Owner">
         <allow permission=".Edit" roles="Owner" />
-        <deny permission=".Delete" roles="Clerk Speaker" />
         <allow permission=".Delete" roles="Owner" />
+    </facet>
+    <facet name="internal">
+        <allow permission=".View" roles="Clerk Speaker Signatory MP Minister" />
+        <allow permission=".Edit" roles="Clerk Speaker" />
+        <allow permission=".Delete" roles="Clerk Speaker" />
+    </facet>
+    <facet name="all_view">
+        <allow permission=".View" roles="Clerk Speaker Signatory MP Minister" />
+    </facet>
+    
+    
+    <state id="draft" title="Draft Event" tags="draft private">
+        <facet ref=".all_Owner" />
     </state>
     
-    <state id="attached" title="Event" 
-        tags="public"
-        permissions_from_parent="true" 
-    />
+    <state id="attached" title="Event" permissions_from_parent="true" tags="public" />
     
-    <state id="internal" title="Published Internal" like_state="draft">
-        <allow permission=".View" roles="Clerk Speaker Signatory MP Minister" />
-        <allow permission=".Edit" roles="Clerk" />
-        <allow permission=".Edit" roles="Speaker" />
-        <deny permission=".Edit" roles="Owner" />
-        <allow permission=".Delete" roles="Clerk Speaker" />
-        <deny permission=".Delete" roles="Owner" />
+    <!-- like_state="draft" -->
+    <state id="internal" title="Published Internal">
+        <facet ref=".internal" />
     </state>
     
     <!-- !+inactive(mr, aug-2011) review usage and rename across the board
         currently being used in attachment, heading, event
         consider using "dropped", "obsoleted", "removed"...
     -->
-    <state id="inactive" title="Inactive event" like_state="internal">
-        <deny permission=".Edit" roles="Clerk Speaker" />
-        <!-- !+delete also deny? -->
+    <!-- like_state="internal" -->
+    <state id="inactive" title="Inactive event">
+        <facet ref=".all_view" />
     </state>
     
     

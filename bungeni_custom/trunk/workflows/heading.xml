@@ -10,16 +10,22 @@
     <allow permission=".Add" roles="Clerk Speaker" />
     
     
-    <state id="inactive" title="Inactive heading obsolete">
-        <!-- heading -->
+    <!-- workflow facets -->
+    <facet name="view_Clerk">
         <allow permission=".View" roles="Clerk Speaker" />
-        <deny permission=".View" roles="Owner Signatory MP Minister Anonymous" />
+    </facet>
+    <facet name="view">
+        <allow permission=".View" roles="Authenticated Anonymous" />
+    </facet>
+    
+    
+    <state id="inactive" title="Inactive heading obsolete">
+        <facet ref=".view_Clerk" />
     </state>
     
-    <state id="public" title="Public" 
-        like_state="inactive"
-        tags="public tobescheduled">
-        <allow permission=".View" roles="Owner Signatory MP Minister Anonymous" />
+    <!-- like_state="inactive" -->
+    <state id="public" title="Public" tags="public tobescheduled">
+        <facet ref=".view" />
     </state>
     
     

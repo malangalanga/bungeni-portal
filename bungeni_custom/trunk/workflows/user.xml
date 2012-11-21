@@ -4,28 +4,32 @@
     permission_actions=".View .Edit .Add .Delete"
     >
     
-    <feature name="address" enabled="true" />
+    <feature name="address" enabled="true">
+        <facet name="all_Clerk_Owner">
+            <allow permission="address.Edit" roles="Clerk Owner" />
+            <allow permission="address.Add" roles="Clerk Owner" />
+            <allow permission="address.Delete" roles="Clerk Owner" />
+        </facet>
+    </feature>
+    
+    <!-- workflow facets -->
+    <facet name="all_Owner">
+        <allow permission=".Edit" roles="Owner" />
+        <allow permission="delegation.Edit" roles="Owner" />
+        <allow permission="delegation.Add" roles="Owner" />
+    </facet>
     
     
     <state id="A" title="Active User">
-        <allow permission=".Edit" roles="Authenticated" />
-        <allow permission="delegation.Edit" roles="Owner" />
-        <allow permission="delegation.Add" roles="Owner" />
-        <allow permission="address.Edit" roles="Clerk Owner" />
-        <allow permission="address.Add" roles="Clerk Owner" />
-        <allow permission="address.Delete" roles="Clerk Owner" />
+        <facet ref=".all_Owner" />
+        <facet ref="address.all_Clerk_Owner" />
     </state>
     
-    <state id="I" like_state="A" title="Inactive User">
-        <deny permission=".Edit" roles="Authenticated" />
-        <deny permission="delegation.Edit" roles="Owner" />
-        <deny permission="delegation.Add" roles="Owner" />
-        <deny permission="address.Edit" roles="Clerk Owner" />
-        <deny permission="address.Add" roles="Clerk Owner" />
-        <deny permission="address.Delete" roles="Clerk Owner" />
-    </state>
+    <!-- like_state="A" -->
+    <state id="I" title="Inactive User" />
     
-    <state id="D" like_state="I" title="Deceased User" />
+    <!-- like_state="I" -->
+    <state id="D" title="Deceased User" />
     
     
     <transition title="Create"

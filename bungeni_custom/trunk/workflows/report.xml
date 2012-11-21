@@ -15,9 +15,12 @@
     <feature name="download" enabled="true" />
     
     
-    <state id="published" title="Published" tags="public">
+    <!-- workflow facets -->
+    <facet name="all_Clerk" default="true">
         <allow permission=".View" roles="Authenticated Anonymous" />
-    </state>
+    </facet>
+    
+    <state id="published" title="Published" tags="public" />    
     
     
     <transition title="Create Report"

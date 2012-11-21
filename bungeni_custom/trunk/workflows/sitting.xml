@@ -23,73 +23,107 @@
     <feature name="attachment" enabled="false" />
     
     
-    <state id="sitting" title="Sitting" tags="draft public agendaprivate">
+    <!-- workflow facets -->
+    <facet name="all_Clerk">
         <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
         <allow permission=".Edit" roles="Clerk" />
         <allow permission=".Delete" roles="Clerk" />
-        <deny permission="item_schedule.View" roles="Clerk Speaker Owner Signatory MP Minister Anonymous" />
-        <deny permission="item_schedule.Edit" roles="Clerk" />
-        <deny permission="item_schedule.Add" roles="Clerk" />
-        <deny permission="item_schedule.Delete" roles="Clerk" />
         <allow permission="item_schedule_discussion.View" roles="Clerk" />
-        <deny permission="item_schedule_discussion.View" roles="Speaker Owner Signatory MP Minister Anonymous" />
-        <deny permission="item_schedule_discussion.Edit" roles="Clerk" />
-    </state>
-    
-    <state id="draft_agenda" title="Draft Agenda" 
-        like_state="sitting"
-        tags="draft public workspace agendaprivate">
+    </facet>
+    <facet name="draft_agenda">
+        <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
+        <allow permission=".Edit" roles="Clerk" />
+        <allow permission=".Delete" roles="Clerk" />
         <allow permission="item_schedule.Edit" roles="Clerk" />
         <allow permission="item_schedule.View" roles="Clerk Speaker" />
         <allow permission="item_schedule.Add" roles="Clerk" />
         <allow permission="item_schedule.Delete" roles="Clerk" />
-        <allow permission="item_schedule_discussion.View" roles="Speaker" />
-    </state>
-    
-    <state id="published_agenda" title="Published Agenda" 
-        like_state="draft_agenda"
-        tags="public published workspace">
-        <!-- sitting -->
-        <deny permission=".Edit" roles="Clerk" />
-        <deny permission=".Delete" roles="Clerk" />
-        <allow permission="item_schedule.View" roles="Speaker Owner Signatory MP Minister Anonymous" />
-        <deny permission="item_schedule.Edit" roles="Clerk" />
-    </state>
-    
-    <state id="published_agenda_internal" title="Published Agenda Internal" 
-        like_state="published_agenda"
-        tags="public agendaprivate workspace">
-        <deny permission="item_schedule.View" roles="Anonymous" />
-    </state>
-    
-    <state id="draft_minutes" title="Draft Minutes" 
-        like_state="published_agenda"
-        tags="draft public workspace">
+        <allow permission="item_schedule_discussion.View" roles="Clerk Speaker" />
+    </facet>
+    <facet name="published_agenda">
+        <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
+        <allow permission="item_schedule.View" roles="Clerk Speaker Owner Signatory MP Minister Anonymous" />
+        <allow permission="item_schedule.Add" roles="Clerk" />
+        <allow permission="item_schedule.Delete" roles="Clerk" />
+        <allow permission="item_schedule_discussion.View" roles="Clerk Speaker" />
+    </facet>
+    <facet name="published_agenda_internal">
+        <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
+        <allow permission="item_schedule.View" roles="Clerk Speaker Owner Signatory MP Minister" />
+        <allow permission="item_schedule.Add" roles="Clerk" />
+        <allow permission="item_schedule.Delete" roles="Clerk" />
+        <allow permission="item_schedule_discussion.View" roles="Clerk Speaker" />
+    </facet>
+    <facet name="draft_minutes">
+        <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
         <allow permission=".Edit" roles="Clerk" />
+        <allow permission="item_schedule.View" roles="Clerk Speaker Owner Signatory MP Minister" />
         <allow permission="item_schedule.Edit" roles="Clerk" />
+        <allow permission="item_schedule.Add" roles="Clerk" />
+        <allow permission="item_schedule.Delete" roles="Clerk" />
+        <allow permission="item_schedule_discussion.View" roles="Clerk Speaker" />
         <allow permission="item_schedule_discussion.Edit" roles="Clerk" />
+    </facet>
+    <facet name="published_minutes">
+        <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
+        <allow permission=".Edit" roles="Clerk" />
+        <allow permission="item_schedule.View" roles="Clerk Speaker Owner Signatory MP Minister" />
+        <allow permission="item_schedule.Edit" roles="Clerk" />
+        <allow permission="item_schedule_discussion.View" roles="Clerk Speaker Owner Signatory MP Minister Anonymous" />
+    </facet>
+    <facet name="published_minutes_internal">
+        <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
+        <allow permission=".Edit" roles="Clerk" />
+        <allow permission="item_schedule.View" roles="Clerk Speaker Owner Signatory MP Minister" />
+        <allow permission="item_schedule.Edit" roles="Clerk" />
+        <allow permission="item_schedule_discussion.View" roles="Clerk Speaker Owner Signatory MP Minister" />
+    </facet>
+    <facet name="archived">
+        <allow permission=".View" roles="Speaker" />
+        <allow permission="item_schedule_discussion.View" roles="Clerk" />
+    </facet>
+
+
+    
+    <state id="sitting" title="Sitting" tags="draft public agendaprivate">
+        <facet ref=".all_Clerk" />
     </state>
     
-    <state id="published_minutes" title="Published Minutes" 
-        like_state="published_agenda"
-        tags="public published publishedminutes">
-        <deny permission="item_schedule.Add" roles="Clerk" />
-        <deny permission="item_schedule.Delete" roles="Clerk" />
-        <allow permission="item_schedule_discussion.View" roles="Speaker Owner Signatory MP Minister Anonymous" />
-        <deny permission="item_schedule_discussion.Edit" roles="Clerk" />
+    <!-- like_state="sitting" -->
+    <state id="draft_agenda" title="Draft Agenda" tags="draft public workspace agendaprivate">
+        <facet ref=".draft_agenda" />
     </state>
     
-    <state id="published_minutes_internal" title="Published Minutes Internal" 
-        like_state="published_minutes"
-        tags="public">
-        <deny permission="item_schedule_discussion.View" roles="Anonymous" />
+    <!-- like_state="draft_agenda" -->
+    <state id="published_agenda" title="Published Agenda" tags="public published workspace">
+        <facet ref=".published_agenda" />
     </state>
     
-    <state id="archived" title="Archive" tags="private" like_state="sitting">
-        <deny permission=".View" roles="Owner Signatory MP Minister Anonymous" />
-        <deny permission=".Edit" roles="Clerk" />
-        <deny permission=".Delete" roles="Clerk" />    
+    <!-- like_state="published_agenda" -->
+    <state id="published_agenda_internal" title="Published Agenda Internal" tags="public agendaprivate workspace">
+        <facet ref=".published_agenda_internal" />
     </state>
+    
+    <!-- like_state="published_agenda" -->
+    <state id="draft_minutes" title="Draft Minutes" tags="draft public workspace">
+        <facet ref=".draft_minutes" />
+    </state>
+    
+    <!-- like_state="published_agenda" -->
+    <state id="published_minutes" title="Published Minutes" tags="public published publishedminutes">
+        <facet ref=".published_minutes" />
+    </state>
+    
+    <!-- like_state="published_minutes" -->
+    <state id="published_minutes_internal" title="Published Minutes Internal" tags="public">
+        <facet ref=".published_minutes_internal" />
+    </state>
+    
+    <!-- like_state="sitting" -->
+    <state id="archived" title="Archive" tags="private">
+        <facet ref=".archived" />
+    </state>
+    
     
     <transition title="Create Sitting"
         source=""
@@ -174,5 +208,6 @@
         condition="sitting_dummy"
         trigger="automatic"
     />
+
 </workflow>
 

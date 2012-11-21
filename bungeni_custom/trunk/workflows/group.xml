@@ -10,37 +10,44 @@
     <allow permission=".Add" roles="Clerk" />
     <allow permission=".Delete" roles="Clerk" />
     
-    <feature name="address" enabled="true" />
     
-    <state id="draft" title="Draft - Group not yet Active">
+    <feature name="address" enabled="true">
+        <facet name="all_Clerk_Owner">
+            <allow permission="address.Edit" roles="Clerk Owner" />
+            <allow permission="address.Add" roles="Clerk Owner" />
+            <allow permission="address.Delete" roles="Clerk Owner" />
+        </facet>
+    </feature>
+    
+    <!-- workflow facets -->
+    <facet name="view_Clerk">
         <allow permission=".View" roles="Clerk" />
-        <deny permission=".View" roles="Speaker MP Minister Anonymous" />
-        <deny permission="group_membership.Edit" roles="Clerk" />
-        <deny permission="group_membership.Add" roles="Clerk" />
-        <deny permission="group_membership.Delete" roles="Clerk" />
-        <allow permission="address.Edit" roles="Clerk Owner" />
-        <allow permission="address.Add" roles="Clerk Owner" />
-        <allow permission="address.Delete" roles="Clerk Owner" />
-    </state>
-    
-    <state id="active" title="Active Group" 
-        like_state="draft"
-        tags="public">
-        <allow permission=".View" roles="Speaker MP Minister Anonymous" />
+    </facet>
+    <facet name="active_Clerk">
+        <allow permission=".View" roles="Authenticated Anonymous" />
         <allow permission="group_membership.Edit" roles="Clerk" />
         <allow permission="group_membership.Add" roles="Clerk" />
         <allow permission="group_membership.Delete" roles="Clerk" />
+    </facet>
+    <facet name="view">
+        <allow permission=".View" roles="Authenticated Anonymous" />
+    </facet>
+    
+    
+    <state id="draft" title="Draft - Group not yet Active">
+        <facet ref=".view_Clerk" />
+        <facet ref="address.all_Clerk_Owner" />
     </state>
     
-    <state id="dissolved" title="Group is Dissolved" 
-        like_state="active"
-        tags="public">
-        <deny permission="group_membership.Edit" roles="Clerk" />
-        <deny permission="group_membership.Add" roles="Clerk" />
-        <deny permission="group_membership.Delete" roles="Clerk" />
-        <deny permission="address.Edit" roles="Clerk Owner" />
-        <deny permission="address.Add" roles="Clerk Owner" />
-        <deny permission="address.Delete" roles="Clerk Owner" />
+    <!--  like_state="draft" -->
+    <state id="active" title="Active Group" tags="public">
+        <facet ref=".active_Clerk" />
+        <facet ref="address.all_Clerk_Owner" />
+    </state>
+    
+    <!--  like_state="active" -->
+    <state id="dissolved" title="Group is Dissolved" tags="public">
+        <facet ref=".view" />
     </state>
     
     

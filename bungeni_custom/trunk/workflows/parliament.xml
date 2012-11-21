@@ -14,38 +14,34 @@
     <feature name="address" enabled="true" />
     
     
-    <state id="draft" title="Draft - Parliament not yet Active">
-        <!-- parliament -->
+    <!-- workflow facets -->
+    <facet name="view_Clerk">
         <allow permission=".View" roles="Clerk" />
-        <deny permission=".View" roles="Speaker" />
-        <deny permission=".View" roles="Owner" />
-        <deny permission=".View" roles="Signatory" />
-        <deny permission=".View" roles="MP" />
-        <deny permission=".View" roles="Minister" />
-        <deny permission=".View" roles="Anonymous" />
         <allow permission=".Delete" roles="Owner" />
-        <!-- group_membership -->
-        <deny permission="group_membership.Edit" roles="Clerk" />
-        <deny permission="group_membership.Add" roles="Clerk" />
-        <deny permission="group_membership.Delete" roles="Clerk" />
-    </state>
-    
-    <state id="active" title="Active Parliament" 
-        like_state="draft"
-        tags="public">
-        <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
-        <deny permission=".Delete" roles="Owner" />
+    </facet>
+    <facet name="active_Clerk">
+        <allow permission=".View" roles="Authenticated Anonymous" />
         <allow permission="group_membership.Edit" roles="Clerk" />
         <allow permission="group_membership.Add" roles="Clerk" />
         <allow permission="group_membership.Delete" roles="Clerk" />
+    </facet>
+    <facet name="view">
+        <allow permission=".View" roles="Authenticated Anonymous" />
+    </facet>
+    
+    
+    <state id="draft" title="Draft - Parliament not yet Active">
+        <facet ref=".view_Clerk" />
     </state>
     
-    <state id="dissolved" title="Parliament is Dissolved" 
-        like_state="active"
-        tags="public">
-        <deny permission="group_membership.Edit" roles="Clerk" />
-        <deny permission="group_membership.Add" roles="Clerk" />
-        <deny permission="group_membership.Delete" roles="Clerk" />
+    <!-- like_state="draft" -->
+    <state id="active" title="Active Parliament" tags="public">
+        <facet ref=".active_Clerk" />
+    </state>
+    
+    <!-- like_state="active" -->
+    <state id="dissolved" title="Parliament is Dissolved" tags="public">
+        <facet ref=".view" />
     </state>
     
     

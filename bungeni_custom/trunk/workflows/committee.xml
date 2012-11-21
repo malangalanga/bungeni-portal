@@ -14,25 +14,30 @@
     <feature name="address" enabled="true" />
     
     
-    <state id="draft" title="Draft - Committee not yet Active">
+    <!-- workflow facets -->
+    <facet name="all_Clerk">
         <allow permission=".View" roles="Clerk" />
-        <deny permission=".View" roles="Speaker MP Minister Anonymous" />
         <allow permission=".Delete" roles="Owner" />
-        <deny permission="agenda_item.Add" roles="CommitteeMember" />
-    </state>
-
-    <state id="active" title="Active Committee" 
-        like_state="draft" 
-        tags="public">
-        <allow permission=".View" roles="Speaker MP Minister Anonymous" />
-        <deny permission=".Delete" roles="Owner" />
+    </facet>
+    <facet name="all" default="true">
+        <allow permission=".View" roles="Authenticated Anonymous" />
         <allow permission="agenda_item.Add" roles="CommitteeMember" />
+    </facet>
+    <facet name="view">
+        <allow permission=".View" roles="Authenticated Anonymous" />
+    </facet>
+    
+    
+    <state id="draft" title="Draft - Committee not yet Active">
+        <facet ref=".all_Clerk" />
     </state>
-  
-    <state id="dissolved" title="Committee is Dissolved" 
-        like_state="active"
-        tags="public">
-        <deny permission="agenda_item.Add" roles="CommitteeMember" />
+    
+    <!-- like_state="draft" -->
+    <state id="active" title="Active Committee" tags="public" />
+    
+    <!-- like_state="active" -->
+    <state id="dissolved" title="Committee is Dissolved" tags="public">
+        <facet ref=".view" />
     </state>
     
     

@@ -129,7 +129,7 @@
         <allow permission=".Edit" roles="Speaker" />
     </facet>
     <facet name="public">
-        <allow permission=".View" roles="Clerk Speaker Owner Signatory MP Minister Anonymous" />
+        <allow permission=".View" roles="Anonymous" />
     </facet>
     
     
@@ -214,9 +214,7 @@
     </state>
     
     <state id="inadmissible" title="Inadmissible" 
-        like_state="withdrawn_internal"
-        tags="terminal fail">
-    </state>
+        like_state="withdrawn_internal" tags="terminal fail" />
     
     <!-- like_state="submitted" -->
     <state id="admissible" title="Admissible" version="true" tags="public approved">

@@ -94,11 +94,11 @@
         <allow permission=".Edit" roles="Clerk" />
     </facet>
     <facet name="public_edit_Clerk">
-        <allow permission=".View" roles="Owner Clerk Speaker MP Minister Signatory Anonymous" />
+        <allow permission=".View" roles="Authenticated Anonymous" />
         <allow permission=".Edit" roles="Clerk" />
     </facet>
     <facet name="public">
-        <allow permission=".View" roles="Owner Clerk Speaker MP Minister Signatory Anonymous" />
+        <allow permission=".View" roles="Authenticated Anonymous" />
     </facet>
     
     

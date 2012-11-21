@@ -4,15 +4,17 @@
     note=""
     >
     
-    <state id="attached" title="Member" 
-        permissions_from_parent="true" 
-    />
     
-    <state id="internal" title="Published Internal"
-        note="Visible to bungeni users"
-        >
+    <!-- workflow facets -->
+    <facet name="view">
         <allow permission=".View" roles="Authenticated" />
-        <deny permission=".View" roles="Anonymous" />
+    </facet>
+    
+    
+    <state id="attached" title="Member" permissions_from_parent="true" />
+    
+    <state id="internal" title="Published Internal" note="Visible to bungeni users">
+        <facet ref=".view" />
     </state>
     
     <!-- !+inactive(mr, aug-2011) review usage and rename across the board 

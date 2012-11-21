@@ -22,31 +22,31 @@
     <feature name="version" enabled="false" />
     <feature name="attachment" enabled="false" />
     
+    <!-- workflow facets -->
+    <facet name="all_Owner">
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory MP Minister" />
+        <allow permission=".Delete" roles="Owner" />
+    </facet>
+    <facet name="public">
+        <allow permission=".View" roles="Authenticated Anonymous" />
+    </facet>
+    
     
     <state id="awaiting_consent" title="Awaiting Consent" tags="workspace">
-        <allow permission=".View" roles="Clerk Speaker Owner Signatory MP Minister" />
-        <deny permission=".View" roles="Anonymous" />
-        <deny permission=".Edit" roles="Clerk" />
-        <allow permission=".Delete" roles="Owner" />
+        <facet ref=".all_Owner" />
     </state>
     
-    <state id="consented" title="Signature Consented" 
-        like_state="awaiting_consent"
-        tags="workspace public">
-        <allow permission=".View" roles="Anonymous" />
-        <deny permission=".Delete" roles="Owner" />
-    </state>
-
-    <state id="rejected" title="Signature Rejected" 
-        like_state="consented"
-        tags="terminal">
-        <deny permission=".View" roles="Clerk Speaker Owner Signatory MP Minister Anonymous" />
+    <!-- like_state="awaiting_consent" -->
+    <state id="consented" title="Signature Consented" tags="workspace public">
+        <facet ref=".public" />
     </state>
     
-    <state id="withdrawn" title="Signature Withdrawn" 
-        like_state="rejected"
-        tags="terminal"
-    />
+    <!-- like_state="consented" -->
+    <state id="rejected" title="Signature Rejected" tags="terminal" />
+    
+    <!-- like_state="rejected" -->
+    <state id="withdrawn" title="Signature Withdrawn" tags="terminal" />
+    
     
     <transition title="Create"
         source=""
