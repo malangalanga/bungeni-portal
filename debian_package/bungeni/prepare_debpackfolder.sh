@@ -34,7 +34,7 @@ BUNGENI_REL_FOLDER="bungeni_${BUNGENI_REL}"
 BUNGENI_TAR=$2
 BUNGENI_ARCH=$3
 BUNGENI_DEB="${BUNGENI_REL_FOLDER}_${BUNGENI_ARCH}.deb"
-BUNGENI_SIZE=$(getsize ../bungeni.exclude ../bungeni.include)
+BUNGENI_SIZE=$(getsize ../bungeni.include ../bungeni.exclude)
 
 logger.printTask "[Bungeni] Setting debian package folder."
 cp -R bungeni_version_revision $BUNGENI_REL_FOLDER

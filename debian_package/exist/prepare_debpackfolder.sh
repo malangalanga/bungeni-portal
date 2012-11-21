@@ -26,7 +26,7 @@ EXIST_REL_FOLDER="bungeni-exist-db_${EXIST_REL}"
 EXIST_TAR=$2
 EXIST_ARCH=$3
 EXIST_DEB="${EXIST_REL_FOLDER}_${EXIST_ARCH}.deb"
-EXIST_SIZE=$(getsize ../exist.exclude ../exist.include)
+EXIST_SIZE=$(getsize ../exist.include ../exist.exclude)
 
 logger.printTask "[ExistDb] Setting up debian package folder."
 cp -R exist-db_version_revision $EXIST_REL_FOLDER

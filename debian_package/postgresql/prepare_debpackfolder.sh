@@ -26,7 +26,7 @@ POSTGRES_REL_FOLDER="bungeni-postgresql_${POSTGRES_REL}"
 POSTGRES_TAR=$2
 POSTGRES_ARCH=$3
 POSTGRES_DEB="${POSTGRES_REL_FOLDER}_${POSTGRES_ARCH}.deb"
-POSTGRES_SIZE=$(getsize ../postgresql.exclude ../postgresql.include)
+POSTGRES_SIZE=$(getsize ../postgresql.include ../postgresql.exclude)
 
 logger.printTask "[PostgreSQL] Setting up debian package..."
 cp -R postgresql_version_revision $POSTGRES_REL_FOLDER

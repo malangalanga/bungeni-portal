@@ -26,7 +26,7 @@ PLONE_REL_FOLDER="bungeni-plone_${PLONE_REL}"
 PLONE_TAR=$2
 PLONE_ARCH=$3
 PLONE_DEB="${PLONE_REL_FOLDER}_${PLONE_ARCH}.deb"
-PLONE_SIZE=$(getsize ../plone.exclude ../plone.include)
+PLONE_SIZE=$(getsize ../plone.include ../plone.exclude)
 
 logger.printTask "[Plone] Setting up debian package folder."
 cp -R plone_version_revision $PLONE_REL_FOLDER

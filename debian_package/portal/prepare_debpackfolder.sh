@@ -26,7 +26,7 @@ PORTAL_REL_FOLDER="bungeni-portal_${PORTAL_REL}"
 PORTAL_TAR=$2
 PORTAL_ARCH=$3
 PORTAL_DEB="${PORTAL_REL_FOLDER}_${PORTAL_ARCH}.deb"
-PORTAL_SIZE=$(getsize ../portal.exclude ../portal.include)
+PORTAL_SIZE=$(getsize ../portal.include ../portal.exclude)
 
 logger.printTask "[Portal] Setting up debian package..."
 cp -R portal_version_revision $PORTAL_REL_FOLDER
