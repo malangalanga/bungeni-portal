@@ -16,230 +16,234 @@
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
-    <feature name="attachment" enabled="true" />
-    <feature name="event" enabled="true" />
+    
+    <feature name="attachment" enabled="true">
+        <facet name="all_Clerk">
+            <allow permission="attachment.Edit" roles="Clerk" />
+            <allow permission="attachment.Add" roles="Clerk" />
+            <allow permission="attachment.Delete" roles="Clerk" />
+        </facet>
+        <facet name="all_Owner">
+            <allow permission="attachment.Edit" roles="Owner" />
+            <allow permission="attachment.Add" roles="Owner" />
+            <allow permission="attachment.Delete" roles="Owner" />
+        </facet>
+        <facet name="all_Speaker">
+            <allow permission="attachment.Edit" roles="Speaker" />
+            <allow permission="attachment.Add" roles="Speaker" /> 
+            <allow permission="attachment.Delete" roles="Speaker" /> 
+        </facet>
+    </feature>
+    
+    <feature name="event" enabled="true">
+        <facet name="all_internal" default="true">
+            <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
+            <allow permission="event.Edit" roles="Clerk Speaker" />
+            <allow permission="event.Add" roles="Clerk Speaker" />
+            <allow permission="event.Delete" roles="Clerk Speaker" />
+        </facet>
+        <facet name="view_internal">
+            <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
+        </facet>
+    </feature>
+    
     <feature name="signatory" enabled="true">
         <parameter name="min_signatories" value="1" />
         <parameter name="open_states" value="admissible" />
+        <facet name="all_Clerk">
+            <allow permission="signatory.Add" roles="Clerk" />
+            <allow permission="signatory.Delete" roles="Clerk" />
+        </facet>
+        <facet name="all_Owner">
+            <allow permission="signatory.Add" roles="Owner" />
+            <allow permission="signatory.Delete" roles="Owner" />
+        </facet>
+        <facet name="add_Owner">
+            <allow permission="signatory.Add" roles="Owner" />
+        </facet>
+        <facet name="delete_Clerk">
+            <allow permission="signatory.Delete" roles="Clerk" />
+        </facet>
+        <facet name="delete_Speaker">
+            <allow permission="signatory.Delete" roles="Speaker" />
+        </facet>
     </feature>
+    
     <feature name="schedule" enabled="true" />
     <feature name="workspace" enabled="true" />
     <feature name="notification" enabled="false" />
     <feature name="download" enabled="true" />
-    <feature name="group_assignment" enabled="true" />
+    
+    <feature name="group_assignment" enabled="true">
+        <facet name="all_Clerk">
+            <allow permission="group_assignment.Add" roles="Clerk" />
+            <allow permission="group_assignment.View" roles="Clerk" />
+            <allow permission="group_assignment.Edit" roles="Clerk" />
+            <allow permission="group_assignment.Delete" roles="Clerk" />
+        </facet>
+    </feature>
+    
+    
+    <!-- workflow facets -->
+    <facet name="all_Clerk">
+        <allow permission=".View" roles="Clerk" />
+        <allow permission=".Edit" roles="Clerk" />
+        <allow permission=".Delete" roles="Clerk" />
+    </facet>
+    <facet name="all_Owner">
+        <allow permission=".View" roles="Owner" />
+        <allow permission=".Edit" roles="Owner" />
+        <allow permission=".Delete" roles="Owner" />
+    </facet>
+    <facet name="view_Signatory">
+        <allow permission=".View" roles="Owner Signatory" />
+    </facet>
+    <facet name="view_Clerk">
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory" />
+    </facet>
+    <facet name="edit_Clerk">
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory CommitteeMember" />
+        <allow permission=".Edit" roles="Clerk CommitteeMember" />
+    </facet>
+    <facet name="redraft_Owner">
+        <allow permission=".View" roles="Owner" />
+        <allow permission=".Edit" roles="Owner" />
+    </facet>
+    <facet name="edit_Owner">
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory" />
+        <allow permission=".Edit" roles="Owner" />
+    </facet>
+    <facet name="edit_Speaker">
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory" />
+        <allow permission=".Edit" roles="Speaker" />
+    </facet>
+    <facet name="public">
+        <allow permission=".View" roles="Authenticated Anonymous" />
+    </facet>
     
     
     <state id="working_draft" title="Working Draft" tags="draft private">
-        <allow permission=".View" roles="Clerk" />
-        <deny permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous CommitteeMember" />
-        <allow permission=".Edit" roles="Clerk" />
-        <deny permission=".Edit" roles="Speaker Owner MP Minister Anonymous CommitteeMember" />
-        <allow permission=".Delete" roles="Clerk" />
-        <deny permission=".Delete" roles="Speaker Owner MP Minister Anonymous" />
-        <allow permission="signatory.Add" roles="Clerk" />
-        <deny permission="signatory.Add" roles="Speaker Owner MP Minister Anonymous" />
-        <allow permission="signatory.Delete" roles="Clerk" />
-        <deny permission="signatory.Delete" roles="Speaker Owner MP Minister Anonymous" />
-        <allow permission="attachment.Edit" roles="Clerk" />
-        <deny permission="attachment.Edit" roles="Speaker Owner" />
-        <allow permission="attachment.Add" roles="Clerk" />
-        <deny permission="attachment.Add" roles="Speaker Owner MP Minister Anonymous" />
-        <deny permission="attachment.Delete" roles="Clerk Speaker" />
-        <allow permission="attachment.Delete" roles="Owner" />
-        <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
-        <allow permission="event.Edit" roles="Clerk Speaker" />
-        <allow permission="event.Add" roles="Clerk Speaker" />
-        <allow permission="event.Delete" roles="Clerk Speaker" />
-        <deny permission="group_assignment.Add" roles="Clerk" />
-        <deny permission="group_assignment.View" roles="Clerk" />
-        <deny permission="group_assignment.Edit" roles="Clerk" />
-        <deny permission="group_assignment.Delete" roles="Clerk" />
+        <facet ref=".all_Clerk" />
+        <facet ref="signatory.all_Clerk" />
+        <facet ref="attachment.all_Clerk" />
     </state>
     
-    <state id="draft" title="Draft" 
-        like_state="working_draft" 
-        tags="draft private">
-        <deny permission=".View" roles="Clerk" />
-        <allow permission=".View" roles="Owner" />
-        <deny permission=".Edit" roles="Clerk" />
-        <allow permission=".Edit" roles="Owner" />
-        <deny permission=".Delete" roles="Clerk" />
-        <allow permission=".Delete" roles="Owner" />
-        <deny permission="signatory.Add" roles="Clerk" />
-        <allow permission="signatory.Add" roles="Owner" />
-        <deny permission="signatory.Delete" roles="Clerk" />
-        <allow permission="signatory.Delete" roles="Owner" />
-        <allow permission="attachment.Edit" roles="Owner" />
-        <deny permission="attachment.Edit" roles="Clerk" />
-        <allow permission="attachment.Add" roles="Owner" />
-        <deny permission="attachment.Add" roles="Clerk" />
+    <!-- like_state="working_draft" -->
+    <state id="draft" title="Draft" tags="draft private">
+        <facet ref=".all_Owner" />
+        <facet ref="signatory.all_Owner" />
+        <facet ref="attachment.all_Owner" />
     </state>
     
-    <state id="submitted_signatories" title="Submitted to Signatories"
-        version="true" 
-        like_state="draft"
-        tags="actionmp">
-        <allow permission=".View" roles="Signatory" />
-        <deny permission=".Edit" roles="Owner" />
-        <deny permission=".Delete" roles="Owner" />
-        <deny permission="signatory.Delete" roles="Owner" />
-        <deny permission="attachment.Edit" roles="Owner" />
-        <deny permission="attachment.Add" roles="Owner" />
-        <deny permission="attachment.Delete" roles="Owner" />
+    <!-- like_state="draft" -->
+    <state id="submitted_signatories" title="Submitted to Signatories" version="true" tags="actionmp">
+        <facet ref=".view_Signatory" />
+        <facet ref="signatory.add_Owner" />
     </state>
     
-    <state id="redraft" title="Redraft" like_state="draft"
-        note="document under review before resubmission"
-        version="true">
-        <deny permission=".Delete" roles="Owner" />
-        <allow permission="attachment.Delete" roles="Owner" />
+    <!-- like_state="draft" -->
+    <state id="redraft" title="Redraft" note="document under review before resubmission" version="true">
+        <facet ref=".redraft_Owner" />
+        <facet ref="signatory.all_Owner" />
+        <facet ref="attachment.all_Owner" />
     </state>
     
-    <state id="withdrawn_signatory" title="Dropped" 
-        like_state="submitted_signatories"
-        note="motion has been withdrawn before submission to house">
-        <deny permission="signatory.Add" roles="Owner" />        
+    <!-- like_state="submitted_signatories" -->
+    <state id="withdrawn_signatory" title="Dropped" note="doc has been withdrawn before submission to house">
+        <facet ref=".view_Signatory" />
+        <facet ref="signatory.add_Owner" />
     </state>
     
-    <state id="submitted" title="Submitted" 
-        version="true"
-        like_state="submitted_signatories"
-        tags="actionclerk">
-        <allow permission=".View" roles="Clerk Speaker" />
-        <deny permission="signatory.Add" roles="Owner" />
-        <deny permission="attachment.Delete" roles="Owner" />
+    <!-- like_state="submitted_signatories" -->
+    <state id="submitted" title="Submitted" version="true" tags="actionclerk">
+        <facet ref=".view_Clerk" />
     </state>
     
-    <state id="received" title="Received by Clerks Office" 
-        like_state="submitted"
-        tags="actionclerk">
-        <allow permission=".View" roles="CommitteeMember" />
-        <allow permission=".Edit" roles="Clerk" />
-        <allow permission=".Edit" roles="CommitteeMember" />
-        <allow permission="signatory.Delete" roles="Clerk" />
-        <allow permission="attachment.Edit" roles="Clerk" />        
-        <allow permission="attachment.Add" roles="Clerk" />
-        <allow permission="attachment.Delete" roles="Clerk" />
-        <allow permission="group_assignment.Add" roles="Clerk" />
-        <allow permission="group_assignment.View" roles="Clerk" />
-        <allow permission="group_assignment.Edit" roles="Clerk" />
-        <allow permission="group_assignment.Delete" roles="Clerk" />
+    <!-- like_state="submitted" -->
+    <state id="received" title="Received by Clerks Office" tags="actionclerk">
+        <facet ref=".edit_Clerk" />
+        <facet ref="signatory.delete_Clerk" />
+        <facet ref="attachment.all_Clerk" />
+        <facet ref="group_assignment.all_Clerk" />
     </state>
     
-    <state id="clarification_required" title="Requires Clarification to Receive"
-        version="true"
-        like_state="submitted"
-        tags="actionmp">
-        <allow permission=".Edit" roles="Owner" />
-        <allow permission="signatory.Add" roles="Owner" />
-        <allow permission="signatory.Delete" roles="Owner" />
-        <allow permission="attachment.Edit" roles="Owner" />
-        <allow permission="attachment.Add" roles="Owner" />
+    <!-- like_state="submitted" -->
+    <state id="clarification_required" title="Requires Clarification to Receive" version="true" tags="actionmp">
+        <facet ref=".edit_Owner" />
+        <facet ref="signatory.all_Owner" />
+        <facet ref="attachment.all_Owner" />
     </state>
     
-    <state id="completed" title="Submitted to the Speaker"
-        version="true"
-        like_state="submitted">
-        <allow permission=".Edit" roles="Speaker" />
-        <allow permission="signatory.Delete" roles="Speaker" />
-        <allow permission="attachment.Edit" roles="Speaker" />
-        <allow permission="attachment.Add" roles="Speaker" />
+    <!-- like_state="submitted" -->
+    <state id="completed" title="Submitted to the Speaker" version="true">
+        <facet ref=".edit_Speaker" />
+        <facet ref="signatory.delete_Speaker" />
+        <facet ref="attachment.all_Speaker" />
     </state>
     
-    <state id="incomplete" title="Requires Clarification to Approve"
-        version="true"
-        like_state="received"
-        tags="actionclerk"
-    />
+    <state id="incomplete" title="Requires Clarification to Approve" version="true"
+        like_state="received" tags="actionclerk" />
     
-    <state id="withdrawn_internal" title="Withdrawn" 
-        like_state="submitted"
-        tags="terminal fail">
-        <deny permission="event.Edit" roles="Clerk Speaker" />
-        <deny permission="event.Add" roles="Clerk Speaker" />
-        <deny permission="event.Delete" roles="Clerk Speaker" />
+    <!-- like_state="submitted" -->
+    <state id="withdrawn_internal" title="Withdrawn" tags="terminal fail">
+        <facet ref=".view_Clerk" />
+        <facet ref="event.view_internal" />
     </state>
     
     <state id="inadmissible" title="Inadmissible" 
-        like_state="withdrawn_internal"
-        tags="terminal fail">
-    </state>
+        like_state="withdrawn_internal" tags="terminal fail" />
     
-    <state id="admissible" title="Admissible" 
-        version="true"
-        like_state="submitted"
-        tags="public approved">
-        <allow permission=".View" roles="Clerk Speaker Owner Signatory MP Minister Anonymous" />
+    <!-- like_state="submitted" -->
+    <state id="admissible" title="Admissible" version="true" tags="public approved">
+        <facet ref=".public" />
     </state>
     
     <state id="schedule_pending" title="Schedule pending"
-        like_state="admissible"
-        tags="public tobescheduled"
-    />
+        like_state="admissible" tags="public tobescheduled" />
     
     <state id="scheduled" title="Scheduled" 
-        like_state="admissible"
-        tags="public scheduled">
+        like_state="admissible" tags="public scheduled" />
+    
+    <!-- like_state="admissible" -->
+    <state id="adopted" title="Adopted" version="true" tags="public terminal succeed">
+        <facet ref=".public" />
+        <facet ref="event.view_internal" />
     </state>
     
-    <state id="adopted" title="Adopted"
-        version="true"
-        like_state="admissible"
-        tags="public terminal succeed">
-        <deny permission="event.Edit" roles="Clerk Speaker" />
-        <deny permission="event.Add" roles="Clerk Speaker" />
-        <deny permission="event.Delete" roles="Clerk Speaker" />
-    </state>
-    
-    <state id="adopted_amendments" title="Adopted with amendments"
-        version="true"
-        like_state="adopted"
-        tags="public terminal succeed"
-    />
+    <state id="adopted_amendments" title="Adopted with amendments" version="true"
+        like_state="adopted" tags="public terminal succeed" />
     
     <state id="adjourned" title="Debate adjourned" 
-        like_state="admissible"
-        tags="public approved"
-        note="a motion was debated and the debate adjourned"
-    />
+        like_state="admissible" tags="public approved"
+        note="a doc was debated and the debate adjourned" />
     
     <state id="deferred" title="Deferred" 
-        like_state="admissible"
-        tags="public approved"
-        note="An admissable motion that cannot be debated.">
-    </state>
+        like_state="admissible" tags="public approved"
+        note="An admissable doc that cannot be debated." />
     
     <state id="elapsed" title="Elapsed" 
-        like_state="adopted" 
-        tags="public terminal fail"
-        note="A defered motion that was not debated"
-    />
+        like_state="adopted" tags="public terminal fail"
+        note="A defered doc that was not debated" />
     
     <state id="dropped" title="Dropped" 
-        like_state="adopted" 
-        tags="public terminal fail"
-        note="A motion was scheduled, but dropped e.g. becuase no show of MP."
-    />
+        like_state="adopted" tags="public terminal fail"
+        note="A doc was scheduled, but dropped e.g. becuase no show of MP." />
     
     <state id="rejected" title="Rejected" 
-        like_state="adopted"
-        tags="public terminal fail">
-    </state>
+        like_state="adopted" tags="public terminal fail" />
     
     <state id="withdrawn" title="Withdrawn" 
-        like_state="adopted"
-        tags="public terminal fail"
-    />
+        like_state="adopted" tags="public terminal fail" />
     
     
-    <transition title="Create Motion"
+    <transition title="Create Doc"
         source=""
         destination="draft"
         condition="user_is_context_owner"
         trigger="automatic"
     />
     
-    <transition title="Create Motion (On behalf of)"
+    <transition title="Create Doc (On behalf of)"
         source=""
         destination="working_draft"
         condition="user_is_not_context_owner"
@@ -444,7 +448,7 @@
         require_confirmation="true"
     />
     
-    <transition title="Reject a scheduled motion"
+    <transition title="Reject a scheduled doc"
         source="scheduled"
         destination="rejected"
         condition=""

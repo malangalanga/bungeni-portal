@@ -19,14 +19,16 @@
         <allow permission=".View" roles="Clerk" />
         <allow permission=".Delete" roles="Owner" />
     </facet>
-    <facet name="active_Clerk">
+    <facet name="public_all_Clerk">
         <allow permission=".View" roles="Authenticated Anonymous" />
+        <allow permission="group_membership.View" roles="Authenticated Anonymous" />
         <allow permission="group_membership.Edit" roles="Clerk" />
         <allow permission="group_membership.Add" roles="Clerk" />
         <allow permission="group_membership.Delete" roles="Clerk" />
     </facet>
-    <facet name="view">
+    <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
+        <allow permission="group_membership.View" roles="Authenticated Anonymous" />
     </facet>
     
     
@@ -36,12 +38,12 @@
     
     <!-- like_state="draft" -->
     <state id="active" title="Active Parliament" tags="public">
-        <facet ref=".active_Clerk" />
+        <facet ref=".public_all_Clerk" />
     </state>
     
     <!-- like_state="active" -->
     <state id="dissolved" title="Parliament is Dissolved" tags="public">
-        <facet ref=".view" />
+        <facet ref=".public" />
     </state>
     
     
