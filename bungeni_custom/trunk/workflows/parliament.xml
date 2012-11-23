@@ -11,7 +11,11 @@
     <allow permission=".Delete" roles="Clerk" />
     
     
-    <feature name="address" enabled="true" />
+    <feature name="address" enabled="true">
+        <facet name="public">
+            <allow permission="address.View" roles="Authenticated Anonymous" />
+        </facet>
+    </feature>
     
     
     <!-- workflow facets -->
@@ -21,14 +25,14 @@
     </facet>
     <facet name="public_all_Clerk">
         <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="group_membership.View" roles="Authenticated Anonymous" />
-        <allow permission="group_membership.Edit" roles="Clerk" />
-        <allow permission="group_membership.Add" roles="Clerk" />
-        <allow permission="group_membership.Delete" roles="Clerk" />
+        <allow permission="member_of_parliament.View" roles="Authenticated Anonymous" />
+        <allow permission="member_of_parliament.Edit" roles="Clerk" />
+        <allow permission="member_of_parliament.Add" roles="Clerk" />
+        <allow permission="member_of_parliament.Delete" roles="Clerk" />
     </facet>
     <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="group_membership.View" roles="Authenticated Anonymous" />
+        <allow permission="member_of_parliament.View" roles="Authenticated Anonymous" />
     </facet>
     
     
@@ -38,10 +42,12 @@
     
     <state id="active" title="Active Parliament" tags="public">
         <facet ref=".public_all_Clerk" />
+        <facet ref="address.public" />
     </state>
     
     <state id="dissolved" title="Parliament is Dissolved" tags="public">
         <facet ref=".public" />
+        <facet ref="address.public" />
     </state>
     
     
