@@ -11,7 +11,11 @@
     <allow permission=".Delete" roles="Clerk" />
     
     
-    <feature name="address" enabled="true" />
+    <feature name="address" enabled="true">
+        <facet name="public">
+            <allow permission="address.View" roles="Authenticated Anonymous" />
+        </facet>
+    </feature>
     
     
     <!-- workflow facets -->
@@ -19,12 +23,22 @@
         <allow permission=".View" roles="Clerk" />
         <allow permission=".Delete" roles="Owner" />
     </facet>
-    <facet name="all" default="true">
+    <facet name="public_all_Clerk">
         <allow permission=".View" roles="Authenticated Anonymous" />
+        <allow permission="committee_member.View" roles="Authenticated Anonymous" />
+        <allow permission="committee_member.Edit" roles="Clerk" />
+        <allow permission="committee_member.Add" roles="Clerk" />
+        <allow permission="committee_member.Delete" roles="Clerk" />
+        <allow permission="committee_staff.View" roles="Authenticated Anonymous" />
+        <allow permission="committee_staff.Edit" roles="Clerk" />
+        <allow permission="committee_staff.Add" roles="Clerk" />
+        <allow permission="committee_staff.Delete" roles="Clerk" />
         <allow permission="agenda_item.Add" roles="CommitteeMember" />
     </facet>
-    <facet name="view">
+    <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
+        <allow permission="committee_member.View" roles="Authenticated Anonymous" />
+        <allow permission="committee_staff.View" roles="Authenticated Anonymous" />
     </facet>
     
     
@@ -32,10 +46,14 @@
         <facet ref=".all_Clerk" />
     </state>
     
-    <state id="active" title="Active Committee" tags="public" />
+    <state id="active" title="Active Committee" tags="public">
+        <facet ref=".public_all_Clerk" />
+        <facet ref="address.public" />
+    </state>
     
     <state id="dissolved" title="Committee is Dissolved" tags="public">
-        <facet ref=".view" />
+        <facet ref=".public" />
+        <facet ref="address.public" />
     </state>
     
     
