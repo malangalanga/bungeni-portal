@@ -8,32 +8,12 @@ workflow instances of parliamentary documents, for a given Bungeni deployment.
 currently oriented more towards the Bungeni developer than to the site 
 administartor of a Bungeni deployment.
 
+For the spec of the workflow XML format see: bungeni/schema/workflow.rnc
 
 Guide to Workflow XML Definitions
 =================================
 
 Workflow (root element):
-
-RNC definition for <workflow> XML element:
-
-grammar { 
-    start = workflow
-    element workflow {
-        attribute title { text },
-        attribute description { text },
-        attribute tags { text }?, # declare any system defined tags used in workflow
-        attribute note { text }?,
-        attribute permission_actions { text }?, # a space-separated string of 
-        # type-relative permission actions i.e. each included action allowed to 
-        # be in the form [type_key].{Action}, with the optional type_key
-        # defaulting to the type_key of the type "owning" this workflow.
-        
-        element feature {...}*,
-        element allow {...}*,
-        element state {...}*,
-        element transition {...}*,
-    }
-}
 
 - workflow states may be tagged with system-provided tags and any state tag 
 used in the workflow must be declared within workflow.@tags, as a 
@@ -76,19 +56,6 @@ feature-specific settings (!+ as attributes or sub-elements).
 For list of currently known features (for different archetypes) see:
 bungeni/models/feauture.py
 
-RNC definition for <feature> XML element:
-
-    element feature {
-        attribute name { text },
-        attribute enabled { boolean="true" }?,
-        attribute note { text }?,
-        
-        element parameter {
-            attribute name { text },
-            attribute value { text }, # !+type?
-        }*,
-    }
-
 - @name must be for a supported feature of the workflowed type. 
 
 - if no <feature> element present for a named feature, then that feature is not
@@ -102,24 +69,6 @@ RNC definition for <feature> XML element:
 
 States
 ------
-
-RNC definition for <state> XML element:
-    
-    element state {
-        attribute id { text },
-        attribute title { text },
-        attribute version { boolean="false" }?,
-        attribute like_state {  }?,
-        attribute tags { text }?,
-        attribute note { text }?,
-        attribute permissions_from_parent { boolean="false" }?
-        attribute obsolete { boolean="false" }?,
-        
-        (element allow {...} | element deny {...} )*,
-        element facet {
-            ref { text }, # feature_name.facet_name
-        }*,
-    }
 
 - the state ID should be a lowercase *adverb* (more or less) that describes 
 the _condition_ an object is in, given the transition trail of the object.
@@ -157,7 +106,7 @@ workflow as a single XML document.
     id 
     title
     version=False
-    like_state
+    permissions_from_state
     tags
     note
     permissions_from_parent=False
@@ -184,8 +133,8 @@ denies are executed **after** all grants.
 
 
 DEBUGGING NOTE: to easily see the the evaluated result of all permission 
-assigments for each workflow state definition (that uses like_state) set the 
-logging level to DEBUG.
+assigments for each workflow state definition (that uses permissions_from_state) 
+set the logging level to DEBUG.
 
 !+ <state ... manual_date="true">
     transition to a "politicocratic" destination states need to allow 
@@ -196,21 +145,6 @@ logging level to DEBUG.
 
 Transitions
 -----------
-
-RNC definition for <transition> XML element:
-    
-    element transition {
-        attribute title { text },
-        attribute source { text }, # space separated list of state ids
-        attribute destination { text }, # state id
-        attribute grouping_unique_sources { text } # a transition grouping id
-        attribute condition { test } ?,
-        attribute trigger { "automatic" | "system" | "manual" },
-        attribute roles { text }, # "Clerk ..."
-        attribute order { integer=0 },
-        attribute require_confirmation { boolean="false" },
-        attribute note { text },
-    }
 
 - the transition title should be a lowercase *verb*.
 
