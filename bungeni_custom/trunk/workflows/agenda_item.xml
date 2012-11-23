@@ -95,81 +95,72 @@
         <facet ref="signatory.all_Clerk" />
     </state>
     
-    <!-- like_state="working_draft" -->
     <state id="draft" title="Draft" tags="draft private">
         <facet ref=".all_Owner" />
         <facet ref="attachment.all_Owner" />
         <facet ref="signatory.all_Owner" />
     </state>
     
-    <!-- like_state="draft" -->
     <state id="submitted_signatories" title="Submitted to Signatories" version="true">
         <facet ref=".view_Signatory" />
         <facet ref="signatory.add_Owner" />
     </state>
     
-    <!-- like_state="draft" -->
     <state id="redraft" title="Redraft" version="true" note="document under review before resubmission">
         <facet ref=".redraft_Owner" />
         <facet ref="attachment.all_Owner" />
         <facet ref="signatory.all_Owner" />
     </state>
     
-    <!-- like_state="submitted_signatories" -->
     <state id="withdrawn_signatory" title="Dropped">
         <facet ref=".view_Signatory" />
     </state>
     
-    <!-- like_state="submitted_signatories" -->
     <state id="submitted" title="Submitted" version="true" tags="actionclerk">
         <facet ref=".view_internal" />
     </state>
-
-    <!-- like_state="submitted" -->
+    
     <state id="received" title="Received by Clerks Office" tags="actionclerk">
         <facet ref=".edit_Clerk" />
         <facet ref="attachment.all_Clerk" />
     </state>
     
-    <!-- like_state="submitted" -->
     <state id="clarification_required" title="Requires Clarification to Receive" version="true" tags="actionmp">
         <facet ref=".edit_Owner" />
         <facet ref="attachment.all_Owner" />
     </state>
     
-    <!-- like_state="submitted" -->
     <state id="completed" title="Submitted to the Speaker" version="true">
         <facet ref=".edit_Speaker" />
         <facet ref="attachment.all_Speaker" />
     </state>
     
     <state id="incomplete" title="Requires Clarification to Approve" 
-        like_state="received" version="true" tags="actionclerk" />
+        permissions_from_state="received" version="true" tags="actionclerk" />
     
-    <state id="inadmissible" title="Inadmissible" like_state="submitted" tags="terminal fail" />
+    <state id="inadmissible" title="Inadmissible" permissions_from_state="submitted" tags="terminal fail" />
     
-    <state id="withdrawn_internal" title="Withdrawn" like_state="submitted" tags="terminal fail" />
+    <state id="withdrawn_internal" title="Withdrawn" permissions_from_state="submitted" tags="terminal fail" />
     
-    <!-- like_state="submitted" -->
     <state id="admissible" title="Admissible" version="true" tags="public approved">
         <facet ref=".public" />
     </state>
     
-    <state id="schedule_pending" title="Schedule pending" like_state="admissible" tags="public tobescheduled" />
+    <state id="schedule_pending" title="Schedule pending" permissions_from_state="admissible" tags="public tobescheduled" />
     
-    <state id="debated" title="Debated" like_state="admissible" tags="public terminal succeed" />
+    <state id="debated" title="Debated" permissions_from_state="admissible" tags="public terminal succeed" />
     
-    <state id="scheduled" title="Scheduled" like_state="admissible" tags="public scheduled" />
+    <state id="scheduled" title="Scheduled" permissions_from_state="admissible" tags="public scheduled" />
     
-    <state id="adjourned" title="Debate adjourned" like_state="admissible" tags="public approved" />
+    <state id="adjourned" title="Debate adjourned" permissions_from_state="admissible" tags="public approved" />
     
-    <state id="deferred" title="Deferred" like_state="admissible" tags="public approved" />
+    <state id="deferred" title="Deferred" permissions_from_state="admissible" tags="public approved" />
     
-    <state id="elapsed" title="Elapsed" like_state="debated" tags="public terminal fail" />
+    <state id="elapsed" title="Elapsed" permissions_from_state="debated" tags="public terminal fail" />
     
-    <state id="dropped" title="Dropped" like_state="debated" tags="public terminal fail" />
+    <state id="dropped" title="Dropped" permissions_from_state="debated" tags="public terminal fail" />
     
-    <state id="withdrawn" title="Withdrawn" like_state="debated" tags="public terminal fail" />
+    <state id="withdrawn" title="Withdrawn" permissions_from_state="debated" tags="public terminal fail" />
     
     
     <transition title="Create Agenda Item"

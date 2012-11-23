@@ -40,7 +40,6 @@
     
     <state id="attached" title="Event" permissions_from_parent="true" tags="public" />
     
-    <!-- like_state="draft" -->
     <state id="internal" title="Published Internal">
         <facet ref=".internal" />
     </state>
@@ -49,7 +48,6 @@
         currently being used in attachment, heading, event
         consider using "dropped", "obsoleted", "removed"...
     -->
-    <!-- like_state="internal" -->
     <state id="inactive" title="Inactive event">
         <facet ref=".all_view" />
     </state>

@@ -108,111 +108,102 @@
         <facet ref="attachment.all_Clerk" />
     </state>
     
-    <!-- like_state="working_draft"  -->
     <state id="draft" title="Draft Bill" tags="draft private">
         <facet ref=".all_Owner" />
         <facet ref="signatory.all_Owner" />
         <facet ref="attachment.all_Owner" />
     </state>
     
-    <!-- like_state="draft" -->
     <state id="submitted_signatories" title="Submitted to Signatories" version="true" tags="actionmp">
         <facet ref=".view_Signatory" />
         <facet ref="signatory.add_Owner" />
     </state>
     
-    <!-- like_state="draft" -->
     <state id="redraft" title="Redraft" version="true" note="document under review before resubmission">
         <facet ref=".redraft_Owner" />
         <facet ref="signatory.all_Owner" />
         <facet ref="attachment.all_Owner" />
     </state>
     
-    <!-- like_state="submitted_signatories" -->
     <state id="withdrawn_signatory" title="Dropped">
         <facet ref=".view_Signatory" />
         <facet ref="event.view_internal" />
     </state>
     
-    <!-- like_state="submitted_signatories" -->
     <state id="submitted" title="Submitted to Clerk" version="true" tags="actionclerk">
         <facet ref=".view_Clerk" />
     </state>
     
-    <!-- like_state="submitted" -->
     <state id="received" title="received by clerk" tags="actionclerk">
         <facet ref=".edit_Clerk" />
         <facet ref="attachment.all_Clerk" />
     </state>
     
-    <!-- like_state="received" -->
     <state id="gazetted" title="Bill Published in Gazette" version="true" tags="public">
         <facet ref=".public_edit_Clerk" />
         <facet ref="attachment.all_Clerk" />
     </state>
     
     <state id="first_reading_pending" title="First Reading Pending" 
-        like_state="gazetted" tags="public tobescheduled" />
+        permissions_from_state="gazetted" tags="public tobescheduled" />
     
     <state id="first_reading" title="First Reading" 
-        like_state="gazetted" tags="public scheduled" />
+        permissions_from_state="gazetted" tags="public scheduled" />
     
     <state id="first_reading_adjourned" title="First Reading Adjourned" 
-        like_state="gazetted" tags="public approved" />
+        permissions_from_state="gazetted" tags="public approved" />
     
     <state id="first_committee" title="Submitted to Select Committee (after 1st reading)" 
-        like_state="gazetted" tags="public" />
+        permissions_from_state="gazetted" tags="public" />
     
     <state id="first_report_reading_pending" title="First Report Reading Pending" 
-        like_state="first_committee" tags="public tobescheduled" />
+        permissions_from_state="first_committee" tags="public tobescheduled" />
     
     <state id="first_report_reading" title="First Report Reading" version="true"
-        like_state="first_committee" tags="public scheduled" />
+        permissions_from_state="first_committee" tags="public scheduled" />
     
     <state id="first_report_reading_adjourned" title="First Report Reading Adjourned" 
-        like_state="first_committee" tags="public approved" />
+        permissions_from_state="first_committee" tags="public approved" />
     
     <state id="second_reading_pending" title="Second Reading Pending" 
-        like_state="first_committee" tags="public tobescheduled" />
+        permissions_from_state="first_committee" tags="public tobescheduled" />
     
     <state id="second_reading" title="Second Reading" version="true"
-        like_state="first_committee" tags="public scheduled" />
+        permissions_from_state="first_committee" tags="public scheduled" />
     
     <state id="second_reading_adjourned" title="Second Reading Adjourned"
-        like_state="first_committee" tags="public approved" />
+        permissions_from_state="first_committee" tags="public approved" />
     
     <state id="whole_house_pending" title="Whole House Pending" 
-        like_state="first_committee" tags="public tobescheduled" />
+        permissions_from_state="first_committee" tags="public tobescheduled" />
     
     <state id="whole_house" title="Whole House" 
-        like_state="first_committee" tags="public scheduled" />
+        permissions_from_state="first_committee" tags="public scheduled" />
     
     <state id="whole_house_adjourned" title="Whole House Adjourned" 
-        like_state="first_committee" tags="public approved" />
+        permissions_from_state="first_committee" tags="public approved" />
         
     <state id="second_committee" title="Submitted to Select Committee (after 2nd reading)"
-        like_state="first_committee" tags="public" />
+        permissions_from_state="first_committee" tags="public" />
     
     <state id="third_reading_pending" title="Third Reading Pending"
-        like_state="first_committee" tags="public tobescheduled" />
+        permissions_from_state="first_committee" tags="public tobescheduled" />
     
     <state id="third_reading" title="Third Reading"
-        like_state="first_committee" tags="public scheduled" />
+        permissions_from_state="first_committee" tags="public scheduled" />
     
-    <state id="third_reading_adjourned" like_state="first_committee"
+    <state id="third_reading_adjourned" permissions_from_state="first_committee"
         title="Third Reading Adjourned" tags="public approved" />
     
-    <!-- like_state="first_committee" -->
     <state id="approved" title="Approved Bill" tags="public terminal succeed approved">
         <facet ref=".public" />
         <facet ref="event.view_internal" />
     </state>
     
-    <state id="rejected" title="Rejected Bill" like_state="approved" tags="public terminal fail" />
+    <state id="rejected" title="Rejected Bill" permissions_from_state="approved" tags="public terminal fail" />
     
-    <state id="withdrawn" title="Bill Withdrawn" like_state="approved" tags="public terminal fail" />
+    <state id="withdrawn" title="Bill Withdrawn" permissions_from_state="approved" tags="public terminal fail" />
     
-    <!-- like_state="submitted" -->
     <state id="withdrawn_internal" title="Withdrawn" tags="private terminal fail">
         <facet ref=".view_Signatory" />
         <facet ref="event.view_internal" />

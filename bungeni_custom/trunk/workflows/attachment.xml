@@ -38,13 +38,11 @@
     
     <state id="attached" title="Attachment" tags="public" permissions_from_parent="true" />
     
-    <!-- like_state="draft" -->
     <state id="internal" title="Published Internal">
         <facet ref=".all_internal" />
     </state>
     
     <!-- !+inactive(mr, aug-2011) review usage and rename across the board -->
-    <!-- like_state="internal" -->
     <state id="inactive" title="Inactive file">
         <facet ref=".edit_internal" />
     </state>

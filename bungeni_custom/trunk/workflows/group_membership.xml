@@ -18,10 +18,7 @@
     </state>
     
     <!-- !+inactive(mr, aug-2011) review usage and rename across the board 
-    <state id="inactive" title="Inactive address" like_state="internal">
-        <deny permission="zope.View" roles="Authenticated" /> 
-        <deny permission="zope.View" roles="Anonymous" /> 
-    </state>
+    <state id="inactive" title="Inactive address" permissions_from_state="internal" />
     -->
     
     

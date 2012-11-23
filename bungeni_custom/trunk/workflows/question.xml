@@ -133,112 +133,97 @@
         <facet ref="signatory.all_Clerk" />
     </state>
     
-    <!-- like_state="working_draft" -->
     <state id="draft" title="Draft" tags="draft private">
         <facet ref=".all_Owner" />
         <facet ref="attachment.all_Owner" />
         <facet ref="signatory.all_Owner" />
     </state>
     
-    <!-- like_state="draft" -->
     <state id="submitted_signatories" title="Submitted to Signatories" version="true" tags="actionmp">
         <facet ref=".view_Signatory" />
         <facet ref="signatory.add_Owner" />
     </state>
     
-    <!-- like_state="draft" -->
     <state id="redraft" title="Redraft" version="true" note="document under review before resubmission">
         <facet ref=".redraft_Owner" />
         <facet ref="attachment.all_Owner" />
         <facet ref="signatory.all_Owner" />
     </state>
 
-    <!-- like_state="submitted_signatories" -->
     <state id="withdrawn_signatory" title="Dropped">
         <facet ref=".view_Signatory" />
     </state>
 
-    <!-- like_state="submitted_signatories" -->
     <state id="submitted" title="Submitted to clerk" version="true" tags="actionclerk">
         <facet ref=".view_Clerk" />
     </state>
     
-    <!-- like_state="submitted" -->
     <state id="received" title="Received by clerk" tags="actionclerk">
         <facet ref=".edit_Clerk" />
         <facet ref="attachment.all_Clerk" />
         <facet ref="user_assignment.all_HeadClerk" />
     </state>
     
-    <!-- like_state="submitted" -->
     <state id="completed" title="Submitted to the Speaker" version="true">
         <facet ref=".edit_Speaker" />
         <facet ref="attachment.all_Speaker" />
     </state>
     
-    <!-- like_state="submitted" -->
     <state id="admissible" title="Admissible" version="true" tags="public approved oral written">
         <facet ref=".public" />
     </state>
     
-    <!-- like_state="submitted" -->
     <state id="inadmissible" title="Inadmissible" tags="terminal fail">
         <facet ref=".view_Clerk" />
         <facet ref="event.view_internal" />
     </state>
     
-    <!-- like_state="submitted" -->
     <state id="clarification_required" title="Requires Clarification to Receive" version="true" tags="actionmp">
         <facet ref=".edit_Owner" />
         <facet ref="attachment.all_Owner" />
     </state>
     
     <state id="incomplete" title="Require Clarification to Approve" version="true"
-        like_state="received" tags="actionclerk" />
+        permissions_from_state="received" tags="actionclerk" />
     
     <state id="schedule_pending" title="Schedule pending" 
-        like_state="admissible" tags="public tobescheduled oral" />
+        permissions_from_state="admissible" tags="public tobescheduled oral" />
     
     <state id="scheduled" title="Scheduled" 
-        like_state="admissible" tags="public scheduled oral" />
+        permissions_from_state="admissible" tags="public scheduled oral" />
 
     <state id="adjourned" title="Debate adjourned" 
-        like_state="admissible" tags="public approved" />
+        permissions_from_state="admissible" tags="public approved" />
     
-    <!-- like_state="admissible" -->
     <state id="response_pending" title="Pending response" tags="public written">
         <facet ref=".public_response_Minister" />
     </state>
     
-    <!-- like_state="response_pending" -->    
     <state id="response_submitted" title="Response submitted" tags="public actionclerk">
         <facet ref=".public_response_internal" />
     </state>
     
-    <!-- like_state="admissible" -->
     <state id="response_completed" title="Response completed" tags="public terminal succeed">
         <facet ref=".public_response_public" />
     </state>
     
-    <state id="deferred" title="Deferred" like_state="admissible" tags="public approved" />
+    <state id="deferred" title="Deferred" permissions_from_state="admissible" tags="public approved" />
     
-    <!-- like_state="admissible" -->
     <state id="debated" title="Debated" tags="public terminal succeed">
         <facet ref=".public" />
         <facet ref="event.view_internal" />
     </state>
     
-    <state id="elapsed" title="Elapsed" like_state="debated" tags="public terminal fail" />
+    <state id="elapsed" title="Elapsed" permissions_from_state="debated" tags="public terminal fail" />
 
-    <state id="dropped" title="Dropped" like_state="debated" tags="public terminal fail" />
+    <state id="dropped" title="Dropped" permissions_from_state="debated" tags="public terminal fail" />
     
-    <!-- like_state="submitted" -->
     <state id="withdrawn_internal" title="Withdrawn" tags="terminal fail">
         <facet ref=".view_Clerk" />
         <facet ref="event.view_internal" />
     </state>
     
-    <state id="withdrawn" title="Withdrawn" like_state="debated" tags="public terminal fail" />
+    <state id="withdrawn" title="Withdrawn" permissions_from_state="debated" tags="public terminal fail" />
     
     
     <transition title="Create Question"
