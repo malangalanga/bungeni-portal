@@ -22,7 +22,9 @@
     <match path="regex:^/(workspace|business|members|archive|admin)/?"
         class="load-bungeni-navigation" />
     <match path="regex:^/(workspace)/?"
-        class="load-workspace-navigation" />               
+        class="load-workspace-navigation" />
+    <match path="regex:^/(admin)/?"
+        class="load-admin-navigation" />                        
     <match path="regex:^/(workspace/groups/my-groups)/(group-committee|group-political_group)-([0-9])+(/)?(view)?$"
         class="load-workspace-group-navigation" />  
     <match path="regex:^/(plone/groups|plone/memberships)/?"
@@ -98,14 +100,8 @@
             content="#portal-globalnav > li:first-child"
             theme="children:#portal-globalnav > ul" />            
         <prepend content="ul#portal-personaltools li"
-            theme="children:#portal-globalnav ul.level1" /> 
-        <!-- add plone navigation -->
-        
-        <append href="/bungeni"
-                content="ul#portal-personaltools li.navigation"
-                theme="children:#portal-globalnav ul"
-        />      
-        
+            theme="children:#portal-globalnav ul.level1" />      
+     
         <!-- bungeni login link -->
         <append href="/bungeni"
                 content="ul#portal-personaltools li:not(.navigation)"
@@ -119,10 +115,20 @@
     </rule>    
     
     <rule class="load-workspace-navigation">    
+        <prepend content="#portal-globalnav > li:first-child"
+            theme="children:#portal-globalnav > ul" />    
         <pyquery pyref=
             "portal.theme.static.themes.rules:add_member_workspace_links"
         />          
     </rule>
+    
+    <rule class="load-admin-navigation">   
+        <prepend content="#portal-globalnav > li:last-child"
+            theme="children:#portal-globalnav > ul" />     
+        <prepend content="#portal-globalnav > li:first-child"
+            theme="children:#portal-globalnav > ul" />  
+                        
+    </rule>    
     
     <rule class="load-workspace-group-navigation">   
         <prepend href="/plone"
