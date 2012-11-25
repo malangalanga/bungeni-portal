@@ -2,6 +2,9 @@
 # post remove script for bungeni exist
 set -e
 
+echo "kill epmd process"
+epmd -kill
+
 echo "exist-db successfully removed."
 
 exit 0
