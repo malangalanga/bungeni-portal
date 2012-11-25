@@ -37,7 +37,7 @@ class PersonalBarViewlet(common.PersonalBarViewlet):
                     'selected':selected_url} \
                     for item in subcontext.objectValues()
                         if not item.exclude_from_nav()]      
-        except IndexError:
+        except (IndexError, AttributeError):
             pass
         
 class CatalogNavigationTabs(BrowserView):
