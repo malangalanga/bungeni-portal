@@ -16,7 +16,7 @@
 
 
 <proxy path="/exist">
-    <dest href="http://localhost:8088/exist/apps/framework/bungeni" />
+    <dest href="http://%(app_host)s:8088/exist/apps/framework/bungeni" />
     <response rewrite-links="1" />
 </proxy>
 
