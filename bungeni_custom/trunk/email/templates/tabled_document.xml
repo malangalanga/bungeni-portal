@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<template html="false">
+<template html="false"
+  xmlns:tal="http://xml.zope.org/namespaces/tal">
   <block state="submitted">
     <subject>
       Tabled Document has been submitted : <span tal:replace="item/title"/>
