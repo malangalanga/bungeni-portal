@@ -78,7 +78,7 @@ autostart = false
 
 [program:rabbitmq]
 command = %(user_rabbitmq)s/sbin/rabbitmq-server
-environment = HOME="%(system_home)s"
+environment = HOME="%(system_home)s",ERL_EPMD_RELAXED_COMMAND_CHECK="TRUE"
 stdout_logfile = %(user_logs)s/rabbitmq.log
 priority = 10
 redirect_stderr = true
