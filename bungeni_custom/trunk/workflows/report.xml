@@ -6,6 +6,7 @@
     >
     
     <!-- global grants -->
+    <allow permission=".View" roles="Authenticated" />
     <allow permission=".Edit" roles="Clerk Speaker" />
     
     
@@ -16,11 +17,11 @@
     
     
     <!-- workflow facets -->
-    <facet name="all_Clerk" default="true">
-        <allow permission=".View" roles="Authenticated Anonymous" />
+    <facet name="view" default="true">
+        <allow permission=".View" roles="Anonymous" />
     </facet>
     
-    <state id="published" title="Published" tags="public" />    
+    <state id="published" title="Published" tags="public"/>
     
     
     <transition title="Create Report"
