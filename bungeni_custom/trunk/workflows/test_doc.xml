@@ -52,10 +52,12 @@
         <parameter name="open_states" value="admissible" />
         <facet name="all_Clerk">
             <allow permission="signatory.Add" roles="Clerk" />
+            <allow permission="signatory.View" roles="Clerk" />
             <allow permission="signatory.Delete" roles="Clerk" />
         </facet>
         <facet name="all_Owner">
             <allow permission="signatory.Add" roles="Owner" />
+            <allow permission="signatory.View" roles="Owner" />
             <allow permission="signatory.Delete" roles="Owner" />
         </facet>
         <facet name="add_Owner">
@@ -95,8 +97,9 @@
         <allow permission=".Edit" roles="Owner" />
         <allow permission=".Delete" roles="Owner" />
     </facet>
-    <facet name="view_Signatory">
+    <facet name="view_Owner_Signatory">
         <allow permission=".View" roles="Owner Signatory" />
+        <allow permission="signatory.View" roles="Owner Signatory" />
     </facet>
     <facet name="view_Clerk">
         <allow permission=".View" roles="Clerk Speaker Owner Signatory" />
@@ -135,7 +138,7 @@
     </state>
     
     <state id="submitted_signatories" title="Submitted to Signatories" version="true" tags="actionmp">
-        <facet ref=".view_Signatory" />
+        <facet ref=".view_Owner_Signatory" />
         <facet ref="signatory.add_Owner" />
     </state>
     
@@ -146,7 +149,7 @@
     </state>
     
     <state id="withdrawn_signatory" title="Dropped" note="doc has been withdrawn before submission to house">
-        <facet ref=".view_Signatory" />
+        <facet ref=".view_Owner_Signatory" />
         <facet ref="signatory.add_Owner" />
     </state>
     
