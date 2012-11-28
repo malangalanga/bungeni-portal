@@ -63,11 +63,13 @@
         <parameter name="open_states" value="admissible" />
         <facet name="all_Clerk">
             <allow permission="signatory.Add" roles="Clerk" />
+            <allow permission="signatory.View" roles="Clerk" />
             <allow permission="signatory.Delete" roles="Clerk" />
         </facet>
         <facet name="all_Owner">
-            <allow permission="signatory.Add" roles="Clerk" />
-            <allow permission="signatory.Delete" roles="Clerk" />
+            <allow permission="signatory.Add" roles="Owner" />
+            <allow permission="signatory.View" roles="Owner" />
+            <allow permission="signatory.Delete" roles="Owner" />
         </facet>
         <facet name="add_Owner">
             <allow permission="signatory.Add" roles="Owner" />
@@ -108,6 +110,7 @@
     </facet>
     <facet name="view_Owner_Signatory">
         <allow permission=".View" roles="Owner Signatory" />
+        <allow permission="signatory.View" roles="Owner Signatory" />
     </facet>
     <facet name="view_internal" default="true">
         <allow permission=".View" roles="Clerk Speaker Owner Signatory" />
