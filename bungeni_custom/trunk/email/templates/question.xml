@@ -1,15 +1,6 @@
 <?xml version="1.0"?>
 <template html="false"
   xmlns:tal="http://xml.zope.org/namespaces/tal">
-  <block state="submitted">
-    <subject>
-      Question has been submitted : <span tal:replace="item/title"/>
-    </subject>
-    <body>
-      The question
-      <span tal:replace="item/title"/> was submitted on <span tal:replace="item/status_date"/>
-    </body>
-  </block>
 
   <block state="received">
     <subject>
