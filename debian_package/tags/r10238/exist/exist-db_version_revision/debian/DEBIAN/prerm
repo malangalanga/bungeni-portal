@@ -1,0 +1,11 @@
+#!/bin/sh
+# pre remove script for bungeni exist
+set -e
+
+echo "Stopping epmd"
+epmd -kill || true
+
+echo "Stopping services"
+service  bungeni_services stop
+
+exit 0

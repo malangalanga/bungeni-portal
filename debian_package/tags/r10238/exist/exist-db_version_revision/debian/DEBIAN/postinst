@@ -1,0 +1,11 @@
+#!/bin/sh
+# pre remove script for bungeni exist
+set -e
+
+echo "setting exist ownership to bungeni user"
+chown -R bungeni:bungeni /opt/bungeni/bungeni_apps/exist
+chown -R bungeni:bungeni /opt/bungeni/bungeni_apps/glue
+chown -R bungeni:bungeni /opt/bungeni/bungeni_apps/jython
+
+exit 0
+

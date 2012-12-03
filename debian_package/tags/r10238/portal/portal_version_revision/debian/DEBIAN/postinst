@@ -1,0 +1,8 @@
+#!/bin/sh
+# postinst script for portal
+set -e
+
+echo "setting portal ownership to bungeni user"
+chown -R bungeni:bungeni /opt/bungeni/bungeni_apps/bungeni/portal
+
+exit 0

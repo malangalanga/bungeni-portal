@@ -1,0 +1,8 @@
+#!/bin/sh
+# postinst script for postgres
+set -e
+
+echo "setting postgresql ownership to bungeni user"
+chown -R bungeni:bungeni /opt/bungeni/bungeni_apps/postgres* /opt/bungeni/bungeni_apps/logs/postgres*
+
+exit 0
