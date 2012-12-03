@@ -15,13 +15,11 @@
         <facet name="all_Clerk_Owner">
             <allow permission="address.Edit" roles="Clerk Owner" />
             <allow permission="address.Add" roles="Clerk Owner" />
-            <allow permission="address.Delete" roles="Clerk Owner" />
         </facet>
         <facet name="public_all_Clerk_Owner">
             <allow permission="address.View" roles="Authenticated Anonymous" />
             <allow permission="address.Edit" roles="Clerk Owner" />
             <allow permission="address.Add" roles="Clerk Owner" />
-            <allow permission="address.Delete" roles="Clerk Owner" />
         </facet>
         <facet name="public">
             <allow permission="address.View" roles="Authenticated Anonymous" />
@@ -29,7 +27,7 @@
     </feature>
     
     <!-- workflow facets -->
-    <facet name="view_Clerk">
+    <facet name="draft_Clerk">
         <allow permission=".View" roles="Clerk" />
     </facet>
     <facet name="public_all_Clerk">
@@ -37,6 +35,7 @@
         <allow permission="group_membership.View" roles="Authenticated Anonymous" />
         <allow permission="group_membership.Edit" roles="Clerk" />
         <allow permission="group_membership.Add" roles="Clerk" />
+        <!-- !+GROUP_MEMBERSHIP_DELETE(mr, dec-2012) in sub-item's workflow "draft" state -->
         <allow permission="group_membership.Delete" roles="Clerk" />
         <!-- !+NO_REDEFINE_PERMISSION redefine of political_group_member permissions 
             to group_membership to fails here (and this is the workflow used by 
@@ -53,7 +52,7 @@
         <allow permission="political_group_member.View" roles="Authenticated Anonymous" />
         <allow permission="political_group_member.Edit" roles="Clerk" />
         <allow permission="political_group_member.Add" roles="Clerk" />
-        <allow permission="political_group_member.Delete" roles="Clerk" />
+        <allow permission="political_group_member.Delete" roles="Clerk" /><!-- !+GROUP_MEMBERSHIP_DELETE -->
     </facet>
     <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
@@ -64,7 +63,7 @@
     
     
     <state id="draft" title="Draft - Group not yet Active">
-        <facet ref=".view_Clerk" />
+        <facet ref=".draft_Clerk" />
         <facet ref="address.all_Clerk_Owner" />
     </state>
     

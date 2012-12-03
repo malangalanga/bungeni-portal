@@ -20,25 +20,32 @@
     <feature name="attachment" enabled="true" />
     
     <!-- workflow facets -->
-    <facet name="all_Owner">
+    <facet name="draft_Owner">
         <allow permission=".Edit" roles="Owner" />
         <allow permission=".Delete" roles="Owner" />
     </facet>
     <facet name="internal">
-        <allow permission=".View" roles="Clerk Speaker Signatory MP Minister" />
+        <allow permission=".View" roles="Authenticated" />
         <allow permission=".Edit" roles="Clerk Speaker" />
-        <allow permission=".Delete" roles="Clerk Speaker" />
     </facet>
     <facet name="all_view">
-        <allow permission=".View" roles="Clerk Speaker Signatory MP Minister" />
+        <allow permission=".View" roles="Authenticated" />
     </facet>
     
     
     <state id="draft" title="Draft Event" tags="draft private">
-        <facet ref=".all_Owner" />
+        <facet ref=".draft_Owner" />
     </state>
     
     <state id="attached" title="Event" permissions_from_parent="true" tags="public" />
+    <!-- !+event.attachment(mr, dec-2012) in the "attached" state there is NO DISTINCTION
+    between permissions on attachments on HEAD doc or attachments on THIS event!
+    
+    All permissions in "attached" are delegated to the HEAD doc instance that
+    (in all likeliness) also directly supports attachments, but any permission 
+    the head doc defined for attachments apply for both direct attachments on
+    head instance as well as on any attachment on any event in "attached" state.
+    -->
     
     <state id="internal" title="Published Internal">
         <facet ref=".internal" />

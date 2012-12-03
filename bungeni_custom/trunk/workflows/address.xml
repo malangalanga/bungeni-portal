@@ -10,26 +10,25 @@
     
     
     <!-- workflow facets -->
-    <facet name="all_Owner">
+    <facet name="draft_Owner">
         <allow permission=".View" roles="Owner" />
         <allow permission=".Edit" roles="Owner" />
         <allow permission=".Delete" roles="Owner" />
     </facet>
-    <facet name="all_internal">
-        <allow permission=".View" roles="Owner Clerk Speaker Signatory MP Minister" />
+    <facet name="internal">
+        <allow permission=".View" roles="Authenticated" />
         <allow permission=".Edit" roles="Owner Clerk" />
-        <allow permission=".Delete" roles="Owner Clerk" />
     </facet>
     
     
     <state id="draft" title="Draft Address" tags="draft private">
-        <facet ref=".all_Owner" />
+        <facet ref=".draft_Owner" />
     </state>
     
     <state id="attached" title="Address" tags="public" permissions_from_parent="true" />
     
     <state id="internal" title="Published Internal" note="Visible to bungeni users">
-        <facet ref=".all_internal" />
+        <facet ref=".internal" />
     </state>
     
     <!-- !+inactive(mr, aug-2011) review usage and rename across the board 

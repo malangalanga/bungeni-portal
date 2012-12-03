@@ -23,8 +23,8 @@
     <feature name="attachment" enabled="false" />
     
     <!-- workflow facets -->
-    <facet name="all_Owner">
-        <allow permission=".View" roles="Clerk Speaker Owner Signatory MP Minister" />
+    <facet name="draft_Owner">
+        <allow permission=".View" roles="Authenticated" />
         <allow permission=".Delete" roles="Owner" />
     </facet>
     <facet name="public">
@@ -33,7 +33,7 @@
     
     
     <state id="awaiting_consent" title="Awaiting Consent" tags="workspace">
-        <facet ref=".all_Owner" />
+        <facet ref=".draft_Owner" />
     </state>
     
     <state id="consented" title="Signature Consented" tags="workspace public">

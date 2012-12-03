@@ -16,35 +16,33 @@
     
     
     <!-- workflow facets -->
-    <facet name="all_Owner">
+    <facet name="draft_Owner">
         <allow permission=".View" roles="Owner" />
         <allow permission=".Edit" roles="Owner" />
         <allow permission=".Delete" roles="Owner" />
     </facet>
-    <facet name="all_internal">
-        <allow permission=".View" roles="Owner Clerk Speaker Signatory MP Minister" />
-        <allow permission=".Edit" roles="Clerk Speaker" />
-        <allow permission=".Delete" roles="Clerk Speaker" />
-    </facet>
-    <facet name="edit_internal">
-        <allow permission=".View" roles="Owner Clerk Speaker Signatory MP Minister" />
+    <facet name="internal">
+        <allow permission=".View" roles="Authenticated" />
         <allow permission=".Edit" roles="Clerk Speaker" />
     </facet>
-
+    <facet name="internal_terminal">
+        <allow permission=".View" roles="Authenticated" />
+    </facet>
+    
     
     <state id="draft" title="Draft Event" tags="draft private">
-        <facet ref=".all_Owner" />
+        <facet ref=".draft_Owner" />
     </state>
     
     <state id="attached" title="Attachment" tags="public" permissions_from_parent="true" />
     
     <state id="internal" title="Published Internal">
-        <facet ref=".all_internal" />
+        <facet ref=".internal" />
     </state>
     
     <!-- !+inactive(mr, aug-2011) review usage and rename across the board -->
     <state id="inactive" title="Inactive file">
-        <facet ref=".edit_internal" />
+        <facet ref=".internal_terminal" />
     </state>
     
     

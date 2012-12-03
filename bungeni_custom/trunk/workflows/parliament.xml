@@ -19,7 +19,7 @@
     
     
     <!-- workflow facets -->
-    <facet name="view_Clerk">
+    <facet name="draft_Clerk">
         <allow permission=".View" roles="Clerk" />
         <allow permission=".Delete" roles="Owner" />
     </facet>
@@ -28,7 +28,7 @@
         <allow permission="member_of_parliament.View" roles="Authenticated Anonymous" />
         <allow permission="member_of_parliament.Edit" roles="Clerk" />
         <allow permission="member_of_parliament.Add" roles="Clerk" />
-        <allow permission="member_of_parliament.Delete" roles="Clerk" />
+        <allow permission="member_of_parliament.Delete" roles="Clerk" /><!-- !+GROUP_MEMBERSHIP_DELETE -->
     </facet>
     <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
@@ -37,7 +37,7 @@
     
     
     <state id="draft" title="Draft - Parliament not yet Active">
-        <facet ref=".view_Clerk" />
+        <facet ref=".draft_Clerk" />
     </state>
     
     <state id="active" title="Active Parliament" tags="public">

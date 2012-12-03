@@ -22,13 +22,11 @@
             <allow permission="attachment.View" roles="Clerk" />
             <allow permission="attachment.Edit" roles="Clerk" />
             <allow permission="attachment.Add" roles="Clerk" />
-            <allow permission="attachment.Delete" roles="Clerk" />
         </facet>
         <facet name="all_Owner">
             <allow permission="attachment.View" roles="Owner" />
             <allow permission="attachment.Edit" roles="Owner" />
             <allow permission="attachment.Add" roles="Owner" />
-            <allow permission="attachment.Delete" roles="Owner" />
         </facet>
         <facet name="view_Clerk">
             <allow permission="attachment.View" roles="Clerk" />
@@ -37,24 +35,34 @@
             <allow permission="attachment.View" roles="Owner Clerk" />
             <allow permission="attachment.Edit" roles="Owner" />
             <allow permission="attachment.Add" roles="Owner" />
-            <allow permission="attachment.Delete" roles="Owner" />
         </facet>
         <facet name="edit_add_Speaker">
             <allow permission="attachment.View" roles="Owner Clerk Speaker" />
             <allow permission="attachment.Edit" roles="Speaker" />
             <allow permission="attachment.Add" roles="Speaker" />
         </facet>
+        <facet name="public">
+            <allow permission="attachment.View" roles="Anonymous" />
+            <allow permission="attachment.Edit" roles="Clerk" />
+            <allow permission="attachment.Add" roles="Clerk" />
+        </facet>
     </feature>
     
     <feature name="event" enabled="true">
-        <facet name="all_internal" default="true">
-            <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
+        <facet name="internal" default="true">
+            <allow permission="event.View" roles="Authenticated" />
             <allow permission="event.Edit" roles="Clerk Speaker" />
             <allow permission="event.Add" roles="Clerk Speaker" />
-            <allow permission="event.Delete" roles="Clerk Speaker" />
         </facet>
-        <facet name="view_internal">
-            <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister" />
+        <facet name="internal_terminal">
+            <allow permission="event.View" roles="Authenticated" />
+            <allow permission="event.Edit" roles="Clerk" />
+            <allow permission="event.Add" roles="Clerk" />
+        </facet>
+        <facet name="public">
+            <allow permission="event.View" roles="Anonymous" />
+            <allow permission="event.Edit" roles="Clerk" />
+            <allow permission="event.Add" roles="Clerk" />
         </facet>
     </feature>
     
@@ -64,21 +72,13 @@
         <facet name="all_Clerk">
             <allow permission="signatory.Add" roles="Clerk" />
             <allow permission="signatory.View" roles="Clerk" />
-            <allow permission="signatory.Delete" roles="Clerk" />
         </facet>
         <facet name="all_Owner">
             <allow permission="signatory.Add" roles="Owner" />
             <allow permission="signatory.View" roles="Owner" />
-            <allow permission="signatory.Delete" roles="Owner" />
         </facet>
         <facet name="add_Owner">
             <allow permission="signatory.Add" roles="Owner" />
-        </facet>
-        <facet name="delete_Clerk">
-            <allow permission="signatory.Delete" roles="Clerk" />
-        </facet>
-        <facet name="delete_Speaker">
-            <allow permission="signatory.Delete" roles="Speaker" />
         </facet>
     </feature>
     
@@ -98,12 +98,12 @@
     
     
     <!-- workflow facets -->
-    <facet name="all_Clerk">
+    <facet name="draft_Clerk">
         <allow permission=".View" roles="Clerk" />
         <allow permission=".Edit" roles="Clerk" />
         <allow permission=".Delete" roles="Clerk" />
     </facet>
-    <facet name="all_Owner">
+    <facet name="draft_Owner">
         <allow permission=".View" roles="Owner" />
         <allow permission=".Edit" roles="Owner" />
         <allow permission=".Delete" roles="Owner" />
@@ -138,13 +138,13 @@
     
     <!-- workflow states -->
     <state id="working_draft" title="Working Draft" tags="draft private">
-        <facet ref=".all_Clerk" />
+        <facet ref=".draft_Clerk" />
         <facet ref="signatory.all_Clerk" />
         <facet ref="attachment.all_Clerk" />
     </state>
     
     <state id="draft" title="Draft" tags="draft private">
-        <facet ref=".all_Owner" />
+        <facet ref=".draft_Owner" />
         <facet ref="signatory.all_Owner" />
         <facet ref="attachment.all_Owner" />
     </state>
@@ -179,7 +179,6 @@
     
     <state id="received" title="Received by Clerks Office" tags="actionclerk">
         <facet ref=".internal_Clerk" />
-        <facet ref="signatory.delete_Clerk" />
         <facet ref="attachment.all_Clerk" />
         <facet ref="group_assignment.all_Clerk" />
     </state>
@@ -194,7 +193,6 @@
     
     <state id="completed" title="Submitted to the Speaker" version="true">
         <facet ref=".internal_Speaker" />
-        <facet ref="signatory.delete_Speaker" />
         <facet ref="attachment.edit_add_Speaker" />
     </state>
     
@@ -204,7 +202,7 @@
     
     <state id="withdrawn_internal" title="Withdrawn" tags="terminal fail">
         <facet ref="attachment.view_Clerk" />
-        <facet ref="event.view_internal" />
+        <facet ref="event.internal_terminal" />
     </state>
     
     <state id="inadmissible" title="Inadmissible" 
@@ -212,7 +210,8 @@
     
     <state id="admissible" title="Admissible" version="true" tags="public approved">
         <facet ref=".public" />
-        <facet ref="attachment.view_Clerk" />
+        <facet ref="attachment.public" />
+        <facet ref="event.public" />
     </state>
     
     <state id="schedule_pending" title="Schedule pending" permissions_from_state="admissible" tags="public tobescheduled" />
@@ -221,8 +220,8 @@
     
     <state id="adopted" title="Adopted" version="true" tags="public terminal succeed">
         <facet ref=".public" />
-        <facet ref="attachment.view_Clerk" />
-        <facet ref="event.view_internal" />
+        <facet ref="attachment.public" />
+        <facet ref="event.public" />
     </state>
     
     <state id="adopted_amendments" title="Adopted with amendments" version="true" permissions_from_state="adopted"

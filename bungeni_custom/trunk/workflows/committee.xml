@@ -28,11 +28,11 @@
         <allow permission="committee_member.View" roles="Authenticated Anonymous" />
         <allow permission="committee_member.Edit" roles="Clerk" />
         <allow permission="committee_member.Add" roles="Clerk" />
-        <allow permission="committee_member.Delete" roles="Clerk" />
+        <allow permission="committee_member.Delete" roles="Clerk" /><!-- !+GROUP_MEMBERSHIP_DELETE -->
         <allow permission="committee_staff.View" roles="Authenticated Anonymous" />
         <allow permission="committee_staff.Edit" roles="Clerk" />
         <allow permission="committee_staff.Add" roles="Clerk" />
-        <allow permission="committee_staff.Delete" roles="Clerk" />
+        <allow permission="committee_staff.Delete" roles="Clerk" /><!-- !+GROUP_MEMBERSHIP_DELETE -->
         <allow permission="agenda_item.Add" roles="CommitteeMember" />
     </facet>
     <facet name="public">

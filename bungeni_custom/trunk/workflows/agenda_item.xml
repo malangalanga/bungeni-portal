@@ -20,17 +20,19 @@
         <facet name="all_Clerk">
             <allow permission="attachment.Edit" roles="Clerk" />
             <allow permission="attachment.Add" roles="Clerk" />
-            <allow permission="attachment.Delete" roles="Clerk" />
         </facet>
         <facet name="all_Owner">
             <allow permission="attachment.Edit" roles="Owner" />
             <allow permission="attachment.Add" roles="Owner" />
-            <allow permission="attachment.Delete" roles="Owner" />
         </facet>
         <facet name="all_Speaker">
             <allow permission="attachment.Edit" roles="Speaker" />
             <allow permission="attachment.Add" roles="Speaker" /> 
-            <allow permission="attachment.Delete" roles="Speaker" /> 
+        </facet>
+        <facet name="public">
+            <allow permission="attachment.View" roles="Anonymous" />
+            <allow permission="attachment.Edit" roles="Clerk" />
+            <allow permission="attachment.Add" roles="Clerk" />
         </facet>
     </feature>
     <feature name="signatory" enabled="false">
@@ -38,21 +40,13 @@
         <facet name="all_Clerk">
             <allow permission="signatory.Add" roles="Clerk" />
             <allow permission="signatory.View" roles="Clerk" />
-            <allow permission="signatory.Delete" roles="Clerk" />
         </facet>
         <facet name="all_Owner">
             <allow permission="signatory.Add" roles="Owner" />
             <allow permission="signatory.View" roles="Owner" />
-            <allow permission="signatory.Delete" roles="Owner" />
         </facet>
         <facet name="add_Owner">
             <allow permission="signatory.Add" roles="Owner" />
-        </facet>
-        <facet name="delete_Clerk">
-            <allow permission="signatory.Delete" roles="Clerk" />
-        </facet>
-        <facet name="delete_Speaker">
-            <allow permission="signatory.Delete" roles="Speaker" />
         </facet>
     </feature>
     <feature name="schedule" enabled="true" />
@@ -61,12 +55,12 @@
     <feature name="download" enabled="true" />
     
     <!-- workflow facets -->
-    <facet name="all_Clerk">
+    <facet name="draft_Clerk">
         <allow permission=".View" roles="Clerk" />
         <allow permission=".Edit" roles="Clerk" />
         <allow permission=".Delete" roles="Clerk" />
     </facet>
-    <facet name="all_Owner">
+    <facet name="draft_Owner">
         <allow permission=".View" roles="Owner" />
         <allow permission=".Edit" roles="Owner" />
         <allow permission=".Delete" roles="Owner" />
@@ -100,13 +94,13 @@
     
     
     <state id="working_draft" title="Working Draft" tags="draft private">
-        <facet ref=".all_Clerk" />
+        <facet ref=".draft_Clerk" />
         <facet ref="attachment.all_Clerk" />
         <facet ref="signatory.all_Clerk" />
     </state>
     
     <state id="draft" title="Draft" tags="draft private">
-        <facet ref=".all_Owner" />
+        <facet ref=".draft_Owner" />
         <facet ref="attachment.all_Owner" />
         <facet ref="signatory.all_Owner" />
     </state>
@@ -154,6 +148,7 @@
     
     <state id="admissible" title="Admissible" version="true" tags="public approved">
         <facet ref=".public" />
+        <facet ref="attachment.public" />
     </state>
     
     <state id="schedule_pending" title="Schedule pending" permissions_from_state="admissible" tags="public tobescheduled" />
