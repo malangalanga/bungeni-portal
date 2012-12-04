@@ -8,17 +8,18 @@
     <!-- global grants -->
     <allow permission=".View" roles="Clerk" />
     <allow permission=".Add" roles="Clerk" />
+    <allow permission="sitting_attendance.View" roles="Clerk Speaker MP" />
     <allow permission="sitting_attendance.Edit" roles="Clerk" />
     <allow permission="sitting_attendance.Add" roles="Clerk" />
-    <allow permission="sitting_attendance.View" roles="Clerk Speaker MP" />
     <allow permission="sitting_attendance.Delete" roles="Clerk" />
-    <allow permission="sitting_report.Add" roles="Clerk" />
-    <allow permission="sitting_report.Edit" roles="Clerk" />
     <allow permission="sitting_report.View" roles="Anonymous" />
+    <allow permission="sitting_report.Edit" roles="Clerk" />
+    <allow permission="sitting_report.Add" roles="Clerk" />
     <allow permission="sitting_report.Delete" roles="Clerk" />
     
     
     <!-- features -->
+    <!-- !+SITTING_AUDIT cannot support audit/version without a sitting_audit db table ?! -->
     <feature name="audit" enabled="false" />
     <feature name="version" enabled="false" />
     <feature name="attachment" enabled="false" />
@@ -35,8 +36,8 @@
         <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
         <allow permission=".Edit" roles="Clerk" />
         <allow permission=".Delete" roles="Clerk" />
-        <allow permission="item_schedule.Edit" roles="Clerk" />
         <allow permission="item_schedule.View" roles="Clerk Speaker" />
+        <allow permission="item_schedule.Edit" roles="Clerk" />
         <allow permission="item_schedule.Add" roles="Clerk" />
         <allow permission="item_schedule.Delete" roles="Clerk" />
         <allow permission="item_schedule_discussion.View" roles="Clerk Speaker" />
@@ -83,8 +84,7 @@
         <allow permission=".View" roles="Speaker" />
         <allow permission="item_schedule_discussion.View" roles="Clerk" />
     </facet>
-
-
+    
     
     <state id="sitting" title="Sitting" tags="draft public agendaprivate">
         <facet ref=".all_Clerk" />

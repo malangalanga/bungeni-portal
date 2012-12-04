@@ -7,10 +7,25 @@
     
     
     <!-- workflow facets -->
+    <!-- !+MEMBERSHIP_DRAFT_STATE would also need to formalize the meaning of 
+        "Owner" for a membership.
+    <facet name="draft_Owner">
+        <allow permission=".View" roles="Owner" />
+        <allow permission=".Edit" roles="Owner" />
+        <allow permission=".Delete" roles="Owner" />
+    </facet>
+    -->
     <facet name="view">
         <allow permission=".View" roles="Authenticated" />
     </facet>
     
+    <!-- !+MEMBERSHIP_DRAFT_STATE  there should be an initial draft state for 
+        membership, and this would also be the only time when delete will be 
+        possible.
+    <state id="draft" title="Draft Membership">
+        <facet ref=".draft_Owner" />
+    </state>
+    -->
     
     <state id="attached" title="Member" permissions_from_parent="true" />
     

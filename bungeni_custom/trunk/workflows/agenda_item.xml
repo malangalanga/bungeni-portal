@@ -12,29 +12,53 @@
     <!-- global grants -->
     <allow permission=".Add" roles="Clerk" />
     
-    
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
+    
+    <!-- NOTE on Feature Facet Permissions: Sub-item permissions (apart from the
+    Add permission, that is by defn unbound to an *existing* item) that are 
+    allowed within a *feature facet* apply only for when the (workflowed, always)
+    sub-item itself is in a permissions_from_parent="true" state. -->
     <feature name="attachment" enabled="true">
-        <facet name="all_Clerk">
+        <facet name="draft_Clerk">
+            <allow permission="attachment.View" roles="Clerk" />
             <allow permission="attachment.Edit" roles="Clerk" />
             <allow permission="attachment.Add" roles="Clerk" />
         </facet>
-        <facet name="all_Owner">
+        <facet name="draft_Owner">
+            <allow permission="attachment.View" roles="Owner" />
             <allow permission="attachment.Edit" roles="Owner" />
             <allow permission="attachment.Add" roles="Owner" />
         </facet>
-        <facet name="all_Speaker">
+        <facet name="internal">
+            <allow permission="attachment.View" roles="Authenticated" />
+            <allow permission="attachment.Edit" roles="Clerk" />
+            <allow permission="attachment.Add" roles="Clerk" />
+        </facet>
+        <facet name="internal_Owner">
+            <allow permission="attachment.View" roles="Authenticated" />
+            <allow permission="attachment.Edit" roles="Owner" />
+            <allow permission="attachment.Add" roles="Owner" />
+        </facet>
+        <facet name="internal_Speaker">
+            <allow permission="attachment.View" roles="Authenticated" />
             <allow permission="attachment.Edit" roles="Speaker" />
             <allow permission="attachment.Add" roles="Speaker" /> 
+        </facet>
+        <facet name="internal_terminal">
+            <allow permission="attachment.View" roles="Authenticated" />
         </facet>
         <facet name="public">
             <allow permission="attachment.View" roles="Anonymous" />
             <allow permission="attachment.Edit" roles="Clerk" />
             <allow permission="attachment.Add" roles="Clerk" />
         </facet>
+        <facet name="public_terminal">
+            <allow permission="attachment.View" roles="Anonymous" />
+        </facet>
     </feature>
+    
     <feature name="signatory" enabled="false">
         <parameter name="open_states" value="admissible" />
         <facet name="all_Clerk">
@@ -49,6 +73,7 @@
             <allow permission="signatory.Add" roles="Owner" />
         </facet>
     </feature>
+    
     <feature name="schedule" enabled="true" />
     <feature name="workspace" enabled="true" />
     <feature name="notification" enabled="true" />
@@ -89,19 +114,19 @@
         <allow permission=".Edit" roles="Speaker" />
     </facet>
     <facet name="public">
-        <allow permission=".View" roles="Authenticated Anonymous" />
+        <allow permission=".View" roles="Anonymous" />
     </facet>
     
     
     <state id="working_draft" title="Working Draft" tags="draft private">
         <facet ref=".draft_Clerk" />
-        <facet ref="attachment.all_Clerk" />
+        <facet ref="attachment.draft_Clerk" />
         <facet ref="signatory.all_Clerk" />
     </state>
     
     <state id="draft" title="Draft" tags="draft private">
         <facet ref=".draft_Owner" />
-        <facet ref="attachment.all_Owner" />
+        <facet ref="attachment.draft_Owner" />
         <facet ref="signatory.all_Owner" />
     </state>
     
@@ -112,7 +137,7 @@
     
     <state id="redraft" title="Redraft" version="true" note="document under review before resubmission">
         <facet ref=".redraft_Owner" />
-        <facet ref="attachment.all_Owner" />
+        <facet ref="attachment.internal_Owner" />
         <facet ref="signatory.all_Owner" />
     </state>
     
@@ -126,25 +151,28 @@
     
     <state id="received" title="Received by Clerks Office" tags="actionclerk">
         <facet ref=".edit_Clerk" />
-        <facet ref="attachment.all_Clerk" />
+        <facet ref="attachment.internal" />
     </state>
     
     <state id="clarification_required" title="Requires Clarification to Receive" version="true" tags="actionmp">
         <facet ref=".edit_Owner" />
-        <facet ref="attachment.all_Owner" />
+        <facet ref="attachment.internal_Owner" />
     </state>
     
     <state id="completed" title="Submitted to the Speaker" version="true">
         <facet ref=".edit_Speaker" />
-        <facet ref="attachment.all_Speaker" />
+        <facet ref="attachment.internal_Speaker" />
     </state>
     
     <state id="incomplete" title="Requires Clarification to Approve" 
         permissions_from_state="received" version="true" tags="actionclerk" />
     
-    <state id="inadmissible" title="Inadmissible" permissions_from_state="submitted" tags="terminal fail" />
+    <state id="inadmissible" title="Inadmissible" tags="terminal fail">
+        <facet ref=".view_internal" />
+        <facet ref="attachment.internal_terminal" />
+    </state>
     
-    <state id="withdrawn_internal" title="Withdrawn" permissions_from_state="submitted" tags="terminal fail" />
+    <state id="withdrawn_internal" title="Withdrawn" permissions_from_state="inadmissible" tags="terminal fail" />
     
     <state id="admissible" title="Admissible" version="true" tags="public approved">
         <facet ref=".public" />
@@ -153,13 +181,16 @@
     
     <state id="schedule_pending" title="Schedule pending" permissions_from_state="admissible" tags="public tobescheduled" />
     
-    <state id="debated" title="Debated" permissions_from_state="admissible" tags="public terminal succeed" />
-    
     <state id="scheduled" title="Scheduled" permissions_from_state="admissible" tags="public scheduled" />
     
     <state id="adjourned" title="Debate adjourned" permissions_from_state="admissible" tags="public approved" />
     
     <state id="deferred" title="Deferred" permissions_from_state="admissible" tags="public approved" />
+    
+    <state id="debated" title="Debated" tags="public terminal succeed">
+        <facet ref=".public" />
+        <facet ref="attachment.public_terminal" />
+    </state>
     
     <state id="elapsed" title="Elapsed" permissions_from_state="debated" tags="public terminal fail" />
     

@@ -18,19 +18,41 @@
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
     
+    <!-- NOTE on Feature Facet Permissions: Sub-item permissions (apart from the
+    Add permission, that is by defn unbound to an *existing* item) that are 
+    allowed within a *feature facet* apply only for when the (workflowed, always)
+    sub-item itself is in a permissions_from_parent="true" state. -->
     <feature name="attachment" enabled="true">
-        <facet name="all_Clerk">
+        <facet name="draft_Clerk">
+            <allow permission="attachment.View" roles="Clerk" />
             <allow permission="attachment.Edit" roles="Clerk" />
             <allow permission="attachment.Add" roles="Clerk" />
         </facet>
-        <facet name="all_Owner">
+        <facet name="draft_Owner">
+            <allow permission="attachment.View" roles="Owner" />
             <allow permission="attachment.Edit" roles="Owner" />
             <allow permission="attachment.Add" roles="Owner" />
+        </facet>
+        <facet name="internal">
+            <allow permission="attachment.View" roles="Authenticated" />
+            <allow permission="attachment.Edit" roles="Clerk" />
+            <allow permission="attachment.Add" roles="Clerk" />
+        </facet>
+        <facet name="internal_Owner">
+            <allow permission="attachment.View" roles="Authenticated" />
+            <allow permission="attachment.Edit" roles="Owner" />
+            <allow permission="attachment.Add" roles="Owner" />
+        </facet>
+        <facet name="internal_terminal">
+            <allow permission="attachment.View" roles="Authenticated" />
         </facet>
         <facet name="public">
             <allow permission="attachment.View" roles="Anonymous" />
             <allow permission="attachment.Edit" roles="Clerk" />
             <allow permission="attachment.Add" roles="Clerk" />
+        </facet>
+        <facet name="public_terminal">
+            <allow permission="attachment.View" roles="Anonymous" />
         </facet>
     </feature>
     
@@ -110,30 +132,32 @@
     
     <state id="working_draft" title="Working Draft" tags="draft private">
         <facet ref=".draft_Clerk" />
+        <facet ref="attachment.draft_Clerk" />
         <facet ref="signatory.all_Clerk" />
-        <facet ref="attachment.all_Clerk" />
     </state>
     
     <state id="draft" title="Draft Bill" tags="draft private">
         <facet ref=".draft_Owner" />
+        <facet ref="attachment.draft_Owner" />
         <facet ref="signatory.all_Owner" />
-        <facet ref="attachment.all_Owner" />
     </state>
     
     <state id="submitted_signatories" title="Submitted to Signatories" version="true" tags="actionmp">
         <facet ref=".view_Owner_Signatory" />
+        <facet ref="attachment.internal_Owner" />
         <facet ref="signatory.add_Owner" />
     </state>
     
     <state id="redraft" title="Redraft" version="true" note="document under review before resubmission">
         <facet ref=".redraft_Owner" />
+        <facet ref="attachment.internal_Owner" />
         <facet ref="signatory.all_Owner" />
-        <facet ref="attachment.all_Owner" />
     </state>
     
     <state id="withdrawn_signatory" title="Dropped" tags="private terminal fail">
         <facet ref=".view_Owner_Signatory" />
-        <facet ref="event.internal_terminal" />
+        <facet ref="attachment.internal_terminal" /><!-- !+internal_private? -->
+        <facet ref="event.internal_terminal" /><!-- !+internal_private? -->
     </state>
     
     <state id="submitted" title="Submitted to Clerk" version="true" tags="actionclerk">
@@ -142,7 +166,7 @@
     
     <state id="received" title="received by clerk" tags="actionclerk">
         <facet ref=".edit_Clerk" />
-        <facet ref="attachment.all_Clerk" />
+        <facet ref="attachment.internal" />
     </state>
     
     <state id="gazetted" title="Bill Published in Gazette" version="true" tags="public">
@@ -204,6 +228,7 @@
     
     <state id="approved" title="Approved Bill" tags="public terminal succeed approved">
         <facet ref=".public" />
+        <facet ref="attachment.public_terminal" />
     </state>
     
     <state id="rejected" title="Rejected Bill" permissions_from_state="approved" tags="public terminal fail" />
@@ -212,6 +237,7 @@
     
     <state id="withdrawn_internal" title="Withdrawn" tags="private terminal fail">
         <facet ref=".view_Owner_Signatory" />
+        <facet ref="attachment.internal_terminal" />
         <facet ref="event.internal_terminal" />
     </state>
     

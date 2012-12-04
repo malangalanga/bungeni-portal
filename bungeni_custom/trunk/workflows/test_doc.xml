@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<workflow title="Test Doc Workflow" 
-    description="Test workflow for a custom Doc type"
+<workflow title="Doc Workflow" 
+    description="A Doc"
     tags="draft private public
         approved tobescheduled scheduled
         actionclerk actionmp
@@ -17,23 +17,46 @@
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
     
+    <!-- NOTE on Feature Facet Permissions: Sub-item permissions (apart from the
+    Add permission, that is by defn unbound to an *existing* item) that are 
+    allowed within a *feature facet* apply only for when the (workflowed, always)
+    sub-item itself is in a permissions_from_parent="true" state. -->
     <feature name="attachment" enabled="true">
-        <facet name="all_Clerk">
+        <facet name="draft_Clerk">
+            <allow permission="attachment.View" roles="Clerk" />
             <allow permission="attachment.Edit" roles="Clerk" />
             <allow permission="attachment.Add" roles="Clerk" />
         </facet>
-        <facet name="all_Owner">
+        <facet name="draft_Owner">
+            <allow permission="attachment.View" roles="Owner" />
             <allow permission="attachment.Edit" roles="Owner" />
             <allow permission="attachment.Add" roles="Owner" />
         </facet>
-        <facet name="all_Speaker">
+        <facet name="internal">
+            <allow permission="attachment.View" roles="Authenticated" />
+            <allow permission="attachment.Edit" roles="Clerk" />
+            <allow permission="attachment.Add" roles="Clerk" />
+        </facet>
+        <facet name="internal_Owner">
+            <allow permission="attachment.View" roles="Authenticated" />
+            <allow permission="attachment.Edit" roles="Owner" />
+            <allow permission="attachment.Add" roles="Owner" />
+        </facet>
+        <facet name="internal_Speaker">
+            <allow permission="attachment.View" roles="Authenticated" />
             <allow permission="attachment.Edit" roles="Speaker" />
             <allow permission="attachment.Add" roles="Speaker" /> 
+        </facet>
+        <facet name="internal_terminal">
+            <allow permission="attachment.View" roles="Authenticated" />
         </facet>
         <facet name="public">
             <allow permission="attachment.View" roles="Anonymous" />
             <allow permission="attachment.Edit" roles="Clerk" />
             <allow permission="attachment.Add" roles="Clerk" />
+        </facet>
+        <facet name="public_terminal">
+            <allow permission="attachment.View" roles="Anonymous" />
         </facet>
     </feature>
     
@@ -87,12 +110,12 @@
     
     
     <!-- workflow facets -->
-    <facet name="all_Clerk">
+    <facet name="draft_Clerk">
         <allow permission=".View" roles="Clerk" />
         <allow permission=".Edit" roles="Clerk" />
         <allow permission=".Delete" roles="Clerk" />
     </facet>
-    <facet name="all_Owner">
+    <facet name="draft_Owner">
         <allow permission=".View" roles="Owner" />
         <allow permission=".Edit" roles="Owner" />
         <allow permission=".Delete" roles="Owner" />
@@ -101,84 +124,86 @@
         <allow permission=".View" roles="Owner Signatory" />
         <allow permission="signatory.View" roles="Owner Signatory" />
     </facet>
-    <facet name="view_Clerk">
+    <facet name="view_internal" default="true">
         <allow permission=".View" roles="Clerk Speaker Owner Signatory" />
-    </facet>
-    <facet name="edit_Clerk">
-        <allow permission=".View" roles="Clerk Speaker Owner Signatory CommitteeMember" />
-        <allow permission=".Edit" roles="Clerk CommitteeMember" />
     </facet>
     <facet name="redraft_Owner">
         <allow permission=".View" roles="Owner" />
         <allow permission=".Edit" roles="Owner" />
     </facet>
-    <facet name="edit_Owner">
+    <facet name="review_Owner">
         <allow permission=".View" roles="Clerk Speaker Owner Signatory" />
         <allow permission=".Edit" roles="Owner" />
     </facet>
-    <facet name="edit_Speaker">
+    <facet name="internal_Clerk">
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory CommitteeMember" />
+        <allow permission=".Edit" roles="Clerk CommitteeMember" />
+    </facet>
+    <facet name="internal_Speaker">
         <allow permission=".View" roles="Clerk Speaker Owner Signatory" />
         <allow permission=".Edit" roles="Speaker" />
     </facet>
     <facet name="public">
-        <allow permission=".View" roles="Authenticated Anonymous" />
+        <allow permission=".View" roles="Anonymous" />
     </facet>
     
     
+    <!-- workflow states -->
     <state id="working_draft" title="Working Draft" tags="draft private">
-        <facet ref=".all_Clerk" />
+        <facet ref=".draft_Clerk" />
+        <facet ref="attachment.draft_Clerk" />
         <facet ref="signatory.all_Clerk" />
-        <facet ref="attachment.all_Clerk" />
     </state>
     
     <state id="draft" title="Draft" tags="draft private">
-        <facet ref=".all_Owner" />
+        <facet ref=".draft_Owner" />
+        <facet ref="attachment.draft_Owner" />
         <facet ref="signatory.all_Owner" />
-        <facet ref="attachment.all_Owner" />
     </state>
     
     <state id="submitted_signatories" title="Submitted to Signatories" version="true" tags="actionmp">
         <facet ref=".view_Owner_Signatory" />
+        <facet ref="attachment.internal" />
         <facet ref="signatory.add_Owner" />
     </state>
     
     <state id="redraft" title="Redraft" note="document under review before resubmission" version="true">
         <facet ref=".redraft_Owner" />
+        <facet ref="attachment.internal_Owner" />
         <facet ref="signatory.all_Owner" />
-        <facet ref="attachment.all_Owner" />
     </state>
     
-    <state id="withdrawn_signatory" title="Dropped" note="doc has been withdrawn before submission to house">
+    <state id="withdrawn_signatory" title="Dropped" note="motion has been withdrawn before submission to house">
         <facet ref=".view_Owner_Signatory" />
-        <facet ref="signatory.add_Owner" />
+        <facet ref="attachment.internal_terminal" /><!-- !+internal_terminal? -->
     </state>
     
     <state id="submitted" title="Submitted" version="true" tags="actionclerk">
-        <facet ref=".view_Clerk" />
+        <facet ref="attachment.internal" />
     </state>
     
     <state id="received" title="Received by Clerks Office" tags="actionclerk">
-        <facet ref=".edit_Clerk" />
-        <facet ref="attachment.all_Clerk" />
+        <facet ref=".internal_Clerk" />
+        <facet ref="attachment.internal" />
         <facet ref="group_assignment.all_Clerk" />
     </state>
     
     <state id="clarification_required" title="Requires Clarification to Receive" version="true" tags="actionmp">
-        <facet ref=".edit_Owner" />
+        <facet ref=".review_Owner" />
+        <facet ref="attachment.internal_Owner" />
         <facet ref="signatory.all_Owner" />
-        <facet ref="attachment.all_Owner" />
     </state>
     
     <state id="completed" title="Submitted to the Speaker" version="true">
-        <facet ref=".edit_Speaker" />
-        <facet ref="attachment.all_Speaker" />
+        <facet ref=".internal_Speaker" />
+        <facet ref="attachment.internal_Speaker" />
     </state>
     
-    <state id="incomplete" title="Requires Clarification to Approve" version="true"
-        permissions_from_state="received" tags="actionclerk" />
+    <state id="incomplete" title="Requires Clarification to Approve"
+        version="true" permissions_from_state="received" tags="actionclerk" />
     
     <state id="withdrawn_internal" title="Withdrawn" tags="terminal fail">
-        <facet ref=".view_Clerk" />
+        <facet ref="attachment.internal_terminal" />
         <facet ref="event.internal_terminal" />
     </state>
     
@@ -191,42 +216,34 @@
         <facet ref="event.public" />
     </state>
     
-    <state id="schedule_pending" title="Schedule pending"
-        permissions_from_state="admissible" tags="public tobescheduled" />
+    <state id="schedule_pending" title="Schedule pending" permissions_from_state="admissible" tags="public tobescheduled" />
     
-    <state id="scheduled" title="Scheduled" 
-        permissions_from_state="admissible" tags="public scheduled" />
+    <state id="scheduled" title="Scheduled" permissions_from_state="admissible" tags="public scheduled" />
+    
+    <state id="adjourned" title="Debate adjourned" permissions_from_state="admissible" tags="public approved"
+        note="a motion was debated and the debate adjourned" />
+    
+    <state id="deferred" title="Deferred" permissions_from_state="admissible" tags="public approved"
+        note="An admissable motion that cannot be debated." />
     
     <state id="adopted" title="Adopted" version="true" tags="public terminal succeed">
         <facet ref=".public" />
-        <facet ref="attachment.public" />
+        <facet ref="attachment.public_terminal" />
         <facet ref="event.public" />
     </state>
     
-    <state id="adopted_amendments" title="Adopted with amendments" version="true"
-        permissions_from_state="adopted" tags="public terminal succeed" />
+    <state id="adopted_amendments" title="Adopted with amendments" version="true" permissions_from_state="adopted"
+        tags="public terminal succeed" />
     
-    <state id="adjourned" title="Debate adjourned" 
-        permissions_from_state="admissible" tags="public approved"
-        note="a doc was debated and the debate adjourned" />
+    <state id="elapsed" title="Elapsed" permissions_from_state="adopted" tags="public terminal fail"
+        note="A defered motion that was not debated" />
     
-    <state id="deferred" title="Deferred" 
-        permissions_from_state="admissible" tags="public approved"
-        note="An admissable doc that cannot be debated." />
+    <state id="dropped" title="Dropped" permissions_from_state="adopted" tags="public terminal fail"
+        note="A motion was scheduled, but dropped e.g. becuase no show of MP." />
     
-    <state id="elapsed" title="Elapsed" 
-        permissions_from_state="adopted" tags="public terminal fail"
-        note="A defered doc that was not debated" />
+    <state id="rejected" title="Rejected" permissions_from_state="adopted" tags="public terminal fail" />
     
-    <state id="dropped" title="Dropped" 
-        permissions_from_state="adopted" tags="public terminal fail"
-        note="A doc was scheduled, but dropped e.g. becuase no show of MP." />
-    
-    <state id="rejected" title="Rejected" 
-        permissions_from_state="adopted" tags="public terminal fail" />
-    
-    <state id="withdrawn" title="Withdrawn" 
-        permissions_from_state="adopted" tags="public terminal fail" />
+    <state id="withdrawn" title="Withdrawn" permissions_from_state="adopted" tags="public terminal fail" />
     
     
     <transition title="Create Doc"
@@ -242,7 +259,7 @@
         condition="user_is_not_context_owner"
         trigger="automatic"
     />
-
+    
     <transition title="Submit"
         source="draft submitted_signatories redraft"
         destination="submitted"
@@ -250,7 +267,7 @@
         trigger="manual"
         roles="Owner"
     />
-
+    
     <transition title="Submit"
         source="working_draft"
         destination="submitted"
@@ -258,7 +275,7 @@
         trigger="manual"
         roles="Clerk"
     />
-
+    
     <transition title="Submit to Signatories"
         source="draft redraft"
         destination="submitted_signatories"
@@ -441,7 +458,7 @@
         require_confirmation="true"
     />
     
-    <transition title="Reject a scheduled doc"
+    <transition title="Reject a scheduled motion"
         source="scheduled"
         destination="rejected"
         condition=""

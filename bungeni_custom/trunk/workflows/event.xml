@@ -17,7 +17,27 @@
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
-    <feature name="attachment" enabled="true" />
+    
+    <!-- NOTE on Feature Facet Permissions: Sub-item permissions (apart from the
+    Add permission, that is by defn unbound to an *existing* item) that are 
+    allowed within a *feature facet* apply only for when the (workflowed, always)
+    sub-item itself is in a permissions_from_parent="true" state. -->
+    <feature name="attachment" enabled="true">
+        <facet name="draft_Owner">
+            <allow permission="attachment.View" roles="Owner" />
+            <allow permission="attachment.Edit" roles="Owner" />
+            <allow permission="attachment.Add" roles="Owner" />
+        </facet>
+        <facet name="internal">
+            <allow permission="attachment.View" roles="Authenticated" />
+            <allow permission="attachment.Edit" roles="Clerk" />
+            <allow permission="attachment.Add" roles="Clerk" />
+        </facet>
+        <facet name="internal_terminal">
+            <allow permission="attachment.View" roles="Authenticated" />
+        </facet>
+    </feature>
+    
     
     <!-- workflow facets -->
     <facet name="draft_Owner">
@@ -35,20 +55,24 @@
     
     <state id="draft" title="Draft Event" tags="draft private">
         <facet ref=".draft_Owner" />
+        <facet ref="attachment.draft_Owner" />
     </state>
     
     <state id="attached" title="Event" permissions_from_parent="true" tags="public" />
-    <!-- !+event.attachment(mr, dec-2012) in the "attached" state there is NO DISTINCTION
-    between permissions on attachments on HEAD doc or attachments on THIS event!
-    
-    All permissions in "attached" are delegated to the HEAD doc instance that
-    (in all likeliness) also directly supports attachments, but any permission 
-    the head doc defined for attachments apply for both direct attachments on
-    head instance as well as on any attachment on any event in "attached" state.
+    <!-- !+event.attachment(mr, dec-2012) NOTE that when an attachment (on this 
+    event) is in the "attached" state AND the this event itself is in the "attached" 
+    state then the HEAD doc handles all permissions (including all attachment-related 
+    permissions). But, the HEAD doc (in all likeliness) also directly supports
+    attachments and the workflow defines all the permissions for it, and (when both 
+    this event and a sub-attachment are both in "attached" state) there is 
+    NO DISTINCTION between permissions on direct attachments on HEAD doc or 
+    the attachments on THIS event!
     -->
+
     
     <state id="internal" title="Published Internal">
         <facet ref=".internal" />
+        <facet ref="attachment.internal" />
     </state>
     
     <!-- !+inactive(mr, aug-2011) review usage and rename across the board
@@ -57,6 +81,7 @@
     -->
     <state id="inactive" title="Inactive event">
         <facet ref=".all_view" />
+        <facet ref="attachment.internal_terminal" />
     </state>
     
     

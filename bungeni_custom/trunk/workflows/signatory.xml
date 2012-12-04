@@ -51,14 +51,14 @@
         destination="awaiting_consent"
         trigger="automatic"
     />
-
+    
     <transition title="Create and Sign"
         source=""
         destination="consented"
         trigger="automatic"
         condition="signatory_auto_sign"
     />
-
+    
     <transition title="consent"
         source="awaiting_consent"
         destination="consented"
@@ -76,7 +76,7 @@
         require_confirmation="true"
         condition="pi_allow_signature_actions"
     />
-
+    
     <transition title="withdraw signature"
         source="consented"
         destination="withdrawn"
