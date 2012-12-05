@@ -43,7 +43,7 @@
             <allow permission="attachment.Edit" roles="Owner" />
             <allow permission="attachment.Add" roles="Owner" />
         </facet>
-        <facet name="internal_terminal">
+        <facet name="internal_frozen">
             <allow permission="attachment.View" roles="Authenticated" />
         </facet>
         <facet name="public">
@@ -51,26 +51,39 @@
             <allow permission="attachment.Edit" roles="Clerk" />
             <allow permission="attachment.Add" roles="Clerk" />
         </facet>
-        <facet name="public_terminal">
+        <facet name="public_frozen">
             <allow permission="attachment.View" roles="Anonymous" />
         </facet>
     </feature>
     
     <feature name="event" enabled="true">
+        <facet name="draft_Clerk">
+            <allow permission="event.View" roles="Clerk" />
+            <allow permission="event.Edit" roles="Clerk" />
+            <allow permission="event.Add" roles="Clerk" />
+            <allow permission="event.Delete" roles="Clerk" />
+        </facet>
+        <facet name="draft_Owner">
+            <allow permission="event.View" roles="Owner" />
+            <allow permission="event.Edit" roles="Owner" />
+            <allow permission="event.Add" roles="Owner" />
+            <allow permission="event.Delete" roles="Owner" />
+        </facet>
         <facet name="internal" default="true">
             <allow permission="event.View" roles="Authenticated" />
             <allow permission="event.Edit" roles="Clerk Speaker" />
             <allow permission="event.Add" roles="Clerk Speaker" />
         </facet>
-        <facet name="internal_terminal">
+        <facet name="internal_frozen">
             <allow permission="event.View" roles="Authenticated" />
-            <allow permission="event.Edit" roles="Clerk" />
-            <allow permission="event.Add" roles="Clerk" />
         </facet>
         <facet name="public">
             <allow permission="event.View" roles="Anonymous" />
             <allow permission="event.Edit" roles="Clerk" />
             <allow permission="event.Add" roles="Clerk" />
+        </facet>
+        <facet name="public_frozen">
+            <allow permission="event.View" roles="Anonymous" />
         </facet>
     </feature>
     
@@ -133,40 +146,52 @@
     <state id="working_draft" title="Working Draft" tags="draft private">
         <facet ref=".draft_Clerk" />
         <facet ref="attachment.draft_Clerk" />
+        <facet ref="event.draft_Clerk" />
         <facet ref="signatory.all_Clerk" />
     </state>
     
     <state id="draft" title="Draft Bill" tags="draft private">
         <facet ref=".draft_Owner" />
         <facet ref="attachment.draft_Owner" />
+        <facet ref="event.draft_Owner" />
         <facet ref="signatory.all_Owner" />
     </state>
     
     <state id="submitted_signatories" title="Submitted to Signatories" version="true" tags="actionmp">
         <facet ref=".view_Owner_Signatory" />
         <facet ref="attachment.internal_Owner" />
+        <facet ref="event.internal" />
         <facet ref="signatory.add_Owner" />
     </state>
     
     <state id="redraft" title="Redraft" version="true" note="document under review before resubmission">
         <facet ref=".redraft_Owner" />
         <facet ref="attachment.internal_Owner" />
+        <facet ref="event.internal" />
         <facet ref="signatory.all_Owner" />
     </state>
     
     <state id="withdrawn_signatory" title="Dropped" tags="private terminal fail">
         <facet ref=".view_Owner_Signatory" />
-        <facet ref="attachment.internal_terminal" /><!-- !+internal_private? -->
-        <facet ref="event.internal_terminal" /><!-- !+internal_private? -->
+        <facet ref="attachment.internal_frozen" /><!-- !+private_frozen? -->
+        <facet ref="event.internal_frozen" />
+    </state>
+    
+    <state id="withdrawn_internal" title="Withdrawn" tags="private terminal fail">
+        <facet ref=".view_Owner_Signatory" />
+        <facet ref="attachment.internal_frozen" />
+        <facet ref="event.internal_frozen" />
     </state>
     
     <state id="submitted" title="Submitted to Clerk" version="true" tags="actionclerk">
         <facet ref=".view_Clerk" />
+        <facet ref="event.internal_frozen" />
     </state>
     
     <state id="received" title="received by clerk" tags="actionclerk">
         <facet ref=".edit_Clerk" />
         <facet ref="attachment.internal" />
+        <facet ref="event.internal" />
     </state>
     
     <state id="gazetted" title="Bill Published in Gazette" version="true" tags="public">
@@ -228,18 +253,13 @@
     
     <state id="approved" title="Approved Bill" tags="public terminal succeed approved">
         <facet ref=".public" />
-        <facet ref="attachment.public_terminal" />
+        <facet ref="attachment.public_frozen" />
+        <facet ref="event.public_frozen" />
     </state>
     
     <state id="rejected" title="Rejected Bill" permissions_from_state="approved" tags="public terminal fail" />
     
     <state id="withdrawn" title="Bill Withdrawn" permissions_from_state="approved" tags="public terminal fail" />
-    
-    <state id="withdrawn_internal" title="Withdrawn" tags="private terminal fail">
-        <facet ref=".view_Owner_Signatory" />
-        <facet ref="attachment.internal_terminal" />
-        <facet ref="event.internal_terminal" />
-    </state>
     
     
     <transition title="Create Bill"

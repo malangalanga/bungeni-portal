@@ -25,7 +25,7 @@
         <allow permission=".View" roles="Authenticated" />
         <allow permission=".Edit" roles="Clerk Speaker" />
     </facet>
-    <facet name="internal_terminal">
+    <facet name="internal_frozen">
         <allow permission=".View" roles="Authenticated" />
     </facet>
     
@@ -42,7 +42,7 @@
     
     <!-- !+inactive(mr, aug-2011) review usage and rename across the board -->
     <state id="inactive" title="Inactive file">
-        <facet ref=".internal_terminal" />
+        <facet ref=".internal_frozen" />
     </state>
     
     

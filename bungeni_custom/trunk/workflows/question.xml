@@ -48,7 +48,7 @@
             <allow permission="attachment.Edit" roles="Speaker" />
             <allow permission="attachment.Add" roles="Speaker" /> 
         </facet>
-        <facet name="internal_terminal">
+        <facet name="internal_frozen">
             <allow permission="attachment.View" roles="Authenticated" />
         </facet>
         <facet name="public">
@@ -56,29 +56,42 @@
             <allow permission="attachment.Edit" roles="Clerk" />
             <allow permission="attachment.Add" roles="Clerk" />
         </facet>
-        <facet name="public_terminal">
+        <facet name="public_frozen">
             <allow permission="attachment.View" roles="Anonymous" />
         </facet>
     </feature>
     
     <feature name="event" enabled="true">
+        <facet name="draft_Clerk">
+            <allow permission="event.View" roles="Clerk" />
+            <allow permission="event.Edit" roles="Clerk" />
+            <allow permission="event.Add" roles="Clerk" />
+            <allow permission="event.Delete" roles="Clerk" />
+        </facet>
+        <facet name="draft_Owner">
+            <allow permission="event.View" roles="Owner" />
+            <allow permission="event.Edit" roles="Owner" />
+            <allow permission="event.Add" roles="Owner" />
+            <allow permission="event.Delete" roles="Owner" />
+        </facet>
         <facet name="internal" default="true">
             <allow permission="event.View" roles="Authenticated" />
             <allow permission="event.Edit" roles="Clerk Speaker" />
             <allow permission="event.Add" roles="Clerk Speaker" />
         </facet>
-        <facet name="internal_terminal">
+        <facet name="internal_frozen">
             <allow permission="event.View" roles="Authenticated" />
-            <allow permission="event.Edit" roles="Clerk" />
-            <allow permission="event.Add" roles="Clerk" />
         </facet>
         <facet name="public">
             <allow permission="event.View" roles="Anonymous" />
             <allow permission="event.Edit" roles="Clerk" />
             <allow permission="event.Add" roles="Clerk" />
         </facet>
+        <facet name="public_frozen">
+            <allow permission="event.View" roles="Anonymous" />
+        </facet>
     </feature>
-
+    
     <feature name="signatory" enabled="true">
         <parameter name="open_states" value="admissible" />
         <facet name="all_Clerk">
@@ -164,43 +177,60 @@
     <state id="working_draft" title="Working Draft" tags="draft private">
         <facet ref=".draft_Clerk" />
         <facet ref="attachment.draft_Clerk" />
+        <facet ref="event.draft_Clerk" />
         <facet ref="signatory.all_Clerk" />
     </state>
     
     <state id="draft" title="Draft" tags="draft private">
         <facet ref=".draft_Owner" />
         <facet ref="attachment.draft_Owner" />
+        <facet ref="event.draft_Owner" />
         <facet ref="signatory.all_Owner" />
     </state>
     
     <state id="submitted_signatories" title="Submitted to Signatories" version="true" tags="actionmp">
         <facet ref=".view_Owner_Signatory" />
+        <facet ref="attachment.internal" />
+        <facet ref="event.internal" />
         <facet ref="signatory.add_Owner" />
     </state>
     
     <state id="redraft" title="Redraft" version="true" note="document under review before resubmission">
         <facet ref=".redraft_Owner" />
         <facet ref="attachment.internal_Owner" />
+        <facet ref="event.internal" />
         <facet ref="signatory.all_Owner" />
     </state>
 
     <state id="withdrawn_signatory" title="Dropped">
         <facet ref=".view_Owner_Signatory" />
+        <facet ref="attachment.internal_frozen" /><!-- !+private_frozen? -->
+        <facet ref="event.internal_frozen" />
     </state>
-
+    
+    <state id="withdrawn_internal" title="Withdrawn" tags="terminal fail">
+        <facet ref=".view_Owner_Signatory" />
+        <facet ref="attachment.internal_frozen" />
+        <facet ref="event.internal_frozen" />
+    </state>
+    
     <state id="submitted" title="Submitted to clerk" version="true" tags="actionclerk">
         <facet ref=".view_Clerk" />
+        <facet ref="attachment.internal" />
+        <facet ref="event.internal_frozen" />
     </state>
     
     <state id="received" title="Received by clerk" tags="actionclerk">
         <facet ref=".edit_Clerk" />
         <facet ref="attachment.internal" />
+        <facet ref="event.internal" />
         <facet ref="user_assignment.all_HeadClerk" />
     </state>
     
     <state id="completed" title="Submitted to the Speaker" version="true">
         <facet ref=".edit_Speaker" />
         <facet ref="attachment.internal_Speaker" />
+        <facet ref="event.internal" />
     </state>
     
     <state id="admissible" title="Admissible" version="true" tags="public approved oral written">
@@ -211,15 +241,14 @@
     
     <state id="inadmissible" title="Inadmissible" tags="terminal fail">
         <facet ref=".view_Clerk" />
-        <facet ref="attachment.internal_terminal" />
-        <facet ref="event.internal_terminal" />
+        <facet ref="attachment.internal_frozen" />
+        <facet ref="event.internal_frozen" />
     </state>
-    
-    <state id="withdrawn_internal" title="Withdrawn" permissions_from_state="inadmissible" tags="terminal fail" />
     
     <state id="clarification_required" title="Requires Clarification to Receive" version="true" tags="actionmp">
         <facet ref=".edit_Owner" />
         <facet ref="attachment.internal_Owner" />
+        <facet ref="event.internal" />
     </state>
     
     <state id="incomplete" title="Require Clarification to Approve" version="true"
@@ -256,8 +285,8 @@
     
     <state id="debated" title="Debated" tags="public terminal succeed">
         <facet ref=".public" />
-        <facet ref="attachment.public_terminal" />
-        <facet ref="event.public" />
+        <facet ref="attachment.public_frozen" />
+        <facet ref="event.public_frozen" />
     </state>
     
     <state id="elapsed" title="Elapsed" permissions_from_state="debated" tags="public terminal fail" />

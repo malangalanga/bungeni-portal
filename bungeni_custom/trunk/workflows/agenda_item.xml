@@ -46,7 +46,7 @@
             <allow permission="attachment.Edit" roles="Speaker" />
             <allow permission="attachment.Add" roles="Speaker" /> 
         </facet>
-        <facet name="internal_terminal">
+        <facet name="internal_frozen">
             <allow permission="attachment.View" roles="Authenticated" />
         </facet>
         <facet name="public">
@@ -54,7 +54,7 @@
             <allow permission="attachment.Edit" roles="Clerk" />
             <allow permission="attachment.Add" roles="Clerk" />
         </facet>
-        <facet name="public_terminal">
+        <facet name="public_frozen">
             <allow permission="attachment.View" roles="Anonymous" />
         </facet>
     </feature>
@@ -169,7 +169,7 @@
     
     <state id="inadmissible" title="Inadmissible" tags="terminal fail">
         <facet ref=".view_internal" />
-        <facet ref="attachment.internal_terminal" />
+        <facet ref="attachment.internal_frozen" />
     </state>
     
     <state id="withdrawn_internal" title="Withdrawn" permissions_from_state="inadmissible" tags="terminal fail" />
@@ -189,7 +189,7 @@
     
     <state id="debated" title="Debated" tags="public terminal succeed">
         <facet ref=".public" />
-        <facet ref="attachment.public_terminal" />
+        <facet ref="attachment.public_frozen" />
     </state>
     
     <state id="elapsed" title="Elapsed" permissions_from_state="debated" tags="public terminal fail" />

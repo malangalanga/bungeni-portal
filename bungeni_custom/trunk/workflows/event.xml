@@ -33,7 +33,7 @@
             <allow permission="attachment.Edit" roles="Clerk" />
             <allow permission="attachment.Add" roles="Clerk" />
         </facet>
-        <facet name="internal_terminal">
+        <facet name="internal_frozen">
             <allow permission="attachment.View" roles="Authenticated" />
         </facet>
     </feature>
@@ -44,14 +44,23 @@
         <allow permission=".Edit" roles="Owner" />
         <allow permission=".Delete" roles="Owner" />
     </facet>
-    <facet name="internal">
+    <facet name="internal" default="true">
         <allow permission=".View" roles="Authenticated" />
         <allow permission=".Edit" roles="Clerk Speaker" />
+        <allow permission=".Add" roles="Clerk Speaker" /><!-- when via parent, on parent -->
     </facet>
-    <facet name="all_view">
+    <facet name="internal_frozen">
         <allow permission=".View" roles="Authenticated" />
     </facet>
-    
+    <facet name="public">
+        <allow permission=".View" roles="Anonymous" />
+        <allow permission=".Edit" roles="Clerk" />
+        <allow permission=".Add" roles="Clerk" />
+    </facet>
+    <facet name="public_frozen">
+        <allow permission=".View" roles="Anonymous" />
+    </facet>
+
     
     <state id="draft" title="Draft Event" tags="draft private">
         <facet ref=".draft_Owner" />
@@ -80,8 +89,8 @@
         consider using "dropped", "obsoleted", "removed"...
     -->
     <state id="inactive" title="Inactive event">
-        <facet ref=".all_view" />
-        <facet ref="attachment.internal_terminal" />
+        <facet ref=".internal_frozen" />
+        <facet ref="attachment.internal_frozen" />
     </state>
     
     
