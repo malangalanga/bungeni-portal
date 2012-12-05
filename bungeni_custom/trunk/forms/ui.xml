@@ -589,8 +589,7 @@
     <descriptor name="heading" order="3">
         <field name="text" label="Title" required="true" value_type="text" render_type="text_line">
             <show modes="add" />
-            <show modes="view edit" />
-            <hide modes="listing" />
+            <show modes="view edit listing" />
         </field>
         <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
             <show modes="add" />
