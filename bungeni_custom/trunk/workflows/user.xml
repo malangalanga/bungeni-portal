@@ -6,6 +6,7 @@
     
     <feature name="address" enabled="true">
         <facet name="all_Clerk_Owner">
+            <allow permission="address.View" roles="Clerk Owner" />
             <allow permission="address.Edit" roles="Clerk Owner" />
             <allow permission="address.Add" roles="Clerk Owner" />
         </facet>
@@ -13,6 +14,7 @@
     
     <!-- workflow facets -->
     <facet name="all_Owner">
+        <allow permission=".View" roles="Owner" />
         <allow permission=".Edit" roles="Owner" />
         <allow permission="delegation.Edit" roles="Owner" />
         <allow permission="delegation.Add" roles="Owner" />
