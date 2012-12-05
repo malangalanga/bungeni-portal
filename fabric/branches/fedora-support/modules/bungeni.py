@@ -175,10 +175,21 @@ class OsEssentials:
         return lijdkpackage[0]
 
     installMethods = {
-        "Ubuntu": "apt-get install -y  --allow-unauthenticated ",
-        "Debian": "apt-get install -y  --allow-unauthenticated ",
-        "Suse": "yum install ",
-        "Redhat": "rpm -Uvh ",
+        "Ubuntu": 
+            {
+            "default": "apt-get install -y  --allow-unauthenticated " ,
+            "group": "apt-get install -y  --allow-unauthenticated " ,
+            },
+        "Debian": 
+            {
+            "default": "apt-get install -y  --allow-unauthenticated " ,
+            "group": "apt-get install -y  --allow-unauthenticated " ,
+            },
+        "Suse":             
+            {
+            "default": "yum install -y  --allow-unauthenticated " ,
+            "group": "yum groupinstall -y  --allow-unauthenticated " ,
+            },
         }
 
 
@@ -545,11 +556,11 @@ class Presetup:
 
         liLibs = self.ossent.get_reqd_libs(self.osinfo.release_id,
                 self.osinfo.release_no)
-        sudo(self.ossent.get_install_method(self.osinfo.release_id)
+        sudo(self.ossent.get_install_method(self.osinfo.release_id).get('default')
              + " ".join(liLibs))
         if not self.ossent.is_gandi_server():
             print "Installing Linux Headers"
-            sudo(self.ossent.get_install_method(self.osinfo.release_id)
+            sudo(self.ossent.get_install_method(self.osinfo.release_id).get('default')
                  + " " + self.cfg.linux_headers)
         else:
             print "This server was identified as a Gandi virtual server"
@@ -558,7 +569,7 @@ class Presetup:
         """
         Installs the required erlang packages for RabbitMQ to work properly
         """
-        sudo(self.ossent.get_install_method(self.osinfo.release_id)
+        sudo(self.ossent.get_install_method(self.osinfo.release_id).get('default')
              + " erlang-base erlang-os-mon erlang-xmerl erlang-inets openjdk-6-jre")
 
     def build_py27(self):
