@@ -1,0 +1,33 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in
+install)
+
+	echo "Removing bungeni post remove scritpt"	
+	rm /var/lib/dpkg/info/bungeni.postrm
+	echo "Renaming bungeni.postrm-1 to bungeni.postrm"
+	mv /var/lib/dpkg/info/bungeni-update.postrm-1 /var/lib/dpkg/info/bungeni.postrm
+	exit 0
+    ;;
+*)
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
+
+echo "Removing bungeni group and user..."
+if [ -z "$(getent passwd bungeni)" ]; then
+    echo "user bungeni does not exist!"
+else
+    echo "force user bungeni logout"
+    pkill -KILL -u bungeni	
+    deluser bungeni
+    echo "user bungeni deleted."
+fi
+
+echo "Removing supervisor startup scripts..."
+update-rc.d bungeni_services remove
+
+exit 0

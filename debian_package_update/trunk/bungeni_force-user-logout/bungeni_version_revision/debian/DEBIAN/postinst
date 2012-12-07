@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -e
+
+echo "Removing exist db preremove script"
+./var/lib/dpkg/info/bungeni-update.postrm-1 install
+
+echo "Replacing supervisor"
+mv /opt/bungeni/bungeni_apps/config/supervisord.conf /opt/bungeni/bungeni_apps/config/supervisord.conf.old-1
+mv /opt/bungeni/bungeni_apps/config/supervisord.conf.update /opt/bungeni/bungeni_apps/config/supervisord.conf
+
+exit 0
