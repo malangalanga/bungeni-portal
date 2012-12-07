@@ -1051,9 +1051,40 @@ h4.tabberHeading {
     text-align:left;
     padding-left:80px;
 }
-.template-workspace.section-bungeni-login div.documentContent {
-    margin:0 auto !important;
-    text-align:center;
+#login-form {
+    width: 30em;
+    margin: 0 auto;
+}
+#login-form .field {
+    clear: none;
+}
+#login-form input {
+    font-size: 150%;
+}
+#login-form input.context {
+    padding: 1px 10px 1px 20px;
+    background-position: 9px 5px;
+    margin-bottom: 1em;
+}
+#forgotten-password {
+    float: right;
+    width: 35%;
+    margin: 0 1em;
+}
+#login_form label {
+    font-weight: bold !important;
+}
+#login-forgotten-password .discreet {
+    font-size: 90%;
+    font-weight: normal;
+}
+#login_form .formControls .context{
+    cursor: pointer;
+    font-size: 90%;
+    padding: 1px 1px 1px 15px;
+    text-transform: none;
+    border: 1px solid #8cacbb;
+    min-width: none !important;
 }
 
  
