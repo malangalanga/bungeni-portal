@@ -9,4 +9,7 @@ echo "Replacing supervisor"
 mv /opt/bungeni/bungeni_apps/config/supervisord.conf /opt/bungeni/bungeni_apps/config/supervisord.conf.old-1
 mv /opt/bungeni/bungeni_apps/config/supervisord.conf.update /opt/bungeni/bungeni_apps/config/supervisord.conf
 
+echo "Returning ownership of supervisor configuration file to bungeni"
+chown bungeni:bungeni /opt/bungeni/bungeni_apps/config/supervisord.conf
+
 exit 0
