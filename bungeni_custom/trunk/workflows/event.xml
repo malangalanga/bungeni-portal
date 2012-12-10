@@ -47,7 +47,7 @@
     <facet name="internal" default="true">
         <allow permission=".View" roles="Authenticated" />
         <allow permission=".Edit" roles="Clerk Speaker" />
-        <allow permission=".Add" roles="Clerk Speaker" /><!-- when via parent, on parent -->
+        <allow permission=".Add" roles="Clerk Speaker" /><!-- on parent (when permissions_from_parent) -->
     </facet>
     <facet name="internal_frozen">
         <allow permission=".View" roles="Authenticated" />
@@ -55,7 +55,7 @@
     <facet name="public">
         <allow permission=".View" roles="Anonymous" />
         <allow permission=".Edit" roles="Clerk" />
-        <allow permission=".Add" roles="Clerk" />
+        <allow permission=".Add" roles="Clerk" /><!-- on parent (when permissions_from_parent) -->
     </facet>
     <facet name="public_frozen">
         <allow permission=".View" roles="Anonymous" />

@@ -93,16 +93,31 @@
     
     <feature name="signatory" enabled="true">
         <parameter name="open_states" value="admissible" />
-        <facet name="all_Clerk">
-            <allow permission="signatory.Add" roles="Clerk" />
+        <facet name="draft_Clerk">
             <allow permission="signatory.View" roles="Clerk" />
+            <allow permission="signatory.Edit" roles="Clerk" />
+            <allow permission="signatory.Add" roles="Clerk" />
+            <allow permission="signatory.Delete" roles="Clerk" />
         </facet>
-        <facet name="all_Owner">
-            <allow permission="signatory.Add" roles="Owner" />
+        <facet name="draft_Owner">
             <allow permission="signatory.View" roles="Owner" />
-        </facet>
-        <facet name="add_Owner">
+            <allow permission="signatory.Edit" roles="Owner" />
             <allow permission="signatory.Add" roles="Owner" />
+            <allow permission="signatory.Delete" roles="Owner" />
+        </facet>
+        <facet name="internal" default="true">
+            <allow permission="signatory.View" roles="Clerk Owner Signatory MP" /><!-- !+ Authenticated ? -->
+        </facet>
+        <facet name="internal_Owner">
+            <allow permission="signatory.View" roles="Authenticated" />
+            <allow permission="signatory.Edit" roles="Owner" />
+            <allow permission="signatory.Add" roles="Owner" />
+        </facet>
+        <facet name="internal_frozen">
+            <allow permission="signatory.View" roles="Authenticated" />
+        </facet>
+        <facet name="public_frozen">
+            <allow permission="signatory.View" roles="Anonymous" />
         </facet>
     </feature>
     
@@ -124,9 +139,8 @@
         <allow permission=".Edit" roles="Owner" />
         <allow permission=".Delete" roles="Owner" />
     </facet>
-    <facet name="view_Owner_Signatory">
+    <facet name="internal_Signatory">
         <allow permission=".View" roles="Owner Signatory" />
-        <allow permission="signatory.View" roles="Owner Signatory" />
     </facet>
     <facet name="view_Clerk">
         <allow permission=".View" roles="Clerk Speaker Owner Signatory" />
@@ -152,64 +166,70 @@
         <facet ref=".draft_Clerk" />
         <facet ref="attachment.draft_Clerk" />
         <facet ref="event.draft_Clerk" />
-        <facet ref="signatory.all_Clerk" />
+        <facet ref="signatory.draft_Clerk" />
     </state>
     
     <state id="draft" title="Draft" tags="draft private">
         <facet ref=".draft_Owner" />
         <facet ref="attachment.draft_Owner" />
         <facet ref="event.draft_Owner" />
-        <facet ref="signatory.all_Owner" />
+        <facet ref="signatory.draft_Owner" />
     </state>
 
     <state id="submitted_signatories" title="Submitted to Signatories" version="true">
-        <facet ref=".view_Owner_Signatory" />
+        <facet ref=".internal_Signatory" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
-        <facet ref="signatory.add_Owner" />
+        <facet ref="signatory.internal" />
     </state>
     
     <state id="redraft" title="Redraft" version="true" note="document under review before resubmission">
         <facet ref=".edit_Owner" />
         <facet ref="attachment.internal_Owner" />
         <facet ref="event.internal" />
-        <facet ref="signatory.all_Owner" />
+        <facet ref="signatory.internal_Owner" />
     </state>
     
     <state id="withdrawn_signatory" title="Dropped">
-        <facet ref=".view_Owner_Signatory" />
+        <facet ref=".internal_Signatory" />
         <facet ref="attachment.internal_frozen" /><!-- !+private_frozen? -->
         <facet ref="event.internal_frozen" />
+        <facet ref="signatory.internal_frozen" />
     </state>
     
     <state id="withdrawn_internal" title="Withdrawn" tags="terminal fail">
-        <facet ref=".view_Owner_Signatory" />
+        <facet ref=".internal_Signatory" />
         <facet ref="attachment.internal_frozen" /><!-- !+private_frozen? -->
         <facet ref="event.internal_frozen" />
+        <facet ref="signatory.internal_frozen" />
     </state>
     
     <state id="submitted" title="Submitted" version="true" tags="actionclerk">
         <facet ref=".view_Clerk" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal_frozen" />
+        <facet ref="signatory.internal_frozen" />
     </state>
     
     <state id="received" title="Received by Clerks Office" tags="actionclerk">
         <facet ref=".edit_Clerk" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
+        <facet ref="signatory.internal_frozen" />
     </state>
     
     <state id="completed" title="Submitted to the Speaker" version="true">
         <facet ref=".edit_Speaker" />
         <facet ref="attachment.internal_Speaker" />
         <facet ref="event.internal" />
+        <facet ref="signatory.internal_frozen" />
     </state>
     
     <state id="admissible" title="Admissible" version="true" tags="public approved">
         <facet ref=".public" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />
+        <facet ref="signatory.public_frozen" />
     </state>
     
     <state id="schedule_pending" title="Schedule pending" 
@@ -219,6 +239,7 @@
         <facet ref=".view_Clerk" />
         <facet ref="attachment.internal_frozen" />
         <facet ref="event.internal_frozen" />
+        <facet ref="signatory.internal_frozen" />
     </state>
     
     <state id="incomplete" title="Requires Clarification to Approve" version="true" 
@@ -228,6 +249,7 @@
         <facet ref=".edit_Owner" />
         <facet ref="attachment.internal_Owner" />
         <facet ref="event.internal_frozen" />
+        <facet ref="signatory.internal" />
     </state>
     
     <state id="scheduled" title="Scheduled" permissions_from_state="admissible" tags="public scheduled" />
@@ -239,6 +261,7 @@
         <facet ref=".public" />
         <facet ref="attachment.public_frozen" />
         <facet ref="event.public_frozen" />
+        <facet ref="signatory.public_frozen" />
     </state>
     
     <state id="withdrawn" title="Withdrawn" 

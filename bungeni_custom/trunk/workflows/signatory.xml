@@ -10,9 +10,6 @@
     -->
     
     <!-- global grants -->
-    <allow permission=".Edit" roles="Owner" />
-    <allow permission=".Add" roles="Owner" />
-    <allow permission=".Delete" roles="Clerk" />
     <allow permission=".Act" roles="Signatory" />
     <allow permission=".Append" roles="MP" />
     
@@ -22,13 +19,33 @@
     <feature name="version" enabled="false" />
     <feature name="attachment" enabled="false" />
     
+    
     <!-- workflow facets -->
+    <facet name="draft_Clerk">
+        <allow permission=".View" roles="Clerk" />
+        <allow permission=".Edit" roles="Clerk" />
+        <allow permission=".Add" roles="Clerk" /><!-- on parent doc -->
+        <allow permission=".Delete" roles="Clerk" />
+    </facet>
     <facet name="draft_Owner">
-        <allow permission=".View" roles="Authenticated" />
+        <allow permission=".View" roles="Owner" />
+        <allow permission=".Edit" roles="Owner" />
+        <allow permission=".Add" roles="Owner" /><!-- on parent doc -->
         <allow permission=".Delete" roles="Owner" />
     </facet>
-    <facet name="public">
-        <allow permission=".View" roles="Authenticated Anonymous" />
+    <facet name="internal" default="true">
+        <allow permission=".View" roles="Clerk Owner Signatory MP" /><!-- !+Authenticated? -->
+    </facet>
+    <facet name="internal_Owner">
+        <allow permission=".View" roles="Authenticated" />
+        <allow permission=".Edit" roles="Owner" />
+        <allow permission=".Add" roles="Owner" />
+    </facet>
+    <facet name="internal_frozen">
+        <allow permission=".View" roles="Authenticated" />
+    </facet>
+    <facet name="public_frozen">
+        <allow permission=".View" roles="Anonymous" />
     </facet>
     
     
@@ -37,12 +54,16 @@
     </state>
     
     <state id="consented" title="Signature Consented" tags="workspace public">
-        <facet ref=".public" />
+        <facet ref=".public_frozen" />
     </state>
     
-    <state id="rejected" title="Signature Rejected" tags="terminal" />
+    <state id="rejected" title="Signature Rejected" tags="terminal">
+        <facet ref=".internal_frozen" />
+    </state>
     
-    <state id="withdrawn" title="Signature Withdrawn" tags="terminal" />
+    <state id="withdrawn" title="Signature Withdrawn" tags="terminal">
+        <facet ref=".internal_frozen" />
+    </state>
     
     
     <transition title="Create"
