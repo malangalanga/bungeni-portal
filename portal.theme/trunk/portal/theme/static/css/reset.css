@@ -4,10 +4,10 @@
    GENERAL - Styles are applied site-wide
    ========================================================================== */
 /*
- * These are the general styles applied to both portal (template-portal)and the
- * workspace (template-workspace). Within both portal and workspace further
+ * These are the general styles applied to both portal (.template-portal)and the
+ * workspace (.template-workspace). Within both portal and workspace further
  * customizations can be made for bungeni (.section-bungeni-workspace),
- * plone (.site-plone) and eXist (template-portal-eXist)
+ * plone (.site-plone) and eXist (.template-portal-eXist)
  */
 
 /* HEADER - Language selector, Portal banner
@@ -146,7 +146,7 @@ div#portal-globalnav {
 
 div#portal-globalnav ul.level0 {
     position: relative !important;
-    margin: 0;
+    margin: 2px 0 0;
     padding: 0;
     min-width:inherit;
     width: auto;
@@ -198,10 +198,9 @@ div#portal-globalnav ul.level0 li a:hover {
 div#portal-globalnav ul.level1 {
     position: relative;
     top:2em;
-    height: 18px;
     width: auto !important;
     left:0px;
-    height: 18px;
+    height: 17px;
     margin-top: -2em;
     width: 100%;
     display: block;
@@ -868,8 +867,9 @@ h4.tabberHeading {
      * - required for sticky footer to work.
      * - margin-top must be the same as the height of the footer.
      */
-    margin: -25px 1.4em 0;
+    margin: -25px 1.4em 0 !important;
     height: 25px;
+    background: white !important;
 }
 
 #portal-footer div {
@@ -887,19 +887,6 @@ h4.tabberHeading {
 /* =============================================================================
    TEMPLATE PORTAL - Styling applied on portal
    ========================================================================== */
-.template-portal #top-layer #demoWarning {
-    width: 150px;
-    height: 18px;
-    line-height: 18px;
-    margin: 0 auto;
-    padding: 0;
-}
-.template-portal #top-layer ul#portal-personaltools li:last-child {
-    margin-right:0px;
-    float:right;
-    clear:both;
-}
-
 /* Portal-Width
 -------------------------------------------------------------- */
 .template-portal #visual-table-wrapper, 
@@ -964,6 +951,8 @@ h4.tabberHeading {
     margin-left:auto;
     margin-right:auto;
     position:relative;
+    width: 150px;
+    padding: 0;    
 }
 .template-portal #top-layer #demoWarning blink {
     margin-left:0px;
@@ -972,6 +961,11 @@ h4.tabberHeading {
 }
 .template-portal #top-layer ul#portal-personaltools li {
     padding: 0 0 0 .5em;
+}
+.template-portal #top-layer ul#portal-personaltools li:last-child {
+    margin-right:0px;
+    float:right;
+    clear:both;
 }
 .template-portal #visual-table-wrapper {
     margin: 0 auto !important;   
@@ -1182,9 +1176,9 @@ h4.tabberHeading {
 .template-workspace div.main-column div#portal-globalnav {
     margin-top: 0em;
 }
-
 .template-workspace div#portal-globalnav ul.level1 {
-    height:18px;
+    height:17px;
+    margin-top:-2.1em;
 }
 .template-workspace div#portal-globalnav ul.level1 li {
     height:18px;
@@ -1305,7 +1299,7 @@ h4.tabberHeading {
 .template-workspace span#corner-b {
     position: absolute;
     top: 0;
-    width: 16px;
+    width: 25px;
     height: 16px;
 }
 .template-workspace span#corner-a {
@@ -1701,6 +1695,9 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
    Plone - Plone CMS content styling
    .site-plone
    ========================================================================== */
+.template-workspace.site-plone #main-body-table {
+    margin-top: 5px !important;
+}
 .template-web_pages ul.contentViews,
 .template-private_folder ul.contentViews,
 .template-web_pages #plone-contentmenu-actions,
@@ -1710,7 +1707,7 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
     display: none;
 } 
 .site-plone.template-workspace div#visual-table-wrapper {
-    margin: 0.68em 0 0 1.4em !important;
+    margin: 0em 0 0 1.4em !important;
 
 }  
 
@@ -1730,7 +1727,7 @@ div#region-content {
     text-align: center;
 }
 .template-workspace.template-portal-eXist #visual-table-wrapper {
-    margin-top:6px;
+    margin-top:0px;
 }
 .template-workspace.template-portal-eXist #portal-breadcrumbs {
     width:99.50%;
@@ -1748,9 +1745,6 @@ div#region-content {
 .template-portal-eXist  .grey-full {
     margin-left:10px;
     width:100%;
-}
-.template-portal-eXist div#portal-globalnav ul.level1 {
-    /*top: 1.6em;*/
 }
 .template-portal-eXist div#main-wrapper {
     width: 96%;

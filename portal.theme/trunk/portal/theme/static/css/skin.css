@@ -2,9 +2,10 @@
    GENERAL - Styles are applied site-wide
    ========================================================================== */
 /*
- * These are the general styles applied to both portal and workspace 
- * you can overwrite this section in the specific sections of (template-portal, template-workspace and template-portal-exist) 
- *
+ * These are the general styles applied to both portal (.template-portal)and the
+ * workspace (.template-workspace). Within both portal and workspace further
+ * customizations can be made for bungeni (.section-bungeni-workspace),  
+ * plone (.site-plone) and eXist (.template-portal-eXist) 
  */
 
 /* Top-layer
@@ -882,74 +883,8 @@ span.yui-button.yui-link-button span a {
     border-bottom: 1px dotted #ccc;
 }
 
-/* cynin customizations
--------------------------------------------------------------- */
-#portal-titlebar {
-    background:#fff !important;
-    border-bottom: 1px solid #ccc;
-}
-#col1_content {
-    background: #E5E5E5;
-    border-right: 1px solid #afafaf;
-}
-#col1_content #sidenavigationlogoholder {
-    border: 0 none;
-    border-radius: 0;
-    -moz-border-radius: 0;
-    border-bottom: 1px solid #ccc;
-    background: transparent;
-}
-#col1_content .verticalnavigationholder {
-    border-top: 1px solid #ccc !important;
-}
-#col1_content dd.portletItem {
-    border: 0 none;
-}
-#col1_content #portal-languageselector select {
-    font-size: 90%;
-    border: 1px solid #ccc;
-}
-div.navTreeCurrentNode, 
-.portletNavigationTree div.navTreeCurrentNode.hover, 
-.navTreeHome.navTreeCurrentNode, 
-.navTreeHome.navTreeCurrentNode.hover {
-    border: 1px solid #fff;
-}
-#col3 {
-    border:0 none;
-    background: transparent;
-}
 /* frontpage
 -------------------------------------------------------------- */
-div.main-column #collage h2 {
-    text-align: justify;
-    text-shadow: 0 0 0 #fff;
-    font-size: 120%;
-    font-weight: bold !important;
-    color: #C8631B !important;
-}
-#collage .three-columns-equal .block_1 ul {
-    list-style-type:none; 
-}
-#collage .three-columns-equal .block_1 ul {
-#    list-style-image:none;  
-#    list-style-type:square;
-}
-#collage .three-columns-equal .block_1 ul li.navigation,
-#collage .three-columns-equal .block_1 ul li.plain{
-    list-style-image:none;  
-    list-style-type:none;
-}
-#collage .three-columns-equal .block_1 ul li a{
-    border-bottom: 0px;
-    text-align: left;  
-}
-#collage .three-columns-equal .block_1 ul li a:visited {
-    color:#436976;
-}
-#collage .tileImage {
-    border:1px solid black;
-}
 .template-document_view #content h1.documentFirstHeading {
     font-size:160% !important;
 }
@@ -1641,11 +1576,11 @@ div.main-column #collage h2 {
 }
 
 .template-workspace {
-    background: #4d4d4d url(/static/images/workspace-border-left.png) repeat-y top left;
+    background: url(/static/images/workspace-border-left.png) repeat-y top left;
 }
 .template-workspace #visual-table-wrapper {
     text-align: left;
-    background: #fff url(/static/images/workspace-border-right.png) top right repeat-y;
+    background:url(/static/images/workspace-border-right.png) top right repeat-y;
 }
 .template-workspace span#corner-a,
 .template-workspace span#corner-b {
