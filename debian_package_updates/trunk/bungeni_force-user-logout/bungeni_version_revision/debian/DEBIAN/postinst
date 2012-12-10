@@ -2,14 +2,27 @@
 
 set -e
 
-echo "Removing exist db preremove script"
-./var/lib/dpkg/info/bungeni-update.postrm-1 install
+case "$1" in
+configure)
 
-echo "Replacing supervisor"
-mv /opt/bungeni/bungeni_apps/config/supervisord.conf /opt/bungeni/bungeni_apps/config/supervisord.conf.old-1
-mv /opt/bungeni/bungeni_apps/config/supervisord.conf.update /opt/bungeni/bungeni_apps/config/supervisord.conf
+	echo "Removing bungeni post remove scritpt"	
+	rm /var/lib/dpkg/info/bungeni.postrm
+	echo "Renaming bungeni.postrm-1 to bungeni.postrm"
+	mv /var/lib/dpkg/info/bungeni-update.postrm-1 /var/lib/dpkg/info/bungeni.postrm
+	
+	echo "Replacing supervisor"
+	OLD_DATE=$(date +"%Y-%m-%d_%H-%M-%S")
+	mv /opt/bungeni/bungeni_apps/config/supervisord.conf /opt/bungeni/bungeni_apps/config/supervisord.conf.old-$OLD_DATE
+	mv /opt/bungeni/bungeni_apps/config/supervisord.conf.update /opt/bungeni/bungeni_apps/config/supervisord.conf
 
-echo "Returning ownership of supervisor configuration file to bungeni"
-chown bungeni:bungeni /opt/bungeni/bungeni_apps/config/supervisord.conf
+	echo "Returning ownership of supervisor configuration file to bungeni"
+	chown -Rf bungeni:bungeni /opt/bungeni/bungeni_apps/config/*
+	chown root:root /var/lib/dpkg/info/bungeni*
+    ;;
+*)
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
 
 exit 0

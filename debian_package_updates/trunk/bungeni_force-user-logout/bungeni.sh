@@ -8,7 +8,7 @@ set -v
 new bashtasklog logger
 
 BUNGENI_PACKAGE_DATE=$(getdate)
-BUNGENI_REL_FOLDER="bungeni-update_${BUNGENI_PACKAGE_DATE}"
+BUNGENI_REL_FOLDER="bungeni-update_1.0_${BUNGENI_PACKAGE_DATE}"
 BUNGENI_ARCH=$(getarchtype)
 BUNGENI_SIZE=0
 

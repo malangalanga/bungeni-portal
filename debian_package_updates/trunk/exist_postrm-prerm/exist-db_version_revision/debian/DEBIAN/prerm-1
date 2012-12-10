@@ -3,24 +3,19 @@
 set -e
 
 case "$1" in
-install)
+remove|purge)
 
-	echo "Removing bungeni existDb preremove scritpt"	
-	rm /var/lib/dpkg/info/bungeni-exist-db.prerm
-	echo "Renaming bungeni-exist-db-update.prerm-1 to bungeni-exist-db.prerm"
-	mv /var/lib/dpkg/info/bungeni-exist-db-update.prerm-1 /var/lib/dpkg/info/bungeni-exist-db.prerm
-	exit 0
+	echo "Stopping epmd"
+	epmd -kill || true
+
+	echo "Stopping services"
+	service  bungeni_services stop
     ;;
 *)
+
         echo "prerm called with unknown argument \`$1'" >&2
         exit 0
     ;;
 esac
-
-echo "Stopping epmd"
-epmd -kill || true
-
-echo "Stopping services"
-service  bungeni_services stop
 
 exit 0

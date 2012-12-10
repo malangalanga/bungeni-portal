@@ -2,7 +2,17 @@
 
 set -e
 
-echo "Stopping services.."
-service bungeni_services stop
+case "$1" in
+install)
+
+		echo "Stopping services.."
+		service bungeni_services stop
+    ;;
+*)
+
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
 
 exit 0

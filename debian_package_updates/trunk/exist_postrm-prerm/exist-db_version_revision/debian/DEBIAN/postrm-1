@@ -3,20 +3,15 @@
 set -e
 
 case "$1" in
-install)
-		
-	echo "Removing bungeni existDb post remove scritpt"	
-	rm /var/lib/dpkg/info/bungeni-exist-db.postrm
-	echo "Renaming bungeni-exist-db-update.postrm-1 to bungeni-exist-db.postrm"
-	mv /var/lib/dpkg/info/bungeni-exist-db-update.postrm-1 /var/lib/dpkg/info/bungeni-exist-db.postrm
-	exit 0
+remove|purge)
+
+	echo "exist-db successfully removed."
     ;;
 *)
+
         echo "postrm called with unknown argument \`$1'" >&2
         exit 0
     ;;
 esac
-
-echo "exist-db successfully removed."
 
 exit 0

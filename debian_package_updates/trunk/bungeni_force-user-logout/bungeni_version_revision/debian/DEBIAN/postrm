@@ -2,6 +2,15 @@
 
 set -e
 
-echo "bungeni update successfully removed."
+case "$1" in
+remove)
+
+		echo "bungeni update successfully removed."
+    ;;
+*)
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
 
 exit 0
