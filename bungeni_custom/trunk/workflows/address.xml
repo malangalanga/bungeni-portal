@@ -10,19 +10,33 @@
     
     
     <!-- workflow facets -->
-    <facet name="draft_Owner">
-        <allow permission=".View" roles="Owner" />
-        <allow permission=".Edit" roles="Owner" />
-        <allow permission=".Delete" roles="Owner" />
+    <facet name="draft">
+        <allow permission=".View" roles="Clerk Owner" />
+        <allow permission=".Edit" roles="Clerk Owner" />
+        <allow permission=".Delete" roles="Clerk Owner" />
     </facet>
-    <facet name="internal">
+    <facet name="internal" default="true">
         <allow permission=".View" roles="Authenticated" />
+        <allow permission=".Edit" roles="Clerk Owner" />
+        <allow permission=".Add" roles="Clerk Owner" />
+        <allow permission=".Delete" roles="Clerk Owner" />
+    </facet>
+    <facet name="internal_frozen">
+        <allow permission=".View" roles="Authenticated" />
+    </facet>
+    <facet name="public">
+        <allow permission=".View" roles="Anonymous" />
         <allow permission=".Edit" roles="Owner Clerk" />
+        <allow permission=".Add" roles="Clerk Owner" />
+        <allow permission=".Delete" roles="Clerk Owner" />
+    </facet>
+    <facet name="public_frozen">
+        <allow permission=".View" roles="Anonymous" />
     </facet>
     
     
     <state id="draft" title="Draft Address" tags="draft private">
-        <facet ref=".draft_Owner" />
+        <facet ref=".draft" />
     </state>
     
     <state id="attached" title="Address" tags="public" permissions_from_parent="true" />

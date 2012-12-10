@@ -12,42 +12,55 @@
     
     
     <feature name="address" enabled="true">
+        <facet name="internal" default="true">
+            <allow permission="address.View" roles="Authenticated" />
+            <allow permission="address.Edit" roles="Clerk Owner" />
+            <allow permission="address.Add" roles="Clerk Owner" />
+            <allow permission="address.Delete" roles="Clerk Owner" />
+        </facet>
         <facet name="public">
-            <allow permission="address.View" roles="Authenticated Anonymous" />
+            <allow permission="address.View" roles="Anonymous" />
+            <allow permission="address.Edit" roles="Owner Clerk" />
+            <allow permission="address.Add" roles="Clerk Owner" />
+            <allow permission="address.Delete" roles="Clerk Owner" />
+        </facet>
+        <facet name="public_frozen">
+            <allow permission="address.View" roles="Anonymous" />
         </facet>
     </feature>
     
     
     <!-- workflow facets -->
-    <facet name="draft_Clerk">
+    <facet name="draft">
         <allow permission=".View" roles="Clerk" />
         <allow permission=".Delete" roles="Owner" />
     </facet>
-    <facet name="public_all_Clerk">
+    <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
         <allow permission="member_of_parliament.View" roles="Authenticated Anonymous" />
         <allow permission="member_of_parliament.Edit" roles="Clerk" />
         <allow permission="member_of_parliament.Add" roles="Clerk" />
         <allow permission="member_of_parliament.Delete" roles="Clerk" /><!-- !+GROUP_MEMBERSHIP_DELETE -->
     </facet>
-    <facet name="public">
+    <facet name="public_frozen">
         <allow permission=".View" roles="Authenticated Anonymous" />
         <allow permission="member_of_parliament.View" roles="Authenticated Anonymous" />
     </facet>
     
     
     <state id="draft" title="Draft - Parliament not yet Active">
-        <facet ref=".draft_Clerk" />
+        <facet ref=".draft" />
+        <facet ref="address.internal" />
     </state>
     
     <state id="active" title="Active Parliament" tags="public">
-        <facet ref=".public_all_Clerk" />
+        <facet ref=".public" />
         <facet ref="address.public" />
     </state>
     
     <state id="dissolved" title="Parliament is Dissolved" tags="public">
-        <facet ref=".public" />
-        <facet ref="address.public" />
+        <facet ref=".public_frozen" />
+        <facet ref="address.public_frozen" />
     </state>
     
     

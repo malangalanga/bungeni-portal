@@ -12,25 +12,29 @@
     
     
     <feature name="address" enabled="true">
-        <facet name="all_Clerk_Owner">
+        <facet name="internal" default="true">
+            <allow permission="address.View" roles="Authenticated" />
             <allow permission="address.Edit" roles="Clerk Owner" />
             <allow permission="address.Add" roles="Clerk Owner" />
-        </facet>
-        <facet name="public_all_Clerk_Owner">
-            <allow permission="address.View" roles="Authenticated Anonymous" />
-            <allow permission="address.Edit" roles="Clerk Owner" />
-            <allow permission="address.Add" roles="Clerk Owner" />
+            <allow permission="address.Delete" roles="Clerk Owner" />
         </facet>
         <facet name="public">
-            <allow permission="address.View" roles="Authenticated Anonymous" />
+            <allow permission="address.View" roles="Anonymous" />
+            <allow permission="address.Edit" roles="Clerk Owner" />
+            <allow permission="address.Add" roles="Clerk Owner" />
+            <allow permission="address.Delete" roles="Clerk Owner" />
+        </facet>
+        <facet name="public_frozen">
+            <allow permission="address.View" roles="Anonymous" />
         </facet>
     </feature>
     
+    
     <!-- workflow facets -->
-    <facet name="draft_Clerk">
-        <allow permission=".View" roles="Clerk" />
+    <facet name="draft">
+        <allow permission=".View" roles="Clerk Owner" />
     </facet>
-    <facet name="public_all_Clerk">
+    <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
         <allow permission="group_membership.View" roles="Authenticated Anonymous" />
         <allow permission="group_membership.Edit" roles="Clerk" />
@@ -54,7 +58,7 @@
         <allow permission="political_group_member.Add" roles="Clerk" />
         <allow permission="political_group_member.Delete" roles="Clerk" /><!-- !+GROUP_MEMBERSHIP_DELETE -->
     </facet>
-    <facet name="public">
+    <facet name="public_frozen">
         <allow permission=".View" roles="Authenticated Anonymous" />
         <allow permission="group_membership.View" roles="Authenticated Anonymous" />
         <!-- !+REDEFINE_FAIL -->
@@ -63,18 +67,18 @@
     
     
     <state id="draft" title="Draft - Group not yet Active">
-        <facet ref=".draft_Clerk" />
-        <facet ref="address.all_Clerk_Owner" />
+        <facet ref=".draft" />
+        <facet ref="address.internal" />
     </state>
     
     <state id="active" title="Active Group" tags="public">
-        <facet ref=".public_all_Clerk" />
-        <facet ref="address.public_all_Clerk_Owner" />
+        <facet ref=".public" />
+        <facet ref="address.public" />
     </state>
     
     <state id="dissolved" title="Group is Dissolved" tags="public">
-        <facet ref=".public" />
-        <facet ref="address.public" />
+        <facet ref=".public_frozen" />
+        <facet ref="address.public_frozen" />
     </state>
     
     

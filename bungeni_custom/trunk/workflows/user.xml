@@ -4,31 +4,43 @@
     permission_actions=".View .Edit .Add .Delete"
     >
     
+    
     <feature name="address" enabled="true">
-        <facet name="all_Clerk_Owner">
-            <allow permission="address.View" roles="Clerk Owner" />
+        <facet name="internal" default="true">
+            <allow permission="address.View" roles="Authenticated" />
             <allow permission="address.Edit" roles="Clerk Owner" />
             <allow permission="address.Add" roles="Clerk Owner" />
+            <allow permission="address.Delete" roles="Clerk Owner" />
+        </facet>
+        <facet name="internal_frozen">
+            <allow permission="address.View" roles="Authenticated" />
         </facet>
     </feature>
     
+    
     <!-- workflow facets -->
-    <facet name="all_Owner">
-        <allow permission=".View" roles="Owner" />
-        <allow permission=".Edit" roles="Owner" />
+    <facet name="internal">
+        <allow permission=".View" roles="Authenticated" />
+        <allow permission=".Edit" roles="Clerk Owner" />
         <allow permission="delegation.Edit" roles="Owner" />
         <allow permission="delegation.Add" roles="Owner" />
+    </facet>
+    <facet name="internal_frozen">
+        <allow permission=".View" roles="Authenticated" />
     </facet>
     
     
     <state id="A" title="Active User">
-        <facet ref=".all_Owner" />
-        <facet ref="address.all_Clerk_Owner" />
+        <facet ref=".internal" />
+        <facet ref="address.internal" />
     </state>
     
-    <state id="I" title="Inactive User" />
+    <state id="I" title="Inactive User">
+        <facet ref=".internal_frozen" />
+        <facet ref="address.internal_frozen" />
+    </state>
     
-    <state id="D" title="Deceased User" />
+    <state id="D" title="Deceased User" permissions_from_state="I" />
     
     
     <transition title="Create"

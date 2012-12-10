@@ -12,18 +12,29 @@
     
     
     <feature name="address" enabled="true">
+        <facet name="internal" default="true">
+            <allow permission="address.View" roles="Authenticated" />
+            <allow permission="address.Edit" roles="Clerk Owner" />
+            <allow permission="address.Add" roles="Clerk Owner" />
+            <allow permission="address.Delete" roles="Clerk Owner" />
+        </facet>
         <facet name="public">
-            <allow permission="address.View" roles="Authenticated Anonymous" />
+            <allow permission="address.View" roles="Anonymous" />
+            <allow permission="address.Edit" roles="Owner Clerk" />
+            <allow permission="address.Add" roles="Clerk Owner" />
+            <allow permission="address.Delete" roles="Clerk Owner" />
+        </facet>
+        <facet name="public_frozen">
+            <allow permission="address.View" roles="Anonymous" />
         </facet>
     </feature>
     
     
     <!-- workflow facets -->
-    <facet name="all_Clerk">
+    <facet name="draft">
         <allow permission=".View" roles="Clerk" />
-        <allow permission=".Delete" roles="Owner" />
     </facet>
-    <facet name="public_all_Clerk">
+    <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
         <allow permission="committee_member.View" roles="Authenticated Anonymous" />
         <allow permission="committee_member.Edit" roles="Clerk" />
@@ -35,7 +46,7 @@
         <allow permission="committee_staff.Delete" roles="Clerk" /><!-- !+GROUP_MEMBERSHIP_DELETE -->
         <allow permission="agenda_item.Add" roles="CommitteeMember" />
     </facet>
-    <facet name="public">
+    <facet name="public_frozen">
         <allow permission=".View" roles="Authenticated Anonymous" />
         <allow permission="committee_member.View" roles="Authenticated Anonymous" />
         <allow permission="committee_staff.View" roles="Authenticated Anonymous" />
@@ -43,17 +54,18 @@
     
     
     <state id="draft" title="Draft - Committee not yet Active">
-        <facet ref=".all_Clerk" />
+        <facet ref=".draft" />
+        <facet ref="address.internal" />
     </state>
     
     <state id="active" title="Active Committee" tags="public">
-        <facet ref=".public_all_Clerk" />
+        <facet ref=".public" />
         <facet ref="address.public" />
     </state>
     
     <state id="dissolved" title="Committee is Dissolved" tags="public">
-        <facet ref=".public" />
-        <facet ref="address.public" />
+        <facet ref=".public_frozen" />
+        <facet ref="address.public_frozen" />
     </state>
     
     
