@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <template html="false" 
   xmlns:tal="http://xml.zope.org/namespaces/tal">
-  <block state="submitted">
+  <block onstate="submitted">
     <subject>
       Bill has been submitted : <span tal:replace="item/title"/>
     </subject>
@@ -11,7 +11,7 @@
     </body>
   </block>
 
-  <block state="received">
+  <block onstate="received">
     <subject>
       Bill has been received by the Clerk's Office : <span tal:replace="item/title"/>
     </subject>
@@ -21,7 +21,7 @@
     </body>
   </block>
 
-  <block state="inadmissible">
+  <block onstate="inadmissible">
     <subject>
       Bill is inadmissible : <span tal:replace="item/title"/>
     </subject>
@@ -31,7 +31,7 @@
     </body>
   </block>
 
-  <block state="clarification_required">
+  <block onstate="clarification_required">
     <subject>
       Clarification required for bill : 
       <span tal:replace="item/title"/>
@@ -42,7 +42,7 @@
     </body>
   </block>
 
-  <block state="debated">
+  <block onstate="debated">
     <subject>
       Bill : 
       <span tal:replace="item/title"/> has been debated
@@ -53,7 +53,7 @@
     </body>
   </block>
 
-  <block state="scheduled">
+  <block onstate="scheduled">
     <subject>
       Bill 
       <span tal:replace="item/title"/> has been scheduled
@@ -65,7 +65,7 @@
     </body>
   </block>
 
-  <block state="defered">
+  <block onstate="defered">
     <subject>
       Bill 
       <span tal:replace="item/title"/> has been deferred

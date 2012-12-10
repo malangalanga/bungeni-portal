@@ -2,7 +2,7 @@
 <template html="false"
   xmlns:tal="http://xml.zope.org/namespaces/tal">
 
-  <block state="published-agenda">
+  <block onstate="published-agenda">
     <subject>
       The agenda for this sitting <span tal:replace="item/title"/> has been published
     </subject>
