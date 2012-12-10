@@ -1,7 +1,21 @@
 #!/bin/sh
-# post remove script for plone
+
 set -e
 
-echo "Plone successfully removed."
+case "$1" in
+    purge)
+    ;;
+    remove|upgrade|failed-upgrade|abort-install|abort-upgrade)
+    
+		echo "Plone successfully removed."
+    ;;
+    disappear)
+    ;;
+    *)
+
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
 
 exit 0

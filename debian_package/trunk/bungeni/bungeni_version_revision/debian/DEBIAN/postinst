@@ -1,14 +1,23 @@
 #!/bin/sh
-# postinst script for bungeni
+
 set -e
 
-echo "Adding bungeni group and user..."
-useradd bungeni
-echo "bungeni:bungeni" | chpasswd
-echo "Setting Permissions..."
-usermod -d /opt/bungeni bungeni
-usermod -s /bin/bash bungeni
-chown -R bungeni:bungeni /opt/bungeni
-update-rc.d bungeni_services defaults
+case "$1" in
+configure)
+
+		echo "Adding bungeni group and user..."
+		useradd bungeni
+		echo "bungeni:bungeni" | chpasswd
+		echo "Setting Permissions..."
+		usermod -d /opt/bungeni bungeni
+		usermod -s /bin/bash bungeni
+		chown -R bungeni:bungeni /opt/bungeni
+		update-rc.d bungeni_services defaults
+    ;;
+*)
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
 
 exit 0

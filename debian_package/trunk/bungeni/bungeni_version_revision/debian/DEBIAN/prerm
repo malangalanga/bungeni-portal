@@ -1,11 +1,21 @@
 #!/bin/sh
-# postinst script for bungeni
+
 set -e
 
-echo "Stopping services.."
-service  bungeni_services stop
+case "$1" in
+remove|purge)
 
-while ps -A | grep supervisord; do sleep 1; done
-echo "Bungeni services stopped."
+		echo "Stopping services.."
+		service  bungeni_services stop
+
+		while ps -A | grep supervisord; do sleep 1; done
+		echo "Bungeni services stopped."
+    ;;
+*)
+
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
 
 exit 0

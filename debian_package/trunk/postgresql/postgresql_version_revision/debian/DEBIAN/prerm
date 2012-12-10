@@ -1,8 +1,18 @@
 #!/bin/sh
-# pre remove script for postgres
+
 set -e
 
-echo "stopping services"
-service  bungeni_services stop
+case "$1" in
+	remove|purge)
+
+		echo "stopping services"
+		service  bungeni_services stop
+    ;;
+	*)
+
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
 
 exit 0

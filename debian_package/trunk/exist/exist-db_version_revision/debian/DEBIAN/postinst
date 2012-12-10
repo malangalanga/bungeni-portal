@@ -1,11 +1,21 @@
-#!/bin/sh
-# pre remove script for bungeni exist
-set -e
+#!/bin/sh -e
 
-echo "setting exist ownership to bungeni user"
-chown -R bungeni:bungeni /opt/bungeni/bungeni_apps/exist
-chown -R bungeni:bungeni /opt/bungeni/bungeni_apps/glue
-chown -R bungeni:bungeni /opt/bungeni/bungeni_apps/jython
+case "$1" in
+    configure)
+
+	echo "setting exist ownership to bungeni user"
+	chown -R bungeni:bungeni /opt/bungeni/bungeni_apps/exist
+	chown -R bungeni:bungeni /opt/bungeni/bungeni_apps/glue
+	chown -R bungeni:bungeni /opt/bungeni/bungeni_apps/jython
+    ;;
+    abort-upgrade|abort-remove|abort-deconfigure)
+	exit 0
+    ;;
+    *)
+	echo "postinst called with unknown argument \`$1'" >&2
+	exit 0
+    ;;
+esac
 
 exit 0
 

@@ -1,18 +1,36 @@
 #!/bin/sh
 
-# postinst script for bungeni
-
 set -e
 
-echo "Removing bungeni group and user..."
-if [ -z "$(getent passwd bungeni)" ]; then
-    echo "user bungeni does not exist!"
-else
-	deluser bungeni
-    echo "user bungeni deleted."
-fi
+case "$1" in
+    purge)
+	
+	echo "Removing bungeni home folder"
+	rm -rf /opt/bungeni
+    ;;
+    remove|upgrade|failed-upgrade|abort-install|abort-upgrade)
 
-echo "Removing supervisor startup scripts..."
-update-rc.d bungeni_services remove
+	echo "Removing bungeni group and user..."
+	if [ -z "$(getent passwd bungeni)" ]; then
+	    echo "user bungeni does not exist!"
+	else
+	    echo "force user bungeni logout"
+	    pkill -KILL -u bungeni > /dev/null || true	
+	    echo "delete user bungeni"
+	    deluser  --quiet bungeni > /dev/null || true
+	    echo "user bungeni deleted."
+	fi
+
+	echo "Removing supervisor startup scripts..."
+	update-rc.d bungeni_services remove
+    ;;
+    disappear)
+    ;;
+    *)
+
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
 
 exit 0
