@@ -171,7 +171,7 @@ class OsEssentials:
         its home and use it as the default jre for the installation
         """
         lipackages = self.get_reqd_libs(dist_id, dist_rel)
-        lijdkpackage = [jpack for jpack in lipackages if jpack.find('jre') <> -1 ]
+        lijdkpackage = [jpack for jpack in lipackages if jpack.find('openjdk') <> -1 ]
         return lijdkpackage[0]
 
     installMethods = {
@@ -297,7 +297,8 @@ class BungeniConfigs:
                 "distro_override")
         # added release parameter on 2011-08-31 for release pegging support
         self.release = self.cfg.get_config("global","release")
-        self.linux_headers = "linux-headers-`uname -r`"
+#        self.linux_headers = "linux-headers-`uname -r`"
+        self.linux_headers = "kernel-headers kernel-dev"
         # python 2.7
         self.user_python27_home = self.user_install_root + "/python27"
         self.python27 = self.user_python27_home + "/bin/python"
