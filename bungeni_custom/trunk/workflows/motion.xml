@@ -129,7 +129,7 @@
     <feature name="download" enabled="true" />
     
     <feature name="group_assignment" enabled="true">
-        <facet name="all_Clerk">
+        <facet name="internal">
             <allow permission="group_assignment.Add" roles="Clerk" />
             <allow permission="group_assignment.View" roles="Clerk" />
             <allow permission="group_assignment.Edit" roles="Clerk" />
@@ -232,7 +232,7 @@
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
         <facet ref="signatory.internal_frozen" />
-        <facet ref="group_assignment.all_Clerk" />
+        <facet ref="group_assignment.internal" />
     </state>
     
     <state id="clarification_required" title="Requires Clarification to Receive"
