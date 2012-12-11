@@ -465,7 +465,6 @@ div#portal-globalnav ul.level0 li a {
     -moz-border-radius-topright: 5px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    font-family: tahoma,verdana,sans-serif;
     font-size: 12px;
 }
 div#portal-globalnav ul.level0 li.selected a,
@@ -940,12 +939,12 @@ span.yui-button.yui-link-button span a {
     text-align: center;
     border: 0 none;
     border-top: 1px solid #D4E2EF;
-    background: #fff;
+    background: #fff !important;
 }
 
 #portal-footer div {
     border-top: 1px solid #ccc;
-    background: #fff;
+    background: #fff !important;
 }
 
 /* =============================================================================
@@ -1397,6 +1396,7 @@ span.yui-button.yui-link-button span a {
     display: block;
 }
 .section-bungeni-workspace div#portal-globalnav ul.level1 {
+    top: 1.5em !important;
     border: 1px solid #aaf;
     border-right: 0 none;
     border-top: 0 none !important;
@@ -1828,7 +1828,6 @@ span.yui-button.yui-link-button span a {
     -moz-border-radius-topright: 5px !important;
     border-top-left-radius: 5px !important;
     border-top-right-radius: 5px !important;
-    font-family:tahoma,verdana,sans-serif !important;
     font-size: 12px;
     font-weight: normal !important;
     text-shadow: none !important;
@@ -1864,11 +1863,9 @@ span.yui-button.yui-link-button span a {
 }
 
 .template-portal-eXist #top-layer ul#portal-personaltools li a {
-    font-family:Verdana, sans-serif;
     font-size:12px;
 }
 .template-portal-eXist #top-layer ul#portal-languageselector li a {
-    font-family:Verdana, sans-serif;
     font-size:12px;
 }
 .template-portal-eXist .big-dbl-arrow {
@@ -2081,7 +2078,6 @@ span.yui-button.yui-link-button span a {
 
 
 .template-portal-eXist div#portal-globalnav ul.level1 li a {
-    font-family:Verdana, sans-serif;
     font-size:12px;
 }
 

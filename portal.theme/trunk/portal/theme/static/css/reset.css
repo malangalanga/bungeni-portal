@@ -633,7 +633,7 @@ dd#items-to-be-scheduled-dl .formPanel {
 .formPanel form { 
     margin: 0 auto;
     padding: 0 !important;
-    width: 100%;
+    width: 95%;
     clear:both;
 }
 /*.formPanel .field:after,
@@ -867,14 +867,14 @@ h4.tabberHeading {
      * - required for sticky footer to work.
      * - margin-top must be the same as the height of the footer.
      */
-    margin: -25px 1.4em 0 !important;
     height: 25px;
-    background: white !important;
+    margin: 0em !important;
+    padding: 0em !important;
 }
 
 #portal-footer div {
     margin: 0 auto;
-    width: 170px;
+    width: 180px;
     height: 20px;
     line-height: 20px;
 }
@@ -1020,7 +1020,7 @@ h4.tabberHeading {
      */
     height: 30px;
     line-height: 30px;
-    margin: -30px auto 0;
+    margin: 0 auto !important;
 }
 .template-portal.section-bungeni-login #portal-search form {
     padding-right:20px;
@@ -1112,7 +1112,7 @@ h4.tabberHeading {
 
 .template-workspace #header-wrapper {
     margin: 0 auto;
-    width:98%;
+    width:98.2%;
     height:130px;
     padding-right:10px;
     margin-right:0px;
@@ -1283,7 +1283,7 @@ h4.tabberHeading {
 }
 .template-workspace #visual-table-wrapper {
     position: relative;
-    padding: 0 1.4em 0 0;
+    padding: 0.3em 1.4em 0 0;
     text-align: left;
     margin: 0;
     margin-left: 1.4em;
@@ -1507,6 +1507,9 @@ div.overlay #createGroup fieldset { border: none; }
    Bungeni - Bungeni workspace
    .section-bungeni-workspace
    ========================================================================== */
+.section-bungeni-workspace div#portal-globalnav {
+    width: 97.8%;
+}   
 .section-bungeni-workspace #portal-column-content.sl {
     margin: 0;
 }
@@ -1707,9 +1710,12 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
     display: none;
 } 
 .site-plone.template-workspace div#visual-table-wrapper {
-    margin: 0em 0 0 1.4em !important;
-
-}  
+    margin: 0em 0 0 1.8em !important;
+}
+.site-plone.template-workspace div#portal-globalnav {
+    width: 97.7%;
+    padding: 0 0 0 0.15em;
+}
 
 /* =============================================================================
    EXIST - eXist XML UI content styling
@@ -1728,6 +1734,15 @@ div#region-content {
 }
 .template-workspace.template-portal-eXist #visual-table-wrapper {
     margin-top:0px;
+    padding:2.5em 1.4em 0 0 !important;
+}
+.template-workspace.template-portal-eXist div#portal-globalnav {
+    width: 97.7%;
+    padding: 0 0 0 0.15em;
+}
+.template-workspace.template-portal-eXist div#portal-globalnav ul.level1 {
+    top: 2em !important;
+    z-index: 1 !important;
 }
 .template-workspace.template-portal-eXist #portal-breadcrumbs {
     width:99.50%;
