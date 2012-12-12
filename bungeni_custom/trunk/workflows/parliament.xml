@@ -11,23 +11,7 @@
     <allow permission=".Delete" roles="Clerk" />
     
     
-    <feature name="address" enabled="true">
-        <facet name="internal" default="true">
-            <allow permission="address.View" roles="Authenticated" />
-            <allow permission="address.Edit" roles="Clerk Owner" />
-            <allow permission="address.Add" roles="Clerk Owner" />
-            <allow permission="address.Delete" roles="Clerk Owner" />
-        </facet>
-        <facet name="public">
-            <allow permission="address.View" roles="Anonymous" />
-            <allow permission="address.Edit" roles="Owner Clerk" />
-            <allow permission="address.Add" roles="Clerk Owner" />
-            <allow permission="address.Delete" roles="Clerk Owner" />
-        </facet>
-        <facet name="public_frozen">
-            <allow permission="address.View" roles="Anonymous" />
-        </facet>
-    </feature>
+    <feature name="address" enabled="true" />
     
     
     <!-- workflow facets -->

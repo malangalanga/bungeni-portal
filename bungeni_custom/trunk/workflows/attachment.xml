@@ -16,10 +16,27 @@
     
     
     <!-- workflow facets -->
+    <facet name="draft_Clerk">
+        <allow permission=".View" roles="Clerk" />
+        <allow permission=".Edit" roles="Clerk" />
+        <allow permission=".Add" roles="Clerk" />
+        <allow permission=".Delete" roles="Clerk" />
+    </facet>
     <facet name="draft_Owner">
         <allow permission=".View" roles="Owner" />
         <allow permission=".Edit" roles="Owner" />
+        <allow permission=".Add" roles="Owner" />
         <allow permission=".Delete" roles="Owner" />
+    </facet>
+    <facet name="internal_Owner">
+        <allow permission=".View" roles="Authenticated" />
+        <allow permission=".Edit" roles="Owner" />
+        <allow permission=".Add" roles="Owner" />
+    </facet>
+    <facet name="internal_Speaker">
+        <allow permission=".View" roles="Authenticated" />
+        <allow permission=".Edit" roles="Speaker" />
+        <allow permission=".Add" roles="Speaker" /> 
     </facet>
     <facet name="internal">
         <allow permission=".View" roles="Authenticated" />
@@ -28,7 +45,15 @@
     <facet name="internal_frozen">
         <allow permission=".View" roles="Authenticated" />
     </facet>
-    
+    <facet name="public">
+        <allow permission=".View" roles="Anonymous" />
+        <allow permission=".Edit" roles="Clerk" />
+        <allow permission=".Add" roles="Clerk" />
+    </facet>
+    <facet name="public_frozen">
+        <allow permission=".View" roles="Anonymous" />
+    </facet>
+
     
     <state id="draft" title="Draft Event" tags="draft private">
         <facet ref=".draft_Owner" />

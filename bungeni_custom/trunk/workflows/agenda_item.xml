@@ -15,80 +15,14 @@
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
-    
     <!-- NOTE on Feature Facet Permissions: Sub-item permissions (apart from the
     Add permission, that is by defn unbound to an *existing* item) that are 
     allowed within a *feature facet* apply only for when the (workflowed, always)
     sub-item itself is in a permissions_from_parent="true" state. -->
-    <feature name="attachment" enabled="true">
-        <facet name="draft_Clerk">
-            <allow permission="attachment.View" roles="Clerk" />
-            <allow permission="attachment.Edit" roles="Clerk" />
-            <allow permission="attachment.Add" roles="Clerk" />
-        </facet>
-        <facet name="draft_Owner">
-            <allow permission="attachment.View" roles="Owner" />
-            <allow permission="attachment.Edit" roles="Owner" />
-            <allow permission="attachment.Add" roles="Owner" />
-        </facet>
-        <facet name="internal">
-            <allow permission="attachment.View" roles="Authenticated" />
-            <allow permission="attachment.Edit" roles="Clerk" />
-            <allow permission="attachment.Add" roles="Clerk" />
-        </facet>
-        <facet name="internal_Owner">
-            <allow permission="attachment.View" roles="Authenticated" />
-            <allow permission="attachment.Edit" roles="Owner" />
-            <allow permission="attachment.Add" roles="Owner" />
-        </facet>
-        <facet name="internal_Speaker">
-            <allow permission="attachment.View" roles="Authenticated" />
-            <allow permission="attachment.Edit" roles="Speaker" />
-            <allow permission="attachment.Add" roles="Speaker" /> 
-        </facet>
-        <facet name="internal_frozen">
-            <allow permission="attachment.View" roles="Authenticated" />
-        </facet>
-        <facet name="public">
-            <allow permission="attachment.View" roles="Anonymous" />
-            <allow permission="attachment.Edit" roles="Clerk" />
-            <allow permission="attachment.Add" roles="Clerk" />
-        </facet>
-        <facet name="public_frozen">
-            <allow permission="attachment.View" roles="Anonymous" />
-        </facet>
-    </feature>
-    
+    <feature name="attachment" enabled="true" />
     <feature name="signatory" enabled="false">
         <parameter name="open_states" value="admissible" />
-        <facet name="draft_Clerk">
-            <allow permission="signatory.View" roles="Clerk" />
-            <allow permission="signatory.Edit" roles="Clerk" />
-            <allow permission="signatory.Add" roles="Clerk" />
-            <allow permission="signatory.Delete" roles="Clerk" />
-        </facet>
-        <facet name="draft_Owner">
-            <allow permission="signatory.View" roles="Owner" />
-            <allow permission="signatory.Edit" roles="Owner" />
-            <allow permission="signatory.Add" roles="Owner" />
-            <allow permission="signatory.Delete" roles="Owner" />
-        </facet>
-        <facet name="internal" default="true">
-            <allow permission="signatory.View" roles="Clerk Owner Signatory MP" /><!-- !+ Authenticated ? -->
-        </facet>
-        <facet name="internal_Owner">
-            <allow permission="signatory.View" roles="Authenticated" />
-            <allow permission="signatory.Edit" roles="Owner" />
-            <allow permission="signatory.Add" roles="Owner" />
-        </facet>
-        <facet name="internal_frozen">
-            <allow permission="signatory.View" roles="Authenticated" />
-        </facet>
-        <facet name="public_frozen">
-            <allow permission="signatory.View" roles="Anonymous" />
-        </facet>
     </feature>
-    
     <feature name="schedule" enabled="true" />
     <feature name="workspace" enabled="true" />
     <feature name="notification" enabled="true" />

@@ -16,126 +16,19 @@
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
-    
     <!-- NOTE on Feature Facet Permissions: Sub-item permissions (apart from the
     Add permission, that is by defn unbound to an *existing* item) that are 
     allowed within a *feature facet* apply only for when the (workflowed, always)
     sub-item itself is in a permissions_from_parent="true" state. -->
-    <feature name="attachment" enabled="true">
-        <facet name="draft_Clerk">
-            <allow permission="attachment.View" roles="Clerk" />
-            <allow permission="attachment.Edit" roles="Clerk" />
-            <allow permission="attachment.Add" roles="Clerk" />
-        </facet>
-        <facet name="draft_Owner">
-            <allow permission="attachment.View" roles="Owner" />
-            <allow permission="attachment.Edit" roles="Owner" />
-            <allow permission="attachment.Add" roles="Owner" />
-        </facet>
-        <facet name="internal">
-            <allow permission="attachment.View" roles="Authenticated" />
-            <allow permission="attachment.Edit" roles="Clerk" />
-            <allow permission="attachment.Add" roles="Clerk" />
-        </facet>
-        <facet name="internal_Owner">
-            <allow permission="attachment.View" roles="Authenticated" />
-            <allow permission="attachment.Edit" roles="Owner" />
-            <allow permission="attachment.Add" roles="Owner" />
-        </facet>
-        <facet name="internal_Speaker">
-            <allow permission="attachment.View" roles="Authenticated" />
-            <allow permission="attachment.Edit" roles="Speaker" />
-            <allow permission="attachment.Add" roles="Speaker" /> 
-        </facet>
-        <facet name="internal_frozen">
-            <allow permission="attachment.View" roles="Authenticated" />
-        </facet>
-        <facet name="public">
-            <allow permission="attachment.View" roles="Anonymous" />
-            <allow permission="attachment.Edit" roles="Clerk" />
-            <allow permission="attachment.Add" roles="Clerk" />
-        </facet>
-        <facet name="public_frozen">
-            <allow permission="attachment.View" roles="Anonymous" />
-        </facet>
-    </feature>
-    
-    <feature name="event" enabled="true">
-        <facet name="draft_Clerk">
-            <allow permission="event.View" roles="Clerk" />
-            <allow permission="event.Edit" roles="Clerk" />
-            <allow permission="event.Add" roles="Clerk" />
-            <allow permission="event.Delete" roles="Clerk" />
-        </facet>
-        <facet name="draft_Owner">
-            <allow permission="event.View" roles="Owner" />
-            <allow permission="event.Edit" roles="Owner" />
-            <allow permission="event.Add" roles="Owner" />
-            <allow permission="event.Delete" roles="Owner" />
-        </facet>
-        <facet name="internal" default="true">
-            <allow permission="event.View" roles="Authenticated" />
-            <allow permission="event.Edit" roles="Clerk Speaker" />
-            <allow permission="event.Add" roles="Clerk Speaker" />
-        </facet>
-        <facet name="internal_frozen">
-            <allow permission="event.View" roles="Authenticated" />
-        </facet>
-        <facet name="public">
-            <allow permission="event.View" roles="Anonymous" />
-            <allow permission="event.Edit" roles="Clerk" />
-            <allow permission="event.Add" roles="Clerk" />
-        </facet>
-        <facet name="public_frozen">
-            <allow permission="event.View" roles="Anonymous" />
-        </facet>
-    </feature>
-    
-    <feature name="signatory" enabled="true">
-        <parameter name="min_signatories" value="1" />
-        <parameter name="open_states" value="admissible" />
-        <facet name="draft_Clerk">
-            <allow permission="signatory.View" roles="Clerk" />
-            <allow permission="signatory.Edit" roles="Clerk" />
-            <allow permission="signatory.Add" roles="Clerk" />
-            <allow permission="signatory.Delete" roles="Clerk" />
-        </facet>
-        <facet name="draft_Owner">
-            <allow permission="signatory.View" roles="Owner" />
-            <allow permission="signatory.Edit" roles="Owner" />
-            <allow permission="signatory.Add" roles="Owner" />
-            <allow permission="signatory.Delete" roles="Owner" />
-        </facet>
-        <facet name="internal" default="true">
-            <allow permission="signatory.View" roles="Clerk Owner Signatory MP" /><!-- !+Authenticated? -->
-        </facet>
-        <facet name="internal_Owner">
-            <allow permission="signatory.View" roles="Authenticated" />
-            <allow permission="signatory.Edit" roles="Owner" />
-            <allow permission="signatory.Add" roles="Owner" />
-        </facet>
-        <facet name="internal_frozen">
-            <allow permission="signatory.View" roles="Authenticated" />
-        </facet>
-        <facet name="public_frozen">
-            <allow permission="signatory.View" roles="Anonymous" />
-        </facet>
-    </feature>
-    
+    <feature name="attachment" enabled="true" />
+    <feature name="event" enabled="true" />
+    <feature name="signatory" enabled="false" />
     <feature name="schedule" enabled="true" />
     <feature name="workspace" enabled="true" />
     <feature name="notification" enabled="false" />
-    <feature name="email" enabled="true" />
+    <feature name="email" enabled="false" />
     <feature name="download" enabled="true" />
-    
-    <feature name="group_assignment" enabled="true">
-        <facet name="all_Clerk">
-            <allow permission="group_assignment.Add" roles="Clerk" />
-            <allow permission="group_assignment.View" roles="Clerk" />
-            <allow permission="group_assignment.Edit" roles="Clerk" />
-            <allow permission="group_assignment.Delete" roles="Clerk" />
-        </facet>
-    </feature>
+    <feature name="group_assignment" enabled="true" />
     
     
     <!-- workflow facets -->
@@ -232,7 +125,6 @@
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
         <facet ref="signatory.internal_frozen" />
-        <facet ref="group_assignment.all_Clerk" />
     </state>
     
     <state id="clarification_required" title="Requires Clarification to Receive"

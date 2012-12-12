@@ -17,111 +17,15 @@
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
-    
     <!-- NOTE on Feature Facet Permissions: Sub-item permissions (apart from the
     Add permission, that is by defn unbound to an *existing* item) that are 
     allowed within a *feature facet* apply only for when the (workflowed, always)
     sub-item itself is in a permissions_from_parent="true" state. -->
-    <feature name="attachment" enabled="true">
-        <facet name="draft_Clerk">
-            <allow permission="attachment.View" roles="Clerk.HeadClerk" />
-            <allow permission="attachment.Edit" roles="Clerk.HeadClerk" />
-            <allow permission="attachment.Add" roles="Clerk.HeadClerk" />
-        </facet>
-        <facet name="draft_Owner">
-            <allow permission="attachment.View" roles="Owner" />
-            <allow permission="attachment.Edit" roles="Owner" />
-            <allow permission="attachment.Add" roles="Owner" />
-        </facet>
-        <facet name="internal">
-            <allow permission="attachment.View" roles="Authenticated" />
-            <allow permission="attachment.Edit" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-            <allow permission="attachment.Add" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-        </facet>
-        <facet name="internal_Owner">
-            <allow permission="attachment.View" roles="Authenticated" />
-            <allow permission="attachment.Edit" roles="Owner" />
-            <allow permission="attachment.Add" roles="Owner" />
-        </facet>
-        <facet name="internal_Speaker">
-            <allow permission="attachment.View" roles="Authenticated" />
-            <allow permission="attachment.Edit" roles="Speaker" />
-            <allow permission="attachment.Add" roles="Speaker" /> 
-        </facet>
-        <facet name="internal_frozen">
-            <allow permission="attachment.View" roles="Authenticated" />
-        </facet>
-        <facet name="public">
-            <allow permission="attachment.View" roles="Anonymous" />
-            <allow permission="attachment.Edit" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-            <allow permission="attachment.Add" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-        </facet>
-        <facet name="public_frozen">
-            <allow permission="attachment.View" roles="Anonymous" />
-        </facet>
-    </feature>
-    
-    <feature name="event" enabled="true">
-        <facet name="draft_Clerk">
-            <allow permission="event.View" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-            <allow permission="event.Edit" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-            <allow permission="event.Add" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-            <allow permission="event.Delete" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-        </facet>
-        <facet name="draft_Owner">
-            <allow permission="event.View" roles="Owner" />
-            <allow permission="event.Edit" roles="Owner" />
-            <allow permission="event.Add" roles="Owner" />
-            <allow permission="event.Delete" roles="Owner" />
-        </facet>
-        <facet name="internal" default="true">
-            <allow permission="event.View" roles="Authenticated" />
-            <allow permission="event.Edit" roles="Clerk.HeadClerk Clerk.QuestionClerk Speaker" />
-            <allow permission="event.Add" roles="Clerk.HeadClerk Clerk.QuestionClerk Speaker" />
-        </facet>
-        <facet name="internal_frozen">
-            <allow permission="event.View" roles="Authenticated" />
-        </facet>
-        <facet name="public">
-            <allow permission="event.View" roles="Anonymous" />
-            <allow permission="event.Edit" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-            <allow permission="event.Add" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-        </facet>
-        <facet name="public_frozen">
-            <allow permission="event.View" roles="Anonymous" />
-        </facet>
-    </feature>
-    
+    <feature name="attachment" enabled="true" />
+    <feature name="event" enabled="true" />
     <feature name="signatory" enabled="true">
         <parameter name="open_states" value="admissible" />
-        <facet name="draft_Clerk">
-            <allow permission="signatory.View" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-            <allow permission="signatory.Edit" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-            <allow permission="signatory.Add" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-            <allow permission="signatory.Delete" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-        </facet>
-        <facet name="draft_Owner">
-            <allow permission="signatory.View" roles="Owner" />
-            <allow permission="signatory.Edit" roles="Owner" />
-            <allow permission="signatory.Add" roles="Owner" />
-            <allow permission="signatory.Delete" roles="Owner" />
-        </facet>
-        <facet name="internal" default="true">
-            <allow permission="signatory.View" roles="Clerk Owner Signatory MP" /><!-- !+ Authenticated ? -->
-        </facet>
-        <facet name="internal_Owner">
-            <allow permission="signatory.View" roles="Authenticated" />
-            <allow permission="signatory.Edit" roles="Owner" />
-            <allow permission="signatory.Add" roles="Owner" />
-        </facet>
-        <facet name="internal_frozen">
-            <allow permission="signatory.View" roles="Authenticated" />
-        </facet>
-        <facet name="public_frozen">
-            <allow permission="signatory.View" roles="Anonymous" />
-        </facet>
     </feature>
-    
     <feature name="schedule" enabled="true" />
     <feature name="workspace" enabled="true" />
     <feature name="notification" enabled="true" />
@@ -130,10 +34,6 @@
     <feature name="user_assignment" enabled="true">
         <parameter name="assigner_roles" value="Clerk.HeadClerk" />
         <parameter name="assignable_roles" value="Clerk.QuestionClerk" />
-        <facet name="all_HeadClerk">
-            <allow permission="user_assignment.View" roles="Clerk.HeadClerk" />
-            <allow permission="user_assignment.Edit" roles="Clerk.HeadClerk" />
-        </facet>
     </feature>
     
     
@@ -161,6 +61,8 @@
     <facet name="edit_Clerk">
         <allow permission=".View" roles="Clerk.HeadClerk Clerk.QuestionClerk Speaker Owner Signatory" />
         <allow permission=".Edit" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
+        <allow permission="user_assignment.View" roles="Clerk.HeadClerk" />
+        <allow permission="user_assignment.Edit" roles="Clerk.HeadClerk" />
     </facet>
     <facet name="edit_Speaker">
         <allow permission=".View" roles="Clerk.HeadClerk Clerk.QuestionClerk Speaker Owner Signatory" />
@@ -242,7 +144,6 @@
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
         <facet ref="signatory.internal_frozen" />
-        <facet ref="user_assignment.all_HeadClerk" />
     </state>
     
     <state id="completed" title="Submitted to the Speaker" version="true">

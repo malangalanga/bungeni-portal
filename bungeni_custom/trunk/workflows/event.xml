@@ -10,38 +10,30 @@
     that must declare who (and in which states) has the permission '.Add'.
     -->
     
-    <!-- global grants -->
-    <allow permission=".View" roles="Owner" />
-    
+    <!-- sub-item: NO global grants -->
+        
     
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
-    
     <!-- NOTE on Feature Facet Permissions: Sub-item permissions (apart from the
     Add permission, that is by defn unbound to an *existing* item) that are 
     allowed within a *feature facet* apply only for when the (workflowed, always)
     sub-item itself is in a permissions_from_parent="true" state. -->
-    <feature name="attachment" enabled="true">
-        <facet name="draft_Owner">
-            <allow permission="attachment.View" roles="Owner" />
-            <allow permission="attachment.Edit" roles="Owner" />
-            <allow permission="attachment.Add" roles="Owner" />
-        </facet>
-        <facet name="internal">
-            <allow permission="attachment.View" roles="Authenticated" />
-            <allow permission="attachment.Edit" roles="Clerk" />
-            <allow permission="attachment.Add" roles="Clerk" />
-        </facet>
-        <facet name="internal_frozen">
-            <allow permission="attachment.View" roles="Authenticated" />
-        </facet>
-    </feature>
+    <feature name="attachment" enabled="true" />
     
     
     <!-- workflow facets -->
+    <facet name="draft_Clerk">
+        <allow permission=".View" roles="Clerk" />
+        <allow permission=".Edit" roles="Clerk" />
+        <allow permission=".Add" roles="Clerk" />
+        <allow permission=".Delete" roles="Clerk" />
+    </facet>
     <facet name="draft_Owner">
+        <allow permission=".View" roles="Owner" />
         <allow permission=".Edit" roles="Owner" />
+        <allow permission=".Add" roles="Owner" />
         <allow permission=".Delete" roles="Owner" />
     </facet>
     <facet name="internal" default="true">
