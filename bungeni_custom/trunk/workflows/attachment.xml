@@ -33,14 +33,16 @@
         <allow permission=".Edit" roles="Owner" />
         <allow permission=".Add" roles="Owner" />
     </facet>
-    <facet name="internal_Speaker">
-        <allow permission=".View" roles="Authenticated" />
-        <allow permission=".Edit" roles="Speaker" />
-        <allow permission=".Add" roles="Speaker" /> 
-    </facet>
-    <facet name="internal">
+    <facet name="internal" default="true" note="
+            By default, Clerk and Speaker offices may add/edit any and all 
+            attachments, even if the attachment was not created (owned) by 
+            them. Should finer distinctions be needed e.g. allowing editing by
+            an office/mp only attachments that they originally created (own) 
+            then the permission granting shoudl be Owner based.
+        ">
         <allow permission=".View" roles="Authenticated" />
         <allow permission=".Edit" roles="Clerk Speaker" />
+        <allow permission=".Add" roles="Clerk Speaker" />
     </facet>
     <facet name="internal_frozen">
         <allow permission=".View" roles="Authenticated" />

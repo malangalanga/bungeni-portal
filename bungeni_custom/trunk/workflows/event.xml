@@ -16,14 +16,19 @@
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
-    <!-- NOTE on Feature Facet Permissions: Sub-item permissions (apart from the
-    Add permission, that is by defn unbound to an *existing* item) that are 
-    allowed within a *feature facet* apply only for when the (workflowed, always)
-    sub-item itself is in a permissions_from_parent="true" state. -->
     <feature name="attachment" enabled="true" />
     
     
     <!-- workflow facets -->
+    <!-- 
+    NOTE on "feature" sub-item facet permissions: 
+    Feature sub-item permissions (apart from theAdd permission, that is by 
+    definitiion NOT bound to an *existing* sub-item) that are allowed within 
+    a *facet* apply only for when:
+    - the parent doc is in a state that uses this same facet
+    - the "feature" sub-item (that is always worklfowed) itself is in a 
+      state that sets permissions_from_parent="true". 
+    -->
     <facet name="draft_Clerk">
         <allow permission=".View" roles="Clerk" />
         <allow permission=".Edit" roles="Clerk" />
@@ -39,7 +44,7 @@
     <facet name="internal" default="true">
         <allow permission=".View" roles="Authenticated" />
         <allow permission=".Edit" roles="Clerk Speaker" />
-        <allow permission=".Add" roles="Clerk Speaker" /><!-- on parent (when permissions_from_parent) -->
+        <allow permission=".Add" roles="Clerk Speaker" />
     </facet>
     <facet name="internal_frozen">
         <allow permission=".View" roles="Authenticated" />
@@ -47,7 +52,7 @@
     <facet name="public">
         <allow permission=".View" roles="Anonymous" />
         <allow permission=".Edit" roles="Clerk" />
-        <allow permission=".Add" roles="Clerk" /><!-- on parent (when permissions_from_parent) -->
+        <allow permission=".Add" roles="Clerk" />
     </facet>
     <facet name="public_frozen">
         <allow permission=".View" roles="Anonymous" />
