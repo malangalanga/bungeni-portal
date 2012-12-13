@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in
+remove|purge)
+
+		echo "Attemting to remove bungeni bungeni update."
+		echo "Note: Unistalling this update will not undo changes that had already been implemented during installation."
+		sleep 2
+    ;;
+*)
+
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
+
+exit 0
