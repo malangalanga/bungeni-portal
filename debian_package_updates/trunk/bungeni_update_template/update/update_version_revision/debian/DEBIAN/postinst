@@ -4,22 +4,47 @@ set -e
 
 case "$1" in
 configure)
-
-	echo "Removing bungeni post remove scritpt"	
-	rm /var/lib/dpkg/info/bungeni.postrm
-	echo "Renaming bungeni.postrm-1 to bungeni.postrm"
-	mv /var/lib/dpkg/info/bungeni-update.postrm-1 /var/lib/dpkg/info/bungeni.postrm
+		
+	LATEST=$(ls /opt/bungeni/updates/latest | grep bungeni-update | cut -d'.' -f -2)
+        #VERSION=$(echo $LATEST | cut -c 16-)
+        #OUTDATED="bungeni-outdate-${VERSION}"
 	
-	echo "Replacing supervisor"
-	OLD_DATE=$(date +"%Y-%m-%d_%H-%M-%S")
-	mv /opt/bungeni/bungeni_apps/config/supervisord.conf /opt/bungeni/bungeni_apps/config/supervisord.conf.old-$OLD_DATE
-	mv /opt/bungeni/bungeni_apps/config/supervisord.conf.update /opt/bungeni/bungeni_apps/config/supervisord.conf
-
-	echo "Returning ownership of supervisor configuration file to bungeni"
-	chown -Rf bungeni:bungeni /opt/bungeni/bungeni_apps/config/*
-	chown root:root /var/lib/dpkg/info/bungeni*
+	echo "Changing latest folder update name"
+	mv /opt/bungeni/updates/latest /opt/bungeni/updates/$LATEST
+        
+	#UNECESSARY
+        #echo "Creating outdate list"
+        #cat /opt/bungeni/updates/$LATEST/common.list /opt/bungeni/updates/$LATEST/exclude.list > /opt/bungeni/updates/$LATEST/outdate.list
+        
+        #echo "Creating outdate files list"
+        #for j in $(cat /opt/bungeni/updates/$LATEST/outdate.list)
+        #do 
+        #    if [ ! -d "$j" ]
+        #    then
+        #        echo $j >> /opt/bungeni/updates/$LATEST/outdated_files.list
+        #    fi
+        #done		
 	
-	./var/lib/dpkg/info/bungeni.prerm upgrade "1.2+10165-2012-11-25"
+	#echo "Create outdated tar file"
+	#tar cf /opt/bungeni/updates/$LATEST/$OUTDATED.tar.gz -l /opt/bungeni/updates/$LATEST/outdated_files.list
+		
+	echo "Extracting from update archive"	
+	tar -C / -zxf /opt/bungeni/updates/$LATEST/$LATEST.tar.gz
+	
+	echo "Creating latest update list"
+	cat /opt/bungeni/updates/$LATEST/common.list /opt/bungeni/updates/$LATEST/include.list > /var/lib/dpkg/info/$LATEST.list
+	find /opt/bungeni/updates/$LATEST/ >> /var/lib/dpkg/info/$LATEST.list
+	
+	echo "Creating latest update md5sums"
+	for i in $(cat /var/lib/dpkg/info/$LATEST.list)
+	do 
+		if [ ! -d "$i" ]
+		then
+			echo $i >> /opt/bungeni/updates/$LATEST/files.list
+		fi
+	done
+	
+	cat /opt/bungeni/updates/$LATEST/files.list | xargs md5sum > /var/lib/dpkg/info/$LATEST.md5sums
     ;;
 *)
         echo "prerm called with unknown argument \`$1'" >&2

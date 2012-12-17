@@ -14,7 +14,7 @@ HOME_PAGE=$(getproperty update.ini home)
 DESCR=$(getproperty update.ini description)
 DATE=$(getdate)
 ARCH_TYPE=$(getarchtype)
-RELEASE_NAME="${PACKAGE_NAME}_${VERSION}_${DATE}"
+RELEASE_NAME="${PACKAGE_NAME}-${VERSION}-${DATE}"
 PACK_HOME=`pwd`/update
 SIZE=0
 
@@ -23,22 +23,27 @@ ZIP_FILE="${RELEASE_NAME}.tar.gz"
 logger.printTask "Setting up debian package folder."
 cd $PACK_HOME
 cp -R update_version_revision $RELEASE_NAME
+cp ../common.diff $PACK_HOME/$RELEASE_NAME/debian/opt/bungeni/updates/latest/common.list
+cp ../exclude.diff $PACK_HOME/$RELEASE_NAME/debian/opt/bungeni/updates/latest/exclude.list
+cp ../include.diff $PACK_HOME/$RELEASE_NAME/debian/opt/bungeni/updates/latest/include.list
+
 rm -rf `find ./${RELEASE_NAME} -type d -name .svn`
 
 logger.printTask "Zipping update files."
 cat ../common.diff ../include.diff > $RELEASE_NAME.include
-cd ../latest/data
-tar -czf $PACK_HOME/$ZIP_FILE -T $PACK_HOME/$RELEASE_NAME.include
-cd $PACK_HOME
-tar xf $ZIP_FILE --directory=./$RELEASE_NAME/debian
+sed -i "s|/opt/|../latest/data/opt/|g" $RELEASE_NAME.include
+#cd ../latest/data
+tar --transform 's,latest/data/opt/,opt/,' -czf $ZIP_FILE -T $RELEASE_NAME.include
+
+mv $ZIP_FILE $RELEASE_NAME/debian/opt/bungeni/updates/latest
 
 logger.printTask "Creating control file."
-sed -i "s/__PACKAGE_NAME__/${PACKAGE_NAME}/g" ./$RELEASE_NAME/debian/DEBIAN/control
+sed -i "s/__PACKAGE_NAME__/${RELEASE_NAME}/g" ./$RELEASE_NAME/debian/DEBIAN/control
 sed -i "s/__ARCH__/${ARCH_TYPE}/g" ./$RELEASE_NAME/debian/DEBIAN/control
 sed -i "s/__SIZE__/${SIZE}/g" ./$RELEASE_NAME/debian/DEBIAN/control
-sed -i "s/__VERSION__/${VERSION}/g" ./$RELEASE_NAME/debian/DEBIAN/control
+sed -i "s/__VERSION__/${VERSION}-${DATE}/g" ./$RELEASE_NAME/debian/DEBIAN/control
 sed -i "s/__DEPENDS__/${DEPENDS}/g" ./$RELEASE_NAME/debian/DEBIAN/control
 
-cd $RELEASE_NAME && ./run.sh $ARCHTYPE
+cd $RELEASE_NAME && ./run.sh $ARCH_TYPE
 
 
