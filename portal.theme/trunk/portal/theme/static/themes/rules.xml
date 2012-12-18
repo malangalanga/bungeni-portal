@@ -17,6 +17,7 @@
     <match environ="QUERY_STRING: wildcard:headless=*" abort="1" />      
     <match environ="QUERY_STRING: wildcard:transition_id=*" abort="1" />     
     <match path="regex:.*/(popup_change_workflow_state)$" abort="1" />
+    <match path="regex:.*/(popout)$" abort="1" />
     <match path="/plone/" class="load-plone-navigation" />
     <match path="/exist/" class="load-exist-navigation" />    
     <match path="regex:^/(workspace|business|members|archive|admin)/?"
