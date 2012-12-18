@@ -1,0 +1,38 @@
+Bungeni Debian Packager
+=======================
+Make sure you have installed bungeni in /opt/bungeni all relevant 
+values is set in the deb.ini. There is no particular order to run the scripts.
+
+1) sudo ./bungeni.sh <version>
+2) ./portal.sh
+3) ./plone.sh
+4) sudo ./postgresql.sh <version> 
+5) ./exist.sh <release>
+
+Note the use of sudo in some scripts is required inorder to enable
+packaging of some data files that normal users do not have privileges to.
+
+To build all packages run:
+
+6) sudo ./build_all.sh
+
+The prepare_userenv.sh script helps you set up bungeni enviroment i.e 
+it creates the bungeni user and home if you do not have it set 
+up in /opt/bungeni already.
+
+7) ./prepare_userenv.sh
+
+The *.include and *.exclude files have paths that enable their respective packaging 
+scripts to determine which files to package and which ones not to package.
+
+Within the packaging scripts respective folders where the *.tar.gz files are generated you'll find
+find prepare_debpackfolder.sh this enables a person to generate a debian package from
+a prebuilt archive.
+
+8) ./prepare_debpackfolder.sh <release name> <pre-built.tar.gz> <architecture type>
+
+*NOTE*: The packager assume generation of one debian package of an application daily so any
+regenerated debian packages within that day will be overwritten. All debian packages 
+are deposited in the packagers root folder.
+
+
