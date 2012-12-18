@@ -11,7 +11,7 @@
     >
     
     <!-- global grants -->
-    <allow permission=".Add" roles="Clerk.HeadClerk Clerk.QuestionClerk MP" />
+    <allow permission=".Add" roles="Clerk.HeadClerk MP" />
     
     
     <!-- features -->
@@ -61,7 +61,7 @@
     <facet name="edit_Clerk">
         <allow permission=".View" roles="Clerk.HeadClerk Clerk.QuestionClerk Speaker Owner Signatory" />
         <allow permission=".Edit" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-        <allow permission="user_assignment.View" roles="Clerk.HeadClerk" />
+        <allow permission="user_assignment.View" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
         <allow permission="user_assignment.Edit" roles="Clerk.HeadClerk" />
     </facet>
     <facet name="edit_Speaker">
