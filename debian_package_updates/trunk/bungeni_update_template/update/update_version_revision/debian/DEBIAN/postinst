@@ -1,4 +1,20 @@
 #!/bin/sh
+#===============================================================================
+#
+#          FILE:  postinst
+#
+#   DESCRIPTION:  Update post install script
+#
+#       OPTIONS:  configure
+#          BUGS:  ---
+#         NOTES:  ---
+#  DEPENDENCIES:  	
+#        AUTHOR:  Samuel Weru, samweru@gmail.com
+#       COMPANY:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
 
 set -e
 
@@ -6,27 +22,9 @@ case "$1" in
 configure)
 		
 	LATEST=$(ls /opt/bungeni/updates/latest | grep bungeni-update | cut -d'.' -f -2)
-        #VERSION=$(echo $LATEST | cut -c 16-)
-        #OUTDATED="bungeni-outdate-${VERSION}"
 	
 	echo "Changing latest folder update name"
 	mv /opt/bungeni/updates/latest /opt/bungeni/updates/$LATEST
-        
-	#UNECESSARY
-        #echo "Creating outdate list"
-        #cat /opt/bungeni/updates/$LATEST/common.list /opt/bungeni/updates/$LATEST/exclude.list > /opt/bungeni/updates/$LATEST/outdate.list
-        
-        #echo "Creating outdate files list"
-        #for j in $(cat /opt/bungeni/updates/$LATEST/outdate.list)
-        #do 
-        #    if [ ! -d "$j" ]
-        #    then
-        #        echo $j >> /opt/bungeni/updates/$LATEST/outdated_files.list
-        #    fi
-        #done		
-	
-	#echo "Create outdated tar file"
-	#tar cf /opt/bungeni/updates/$LATEST/$OUTDATED.tar.gz -l /opt/bungeni/updates/$LATEST/outdated_files.list
 		
 	echo "Extracting from update archive"	
 	tar -C / -zxf /opt/bungeni/updates/$LATEST/$LATEST.tar.gz

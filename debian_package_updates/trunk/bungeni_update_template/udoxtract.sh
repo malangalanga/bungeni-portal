@@ -1,4 +1,24 @@
 #!/bin/bash
+#===============================================================================
+#
+#          FILE:  udoxtract.sh
+#
+#         USAGE:  ./udoxtract.sh
+#
+#   DESCRIPTION:  Extracts latest and previous debian packages into ctrl and
+#                 data folders
+#
+#       OPTIONS:  ---
+#  REQUIREMENTS:  Place latest and previous debian package releases in thier 
+# 				  respective folders
+#          BUGS:  ---
+#         NOTES:  ---
+#        AUTHOR:  Samuel Weru, samweru@gmail.com
+#       COMPANY:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
 
 mkdir -p previous/ctrl
 mkdir -p latest/ctrl

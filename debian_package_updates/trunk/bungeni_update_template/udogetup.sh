@@ -1,6 +1,25 @@
 #!/bin/bash
-
-#set -v
+#===============================================================================
+#
+#          FILE:  udoget.sh
+#
+#         USAGE:  ./udoget.sh
+#
+#   DESCRIPTION:  Generates update debian package	
+#
+#       OPTIONS:  ---
+#  REQUIREMENTS:  previous and latest releases extracted using udoxtract.sh and
+#				  udodiff.sh done to generate common.diff, include.diff and 
+#   			  exclude.diff in that order
+#  DEPENDENCIES:  _bashtasklog.sh, _debpackfunctions.sh
+#          BUGS:  ---
+#         NOTES:  ---
+#        AUTHOR:  Samuel Weru, samweru@gmail.com
+#       COMPANY:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
 
 . _bashtasklog.sh
 . _debpackfunctions.sh

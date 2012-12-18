@@ -1,3 +1,23 @@
+#!/bin/bash
+#===============================================================================
+#
+#          FILE:  run.sh
+#
+#         USAGE:  ./run.sh
+#
+#   DESCRIPTION:  Clean out generated content from update folder
+#
+#       OPTIONS:  ---
+#          BUGS:  ---
+#         NOTES:  ---
+#  DEPENDENCIES:  _bashtasklog.sh, _debpackfunctions.sh		
+#        AUTHOR:  Ashok Hariharan, ashok@parliaments.info | Samuel Weru, samweru@gmail.com
+#       COMPANY:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
+
 . ../../_bashtasklog.sh
 . ../../_debpackfunctions.sh
 
