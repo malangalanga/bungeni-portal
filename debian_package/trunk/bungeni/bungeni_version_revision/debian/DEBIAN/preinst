@@ -1,11 +1,30 @@
-#!/bin/sh
+#!/bin/bash
+#===============================================================================
+#
+#          FILE:  preinst
+#
+#
+#   DESCRIPTION:  Creates bungeni temporary directory 		
+#
+#       OPTIONS:  install
+#          BUGS:  ---
+#         NOTES:  ---
+#
+#       AUTHORS:  Ashok Hariharan <ashok@parliaments.info>
+#				  Samuel Weru <samweru@gmail.com>
+#
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
 
 set -e
 
 case "$1" in
 install)
 
-	echo "Creating directory structure"
+	echo "Preparing bungeni for installation..."
 	mkdir -p /opt/bungeni/.bungenitmp
     ;;
 *)

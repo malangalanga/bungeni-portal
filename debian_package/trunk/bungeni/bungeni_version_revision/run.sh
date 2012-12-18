@@ -1,3 +1,24 @@
+#! /bin/bash -e
+#===============================================================================
+#
+#          FILE:  run.sh
+#
+#         USAGE:  ./run.sh <archtype>
+#
+#   DESCRIPTION:  Generate bungeni md5 hashes and bungeni debian package 
+#
+#          BUGS:  ---
+#         NOTES:  ---
+#
+#  DEPENDENCIES:  _bashtasklog.sh, _debpackfunctions.sh
+#       AUTHORS:  Ashok Hariharan <ashok@parliaments.info>
+#                 Samuel Weru <samweru@gmail.com>  
+#
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
 
 . ../../_bashtasklog.sh
 . ../../_debpackfunctions.sh

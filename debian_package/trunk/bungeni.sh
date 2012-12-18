@@ -1,4 +1,28 @@
 #!/bin/bash
+#===============================================================================
+#
+#          FILE:  bungeni.sh
+#
+#         USAGE:  sudo ./bungeni.sh <version>
+#
+#   DESCRIPTION:  Creates bungeni debian package
+#
+#  REQUIREMENTS:  Run as sudo user		
+#
+#       OPTIONS:  ---
+#          BUGS:  ---
+#         NOTES:  ---
+#  DEPENDENCIES:  _bashtasklog.sh, _debpackfunctions.sh	
+#				  bungeni/prepare_debpackfolder.sh	
+
+#       AUTHORS:  Ashok Hariharan <ashok@parliaments.info>
+#				  Samuel Weru <samweru@gmail.com>
+
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
 
 . _bashtasklog.sh
 . _debpackfunctions.sh

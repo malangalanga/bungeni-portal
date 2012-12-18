@@ -1,4 +1,24 @@
 #!/bin/bash
+#===============================================================================
+#
+#          FILE:  prepare_debpackfolder.sh
+#
+#         USAGE:  ./prepare_debpackfolder.sh <release name> <pre-built-postgres.tar.gz> <arch>
+#
+#   DESCRIPTION:  Generate postgresql control file and debian package 
+#
+#          BUGS:  ---
+#         NOTES:  ---
+#
+#  DEPENDENCIES:  _bashtasklog.sh, _debpackfunctions.sh, ${POSTGRESQL_REL_FOLDER}/run.sh
+#       AUTHORS:  Ashok Hariharan <ashok@parliaments.info>
+#                 Samuel Weru <samweru@gmail.com>  
+#
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
 
 . ../_bashtasklog.sh
 . ../_debpackfunctions.sh

@@ -1,9 +1,30 @@
 #!/bin/bash
+#===============================================================================
+#
+#          FILE:  postgresql.sh 
+#
+#         USAGE:  sudo ./postgresql.sh <version>
+#
+#   DESCRIPTION:  Creates postgresql debian package
+#	
+#  REQUIREMENTS:  Run as sudo user
+#       OPTIONS:  ---
+#          BUGS:  ---
+#         NOTES:  ---
+#  DEPENDENCIES:  _bashtasklog.sh, _debpackfunctions.sh	
+#				  postgresql/prepare_debpackfolder.sh	
+
+#       AUTHORS:  Ashok Hariharan <ashok@parliaments.info>
+#				  Samuel Weru <samweru@gmail.com>
+
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
 
 . _bashtasklog.sh
 . _debpackfunctions.sh
-
-#set -x
 
 EXPECTED_ARGS=1
 

@@ -1,4 +1,27 @@
 #!/bin/bash
+#===============================================================================
+#
+#          FILE:  portal.sh
+#
+#         USAGE:  ./portal.sh
+#
+#   DESCRIPTION:  Creates portal debian package
+#	
+#
+#       OPTIONS:  ---
+#          BUGS:  ---
+#         NOTES:  ---
+#  DEPENDENCIES:  _bashtasklog.sh, _debpackfunctions.sh	
+#				  portal/prepare_debpackfolder.sh	
+
+#       AUTHORS:  Ashok Hariharan <ashok@parliaments.info>
+#				  Samuel Weru <samweru@gmail.com>
+
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
 
 . _bashtasklog.sh
 . _debpackfunctions.sh

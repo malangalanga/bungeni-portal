@@ -1,4 +1,28 @@
 #!/bin/bash
+#===============================================================================
+#
+#          FILE:  build_all.sh
+#
+#         USAGE:  sudo ./build_all.sh
+#
+#   DESCRIPTION:  Builds all bungeni debian packages (bungeni, postgresql, plone, portal, exist-db)
+#				  gets initialization values from deb.ini file.
+#
+#  REQUIREMENTS:  Run as sudo user		
+#
+#       OPTIONS:  ---
+#          BUGS:  ---
+#         NOTES:  ---
+#  DEPENDENCIES:  _bashtasklog.sh, _debpackfunctions.sh		
+#
+#       AUTHORS:  Ashok Hariharan <ashok@parliaments.info>
+#				  Samuel Weru <samweru@gmail.com>
+#
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
 
 . _bashtasklog.sh
 . _debpackfunctions.sh

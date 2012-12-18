@@ -1,6 +1,23 @@
-#!/bin/sh
-
-set -e
+#!/bin/bash
+#===============================================================================
+#
+#          FILE:  postinst
+#
+#
+#   DESCRIPTION:  Portal postinstall script, sets ownership of portal folder to bungeni user	
+#
+#       OPTIONS:  configure, abort-upgrade, abort-remove, abort-deconfigure
+#          BUGS:  ---
+#         NOTES:  ---
+#
+#       AUTHORS:  Ashok Hariharan <ashok@parliaments.info>
+#				  Samuel Weru <samweru@gmail.com>
+#
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
 
 case "$1" in
     configure)

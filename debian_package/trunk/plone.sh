@@ -1,4 +1,27 @@
 #!/bin/bash
+#===============================================================================
+#
+#          FILE:  plone.sh
+#
+#         USAGE:  ./plone.sh
+#
+#   DESCRIPTION:  Creates plone debian package
+#	
+#
+#       OPTIONS:  ---
+#          BUGS:  ---
+#         NOTES:  ---
+#  DEPENDENCIES:  _bashtasklog.sh, _debpackfunctions.sh	
+#				  plone/prepare_debpackfolder.sh	
+
+#       AUTHORS:  Ashok Hariharan <ashok@parliaments.info>
+#				  Samuel Weru <samweru@gmail.com>
+
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
 
 . _bashtasklog.sh
 . _debpackfunctions.sh

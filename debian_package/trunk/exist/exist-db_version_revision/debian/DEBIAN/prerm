@@ -1,4 +1,22 @@
-#!/bin/sh
+#!/bin/sh -e
+#===============================================================================
+#
+#          FILE:  postrm
+#
+#	DESCRIPTION:  Kill erlang epmd service; stop bungeni service
+#
+#       OPTIONS:  remove, purge
+#          BUGS:  ---
+#         NOTES:  ---
+#
+#       AUTHORS:  Ashok Hariharan <ashok@parliaments.info>
+#				  Samuel Weru <samweru@gmail.com>
+#
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
 
 case "$1" in
 remove|purge)

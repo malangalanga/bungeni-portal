@@ -1,6 +1,22 @@
-#!/bin/sh
-
-set -e
+#!/bin/sh -e
+#===============================================================================
+#
+#          FILE:  postrm
+#
+#					
+#
+#       OPTIONS:  purge, remove, upgrade, failed-upgrade, abort-install, abort-upgrade, disappear
+#          BUGS:  ---
+#         NOTES:  ---
+#
+#       AUTHORS:  Ashok Hariharan <ashok@parliaments.info>
+#				  Samuel Weru <samweru@gmail.com>
+#
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
 
 case "$1" in
 	purge)

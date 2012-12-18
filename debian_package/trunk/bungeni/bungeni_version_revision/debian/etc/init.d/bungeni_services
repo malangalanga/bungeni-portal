@@ -1,4 +1,23 @@
 #! /bin/bash -e
+#===============================================================================
+#
+#          FILE:  bungeni_services
+#
+#         USAGE:  sudo service bungeni_services <action>
+#
+#   DESCRIPTION:  Manipulation of bungeni services
+#
+#       OPTIONS:  start, stop, reload, force-reload, restart
+#          BUGS:  ---
+#         NOTES:  ---
+#
+#       AUTHORS:  Ashok Hariharan <ashok@parliaments.info>
+#
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
 
 SUPERVISORD=/opt/bungeni/bungeni_apps/python27/bin/supervisord
 PIDFILE=/opt/bungeni/bungeni_apps/pid/supervisord.pid
