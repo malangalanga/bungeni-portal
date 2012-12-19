@@ -1,7 +1,14 @@
 <?xml version="1.0"?>
 <ui roles="CommitteeMember Minister Owner Clerk.HeadClerk Signatory Anonymous MP Authenticated Speaker PoliticalGroupMember Admin Government Clerk.QuestionClerk Translator Clerk">
-
-    <descriptor name="agenda_item" archetype="doc" order="10">
+    
+    <descriptor name="agenda_item" archetype="doc" order="10"
+        note="
+            !+AgendaItem(mr, dec-2012) should either not be a custom type or else
+            the various assumptions made application-side assumptions e.g. is always 
+            created in a committee context and not in workspace add, must be 
+            formulated and migrated out to configuration.
+        "
+        >
         <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
             <show modes="add view edit listing" />
         </field>
@@ -29,6 +36,22 @@
         <field name="owner_id" label="Moved by" description="Select the user who moved the document" required="true" value_type="member" render_type="single_select" vocabulary="parliament_member_delegation">
             <show modes="add edit" />
             <hide modes="view listing" roles="Anonymous" />
+        </field>
+        <field name="group_id" label="Committee" required="false" value_type="group" render_type="single_select" vocabulary="committee"
+            note="
+                !+AgendaItem_group(mr, dec-2012) am exposing the group field to
+                UI but making it modifiable only by Admin (but visible by everyone).
+                
+                The intention of the logic (currently an application-side assumption)
+                for AgendaItems is that they are ALWAYS created in a committee context
+                and that committee is what is automatically set as the group.
+                
+                This change also alleviates the need to include the group.short_name
+                as part of the DC title for an AgendaItem.
+            "
+            >
+            <show modes="edit add" roles="Admin"/>
+            <show modes="view listing" />
         </field>
         <field name="registry_number" label="Registry Number" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
