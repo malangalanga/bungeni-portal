@@ -25,7 +25,7 @@ case "$1" in
     configure)
 
 		echo "setting postgresql ownership to bungeni user"
-		chown -R bungeni:bungeni /opt/bungeni/bungeni_apps/postgres* /opt/bungeni/bungeni_apps/logs/postgres*
+		chown -R bungeni:bungeni /opt/bungeni/bungeni_apps/postgres*
     ;;
     abort-upgrade|abort-remove|abort-deconfigure)
 		exit 0
