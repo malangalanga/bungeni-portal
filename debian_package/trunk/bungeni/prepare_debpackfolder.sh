@@ -58,7 +58,6 @@ BUNGENI_SIZE=$(getsize ../bungeni.include ../bungeni.exclude)
 
 logger.printTask "[Bungeni] Setting debian package folder."
 cp -R bungeni_version_revision $BUNGENI_REL_FOLDER
-find ./$BUNGENI_REL_FOLDER -name '.svn' -print0 | xargs -0 rm -rf
 
 logger.printTask "[Bungeni] Setting verion in control file."
 sed -i "s/__BUNGENI_VER__/${BUNGENI_REL}/g" ./$BUNGENI_REL_FOLDER/debian/DEBIAN/control
@@ -71,6 +70,12 @@ printf "\n\n"
 {
 	tar xf $BUNGENI_TAR --directory=./$BUNGENI_REL_FOLDER/debian
 	} >> /dev/null
+	
+logger.printTask "[Bungeni] Clean out development files.."
+printf "\n\n"
+{
+	find $BUNGENI_REL_FOLDER \( -name "*.svn" -or -name "*.tmp" -or -name "*.pyc" -or -name "*.pyo" -or -name "*.log" \) -exec rm -rf {} \;
+	} > /dev/null 2>&1 
 
 logger.printTask "[Bungeni] Now run will attempt to execute run.sh in the ${BUNGENI_REL_FOLDER}"
 printf "\n"

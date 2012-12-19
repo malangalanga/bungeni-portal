@@ -50,7 +50,6 @@ PLONE_SIZE=$(getsize ../plone.include ../plone.exclude)
 
 logger.printTask "[Plone] Setting up debian package folder."
 cp -R plone_version_revision $PLONE_REL_FOLDER
-find ./$PLONE_REL_FOLDER -name '.svn' -print0 | xargs -0 rm -rf
 
 logger.printTask "[Plone] Setting version in control file."
 sed -i "s/__PLONE_VER__/${PLONE_REL}/g" ./$PLONE_REL_FOLDER/debian/DEBIAN/control
@@ -62,6 +61,12 @@ printf "\n\n"
 {
    tar xf $PLONE_TAR --directory=./$PLONE_REL_FOLDER/debian
    } >> /dev/null
+   
+logger.printTask "[Plone] Clean out development files.."
+printf "\n\n"
+{
+	find $PLONE_REL_FOLDER -name "*.svn" -exec rm -rf {} \;
+	} > /dev/null 2>&1 
 
 logger.printTask "[Plone] Now run will attempt to execute run.sh in the ${PLONE_REL_FOLDER}"
 printf "\n"

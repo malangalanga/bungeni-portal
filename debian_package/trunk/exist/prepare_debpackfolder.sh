@@ -50,7 +50,6 @@ EXIST_SIZE=$(getsize ../exist.include ../exist.exclude)
 
 logger.printTask "[ExistDb] Setting up debian package folder."
 cp -R exist-db_version_revision $EXIST_REL_FOLDER
-rm -rf `find ./${EXIST_REL_FOLDER} -type d -name .svn`
 
 logger.printTask "[ExistDb] Setting version in control file."
 sed -i "s/__EXIST_VER__/${EXIST_REL}/g" ./$EXIST_REL_FOLDER/debian/DEBIAN/control
@@ -62,6 +61,12 @@ printf "\n\n"
 {
 	tar xf $EXIST_TAR --directory=./$EXIST_REL_FOLDER/debian
 	} >> /dev/null
+	
+logger.printTask "[ExistDb] Clean out development files.."
+printf "\n\n"
+{
+	find $EXIST_REL_FOLDER \( -name "*.svn" -or -name "*.tmp" -or -name "*.lock" -or -name "*.lck" -or -name "*.log" \) -exec rm -rf {} \;
+	} > /dev/null 2>&1 
 
 logger.printTask "[ExistDb] Now run will attempt to execute run.sh in the ${EXIST_REL_FOLDER}"
 printf "\n"

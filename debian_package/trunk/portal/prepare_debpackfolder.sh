@@ -50,7 +50,6 @@ PORTAL_SIZE=$(getsize ../portal.include ../portal.exclude)
 
 logger.printTask "[Portal] Setting up debian package..."
 cp -R portal_version_revision $PORTAL_REL_FOLDER
-find ./$PORTAL_REL_FOLDER/ -name '.svn' -print0 | xargs -0 rm -rf 
 
 logger.printTask "[Portal] Setting version control info."
 sed -i "s/__PORTAL_VER__/${PORTAL_REL}/g" ./$PORTAL_REL_FOLDER/debian/DEBIAN/control
@@ -62,6 +61,12 @@ printf "\n\n"
 {
    tar xf $PORTAL_TAR --directory=./$PORTAL_REL_FOLDER/debian
    } >> /dev/null
+   
+logger.printTask "[Portal] Clean out development files.."
+printf "\n\n"
+{
+	find $PORTAL_REL_FOLDER -name "*.svn" -exec rm -rf {} \;
+	} > /dev/null 2>&1 
 
 logger.printTask "[Portal] Now run will attempt to execute run.sh in the ${PORTAL_REL_FOLDER}"
 printf "\n"
