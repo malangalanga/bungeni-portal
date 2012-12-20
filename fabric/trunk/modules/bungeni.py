@@ -402,7 +402,7 @@ class BungeniConfigs:
             + "/scripts/upd-dbdump.sh"
         #custom 
         self.bungeni_custom_pth = "bungeni_custom.pth"
-        self.custom_folder = self.cfg.get_config("custom",
+        self.custom_folder = self.user_install_root + "/" + self.cfg.get_config("custom",
                 "folder")
         self.enabled_translations = self.cfg.get_config("custom",
                 "enabled_translations").split(":")
@@ -2132,14 +2132,19 @@ class CustomTasks:
         # do something here
         self.cfg = BungeniConfigs()
 
-
     def switch_bungeni_custom(self):
+        run("mkdir -p %s" % self.cfg.custom_folder)    
         with cd(self.cfg.user_bungeni):
             run("mkdir -p %s" % self.cfg.custom_folder)
-            run("cp -R ./src/bungeni_custom/* %s" % self.cfg.custom_folder)
-            with cd(self.cfg.custom_folder):
-                run("find . -name '*.svn' -print0 | xargs -0 rm -rf ")
-            run("echo `pwd` > %s " % self.cfg.bungeni_custom_pth)
+            run("cp -R ./src/bungeni_custom %s" % self.cfg.custom_folder)
+        with cd(self.cfg.custom_folder):
+           run("find ./bungeni_custom -name '*.svn' -print0 | xargs -0 rm -rf ")
+           run(
+              "echo `pwd` > %(user_bungeni)s/%(custom_pth)s " % {
+                "user_bungeni" : self.cfg.user_bungeni, 
+                "custom_pth": self.cfg.bungeni_custom_pth
+             }
+           )
 
     
     def enable_demo_theme(self):
