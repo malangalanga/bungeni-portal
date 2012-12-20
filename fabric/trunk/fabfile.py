@@ -108,6 +108,8 @@ def bungeni_install():
     tasks.build()
     # setup-database
     tasks.setupdb()
+    # switch bungeni custom
+    switch_bungeni_custom()
 
 
 def bungeni_local_config():
