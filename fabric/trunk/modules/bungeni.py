@@ -2272,8 +2272,7 @@ class PostgresTasks:
              "postgres_data":self.cfg.user_postgres_data,
             }
          )
-
-	run("sed -i '$a\ max_prepared_transactions = 12' %(postgres_data)s/postgresql.conf" % {"postgres_data":self.cfg.user_postgres_data})
+	    run("sed -i '$a\ max_prepared_transactions = 12' %(postgres_data)s/postgresql.conf" % {"postgres_data":self.cfg.user_postgres_data})
     
     
     def ctl_options(self):
