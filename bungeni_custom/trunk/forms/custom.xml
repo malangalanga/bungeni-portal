@@ -138,7 +138,10 @@
         <field name="publication_date" label="Publication Date" required="false" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="short_title" label="Statement of Purpose" required="true" value_type="text" render_type="text_line">
+        <field name="short_title" label="Statement of Purpose" required="true" 
+                value_type="text" render_type="text_line"
+                extended="translated_text"
+            >
             <show modes="view edit add listing" />
         </field>
         <field name="group_id" label="Ministry" required="false" value_type="group" render_type="single_select" vocabulary="ministry">
@@ -227,7 +230,10 @@
     </descriptor>
     
     <descriptor name="question" archetype="doc" order="13">
-        <field name="response_text" label="Response" required="false" value_type="text" render_type="rich_text">
+        <field name="response_text" label="Response" required="false" 
+                value_type="text" render_type="rich_text" 
+                extended="translated_text"
+            >
             <show modes="view edit" />
             <!-- !+DECL roles="Minister" -->
         </field>
@@ -245,7 +251,12 @@
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="response_type" label="Response Type" description="Choose the type of response expected for this question" required="false" value_type="vocabulary" render_type="single_select" vocabulary="response_type">
+        <field name="response_type" label="Response Type" 
+                description="Choose the type of response expected for this question" 
+                required="false"
+                value_type="vocabulary" render_type="single_select" vocabulary="response_type"
+                extended="text"
+            >
             <show modes="view edit add listing" />
         </field>
         <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
