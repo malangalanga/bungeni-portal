@@ -1,0 +1,31 @@
+#!/bin/bash
+#===============================================================================
+#
+#          FILE:  mv_2_dist.sh
+#
+#         USAGE:  ./mv_2_dist.sh <debian packager folder> <dev>
+#
+#   DESCRIPTION:  Create release folder for built packages and store in dist
+#
+#       OPTIONS:  ---
+#          BUGS:  ---
+#         NOTES:  ---
+#        AUTHOR:  Samuel Weru, samweru@gmail.com
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
+
+ARCHTYPE=$(getconf LONG_BIT)
+DATE=$(date +"%Y-%m-%d")
+
+if [ $2 == "dev" ]
+then
+	DIST="bungeni_debs"$ARCHTYPE"_snapshot_"$DATE"-dev"
+else
+	DIST="bungeni_debs"$ARCHTYPE"_snapshot_"$DATE
+fi
+
+mkdir -p dist/$DIST
+find $1 -name "*.deb" -exec mv {} dist/$DIST \;

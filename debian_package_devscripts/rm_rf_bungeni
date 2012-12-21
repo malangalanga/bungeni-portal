@@ -1,0 +1,26 @@
+#!/bin/bash
+#===============================================================================
+#
+#          FILE:  rm_rf_bungeni.sh
+#
+#         USAGE:  ./rm_rf_bungeni.sh
+#
+#   DESCRIPTION:  Force removal of bungeni
+#
+#       OPTIONS:  ---
+#          BUGS:  ---
+#         NOTES:  Only use when bungeni installation is broken
+#        AUTHOR:  Samuel Weru, samweru@gmail.com
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
+
+rm -rf /opt/bungeni
+rm -rf /var/lib/dpkg/info/bungeni*
+rm -rf /etc/init.d/bungeni_services
+rm -rf /opt/bungeni/update
+update-rc.d bungeni_services remove
+deluser bungeni
+nano /var/lib/dpkg/status

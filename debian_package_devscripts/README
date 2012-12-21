@@ -1,0 +1,13 @@
+Bungeni Debian Package Development Scripts
+==========================================
+debian_package_devscripts
+├── clean_today - Clean out all generated files from debian packager folder
+├── debian_package
+├── debian_package_update
+├── externals.txt
+├── inst_all - Install all the set of bungeni release debian packages
+├── mk_dev - Create *_dev development packager from original debian packager
+├── mv_2_dist - Create release folder for built packages and store in dist
+├── README 
+├── rm_rf_bungeni - Force removal of bungeni (useful for broken bungeni packages)
+└── svn_set_xtrnls.sh - Update subversion externals property (uses externals.txt)

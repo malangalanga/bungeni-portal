@@ -1,11 +1,11 @@
 #!/bin/bash
 #===============================================================================
 #
-#          FILE:  svn_set_externals.sh
+#          FILE:  clean_today.sh
 #
-#         USAGE:  ./svn_set_externals.sh
+#         USAGE:  ./clean_today.sh <debian packager folder>
 #
-#   DESCRIPTION:  Update subversion externals property
+#   DESCRIPTION:  Clean out all generated files from debian packager folder
 #
 #       OPTIONS:  ---
 #          BUGS:  ---
@@ -16,4 +16,6 @@
 #       CREATED:  ---
 #      REVISION:  ---
 #===============================================================================
-svn propset svn:externals -F externals.txt .
+
+DATE=$(date +"%Y-%m-%d")
+find $1 -name "*"$DATE"*" -exec rm -rf {} \;

@@ -1,11 +1,11 @@
 #!/bin/bash
 #===============================================================================
 #
-#          FILE:  svn_set_externals.sh
+#          FILE:  inst_all.sh
 #
-#         USAGE:  ./svn_set_externals.sh
+#         USAGE:  ./inst_all.sh <dist release folder>
 #
-#   DESCRIPTION:  Update subversion externals property
+#   DESCRIPTION:  Install all the set of bungeni release debian packages
 #
 #       OPTIONS:  ---
 #          BUGS:  ---
@@ -16,4 +16,6 @@
 #       CREATED:  ---
 #      REVISION:  ---
 #===============================================================================
-svn propset svn:externals -F externals.txt .
+
+cd $1
+for f in *.deb; do yes y | sudo gdebi $f; done

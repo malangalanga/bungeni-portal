@@ -1,0 +1,30 @@
+#!/bin/bash
+#===============================================================================
+#
+#          FILE:  mk_dev.sh
+#
+#         USAGE:  ./mk_dev.sh <original debian packager folder>
+#
+#   DESCRIPTION:  Create *_dev development packager from original debian packager
+#
+#       OPTIONS:  ---
+#          BUGS:  ---
+#         NOTES:  ---
+#        AUTHOR:  Samuel Weru, samweru@gmail.com
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
+
+cp -R $1 "$1_dev"
+sed -i 's|find \$.*|rm -rf $EXIST_REL_FOLDER/debian/DEBIAN/.svn $EXIST_REL_FOLDER/debian/.svn|g' $1_dev/exist/prepare_debpackfolder.sh
+sed -i 's|find \$.*|rm -rf $BUNGENI_REL_FOLDER/debian/DEBIAN/.svn $BUNGENI_REL_FOLDER/debian/.svn|g' $1_dev/bungeni/prepare_debpackfolder.sh
+sed -i 's|find \$.*|rm -rf $PLONE_REL_FOLDER/debian/DEBIAN/.svn $PLONE_REL_FOLDER/debian/.svn|g' $1_dev/plone/prepare_debpackfolder.sh
+sed -i 's|find \$.*|rm -rf $PORTAL_REL_FOLDER/debian/DEBIAN/.svn $PORTAL_REL_FOLDER/debian/.svn|g' $1_dev/portal/prepare_debpackfolder.sh
+
+sed -i 's/-${BUNGENI_BUILD_DATE}"/-${BUNGENI_BUILD_DATE}-dev"/g' $1_dev/bungeni.sh
+sed -i 's/-${EXIST_BUILD_DATE}"/-${EXIST_BUILD_DATE}-dev"/g' $1_dev/exist.sh
+sed -i 's/+${POSTGRES_BUILD_DATE}"/+${POSTGRES_BUILD_DATE}-dev"/g' $1_dev/postgresql.sh
+sed -i 's/-${PORTAL_BUILD_DATE}"/-${PORTAL_BUILD_DATE}-dev"/g' $1_dev/portal.sh
+sed -i 's/-${PLONE_BUILD_DATE}"/-${PLONE_BUILD_DATE}-dev"/g' $1_dev/plone.sh
