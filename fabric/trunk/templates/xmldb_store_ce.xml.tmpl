@@ -25,8 +25,26 @@
             </fileset>
         </xdb:store>
         
-        <echo message="Setting execute permission for index."/>
+        <echo message="Setting execute permission for index  and views .xql files"/>
         <xdb:chmod uri="${ce-uri}" resource="index.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/views" resource="add-field.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/views" resource="add-role.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/views" resource="add-transition.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/views" resource="edit-role.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/views" resource="edit-transition.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/views" resource="get-feature.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/views" resource="get-field.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/views" resource="get-form.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/views" resource="get-roles.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/views" resource="get-state.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/views" resource="get-types.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/views" resource="get-workflow.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/views" resource="sys-store-custom.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/edit" resource="delete-node.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/edit" resource="delete-role.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/edit" resource="move-node.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/edit" resource="split-forms.xql" mode="other=+execute" user="${user}" password="${password}"/>
+        <xdb:chmod uri="${ce-uri}/edit" resource="split-workflow.xql" mode="other=+execute" user="${user}" password="${password}"/>
         
         <echo message="Setting execute permission for admin controller."/>
         <xdb:chmod uri="${ce-uri}" resource="controller.xql" mode="other=+execute" user="${user}" password="${password}"/>
