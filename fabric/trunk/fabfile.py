@@ -764,3 +764,12 @@ def reset_all():
         exist_reset()
 
 
+def install_config_editor():
+    """
+    Install Bungeni ConfigEditor on eXist-db
+    """
+    tasks = bungeni.XmldbTasks()
+    tasks.download_ce()
+    tasks.ant_prop_config()
+    tasks.ant_ce_setup_config()
+    tasks.ant_ce_install()

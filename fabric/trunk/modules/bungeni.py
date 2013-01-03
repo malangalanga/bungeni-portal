@@ -419,6 +419,7 @@ class BungeniConfigs:
         self.exist_download_file = self.utils.get_basename(self.exist_install_url)
         self.user_exist_build_path = self.user_build_root + "/exist"
         self.exist_docs = self.user_build_root + "/exist-docs"
+        self.exist_config_editor = self.user_build_root + "/config_editor"
         self.exist_demo_data = self.exist_docs + "/db"
         self.java_home = self.jre_home()
         self.exist_port = self.cfg.get_config("exist", "http_port")
@@ -427,6 +428,7 @@ class BungeniConfigs:
         self.exist_setup_user = self.cfg.get_config("exist", "setup_user")
         self.exist_setup_password = self.cfg.get_config("exist", "setup_pass")
         self.exist_repo = self.cfg.get_config("exist", "repo")
+        self.exist_config_editor_repo = self.cfg.get_config("exist", "config_editor_repo")
         # RabbitMQ installation folder
         self.rabbitmq_install_url = self.cfg.get_config("rabbitmq", "download_url")
         self.user_rabbitmq = self.user_install_root + "/rabbitmq"
@@ -1882,6 +1884,7 @@ class XmldbTasks:
         xmldb_map = {
             "exist_home":self.cfg.user_exist,
             "upload_from":self.cfg.exist_docs,
+            "upload_from_ce":self.cfg.exist_config_editor,
             "exist_admin":self.cfg.exist_setup_user,
             "exist_password": self.cfg.exist_setup_password,
             "exist_port":self.cfg.exist_port,
@@ -1944,6 +1947,40 @@ class XmldbTasks:
         self.scm.export(current_release["xmldb"])
         run("find %(exist_docs)s -name '__contents__.xml' | xargs rm -rf" %
                 {"exist_docs": self.cfg.exist_docs}) 
+
+    def download_ce(self):
+        """
+        Checks out the Bungeni config_editor files from bungeni-exist repository
+        """
+        # clean the config_editor folder if it already exists
+        run("rm -Rf %(config_editor_dir)s/*" % {"config_editor_dir":self.cfg.exist_config_editor})
+        run("mkdir -p %(config_editor_dir)s" % {"config_editor_dir":self.cfg.exist_config_editor})
+        self.scm = SCM(
+            self.cfg.development_build, 
+            self.cfg.exist_config_editor_repo,
+            self.cfg.svn_user, 
+            self.cfg.svn_password,
+            self.cfg.exist_config_editor
+        )
+        self.scm.export("HEAD")
+
+    def ant_ce_setup_config(self):
+        """
+        Generate the ant script to install the ConfigEditor in eXist
+        """
+        templates = Templates(self.cfg)
+        ant_script_ce_tmpl = "xmldb_store_ce.xml.tmpl"
+        import shutil
+        ant_setup_ce_script = templates.name_from_template(ant_script_ce_tmpl)
+        shutil.copy2(templates.template_folder + "/" + ant_script_ce_tmpl,
+                self.cfg.user_config + "/" + ant_setup_ce_script)
+
+    def ant_ce_install(self):
+        """
+        Stores ConfigEditor files into eXist via ant.
+        """
+        with cd(self.cfg.user_config):
+            self.ant_run("xmldb_store_ce.xml")
 
     def setup_exist_demo_data(self):
         """
