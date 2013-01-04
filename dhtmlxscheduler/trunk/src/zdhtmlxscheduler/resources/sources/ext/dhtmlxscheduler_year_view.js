@@ -76,10 +76,9 @@ scheduler.templates.year_tooltip = function(s, e, ev) {
 			this._tooltip.innerHTML = "";
 		} else {
 			var t = this._tooltip = document.createElement("DIV");
-			t.className = "dhx_tooltip";
+			t.className = "dhx_year_tooltip";
 			document.body.appendChild(t);
 			t.onclick = scheduler._click.dhx_cal_data;
-
 		}
 		var evs = this.getEvents(date, this.date.add(date, 1, "day"));
 		var html = "";

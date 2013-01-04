@@ -19,7 +19,7 @@ scheduler.locale = {
 		confirm_closing: "", //Vos modifications seront perdus, êtes-vous sûr ?
 		confirm_deleting: "L'événement sera effacé sans appel, êtes-vous sûr ?",
 		section_description: "Description",
-		section_time: "Période de temps",
+		section_time: "Période",
 		full_day: "Journée complète",
 
 		confirm_recurring: "Voulez-vous éditer toute une série d'évènements répétés?",

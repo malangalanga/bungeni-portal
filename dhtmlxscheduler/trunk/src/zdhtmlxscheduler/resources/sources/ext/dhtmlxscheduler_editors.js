@@ -19,7 +19,7 @@ scheduler.form_blocks['combo']={
 		if (config.options_height)
 			node._combo.setOptionHeight(config.options_height);
 		var combo = node._combo;
-		combo.enableFilteringMode(!!config.filtering, config.script_path||null, !!config.cache);
+		combo.enableFilteringMode(config.filtering, config.script_path||null, !!config.cache);
 		
 		if (!config.script_path) { // script-side filtration is used
 			var all_options = [];
@@ -54,7 +54,7 @@ scheduler.form_blocks['combo']={
 					});
 				}
 			} else {
-				combo.setComboValue(null);
+				combo.setComboValue("");
 			}
 		}
 	},

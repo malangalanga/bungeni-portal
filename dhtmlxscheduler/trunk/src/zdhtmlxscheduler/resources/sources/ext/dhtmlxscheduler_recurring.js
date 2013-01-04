@@ -254,7 +254,7 @@ scheduler.form_blocks["recurring"] = {
 			} else
 				ev._start_date = null;
 
-			ev._end_date = ev.end_date = ds.end;
+			ev._end_date = ds.end;
 			ev.rec_pattern = ev.rec_type.split("#")[0];
 		} else {
 			ev.rec_type = ev.rec_pattern = "";
@@ -448,20 +448,28 @@ scheduler.showLightbox_rec = scheduler.showLightbox;
 scheduler.showLightbox = function(id) {
 	var locale = this.locale;
 	var c = scheduler.config.lightbox_recurring;
-	var pid = this.getEvent(id).event_pid;
+	var ev = this.getEvent(id);
+	var pid = ev.event_pid;
 	var isVirtual = (id.toString().indexOf("#") != -1);
 	if (isVirtual)
 		pid = id.split("#")[0];
-	if ( !pid || pid == 0 || ( (!locale.labels.confirm_recurring || c == 'instance') || (c == 'series' && !isVirtual)) ) {
-		return this.showLightbox_rec(id); // editing instance or non recurring event
-	}
+
 	// show series
-	var callback = function() {
-		pid = this.getEvent(pid);
-		pid._end_date = pid.end_date;
-		pid.end_date = new Date(pid.start_date.valueOf() + pid.event_length * 1000);
-		return this.showLightbox_rec(pid.id); // editing series
+	var showSeries = function(id) {
+		var event = scheduler.getEvent(id);
+		event._end_date = event.end_date;
+		event.end_date = new Date(event.start_date.valueOf() + event.event_length * 1000);
+		return scheduler.showLightbox_rec(id); // editing series
 	};
+
+	if ( (pid || pid == 0) && ev.rec_type) {
+		// direct API call on series id
+		return showSeries(id);
+	}
+	if ( !pid || pid == 0 || ( (!locale.labels.confirm_recurring || c == 'instance') || (c == 'series' && !isVirtual)) ) {
+		// editing instance or non recurring event
+		return this.showLightbox_rec(id);
+	}
 	if (c == 'ask') {
 		var that = this;
 		dhtmlx.modalbox({
@@ -473,7 +481,7 @@ scheduler.showLightbox = function(id) {
 			callback: function(index) {
 				switch(+index) {
 					case 0:
-						return callback.call(that);
+						return showSeries(pid);
 					case 1:
 						return that.showLightbox_rec(id);
 					case 2:
@@ -482,9 +490,8 @@ scheduler.showLightbox = function(id) {
 			}
 		});
 	} else {
-		callback();
+		showSeries(pid);
 	}
-
 };
 
 

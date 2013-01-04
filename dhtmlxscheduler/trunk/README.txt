@@ -1,12 +1,15 @@
 
 
-This package includes version 3.5 of dhtmlxscheduler.
+This package includes version 3.6 of dhtmlxscheduler.
 
 This software is allowed to be use under GPL. You need to obtain Commercial or Enterise License
 to use it in non-GPL projects. Please contact sales@dhtmlx.com for details
 
 CHANGES
 -------
+*1.0.3*
+- Updating to dhtmlxscheduler 3.6
+
 *1.0.2*
 - Updating to dhtmlxscheduler 3.5
 - Factoring out themes into includable resources

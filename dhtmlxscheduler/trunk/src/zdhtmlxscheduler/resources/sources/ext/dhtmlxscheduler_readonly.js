@@ -109,7 +109,6 @@ scheduler.attachEvent("onTemplatesReady", function() {
 				scheduler._lightbox.parentNode.removeChild(scheduler._lightbox);
 			this._lightbox = n;
 			this.setLightboxSize();
-			this._lightbox = null;
 			n.onclick = function(e) {
 				var src = e ? e.target : event.srcElement;
 				if (!src.className) src = src.previousSibling;
@@ -136,7 +135,7 @@ scheduler.attachEvent("onTemplatesReady", function() {
 	scheduler.hide_lightbox = function() {
 		if (this._lightbox_r) {
 			this._lightbox_r.parentNode.removeChild(this._lightbox_r);
-			this._lightbox_r = null;
+			this._lightbox_r = this._lightbox = null;
 		}
 
 		return hold.apply(this, arguments);

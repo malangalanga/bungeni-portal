@@ -18,7 +18,7 @@ def read(*rnames):
 
 setuptools.setup(
     name = 'zdhtmlxscheduler',
-    version = "1.0.2",
+    version = "1.0.3",
     author='Miano Njoka',
     author_email='miano@parliaments.info',
     description = "Zope3 Package of DHTMLX Scheduler",
@@ -30,7 +30,7 @@ setuptools.setup(
     packages = setuptools.find_packages('src'),
     package_dir = {'':'src'},
     include_package_data = True,
-    package_data = {'':extpaths},
+    package_data = { '' : extpaths, 'zdhtmlxscheduler' : ["*.zcml"] },
     zip_safe=False,  
     install_requires = [
         'setuptools',

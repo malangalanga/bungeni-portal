@@ -2,11 +2,12 @@
 This software is allowed to use under GPL or you need to obtain Commercial or Enterise License
 to use it in non-GPL project. Please contact sales@dhtmlx.com for details
 */
-window.dhtmlXTooltip = {};
+window.dhtmlXTooltip = window.dhtmlxTooltip = {};
 
 dhtmlXTooltip.config = {
 	className: 'dhtmlXTooltip tooltip',
 	timeout_to_display: 50,
+	timeout_to_hide: 50,
 	delta_x: 15,
 	delta_y: -20
 };
@@ -90,11 +91,16 @@ dhtmlXTooltip.show = function(event, text) { //browser event, text to display
 	}
 
 	tooltip_div_style.visibility = "visible";
+
+	scheduler.callEvent("onTooltipDisplayed", [this.tooltip, this.tooltip.event_id]);
 };
 
 dhtmlXTooltip.hide = function() {
 	if (this.tooltip.parentNode) {
+		var event_id = this.tooltip.event_id;
+		this.tooltip.event_id = null;
 		this.tooltip.parentNode.removeChild(this.tooltip);
+		scheduler.callEvent("onAfterTooltip", [event_id]);
 	}
 };
 dhtmlXTooltip.delay = function(method, object, params, delay) {
@@ -134,25 +140,39 @@ scheduler.attachEvent("onMouseMove", function(event_id, e) { // (scheduler event
 	var target = ev.target || ev.srcElement;
 	var dhxTooltip = dhtmlXTooltip;
 
-	if (event_id || dhxTooltip.isTooltip(target)) { // if we are over event or tooltip
-		var event = scheduler.getEvent(event_id) || scheduler.getEvent(dhxTooltip.tooltip.event_id);
-		if (!event)
-			return;
-		dhxTooltip.tooltip.event_id = event.id;
-		var text = scheduler.templates.tooltip_text(event.start_date, event.end_date, event);
-		if (!text) return dhxTooltip.hide();
+	var is_tooltip = dhxTooltip.isTooltip(target);
+	var is_tooltip_target = (dhxTooltip.isTooltipTarget && dhxTooltip.isTooltipTarget(target));
+
+	// if we are over event or tooltip or custom target for tooltip
+	if (event_id || is_tooltip || is_tooltip_target) {
+		var text;
+
+		if (event_id || dhxTooltip.tooltip.event_id) {
+			var event = scheduler.getEvent(event_id) || scheduler.getEvent(dhxTooltip.tooltip.event_id);
+			if (!event)
+				return;
+
+			dhxTooltip.tooltip.event_id = event.id;
+			text = scheduler.templates.tooltip_text(event.start_date, event.end_date, event);
+			if (!text)
+				return dhxTooltip.hide();
+		}
+		if (is_tooltip_target) {
+			text = "";
+		}
 
 		var evt = undefined;
-		if (_isIE) { //make a copy of event, will be used in timed call
+		if (_isIE) {
+			//make a copy of event, will be used in timed call
 			evt = document.createEventObject(ev);
 		}
 
-		if (!scheduler.callEvent("onBeforeTooltip", [event_id, event]) || !text)
+		if (!scheduler.callEvent("onBeforeTooltip", [event_id]) || !text)
 			return;
 
 		dhxTooltip.delay(dhxTooltip.show, dhxTooltip, [(evt || ev), text]); // showing tooltip
 	} else {
-		dhxTooltip.delay(dhxTooltip.hide, dhxTooltip, []);
+		dhxTooltip.delay(dhxTooltip.hide, dhxTooltip, [], dhxTooltip.config.timeout_to_hide);
 	}
 });
 scheduler.attachEvent("onBeforeDrag", function() {

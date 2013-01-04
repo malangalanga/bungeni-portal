@@ -1,16 +1,34 @@
-There are a lot of files here, but you need only part of them
+dhtmlxScheduler v.3.6 build 121203
 
-Desctop scheduler, default skin
-	dhtmlxscheduler.js
-	dhtmlxscheduler.css
-	imgs\
-	
-Desctop scheduler, glossy skin
-	dhtmlxscheduler.js
-	dhtmlxscheduler_glossy.css
-	imgs_glossy\
+This software is allowed to use under GPL or you need to obtain Commercial or Enterise License
+to use it in non-GPL project. Please contact sales@dhtmlx.com for details
 
-Mobile scheduler
-	dhtmlxscheduler_mobile.js
-	dhtmlxscheduler_mobile.css
-	imgs_mobile\
+(c) DHTMLX Ltd. 
+
+
+
+Useful links
+-------------
+
+- Online  documentation
+	http://docs.dhtmlx.com/doku.php?id=dhtmlxscheduler:toc
+- Downloadable documentation
+	CHM version
+		http://dhtmlx.com/x/download/regular/dhtmlxScheduler_docs_chm.zip
+	HTML version
+		http://dhtmlx.com/x/download/regular/dhtmlxScheduler_docs_html.zip
+- Support forum
+	http://forum.dhtmlx.com/viewforum.php?f=6
+-Skin builder
+	http://dhtmlx.com/docs/products/dhtmlxScheduler/skinBuilder/index.shtml
+
+
+Other editions
+--------------
+
+- MVC.Net edition
+	http://scheduler-net.com
+- Windows8 edition
+	http://dhtmlx.com/x/download/regular/dhtmlxScheduler_windows.zip
+- Scheduler for mobile devices
+	http://dhtmlx.com/x/download/regular/dhtmlxScheduler_mobile.zip
