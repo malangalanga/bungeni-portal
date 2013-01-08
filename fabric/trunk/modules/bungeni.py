@@ -1866,11 +1866,12 @@ class XmldbTasks:
         """
         run("mkdir -p %(exist_build_path)s" %
                        {"exist_build_path":self.cfg.user_exist_build_path})
-        run("rm -rf %(exist_build_path)s/*.*" % 
+        run("find %(exist_build_path)s -mindepth 1 -delete" % 
                        {"exist_build_path":self.cfg.user_exist_build_path})
         with cd(self.cfg.user_exist_build_path):
             run(self.cfg.exist_download_command)
             run("mkdir -p %(user_exist)s" % {"user_exist":self.cfg.user_exist})
+            run("find %(user_exist)s -mindepth 1 -delete" % {"user_exist":self.cfg.user_exist}) 
             run("tar --strip-components=1 -xvf %(exist_download_file)s -C %(user_exist)s" %
                          {"user_exist":self.cfg.user_exist,
                           "exist_download_file":self.cfg.exist_download_file})
