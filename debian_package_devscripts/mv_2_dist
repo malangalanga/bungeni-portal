@@ -27,5 +27,5 @@ else
 	DIST="bungeni_debs"$ARCHTYPE"_snapshot_"$DATE
 fi
 
-mkdir -p dist/$DIST
-find $1 -name "*.deb" -exec mv {} dist/$DIST \;
+mkdir -p ../debian_package_dist/$DIST
+find $1 -name "*.deb" -exec mv {} ../debian_package_dist/$DIST \;
