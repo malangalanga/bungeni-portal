@@ -34,5 +34,6 @@
     <field name="logo_data" label="Logo" required="false" value_type="image" render_type="image">
         <show modes="view edit add" />
     </field>
+    <integrity constraints="end_after_start" validations="validate_date_range_within_parent" />
 </descriptor>
 

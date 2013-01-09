@@ -48,5 +48,16 @@
     <field name="notes" label="Notes" required="false" value_type="text" render_type="rich_text">
         <show modes="view edit add" />
     </field>
+    
+    <integrity
+        constraints="
+            end_after_start
+            active_and_substituted
+            substituted_end_date
+            inactive_no_end_date
+            member_start_after_elected
+        "
+    />
+
 </descriptor>
 

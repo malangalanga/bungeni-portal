@@ -34,5 +34,7 @@
     <field name="office_role" label="Role" description="Role given to members of this office" required="false" value_type="text" render_type="single_select" vocabulary="office_role">
         <show modes="view edit add listing" />
     </field>
+    <integrity validations="validate_date_range_within_parent" />
+
 </descriptor>
 

@@ -317,40 +317,6 @@
         </field>
     </descriptor>
 
-    <descriptor name="government" order="21">
-        <field name="full_name" label="Full Name" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="combined_name" label="Full Name [Short Name]" required="false" value_type="combined_name" render_type="text_line">
-            <show modes="listing" />
-        </field>
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
-            <show modes="view edit add" />
-            <hide modes="listing" />
-        </field>
-        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
-            <show modes="view listing" />
-        </field>
-        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
-            <show modes="view edit add" />
-        </field>
-        <field name="identifier" label="Government Identifier" description="Unique identifier or number for this Government" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add" />
-        </field>
-    </descriptor>
-
     <descriptor name="group_address">
         <field name="logical_address_type" label="Address Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="logical_address_type">
             <show modes="view edit add listing" />
@@ -411,6 +377,7 @@
         <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
+        <integrity constraints="end_after_start" validations="validate_date_range_within_parent" />
     </descriptor>
 
     <descriptor name="group_membership">
@@ -439,6 +406,7 @@
         <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
+        <integrity constraints="end_after_start active_and_substituted substituted_end_date inactive_no_end_date" validations="validate_date_range_within_parent validate_group_membership_dates" />
     </descriptor>
 
     <descriptor name="heading" order="3">
@@ -479,57 +447,6 @@
         </field>
     </descriptor>
 
-    <descriptor name="member_of_parliament" order="18">
-        <field name="user_id" label="Name" required="true" value_type="user" render_type="single_select" vocabulary="member">
-            <show modes="view add listing" />
-        </field>
-        <field name="member_election_type" label="Election Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="member_election_type">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="election_nomination_date" label="Election/Nomination Date" required="false" value_type="date" render_type="date">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="active_p" label="Active" required="false" value_type="bool" render_type="bool">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
-            <show modes="view edit add" />
-            <hide modes="listing" />
-        </field>
-        <field name="substitution_type" label="Type of Substitution" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit listing" />
-        </field>
-        <field name="replaced_id" label="Substituted by" required="false" value_type="text" render_type="single_select" vocabulary="substitution">
-            <show modes="view edit listing" />
-        </field>
-        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
-            <show modes="view listing" />
-        </field>
-        <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
-            <show modes="view listing" />
-        </field>
-        <field name="representation" label="Representation" description="Select Representation" required="false" value_type="text" render_type="tree_text" vocabulary="representation">
-            <show modes="view edit add" />
-            <hide modes="listing" />
-        </field>
-        <field name="party" label="Political Party" required="false" value_type="vocabulary" render_type="single_select" vocabulary="party">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="leave_reason" label="Leave Reason" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add" />
-            <hide modes="listing" />
-        </field>
-        <field name="notes" label="Notes" required="false" value_type="text" render_type="rich_text">
-            <show modes="view edit add" />
-        </field>
-    </descriptor>
-
     <descriptor name="member_title">
         <field name="title_type_id" label="Title" required="true" value_type="vocabulary" render_type="single_select" vocabulary="group_title_types">
             <show modes="view edit add listing" />
@@ -544,142 +461,7 @@
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-    </descriptor>
-
-    <descriptor name="ministry">
-        <field name="full_name" label="Full Name" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="combined_name" label="Full Name [Short Name]" required="false" value_type="combined_name" render_type="text_line">
-            <show modes="listing" />
-        </field>
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
-            <show modes="view edit add" />
-            <hide modes="listing" />
-        </field>
-        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
-            <show modes="view listing" />
-        </field>
-        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
-            <show modes="view edit add" />
-        </field>
-        <field name="identifier" label="Ministry Identifier" description="Unique identifier or number for this Ministry" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add" />
-        </field>
-    </descriptor>
-
-    <descriptor name="office" order="2">
-        <field name="full_name" label="Full Name" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="combined_name" label="Full Name [Short Name]" required="false" value_type="combined_name" render_type="text_line">
-            <show modes="listing" />
-        </field>
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
-            <show modes="view edit add" />
-            <hide modes="listing" />
-        </field>
-        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
-            <show modes="view listing" />
-        </field>
-        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
-            <show modes="view edit add" />
-        </field>
-        <field name="identifier" label="Office Identifier" description="Unique identifier or number for this Office" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add" />
-        </field>
-        <field name="office_role" label="Role" description="Role given to members of this office" required="false" value_type="text" render_type="single_select" vocabulary="office_role">
-            <show modes="view edit add listing" />
-        </field>
-    </descriptor>
-
-    <descriptor name="parliament" order="1">
-        <field name="full_name" label="Parliament Name" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="short_name" label="Short Name" description="Shorter name for the parliament" required="true" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="identifier" label="Parliament Identifier" description="Unique identifier or number for this Parliament" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
-            <show modes="view edit add" />
-            <hide modes="listing" />
-        </field>
-        <field name="election_date" label="Election Date" description="Date of the election" required="true" value_type="date" render_type="date">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="start_date" label="In power from" description="Date of the swearing in" required="true" value_type="date" render_type="date">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="end_date" label="In power till" description="Date of the dissolution" required="false" value_type="date" render_type="date">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
-            <show modes="view edit add" />
-        </field>
-    </descriptor>
-
-    <descriptor name="political_group" order="19">
-        <field name="full_name" label="Full Name" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="combined_name" label="Full Name [Short Name]" required="false" value_type="combined_name" render_type="text_line">
-            <show modes="listing" />
-        </field>
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
-            <show modes="view edit add" />
-            <hide modes="listing" />
-        </field>
-        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
-            <show modes="view listing" />
-        </field>
-        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
-            <show modes="view edit add" />
-        </field>
-        <field name="identifier" label="Identifier" description="Unique identifier or number for this political group" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add" />
-        </field>
-        <field name="logo_data" label="Logo" required="false" value_type="image" render_type="image">
-            <show modes="view edit add" />
-        </field>
+        <integrity constraints="end_after_start" validations="validate_date_range_within_parent validate_member_titles" />
     </descriptor>
 
     <descriptor name="session" order="16">
@@ -703,6 +485,7 @@
         <field name="notes" label="Notes" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
         </field>
+        <integrity constraints="end_after_start" validations="validate_date_range_within_parent" />
     </descriptor>
 
     <descriptor name="signatory">
@@ -752,6 +535,7 @@
         <field name="convocation_type" label="Convocation Type" description="Sitting Convocation Type" required="false" value_type="vocabulary" render_type="single_select" vocabulary="sitting_convocation_types">
             <show modes="view edit add" />
         </field>
+        <integrity constraints="end_after_start" validations="validate_date_range_within_parent validate_venues" />
     </descriptor>
 
     <descriptor name="sitting_report">
@@ -903,6 +687,7 @@
         <field name="remarks" label="Remarks" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
+        <integrity constraints="user_birth_death_dates" validations="validate_email_availability" />
     </descriptor>
 
 </ui>

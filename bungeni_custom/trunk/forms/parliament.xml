@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
-<descriptor name="parliament" archetype="group" order="1">
+<descriptor name="parliament" archetype="group" order="1" 
+        note="!+sort_on=start_date"
+    >
     <field name="full_name" label="Parliament Name" required="false" value_type="text" render_type="text_line">
         <show modes="view edit add listing" />
     </field>
@@ -25,5 +27,11 @@
     <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
         <show modes="view edit add" />
     </field>
+    
+    <integrity 
+        constraints="end_after_start parliament_start_after_election"
+        validations="validate_parliament_dates"
+    />
+    
 </descriptor>
 

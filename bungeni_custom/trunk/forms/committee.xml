@@ -67,5 +67,11 @@
         <show modes="view edit add" />
         <hide modes="listing" />
     </field>
+    
+    <integrity 
+        constraints="end_after_start"
+        validations="validate_date_range_within_parent"
+    />
+    
 </descriptor>
 

@@ -53,7 +53,8 @@
     </group>
     <group name="government" workflow="group" enabled="true" />
     <group name="parliament" enabled="true">
-        <member name="member_of_parliament" workflow="group_membership" enabled="true" />
+        <member name="member_of_parliament" workflow="group_membership" enabled="true" 
+            note="!+ inconsistent naming, use parliament_member" />
     </group>
 
 </types>
