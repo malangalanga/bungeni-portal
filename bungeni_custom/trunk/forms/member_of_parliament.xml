@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
-<descriptor name="member_of_parliament" archetype="group_membership" order="18">
+<descriptor name="member_of_parliament" archetype="group_membership" order="18"
+        note="!+DESCRIPTOR_CONTAINER_NAME add @label (display_name) and @container_label (container_name)?"
+    >
     <field name="user_id" label="Name" required="true" value_type="user" render_type="single_select" vocabulary="member">
         <show modes="view add listing" />
     </field>
