@@ -24,7 +24,7 @@ from zope.dublincore.interfaces import IDCDescriptiveProperties
 
 from bungeni.models import domain, orm
 from bungeni.ui import descriptor
-from bungeni.utils.capi import capi
+from bungeni.capi import capi
 
 SIMPLE_LIST = "<ul/>"
 TARGET_DIRECTORY = sys.argv[1]
