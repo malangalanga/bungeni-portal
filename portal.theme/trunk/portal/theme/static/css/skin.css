@@ -1396,13 +1396,14 @@ span.yui-button.yui-link-button span a {
     display: block;
 }
 .section-bungeni-workspace div#portal-globalnav ul.level1 {
-    top: 1.5em !important;
+    top: 1.8em !important;
     border: 1px solid #aaf;
     border-right: 0 none;
     border-top: 0 none !important;
     border-bottom:1px solid #1763aa;
     background:#21a1ba url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x !important;
     display: block;
+    z-index: 1;
 }
 .section-bungeni-admin div#portal-globalnav ul.level1 {
     border: 1px solid #aaf;
@@ -1760,8 +1761,9 @@ span.yui-button.yui-link-button span a {
     border-color:#21a1ba;
 }
 /* =============================================================================
-   Bungeni - Bungeni workspace styling
-   .site-plone
+   Bungeni - Bungeni workspace and admin styling
+   .section-bungeni-workspace
+   .section-bungeni-admin
    ========================================================================== */
 .template-workspace.section-bungeni-admin div#portal-globalnav ul.level0 li#portaltab- a {
     color: #222 !important;

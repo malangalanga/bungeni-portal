@@ -6,7 +6,7 @@
     
     <match path="regex:.*/(emptypage|image_view_fullscreen|addcontentselector)$"
         abort="1" />
-    <match path="regex:.*/(getContextSubMenu|translationbrowser_popup)$"
+    <match path="regex:.*/(getContextSubMenu|translationbrowser_popup|manage_main)$"
         abort="1" />
     <match path="regex:.*/(table.htm|ploneimage.htm|anchor.htm|plonelink.htm)$"
         abort="1" />    
@@ -20,7 +20,7 @@
     <match path="regex:.*/(popout)$" abort="1" />
     <match path="/plone/" class="load-plone-navigation" />
     <match path="/exist/" class="load-exist-navigation" />    
-    <match path="regex:^/(workspace|business|members|archive|admin)/?"
+    <match path="regex:^/(workspace|admin)/?"
         class="load-bungeni-navigation" />
     <match path="regex:^/(workspace)/?"
         class="load-workspace-navigation" />
