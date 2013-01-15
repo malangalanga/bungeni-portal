@@ -29,13 +29,7 @@
     <match path="regex:^/(workspace/groups/my-groups)/(group-committee|group-political_group)-([0-9])+(/)?(view)?$"
         class="load-workspace-group-navigation" />  
     <match path="regex:^/(plone/groups|plone/memberships)/?"
-        class="drop-navigation" />           
-    <match path="regex:^/(members/current)/obj-([0-9])+(/)?(view)?$"
-        class="load-member-tab" />  
-    <match path="regex:^/(business/committees)/obj-([0-9])+(/)?(view)?$"
-        class="load-committee-tab" />
-    <match path="regex:^/(members/political-groups)/obj-([0-9])+(/)?(view)?$"
-        class="load-political-group-tab" />   
+        class="drop-navigation" />            
     <match path="regex:^/(business|members)?"
         class="unload-bungeni" />     
     <match path="exact:/"
@@ -154,29 +148,7 @@
         
         <prepend href="/exist" content="#portal-globalnav > li:not(:first-child)"
             theme="children:#portal-globalnav > ul" />        
-    </rule>
-    
-    <rule class="load-member-tab">
-        <pyquery pyref=
-            "portal.theme.static.themes.rules:add_space_tab"
-            pyarg-space_type="member"
-        /> 
-    </rule>
-    
-    <rule class="load-committee-tab">
-        <pyquery pyref=
-            "portal.theme.static.themes.rules:add_space_tab"
-            pyarg-space_type="committee"
-        /> 
-    </rule>
-    
-    <rule class="load-political-group-tab">
-        <pyquery pyref=
-            "portal.theme.static.themes.rules:add_space_tab"
-            pyarg-space_type="political-group"
-        /> 
-    </rule>         
-    
+    </rule>    
     
     <rule class="frontpage">
         <append href="/plone"
