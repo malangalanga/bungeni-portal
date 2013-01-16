@@ -42,14 +42,20 @@
     <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
         <show modes="view listing" />
     </field>
-    <field name="submission_date" label="Submission Date" required="false" value_type="date" render_type="date">
+    <field name="submission_date" label="Submission Date" required="false" 
+            value_type="date" render_type="date" derived="submission_date"
+        >
         <show modes="view" />
         <hide modes="listing" />
     </field>
-    <field name="admissible_date" label="Admissible Date" required="true" value_type="date" render_type="date">
+    <field name="admissible_date" label="Admissible Date" required="true" 
+            value_type="date" render_type="date" derived="admissible_date"
+        >
         <show modes="view listing" />
     </field>
-    <field name="notice_date" label="Notice Date" required="false" value_type="date" render_type="date">
+    <field name="notice_date" label="Notice Date" required="false" 
+            value_type="date" render_type="date" derived="scheduled_date"
+        >
         <show modes="view" />
         <hide modes="listing" />
     </field>

@@ -9,7 +9,7 @@ Signature of all utilities here:
     (context:Object) -> None
         failure raises zope.interface.Invalid
 
-For samples of source definitions of form schema constraints , see the following 
+For samples of source definitions of form schema constraints, see the following 
 corresponding bungeni module:
 
     bungeni.ui.descriptor.constraints

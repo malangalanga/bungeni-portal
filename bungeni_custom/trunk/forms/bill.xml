@@ -42,11 +42,15 @@
     <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
         <show modes="view listing" />
     </field>
-    <field name="submission_date" label="Submission Date" required="false" value_type="date" render_type="date">
+    <field name="submission_date" label="Submission Date" required="false" 
+            value_type="date" render_type="date" derived="submission_date"
+        >
         <show modes="view" />
         <hide modes="listing" />
     </field>
-    <field name="publication_date" label="Publication Date" required="false" value_type="date" render_type="date">
+    <field name="publication_date" label="Publication Date" required="false" 
+            value_type="date" render_type="date" derived="gazetted_date"
+        >
         <show modes="view listing" />
     </field>
     <field name="short_title" label="Statement of Purpose" required="true" 
