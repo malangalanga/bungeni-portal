@@ -69,16 +69,12 @@
     </facet>
     <facet name="published_minutes">
         <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
-        <allow permission=".Edit" roles="Clerk" />
         <allow permission="item_schedule.View" roles="Clerk Speaker Owner Signatory MP Minister" />
-        <allow permission="item_schedule.Edit" roles="Clerk" />
         <allow permission="item_schedule_discussion.View" roles="Clerk Speaker Owner Signatory MP Minister Anonymous" />
     </facet>
     <facet name="published_minutes_internal">
         <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
-        <allow permission=".Edit" roles="Clerk" />
         <allow permission="item_schedule.View" roles="Clerk Speaker Owner Signatory MP Minister" />
-        <allow permission="item_schedule.Edit" roles="Clerk" />
         <allow permission="item_schedule_discussion.View" roles="Clerk Speaker Owner Signatory MP Minister" />
     </facet>
     <facet name="archived">
