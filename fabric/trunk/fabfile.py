@@ -502,6 +502,22 @@ def stop_rabbitmq(mode="ABORT_ON_ERROR"):
 
     service = bungeni.Services()
     service.stop_service("rabbitmq", mode)
+    
+def start_varnish(mode="ABORT_ON_ERROR"):
+    """
+    Start varnish
+    """
+
+    service = bungeni.Services()
+    service.start_service("varnish", mode)
+
+def stop_varnish(mode="ABORT_ON_ERROR"):
+    """
+    Stop varnish
+    """
+
+    service = bungeni.Services()
+    service.stop_service("varnish", mode)
 
 def start_monitor():
     """
@@ -751,6 +767,21 @@ def postgres_install():
     """
     postgres = bungeni.PostgresTasks()
     postgres.build_postgres()
+    
+def varnish_install():
+    """
+    Build and install varnish HTTP accelerator
+    """
+    varnish = bungeni.VarnishTasks()
+    varnish.setup_varnish()
+    varnish.create_vlc_file()
+    
+def config_varnish():
+    """
+    Generates the varnish configuration file (VCL)
+    """
+    varnish = bungeni.VarnishTasks()
+    varnish.varnish_config()
 
 	
 def reset_all():

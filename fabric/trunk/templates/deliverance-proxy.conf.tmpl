@@ -21,7 +21,8 @@
 </proxy>
 
 <proxy path="/plone">
-    <dest href="http://%(app_host)s:%(plone_http_port)s/VirtualHostBase/http/%(web_server_host)s:%(web_server_port)s/plone/VirtualHostRoot/_vh_plone/" />
+    <dest href="http://%(app_host)s:%(plone_http_port)s/plone" />
+    <response rewrite-links="1" />
 </proxy>
 
 <proxy path="/themes">

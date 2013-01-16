@@ -460,6 +460,21 @@ class BungeniConfigs:
         self.postgres_bin_path = self.postgres_install_path + "/bin"
         self.postgres_src_dir = \
             self.utils.get_basename_prefix(self.postgres_install_url)
+        # Varnish installation
+        self.varnish_download_url = self.cfg.get_config("varnish","download_url")
+        self.varnish_download_command = self.get_download_command(self.varnish_download_url)
+        self.varnish_download_file = self.utils.get_basename(self.varnish_download_url)
+        self.varnish_build_path = self.user_build_root + "/varnish"
+        self.varnish_install_path = self.user_install_root + "/varnish"
+        self.user_varnish = self.varnish_install_path
+        self.varnish_vcl_folder = self.varnish_install_path + "/etc/varnish"
+        self.varnish_vcl_file_path = self.varnish_vcl_folder + "/default.vcl"
+        self.varnish_backend_host = self.cfg.get_config("varnish","backend_host")
+        self.varnish_backend_port = self.cfg.get_config("varnish","backend_port")
+        self.varnish_bind_host = self.cfg.get_config("varnish","bind_host")
+        self.varnish_bind_port = self.cfg.get_config("varnish","bind_port")
+        self.varnish_cache_size = self.cfg.get_config("varnish","cache_size")
+        
 
 
     def get_download_command(self, strURL):
@@ -770,6 +785,11 @@ class Presetup:
             "glue_interval": self.cfg.glue_interval,
             "python": sup_pycfg.python_home,
             "system_home" : self.cfg.system_home,
+            "user_varnish" : self.cfg.user_varnish,
+            "varnish_vcl_file_path" : self.cfg.varnish_vcl_file_path,
+            "varnish_bind_host" : self.cfg.varnish_bind_host,
+            "varnish_bind_port" : self.cfg.varnish_bind_port,
+            "varnish_cache_size" : self.cfg.varnish_cache_size,
             }
         run("mkdir -p %s" % self.cfg.user_config)
         run("mkdir -p %s" % self.cfg.user_logs)
@@ -1075,7 +1095,7 @@ class Tasks:
         """
         cfg - BungeniConfigs object
         repo - Address of svn repository
-            working_folder - working folder for checkout and for running buildout
+        working_folder - working folder for checkout and for running buildout
         """
 
         self.cfg = cfg
@@ -2368,7 +2388,63 @@ class PostgresTasks:
             }
         )
              
-
+class VarnishTasks:
+    """
+    Installs and sets up the varnish HTTP accelerator
+    """
+    
+    def __init__(self):
+        self.cfg = BungeniConfigs() 
+        
+        
+    def setup_varnish(self):
+        """
+        Downloads varnish from dist.bungeni.org and installs in the given folder.
+        """
+        
+        run("mkdir -p "+ self.cfg.varnish_build_path)
+        run("rm -rf %(varnish_build_path)s/*" % 
+                       {"varnish_build_path":self.cfg.varnish_build_path})
+        
+        with cd(self.cfg.varnish_build_path):
+            run(self.cfg.varnish_download_command)
+            run("mkdir -p " + self.cfg.varnish_install_path)
+            run("tar --strip-components=1 -xvf %(varnish_download_file)s" %
+                         {"varnish_download_file":self.cfg.varnish_download_file})
+            
+            with cd(self.cfg.varnish_build_path):
+                run("./configure --prefix=%(varnish_home)s" % {"varnish_home": self.cfg.varnish_install_path})
+                run("make")
+                run("make install")
+                
+    
+    def create_vlc_file(self):
+        """
+        Generate a new varnish VCL file (Replacing the old one)
+        """
+        
+        with cd(self.cfg.varnish_vcl_folder):
+            run("mv default.vcl original.vcl")
+            
+            print("Creating varnish VCL file in %s " % self.cfg.varnish_vcl_folder)
+            
+            contents = "backend default { \n\t.host = \"%(server_name)s\"; \n\t.port = \"%(server_port)s\"; \n} \n\nsub vcl_recv { \n\tunset req.http.Cookie; \n\tif (req.http.Cookie) { \n\t\treturn (lookup); \n\t} \n\tif (req.http.Authorization ~ \"Basic\") { \n\t\treturn (pass); \n\t} \n\treturn (lookup); \n} \n\nsub vcl_fetch { \n\tunset beresp.http.Set-Cookie; \n\tset beresp.ttl = 12h; \n\treturn(deliver); \n}" % {
+                    "server_name": self.cfg.varnish_backend_host, 
+                    "server_port": self.cfg.varnish_backend_port
+                }
+            
+            vcl_file = open("%(vcl_folder)s/default.vcl" % {"vcl_folder": self.cfg.varnish_vcl_folder}, "w")
+            vcl_file.write(contents)
+            vcl_file.close()
+            
+            
+    def varnish_config(self):
+        """
+        Update the varnish config file (VCL)
+        """
+        print "Updating varnish default VCL file"
+        self.create_vlc_file()
+    
 
        
 

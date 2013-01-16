@@ -104,3 +104,11 @@ redirect_stderr = true
 stopsignal = INT
 autostart = false
 directory = %(user_glue)s
+
+[program:varnish]
+command = %(user_varnish)s/sbin/varnishd -f "%(varnish_vcl_file_path)s" -a %(varnish_bind_host)s:%(varnish_bind_port)s -F -s malloc,%(varnish_cache_size)s
+stdout_logfile = %(user_logs)s/varnish.log
+priority = 10
+redirect_stderr = true
+stopsignal = INT
+autostart = false
