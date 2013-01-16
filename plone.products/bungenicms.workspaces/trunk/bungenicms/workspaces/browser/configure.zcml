@@ -2,15 +2,7 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser">
 
-    <include package="plone.app.contentmenu" />   
-
-    <browser:page
-        name="space_view"    
-        for="Products.ATContentTypes.interface.IATFolder"
-        class=".space.SpaceView"
-        template="space.pt"
-        permission="zope2.View"
-        />        
+    <include package="plone.app.contentmenu" />          
 
     <browser:resource
         name="scrollable-horizontal.css"

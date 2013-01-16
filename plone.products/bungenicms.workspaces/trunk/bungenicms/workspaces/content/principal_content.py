@@ -95,7 +95,6 @@ def initializeAreas(pm_tool, acl_tool, request, member_folder_id=None):
                             member, PUBLIC_FOLDER_ENTRY_NAME)
             parent_space = getattr(folder, "web_space")
             mark(parent_space, IMemberSpace)    
-            parent_space.setLayout("space_view")  
             create_content(parent_space, MEMBER_SPACE_CONTENT, member,
                             "publish")
 
@@ -125,7 +124,6 @@ def initializeAreas(pm_tool, acl_tool, request, member_folder_id=None):
                      group, PUBLIC_FOLDER_ENTRY_NAME) 
                 parent_space = getattr(parent_space, "web_space")
                 mark(parent_space, IGroupSpace)  
-                parent_space.setLayout("space_view")
                 create_content(parent_space, GROUP_SPACE_CONTENT, group,
                                 "publish")
                 

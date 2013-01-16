@@ -89,7 +89,6 @@ def initializeAreas(pm_tool, acl_tool, request, member_folder_id=None):
             create_space(folder, "web_space", _(u"Web Space"), "publish", member_id, member, "PublicFolder")
             parent_space = getattr(folder, "web_space")
             mark(parent_space, IMemberSpace)    
-            parent_space.setLayout("memberspace_view")  
             create_content(parent_space, MEMBER_SPACE_CONTENT, member, "publish")
 
 
@@ -99,11 +98,9 @@ def initializeAreas(pm_tool, acl_tool, request, member_folder_id=None):
         group_membership_roles = doSearch(acl_tool, member_groupId)
         #if group home folder does not exist
         #it is cheaper to check if the group home folder already exists, then exit if it does
-        #import pdb;pdb.set_trace()
         for bungeni_group in acl_tool.bungeni_groups.enumerateGroups():
 
             if (member_groupId == bungeni_group["id"]) and ("bungeni.MP" not in group_membership_roles) and (bungeni_group["id"]not in groups_space.objectIds()):
-                #import pdb;pdb.set_trace()
                 group = acl_tool.bungeni_groups.getGroupById(bungeni_group["id"])                 
                 create_space(groups_space, bungeni_group["id"],
                     bungeni_group["title"], "private", bungeni_group["id"], 
@@ -117,6 +114,5 @@ def initializeAreas(pm_tool, acl_tool, request, member_folder_id=None):
                      group, "PublicFolder") 
                 parent_space = getattr(parent_space, "web_space")
                 mark(parent_space, IGroupSpace)  
-                parent_space.setLayout("groupspace_view")
                 create_content(parent_space, GROUP_SPACE_CONTENT, group, "publish")
                 

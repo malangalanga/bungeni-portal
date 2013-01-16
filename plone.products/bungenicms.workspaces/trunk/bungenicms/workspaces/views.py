@@ -28,17 +28,12 @@ def doSearch(acl_tool, groupId):
     return allAssignedRoles
 
 def create_space(parent, object_id, object_name, object_status, owner_id, owner, contenttype):  
-    #import pdb; pdb.set_trace()                
     parent.invokeFactory(contenttype, id=object_id)
     space = getattr(parent, object_id)
     space.setTitle(object_name)
-    #import pdb; pdb.set_trace()
-    #space.changeOwnership(owner)
     space.manage_setLocalRoles(owner_id, ["Owner",])
     space.reindexObjectSecurity()
 
-    
-    #import pdb; pdb.set_trace()  
     space.content_status_modify(workflow_action=object_status)
     #space.setConstrainTypesMode(constraintypes.ENABLED) 
     space.reindexObject
@@ -104,11 +99,9 @@ def initializeAreas(pm_tool, acl_tool, request, member_folder_id=None):
         group_membership_roles = doSearch(acl_tool, member_groupId)
         #if group home folder does not exist
         #it is cheaper to check if the group home folder already exists, then exit if it does
-        #import pdb;pdb.set_trace()
         for bungeni_group in acl_tool.bungeni_groups.enumerateGroups():
 
             if (member_groupId == bungeni_group["id"]) and ("bungeni.MP" not in group_membership_roles) and (bungeni_group["id"]not in groups_space.objectIds()):
-                #import pdb;pdb.set_trace()
                 group = acl_tool.bungeni_groups.getGroupById(bungeni_group["id"])                 
                 create_space(groups_space, bungeni_group["id"],
                     bungeni_group["title"], "private", bungeni_group["id"], 
