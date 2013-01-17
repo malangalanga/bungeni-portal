@@ -29,9 +29,11 @@ def doSearch(acl_tool, groupId):
     return allAssignedRoles
 
 def create_space(parent, object_id, object_name, object_status, owner_id, owner,
-                    contenttype):    
-    parent.invokeFactory(contenttype, id=object_id)
-    space = getattr(parent, object_id)
+                    contenttype):   
+    portal = getSite()
+    portal_types = getToolByName(portal, "portal_types")
+    type_info = portal_types.getTypeInfo(contenttype)
+    space = type_info._constructInstance(parent, object_id)
     space.setTitle(object_name)
     space.manage_setLocalRoles(owner_id, ["Manager",])
     space.changeOwnership(owner)
