@@ -20,6 +20,14 @@ set -e
 
 case "$1" in
 install)
+        
+        mkdir -p /opt/bungeni/updates/latest 
+        
+        ############################
+        # Postgresql Back Up 
+        ############################
+        # tar -czf postgres-data.tar.gz /opt/bungeni/bungeni_apps/postgres-data
+        # mv postgres-data.tar.gz /opt/bungeni/updates/latest/
     ;;
 *)
 
