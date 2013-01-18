@@ -30,4 +30,6 @@ def scheduled_date(context):
 def response_pending_date(context):
     return context._get_workflow_date("response_pending")
 
-
+def user_combined_name(user):
+    return " ".join([ name for name in 
+            (user.first_name, user.middle_name, user.last_name) if name ])
