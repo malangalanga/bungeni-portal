@@ -1188,3 +1188,34 @@ class ObjectTranslation(object):
 class TimeBasedNotication(Entity):
     """Time based Notifications
     """
+
+class DebateRecord(Entity):
+    """Debate record object associated with a sitting
+    """
+    available_dynamic_features = ["audit", "version", "attachment",
+        "workspace", "notification", "email", "user_assignment"]
+    interface.implements(interfaces.ITranslatable, interfaces.IDebateRecord)
+
+class DebateRecordItem(Entity):
+    """Items that may be included in a debate record
+    """
+    interface.implements(interfaces.IDebateRecordItem)
+
+class DebateDoc(DebateRecordItem):
+    """A document that is discussed during a sitting
+    """
+    interface.implements(interfaces.IDebateDoc)
+    available_dynamic_features = ["audit", "version"]
+
+class DebateSpeech(DebateRecordItem):
+    """A single speech in a debate record
+    """
+    available_dynamic_features = ["audit", "version", "attachment",
+        "workspace", "notification", "email", "user_assignment"]
+    interface.implements(interfaces.ITranslatable, interfaces.IDebateSpeech)
+
+class DebateRecordMedia(Entity):
+    """
+    Media files of a sitting
+    """
+    interface.implements(interfaces.IDebateRecordMedia)

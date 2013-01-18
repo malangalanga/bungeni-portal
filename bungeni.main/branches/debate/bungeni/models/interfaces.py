@@ -590,3 +590,18 @@ class ISubRoleAnnotations(interface.Interface):
 
 class ICountry(interface.Interface):
     """Marker interface for Country"""
+
+class IDebateRecord(interface.Interface):
+    """Marker interface for debate records"""
+
+class IDebateRecordItem(interface.Interface):
+    """Marker interface for debate record items"""
+
+class IDebateDoc(interface.Interface):
+    """Marker interface for docs debated in a sitting"""
+
+class IDebateSpeech(interface.Interface):
+    """Marker interface for debate speeches"""
+
+class IDebateRecordMedia(interface.Interface):
+    """Marker interface for debate record media"""

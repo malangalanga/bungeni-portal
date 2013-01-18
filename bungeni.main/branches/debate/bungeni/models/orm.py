@@ -266,6 +266,7 @@ mapper(domain.Sitting, schema.sitting,
             cascade="all"
         ),
         "venue": relation(domain.Venue, lazy=False),
+        "debate_record": relation(domain.DebateRecord, lazy=True)
     }
 )
 
@@ -724,8 +725,40 @@ mapper(domain.SittingReport, schema.sitting_report,
 mapper(domain.ObjectTranslation, schema.translation)
 
 
+mapper(domain.TimeBasedNotication, schema.time_based_notification)
+
+mapper(domain.DebateRecord, schema.debate_record,
+    properties={
+        "sitting": relation(domain.Sitting,
+            lazy=True,
+            uselist=False
+        ),
+        "debate_record_item": relation(domain.DebateRecordItem,
+            lazy=True,
+            uselist=True
+        ),
+    }
+)
+
+mapper(domain.DebateRecordItem, schema.debate_record_item)
+
+mapper(domain.DebateDoc, schema.debate_doc,
+    inherits=domain.DebateRecordItem,
+    polymorphic_on=schema.debate_record_item.c.type,
+    polymorphic_identity=polymorphic_identity(domain.DebateSpeech)
+)
+
+mapper(domain.DebateSpeech, schema.debate_speech,
+    inherits=domain.DebateRecordItem,
+    polymorphic_on=schema.debate_record_item.c.type,
+    polymorphic_identity=polymorphic_identity(domain.DebateSpeech)
+)
+
+mapper(domain.DebateRecordMedia, schema.debate_media)
+
 # !+IChange-vertical-properties special case: 
 # class is NOT workflowed, and in any case has no available_dynamic_features
 mapper_add_relation_vertical_properties(domain.Change)
 
-mapper(domain.TimeBasedNotication, schema.time_based_notification)
+
+
