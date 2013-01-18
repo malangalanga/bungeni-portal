@@ -44,9 +44,9 @@ configure)
 	
 	cat /opt/bungeni/updates/$LATEST/files.list | xargs md5sum > /var/lib/dpkg/info/$LATEST.md5sums
 	
-	##############################################
-    # Start Postgreql, Do Upgrade, Stop Postgresql
-    ##############################################
+	###############################################
+    # Start Postgresql, Do Upgrade, Stop Postgresql
+    ###############################################
 	# echo "Running db schema upgrade"
 	# su bungeni -l -c "/opt/bungeni/bungeni_apps/postgres/bin/pg_ctl start -D /opt/bungeni/bungeni_apps/postgres-data/ -l /opt/bungeni/bungeni_apps/logs/postgres.log"
 	# sleep 10
