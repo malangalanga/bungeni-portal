@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:db="http://namespaces.objectrealms.net/rdb"
+    xmlns:xapian="http://namespaces.objectrealms.net/xapian"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="bungeni">
+    
+    <include package="zope.component" file="meta.zcml" />
+    <include package="zope.app.component" file="meta.zcml" />
+    <include package="zope.i18n" file="meta.zcml" />
+    <exclude package="zope.componentvocabulary" />
+    <include package="zope.app.zcmlfiles" />
+    <include package="zope.security" file="meta.zcml" />
+    <include package="zope.securitypolicy" file="meta.zcml" />
+    <securityPolicy component="bungeni.BungeniSecurityPolicy" />
+    
+    <!-- Principals -->
+    <unauthenticatedPrincipal id="zope.anybody" title="Unauthenticated User" />
+    <unauthenticatedGroup id="zope.Anybody" title="Unauthenticated Users" />
+    <authenticatedGroup id="zope.Authenticated" title="Authenticated Users" />
+    <everybodyGroup id="zope.Everybody" title="All Users" />
+    
+    <include package="zope.annotation"/>
+    <!-- App configuration -->
+    <include package="bungeni.models" />
+    <include package="bungeni.core" file="auth.zcml" />
+    <include package="bungeni.models" file="roles.zcml" />
+    <include package="bungeni.models" file="permissions.zcml" />
+    <include package="bungeni.core.workflows" file="permissions.zcml" />
+        
+    <include package="bungeni.alchemist" file="meta.zcml"/>
+    <include package="ore.xapian" file="meta.zcml" />
+    <include package="ore.xapian" />
+    
+    <!-- DB setup -->
+    <include package="bungeni_custom.sys" file="db.zcml" />
+    <db:bind engine="bungeni-test" metadata="bungeni.models.schema.metadata" />
+    <db:bind engine="bungeni-test" metadata="bungeni.alchemist.security.metadata" />
+    
+</configure>
+

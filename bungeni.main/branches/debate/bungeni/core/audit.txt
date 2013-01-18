@@ -1,0 +1,126 @@
+Audit
+----------------
+The test below creates a bill and checks that changes to it are audit
+logged properly
+TODO:expand to test all bungeni content types
+
+Setup a participation
+---------------------
+
+  >>> from bungeni.core.testing import create_participation
+  >>> import zope.security.management
+  >>> zope.security.management.endInteraction()
+
+Database imports
+----------------
+  
+  >>> from bungeni.models import domain
+  >>> import datetime
+  >>> import bungeni.models.testing
+  >>> db = bungeni.models.testing.setup_db()
+  >>> from bungeni.alchemist import Session
+  >>> session = Session()
+  
+    >>> from bungeni.core import audit
+    >>> audit = reload(audit)
+
+Initialise User
+---------------
+   >>> user = domain.User(
+   ...        login=u"jdoe", 
+   ...        first_name=u"a", 
+   ...        last_name=u'ab', 
+   ...        email=u"mp1@example.com", 
+   ...        date_of_birth=datetime.datetime.now(),
+   ...        language="en",
+   ...        gender='M')
+   >>> session.add(user)
+   >>> session.flush()
+
+Initialise Group
+----------------
+
+  >>> parliament = domain.Parliament(short_name=u"p_1",
+  ...                               start_date=datetime.datetime.now(), 
+  ...                               election_date=datetime.datetime.now())
+  >>> parliament.language = "en"
+  >>> session.add( parliament )
+  >>> session.flush()
+  >>> len([ au for au in session.query(domain.Audit).filter(domain.Audit.audit_type=="bill") ])
+  0
+
+Initialise Bill
+-------------------
+
+   >>> bill = domain.Bill()
+   >>> bill.body = "THIS IS A TEST"
+   >>> bill.start_date = datetime.datetime.now()
+   >>> bill.end_date = datetime.datetime.now()
+   >>> bill.note = "This is a test"
+   >>> bill.title = "Sitting Agenda"
+   >>> bill.owner = user
+   >>> bill.language = "en"
+   >>> bill.created_date = datetime.datetime.now()
+   >>> bill.group = parliament
+   >>> bill.doc_type = "member"
+   >>> session.add(bill)
+   >>> session.flush()
+
+Create a participation with the user we just created as the principal
+--------------------------------------
+  
+  >>> principal = zope.security.testing.Principal('jdoe', 'manager', ())
+  >>> zope.security.management.newInteraction(create_participation(principal))
+  >>> principal.id
+  'jdoe'
+
+Broadcast an object created event
+---------------------------------
+  >>> event = zope.lifecycleevent.ObjectCreatedEvent(bill)
+  >>> zope.component.event.objectEventNotify(event)
+  
+check the audit table for changes: 
+!+AUDIT(murithi, may-2011) - With workflow events firing => more changes
+TODO: cater for workflow related changes in changes table
+
+check audit table for "add" change for this bill instance
+  >>> len(domain.get_changes(bill, "add"))
+  1
+
+  >>> from bungeni.models.testing import get_audit_count_for_type
+  >>> changes_table_count = get_audit_count_for_type("bill")
+
+Select last modification
+------------------------
+  >>> last_change = bill.changes[0]
+  >>> last_change.user.login
+  u'jdoe'
+  >>> last_change.action
+  'add'
+
+Broadcase an object modified event
+----------------------------------
+  >>> event = zope.lifecycleevent.ObjectModifiedEvent(bill)
+  >>> zope.component.event.objectEventNotify(event)
+
+check the audit table: 
+
+  >>> get_audit_count_for_type("bill") == changes_table_count + 1 
+  True
+
+Select last modification
+------------------------
+  >>> session.refresh(bill) # !+ otherwise bill.changes is stale!
+  >>> last_change = bill.changes[0]
+  >>> last_change.user.login
+  u'jdoe'
+  >>> unicode(last_change.action) #!+bin/test -c bungeni.core -t audit.txt
+  u'modify'
+
+Clean up
+--------
+  >>> session.flush()
+  >>> session.commit()
+  >>> session.close()
+  >>> zope.security.management.endInteraction()
+

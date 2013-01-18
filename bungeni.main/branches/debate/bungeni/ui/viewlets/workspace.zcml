@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="bungeni">
+    <browser:viewlet name="bungeni.workspace_context_navigation"
+        layer="..interfaces.IWorkspaceMyDocumentsSectionLayer"
+        permission="bungeni.ui.workspace.View"
+        manager="ploned.ui.interfaces.ILeftColumnManager"
+        class=".workspace.WorkspaceDocumentNavigation"
+        weight="1"
+    />
+    <browser:viewlet name="bungeni.workspace_document_marker"
+        for="bungeni.alchemist.interfaces.IAlchemistContent"
+        layer="..interfaces.IWorkspaceMyDocumentsSectionLayer"
+        permission="bungeni.ui.workspace.View"
+        manager="ploned.ui.interfaces.ILeftColumnManager"
+        class=".workspace.WorkspaceDocMarker"
+        weight="2"
+    />
+    <browser:viewlet name="bungeni.workspace_under_consideration_navigation"
+        layer="..interfaces.IWorkspaceUnderConsiderationSectionLayer"
+        permission="bungeni.ui.workspace.View"
+        manager="ploned.ui.interfaces.ILeftColumnManager"
+        class=".workspace.WorkspaceUnderConsiderationNavigation"
+        weight="1"
+    />
+    <browser:viewlet name="bungeni.workspace_signatory_status"
+        for="bungeni.models.interfaces.IBungeniParliamentaryContent"
+        layer="..interfaces.IWorkspaceSectionLayer"
+        class=".workspace.SignatoriesStatus"
+        manager="ploned.ui.interfaces.IAboveContentManager"
+        permission="bungeni.signatory.View"
+        weight="99"
+    />
+</configure>
