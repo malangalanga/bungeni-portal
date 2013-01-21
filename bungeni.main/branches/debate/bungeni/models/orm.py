@@ -754,7 +754,7 @@ mapper(domain.DebateSpeech, schema.debate_speech,
     polymorphic_identity=polymorphic_identity(domain.DebateSpeech)
 )
 
-mapper(domain.DebateRecordMedia, schema.debate_media)
+mapper(domain.DebateMedia, schema.debate_media)
 
 # !+IChange-vertical-properties special case: 
 # class is NOT workflowed, and in any case has no available_dynamic_features

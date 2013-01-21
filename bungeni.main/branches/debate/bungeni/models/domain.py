@@ -1195,6 +1195,8 @@ class DebateRecord(Entity):
     available_dynamic_features = ["audit", "version", "attachment",
         "workspace", "notification", "email", "user_assignment"]
     interface.implements(interfaces.ITranslatable, interfaces.IDebateRecord)
+    debate_media = one2many("debate_media",
+        "bungeni.models.domain.DebateMediaContainer", "debate_record_id")
 
 class DebateRecordItem(Entity):
     """Items that may be included in a debate record
@@ -1214,8 +1216,8 @@ class DebateSpeech(DebateRecordItem):
         "workspace", "notification", "email", "user_assignment"]
     interface.implements(interfaces.ITranslatable, interfaces.IDebateSpeech)
 
-class DebateRecordMedia(Entity):
+class DebateMedia(Entity):
     """
     Media files of a sitting
     """
-    interface.implements(interfaces.IDebateRecordMedia)
+    interface.implements(interfaces.IDebateMedia)

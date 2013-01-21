@@ -603,5 +603,5 @@ class IDebateDoc(interface.Interface):
 class IDebateSpeech(interface.Interface):
     """Marker interface for debate speeches"""
 
-class IDebateRecordMedia(interface.Interface):
+class IDebateMedia(interface.Interface):
     """Marker interface for debate record media"""
