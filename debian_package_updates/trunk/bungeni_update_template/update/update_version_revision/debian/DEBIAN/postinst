@@ -86,6 +86,15 @@ configure)
 			backup -u admin -r /opt/bungeni/updates/$LATEST/db/bungeni-atts/__contents__.xml \
 			-ouri=xmldb:exist://127.0.0.1:8088/exist/xmlrpc"
 	
+	echo "Restore framework"
+	su bungeni -l -c "JAVA_HOME=$JAVA_HOME \ 
+			java -jar -Dexist.home=/opt/bungeni/bungeni_apps/exist/ /opt/bungeni/bungeni_apps/exist/start.jar \
+			backup -u admin -r /opt/bungeni/updates/$LATEST/db/framework/__contents__.xml \
+			-ouri=xmldb:exist://127.0.0.1:8088/exist/xmlrpc"
+			
+	echo "Make /db/framework/bungeni/controller.xql executable"
+	su bungeni -l -c "ant -buildfile /opt/bungeni/updates/$LATEST/build.xml"
+	
 	echo "Kill bungeni processes"
 	pkill -u bungeni
 	
