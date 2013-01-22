@@ -1095,8 +1095,16 @@ time_based_notification = rdb.Table("time_based_notification", metadata,
 debate_record = rdb.Table("debate_record", metadata,
     rdb.Column("debate_record_id", rdb.Integer, primary_key=True),
     rdb.Column("sitting_id", rdb.Integer, rdb.ForeignKey("sitting.sitting_id"),
-        unique=True)
+        unique=True),
+    # Workflow State
+    rdb.Column("status", rdb.Unicode(32)),
+    rdb.Column("status_date", rdb.DateTime(timezone=False),
+        server_default=text("now()"),
+        nullable=False
+    ),
 )
+
+debate_record_audit = make_audit_table(debate_record, metadata)
 
 debate_record_item = rdb.Table("debate_record_item", metadata,
     rdb.Column("debate_record_item_id", rdb.Integer, primary_key=True),
@@ -1106,6 +1114,8 @@ debate_record_item = rdb.Table("debate_record_item", metadata,
     rdb.Column("start_date", rdb.DateTime(timezone=False), nullable=False),
     rdb.Column("end_date", rdb.DateTime(timezone=False), nullable=False),
 )
+
+debate_record_item_audit = make_audit_table(debate_record_item, metadata)
 
 debate_doc = rdb.Table("debate_doc", metadata,
     rdb.Column("debate_doc_id", rdb.Integer,
@@ -1122,7 +1132,13 @@ debate_speech = rdb.Table("debate_speech", metadata,
     # users that are not MPs or staff can have a user record that is not active
     rdb.Column("person_id", rdb.ForeignKey("user.user_id")),
     rdb.Column("text", rdb.UnicodeText),
-    
+    # Workflow State
+    rdb.Column("status", rdb.Unicode(32)),
+    rdb.Column("status_date", rdb.DateTime(timezone=False),
+        server_default=text("now()"),
+        nullable=False
+    ),
+    rdb.Column("language", rdb.String(5), nullable=False)
 )
 
 debate_media = rdb.Table("debate_media", metadata,

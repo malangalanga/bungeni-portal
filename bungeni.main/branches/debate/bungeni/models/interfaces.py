@@ -605,3 +605,6 @@ class IDebateSpeech(interface.Interface):
 
 class IDebateMedia(interface.Interface):
     """Marker interface for debate record media"""
+
+class IDebateMediaContainer(IAlchemistContainer):
+    """Interface for debate media container"""

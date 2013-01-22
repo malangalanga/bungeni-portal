@@ -18,13 +18,13 @@ from z3c.traverser.traverser import NameTraverserPlugin
 from bungeni.alchemist import Session
 from bungeni.core.interfaces import IRSSValues
 from bungeni.core.workflows.utils import view_permission
+from bungeni.core.workflow.interfaces import IWorkflowController
 from bungeni.models import domain
 from bungeni.models.interfaces import (IFeatureAudit, \
     IAlchemistContainer
 )
 from bungeni.utils import register
 from bungeni.capi import capi
-
 #import bungeni.ui.versions # !+REGISTER
 
 
@@ -96,6 +96,8 @@ class DebateTraverserPlugin(NameTraverserPlugin):
             debate = domain.DebateRecord()
             debate.sitting_id = context.sitting_id
             session.add(debate)
+            wfc = IWorkflowController(debate)
+            wfc.fireAutomatic()
             session.flush()
         debate.__name__ = self.traversalName
         debate.__parent__ = self.context

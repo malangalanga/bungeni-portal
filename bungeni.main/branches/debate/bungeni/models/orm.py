@@ -733,7 +733,7 @@ mapper(domain.DebateRecord, schema.debate_record,
             lazy=True,
             uselist=False
         ),
-        "debate_record_item": relation(domain.DebateRecordItem,
+        "debate_record_items": relation(domain.DebateRecordItem,
             lazy=True,
             uselist=True
         ),
@@ -745,13 +745,19 @@ mapper(domain.DebateRecordItem, schema.debate_record_item)
 mapper(domain.DebateDoc, schema.debate_doc,
     inherits=domain.DebateRecordItem,
     polymorphic_on=schema.debate_record_item.c.type,
-    polymorphic_identity=polymorphic_identity(domain.DebateSpeech)
+    polymorphic_identity="debate_doc",
+    properties={
+        "doc": relation(domain.Doc, lazy=True)
+    }
 )
 
 mapper(domain.DebateSpeech, schema.debate_speech,
     inherits=domain.DebateRecordItem,
     polymorphic_on=schema.debate_record_item.c.type,
-    polymorphic_identity=polymorphic_identity(domain.DebateSpeech)
+    polymorphic_identity="debate_speech",
+    properties={
+        "person": relation(domain.User, lazy=True)
+    }
 )
 
 mapper(domain.DebateMedia, schema.debate_media)
@@ -759,6 +765,3 @@ mapper(domain.DebateMedia, schema.debate_media)
 # !+IChange-vertical-properties special case: 
 # class is NOT workflowed, and in any case has no available_dynamic_features
 mapper_add_relation_vertical_properties(domain.Change)
-
-
-

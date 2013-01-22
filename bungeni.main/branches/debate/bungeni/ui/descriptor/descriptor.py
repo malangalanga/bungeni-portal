@@ -1532,9 +1532,9 @@ class DebateMediaDescriptor(ModelDescriptor):
         F(name="media_type",
           label="Media Type",
           required=True,
-          value_type="vocabulary",
-          vocabulary="media_type",
-          render_type="text_line",
+          value_type="text",
+          vocabulary="debate_media_type",
+          render_type="single_select",
         ),
     ]
 
