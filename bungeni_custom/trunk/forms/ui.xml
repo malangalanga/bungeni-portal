@@ -346,7 +346,7 @@
         <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="combined_name" label="Full Name [Short Name]" required="false" value_type="combined_name" render_type="text_line">
+        <field name="combined_name" label="Full Name [Short Name]" required="false" value_type="text" render_type="text_line" derived="group_combined_name">
             <show modes="listing" />
         </field>
         <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
@@ -619,7 +619,7 @@
         <field name="last_name" label="Last Name" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="combined_name" label="Full Name" required="false" value_type="combined_name" render_type="text_line" derived="user_combined_name">
+        <field name="combined_name" label="Full Name" required="false" value_type="text" render_type="text_line" derived="user_combined_name">
             <show modes="listing" />
         </field>
         <field name="email" label="Email" description="Email address" required="true" value_type="email" render_type="text_line">
