@@ -32,31 +32,31 @@ install)
         ######################################################################
         # Exist Backup bungeni-xml - start exist, backup data, kill bungeni ps 
         ######################################################################
-        echo "Stop bungeni services"
-        service bungeni_services stop
+        # echo "Stop bungeni services"
+        # service bungeni_services stop
         
-        echo "Clean out any lock files"
-        find /opt/bungeni/bungeni_apps/exist/webapp/WEB-INF/data -type f \( -name '*.lck' -o -name '*.lock' \) -exec rm -rf {} \;
+        # echo "Clean out any lock files"
+        # find /opt/bungeni/bungeni_apps/exist/webapp/WEB-INF/data -type f \( -name '*.lck' -o -name '*.lock' \) -exec rm -rf {} \;
         
-        echo "Start exist"
-        su bungeni -l -c "export JAVA_HOME=$JAVA_HOME"
-        su bungeni -l -c "java -Xms128m -Xmx512m \
-                -Dfile.encoding=UTF-8 \
-                -Djava.endorsed.dirs=/opt/bungeni/bungeni_apps/exist/lib/endorse \
-                -Dexist.home=/opt/bungeni/bungeni_apps/exist \
-                -Djetty.port=8088 \
-                -jar /opt/bungeni/bungeni_apps/exist/start.jar jetty" &
+        # echo "Start exist"
+        # su bungeni -l -c "export JAVA_HOME=$JAVA_HOME"
+        # su bungeni -l -c "java -Xms128m -Xmx512m \
+        #        -Dfile.encoding=UTF-8 \
+        #        -Djava.endorsed.dirs=/opt/bungeni/bungeni_apps/exist/lib/endorse \
+        #        -Dexist.home=/opt/bungeni/bungeni_apps/exist \
+        #        -Djetty.port=8088 \
+        #        -jar /opt/bungeni/bungeni_apps/exist/start.jar jetty" &
         
-		 sleep 11
-		 echo "Back up bungeni data"	
-		 chown bungeni:bungeni -Rf /opt/bungeni/updates/latest	
-		 su bungeni -l -c "JAVA_HOME=$JAVA_HOME \ 
-			java -jar -Dexist.home=/opt/bungeni/bungeni_apps/exist/ /opt/bungeni/bungeni_apps/exist/start.jar \
-			backup -u admin -b /db -d /opt/bungeni/updates/latest/ \
-			-ouri=xmldb:exist://127.0.0.1:8088/exist/xmlrpc"
+		# sleep 11
+		# echo "Back up bungeni data"	
+		# chown bungeni:bungeni -Rf /opt/bungeni/updates/latest	
+		# su bungeni -l -c "JAVA_HOME=$JAVA_HOME \ 
+		#	java -jar -Dexist.home=/opt/bungeni/bungeni_apps/exist/ /opt/bungeni/bungeni_apps/exist/start.jar \
+		#	backup -u admin -b /db -d /opt/bungeni/updates/latest/ \
+		#	-ouri=xmldb:exist://127.0.0.1:8088/exist/xmlrpc"
          
-         echo "Kill bungeni processes"
-         pkill -u bungeni
+        # echo "Kill bungeni processes"
+        # pkill -u bungeni
     ;;
 *)
 
