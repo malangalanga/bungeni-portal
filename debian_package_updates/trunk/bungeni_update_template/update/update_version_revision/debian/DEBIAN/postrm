@@ -19,13 +19,11 @@
 set -e
 
 case "$1" in
-
-abort-install)
-
-		rm -rf /opt/bungeni/updates/$LATEST
-	;;
 	
-remove|upgrade|failed-upgrade|abort-upgrade)
+abort-install | remove|upgrade|failed-upgrade|abort-upgrade)
+		
+		rm -rf /opt/bungeni/updates/$LATEST
+		rm -rf /opt/bungeni/updates/latest
 		
 		echo "bungeni update successfully removed."
     ;;
