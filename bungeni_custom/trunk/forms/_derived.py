@@ -10,26 +10,34 @@ Signature of all utilities here:
 
 $Id$
 """
+from bungeni.utils.misc import describe
+from bungeni.ui.i18n import _
 log = __import__("logging").getLogger("bungeni_custom.forms")
 
 
 # doc
 
+@describe(_(u"Submission Date"))
 def submission_date(context):
     return context._get_workflow_date("submitted")
 
+@describe(_(u"Admissible Date"))
 def admissible_date(context):
     return context._get_workflow_date("admissible")
 
+@describe(_(u"Gazetted Date"))
 def gazetted_date(context):
     return context._get_workflow_date("gazetted")
 
+@describe(_(u"Scheduled Date"))
 def scheduled_date(context):
     return context._get_workflow_date("scheduled")
 
+@describe(_(u"Response Pending Date"))
 def response_pending_date(context):
     return context._get_workflow_date("response_pending")
 
+@describe(_(u"Full Name : First name - middle name - last name"))
 def user_combined_name(user):
     return " ".join([ name for name in 
             (user.first_name, user.middle_name, user.last_name) if name ])
