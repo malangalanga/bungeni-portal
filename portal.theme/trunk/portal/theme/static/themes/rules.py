@@ -201,4 +201,15 @@ def enable_text_editor(content, theme, resource_fetcher, log):
     for script in scripts:
         if script.text.__contains__('YAHOO.widget.Editor'):
             script.text=""
-            script.drop_tag()                               
+            script.drop_tag()                    
+            
+def modify_proxy_response(request, response,
+                          orig_base, proxied_base, proxied_url, log):
+    """
+    Match proxy response content links to request host url.
+    """                              
+    host = request.environ["HTTP_HOST"]
+    resp = response.request.environ["HTTP_HOST"]                          
+    if host != resp and resp in response.body:
+            response.body = response.body.replace(resp, host)              
+            return response                     

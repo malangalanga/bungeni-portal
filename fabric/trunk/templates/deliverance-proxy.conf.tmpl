@@ -11,7 +11,9 @@
 </server-settings>
 
 <proxy path="/bungeni">
-    <dest href="http://%(app_host)s:%(bungeni_http_port)s/++vh++http:%(web_server_host)s:%(web_server_port)s/++/" />
+    <dest href="http://%(app_host)s:%(bungeni_http_port)s" />
+    <response rewrite-links="1" />
+    <response pyref="portal.theme.static.themes.rules:modify_proxy_response" />    
 </proxy>
 
 
@@ -34,5 +36,7 @@
 </proxy>
 
 <proxy path="/">
-    <dest href="http://%(app_host)s:%(bungeni_http_port)s/++vh++http:%(web_server_host)s:%(web_server_port)s/++/" />
+    <dest href="http://%(app_host)s:%(bungeni_http_port)s" />
+    <response rewrite-links="1" />
+    <response pyref="portal.theme.static.themes.rules:modify_proxy_response" />    
 </proxy>
