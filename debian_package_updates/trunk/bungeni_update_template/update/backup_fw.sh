@@ -12,5 +12,5 @@ su bungeni -l -c "JAVA_HOME=$JAVA_HOME \
 	-ouri=xmldb:exist://127.0.0.1:8088/exist/xmlrpc"
 
 #tar --transform 's,^opt/bungeni/bungeni_apps/exist_backup,,' -czf exist_fw.tar.gz /opt/bungeni/bungeni_apps/exist_backup/db/framework 
-tar -czf exist_fw.tar.gz /opt/bungeni/updates/latest/db/framework
+tar -czf exist_fw.tar.gz /opt/bungeni/updates/latest/db
 chown undesa:undesa exist_fw.tar.gz
