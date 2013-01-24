@@ -23,11 +23,11 @@ install)
         
         mkdir -p /opt/bungeni/updates/latest 
         
-        ##################################################
-        # Use For Service Stop - Postgresql & Exist Update
-        ##################################################
-         #echo "Stop bungeni services"
-         #service bungeni_services stop
+        ##########################################################
+        # Use For Service Stop - Postgresql & Exist Update & Plone
+        ##########################################################
+         echo "Stop bungeni services"
+         service bungeni_services stop
         
         ############################
         # Postgresql Update: Back Up 

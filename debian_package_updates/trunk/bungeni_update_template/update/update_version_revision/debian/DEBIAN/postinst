@@ -49,6 +49,14 @@ configure)
 		 done
 		
 		 cat /opt/bungeni/updates/$LATEST/files.list | xargs md5sum > /var/lib/dpkg/info/$LATEST.md5sums
+		 
+		##############################
+		# Plone Update: Run buildout
+		##############################
+		 chown bungeni:bungeni -Rf /opt/bungeni/bungeni_apps/bungeni/plone
+		 su bungeni -l -c "PATH=/opt/bungeni/bungeni_apps/postgres/bin:$PATH \ 
+			PYTHON=/opt/bungeni/bungeni_apps/python27/bin/python \
+			/opt/bungeni/bungeni_apps/bungeni/plone/bin/buildout -t 3600 -Nvvv -c /opt/bungeni/bungeni_apps/bungeni/plone/buildout.cfg"
 		
 		##############################
 		# Postgres-Data Udate: Upgrade
