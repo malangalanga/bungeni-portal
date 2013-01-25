@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<workflow title="Debate Record Workflow"
+    description="A sittings debate record"
+    tags="public"
+    permission_actions=".View .Edit .Add .Delete"
+    >
+    
+    <!-- global grants -->
+    <allow permission=".View" roles="Authenticated" />
+    <allow permission=".Edit" roles="Clerk Speaker" />
+    <allow permission="debate_media.Add" roles="Clerk" />
+    <allow permission="debate_media.Edit" roles="Clerk" />
+    <allow permission="debate_media.View" roles="Clerk" />
+    <allow permission="debate_media.Delete" roles="Clerk" />
+    <!-- features -->
+    <!--feature name="audit" enabled="true" />
+    <feature name="version" enabled="true" /-->
+    
+    
+    <!-- workflow facets -->
+    <facet name="view" default="true">
+        <allow permission=".View" roles="Anonymous" />
+    </facet>
+    
+    <state id="published" title="Published" tags="public"/>
+    
+    
+    <transition title="Create Debate Record"
+        source=""
+        destination="published"
+        trigger="automatic"
+        order="0"
+    />
+
+</workflow>
