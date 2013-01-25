@@ -737,6 +737,10 @@ mapper(domain.DebateRecord, schema.debate_record,
             lazy=True,
             uselist=True
         ),
+        "debate_media": relation(domain.DebateMedia,
+            lazy=True,
+            uselist=True
+        ),
     }
 )
 

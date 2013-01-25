@@ -6,11 +6,11 @@
       <div id="hansard_video">
         <span tal:condition="view/transcription_video">
           <video src="myOgg.ogg" width="400" height="300" 
-                 tal:attributes="src context/transcription_video" controls="controls">
+                 tal:attributes="src view/transcription_video" controls="controls">
             <object type="application/x-java-applet" width="400" height="300">
               <param name="archive" value="/@@/debate/cortado.jar"/>
               <param name="code" value="com.fluendo.player.Cortado.class"/>
-              <param name="url" value="myOgg.ogg" tal:attributes="value context/media_paths/web_optimised_video_path;"/>
+              <param name="url" value="myOgg.ogg" tal:attributes="value view/transcription_video"/>
               <p>You need to install Java to play this file.</p>
             </object>
           </video>
