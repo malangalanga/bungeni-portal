@@ -72,28 +72,21 @@ def add_member_workspace_links(content, theme, resource_fetcher, log):
     if check_url(test_url):
         content('#portal-personaltools').append("<li class='navigation'>\
         <a href='/plone/membership/" + member_id + \
-        "/web_space/folder_contents" + "'>web space</a></li>")                   
+        "/web_space/folder_contents" + "'>web space</a></li>")
         
-def add_group_workspace_links(content, theme, resource_fetcher, log):
+def redirect_group_workspace_links(request, response, response_headers, log):
     """
-    Add a groups 'web space' content to the workspace group view.
-    """
-    link_url = content("#portal-breadcrumbs a").pop(4).values()[0]
+    Redirect bungeni group workspace view to corresponding plone workspace view.
+    If the plone workspace does not exist, default bungeni view will be used.
+    """ 
+    link_url = request.url
+    # !+CUSTOM(mn, jan-2013) move group variables to bungeni_custom 
     if "group-political_group" or "group-committee" in link_url:
-        group_url = link_url.replace("workspace/groups/my-groups","plone/groups")
-        group_url = group_url.replace("-",".")
-        group_url = group_url + "web_space"
-        group_admin_url = group_url + "/folder_contents"
+        group_url = link_url.replace("workspace/groups/my-groups","plone/groups") 
+        group_url = group_url.replace("-",".") + "web_space"
         if check_url(group_url):
-            content(".contentActions").remove()
-            content(".enableFormTabbing").remove()
-            url_response = urllib2.urlopen(group_url)    
-            space_content = pq(url_response.read())
-            content(".title").after(space_content("#content"))
-            content(".tabs").after("<ul><li><a href=" + group_admin_url + ">" +\
-                "Add content</a></li><ul>")
-            theme("head").html().replace("http://localhost:8080/plone", group_url)
-
+            response._status__set("302 Found") 
+            response.location = group_url 
     
 def add_member_public_links(content, theme, resource_fetcher, log):
     """
@@ -207,9 +200,12 @@ def modify_proxy_response(request, response,
                           orig_base, proxied_base, proxied_url, log):
     """
     Match proxy response content links to request host url.
-    """                              
-    host = request.environ["HTTP_HOST"]
+    """      
+    if "HTTP_HOST" in request.environ.keys():
+        host = request.environ["HTTP_HOST"]
+    else:
+        host = request.environ["deliverance.base_url"]
     resp = response.request.environ["HTTP_HOST"]                          
     if host != resp and resp in response.body:
-            response.body = response.body.replace(resp, host)              
-            return response                     
+        response.body = response.body.replace(resp, host)              
+        return response

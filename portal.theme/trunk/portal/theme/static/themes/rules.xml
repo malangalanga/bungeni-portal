@@ -121,14 +121,8 @@
                         
     </rule>    
     
-    <rule class="load-workspace-group-navigation">   
-        <prepend href="/plone"
-                theme="//head"
-                content="//head"
-                nocontent="ignore" />                       
-        <pyquery pyref=
-            "portal.theme.static.themes.rules:add_group_workspace_links"
-        />              
+    <rule class="load-workspace-group-navigation" 
+        pyref="portal.theme.static.themes.rules:redirect_group_workspace_links" >                
     </rule>
     
     <rule class="load-member-content">    
