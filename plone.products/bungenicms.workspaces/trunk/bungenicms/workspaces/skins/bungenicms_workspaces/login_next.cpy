@@ -24,7 +24,7 @@ if membership_tool.isAnonymousUser():
     util.addPortalMessage(_(u'Login failed'), 'error')
     return state.set(status='failure')   
 
-came_from = REQUEST.URL2
+came_from = context.portal_url()
 return REQUEST.RESPONSE.redirect(came_from)
 
 state.set(came_from=came_from)
