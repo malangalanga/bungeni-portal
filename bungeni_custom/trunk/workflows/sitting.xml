@@ -84,11 +84,17 @@
         <facet ref=".all_Clerk" />
     </state>
     
-    <state id="draft_agenda" title="Draft Agenda" tags="draft public workspace agendaprivate">
+    <state id="draft_agenda" title="Draft Agenda"
+            actions="set_real_order"
+            tags="draft public workspace agendaprivate"
+        >
         <facet ref=".draft_agenda" />
     </state>
     
-    <state id="published_agenda" title="Published Agenda" tags="public published workspace">
+    <state id="published_agenda" title="Published Agenda" 
+            actions="schedule_sitting_items"
+            tags="public published workspace"
+        >
         <facet ref=".published_agenda" />
     </state>
     

@@ -42,6 +42,7 @@ def user_combined_name(user):
     return " ".join([ name for name in 
             (user.first_name, user.middle_name, user.last_name) if name ])
 
+#!+i18n?
 def group_combined_name(group):
     return "%s [%s]" % (group.full_name, group.short_name)
 

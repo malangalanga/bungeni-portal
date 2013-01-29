@@ -90,14 +90,20 @@
     </facet>
 
     
-    <state id="working_draft" title="Working Draft" tags="draft private">
+    <state id="working_draft" title="Working Draft"
+            actions="assign_role_minister_question"
+            tags="draft private"
+        >
         <facet ref=".draft_Clerk" />
         <facet ref="attachment.draft_Clerk" />
         <facet ref="event.draft_Clerk" />
         <facet ref="signatory.draft_Clerk" />
     </state>
     
-    <state id="draft" title="Draft" tags="draft private">
+    <state id="draft" title="Draft" 
+            actions="assign_role_minister_question"
+            tags="draft private"
+        >
         <facet ref=".draft_Owner" />
         <facet ref="attachment.draft_Owner" />
         <facet ref="event.draft_Owner" />
@@ -125,7 +131,11 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="withdrawn_internal" title="Withdrawn" tags="terminal fail">
+    <state id="withdrawn_internal" title="Withdrawn" 
+            actions="unschedule_doc"
+            tags="terminal fail"
+            note="A question can be withdrawn by the owner, visible as pre-withdrawn, cannot be edited by anyone."
+        >
         <facet ref=".internal_Signatory" />
         <facet ref="attachment.internal_frozen" />
         <facet ref="event.internal_frozen" />
@@ -139,7 +149,10 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="received" title="Received by clerk" tags="actionclerk">
+    <state id="received" title="Received by clerk" 
+            actions="set_doc_registry_number"
+            tags="actionclerk"
+        >
         <facet ref=".edit_Clerk" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
@@ -153,7 +166,10 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="admissible" title="Admissible" version="true" tags="public approved oral written">
+    <state id="admissible" title="Admissible" version="true" 
+            actions="set_doc_type_number"
+            tags="public approved oral written"
+        >
         <facet ref=".public" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />
@@ -220,7 +236,11 @@
 
     <state id="dropped" title="Dropped" permissions_from_state="debated" tags="public terminal fail" />
     
-    <state id="withdrawn" title="Withdrawn" permissions_from_state="debated" tags="public terminal fail" />
+    <state id="withdrawn" title="Withdrawn" permissions_from_state="debated" 
+        actions="unschedule_doc"
+        tags="public terminal fail" 
+        note="A question can be withdrawn by the owner, visible as pre-withdrawn, cannot be edited by anyone."
+    />
     
     
     <transition title="Create Question"

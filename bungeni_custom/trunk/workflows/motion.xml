@@ -123,7 +123,10 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="received" title="Received by Clerks Office" tags="actionclerk">
+    <state id="received" title="Received by Clerks Office" 
+            actions="set_doc_registry_number"
+            tags="actionclerk"
+        >
         <facet ref=".internal_Clerk" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
@@ -152,7 +155,10 @@
     <state id="inadmissible" title="Inadmissible" 
         permissions_from_state="withdrawn_internal" tags="terminal fail" />
     
-    <state id="admissible" title="Admissible" version="true" tags="public approved">
+    <state id="admissible" title="Admissible" version="true" 
+            actions="set_doc_type_number"
+            tags="public approved"
+        >
         <facet ref=".public" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />

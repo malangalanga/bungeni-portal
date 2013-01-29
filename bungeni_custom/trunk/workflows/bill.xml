@@ -115,7 +115,10 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="received" title="received by clerk" tags="actionclerk">
+    <state id="received" title="received by clerk" 
+            actions="set_doc_registry_number"
+            tags="actionclerk"
+        >
         <facet ref=".edit_Clerk" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />

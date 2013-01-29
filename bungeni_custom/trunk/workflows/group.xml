@@ -55,12 +55,18 @@
         <facet ref="address.internal" />
     </state>
     
-    <state id="active" title="Active Group" tags="public">
+    <state id="active" title="Active Group" 
+            actions="activate"
+            tags="public"
+        >
         <facet ref=".public" />
         <facet ref="address.public" />
     </state>
     
-    <state id="dissolved" title="Group is Dissolved" tags="public">
+    <state id="dissolved" title="Group is Dissolved" 
+            actions="dissolve"
+            tags="public"
+        >
         <facet ref=".public_frozen" />
         <facet ref="address.public_frozen" />
     </state>
