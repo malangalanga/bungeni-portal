@@ -63,6 +63,12 @@
     
     <state id="attached" title="Attachment" tags="public" permissions_from_parent="true" />
     
+    <state id="review" title="Review" tags="public" permissions_from_parent="true" />
+    
+    
+    <state id="review_complete" title="Review Complete" tags="public" permissions_from_parent="true" />
+    
+    
     <state id="internal" title="Published Internal">
         <facet ref=".internal" />
     </state>
@@ -86,6 +92,27 @@
         condition="context_parent_is_draft"
         trigger="automatic"
     />
+
+    <transition title="Attachment Review"
+        source="attached"
+        destination="review"
+        trigger="manual"
+        roles="Clerk"
+    />
+
+    <transition title="Attachment Review Complete"
+        source="review"
+        destination="review_complete"
+        trigger="manual"
+        roles="Clerk"
+    />
+
+    <transition title="Attachment Review"
+        source="review_complete"
+        destination="review"
+        trigger="manual"
+        roles="Clerk"
+    />
     
     <transition title="Publish"
         source="draft"
@@ -102,7 +129,7 @@
     />
     
     <transition title="Re-publish"
-        source="internal"
+        source="internal review_complete"
         destination="attached"
         trigger="manual"
         roles="Clerk Owner"
@@ -113,6 +140,7 @@
     published it is never retracted) we do not want to allow transitioning away 
     from "attached".
     -->
+    
     <transition title="Publish Internal"
         source="attached"
         destination="internal"
