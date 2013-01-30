@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: Tue Jan 29 16:53:10 2013\n"
+"POT-Creation-Date: Wed Jan 30 15:21:42 2013\n"
 "PO-Revision-Date: 2011-09-23 20:40+0300\n"
 "Last-Translator: Flavio <flavio.zeni@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,7 +35,7 @@ msgstr "adicionar"
 #: src/bungeni.main/bungeni/ui/forms/common.py:877
 #: src/bungeni.main/bungeni/ui/forms/common.py:930
 #: src/bungeni.main/bungeni/ui/login.py:382
-#: src/bungeni.main/bungeni/ui/widgets.py:372
+#: src/bungeni.main/bungeni/ui/widgets.py:379
 msgid "Cancel"
 msgstr "cancelar"
 
@@ -73,7 +73,6 @@ msgstr "bungeni"
 
 #: src/bungeni.main/bungeni/core/app.py:154
 #: src/bungeni.main/bungeni/core/app.py:161
-#: src/bungeni.main/bungeni/core/app.py:276
 msgid "Current parliamentary activity"
 msgstr "actividade parlamentar actual"
 
@@ -184,209 +183,53 @@ msgstr "meus grupos"
 msgid "Groups that the user is a member of"
 msgstr ""
 
-#: src/bungeni.main/bungeni/core/app.py:248
+#: src/bungeni.main/bungeni/core/app.py:250
 #: src/bungeni.main/bungeni/ui/menu.zcml:848
-msgid "Business"
-msgstr "trabalhos"
-
-#: src/bungeni.main/bungeni/core/app.py:249
-msgid "Daily operations of the parliament"
-msgstr "trabalhos parlamentares diários"
-
-#: src/bungeni.main/bungeni/core/app.py:252
-#: src/bungeni.main/bungeni/ui/menu.zcml:854
-msgid "Members"
-msgstr "deputados"
-
-#: src/bungeni.main/bungeni/core/app.py:253
-msgid "Records of members of parliament"
-msgstr "registos dos deputados"
-
-#: src/bungeni.main/bungeni/core/app.py:256
-#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:76
-#: src/bungeni.main/bungeni/ui/menu.zcml:860
-#: src/bungeni.main/bungeni/ui/templates/archive.pt:5
-msgid "Archive"
-msgstr "arquivo"
-
-#: src/bungeni.main/bungeni/core/app.py:257
-msgid "Parliament records and documents"
-msgstr "registos e documentos do parlamento"
-
-#: src/bungeni.main/bungeni/core/app.py:267
-#: src/bungeni.main/bungeni/ui/menu.zcml:866
 msgid "Administration"
 msgstr "administração"
 
-#: src/bungeni.main/bungeni/core/app.py:268
+#: src/bungeni.main/bungeni/core/app.py:251
 msgid "Manage bungeni settings"
 msgstr "administrar configurações bungeni"
 
-#: src/bungeni.main/bungeni/core/app.py:275
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:7
-msgid "What's on"
-msgstr "atualidade"
-
-#: src/bungeni.main/bungeni/core/app.py:282
-#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:111
-msgid "Committees"
-msgstr "comissões"
-
-#: src/bungeni.main/bungeni/core/app.py:284
-msgid "View committees created by the current parliament"
-msgstr "comissões criadas pelo parlamento atual"
-
-#: src/bungeni.main/bungeni/core/app.py:288
-#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:93
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:64
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:70
-msgid "Bills"
-msgstr "iniciativas"
-
-#: src/bungeni.main/bungeni/core/app.py:290
-msgid "View bills introduced in the current parliament"
-msgstr "visualizar projectos de lei apresentados pelo parlamento atual"
-
-#: src/bungeni.main/bungeni/core/app.py:294
-#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:340
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:117
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:124
-msgid "Questions"
-msgstr "Perguntas"
-
-#: src/bungeni.main/bungeni/core/app.py:296
-msgid "View questions tabled in the current parliament"
-msgstr "vizualizar as perguntas emitidas pelo parlamento atual"
-
-#: src/bungeni.main/bungeni/core/app.py:300
-#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:276
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:91
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:97
-msgid "Motions"
-msgstr "moções"
-
-#: src/bungeni.main/bungeni/core/app.py:302
-msgid "View motions moved in the current parliament"
-msgstr "visualizar moções apresentadas pelo parlamento"
-
-#: src/bungeni.main/bungeni/core/app.py:306
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:144
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:150
-msgid "Tabled documents"
-msgstr "documentos agendados"
-
-#: src/bungeni.main/bungeni/core/app.py:307
-msgid "View the documents tabled in the current parliament"
-msgstr "visualizar documentos apresentadas pelo parlamento atual"
-
-#: src/bungeni.main/bungeni/core/app.py:311
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:170
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:176
-msgid "Agenda items"
-msgstr "agendamentos"
-
-#: src/bungeni.main/bungeni/core/app.py:313
-msgid "View the agenda items of the current parliament"
-msgstr "visualizar a agenda do parlamento"
-
-#: src/bungeni.main/bungeni/core/app.py:317
-#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:421
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:18
-msgid "Sittings"
-msgstr "reuniões plenárias"
-
-# "sitting" implica que seja uma reunião plenária
-#: src/bungeni.main/bungeni/core/app.py:318
-msgid "View the sittings of the current parliament"
-msgstr "visualizar as reuniões do parlamento"
-
-#: src/bungeni.main/bungeni/core/app.py:323
-msgid "Publications"
-msgstr "publicações"
-
-#: src/bungeni.main/bungeni/core/app.py:326
-msgid "browse and download parliamentary publications"
-msgstr "navegar e baixar as publicações parlamentares"
-
-#: src/bungeni.main/bungeni/core/app.py:333
-msgid "Current"
-msgstr "atual"
-
-#: src/bungeni.main/bungeni/core/app.py:334
-msgid "View current parliament members (MPs)"
-msgstr "vizualizar atuais deputados"
-
-#: src/bungeni.main/bungeni/core/app.py:339
-msgid "Political groups"
-msgstr "grupos parlamentares"
-
-#: src/bungeni.main/bungeni/core/app.py:340
-msgid "View current political groups"
-msgstr "visualizar grupos parlamentares actuais"
-
-#: src/bungeni.main/bungeni/core/app.py:344
-msgid "Browse archives"
-msgstr "navegue arquivos"
-
-#: src/bungeni.main/bungeni/core/app.py:345
-msgid "Browse records from the archive"
-msgstr "Procurar registros do arquivo"
-
-#: src/bungeni.main/bungeni/core/app.py:349
-msgid "Documents"
-msgstr "documentos"
-
-#: src/bungeni.main/bungeni/core/app.py:350
-msgid "Browse documents in the archive"
-msgstr "Procurar documentos no arquivo"
-
-#: src/bungeni.main/bungeni/core/app.py:389
+#: src/bungeni.main/bungeni/core/app.py:262
 #: src/bungeni.main/bungeni/ui/menu.zcml:411
 msgid "Content"
 msgstr "conteúdo"
 
-#: src/bungeni.main/bungeni/core/app.py:390
+#: src/bungeni.main/bungeni/core/app.py:263
 msgid "browse bungeni content"
 msgstr "procurar conteúdo"
 
-#: src/bungeni.main/bungeni/core/app.py:395
-#: src/bungeni.main/bungeni/ui/menu.zcml:418
-msgid "Settings"
-msgstr "definições"
-
-#: src/bungeni.main/bungeni/core/app.py:396
-msgid "settings"
-msgstr "definições"
-
-#: src/bungeni.main/bungeni/core/app.py:401
+#: src/bungeni.main/bungeni/core/app.py:268
 msgid "email settings"
 msgstr "definições de correio electrónico"
 
-#: src/bungeni.main/bungeni/core/app.py:402
+#: src/bungeni.main/bungeni/core/app.py:269
 msgid "manage email settings"
 msgstr "definições de correio electrónico"
 
-#: src/bungeni.main/bungeni/core/app.py:407
+#: src/bungeni.main/bungeni/core/app.py:274
 msgid "search index settings"
 msgstr "índice de configurações de pesquisa"
 
-#: src/bungeni.main/bungeni/core/app.py:408
+#: src/bungeni.main/bungeni/core/app.py:275
 msgid "manage search index settings"
 msgstr "gerenciar as configurações de índice de pesquisa"
 
-#: src/bungeni.main/bungeni/core/app.py:413
+#: src/bungeni.main/bungeni/core/app.py:280
 msgid "registry settings"
 msgstr "configurações do Registro"
 
-#: src/bungeni.main/bungeni/core/app.py:414
+#: src/bungeni.main/bungeni/core/app.py:281
 msgid "manage registry settings"
 msgstr "gerenciar as configurações de registro"
 
-#: src/bungeni.main/bungeni/core/app.py:419
+#: src/bungeni.main/bungeni/core/app.py:286
 msgid "serialization manager"
 msgstr ""
 
-#: src/bungeni.main/bungeni/core/app.py:420
+#: src/bungeni.main/bungeni/core/app.py:287
 msgid "batch serialization of content"
 msgstr ""
 
@@ -629,112 +472,79 @@ msgstr "submeter ao Secretário-Geral"
 msgid "Schedule"
 msgstr "agendar"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:276
-msgid "Allow Question Submission"
-msgstr "permitir apresentação da pergunta"
-
-#: src/bungeni.main/bungeni/models/interfaces.py:280
-msgid "Days to Defer Question"
-msgstr "número de dias para diferir a pergunta"
-
-#: src/bungeni.main/bungeni/models/interfaces.py:281
-msgid ""
-"number of days after which admissible questions are automatically deferred"
-msgstr "tempo após o qual as questões são admissíveis automaticamente adiada"
-
-#: src/bungeni.main/bungeni/models/interfaces.py:287
-msgid "Days before question scheduled"
-msgstr "dias antes da questão agendada"
-
-#: src/bungeni.main/bungeni/models/interfaces.py:291
-msgid "Days before bill scheduled"
-msgstr "número de dias em falta para o agendamento de uma iniciativa"
-
-#: src/bungeni.main/bungeni/models/interfaces.py:295
-msgid "Maximum Questions Per Sitting"
-msgstr "máximo de perguntas por reunião"
-
-#: src/bungeni.main/bungeni/models/interfaces.py:299
-msgid "Maximum Questions Per Sitting Per MP"
-msgstr "max perguntas por sessão por mp"
-
-#: src/bungeni.main/bungeni/models/interfaces.py:303
-msgid "Number of sittings to include in what's business section"
-msgstr "Número de sessões para incluir, no que é seção de negócios"
-
-#: src/bungeni.main/bungeni/models/interfaces.py:311
+#: src/bungeni.main/bungeni/models/interfaces.py:277
 msgid "Reset global registry number"
 msgstr "Redefinir número de registro mundial"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:315
+#: src/bungeni.main/bungeni/models/interfaces.py:281
 msgid "Reset questions registry number"
 msgstr "Redefinir perguntas número de registro"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:319
+#: src/bungeni.main/bungeni/models/interfaces.py:285
 msgid "Reset motions registry number"
 msgstr "Redefinir movimentos número de registro"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:323
+#: src/bungeni.main/bungeni/models/interfaces.py:289
 msgid "Reset agenda items registry number"
 msgstr "Redefinir agenda número de registro itens"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:327
+#: src/bungeni.main/bungeni/models/interfaces.py:293
 msgid "Reset bills registry number"
 msgstr "Redefinir contas de número de registro"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:331
+#: src/bungeni.main/bungeni/models/interfaces.py:297
 msgid "Reset reports registry number"
 msgstr "Redefinir relatórios número de registro"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:335
+#: src/bungeni.main/bungeni/models/interfaces.py:301
 msgid "Reset tabled documents registry number"
 msgstr "Redefinir apresentou documentos número de registro"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:345
+#: src/bungeni.main/bungeni/models/interfaces.py:311
 msgid "Email Notifications Enabled?"
 msgstr "permitir notificações por correio electrónico?"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:351
+#: src/bungeni.main/bungeni/models/interfaces.py:317
 msgid "Email server hostname or IP address"
 msgstr "nome do servidor de correio electrónico ou endereço IP"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:355
+#: src/bungeni.main/bungeni/models/interfaces.py:321
 msgid "Email server port"
 msgstr "porta de acesso ao servidor de correio electrónico"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:359
+#: src/bungeni.main/bungeni/models/interfaces.py:325
 msgid "Email server login name"
 msgstr "nome da autenticação no servidor de correio electrónico"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:363
+#: src/bungeni.main/bungeni/models/interfaces.py:329
 msgid "Email server password"
 msgstr "palavra-passe para aceder ao servidor de correio electrónico"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:367
+#: src/bungeni.main/bungeni/models/interfaces.py:333
 msgid "Default sender address"
 msgstr "endereço de e-mail pré-definido do emissor"
 
-#: src/bungeni.main/bungeni/models/interfaces.py:371
+#: src/bungeni.main/bungeni/models/interfaces.py:337
 msgid "Connect securely to mail server (using TLS)"
 msgstr "conectar com segurança ao servidor de correio (usando TLS)"
 
-#: src/bungeni.main/bungeni/ui/admin.py:152
+#: src/bungeni.main/bungeni/ui/admin.py:119
 #, fuzzy
 msgid "Batch Serialization"
 msgstr "projecto de tradução"
 
-#: src/bungeni.main/bungeni/ui/admin.py:153
+#: src/bungeni.main/bungeni/ui/admin.py:120
 msgid ""
 "This will serialize all workflowable objects in Bungeni to XML. You can "
 "limit by type below or choose *All types* to serialize everything."
 msgstr ""
 
-#: src/bungeni.main/bungeni/ui/admin.py:158
+#: src/bungeni.main/bungeni/ui/admin.py:125
 #, fuzzy
 msgid "Serialize Items"
 msgstr "Itens disponíveis"
 
-#: src/bungeni.main/bungeni/ui/admin.py:162
+#: src/bungeni.main/bungeni/ui/admin.py:129
 msgid "Sent ${item_count} items for serialization"
 msgstr ""
 
@@ -1271,6 +1081,11 @@ msgstr "aprovar"
 msgid "Approved Bill"
 msgstr "iniciativa aprovada"
 
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:76
+#: src/bungeni.main/bungeni/ui/templates/archive.pt:5
+msgid "Archive"
+msgstr "arquivo"
+
 #: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:77
 msgid "Attachment"
 msgstr "Acessório"
@@ -1341,6 +1156,10 @@ msgstr "iniciativa retirada"
 #, fuzzy
 msgid "Bill Workflow"
 msgstr "fluxo de trabalho"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:93
+msgid "Bills"
+msgstr "iniciativas"
 
 #: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:94
 #: src/bungeni.main/bungeni/ui/login.py:254
@@ -1416,6 +1235,10 @@ msgstr "adicionar pessoal da comissão ..."
 #: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:110
 msgid "Committee is Dissolved"
 msgstr "a comissão está dissolvida"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:111
+msgid "Committees"
+msgstr "comissões"
 
 #: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:112
 msgid "Complete"
@@ -2111,6 +1934,10 @@ msgstr "Proposta"
 msgid "Motion Workflow"
 msgstr "fluxo de trabalho"
 
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:276
+msgid "Motions"
+msgstr "moções"
+
 #: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:277
 msgid "Move from Deceased"
 msgstr "Mover de Deceased"
@@ -2378,6 +2205,10 @@ msgstr "tipo de pergunta"
 #, fuzzy
 msgid "Question Workflow"
 msgstr "versão da pergunta"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:340
+msgid "Questions"
+msgstr "Perguntas"
 
 #: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:341
 msgid "Quorum"
@@ -2715,6 +2546,10 @@ msgstr "reuniões incluídas neste relatório"
 msgid "Sitting Reports"
 msgstr "reuniões incluídas neste relatório"
 
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:421
+msgid "Sittings"
+msgstr "reuniões plenárias"
+
 #: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:422
 msgid "Sort Order"
 msgstr "reordenar"
@@ -2937,7 +2772,7 @@ msgid "Users"
 msgstr "utilizadores"
 
 #: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:477
-#: src/bungeni.main/bungeni/ui/menu.zcml:956
+#: src/bungeni.main/bungeni/ui/menu.zcml:938
 #: src/bungeni.main/bungeni/ui/templates/version.pt:5
 msgid "Versions"
 msgstr "versões"
@@ -3252,8 +3087,8 @@ msgstr "modificado"
 
 #: src/bungeni.main/bungeni/ui/forms/common.py:116
 #: src/bungeni.main/bungeni/ui/menu.zcml:719
-#: src/bungeni.main/bungeni/ui/menu.zcml:905
-#: src/bungeni.main/bungeni/ui/menu.zcml:1183
+#: src/bungeni.main/bungeni/ui/menu.zcml:887
+#: src/bungeni.main/bungeni/ui/menu.zcml:1165
 #: src/bungeni.main/bungeni/ui/viewlets/templates/portlet-contentactions.pt:6
 msgid "View"
 msgstr "ver"
@@ -3325,7 +3160,7 @@ msgstr "reordenação de item"
 
 #: src/bungeni.main/bungeni/ui/forms/common.py:837
 #: src/bungeni.main/bungeni/ui/forms/forms.py:193
-#: src/bungeni.main/bungeni/ui/menu.zcml:1075
+#: src/bungeni.main/bungeni/ui/menu.zcml:1057
 msgid "Delete"
 msgstr "apagar"
 
@@ -3352,8 +3187,8 @@ msgstr "editar documento apresentado"
 
 #: src/bungeni.main/bungeni/ui/forms/common.py:917
 #: src/bungeni.main/bungeni/ui/forms/templates/sign-open-document.pt:5
+#: src/bungeni.main/bungeni/ui/menu.zcml:903
 #: src/bungeni.main/bungeni/ui/menu.zcml:921
-#: src/bungeni.main/bungeni/ui/menu.zcml:939
 #, fuzzy
 msgid "Sign Document"
 msgstr "documentos"
@@ -4134,6 +3969,10 @@ msgstr "editar membro do gabinete"
 msgid "Delete office member"
 msgstr "apagar membro do gabinete"
 
+#: src/bungeni.main/bungeni/ui/menu.zcml:418
+msgid "Settings"
+msgstr "definições"
+
 #: src/bungeni.main/bungeni/ui/menu.zcml:425
 msgid "Email settings"
 msgstr "Configurações de e-mail"
@@ -4184,7 +4023,7 @@ msgid "Add user address..."
 msgstr "Adicione o endereço do usuário ..."
 
 #: src/bungeni.main/bungeni/ui/menu.zcml:540
-#: src/bungeni.main/bungeni/ui/menu.zcml:973
+#: src/bungeni.main/bungeni/ui/menu.zcml:955
 msgid "Edit user"
 msgstr "editar utilizador"
 
@@ -4283,146 +4122,151 @@ msgstr "área de trabalho"
 msgid "Home"
 msgstr "início"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:876
-#: src/bungeni.main/bungeni/ui/menu.zcml:884
+#: src/bungeni.main/bungeni/ui/menu.zcml:858
+#: src/bungeni.main/bungeni/ui/menu.zcml:866
 msgid "Actions..."
 msgstr "ações"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:911
+#: src/bungeni.main/bungeni/ui/menu.zcml:893
 #: src/bungeni.main/bungeni/ui/templates/workflow.pt:5
 msgid "Workflow"
 msgstr "fluxo de trabalho"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:913
+#: src/bungeni.main/bungeni/ui/menu.zcml:895
 msgid "attachments"
 msgstr "anexos"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:930
+#: src/bungeni.main/bungeni/ui/menu.zcml:912
 #, fuzzy
 msgid "Withdraw signature"
 msgstr "rever assinatura"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:948
+#: src/bungeni.main/bungeni/ui/menu.zcml:930
 msgid "Audit log"
 msgstr "Log de auditoria"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:965
+#: src/bungeni.main/bungeni/ui/menu.zcml:947
 msgid "Delete user"
 msgstr "apagar utilizador"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:984
+#: src/bungeni.main/bungeni/ui/menu.zcml:966
 msgid "Edit attached file"
 msgstr "Edite o arquivo em anexo"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:987
+#: src/bungeni.main/bungeni/ui/menu.zcml:969
 msgid "Delete attached file"
 msgstr "Excluir arquivo anexado"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:990
+#: src/bungeni.main/bungeni/ui/menu.zcml:972
 msgid "Download attached file"
 msgstr "Baixar arquivo em anexo"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:995
+#: src/bungeni.main/bungeni/ui/menu.zcml:977
 msgid "Edit parliament"
 msgstr "Editar parlamento"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1003
+#: src/bungeni.main/bungeni/ui/menu.zcml:985
 msgid "Edit office"
 msgstr "editar gabinete"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1011
+#: src/bungeni.main/bungeni/ui/menu.zcml:993
 msgid "Edit committee"
 msgstr "editar comissão"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1019
+#: src/bungeni.main/bungeni/ui/menu.zcml:1001
 msgid "Edit political group"
 msgstr "Editar grupo político"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1027
+#: src/bungeni.main/bungeni/ui/menu.zcml:1009
 msgid "Delete parliament"
 msgstr "Excluir parlamento"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1035
+#: src/bungeni.main/bungeni/ui/menu.zcml:1017
 msgid "Delete office"
 msgstr "apagar gabinete"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1043
+#: src/bungeni.main/bungeni/ui/menu.zcml:1025
 msgid "Delete committee"
 msgstr "apagar comissão"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1051
+#: src/bungeni.main/bungeni/ui/menu.zcml:1033
 msgid "Delete political group"
 msgstr "Excluir grupo político"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1059
+#: src/bungeni.main/bungeni/ui/menu.zcml:1041
 msgid "Edit government"
 msgstr "editar governo"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1067
+#: src/bungeni.main/bungeni/ui/menu.zcml:1049
 msgid "Edit ministry"
 msgstr "editar ministério"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1083
+#: src/bungeni.main/bungeni/ui/menu.zcml:1065
 msgid "Delete ministry"
 msgstr "apagar ministério"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1091
+#: src/bungeni.main/bungeni/ui/menu.zcml:1073
 msgid "Edit group address"
 msgstr "Editar endereço de grupo"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1099
+#: src/bungeni.main/bungeni/ui/menu.zcml:1081
 msgid "Delete group address"
 msgstr "Excluir endereço de grupo"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1107
+#: src/bungeni.main/bungeni/ui/menu.zcml:1089
 msgid "Edit title type"
 msgstr "Editar tipo de título"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1115
+#: src/bungeni.main/bungeni/ui/menu.zcml:1097
 msgid "Delete title type"
 msgstr "Excluir tipo de título"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1123
+#: src/bungeni.main/bungeni/ui/menu.zcml:1105
 msgid "Delete user delegation"
 msgstr "Excluir delegação usuário"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1131
+#: src/bungeni.main/bungeni/ui/menu.zcml:1113
 msgid "Edit user delegation"
 msgstr "Editar delegação usuário"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1139
+#: src/bungeni.main/bungeni/ui/menu.zcml:1121
 msgid "Committee schedule"
 msgstr "Comissão agenda"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1147
+#: src/bungeni.main/bungeni/ui/menu.zcml:1129
 #, fuzzy
 msgid "Create reports"
 msgstr "criar relatório"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1165
+#: src/bungeni.main/bungeni/ui/menu.zcml:1147
 #, fuzzy
 msgid "User Assignment"
 msgstr "visualizar governo"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1174
+#: src/bungeni.main/bungeni/ui/menu.zcml:1156
 #, fuzzy
 msgid "Group Assignment"
 msgstr "adicionar item trabalho de grupo"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1191
+#: src/bungeni.main/bungeni/ui/menu.zcml:1173
 #, fuzzy
 msgid "Edit group assignment"
 msgstr "editar item de trabalho de grupo"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1199
+#: src/bungeni.main/bungeni/ui/menu.zcml:1181
 #, fuzzy
 msgid "Delete group assignment"
 msgstr "apagar grupo atribuição item"
 
-#: src/bungeni.main/bungeni/ui/menu.zcml:1207
+#: src/bungeni.main/bungeni/ui/menu.zcml:1189
 #, fuzzy
 msgid "Add group assignment..."
 msgstr "adicionar item trabalho de grupo"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1196
+#, fuzzy
+msgid "Delete Record"
+msgstr "Excluir evento"
 
 #. Default: "Report template file does not exist at ${path}"
 #: src/bungeni.main/bungeni/ui/reporting/generators.py:149
@@ -5161,22 +5005,22 @@ msgid "Select one or two items to show differences"
 msgstr "selecione um ou dois itens para mostrar diferenças"
 
 #: src/bungeni.main/bungeni/ui/viewlets/archive.py:23
-#: src/bungeni.main/bungeni/ui/widgets.py:1302
+#: src/bungeni.main/bungeni/ui/widgets.py:1309
 msgid "From"
 msgstr "de"
 
 #: src/bungeni.main/bungeni/ui/viewlets/archive.py:24
-#: src/bungeni.main/bungeni/ui/widgets.py:1303
+#: src/bungeni.main/bungeni/ui/widgets.py:1310
 msgid "Leave blank or set lower limit"
 msgstr "deixar em branco ou definir limite inferior"
 
 #: src/bungeni.main/bungeni/ui/viewlets/archive.py:28
-#: src/bungeni.main/bungeni/ui/widgets.py:1307
+#: src/bungeni.main/bungeni/ui/widgets.py:1314
 msgid "To"
 msgstr "a"
 
 #: src/bungeni.main/bungeni/ui/viewlets/archive.py:29
-#: src/bungeni.main/bungeni/ui/widgets.py:1308
+#: src/bungeni.main/bungeni/ui/widgets.py:1315
 msgid "Leave blank or set upper limit"
 msgstr "deixar em branco ou definir limite superior"
 
@@ -5217,7 +5061,7 @@ msgid "Date range set"
 msgstr "intervalo de data definido"
 
 #: src/bungeni.main/bungeni/ui/viewlets/archive.py:121
-#: src/bungeni.main/bungeni/ui/widgets.py:1333
+#: src/bungeni.main/bungeni/ui/widgets.py:1340
 msgid "Clear"
 msgstr "limpar"
 
@@ -5248,46 +5092,10 @@ msgstr "adicionar pontos ao agendamento, através da sua selecção"
 msgid "heading_sections"
 msgstr "seções"
 
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:8
-msgid "An overview of the daily operations of the parliament"
-msgstr "visão geral dos trabalhos do dia no parlamento"
-
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:15
-msgid "From: ${whats_on_start_date} to: ${whats_on_end_date}"
-msgstr "de: ${whats_on_start_date} a: ${whats_on_end_date}"
-
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:20
-msgid "Period selected has no Sittings"
-msgstr "não existem reuniões no período seleccionado"
-
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:66
-msgid "Period selected has no Bills"
-msgstr "não existem iniciativas no período seleccionado"
-
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:93
-msgid "Period selected has no Motions"
-msgstr "não existem moções no período seleccionado"
-
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:120
-msgid "Period selected has no Questions"
-msgstr "não existem perguntas no período seleccionado"
-
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:146
-msgid "Period selected has no Tabled Documents"
-msgstr "não existem documentos apresentados no período seleccionado"
-
-#: src/bungeni.main/bungeni/ui/viewlets/templates/whatson.pt:172
-msgid "Period selected has no Agenda Items"
-msgstr "não existem agendamentos no período seleccionado"
-
 #: src/bungeni.main/bungeni/ui/viewlets/templates/workspace-under-consideration.pt:4
 #: src/bungeni.main/bungeni/ui/viewlets/templates/workspace.pt:4
 msgid "documents"
 msgstr "documentos"
-
-#: src/bungeni.main/bungeni/ui/viewlets/whatson.py:47
-msgid "N/A"
-msgstr "N / A"
 
 #. Default: "This document has the required number of signatories. ${signed_members} member(s) have signed. ${required_members} signature(s) required."
 #: src/bungeni.main/bungeni/ui/viewlets/workspace.py:78
@@ -5303,7 +5111,7 @@ msgstr ""
 "Este documento não tem o número necessário de assinaturas. Requer "
 "${required_members} assinatura (s). ${signed_members} membro (s) assinaram."
 
-#: src/bungeni.main/bungeni/ui/views.zcml:414
+#: src/bungeni.main/bungeni/ui/views.zcml:402
 msgid "Listing"
 msgstr "listagem"
 
@@ -5334,45 +5142,45 @@ msgstr "formulário carregado não é um objeto de arquivo"
 msgid "download"
 msgstr "download pdf"
 
-#: src/bungeni.main/bungeni/ui/widgets.py:369
+#: src/bungeni.main/bungeni/ui/widgets.py:376
 msgid "Choose Month"
 msgstr "escolha o mês"
 
-#: src/bungeni.main/bungeni/ui/widgets.py:370
+#: src/bungeni.main/bungeni/ui/widgets.py:377
 msgid "Enter Year"
 msgstr "entre ano"
 
-#: src/bungeni.main/bungeni/ui/widgets.py:371
+#: src/bungeni.main/bungeni/ui/widgets.py:378
 msgid "OK"
 msgstr "ok"
 
-#: src/bungeni.main/bungeni/ui/widgets.py:373
+#: src/bungeni.main/bungeni/ui/widgets.py:380
 msgid "Please enter a valid year"
 msgstr "por favor, digite um ano válido"
 
-#: src/bungeni.main/bungeni/ui/widgets.py:496
-#: src/bungeni.main/bungeni/ui/widgets.py:560
+#: src/bungeni.main/bungeni/ui/widgets.py:503
+#: src/bungeni.main/bungeni/ui/widgets.py:567
 msgid "Incorrect string data for date"
 msgstr "dado string incorreto para data "
 
-#: src/bungeni.main/bungeni/ui/widgets.py:660
-#: src/bungeni.main/bungeni/ui/widgets.py:737
+#: src/bungeni.main/bungeni/ui/widgets.py:667
+#: src/bungeni.main/bungeni/ui/widgets.py:744
 msgid "Incorrect string data for date and time"
 msgstr "dado string incorreto para data e hora"
 
-#: src/bungeni.main/bungeni/ui/widgets.py:980
+#: src/bungeni.main/bungeni/ui/widgets.py:987
 msgid "start typing to chose $fname..."
 msgstr "começar a digitar a escolher $fname ..."
 
-#: src/bungeni.main/bungeni/ui/widgets.py:1253
+#: src/bungeni.main/bungeni/ui/widgets.py:1260
 msgid "selected subject terms"
 msgstr "selecionados termos do assunto"
 
-#: src/bungeni.main/bungeni/ui/widgets.py:1263
+#: src/bungeni.main/bungeni/ui/widgets.py:1270
 msgid "no subjects"
 msgstr "sem temas"
 
-#: src/bungeni.main/bungeni/ui/widgets.py:1328
+#: src/bungeni.main/bungeni/ui/widgets.py:1335
 #, fuzzy
 msgid "Ok"
 msgstr "Ok"
@@ -5460,6 +5268,138 @@ msgstr "não há itens encontrados"
 #: src/bungeni.main/bungeni/ui/workspace.py:69
 msgid "workspace_column_group_status_date"
 msgstr ""
+
+#~ msgid "settings"
+#~ msgstr "definições"
+
+#~ msgid "Number of sittings to include in what's business section"
+#~ msgstr "Número de sessões para incluir, no que é seção de negócios"
+
+#~ msgid "Business"
+#~ msgstr "trabalhos"
+
+#~ msgid "Daily operations of the parliament"
+#~ msgstr "trabalhos parlamentares diários"
+
+#~ msgid "Members"
+#~ msgstr "deputados"
+
+#~ msgid "Records of members of parliament"
+#~ msgstr "registos dos deputados"
+
+#~ msgid "Parliament records and documents"
+#~ msgstr "registos e documentos do parlamento"
+
+#~ msgid "What's on"
+#~ msgstr "atualidade"
+
+#~ msgid "View committees created by the current parliament"
+#~ msgstr "comissões criadas pelo parlamento atual"
+
+#~ msgid "View bills introduced in the current parliament"
+#~ msgstr "visualizar projectos de lei apresentados pelo parlamento atual"
+
+#~ msgid "View questions tabled in the current parliament"
+#~ msgstr "vizualizar as perguntas emitidas pelo parlamento atual"
+
+#~ msgid "View motions moved in the current parliament"
+#~ msgstr "visualizar moções apresentadas pelo parlamento"
+
+#~ msgid "Tabled documents"
+#~ msgstr "documentos agendados"
+
+#~ msgid "View the documents tabled in the current parliament"
+#~ msgstr "visualizar documentos apresentadas pelo parlamento atual"
+
+#~ msgid "Agenda items"
+#~ msgstr "agendamentos"
+
+#~ msgid "View the agenda items of the current parliament"
+#~ msgstr "visualizar a agenda do parlamento"
+
+# "sitting" implica que seja uma reunião plenária
+#~ msgid "View the sittings of the current parliament"
+#~ msgstr "visualizar as reuniões do parlamento"
+
+#~ msgid "Publications"
+#~ msgstr "publicações"
+
+#~ msgid "browse and download parliamentary publications"
+#~ msgstr "navegar e baixar as publicações parlamentares"
+
+#~ msgid "Current"
+#~ msgstr "atual"
+
+#~ msgid "View current parliament members (MPs)"
+#~ msgstr "vizualizar atuais deputados"
+
+#~ msgid "Political groups"
+#~ msgstr "grupos parlamentares"
+
+#~ msgid "View current political groups"
+#~ msgstr "visualizar grupos parlamentares actuais"
+
+#~ msgid "Browse archives"
+#~ msgstr "navegue arquivos"
+
+#~ msgid "Browse records from the archive"
+#~ msgstr "Procurar registros do arquivo"
+
+#~ msgid "Documents"
+#~ msgstr "documentos"
+
+#~ msgid "Browse documents in the archive"
+#~ msgstr "Procurar documentos no arquivo"
+
+#~ msgid "Allow Question Submission"
+#~ msgstr "permitir apresentação da pergunta"
+
+#~ msgid "Days to Defer Question"
+#~ msgstr "número de dias para diferir a pergunta"
+
+#~ msgid ""
+#~ "number of days after which admissible questions are automatically deferred"
+#~ msgstr ""
+#~ "tempo após o qual as questões são admissíveis automaticamente adiada"
+
+#~ msgid "Days before question scheduled"
+#~ msgstr "dias antes da questão agendada"
+
+#~ msgid "Days before bill scheduled"
+#~ msgstr "número de dias em falta para o agendamento de uma iniciativa"
+
+#~ msgid "Maximum Questions Per Sitting"
+#~ msgstr "máximo de perguntas por reunião"
+
+#~ msgid "Maximum Questions Per Sitting Per MP"
+#~ msgstr "max perguntas por sessão por mp"
+
+#~ msgid "An overview of the daily operations of the parliament"
+#~ msgstr "visão geral dos trabalhos do dia no parlamento"
+
+#~ msgid "From: ${whats_on_start_date} to: ${whats_on_end_date}"
+#~ msgstr "de: ${whats_on_start_date} a: ${whats_on_end_date}"
+
+#~ msgid "Period selected has no Sittings"
+#~ msgstr "não existem reuniões no período seleccionado"
+
+#~ msgid "Period selected has no Bills"
+#~ msgstr "não existem iniciativas no período seleccionado"
+
+#~ msgid "Period selected has no Motions"
+#~ msgstr "não existem moções no período seleccionado"
+
+#~ msgid "Period selected has no Questions"
+#~ msgstr "não existem perguntas no período seleccionado"
+
+#~ msgid "Period selected has no Tabled Documents"
+#~ msgstr "não existem documentos apresentados no período seleccionado"
+
+#~ msgid "Period selected has no Agenda Items"
+#~ msgstr "não existem agendamentos no período seleccionado"
+
+#~ msgid "N/A"
+#~ msgstr "N / A"
 
 #, fuzzy
 #~ msgid "section_workspace_draft"
