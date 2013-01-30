@@ -2,26 +2,23 @@
 # Copyright (C) 2010 - Africa i-Parliaments - http://www.parliaments.info/
 # Licensed under GNU GPL v2 - http://www.gnu.org/licenses/gpl-2.0.txt
 
-"""Workflow transition actions.
+"""Workflow transition-to-state actions.
 
-Signature of all action callables:
+Signature of all transition-to-state action callables:
 
     (context:Object) -> None
 
-All state transition actions are set ON execution of the workflow trransition 
-i.e. the status has already been updated to destination state id. 
-
-The order of execution of any actions follows same order of how actions are 
-listed in state.@actions xml attribute.
-
-The specially-handled "version" action, specified via state.@version="true",
-whenever present is ALWAYS executed as first action.
-!+ drop @version bool attr for simply another action?
+All transition-to-state actions are executed "on workflow trransition" i.e. 
+exactly when the status is updated from the source to the destination state, 
+and in exactly the order they are specified in the state.@actions xml attribute.
 
 For more samples of source definitions of transition conditions, see the
 following corresponding bungeni module:
 
     bungeni.core.workflows._actions
+
+REMEMBER: when a transition-to-state action is executed, the context.status 
+is already updated to the destination state.
 
 $Id$
 """
@@ -29,8 +26,8 @@ log = __import__("logging").getLogger("bungeni_custom.workflows")
 
 from bungeni.core.workflows._actions import (
     
-    # version
-    create_version as version,
+    # all
+    version, # context must be version-enabled
     
     # doc
     set_doc_registry_number, # when a doc is received

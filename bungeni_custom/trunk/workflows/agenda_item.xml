@@ -78,12 +78,12 @@
         <facet ref="signatory.draft_Owner" />
     </state>
     
-    <state id="submitted_signatories" title="Submitted to Signatories" version="true">
+    <state id="submitted_signatories" title="Submitted to Signatories" actions="version">
         <facet ref=".internal_Signatory" />
         <facet ref="signatory.internal" />
     </state>
     
-    <state id="redraft" title="Redraft" version="true" note="document under review before resubmission">
+    <state id="redraft" title="Redraft" actions="version" note="document under review before resubmission">
         <facet ref=".redraft_Owner" />
         <facet ref="attachment.internal_Owner" />
         <facet ref="signatory.internal_Owner" />
@@ -94,7 +94,7 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="submitted" title="Submitted" version="true" tags="actionclerk">
+    <state id="submitted" title="Submitted" actions="version" tags="actionclerk">
         <facet ref=".view_internal" />
         <facet ref="signatory.internal_frozen" />
     </state>
@@ -108,20 +108,23 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="clarification_required" title="Requires Clarification to Receive" version="true" tags="actionmp">
+    <state id="clarification_required" title="Requires Clarification to Receive" 
+            actions="version" 
+            tags="actionmp"
+        >
         <facet ref=".edit_Owner" />
         <facet ref="attachment.internal_Owner" />
         <facet ref="signatory.internal" />
     </state>
     
-    <state id="completed" title="Submitted to the Speaker" version="true">
+    <state id="completed" title="Submitted to the Speaker" actions="version">
         <facet ref=".edit_Speaker" />
         <facet ref="attachment.internal" />
         <facet ref="signatory.internal_frozen" />
     </state>
     
     <state id="incomplete" title="Requires Clarification to Approve" 
-        permissions_from_state="received" version="true" tags="actionclerk" />
+        permissions_from_state="received" actions="version" tags="actionclerk" />
     
     <state id="inadmissible" title="Inadmissible" tags="terminal fail">
         <facet ref=".view_internal" />
@@ -130,7 +133,7 @@
     
     <state id="withdrawn_internal" title="Withdrawn" permissions_from_state="inadmissible" tags="terminal fail" />
     
-    <state id="admissible" title="Admissible" version="true" tags="public approved">
+    <state id="admissible" title="Admissible" actions="version" tags="public approved">
         <facet ref=".public" />
         <facet ref="attachment.public" />
         <facet ref="signatory.public_frozen" />

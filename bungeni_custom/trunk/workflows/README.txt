@@ -105,8 +105,8 @@ workflow as a single XML document.
 - the order of state attributes should respect:
     id 
     title
-    version=False
     permissions_from_state
+    actions
     tags
     note
     permissions_from_parent=False

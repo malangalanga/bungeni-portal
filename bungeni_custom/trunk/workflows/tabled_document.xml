@@ -81,14 +81,14 @@
         <facet ref="signatory.draft_Owner" />
     </state>
 
-    <state id="submitted_signatories" title="Submitted to Signatories" version="true">
+    <state id="submitted_signatories" title="Submitted to Signatories" actions="version">
         <facet ref=".internal_Signatory" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
         <facet ref="signatory.internal" />
     </state>
     
-    <state id="redraft" title="Redraft" version="true" note="document under review before resubmission">
+    <state id="redraft" title="Redraft" actions="version" note="document under review before resubmission">
         <facet ref=".edit_Owner" />
         <facet ref="attachment.internal_Owner" />
         <facet ref="event.internal" />
@@ -109,7 +109,7 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="submitted" title="Submitted" version="true" tags="actionclerk">
+    <state id="submitted" title="Submitted" actions="version" tags="actionclerk">
         <facet ref=".view_Clerk" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal_frozen" />
@@ -126,15 +126,15 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="completed" title="Submitted to the Speaker" version="true">
+    <state id="completed" title="Submitted to the Speaker" actions="version">
         <facet ref=".edit_Speaker" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="admissible" title="Admissible" version="true" 
-            actions="set_doc_type_number"
+    <state id="admissible" title="Admissible"
+            actions="version set_doc_type_number"
             tags="public approved"
         >
         <facet ref=".public" />
@@ -153,10 +153,10 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="incomplete" title="Requires Clarification to Approve" version="true" 
+    <state id="incomplete" title="Requires Clarification to Approve" actions="version" 
         permissions_from_state="received" tags="actionclerk" />
     
-    <state id="clarification_required" title="Requires Clarification to Receive" version="true" tags="actionmp">
+    <state id="clarification_required" title="Requires Clarification to Receive" actions="version" tags="actionmp">
         <facet ref=".edit_Owner" />
         <facet ref="attachment.internal_Owner" />
         <facet ref="event.internal_frozen" />

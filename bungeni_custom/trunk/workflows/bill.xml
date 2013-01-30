@@ -81,14 +81,14 @@
         <facet ref="signatory.draft_Owner" />
     </state>
     
-    <state id="submitted_signatories" title="Submitted to Signatories" version="true" tags="actionmp">
+    <state id="submitted_signatories" title="Submitted to Signatories" actions="version" tags="actionmp">
         <facet ref=".internal_Signatory" />
         <facet ref="attachment.internal_Owner" />
         <facet ref="event.internal" />
         <facet ref="signatory.internal" />
     </state>
     
-    <state id="redraft" title="Redraft" version="true" note="document under review before resubmission">
+    <state id="redraft" title="Redraft" actions="version" note="document under review before resubmission">
         <facet ref=".redraft_Owner" />
         <facet ref="attachment.internal_Owner" />
         <facet ref="event.internal" />
@@ -109,7 +109,7 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="submitted" title="Submitted to Clerk" version="true" tags="actionclerk">
+    <state id="submitted" title="Submitted to Clerk" actions="version" tags="actionclerk">
         <facet ref=".view_Clerk" />
         <facet ref="event.internal_frozen" />
         <facet ref="signatory.internal_frozen" />
@@ -125,7 +125,7 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="gazetted" title="Bill Published in Gazette" version="true" tags="public">
+    <state id="gazetted" title="Bill Published in Gazette" actions="version" tags="public">
         <facet ref=".public_edit_Clerk" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />
@@ -147,7 +147,7 @@
     <state id="first_report_reading_pending" title="First Report Reading Pending" 
         permissions_from_state="first_committee" tags="public tobescheduled" />
     
-    <state id="first_report_reading" title="First Report Reading" version="true"
+    <state id="first_report_reading" title="First Report Reading" actions="version"
         permissions_from_state="first_committee" tags="public scheduled" />
     
     <state id="first_report_reading_adjourned" title="First Report Reading Adjourned" 
@@ -156,7 +156,7 @@
     <state id="second_reading_pending" title="Second Reading Pending" 
         permissions_from_state="first_committee" tags="public tobescheduled" />
     
-    <state id="second_reading" title="Second Reading" version="true"
+    <state id="second_reading" title="Second Reading" actions="version"
         permissions_from_state="first_committee" tags="public scheduled" />
     
     <state id="second_reading_adjourned" title="Second Reading Adjourned"
