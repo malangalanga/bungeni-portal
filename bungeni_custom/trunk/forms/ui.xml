@@ -303,6 +303,9 @@
         <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
+        <field name="event_date" label="Event Date" required="false" value_type="datetime" render_type="datetime" extended="datetime">
+            <show modes="view edit add listing" />
+        </field>
     </descriptor>
 
     <descriptor name="group_address">
@@ -432,6 +435,37 @@
         </field>
         <field name="body" label="Minutes" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add listing" />
+        </field>
+    </descriptor>
+
+    <descriptor name="item_schedule_vote">
+        <field name="date" label="Vote Date" required="true" value_type="date" render_type="date">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="title" label="Vote Title" required="true" value_type="text" render_type="text_line">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="description" label="Vote Description" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="result" label="Vote Result" required="true" value_type="text" render_type="single_select" vocabulary="sitting_schedule_vote_result">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="votes_for" label="Votes Cast For" required="false" value_type="number" render_type="number">
+            <show modes="view edit add" />
+        </field>
+        <field name="votes_against" label="Votes Cast Against" required="false" value_type="number" render_type="number">
+            <show modes="view edit add" />
+        </field>
+        <field name="votes_absent" label="Number" required="false" value_type="number" render_type="number">
+            <show modes="view edit add" />
+        </field>
+        <field name="file" label="Vote Record File" description="Upload Vote Record File (XML)" required="false" value_type="file" render_type="file">
+            <show modes="view edit add" />
+        </field>
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
     </descriptor>
 
