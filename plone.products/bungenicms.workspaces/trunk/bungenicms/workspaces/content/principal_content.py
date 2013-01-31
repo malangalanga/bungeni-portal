@@ -36,7 +36,7 @@ def create_space(parent, object_id, object_name, object_status, owner_id, owner,
     space = type_info._constructInstance(parent, object_id)
     space.setTitle(object_name)
     portal.plone_utils.changeOwnershipOf( space, portal.getOwner().getId(), 1 )
-    space.manage_setLocalRoles(owner_id, ["Contributor","Editor",])  
+    space._setRoles(owner_id, ("Reader","Contributor","Editor", "Reviewer")) 
     space.reindexObjectSecurity()
     space.content_status_modify(workflow_action=object_status)
     space.reindexObject
