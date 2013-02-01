@@ -35,19 +35,7 @@
         <show modes="add edit" />
         <hide modes="view listing" roles="Anonymous" />
     </field>
-    <field name="group_id" label="Committee" required="false" value_type="group" render_type="single_select" vocabulary="committee"
-        note="
-            !+AgendaItem_group(mr, dec-2012) am exposing the group field to
-            UI but making it modifiable only by Admin (but visible by everyone).
-            
-            The intention of the logic (currently an application-side assumption)
-            for AgendaItems is that they are ALWAYS created in a committee context
-            and that committee is what is automatically set as the group.
-            
-            This change also alleviates the need to include the group.short_name
-            as part of the DC title for an AgendaItem.
-        "
-        >
+    <field name="group_id" label="Committee" required="false" value_type="group" render_type="single_select" vocabulary="group">
         <show modes="edit add" roles="Admin"/>
         <show modes="view listing" />
     </field>
