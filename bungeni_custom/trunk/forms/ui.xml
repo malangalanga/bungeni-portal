@@ -712,6 +712,14 @@
         <field name="remarks" label="Remarks" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
+        
+        <container match="agenda_item.owner_id" name="agendaitems" note="!+naming" />
+        <container match="bill.owner_id" />
+        <container match="motion.owner_id" />
+        <container match="question.owner_id" />
+        <container match="tabled_document.owner_id" name="tableddocuments" note="!+naming" />
+        <container match="report.owner_id" name="preports" note="!+naming" />
+        
         <integrity constraints="user_birth_death_dates" validations="validate_email_availability" />
     </descriptor>
 

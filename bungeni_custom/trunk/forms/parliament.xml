@@ -26,6 +26,13 @@
         <show modes="view edit add" />
     </field>
     
+    <container match="agenda_item.group_id" name="agendaitems" note="!+naming !+why not parliament_id?" />
+    <container match="bill.parliament_id" />
+    <container match="motion.parliament_id" />
+    <container match="question.parliament_id" />
+    <container match="tabled_document.parliament_id" name="tableddocuments" note="!+naming" />
+    <container match="report.group_id" name="preports" note="!+naming !+why not parliament_id?" />
+    
     <integrity 
         constraints="end_after_start parliament_start_after_election"
         validations="validate_parliament_dates"
