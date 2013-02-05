@@ -33,6 +33,15 @@
     <container match="tabled_document.parliament_id" name="tableddocuments" note="!+naming" />
     <container match="report.group_id" name="preports" note="!+naming !+why not parliament_id?" />
     
+    <container match="session.parliament_id" />
+    <container match="committee.parent_group_id" />
+    <container match="government.parent_group_id" />
+    <container match="office.parent_group_id" />
+    <container match="member_of_parliament.group_id" name="parliamentmembers" />
+    <container match="political_group.parent_group_id" name="politicalgroups" />
+    <container match="sitting.group_id" />
+    <container match="title_type.group_id" />
+    
     <integrity 
         constraints="end_after_start parliament_start_after_election"
         validations="validate_parliament_dates"

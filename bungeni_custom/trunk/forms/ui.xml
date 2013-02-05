@@ -368,6 +368,14 @@
         <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
+        
+        <!--
+        <container match="group_membership.group_id" name="users" />
+        <container match="sitting.group_id" />
+        -->
+        <container match="heading.group_id" />
+        <container match="editorial_note.group_id" name="editorialnotes" />
+        
         <integrity constraints="end_after_start" validations="validate_date_range_within_parent" />
     </descriptor>
 
@@ -719,6 +727,7 @@
         <container match="question.owner_id" />
         <container match="tabled_document.owner_id" name="tableddocuments" note="!+naming" />
         <container match="report.owner_id" name="preports" note="!+naming" />
+        <container match="user_delegation.user_id" name="delegations" note="!+naming" />
         
         <integrity constraints="user_birth_death_dates" validations="validate_email_availability" />
     </descriptor>
