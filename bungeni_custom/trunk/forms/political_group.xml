@@ -34,6 +34,11 @@
     <field name="logo_data" label="Logo" required="false" value_type="image" render_type="image">
         <show modes="view edit add" />
     </field>
+    
+    <container match="member_title.membership_id" name="titles" />
+    <container match="political_group_member.group_id" name="group_members" />
+    <container match="title_type.group_id" name="title_types" />
+    
     <integrity constraints="end_after_start" validations="validate_date_range_within_parent" />
 </descriptor>
 

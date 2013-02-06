@@ -31,5 +31,11 @@
     <field name="notes" label="Notes" required="false" value_type="text" render_type="rich_text">
         <show modes="view edit add" />
     </field>
+    
+    <container match="member_title.membership_id" name="titles" />        
+    <!--
+    <container match="group_membership_role.membership_id" name="subroles" />        
+    -->
+
 </descriptor>
 

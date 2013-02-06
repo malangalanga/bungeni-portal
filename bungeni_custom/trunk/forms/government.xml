@@ -31,6 +31,7 @@
     <field name="identifier" label="Government Identifier" description="Unique identifier or number for this Government" required="false" value_type="text" render_type="text_line">
         <show modes="view edit add" />
     </field>
+    <container match="ministry.parent_group_id" name="ministries" />
     <integrity constraints="end_after_start" validations="validate_government_dates" />
 </descriptor>
 
