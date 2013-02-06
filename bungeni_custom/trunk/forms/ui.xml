@@ -368,14 +368,6 @@
         <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        
-        <!--
-        <container match="group_membership.group_id" name="users" />
-        <container match="sitting.group_id" />
-        -->
-        <container match="heading.group_id" />
-        <container match="editorial_note.group_id" name="editorialnotes" />
-        
         <integrity constraints="end_after_start" validations="validate_date_range_within_parent" />
     </descriptor>
 
@@ -409,7 +401,7 @@
     </descriptor>
 
     <descriptor name="heading" order="3">
-        <field name="text" label="Title" required="true" value_type="text" render_type="text_box">
+        <field name="text" label="Heading" required="true" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
         </field>
         <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
@@ -447,29 +439,56 @@
     </descriptor>
 
     <descriptor name="item_schedule_vote">
-        <field name="date" label="Vote Date" required="true" value_type="date" render_type="date">
+        <field name="time" label="Vote Time" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="title" label="Vote Title" required="true" value_type="text" render_type="text_line">
+        <field name="issue_item" label="Issue item" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="description" label="Vote Description" required="false" value_type="text" render_type="text_box">
+        <field name="issue_sub_item" label="Issue sub item" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
         </field>
-        <field name="result" label="Vote Result" required="true" value_type="text" render_type="single_select" vocabulary="sitting_schedule_vote_result">
+        <field name="document_uri" label="Document URI" required="false" value_type="text" render_type="text_line">
+            <show modes="view edit add" />
+        </field>
+        <field name="question" label="Question" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="votes_for" label="Votes Cast For" required="false" value_type="number" render_type="number">
+        <field name="description" label="Title/Description" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
         </field>
-        <field name="votes_against" label="Votes Cast Against" required="false" value_type="number" render_type="number">
+        <field name="vote_type" label="Vote type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="sitting_schedule_vote_types">
             <show modes="view edit add" />
         </field>
-        <field name="votes_absent" label="Number" required="false" value_type="number" render_type="number">
+        <field name="majority_type" label="Majority type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="sitting_schedule_vote_majority_types">
             <show modes="view edit add" />
         </field>
-        <field name="file" label="Vote Record File" description="Upload Vote Record File (XML)" required="false" value_type="file" render_type="file">
+        <field name="result" label="Vote result" required="true" value_type="text" render_type="single_select" vocabulary="sitting_schedule_vote_result">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="notes" label="Vote Notes" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
+        </field>
+        <field name="eligible_votes" label="Total Eligible Votes" required="false" value_type="number" render_type="number">
+            <show modes="view edit add" />
+        </field>
+        <field name="cast_votes" label="Total votes cast" required="false" value_type="number" render_type="number">
+            <show modes="view edit add" />
+        </field>
+        <field name="votes_for" label="Votes cast for" required="false" value_type="number" render_type="number">
+            <show modes="view edit add" />
+        </field>
+        <field name="votes_against" label="Votes cast against" required="false" value_type="number" render_type="number">
+            <show modes="view edit add" />
+        </field>
+        <field name="votes_abstained" label="Abstained" required="false" value_type="number" render_type="number">
+            <show modes="view edit add" />
+        </field>
+        <field name="roll_call" label="Vote Record File" description="Upload Vote Record File (XML)" required="false" value_type="file" render_type="file">
+            <show modes="view edit add" />
+        </field>
+        <field name="mimetype" label="MIME Type" required="false" value_type="text" render_type="no_input">
+            <show modes="view edit add listing" />
         </field>
         <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
             <show modes="view edit add" />
@@ -720,15 +739,6 @@
         <field name="remarks" label="Remarks" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        
-        <container match="agenda_item.owner_id" name="agendaitems" note="!+naming" />
-        <container match="bill.owner_id" />
-        <container match="motion.owner_id" />
-        <container match="question.owner_id" />
-        <container match="tabled_document.owner_id" name="tableddocuments" note="!+naming" />
-        <container match="report.owner_id" name="preports" note="!+naming" />
-        <container match="user_delegation.user_id" name="delegations" note="!+naming" />
-        
         <integrity constraints="user_birth_death_dates" validations="validate_email_availability" />
     </descriptor>
 
