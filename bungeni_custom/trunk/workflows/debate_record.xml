@@ -6,30 +6,57 @@
     >
     
     <!-- global grants -->
-    <allow permission=".View" roles="Authenticated" />
-    <allow permission=".Edit" roles="Clerk Speaker" />
-    <allow permission="debate_media.Add" roles="Clerk" />
-    <allow permission="debate_media.Edit" roles="Clerk" />
-    <allow permission="debate_media.View" roles="Clerk" />
-    <allow permission="debate_media.Delete" roles="Clerk" />
+    <allow permission="debate_media.Add" roles="Transcriber.Editor" />
+    <allow permission="debate_media.View" roles="Transcriber.Editor" />
+    <allow permission="debate_media.Delete" roles="Transcriber.Editor" />
+
+    <allow permission="debate_takes.Edit" roles="Transcriber.Editor" />
+    <allow permission="debate_takes.View" roles="Transcriber.Editor" />
+
     <!-- features -->
-    <!--feature name="audit" enabled="true" />
-    <feature name="version" enabled="true" /-->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="true" />
+    <feature name="user_assignment" enabled="true">
+        <parameter name="assigner_roles" value="Transcriber.Editor" />
+        <parameter name="assignable_roles" value="Transcriber.Reporter" />
+    </feature>
     
-    
-    <!-- workflow facets -->
-    <facet name="view" default="true">
-        <allow permission=".View" roles="Anonymous" />
+    <facet name="draft">
+      <allow permission=".View" roles="Transcriber.Editor Transcriber.Reporter" />
+      <allow permission="user_assignment.View" roles="Transcriber.Editor Transcriber.Reporter" />
+      <allow permission="user_assignment.Edit" roles="Transcriber.Editor" />
+      <allow permission="debate_media.Edit" roles="Transcriber.Editor" />
     </facet>
-    
-    <state id="published" title="Published" tags="public"/>
+
+    <facet name="published">
+      <allow permission=".View" roles="Transcriber.Editor Transcriber.Reporter" />
+       <allow permission="user_assignment.View" roles="Transcriber.Editor Transcriber.Reporter" />
+      <allow permission="user_assignment.Edit" roles="Transcriber.Editor" />
+      <allow permission="debate_media.Edit" roles="Transcriber.Editor" />
+    </facet>
+
+    <state id="draft" title="Draft">
+      <facet ref=".draft"/>
+    </state>
+
+    <state id="published" title="Published" tags="public">
+      <facet ref=".published"/>
+    </state>
     
     
     <transition title="Create Debate Record"
         source=""
-        destination="published"
+        destination="draft"
         trigger="automatic"
         order="0"
     />
+
+    <transition title="Publish debate"
+	source="draft"
+	destination="published"
+	trigger="manual"
+	order="0"
+	roles="Transcriber.Editor"
+     />
 
 </workflow>

@@ -36,6 +36,7 @@
         <allow permission=".Edit" roles="Clerk" />
         <allow permission=".Delete" roles="Clerk" />
         <allow permission="item_schedule_discussion.View" roles="Clerk" />
+	<allow permission="debate_record.View" roles="Clerk Transcriber"/>
     </facet>
     <facet name="draft_agenda">
         <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
@@ -46,6 +47,7 @@
         <allow permission="item_schedule.Add" roles="Clerk" />
         <allow permission="item_schedule.Delete" roles="Clerk" />
         <allow permission="item_schedule_discussion.View" roles="Clerk Speaker" />
+	
     </facet>
     <facet name="published_agenda">
         <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
