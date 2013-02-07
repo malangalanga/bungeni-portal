@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ui roles="CommitteeMember Minister Owner Clerk.HeadClerk Signatory Anonymous MP Authenticated Speaker PoliticalGroupMember Admin Government Clerk.QuestionClerk Translator Clerk">
-
+    
     <descriptor name="attachment">
         <field name="type" label="Attachment Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="attachment_type">
             <show modes="view edit add listing" />
@@ -31,7 +31,7 @@
             <show modes="view edit add" />
         </field>
     </descriptor>
-
+    
     <descriptor name="attachment_version">
         <field name="user_id" label="User" required="true" value_type="user" render_type="single_select" vocabulary="user">
             <show modes="view listing" />
@@ -83,7 +83,7 @@
             <hide modes="view listing" />
         </field>
     </descriptor>
-
+    
     <descriptor name="country">
         <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
             <show modes="view edit add" />
@@ -96,7 +96,7 @@
             <show modes="view edit add listing" />
         </field>
     </descriptor>
-
+    
     <descriptor name="doc">
         <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
@@ -153,7 +153,7 @@
             <show modes="view edit add" />
         </field>
     </descriptor>
-
+    
     <descriptor name="doc_version">
         <field name="user_id" label="User" required="true" value_type="user" render_type="single_select" vocabulary="user">
             <show modes="view listing" />
@@ -231,7 +231,7 @@
             <hide modes="view listing" />
         </field>
     </descriptor>
-
+    
     <descriptor name="editorial_note">
         <field name="editorial_note_id" label="Item" required="true" value_type="number" render_type="number">
             <show modes="view edit add listing" />
@@ -244,7 +244,7 @@
             <hide modes="listing" />
         </field>
     </descriptor>
-
+    
     <descriptor name="event">
         <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
@@ -307,7 +307,7 @@
             <show modes="view edit add listing" />
         </field>
     </descriptor>
-
+    
     <descriptor name="group_address">
         <field name="logical_address_type" label="Address Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="logical_address_type">
             <show modes="view edit add listing" />
@@ -338,7 +338,7 @@
             <show modes="view edit add listing" />
         </field>
     </descriptor>
-
+    
     <descriptor name="group">
         <field name="full_name" label="Full Name" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
@@ -370,7 +370,7 @@
         </field>
         <integrity constraints="end_after_start" validations="validate_date_range_within_parent" />
     </descriptor>
-
+    
     <descriptor name="group_membership">
         <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
             <show modes="view edit add listing" />
@@ -399,7 +399,7 @@
         </field>
         <integrity constraints="end_after_start active_and_substituted substituted_end_date inactive_no_end_date" validations="validate_date_range_within_parent validate_group_membership_dates" />
     </descriptor>
-
+    
     <descriptor name="heading" order="3">
         <field name="text" label="Heading" required="true" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
@@ -409,7 +409,7 @@
             <hide modes="listing" />
         </field>
     </descriptor>
-
+    
     <descriptor name="item_schedule">
         <field name="item_id" label="Item" required="true" value_type="number" render_type="number">
             <show modes="view edit add listing" />
@@ -427,7 +427,7 @@
             <show modes="view listing" />
         </field>
     </descriptor>
-
+    
     <descriptor name="item_schedule_discussion">
         <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
             <show modes="view edit add" />
@@ -437,7 +437,7 @@
             <show modes="view edit add listing" />
         </field>
     </descriptor>
-
+    
     <descriptor name="item_schedule_vote">
         <field name="time" label="Vote Time" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
@@ -495,7 +495,7 @@
             <hide modes="listing" />
         </field>
     </descriptor>
-
+    
     <descriptor name="member_title">
         <field name="title_type_id" label="Title" required="true" value_type="vocabulary" render_type="single_select" vocabulary="group_title_types">
             <show modes="view edit add listing" />
@@ -512,7 +512,7 @@
         </field>
         <integrity constraints="end_after_start" validations="validate_date_range_within_parent validate_member_titles" />
     </descriptor>
-
+    
     <descriptor name="session" order="16">
         <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
@@ -536,7 +536,7 @@
         </field>
         <integrity constraints="end_after_start" validations="validate_date_range_within_parent" />
     </descriptor>
-
+    
     <descriptor name="signatory">
         <field name="status" label="Signature Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" roles="Owner Signatory" />
@@ -548,7 +548,7 @@
             <show modes="listing" />
         </field>
     </descriptor>
-
+    
     <descriptor name="sitting_attendance">
         <field name="member_id" label="Member of Parliament" required="true" value_type="user" render_type="single_select" vocabulary="sitting_attendance">
             <show modes="view add listing" />
@@ -557,7 +557,7 @@
             <show modes="view edit add listing" />
         </field>
     </descriptor>
-
+    
     <descriptor name="sitting" order="17">
         <field name="short_name" label="Name of activity" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
@@ -586,7 +586,7 @@
         </field>
         <integrity constraints="end_after_start" validations="validate_date_range_within_parent validate_venues" />
     </descriptor>
-
+    
     <descriptor name="sitting_report">
         <field name="sitting_id" label="Sitting" required="true" value_type="vocabulary" render_type="single_select" vocabulary="sitting">
             <show modes="view listing" />
@@ -605,7 +605,7 @@
             <hide modes="edit add" />
         </field>
     </descriptor>
-
+    
     <descriptor name="title_type" order="22">
         <field name="title_name" label="Name" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
@@ -621,7 +621,7 @@
             <hide modes="listing" />
         </field>
     </descriptor>
-
+    
     <descriptor name="user_address">
         <field name="logical_address_type" label="Address Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="logical_address_type">
             <show modes="view edit add listing" />
@@ -652,13 +652,13 @@
             <show modes="view edit add listing" />
         </field>
     </descriptor>
-
+    
     <descriptor name="user_delegation" order="3">
         <field name="delegation_id" label="User" required="true" value_type="user" render_type="single_select" vocabulary="user">
             <show modes="view edit add listing" />
         </field>
     </descriptor>
-
+    
     <descriptor name="user" order="4">
         <field name="user_id" label="Name" required="true" value_type="user" render_type="no_input">
             <hide modes="view" />
