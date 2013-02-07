@@ -3,6 +3,9 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:five="http://namespaces.zope.org/five">
 
-  <five:registerPackage package="." initialize=".initialize" />
+    <include package="plone.app.controlpanel" />   
+    <includeOverrides file="overrides.zcml" /> 
+
+    <five:registerPackage package="." initialize=".initialize" />
 
 </configure>

@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <!-- Override search functionality for control panel group listing-->
+  <browser:page
+      name="usergroup-groupprefs"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".usergroups.GroupsOverviewControlPanel"
+      permission="plone.app.controlpanel.UsersAndGroups"
+      template="usergroups_groupsoverview.pt"
+      />
+      
+</configure>
