@@ -1,0 +1,218 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="bungeni"
+      metal:use-macro="context/@@standard_macros/page">
+      <tal:block metal:fill-slot="header">
+        <script type="text/javascript" 
+            tal:content="view/calendar_js_globals"/>
+        <script type="text/javascript">
+           function show_minical(){
+              if (scheduler.isCalendarVisible())
+                 scheduler.destroyCalendar();
+              else
+                 scheduler.renderCalendar({
+                    position:"dhx_minical_icon",
+                    date:scheduler._date,
+                    navigation:true,
+                    handler:function(date,calendar){
+                       scheduler.setCurrentView(date);
+                       scheduler.destroyCalendar()
+                    }
+                 });
+           }
+           
+            function load_ical(){
+                var start = new Date(scheduler._min_date);
+                var end = new Date(scheduler._max_date);
+                var s_start = new Array(
+                    start.getFullYear(), start.getMonth()+1, start.getDate()
+                );
+                var s_end = new Array(
+                    end.getFullYear(), end.getMonth()+1, end.getDate()
+                );
+                uid = scheduler.uid()
+                date_range = "&amp;from=" + s_start.join("-") + "&amp;to=" + s_end.join("-");
+                ical_url = cal_globals.ical_url + "?uid=" + uid + date_range
+                window.location = ical_url
+            }
+                      
+            function init() {
+                scheduler.locale.labels.venues_tab = cal_globals.venues_view_title;
+                scheduler.locale.labels.committees_tab = "Committees";
+                scheduler.config.xml_date="%Y-%m-%d %H:%i";
+                scheduler.config.show_loading=true;
+                scheduler.config.scroll_hour=8;
+                scheduler.config.details_on_create=true;
+                scheduler.config.all_timed = "short";
+                scheduler.config.multi_day = true;
+
+                
+                //create timeline view for venues
+                scheduler.createTimelineView({
+                    name : "venues",
+                    x_unit: "hour",
+                    x_date: "%d %M %h%a",
+                    x_step: 6,
+                    x_size: 20,
+                    x_start: 1,
+                    y_unit: timeline_data.venues,
+                    y_property: "venue",
+                    render: "bar"
+                })
+                //create timeline view for committees
+                scheduler.createTimelineView({
+                    name : "committees",
+                    x_unit: "hour",
+                    x_date: "%d %M %h%a",
+                    x_step: 6,
+                    x_size: 20,
+                    x_start: 0,
+                    x_length: 1,
+                    y_unit: timeline_data.committees,
+                    y_property: "group_id",
+                    render: "bar"
+                })
+                
+                //event tooltips
+                var format=scheduler.date.date_to_str(scheduler.config.xml_date); 
+                scheduler.templates.tooltip_text = function(start, end, event){
+                    var extra_text = "";
+                    if (event.event_type=="sitting"){
+                        extra_text = '<br/>' + cal_globals.text_venue + ' : ' + event.venue_name +
+                        '<br/>' + cal_globals.text_activity_type + ' : ' + event.activity_type +
+                        '<br/>' + cal_globals.text_meeting_type + ' : ' + event.meeting_type +
+                        '<br/>' + cal_globals.text_convocation_type + ' : ' + event.convocation_type
+                    }
+                    return unescape("%3Cb%3E") + event.short_name + unescape("%3C/b%3E") +
+                        '<br/>' + cal_globals.text_group + ' : ' + event.group + 
+                        '<br/>' + cal_globals.text_start_date + ' : ' + format(start) + 
+                        '<br/>' + cal_globals.text_end_date + ' : ' + format(end) + 
+                        extra_text;
+                };
+                scheduler.templates.event_text = render_event_text;
+                scheduler.templates.event_bar_text = render_event_bar_text;
+                scheduler.templates.event_class = event_type_class;
+                
+                scheduler.init('scheduler_here', null, "week");
+                scheduler.setLoadMode("month");
+                scheduler.load(location.href+"/dhtmlxcalendar?uid="+scheduler.uid());
+                
+                scheduler.config.lightbox.sections=[    
+                        { name:"description", height:200, type:"my_editor" },
+                        { name:"recurring", height:115, type:"recurring", 
+                            map_to:"rec_type", button:"recurring"
+                        },
+                        { name:"time", height:72, type:"time", map_to:"auto"}
+                    ]
+                    
+                //event handlers
+                scheduler.attachEvent("onBeforeViewChange", 
+                    handle_before_change_view
+                );
+                scheduler.attachEvent("onSchedulerResize", 
+                    scheduler_resized
+                );
+
+            }
+            var setup_editor = function(){
+                scheduler.form_blocks["my_editor"]={
+                    render:function(sns){
+                        return $("#calendar_form_html").html();
+                                  
+                    },
+                    set_value:function(node,value,ev){
+                        $("#short_name").val(ev.short_name||"")
+                        $("#venue_id").val(ev.venue||"");
+                        $("#language").val(ev.language||"en");
+                        $("#activity_type").val(ev.activity_type||"");
+                        $("#meeting_type").val(ev.meeting_type||"");
+                        $("#convocation_type").val(ev.convocation_type||"");
+                    },
+                    get_value:function(node,ev){
+                        ev.short_name = $("#short_name").val();
+                        ev.language = $("#language").val();
+                        ev.venue = $("#venue_id").val();
+                        ev.text = cal_globals.text_sitting;
+                        ev.activity_type = $("#activity_type").val();
+                        ev.meeting_type = $("#meeting_type").val();
+                        ev.convocation_type = $("#convocation_type").val();
+                    },
+                    focus:function(node){}
+                }
+            }
+        </script>
+        <script tal:condition="view/edit">
+            function canEdit()
+            {
+                init();
+                setup_editor();
+                scheduler.config.details_on_dblclick = true;
+                scheduler.config.icons_select=["icon_details","icon_delete"]
+                scheduler.config.readonly = false;
+                scheduler.attachEvent("onEventSave", event_save_handler);
+                scheduler.attachEvent("onEventIdChange", re_render_event);
+                //scheduler.attachEvent("onEventIdChange", refresh_events);
+                scheduler.attachEvent("onEventCollision", 
+                    collission_handler
+                );
+                scheduler.attachEvent("onBeforeLightbox", handle_lightbox);
+                scheduler.attachEvent("onBeforeDrag", handle_lightbox);
+                var dp = new dataProcessor(location.href+"/dhtmlxcalendaredit");
+                dp.styles.invalid = "border:2px solid red;color:red;"
+                dp.init(scheduler);
+                dp.attachEvent("onRowMark", row_marked);
+            }
+            window.onload = canEdit;
+        </script>
+        <script tal:condition ="not:view/edit">
+            function cannotEdit()
+            {
+                init();
+                scheduler.config.readonly = true;
+                scheduler.config.icons_select=[]
+                scheduler.config.drag_resize = false;
+                scheduler.config.drag_move = false;
+                scheduler.config.drag_create = false;
+                scheduler.config.dblclick_create = false;
+                var dp = new dataProcessor(location.href+"/dhtmlxcalendaredit");
+                dp.init(scheduler);
+            }
+            window.onload = cannotEdit;
+        </script>
+        
+      </tal:block>
+      <div metal:fill-slot="body" i18n:domain="bungeni" class="dhtmlx_calendar_main">
+          <div class="dhtmlx_calendar_title">
+            <span i18n:translate="">Calendar of </span>
+            <span tal:replace="view/title"></span>
+          </div>
+          <div id="scheduler_here" class="dhx_cal_container">
+                <div class="dhx_cal_navline">
+                    <div class="dhx_cal_prev_button">&nbsp;</div>
+                    <div class="dhx_cal_next_button">&nbsp;</div>
+                    <div class="dhx_cal_today_button"></div>
+                    <div class="dhx_minical_icon" id="dhx_minical_icon" 
+                        onclick="javascript:show_minical()">&nbsp;</div>
+                    <div class="dhx_ical_icon" id="dhx_ical_icon"
+                        onclick="javascript:load_ical()">&nbsp;</div>
+                    <div class="dhx_cal_date"></div>
+                    <div class="dhx_cal_tab" name="day_tab" id="day_tab"></div>
+                    <div class="dhx_cal_tab" name="week_tab" id="week_tab"></div>
+                    <div class="dhx_cal_tab" name="month_tab" id="month_tab"></div>
+                    <div class="dhx_cal_tab" name="year_tab" id="year_tab"></div>
+                    <div class="dhx_cal_tab" name="week_agenda_tab" id="agenda_tab"></div>
+                    <div class="dhx_cal_tab" name="venues_tab" id="venues_tab"></div>
+                    <div class="dhx_cal_tab" name="committees_tab" id="committees_tab"></div>
+                </div>
+                <div class="dhx_cal_header">
+                </div>
+                <div class="dhx_cal_data">
+                </div>        
+          </div>
+          <div tal:condition="view/edit" id="calendar_form_html" 
+            style="display:none;">
+            <span metal:use-macro="view/calendar_macros/eventformhtml"/>
+          </div>
+      </div>
+</html>  

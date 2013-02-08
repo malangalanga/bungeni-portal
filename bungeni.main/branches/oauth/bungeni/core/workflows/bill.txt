@@ -1,0 +1,171 @@
+Bill workflow
+=============
+
+The default bill workflow models the "Westminister Tradition".
+
+Setup
+-----
+
+Setting up database connection and utilities:
+
+  >>> from bungeni.core.testing import setup_db
+  >>> engine = setup_db()
+  
+  >>> from bungeni.core.workflows.testing import setup_security_adapters
+  >>> setup_security_adapters()
+  
+  >>> from bungeni.alchemist import Session
+  >>> session = Session()
+
+Setup a participation
+---------------------
+
+  >>> from bungeni.core.testing import create_participation
+  >>> import zope.security.management
+  >>> zope.security.management.endInteraction()
+  
+Imports
+-------
+
+  >>> from bungeni.models import domain
+  >>> from bungeni.models import schema
+
+Bills are versionable.
+----------------------  
+  >>> from zope.interface import classImplements
+  >>> from bungeni.models.interfaces import IFeatureVersion
+  >>> classImplements(domain.Bill, IFeatureVersion)
+
+  
+Initialise User
+---------------
+   >>> user = domain.User(
+   ...        login=u"jdoe", 
+   ...        first_name=u"a", 
+   ...        last_name=u'ab', 
+   ...        email=u"mp1@example.com", 
+   ...        date_of_birth=datetime.datetime.now(),
+   ...        language="en",
+   ...        gender='M')
+   >>> session.add(user)
+   >>> session.flush()
+   
+Create Participation
+--------------------------------------
+Create a participation with the user we just created as the principal  
+  >>> principal = zope.security.testing.Principal('jdoe', 'manager', ())
+  >>> zope.security.management.newInteraction(create_participation(principal))
+  >>> principal.id
+  'jdoe'
+
+Content creation
+----------------
+
+  >>> from bungeni.models.testing import add_content
+  
+  >>> parliament = add_content(
+  ...    domain.Parliament,
+  ...    short_name=u"p_1",
+  ...    language="en",
+  ...    start_date=yesterday,
+  ...    election_date=yesterday)
+
+  >>> country = add_content(
+  ...     domain.Country,
+  ...     country_id='KE',
+  ...     iso_name = u"KENYA",
+  ...     language="en",
+  ...     country_name=u"Kenya")
+ 
+  >>> mp_1 = add_content(
+  ...     domain.User,
+  ...     u"mp_1",
+  ...     first_name=u"a", 
+  ...     last_name=u'ab', 
+  ...     birth_country="KE",
+  ...     email=u"mp1@example.com", 
+  ...     date_of_birth=today,
+  ...     language="en",
+  ...     gender='M')
+
+  >>> bill = add_content(
+  ...     domain.Bill,
+  ...     doc_type="member",
+  ...     owner_id=mp_1.user_id,
+  ...     title=u"New Bill",
+  ...     language="en")
+
+Actions
+-------
+
+  >>> from bungeni.core.workflow.interfaces import IWorkflowController
+  >>> from bungeni.core.workflows.bill import actions 
+  >>> wfc = IWorkflowController(bill)
+  >>> wfc
+  <bungeni.core.workflow.states.WorkflowController object at ...>
+  >>> wf = wfc.workflow
+  
+"Create". This action sets the submission date and parliament id.
+
+  >>> actions.create(bill)
+  >>> bill.parliament_id == parliament.parliament_id
+  True
+
+!+FIRETRANSITION(mr, dec-2010) workflow transitions (only partly) executed in 
+this way do not create the expected auditlog. 
+
+  #>>> bill.submission_date == today
+  #True
+
+"Submit".
+
+  >>> actions.submit(bill)
+
+  >>> bill.publication_date == today
+  True
+
+  #>>> bill.submission_date == today
+  #True
+  
+"Schedule first reading".
+
+  >>> actions.schedule_first(bill)
+
+"Adjourn first reading".
+
+  >>> actions.adjourn_first(bill)
+
+"Withdraw".
+
+  >>> actions.withdraw(bill)
+
+Conditions
+----------
+
+!+CUSTOM(mr, mar-2011) update to test with bungeni_custom
+
+  >>> from bungeni.core.workflows import _conditions
+  
+"Is scheduled".
+
+  >>> _conditions.is_scheduled(bill)
+  False
+
+  >>> from bungeni.models.testing import create_sitting
+  >>> sitting = create_sitting(parliament.parliament_id)
+
+  >>> scheduling = add_content(
+  ...     domain.ItemSchedule,
+  ...     sitting_id=sitting.sitting_id,
+  ...     item_id=bill.doc_id)
+  
+  >>> _conditions.is_scheduled(bill)
+  True
+
+Cleanup
+-------
+
+  >>> session.flush()
+  >>> session.commit()
+  >>> session.close()
+  
