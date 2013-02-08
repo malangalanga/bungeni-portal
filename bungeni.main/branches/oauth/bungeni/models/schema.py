@@ -1178,6 +1178,27 @@ debate_take = rdb.Table("debate_take", metadata,
     rdb.Column("debate_take_name", rdb.String(100), nullable=False)
 )
 
+
+#OAuth
+oauth_application = rdb.Table("oauth_application", metadata,
+    rdb.Column("application_id", rdb.Integer, primary_key=True),
+    rdb.Column("application_identifier", rdb.UnicodeText, nullable=False, 
+        unique=True),
+    rdb.Column("application_name", rdb.UnicodeText, nullable=False),
+    rdb.Column("application_key", rdb.UnicodeText, nullable=False)
+)
+
+oauth_authorization = rdb.Table("oauth_authorization", metadata,
+    rdb.Column("oauth_authorization_id", rdb.Integer, primary_key=True),
+    rdb.Column("user_id", rdb.Integer, rdb.ForeignKey("user.user_id"),
+        nullable=False),
+    rdb.Column("application_id", rdb.Integer,
+        rdb.ForeignKey("oauth_application.application_id"), nullable=False),
+    rdb.Column("auth_code", rdb.UnicodeText, nullable=False),
+    rdb.Column(expiry, rdb,DateTime(timezone=False), nullable=False)                            
+)
+
+
 #for table_name in metadata.tables.keys():
 #    print metadata.tables[table_name].name
 

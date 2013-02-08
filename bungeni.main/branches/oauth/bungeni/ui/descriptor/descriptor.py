@@ -1714,3 +1714,27 @@ class ItemScheduleVoteDescriptor(ModelDescriptor):
         ),
         LanguageField("language"),
     ]
+
+class OauthApplicationDescriptor(ModelDescriptor):
+    localisable = False
+    fields = [
+        F(name="application_identifier",
+          label="Unique Application Identifier",
+          required=True,
+          value_type="text",
+          render_type="text_line"
+        ),
+        F(name="application_name",
+          label="Application Name",
+          required=True,
+          value_type="text",
+          render_type="text_line"
+        ),
+        F(name="application_key",
+          label="Application Key",
+          localizable=[show("view"), hide("add")],
+          required=True,
+          value_type="text",
+          render_type="text_line"
+        ),
+    ]

@@ -741,6 +741,12 @@ mapper(domain.DebateTake, schema.debate_take,
         "debate_record": relation(domain.DebateRecord, lazy=True)
     }
 )
+
+mapper(domain.OauthApplication, schema.oauth_application)
+
+
+
+
 # !+IChange-vertical-properties special case: 
 # class is NOT workflowed, and in any case has no available_dynamic_features, no descriptor
 import bungeni.alchemist.model

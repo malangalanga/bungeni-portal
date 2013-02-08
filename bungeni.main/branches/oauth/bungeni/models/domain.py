@@ -1099,3 +1099,8 @@ class DebateTake(Entity):
     """Debate takes
     """
     interface.implements(interfaces.IDebateTake)
+
+class OauthApplication(Entity):
+    """Oauth application registration
+    """
+    interface.implements(interfaces.IOauthApplication)

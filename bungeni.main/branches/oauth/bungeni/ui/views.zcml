@@ -589,4 +589,31 @@
       class="bungeni.ui.debaterecord.DebateRecordTakes"
       permission="bungeni.debate_takes.View"
    />
+
+   <!-- Oauth -->
+   <browser:page
+      for="bungeni.core.content.APISection"
+      name="index.html"
+      class="bungeni.ui.api.APIDefaultView"
+      permission="bungeni.oauth.View"
+   />
+   <browser:page
+      for="bungeni.models.domain.OauthApplicationContainer"
+      name="add"
+      class="bungeni.ui.api.AddOauthApplication"
+      permission="zope.ManageContent"
+   />
+   <browser:page
+      for="bungeni.core.content.APIOauthSection"
+      name="index.html"
+      class="bungeni.ui.api.APIDefaultView"
+      permission="bungeni.oauth.View"
+   />
+   <browser:page
+      for="bungeni.core.content.APIOauthSection"
+      name="authorize"
+      class="bungeni.ui.api.APIOauthAuthorization"
+      permission="bungeni.oauth.View"
+   />
+   
 </configure>

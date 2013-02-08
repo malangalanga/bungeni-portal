@@ -197,6 +197,19 @@ class CAPI(object):
             ws_tabs.append(tab.attrib["id"])
         return ws_tabs    
 
+    @cached_property.cachedIn("__oauth_secret__")
+    @bungeni_custom_errors
+    def oauth_secret(self):
+        """secret used to sign oauth requests and app keys"""
+        return bc.oauth_secret
+
+    @cached_property.cachedIn("__oauth_expiry_time__")
+    @bungeni_custom_errors
+    def oauth_auth_expiry_time(self):
+        """time before an oauth authorization code expires
+        max recommended time is 10min
+        """
+        return int(bc.oauth_auth_expiry_time)
     # utility methods
     
     def get_root_path(self):
