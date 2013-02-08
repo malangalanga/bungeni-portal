@@ -1964,7 +1964,7 @@ class XmldbTasks:
             self.cfg.exist_docs
         )
         # clean the framework folder if it already exists
-        run("rm -Rf %(exist_dir)s/*" % {"exist_dir":self.cfg.exist_docs})
+        run("find %(exist_dir)s -mindepth 1 -delete" % {"exist_dir":self.cfg.exist_docs})
         self.scm.export(current_release["xmldb"])
         run("find %(exist_docs)s -name '__contents__.xml' | xargs rm -rf" %
                 {"exist_docs": self.cfg.exist_docs}) 

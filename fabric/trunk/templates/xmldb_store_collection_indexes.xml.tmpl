@@ -21,7 +21,7 @@
          config.xml and ui-config.xml. -->
     <target name="upload-exist-collection-indexes">
         <echo message="Loading index file for bungeni-collection to eXist."/>
-        <xdb:store uri="${sys-uri}/config/db/framework" createcollection="true" createsubcollections="true" user="${user}" password="${password}">
+        <xdb:store uri="${sys-uri}/config/db/apps/framework" createcollection="true" createsubcollections="true" user="${user}" password="${password}">
             <fileset dir="${exist-docs}/system/config/db/framework">
                 <include name="*.xconf"/>
             </fileset>
