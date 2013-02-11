@@ -53,7 +53,6 @@
     </field>
     
     <container match="member_title.membership_id" name="titles" />
-    <container match="user_delegation.user_id" name="delegations" note="!+naming" />
     
     <container match="agenda_item.owner_id" indirect_key="user_id" />
     <container match="bill.owner_id" indirect_key="user_id" />
