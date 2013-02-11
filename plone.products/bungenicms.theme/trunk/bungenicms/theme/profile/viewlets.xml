@@ -14,6 +14,9 @@
     <viewlet name="plone.path_bar" />
     <viewlet name="bungenicmstheme.searchbox" insert-after="plone.path_bar" />    
   </order>
+  <order manager="plone.abovecontenttitle" skinname="Bungeni CMS theme">
+    <viewlet name="bungenicmstheme.nextprevious"/> 
+  </order>    
   <order manager="plone.contentviews" skinname="Bungeni CMS theme">  
     <viewlet name="plone.contentviews" />
     <viewlet name="plone.contentactions" />

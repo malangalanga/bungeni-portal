@@ -7,6 +7,7 @@
    
   <includeOverrides file="overrides.zcml" />
   <include package="plone.app.layout.viewlets" />
+   <include package="plone.app.layout.navigation" />
   <include package="plone.app.layout.presentation" />  
   <include package="Products.ATContentTypes" />
   <include package="Products.CMFPlone.browser" />  
@@ -20,6 +21,20 @@
      template="skins/bungenicms_theme/support.pt"
      permission="zope2.View"
      />
+     
+    <browser:viewlet
+        name="bungenicms.nextprevious"
+        manager="plone.app.layout.viewlets.interfaces.IAboveContentTitle"
+        class="plone.app.layout.nextprevious.view.NextPreviousViewlet"
+        permission="zope2.View"
+        />
+
+    <browser:viewlet
+        name="bungenicms.nextprevious.links"
+        manager="plone.app.layout.viewlets.interfaces.IHtmlHeadLinks"
+        class="plone.app.layout.nextprevious.view.NextPreviousLinksViewlet"
+        permission="zope2.View"
+        />     
 
   <five:registerPackage package="." />    
   
