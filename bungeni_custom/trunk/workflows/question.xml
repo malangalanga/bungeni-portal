@@ -1,12 +1,7 @@
 <?xml version="1.0"?>
 <workflow title="Question Workflow"
     description="A question"
-    tags="draft private public
-        approved tobescheduled scheduled
-        actionclerk actionmp
-        terminal succeed fail
-        oral written
-    "
+    tags="draft private public terminal"
     permission_actions=".View .Edit .Add .Delete"
     >
     
@@ -26,7 +21,10 @@
     <feature name="signatory" enabled="true">
         <parameter name="open_states" value="admissible" />
     </feature>
-    <feature name="schedule" enabled="true" />
+    <feature name="schedule" enabled="true">
+        <parameter name="schedulable_states" value="schedule_pending" />
+        <parameter name="scheduled_states" value="scheduled" />
+    </feature>
     <feature name="workspace" enabled="true" />
     <feature name="notification" enabled="true" />
     <feature name="email" enabled="true" />
@@ -110,7 +108,7 @@
         <facet ref="signatory.draft_Owner" />
     </state>
     
-    <state id="submitted_signatories" title="Submitted to Signatories" actions="version" tags="actionmp">
+    <state id="submitted_signatories" title="Submitted to Signatories" actions="version">
         <facet ref=".internal_Signatory" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
@@ -133,7 +131,7 @@
     
     <state id="withdrawn_internal" title="Withdrawn" 
             actions="unschedule_doc"
-            tags="terminal fail"
+            tags="terminal"
             note="A question can be withdrawn by the owner, visible as pre-withdrawn, cannot be edited by anyone."
         >
         <facet ref=".internal_Signatory" />
@@ -142,7 +140,7 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="submitted" title="Submitted to clerk" actions="version" tags="actionclerk">
+    <state id="submitted" title="Submitted to clerk" actions="version">
         <facet ref=".view_Clerk" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal_frozen" />
@@ -151,7 +149,7 @@
     
     <state id="received" title="Received by clerk" 
             actions="set_doc_registry_number"
-            tags="actionclerk"
+            
         >
         <facet ref=".edit_Clerk" />
         <facet ref="attachment.internal" />
@@ -168,7 +166,7 @@
     
     <state id="admissible" title="Admissible"
             actions="version set_doc_type_number"
-            tags="public approved oral written"
+            tags="public"
         >
         <facet ref=".public" />
         <facet ref="attachment.public" />
@@ -176,14 +174,14 @@
         <facet ref="signatory.public_frozen" />
     </state>
     
-    <state id="inadmissible" title="Inadmissible" tags="terminal fail">
+    <state id="inadmissible" title="Inadmissible" tags="terminal">
         <facet ref=".view_Clerk" />
         <facet ref="attachment.internal_frozen" />
         <facet ref="event.internal_frozen" />
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="clarification_required" title="Requires Clarification to Receive" actions="version" tags="actionmp">
+    <state id="clarification_required" title="Requires Clarification to Receive" actions="version">
         <facet ref=".edit_Owner" />
         <facet ref="attachment.internal_Owner" />
         <facet ref="event.internal" />
@@ -191,54 +189,54 @@
     </state>
     
     <state id="incomplete" title="Require Clarification to Approve" actions="version"
-        permissions_from_state="received" tags="actionclerk" />
+        permissions_from_state="received"  />
     
     <state id="schedule_pending" title="Schedule pending" 
-        permissions_from_state="admissible" tags="public tobescheduled oral" />
+        permissions_from_state="admissible" tags="public" />
     
     <state id="scheduled" title="Scheduled" 
-        permissions_from_state="admissible" tags="public scheduled oral" />
+        permissions_from_state="admissible" tags="public" />
 
     <state id="adjourned" title="Debate adjourned" 
-        permissions_from_state="admissible" tags="public approved" />
+        permissions_from_state="admissible" tags="public" />
     
-    <state id="response_pending" title="Pending response" tags="public written">
+    <state id="response_pending" title="Pending response" tags="public">
         <facet ref=".public_response_Minister" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />
         <facet ref="signatory.public_frozen" />
     </state>
     
-    <state id="response_submitted" title="Response submitted" tags="public actionclerk">
+    <state id="response_submitted" title="Response submitted" tags="public">
         <facet ref=".public_response_internal" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />
         <facet ref="signatory.public_frozen" />
     </state>
     
-    <state id="response_completed" title="Response completed" tags="public terminal succeed">
+    <state id="response_completed" title="Response completed" tags="public terminal">
         <facet ref=".public_response_public" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />
         <facet ref="signatory.public_frozen" />
     </state>
     
-    <state id="deferred" title="Deferred" permissions_from_state="admissible" tags="public approved" />
+    <state id="deferred" title="Deferred" permissions_from_state="admissible" tags="public" />
     
-    <state id="debated" title="Debated" tags="public terminal succeed">
+    <state id="debated" title="Debated" tags="public terminal">
         <facet ref=".public" />
         <facet ref="attachment.public_frozen" />
         <facet ref="event.public_frozen" />
         <facet ref="signatory.public_frozen" />
     </state>
     
-    <state id="elapsed" title="Elapsed" permissions_from_state="debated" tags="public terminal fail" />
+    <state id="elapsed" title="Elapsed" permissions_from_state="debated" tags="public terminal" />
 
-    <state id="dropped" title="Dropped" permissions_from_state="debated" tags="public terminal fail" />
+    <state id="dropped" title="Dropped" permissions_from_state="debated" tags="public terminal" />
     
     <state id="withdrawn" title="Withdrawn" permissions_from_state="debated" 
         actions="unschedule_doc"
-        tags="public terminal fail" 
+        tags="public terminal" 
         note="A question can be withdrawn by the owner, visible as pre-withdrawn, cannot be edited by anyone."
     />
     

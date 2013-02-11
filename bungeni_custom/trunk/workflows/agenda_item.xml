@@ -1,11 +1,7 @@
 <?xml version="1.0"?>
 <workflow title="Agenda Item Workflow"
     description="Agenda Item"
-    tags="draft private public
-        approved tobescheduled scheduled
-        actionclerk actionmp
-        terminal succeed fail
-    "
+    tags="draft private public terminal"
     permission_actions=".View .Edit .Add .Delete"
     >
     
@@ -23,7 +19,10 @@
     <feature name="signatory" enabled="false">
         <parameter name="open_states" value="admissible" />
     </feature>
-    <feature name="schedule" enabled="true" />
+    <feature name="schedule" enabled="true">
+        <parameter name="schedulable_states" value="schedule_pending" />
+        <parameter name="scheduled_states" value="scheduled" />
+    </feature>
     <feature name="workspace" enabled="true" />
     <feature name="notification" enabled="true" />
     <feature name="download" enabled="true" />
@@ -94,14 +93,14 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="submitted" title="Submitted" actions="version" tags="actionclerk">
+    <state id="submitted" title="Submitted" actions="version">
         <facet ref=".view_internal" />
         <facet ref="signatory.internal_frozen" />
     </state>
     
     <state id="received" title="Received by Clerks Office" 
             actions="set_doc_registry_number"
-            tags="actionclerk"
+            
         >
         <facet ref=".edit_Clerk" />
         <facet ref="attachment.internal" />
@@ -110,7 +109,7 @@
     
     <state id="clarification_required" title="Requires Clarification to Receive" 
             actions="version" 
-            tags="actionmp"
+            
         >
         <facet ref=".edit_Owner" />
         <facet ref="attachment.internal_Owner" />
@@ -124,39 +123,39 @@
     </state>
     
     <state id="incomplete" title="Requires Clarification to Approve" 
-        permissions_from_state="received" actions="version" tags="actionclerk" />
+        permissions_from_state="received" actions="version"  />
     
-    <state id="inadmissible" title="Inadmissible" tags="terminal fail">
+    <state id="inadmissible" title="Inadmissible" tags="terminal">
         <facet ref=".view_internal" />
         <facet ref="attachment.internal_frozen" />
     </state>
     
-    <state id="withdrawn_internal" title="Withdrawn" permissions_from_state="inadmissible" tags="terminal fail" />
+    <state id="withdrawn_internal" title="Withdrawn" permissions_from_state="inadmissible" tags="terminal" />
     
-    <state id="admissible" title="Admissible" actions="version" tags="public approved">
+    <state id="admissible" title="Admissible" actions="version" tags="public">
         <facet ref=".public" />
         <facet ref="attachment.public" />
         <facet ref="signatory.public_frozen" />
     </state>
     
-    <state id="schedule_pending" title="Schedule pending" permissions_from_state="admissible" tags="public tobescheduled" />
+    <state id="schedule_pending" title="Schedule pending" permissions_from_state="admissible" tags="public" />
     
-    <state id="scheduled" title="Scheduled" permissions_from_state="admissible" tags="public scheduled" />
+    <state id="scheduled" title="Scheduled" permissions_from_state="admissible" tags="public" />
     
-    <state id="adjourned" title="Debate adjourned" permissions_from_state="admissible" tags="public approved" />
+    <state id="adjourned" title="Debate adjourned" permissions_from_state="admissible" tags="public" />
     
-    <state id="deferred" title="Deferred" permissions_from_state="admissible" tags="public approved" />
+    <state id="deferred" title="Deferred" permissions_from_state="admissible" tags="public" />
     
-    <state id="debated" title="Debated" tags="public terminal succeed">
+    <state id="debated" title="Debated" tags="public terminal">
         <facet ref=".public" />
         <facet ref="attachment.public_frozen" />
     </state>
     
-    <state id="elapsed" title="Elapsed" permissions_from_state="debated" tags="public terminal fail" />
+    <state id="elapsed" title="Elapsed" permissions_from_state="debated" tags="public terminal" />
     
-    <state id="dropped" title="Dropped" permissions_from_state="debated" tags="public terminal fail" />
+    <state id="dropped" title="Dropped" permissions_from_state="debated" tags="public terminal" />
     
-    <state id="withdrawn" title="Withdrawn" permissions_from_state="debated" tags="public terminal fail" />
+    <state id="withdrawn" title="Withdrawn" permissions_from_state="debated" tags="public terminal" />
     
     
     <transition title="Create Agenda Item"

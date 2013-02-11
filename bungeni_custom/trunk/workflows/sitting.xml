@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <workflow title="Group sitting workflow"
     description="Workflow for a group sitting."
-    tags="draft private public agendaprivate workspace published publishedminutes"
+    tags="draft private public published publishedminutes"
     permission_actions=".View .Edit .Add .Delete"
     >
     
@@ -82,29 +82,29 @@
     </facet>
     
     
-    <state id="sitting" title="Sitting" tags="draft public agendaprivate">
+    <state id="sitting" title="Sitting" tags="draft public">
         <facet ref=".all_Clerk" />
     </state>
     
     <state id="draft_agenda" title="Draft Agenda"
             actions="set_real_order"
-            tags="draft public workspace agendaprivate"
+            tags="draft public"
         >
         <facet ref=".draft_agenda" />
     </state>
     
     <state id="published_agenda" title="Published Agenda" 
             actions="schedule_sitting_items"
-            tags="public published workspace"
+            tags="public published"
         >
         <facet ref=".published_agenda" />
     </state>
     
-    <state id="published_agenda_internal" title="Published Agenda Internal" tags="public agendaprivate workspace">
+    <state id="published_agenda_internal" title="Published Agenda Internal" tags="public">
         <facet ref=".published_agenda_internal" />
     </state>
     
-    <state id="draft_minutes" title="Draft Minutes" tags="draft public workspace">
+    <state id="draft_minutes" title="Draft Minutes" tags="draft public">
         <facet ref=".draft_minutes" />
     </state>
     
