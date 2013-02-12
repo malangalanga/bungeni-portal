@@ -1104,3 +1104,8 @@ class OauthApplication(Entity):
     """Oauth application registration
     """
     interface.implements(interfaces.IOauthApplication)
+
+class OauthAuthorization(Entity):
+    """Oauth authorization records
+    """
+    interface.implements(interfaces.IOauthAuthorization)

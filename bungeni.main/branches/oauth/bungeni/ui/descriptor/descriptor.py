@@ -1730,6 +1730,12 @@ class OauthApplicationDescriptor(ModelDescriptor):
           value_type="text",
           render_type="text_line"
         ),
+        F(name="redirection_endpoint",
+          label="Redirection endpoint",
+          required=True,
+          value_type="text",
+          render_type="text_line"
+        ),
         F(name="application_key",
           label="Application Key",
           localizable=[show("view"), hide("add")],

@@ -45,12 +45,12 @@
         permission="zope.Public"
         class=".redirect.RedirectToCurrent"
     />
-    <browser:page name="index"
+    <!--browser:page name="index"
         for="bungeni.models.interfaces.IBungeniApplication"
         permission="bungeni.ui.workspace.View"
         layer=".interfaces.IBungeniAuthenticatedSkin"
         class=".redirect.WorkspaceRootRedirect"
-    />
+    /-->
     <browser:page name="workflow-redirect"
         for="bungeni.core.workflow.interfaces.IWorkflowed"
         permission="bungeni.ui.workspace.View"
@@ -615,5 +615,10 @@
       class="bungeni.ui.api.APIOauthAuthorization"
       permission="bungeni.oauth.View"
    />
-   
+   <browser:page
+      for="bungeni.core.content.APIOauthSection"
+      name="authorize-form"
+      class="bungeni.ui.api.AuthorizeForm"
+      permission="bungeni.oauth.View"
+   />
 </configure>

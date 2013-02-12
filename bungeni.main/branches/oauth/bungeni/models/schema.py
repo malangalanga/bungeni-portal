@@ -1185,7 +1185,8 @@ oauth_application = rdb.Table("oauth_application", metadata,
     rdb.Column("application_identifier", rdb.UnicodeText, nullable=False, 
         unique=True),
     rdb.Column("application_name", rdb.UnicodeText, nullable=False),
-    rdb.Column("application_key", rdb.UnicodeText, nullable=False)
+    rdb.Column("application_key", rdb.UnicodeText, nullable=False),
+    rdb.Column("redirection_endpoint", rdb.UnicodeText, nullable=False)
 )
 
 oauth_authorization = rdb.Table("oauth_authorization", metadata,
@@ -1194,8 +1195,8 @@ oauth_authorization = rdb.Table("oauth_authorization", metadata,
         nullable=False),
     rdb.Column("application_id", rdb.Integer,
         rdb.ForeignKey("oauth_application.application_id"), nullable=False),
-    rdb.Column("auth_code", rdb.UnicodeText, nullable=False),
-    rdb.Column(expiry, rdb,DateTime(timezone=False), nullable=False)                            
+    rdb.Column("authorization_code", rdb.UnicodeText, nullable=False),
+    rdb.Column("expiry", rdb.DateTime(timezone=False), nullable=False)                            
 )
 
 

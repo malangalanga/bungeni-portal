@@ -743,7 +743,7 @@ mapper(domain.DebateTake, schema.debate_take,
 )
 
 mapper(domain.OauthApplication, schema.oauth_application)
-
+mapper(domain.OauthAuthorization, schema.oauth_authorization)
 
 
 
