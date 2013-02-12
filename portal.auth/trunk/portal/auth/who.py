@@ -60,7 +60,7 @@ def get_user_groups(login_id):
         user_id = user.user_id
         for elem in get_groups(user_id):
             groups.add(elem)
-        for user in delegation.get_user_delegations(user_id):
+        for user in delegation.get_user_delegations(user):
             for elem in get_groups(user.user_id):
                 groups.add(elem)
     return groups
