@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <workflow title="Group sitting workflow"
     description="Workflow for a group sitting."
-    tags="draft private public published publishedminutes"
+    tags="draft private public"
     permission_actions=".View .Edit .Add .Delete"
     >
     
@@ -95,7 +95,7 @@
     
     <state id="published_agenda" title="Published Agenda" 
             actions="schedule_sitting_items"
-            tags="public published"
+            tags="public"
         >
         <facet ref=".published_agenda" />
     </state>
@@ -108,7 +108,7 @@
         <facet ref=".draft_minutes" />
     </state>
     
-    <state id="published_minutes" title="Published Minutes" tags="public published publishedminutes">
+    <state id="published_minutes" title="Published Minutes" tags="public">
         <facet ref=".published_minutes" />
     </state>
     
