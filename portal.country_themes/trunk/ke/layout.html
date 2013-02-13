@@ -12,7 +12,7 @@
   <body>
     <span id="corner-a"></span>
     <span id="corner-b"></span>
-    <div id="header-wrapper">
+    <div id="header-wrapper" class="clearfix">
       <div id="header-in-left">&nbsp;</div>
       <div id="header-in-right">&nbsp;</div>
       <div id="top-layer">
@@ -35,18 +35,59 @@
           <img src="images/workspace_parliament.png" class="ws-left" alt="Your Parliament banner here" />
           <img src="images/workspace_logo.png" class="ws-right" alt="The Workspace logo" />
         </a>
-        <!-- global navigation -->
-        <div id="portal-globalnav">
-          <ul class="level0">
-            <!-- top-level navigation -->
-          </ul>
-          <ul class="level1">
-            <!-- second-level navigation -->
-          </ul>
-        </div>        
+        <!--div id="portal-globalnav" style="border:1px solid blue;">
+          <ul class="level0"/>
+          <ul class="level1"/>
+        </div-->        
       </div>
     </div>
     <!-- end of header-wrapper -->
+    
+    <!-- global navigation -->
+    <div class="nav">
+      <nav>
+        <ul>
+          <li class="lower-hse">
+            <a href="#assembly">National Assembly</a>
+            <ul class="hse-list"/>
+          </li>
+          <li class="upper-hse">
+            <a href="#senate">Senate</a>
+            <ul class="hse-list">
+              <li>
+                <a href="#senatebusiness">business</a>
+              </li>
+              <li>
+                <a href="#senatemembers">members</a>
+              </li>
+            </ul>
+          </li>
+          <li class="aux">
+            <a href="index.html">Parliament</a>
+            <ul class="mouseover">
+              <li>
+                <a href="index.html">About Parliament</a>
+              </li>
+              <li>
+                <a href="index.html">Publications</a>
+              </li>
+              <li>
+                <a href="index.html">Visit parliament</a>
+              </li>
+              <li>
+                <a href="index.html">Hansard</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div id="subnav" class="nav subnav assembly level1">
+      <ul/>
+    </div>     
+    
+    
+    
     <!--div style="clear:both;">&nbsp;</div-->
     
     <div id="visual-table-wrapper">
