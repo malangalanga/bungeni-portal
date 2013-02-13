@@ -29,9 +29,7 @@
     <match path="regex:^/(workspace/groups/my-groups)/(group-committee|group-political_group)-([0-9])+(/)?(view)?$"
         class="load-workspace-group-navigation" />  
     <match path="regex:^/(plone/groups|plone/memberships)/?"
-        class="drop-navigation" />            
-    <match path="regex:^/(business|members)?"
-        class="unload-bungeni" />     
+        class="drop-navigation" />               
     <match path="exact:/"
         class="frontpage" />
     <match path="exact:/front-page"
@@ -42,16 +40,10 @@
         <drop content="#portal-personaltools" />
     </rule>
     
-    <!-- Drop the bungeni business and members -->
-    <rule class="unload-bungeni">                    
-        <drop href="/business" content="#portal-globalnav > li" />
-        <drop href="/members" content="#portal-globalnav > li" />
-    </rule>    
-    
     <rule class="load-plone-navigation">        
         <!-- language selector -->
-        <append theme="//head"
-                content="//head"
+        <append content="//head"
+                theme="children:/html/head"
                 nocontent="ignore" />        
         <replace href="/"
             content="#portal-languageselector"
@@ -146,8 +138,8 @@
     
     <rule class="frontpage">
         <append href="/plone"
-                theme="//head"
                 content="//head"
+                theme="children:/html/head"
                 nocontent="ignore" />                
         <replace content="#portal-logo" theme="#portal-logo" />
         <replace content="#portal-siteactions" theme="#portal-siteactions" />
@@ -200,7 +192,9 @@
     
     
     <rule class="primary">
-        <append theme="//head" content="//head/meta" nocontent="ignore" />
+        <prepend content="//head/meta"
+            theme="/html/head"
+            nocontent="ignore" />
         <!-- menu -->
         <prepend content="#portal-globalnav > li"
             theme="children:#portal-globalnav > ul"
