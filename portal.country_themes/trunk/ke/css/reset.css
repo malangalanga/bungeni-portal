@@ -130,90 +130,9 @@ div.main-column h3 {
     display: none;
 }*/
 
-/*
- * portal-globalnav
- */
- #portal-globalnav {
-    padding:0;
-}
-div#portal-globalnav {
-    width: 100%;
-    position: relative;
-    padding:0; 
-    height: 25px;
-}
-div#portal-globalnav ul.level0 {
-    position: absolute !important;
-    margin: 0;
-    padding: 0;
-    min-width:inherit;
-    width: 100%;
-    white-space: nowrap;
-    line-height: 20px;
-    overflow:hidden;
-    bottom:0;
-}
-div#portal-globalnav ul.level0 li {
-    position: relative;
-    display: inline !important;    
-    float: left;
-    height: 24px;
-    margin-bottom: 0;   
-    white-space: nowrap;
-}
-div#portal-globalnav ul.level0 li a { 
-    padding: 0 1em;
-    margin: 0 .25em 0 0;
-    height: 22px;
-    display: inline !important;
-    float: left !important;
-}
-div#portal-globalnav ul.level0 li.selected a {
-    position: relative;
-    top:0px;
-}
-div#portal-globalnav ul.level0 li.selected a,
-div#portal-globalnav ul.level0 li a:hover {
-    position: relative;
-}
+
 #portal-languageselector li {
     display: inline;
-}
-/*
- * Notes:
- * - this has been positioned absolutely because of it's location in the
- *   html structure, the current layout is:
- *   <ul class="level0">
- *       <ul class="level1">
- *           <li>...</li>
- *        </ul>
- *        <li>...</li>
- *   </ul>
- *   a suggested structure would be to have the <ul> elements separately:
- *   <ul class="level0">...</ul>
- *   <ul class="level1">...</ul>
- */
-div#portal-globalnav ul.level1 {
-    position: absolute;
-    top:2.2em;
-    left:0px;
-    height: 18px;
-    margin: 0 0 0 0;
-    width: 100%;
-    display: block;
-}
-div#portal-globalnav ul.level1 li {
-    width: auto;
-    float: left;
-    margin: 0;
-    padding: 0;
-    height: auto;
-    display: block;
-}
-
-div#portal-globalnav ul.level1 li a {
-	padding: 0 15px !important;
-	line-height:18px;
 }
 /*
  * whats-on styles are shared by both template-portal and template-workspace.
@@ -221,30 +140,7 @@ div#portal-globalnav ul.level1 li a {
 #portal-column-two #whats-on-overview {
     display: none;
 }
-/*
- * Notes:
- * this tag is not used for any data or structure.
- * it is used to assist in the page layout. The element(and css) 
- * could be removed from this use by fixing the <ul> element
- * as mentioned in the previous Note.
- *
- *
- * To remove the bar completely - remove the ".section-bungeni-business"
- * part from below
- *
- * To restore it to every page, remove this next style and leave the last one.
- *
- */
-/*.section-bungeni-business div#portal-globalnav-bottom {
-    display: none;
-}*/
-div#portal-globalnav-bottom {
-    display: block;
-    height: 18px;
-    padding: 0;
-    margin-top:0px !important;
-    padding-top:0px;
-}
+
 /* portal-columns-* styles */
 #portal-column-two .visualPadding {
     padding: 0;
@@ -1164,7 +1060,7 @@ div.main-column #collage h2 {
 /* top-layer*/
 .template-portal {
     margin: 0;
-    text-align: center;
+    /*text-align: center;*/
     /* 
     * Sticky Footer.
     * more information: http://www.cssstickyfooter.com/
@@ -1961,9 +1857,7 @@ div#region-content {
     margin-left:10px;
     width:100%;
 }
-.template-portal-eXist div#portal-globalnav ul.level1 {
-    /*top: 1.6em;*/
-}
+
 .template-portal-eXist div#main-wrapper {
     width: 96%;
     margin: 0 auto 0 auto;    

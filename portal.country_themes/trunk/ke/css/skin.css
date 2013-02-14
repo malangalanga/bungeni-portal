@@ -478,87 +478,6 @@ dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
     background-color: #009901 !important;
     color: white !important;
 }
-/*
- * portal-globalnav
- */
-div#portal-globalnav {
-    background: #fff;
-}
-div#portal-globalnav ul.level0 {
-    border: 0 none;
-	list-style-type: none;
-    background: transparent;
-}
-div#portal-globalnav ul.level0 li {
-    border-radius: 0;
-}
-div#portal-globalnav ul.level0 li a { 
-    text-shadow: 0 0 0 #fff;
-    color: #fff;
-    background:#000;
-    border: 1px solid #000;
-    border-bottom: 1px solid #000;
-    border-top-right-radius: 5px;
-    font-family: tahoma,verdana,sans-serif;
-    font-size: 12px;
-}
-div#portal-globalnav ul.level0 li.selected a{
-    font-weight: normal;
-    color: #fff;
-    border: 1px solid #fe0000;
-    background:#fe0000;
-}
-div#portal-globalnav ul.level0 li a:hover {
-    font-weight: normal;
-    color: #000;
-    border: 1px solid #e7e7e7;
-    background:#e7e7e7;
-}
-/*
- * Notes:
- * - this has been positioned absolutely because of it's location in the
- *   html structure, the current layout is:
- *   <ul class="level0">
- *       <ul class="level1">
- *           <li>...</li>
- *        </ul>
- *        <li>...</li>
- *   </ul>
- *   a suggested structure would be to have the <ul> elements separately:
- *   !+IMPLEMENTED (9th July, 2012 - this is current layout) 
- *   <ul class="level0">...</ul>
- *   <ul class="level1">...</ul>
- */
- div#portal-globalnav-bottom {
- 	border:0;
-}
-div#portal-globalnav-bottom:empty{
-    display:none
-}
-div#portal-globalnav ul.level1 {
-    border-top: 0 none;
-    background: #fe0000;
-}
-div#portal-globalnav ul.level1 li a {
-    background: transparent;
-    border: 0 none;
-    text-shadow: none;
-    color:#ffffff !important;
-}
-div#portal-globalnav ul.level1 li a:hover {
-    color: #ff0000;
-    text-decoration: underline;
-    border: 0 none;
-}
-div#portal-globalnav ul.level1 li.selected a {
-    background: transparent;
-    border: 0 none;
-    font-weight: normal;
-    color: #d50005 !important;
-}
-.template-portal div#portal-globalnav ul.level1 li.selected a {
-	color:#000 !important;
-}
 
 /*
  * Notes:
@@ -1105,11 +1024,6 @@ div.main-column #collage h2 {
     background: url(/static/images/shadow_3.png) repeat-y top center;
     border: 0 none;
 }
-
-.template-portal div#portal-globalnav {
-    background: #01A54F;
-}
-
 .template-portal #visual-table-wrapper,
 .template-portal #portal-footer {
     -moz-border-radius-bottomleft: 8px;
@@ -1179,155 +1093,183 @@ nav ul ul.mouseover {
 	}
 
 nav ul {
+    padding:0 !important;
+    margin:0 !important;
+	background: #efefef !important; 
+	background: linear-gradient(top, #efefef 0%, #bbbbbb 100%) !important;  
+	background: -moz-linear-gradient(top, #efefef 0%, #bbbbbb 100%) !important; 
+	background: -webkit-linear-gradient(top, #efefef 0%,#bbbbbb 100%) !important; 
+	box-shadow: 0px 0px 9px rgba(0,0,0,0.15) !important;
+	list-style: none !important;
+	position: relative !important;
+}
+nav ul:after {
+    content: ""; 
+	clear: both; 
+	display: block;
+}
+
+nav ul li {
+ float: left;
+}
+ul#portal-globalnav {
+	background: transparent;
+}
+
+/* The National Assembly */
+nav ul li.lower-hse {
+    display:inline !important;
+    width:350px !important;       
+    background: linear-gradient(top, #239e45 0%, #037d2e 100%);  
+    background: -moz-linear-gradient(top, #239e45 0%, #037d2e 100%); 
+    background: -webkit-linear-gradient(top, #239e45 0%,#037d2e 100%); 	
+}
+nav ul li.lower-hse > a {
+	font-weight:bold;
+    color:#eeeeee !important;
+    font-size:16px;
+}
+	   
+/* The Senate */
+nav ul li.upper-hse {
+	width:350px;    
+	background: linear-gradient(top, #d3302f 0%, #bb0025 100%);  
+	background: -moz-linear-gradient(top, #d3302f 0%, #bb0025 100%); 
+	background: -webkit-linear-gradient(top, #0000FF 0%, #0000FF 100%); 		    
+}
+nav ul li.upper-hse > a {
+	font-weight:bold;
+	color:white !important;
+	font-size:16px;                
+}
+
+/* Auxilliary menus */
+nav ul li#portaltab-parliament {     
+	background: linear-gradient(top, #333636 0%, #0a0000 100%);  
+	background: -moz-linear-gradient(top, #333636 0%, #0a0000 100%); 
+	background: -webkit-linear-gradient(top, #FFD700 0%,#FFD700 100%); 
+	height: 1em !important;	
+}
+nav ul li#portaltab-parliament a {
+	font-weight:bold !important;
+	background: #FFD700;
+	color:grey !important;
+    width:218px;
+    font-size:16px; 
+}	
+#portaltab-parliament li {
+	padding: 0;
+}
+li#portaltab-parliament.plain {
+	width: 200px !important;
+}
+li#portaltab-parliament.plain a:hover,
+#portaltab-parliament ul.submenu a:hover {
+	background-color: #FFD700; 
+}
+#portal-globalnav ul.submenu li {
+	width: 150% !important;
+}
+	   
+nav ul li:hover {
+	-webkit-box-shadow: rgba(0,0,0,.2) 2px 4px 4px;
+	-moz-box-shadow: rgba(0,0,0,.2) 2px 4px 4px;
+	box-shadow: rgba(0,0,0,.2) 2px 4px 4px;                
+}
+nav ul li:hover a {
+	color: #fff;
+}
+		
+nav ul > li > a {
+	display: inline-block !important; 
+	padding: 10px 20px !important;
+	text-decoration: none !important;
+}
+		
+/* HOUSE TOP-NAVS */	
+nav ul ul.hse-list {
+    margin:0;
+    padding:0;
+	display:inline-block !important;
+	background:transparent !important;
+}
+nav ul ul.hse-list li {
+    display:inline;
+    padding:0 5px !important;
+	background-color:transparent !important;
+}
+nav ul ul.hse-list li a {
+    padding:0 !important;
+    margin:0 !important;
+    color:white !important;   
+    background-color:transparent !important;
+	border: transparent !important;
+} 
+nav ul ul.hse-list li a:hover {
+	color:#ffffff;   
+}        
+    
+.subnav {  
+    height:25px;
+    width:960px;
+	margin-top:-0.35em !important;        
+}
+.subnav ul {
+    margin-top:0.5em !important;
+    padding:0;
+	display:inline-block;
+    background:transparent;
+	float:left;        
+}
+.subnav ul li {
+    display:inline;
+    padding:0 5px;
+	background-color:transparent;
+}
+.subnav ul li a {
     padding:0;
     margin:0;
-	background: #efefef; 
-	background: linear-gradient(top, #efefef 0%, #bbbbbb 100%);  
-	background: -moz-linear-gradient(top, #efefef 0%, #bbbbbb 100%); 
-	background: -webkit-linear-gradient(top, #efefef 0%,#bbbbbb 100%); 
-	box-shadow: 0px 0px 9px rgba(0,0,0,0.15);
-	list-style: none;
-	position: relative;
-	display: inline-table;
+    color:#dedede;   
+	background-color:transparent;
+}    
+.subnav ul li a:hover {
+	color:#ffffff;   
+}      
+		
+nav ul ul.mouseover {
+	background: #555556; 
+	border-radius: 0px; 
+	padding: 0;
+	position: absolute; top: 100%;
 }
-	nav ul:after {
-		content: ""; 
-		clear: both; 
-		display: block;
-	}
-
-	nav ul li {
-		float: left;
-	}
-        /* The National Assembly */
-        nav ul li.lower-hse {
-    	    display:inline;
-    	    width:350px;       
-            background: linear-gradient(top, #239e45 0%, #037d2e 100%);  
-            background: -moz-linear-gradient(top, #239e45 0%, #037d2e 100%); 
-            background: -webkit-linear-gradient(top, #239e45 0%,#037d2e 100%); 	
-            }
-            nav ul li.lower-hse > a {
-                font-weight:bold;
-                color:#eeeeee;
-                font-size:16px;
-            }
-	   
-        /* The Senate */
-        nav ul li.upper-hse {
-            width:350px;    
-            background: linear-gradient(top, #d3302f 0%, #bb0025 100%);  
-            background: -moz-linear-gradient(top, #d3302f 0%, #bb0025 100%); 
-            background: -webkit-linear-gradient(top, #d3302f 0%,#bb0025 100%); 		    
-            }
-            nav ul li.upper-hse > a {
-                font-weight:bold;
-                color:#eeeeee;
-                font-size:16px;                
-            }
-
-        /* Auxilliary menus */
-        nav ul li.aux {     
-            background: linear-gradient(top, #333636 0%, #0a0000 100%);  
-            background: -moz-linear-gradient(top, #333636 0%, #0a0000 100%); 
-            background: -webkit-linear-gradient(top, #333636 0%,#0a0000 100%); 	
-            }
-            nav ul li.aux a {
-                font-weight:bold;
-                color:#eeeeef;
-                width:220px;
-                font-size:16px; 
-            }	
-	   
-		nav ul li:hover {
-               -webkit-box-shadow: rgba(0,0,0,.2) 2px 4px 4px;
-                -moz-box-shadow: rgba(0,0,0,.2) 2px 4px 4px;
-                box-shadow: rgba(0,0,0,.2) 2px 4px 4px;                
-            }
-    			nav ul li:hover a {
-    				color: #fff;
-    			}
+nav ul ul.mouseover li {
+	float: none; 
+	border-top: 1px solid #6b727c;
+	border-bottom: 1px solid #555556; 
+	position: relative;
+}
+nav ul ul.mouseover li a {
+	padding: 15px 20px;
+	color: #fff;
+}	
+nav ul ul.mouseover li a:hover {
+	background: #444;
+}
 		
-		nav ul > li > a {
-			display: inline-block; 
-			padding: 10px 20px;
-			text-decoration: none;
-		}
-		
-    /* HOUSE TOP-NAVS */	
-    nav ul ul.hse-list {
-        margin:0;
-        padding:0;
-        display:inline-block;
-        background:transparent;
-    }
-    nav ul ul.hse-list li {
-        display:inline;
-        padding:0 5px;
-        background-color:transparent;
-    }
-    nav ul ul.hse-list li a {
-        padding:0;
-        margin:0;
-        color:#dedede;   
-        background-color:transparent;
-    } 
-    nav ul ul.hse-list li a:hover {
-        color:#ffffff;   
-    }        
-    
-    .subnav {  
-        height:25px;
-        width:960px;
-        margin:0 auto;        
-    }
-    .subnav ul {
-        margin:0;
-        padding:0;
-        display:inline-block;
-        background:transparent;
-        float:left;        
-    }
-    .subnav ul li {
-        display:inline;
-        padding:0 5px;
-        background-color:transparent;
-    }
-    .subnav ul li a {
-        padding:0;
-        margin:0;
-        color:#dedede;   
-        background-color:transparent;
-    }    
-    .subnav ul li a:hover {
-        color:#ffffff;   
-    }      
-		
-	nav ul ul.mouseover {
-		background: #555556; 
-		border-radius: 0px; 
-		padding: 0;
-		position: absolute; top: 100%;
-	}
-		nav ul ul.mouseover li {
-			float: none; 
-			border-top: 1px solid #6b727c;
-			border-bottom: 1px solid #555556; 
-			position: relative;
-		}
-			nav ul ul.mouseover li a {
-				padding: 15px 20px;
-				color: #fff;
-			}	
-				nav ul ul.mouseover li a:hover {
-					background: #444;
-				}
-		
-	nav ul ul.mouseover ul {
-		position: absolute; 
-		left: 100%; 
-		top:0;
-	}
+nav ul ul.mouseover ul {
+	position: absolute; 
+	left: 100%; 
+	top:0 
+}
+#portal-globalnav li.lower-hse a:hover,
+#portal-globalnav li.upper-hse a:hover {
+	background-color: transparent;
+}
+#portal-globalnav li.lower-hse a:hover,
+#portal-globalnav li.upper-hse a:hover,
+#portal-globalnav li#portaltab-parliament a:hover {
+	text-decoration: underline !important;
+}
 /*------------------------------*/
 .index {
     background: linear-gradient(top, #333636 0%, #0a0000 100%);  
@@ -1352,7 +1294,6 @@ nav ul {
     background: -moz-linear-gradient(top, #d3302f 0%, #bb0025 100%); 
     background: -webkit-linear-gradient(top, #d3302f 0%,#bb0025 100%);           
 }
-
 /* BICAMERAL MENU END
 -------------------------------------------------------------- */
 .clearfix {
@@ -2219,10 +2160,11 @@ div.dhx_cal_navline div.active {
 .template-portal-eXist .description {
     font-size:100% !important;
 }
+/*
 .template-portal-eXist div#portal-globalnav ul.level1 li a {
     font-family:Verdana, sans-serif;
     font-size:12px;
-}
+}*/
 
 /* Listing - version
 -------------------------------------------------------------- */
