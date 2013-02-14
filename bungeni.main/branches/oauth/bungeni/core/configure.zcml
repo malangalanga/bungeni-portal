@@ -258,12 +258,12 @@
      factory=".emailnotifications.BungeniDummySMTPMailer" />
 
 
-  <!-- Oauth -->
+  <!-- OAuth -->
   <class class=".content.APISection">
     <require permission="bungeni.oauth.View"
              interface="zope.publisher.interfaces.browser.IBrowserPublisher" />
   </class>
-  <class class=".content.APIOauthSection">
+  <class class=".content.OAuthSection">
     <require permission="bungeni.oauth.View"
              interface="zope.publisher.interfaces.browser.IBrowserPublisher" />
   </class>

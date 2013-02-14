@@ -28,7 +28,7 @@ from bungeni.models.utils import container_getter
 from bungeni.core import interfaces
 from bungeni.core import location
 from bungeni.core.content import (Section, AdminSection, AkomaNtosoSection,
-    WorkspaceSection, APISection, APIOauthSection)
+    WorkspaceSection, APISection, OAuthSection)
 from bungeni.core.content import QueryContent
 from bungeni.core.i18n import _
 from bungeni.core.workspace import (WorkspaceContainer,
@@ -295,10 +295,10 @@ class AppSetup(object):
             description=_(u"Bungeni REST API"),
             default_name="index.html",
         )
-        api["oauth"] = APIOauthSection(
-            title=_(u"Bungeni Oauth API"),
-            description=_(u"Bungeni Oauth API"),
+        api["oauth"] = OAuthSection(
+            title=_(u"Bungeni OAuth API"),
+            description=_(u"Bungeni OAuth API"),
             default_name="index.html",
         )
-        api[u"applications"] = domain.OauthApplicationContainer()
-        to_locatable_container(domain.OauthApplication, api[u"applications"])
+        api[u"applications"] = domain.OAuthApplicationContainer()
+        to_locatable_container(domain.OAuthApplication, api[u"applications"])

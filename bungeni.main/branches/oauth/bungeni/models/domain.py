@@ -1100,12 +1100,17 @@ class DebateTake(Entity):
     """
     interface.implements(interfaces.IDebateTake)
 
-class OauthApplication(Entity):
-    """Oauth application registration
+class OAuthApplication(Entity):
+    """OAuth application registration
     """
-    interface.implements(interfaces.IOauthApplication)
+    interface.implements(interfaces.IOAuthApplication)
 
-class OauthAuthorization(Entity):
-    """Oauth authorization records
+class OAuthAuthorization(Entity):
+    """OAuth authorization records
     """
-    interface.implements(interfaces.IOauthAuthorization)
+    interface.implements(interfaces.IOAuthAuthorization)
+
+class OAuthAccessToken(Entity):
+    """OAuth access token
+    """
+    interface.implements(interfaces.IOAuthAccessToken)

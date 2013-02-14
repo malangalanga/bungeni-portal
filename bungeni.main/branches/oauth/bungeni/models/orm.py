@@ -742,9 +742,9 @@ mapper(domain.DebateTake, schema.debate_take,
     }
 )
 
-mapper(domain.OauthApplication, schema.oauth_application)
-mapper(domain.OauthAuthorization, schema.oauth_authorization)
-
+mapper(domain.OAuthApplication, schema.oauth_application)
+mapper(domain.OAuthAuthorization, schema.oauth_authorization)
+mapper(domain.OAuthAccessToken, schema.oauth_access_token)
 
 
 # !+IChange-vertical-properties special case: 

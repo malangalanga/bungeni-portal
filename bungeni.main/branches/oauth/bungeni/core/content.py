@@ -213,7 +213,7 @@ class WorkspaceSection(Section):
 class APISection(Section):
     pass
 
-class APIOauthSection(Section):
+class OAuthSection(Section):
     pass
 
 #!+SECURITY (miano, nov-2010) the security checker below does not seem to be

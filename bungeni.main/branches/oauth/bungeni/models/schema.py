@@ -1182,23 +1182,32 @@ debate_take = rdb.Table("debate_take", metadata,
 #OAuth
 oauth_application = rdb.Table("oauth_application", metadata,
     rdb.Column("application_id", rdb.Integer, primary_key=True),
-    rdb.Column("application_identifier", rdb.UnicodeText, nullable=False, 
+    rdb.Column("identifier", rdb.UnicodeText, nullable=False, 
         unique=True),
-    rdb.Column("application_name", rdb.UnicodeText, nullable=False),
-    rdb.Column("application_key", rdb.UnicodeText, nullable=False),
+    rdb.Column("name", rdb.UnicodeText, nullable=False),
+    rdb.Column("secret", rdb.String(32), nullable=False),
     rdb.Column("redirection_endpoint", rdb.UnicodeText, nullable=False)
 )
 
 oauth_authorization = rdb.Table("oauth_authorization", metadata,
-    rdb.Column("oauth_authorization_id", rdb.Integer, primary_key=True),
+    rdb.Column("authorization_id", rdb.Integer, primary_key=True),
     rdb.Column("user_id", rdb.Integer, rdb.ForeignKey("user.user_id"),
         nullable=False),
     rdb.Column("application_id", rdb.Integer,
         rdb.ForeignKey("oauth_application.application_id"), nullable=False),
-    rdb.Column("authorization_code", rdb.UnicodeText, nullable=False),
-    rdb.Column("expiry", rdb.DateTime(timezone=False), nullable=False)                            
+    rdb.Column("authorization_code", rdb.String(32), nullable=False),
+    rdb.Column("expiry", rdb.DateTime(timezone=False), nullable=False),
+    rdb.Column("active", rdb.Boolean(), nullable=False)
 )
 
+oauth_access_token = rdb.Table("oauth_access_token", metadata,
+    rdb.Column("access_token_id", rdb.Integer, primary_key=True),
+    rdb.Column("authorization_id", rdb.Integer,
+             rdb.ForeignKey("oauth_authorization.authorization_id")),
+    rdb.Column("access_token", rdb.String(32)),
+    rdb.Column("refresh_token", rdb.String(32)),
+    rdb.Column("expiry", rdb.DateTime(timezone=False), nullable=False),
+)
 
 #for table_name in metadata.tables.keys():
 #    print metadata.tables[table_name].name

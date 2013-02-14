@@ -1715,7 +1715,7 @@ class ItemScheduleVoteDescriptor(ModelDescriptor):
         LanguageField("language"),
     ]
 
-class OauthApplicationDescriptor(ModelDescriptor):
+class OAuthApplicationDescriptor(ModelDescriptor):
     localisable = False
     fields = [
         F(name="application_identifier",

@@ -574,9 +574,12 @@ class IDebateMediaContainer(IAlchemistContainer):
 class IDebateTake(interface.Interface):
     """Marker interface for debate take"""
 
-# Oauth
-class IOauthApplication(interface.Interface):
+# OAuth
+class IOAuthApplication(interface.Interface):
     """Marker interface for an OAuth Application record"""
 
-class IOauthAuthorization(interface.Interface):
+class IOAuthAuthorization(interface.Interface):
     """Marker interfeace for OAuth authorizations"""
+
+class IOAuthAccessToken(interface.Interface):
+    """Marker interface for OAuth access token"""

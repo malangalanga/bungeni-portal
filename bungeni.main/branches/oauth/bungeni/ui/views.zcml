@@ -590,7 +590,7 @@
       permission="bungeni.debate_takes.View"
    />
 
-   <!-- Oauth -->
+   <!-- OAuth -->
    <browser:page
       for="bungeni.core.content.APISection"
       name="index.html"
@@ -598,27 +598,33 @@
       permission="bungeni.oauth.View"
    />
    <browser:page
-      for="bungeni.models.domain.OauthApplicationContainer"
+      for="bungeni.models.domain.OAuthApplicationContainer"
       name="add"
-      class="bungeni.ui.api.AddOauthApplication"
+      class="bungeni.ui.api.AddOAuthApplication"
       permission="zope.ManageContent"
    />
    <browser:page
-      for="bungeni.core.content.APIOauthSection"
+      for="bungeni.core.content.OAuthSection"
       name="index.html"
       class="bungeni.ui.api.APIDefaultView"
       permission="bungeni.oauth.View"
    />
    <browser:page
-      for="bungeni.core.content.APIOauthSection"
+      for="bungeni.core.content.OAuthSection"
       name="authorize"
-      class="bungeni.ui.api.APIOauthAuthorization"
+      class="bungeni.ui.api.OAuthAuthorization"
       permission="bungeni.oauth.View"
    />
    <browser:page
-      for="bungeni.core.content.APIOauthSection"
+      for="bungeni.core.content.OAuthSection"
       name="authorize-form"
-      class="bungeni.ui.api.AuthorizeForm"
+      class="bungeni.ui.api.OAuthAuthorizeForm"
+      permission="bungeni.oauth.View"
+   />
+   <browser:page
+      for="bungeni.core.content.OAuthSection"
+      name="access-token"
+      class="bungeni.ui.api.OAuthAccessToken"
       permission="bungeni.oauth.View"
    />
 </configure>
