@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ui roles="CommitteeMember Minister Owner Clerk.HeadClerk Signatory Anonymous MP Authenticated Speaker PoliticalGroupMember Admin Government Clerk.QuestionClerk Translator Clerk">
+<ui roles="CommitteeMember Transcriber.Editor Minister Owner Clerk.HeadClerk Signatory Anonymous MP Authenticated Speaker PoliticalGroupMember Admin Government Transcriber Clerk.QuestionClerk Transcriber.Reporter Translator Clerk">
     
     <descriptor name="attachment">
         <field name="type" label="Attachment Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="attachment_type">
@@ -233,9 +233,6 @@
     </descriptor>
     
     <descriptor name="editorial_note">
-        <field name="editorial_note_id" label="Item" required="true" value_type="number" render_type="number">
-            <show modes="view edit add listing" />
-        </field>
         <field name="text" label="Text" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add listing" />
         </field>
@@ -414,13 +411,13 @@
         <field name="item_id" label="Item" required="true" value_type="number" render_type="number">
             <show modes="view edit add listing" />
         </field>
-        <field name="item_title" label="Title" required="false" value_type="text" render_type="text_line">
+        <field name="item_title" label="Title" required="false" value_type="text" render_type="text_raw">
             <show modes="view listing" />
         </field>
         <field name="item_mover" label="Mover" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
         </field>
-        <field name="item_type" label="Item Type" required="false" value_type="text" render_type="text_line">
+        <field name="item_type" label="Item Type" required="false" value_type="text" render_type="text_schedule_type">
             <show modes="view edit add listing" />
         </field>
         <field name="item_uri" label="Item URI" required="false" value_type="text" render_type="text_line">
