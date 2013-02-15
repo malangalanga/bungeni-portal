@@ -29,8 +29,9 @@ class PersonalBarViewlet(common.PersonalBarViewlet):
             if len(parents) > 6:
                 selected_url = parents[-5].absolute_url()
             else:
-                selected_url = self.context.absolute_url()            
-            if IFolderish.providedBy(subcontext):
+                selected_url = self.context.absolute_url() 
+            if (IFolderish.providedBy(subcontext) and 
+                    not subcontext.getExcludeFromNav()):
                 self.subcontext = [{
                     'url': item.absolute_url(),
                     'title': item.title_or_id(),
