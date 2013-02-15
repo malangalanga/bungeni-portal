@@ -1718,13 +1718,13 @@ class ItemScheduleVoteDescriptor(ModelDescriptor):
 class OAuthApplicationDescriptor(ModelDescriptor):
     localisable = False
     fields = [
-        F(name="application_identifier",
+        F(name="identifier",
           label="Unique Application Identifier",
           required=True,
           value_type="text",
           render_type="text_line"
         ),
-        F(name="application_name",
+        F(name="name",
           label="Application Name",
           required=True,
           value_type="text",
@@ -1736,8 +1736,8 @@ class OAuthApplicationDescriptor(ModelDescriptor):
           value_type="text",
           render_type="text_line"
         ),
-        F(name="application_key",
-          label="Application Key",
+        F(name="secret",
+          label="Application Secret",
           localizable=[show("view"), hide("add")],
           required=True,
           value_type="text",

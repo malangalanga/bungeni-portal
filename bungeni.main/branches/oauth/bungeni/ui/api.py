@@ -1,8 +1,10 @@
 import hashlib
+import hmac
 import random
 import string
 import urllib
 import simplejson
+import time
 from datetime import datetime, timedelta
 
 from sqlalchemy.orm.exc import NoResultFound
@@ -30,8 +32,8 @@ from bungeni.ui.utils import url
 def get_key():
     """Return a randomly generated key
     """
-    m = hashlib.sha256()
-    m.update("".join(random.sample(string.letters + string.digits, 32)))
+    m = hashlib.sha1()
+    m.update("".join(random.sample(string.letters + string.digits, 20)))
     return m.hexdigest()
 
 
@@ -45,10 +47,10 @@ class AddOAuthApplication(forms.common.AddForm):
     @form.action(_(u"Create Application"), name="create")
     def handle_create_application(self, action, data, validator="validateAdd"):
         oauth_app = domain.OAuthApplication()
-        oauth_app.application_identifier = data["application_identifier"]
-        oauth_app.application_name = data["application_name"]
+        oauth_app.identifier = data["identifier"]
+        oauth_app.name = data["name"]
         oauth_app.redirection_endpoint = data["redirection_endpoint"]
-        oauth_app.application_key = get_key()
+        oauth_app.secret = get_key()
         session = Session()
         session.add(oauth_app)
         session.flush()
@@ -163,41 +165,73 @@ class ErrorPage(BungeniBrowserView):
 class IOAuthAuthorizeForm(interface.Interface):
     client_id = schema.TextLine(required=False)
     state = schema.TextLine(required=False)
-
+    time = schema.TextLine(required=False)
+    nonce = schema.TextLine(required=False)
 
 class OAuthAuthorizeForm(form.FormBase):
     form_fields = form.Fields(IOAuthAuthorizeForm)
     form_fields["client_id"].custom_widget = widgets.HiddenTextWidget
     form_fields["state"].custom_widget = widgets.HiddenTextWidget
+    form_fields["nonce"].custom_widget = widgets.HiddenTextWidget
+    form_fields["time"].custom_widget = widgets.HiddenTextWidget
     template = NamedTemplate("alchemist.form")
     form_name = _("authorise_oauth_application",
         default=u"Authorise OAuth Application")
 
     def __init__(self, context, request, parameters={}):
         self.parameters = parameters
+        if self.parameters:
+            self.parameters["time"] = time.time()
+            self.parameters["nonce"] = self.generate_nonce(
+                self.parameters["time"])
         self.action_url = "/api/oauth/authorize-form"
         super(OAuthAuthorizeForm, self).__init__(context, request)
 
     def setUpWidgets(self, ignore_request=False):
+        
         self.widgets = form.setUpWidgets(
             self.form_fields, self.prefix, self.context, self.request,
             data=self.parameters if self.parameters else self.request.form,
             ignore_request=ignore_request
         )
 
-    @form.action(_(u"Authorize application"), name="authorize")
+    def generate_nonce(self, auth_time):
+        data = "{0}:{1}:{2}".format(
+            self.parameters["client_id"], get_db_user().user_id, auth_time)
+        return hmac.new(capi.oauth_hmac_key, data, hashlib.sha1).hexdigest()
+
+    def check_authorization(self, action, data):
+        errors = []
+        data = self.request.form
+        if not data.get("form.time", None) or not data.get("form.nonce", None):
+            errors.append(InvalidRequest)
+            return errors
+        max_time = datetime.fromtimestamp(float(data["form.time"])) + \
+            timedelta(seconds=capi.oauth_authorization_token_expiry_time)
+        if (datetime.now() > max_time):
+            errors.append(InvalidGrant)
+        if data["form.nonce"] != self.generate_nonce(data["form.time"]):
+            errors.append(InvalidGrant)
+        return errors
+
+    def handle_failure(self, action, data, errors):
+        return ErrorPage(self.context, self.request, errors[0])()
+
+    @form.action(_(u"Authorize application"), name="authorize",
+        validator=check_authorization, failure=handle_failure)
     def handle_authorize_app(self, action, data):
         session = Session()
         oauth_authorization = domain.OAuthAuthorization()
         oauth_authorization.user_id = get_db_user().user_id
         app = session.query(domain.OAuthApplication
-            ).filter(domain.OAuthApplication.application_identifier ==
+            ).filter(domain.OAuthApplication.identifier ==
                 data["client_id"]
             ).one()
         oauth_authorization.application_id = app.application_id
         oauth_authorization.authorization_code = get_key()
         oauth_authorization.expiry = datetime.now() + timedelta(
-            seconds=capi.oauth_auth_expiry_time)
+            seconds=capi.oauth_authorization_token_expiry_time)
+        oauth_authorization.active = True
         session.add(oauth_authorization)
         redirect_uri = "{0}?code={1}".format(
             app.redirection_endpoint, oauth_authorization.authorization_code)
@@ -213,10 +247,10 @@ class OAuthAuthorizeForm(form.FormBase):
                      == data["client_id"]
             ).one()
         error = UnauthorizedClient(app.redirection_endpoint, data["state"])
-        redirect_error(self.request, error)
+        redirect_error(self.context, self.request, error)
 
 
-def redirect_error(request, error):
+def redirect_error(context, request, error):
     if error.redirect_uri:
         next_url = "{0}?error={1}&error_description={2}".format(
             error.redirect_uri, error.error, error.error_description)
@@ -224,10 +258,10 @@ def redirect_error(request, error):
             next_url = "{0}&state={1}".format(next_url, error.state)
         return request.response.redirect(next_url, trusted=True)
     else:
-        bad_request(request, error)
+        return ErrorPage(context, request, error)()
 
 
-def bad_request(request, error):
+def bad_request(context, request, error):
     request.response.setStatus(400)
     data = {"error": error.error, "error_description": error.error_description}
     return simplejson.dumps(data)
@@ -277,7 +311,7 @@ class OAuthAuthorization(BrowserPage):
         except UnauthorizedClient as e:
             return ErrorPage(self.context, self.request, e)()
         except OAuthException as e:
-            return redirect_error(self.request, e)
+            return redirect_error(self.context, self.request, e)
 
         if not IUnauthenticatedPrincipal.providedBy(self.request.principal):
             # authorize form
@@ -345,7 +379,7 @@ class OAuthAccessToken(BrowserPage):
         try:
             parameters = self.parameters()
         except OAuthException as e:
-            return bad_request(self.request, e)
+            return bad_request(self.context, self.request, e)
         assert (self.authorization is not None,
             "Authorization object not initalized")
         self.authorization.expiry = datetime.now()

@@ -209,7 +209,14 @@ class CAPI(object):
         """time in seconds before an oauth authorization code expires
         max recommended time is 10min
         """
-        return int(bc.oauth_auth_expiry_time)
+        return int(bc.oauth_authorization_token_expiry_time)
+
+    @cached_property.cachedIn("__oauth_hmac_key__")
+    @bungeni_custom_errors
+    def oauth_hmac_key(self):
+        """String used to to generate nonces. KEEP SECRET.
+        """
+        return bc.oauth_hmac_key
     # utility methods
     
     def get_root_path(self):

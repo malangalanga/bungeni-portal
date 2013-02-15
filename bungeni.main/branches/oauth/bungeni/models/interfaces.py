@@ -578,6 +578,9 @@ class IDebateTake(interface.Interface):
 class IOAuthApplication(interface.Interface):
     """Marker interface for an OAuth Application record"""
 
+class IOAuthApplicationContainer(IAlchemistContainer):
+    """Marker interface for an OAuth Applications container"""
+
 class IOAuthAuthorization(interface.Interface):
     """Marker interfeace for OAuth authorizations"""
 

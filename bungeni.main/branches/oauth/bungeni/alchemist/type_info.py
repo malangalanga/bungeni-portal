@@ -254,7 +254,7 @@ TYPE_REGISTRY = [
     ("group_document_assignment", TI("group_assignment", interfaces.IGroupDocumentAssignment)),
     ("debate_record", TI("debate_record", interfaces.IDebateRecord)),
         # non-workflowed
-    ("oauth_application", TI(None, interfaces.IOAuthApplication)),
+    ("o_auth_application", TI(None, interfaces.IOAuthApplication)),
     ("debate_media", TI(None, interfaces.IDebateMedia)),
     ("user_delegation", TI(None, interfaces.IUserDelegation)),
     ("title_type", TI(None, interfaces.ITitleType)),

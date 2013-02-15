@@ -300,5 +300,5 @@ class AppSetup(object):
             description=_(u"Bungeni OAuth API"),
             default_name="index.html",
         )
-        api[u"applications"] = domain.OAuthApplicationContainer()
-        to_locatable_container(domain.OAuthApplication, api[u"applications"])
+        admin[u"applications"] = domain.OAuthApplicationContainer()
+        to_locatable_container(domain.OAuthApplication, admin[u"applications"])

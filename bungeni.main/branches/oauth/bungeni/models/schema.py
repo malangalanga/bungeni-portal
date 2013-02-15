@@ -1185,7 +1185,7 @@ oauth_application = rdb.Table("oauth_application", metadata,
     rdb.Column("identifier", rdb.UnicodeText, nullable=False, 
         unique=True),
     rdb.Column("name", rdb.UnicodeText, nullable=False),
-    rdb.Column("secret", rdb.String(32), nullable=False),
+    rdb.Column("secret", rdb.String(100), nullable=False),
     rdb.Column("redirection_endpoint", rdb.UnicodeText, nullable=False)
 )
 
@@ -1195,7 +1195,7 @@ oauth_authorization = rdb.Table("oauth_authorization", metadata,
         nullable=False),
     rdb.Column("application_id", rdb.Integer,
         rdb.ForeignKey("oauth_application.application_id"), nullable=False),
-    rdb.Column("authorization_code", rdb.String(32), nullable=False),
+    rdb.Column("authorization_code", rdb.String(100), nullable=False),
     rdb.Column("expiry", rdb.DateTime(timezone=False), nullable=False),
     rdb.Column("active", rdb.Boolean(), nullable=False)
 )
@@ -1204,8 +1204,8 @@ oauth_access_token = rdb.Table("oauth_access_token", metadata,
     rdb.Column("access_token_id", rdb.Integer, primary_key=True),
     rdb.Column("authorization_id", rdb.Integer,
              rdb.ForeignKey("oauth_authorization.authorization_id")),
-    rdb.Column("access_token", rdb.String(32)),
-    rdb.Column("refresh_token", rdb.String(32)),
+    rdb.Column("access_token", rdb.String(100)),
+    rdb.Column("refresh_token", rdb.String(100)),
     rdb.Column("expiry", rdb.DateTime(timezone=False), nullable=False),
 )
 
