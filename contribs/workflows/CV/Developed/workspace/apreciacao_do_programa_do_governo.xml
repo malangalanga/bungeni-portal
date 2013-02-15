@@ -1,0 +1,59 @@
+<workspace id="apreciacao_do_programa_do_governo">
+    <state id="govPresentation">
+        <tab id="draft" roles="bungeni.Clerk bungeni.an.government"/>
+    </state>
+    <state id="mocaoDeConfiancaSubmetida">
+        <tab id="draft" roles="bungeni.Owner bungeni.an.government"/>
+    </state>
+    <state id="redraft">
+        <tab id="draft" roles="bungeni.Owner"/>
+    </state>
+    <state id="agendamentoVotacaoPlenario">
+        <tab id="archive" 
+	     roles="bungeni.Owner
+		    bungeni.Clerk
+                    bungeni.Signatory"/>
+    </state>
+    <state id="aguardaVotacaoPlenario">
+        <tab id="inbox" roles="bungeni.Clerk"/>
+        <tab id="pending" roles="bungeni.Owner bungeni.Signatory"/>
+    </state>
+    <state id="VotacaoPlenario">
+        <tab id="inbox" roles="bungeni.Signatory"/>
+        <tab id="pending" roles="bungeni.Owner"/>
+    </state>
+<!--inicio-->
+
+
+<state id="VotacaoResultadoPlenario">
+        <tab id="inbox" roles="bungeni.Signatory"/>
+        <tab id="pending" roles="bungeni.Owner"/>
+    </state>
+    <state id="PANRecebeVotacaoNaoAprovada">
+        <tab id="inbox" roles="bungeni.Clerk bungeni.CommitteeMember an.presidente"/>
+        <tab id="pending" roles="bungeni.Owner bungeni.Signatory"/>
+    </state>
+<state id="gabinetePR">
+        <tab id="inbox" roles="bungeni.Clerk bungeni.CommitteeMember an.presidente"/>
+        <tab id="pending" roles="bungeni.Owner bungeni.Signatory"/>
+    </state>
+    <state id="clarification_required">
+        <tab id="inbox" roles="bungeni.Owner"/>
+        <tab id="pending" roles="bungeni.Clerk bungeni.Signatory"/>
+    </state>
+    <state id="legitimacaoGoverno">
+        <tab id="inbox" roles="bungeni.Speaker"/>
+        <tab id="pending" 
+	     roles="bungeni.Owner
+		    bungeni.Clerk 
+		    bungeni.Signatory"/>
+    </state>
+<state id="demissaoGoverno">
+        <tab id="inbox" roles="bungeni.Speaker"/>
+        <tab id="pending" 
+	     roles="bungeni.Owner
+		    bungeni.Clerk 
+		    bungeni.Signatory"/>
+    </state>
+<!--parei invencao-->
+</workspace>
