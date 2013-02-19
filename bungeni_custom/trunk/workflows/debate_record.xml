@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <workflow title="Debate Record Workflow"
     description="A sittings debate record"
-    tags="public"
     permission_actions=".View .Edit .Add .Delete"
     >
     
@@ -39,7 +38,7 @@
       <facet ref=".draft"/>
     </state>
 
-    <state id="published" title="Published" tags="public">
+    <state id="published" title="Published">
       <facet ref=".published"/>
     </state>
     

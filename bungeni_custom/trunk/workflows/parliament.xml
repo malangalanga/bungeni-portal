@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <workflow title="Parliament Workflow"
     description="Workflow for parliaments"
-    tags="public"
     permission_actions=".View .Edit .Add .Delete"
     >
     
@@ -39,7 +38,7 @@
     
     <state id="active" title="Active Parliament"
             actions="activate"
-            tags="public"
+           
         >
         <facet ref=".public" />
         <facet ref="address.public" />
@@ -47,7 +46,7 @@
     
     <state id="dissolved" title="Parliament is Dissolved" 
             actions="dissolve"
-            tags="public"
+           
         >
         <facet ref=".public_frozen" />
         <facet ref="address.public_frozen" />

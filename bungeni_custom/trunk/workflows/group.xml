@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <workflow title="Group Workflow"
     description="Workflow for Parliamentary Groups"
-    tags="public"
     permission_actions=".View .Edit .Add .Delete"
     >
     
@@ -57,7 +56,7 @@
     
     <state id="active" title="Active Group" 
             actions="activate"
-            tags="public"
+           
         >
         <facet ref=".public" />
         <facet ref="address.public" />
@@ -65,7 +64,7 @@
     
     <state id="dissolved" title="Group is Dissolved" 
             actions="dissolve"
-            tags="public"
+           
         >
         <facet ref=".public_frozen" />
         <facet ref="address.public_frozen" />
