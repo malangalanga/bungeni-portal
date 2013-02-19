@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="bungeni">
+    
+    <!-- session permissions -->
+    <grant permission="bungeni.session.Add" role="bungeni.Clerk" />
+    <grant permission="bungeni.session.Edit" role="bungeni.Clerk" />
+    <grant permission="bungeni.session.Delete" role="bungeni.Clerk" />
+    <grant permission="bungeni.session.View" role="bungeni.Anonymous" />
+
+    <!-- venue permissions --> 
+    <grant permission="bungeni.venue.View" role="bungeni.Clerk" />
+    <grant permission="bungeni.venue.Add" role="bungeni.Clerk" />  
+    <grant permission="bungeni.venue.Edit" role="bungeni.Clerk" />  
+    <grant permission="bungeni.venue.Delete" role="bungeni.Clerk" />  
+
+    <!-- editorial note permissions --> 
+    <grant permission="bungeni.editorial_note.View" role="bungeni.Clerk" />
+    <grant permission="bungeni.editorial_note.Add" role="bungeni.Clerk" />  
+    <grant permission="bungeni.editorial_note.Edit" role="bungeni.Clerk" />  
+    <grant permission="bungeni.editorial_note.Delete" role="bungeni.Clerk" />  
+
+
+</configure>
