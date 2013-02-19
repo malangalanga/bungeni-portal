@@ -159,7 +159,7 @@ class XMLCatalogTranslator(POCatalogTranslator):
         if not dummy:
             target_file = open(self.output_file, "w")
             target_file.write("%s\n%s" % 
-                (XML_HEADER, etree.tostring(src_doc, pretty_print=True)))
+                (XML_HEADER, etree.tostring(src_doc, pretty_print=True, encoding='UTF-8')))
 
 
 TRANSLATORS = dict([
