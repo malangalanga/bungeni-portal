@@ -1800,6 +1800,12 @@ span.yui-button.yui-link-button span a {
     text-shadow: none !important;    
 } 
 
+.site-plone .rounded-eigh {
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+}
+
 /* =============================================================================
    TEMPLATE-PORTAL-EXIST - eXist XML UI content styling
    ========================================================================== */  
@@ -1870,6 +1876,11 @@ span.yui-button.yui-link-button span a {
 }
 .template-portal-eXist #top-layer ul#portal-languageselector li a {
     font-size:12px;
+}
+
+.template-portal-eXist #portal-search a.header-links:visited, #portal-search a.header-links {
+margin-right: 2px;
+color: black;
 }
 .template-portal-eXist .big-dbl-arrow {
     text-decoration:none;
