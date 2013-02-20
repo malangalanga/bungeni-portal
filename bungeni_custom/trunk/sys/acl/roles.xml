@@ -1,0 +1,28 @@
+<roles> 
+  <role id="Clerk" title="Clerks Office">
+    <subrole id="Clerk.QuestionClerk" title="Question Clerk - Senate" />
+    <subrole id="Clerk.HeadClerk" title="Head Clerk - Senate" />
+  </role>
+  <role id="Speaker" title="Speakers Office"/>
+  <!-- SENATE roles -->
+  <role id="ClerkSenate" title="Clerks Office - Senate">
+    <subrole id="ClerkSenate.QuestionClerk" title="Question Clerk - Senate" />
+    <subrole id="ClerkSenate.HeadClerk" title="Head Clerk - Senate" />
+  </role>
+  
+  <role id="SpeakerSenate" title="Speaker Office - Senate" />
+
+    <!-- ASSEMBLY roles -->
+  <role id="ClerkAssembly" title="Clerks Office - Assembly">
+    <subrole id="ClerkAssembly.QuestionClerk" title="Question Clerk - Assembly" />
+    <subrole id="ClerkAssembly.HeadClerk" title="Head Clerk - Assembly" />
+  </role>
+  <role id="SpeakerAssembly" title="Speaker Office - Assembly" />
+  
+  <!-- other roles -->
+  <role id="Translator" title="Translators Office" />
+  <role id="Transcriber" title="Transcription Office">
+    <subrole id="Transcriber.Editor" title="Transcription Editor" />
+    <subrole id="Transcriber.Reporter" title="Transcription Reporter" />
+  </role>
+</roles>
