@@ -26,6 +26,11 @@ case "$1" in
 
 		echo "setting postgresql ownership to bungeni user"
 		chown -R bungeni:bungeni /opt/bungeni/bungeni_apps/postgres*
+		
+		echo "refresh dynamic link cache"
+		echo "/opt/bungeni/bungeni_apps/postgres/lib/" > lib-bungeni-plone.conf
+		mv lib-bungeni-plone.conf /etc/ld.so.conf.d/
+		ldconfig
     ;;
     abort-upgrade|abort-remove|abort-deconfigure)
 		exit 0
