@@ -44,6 +44,7 @@ from bungeni.core.workflows._actions import (
     # sitting
     set_real_order,
     schedule_sitting_items,
+    retract_scheduled_items,
     
     # user
     assign_owner_role,

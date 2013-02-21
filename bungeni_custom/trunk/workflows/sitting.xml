@@ -86,16 +86,12 @@
     </state>
     
     <state id="draft_agenda" title="Draft Agenda"
-            actions="set_real_order"
-           
-        >
+            actions="set_real_order retract_scheduled_items">
         <facet ref=".draft_agenda" />
     </state>
     
     <state id="published_agenda" title="Published Agenda" 
-            actions="schedule_sitting_items"
-           
-        >
+            actions="schedule_sitting_items">
         <facet ref=".published_agenda" />
     </state>
     
@@ -103,7 +99,8 @@
         <facet ref=".published_agenda_internal" />
     </state>
     
-    <state id="draft_minutes" title="Draft Minutes">
+    <state id="draft_minutes" title="Draft Minutes"
+        actions="retract_scheduled_items">
         <facet ref=".draft_minutes" />
     </state>
     
