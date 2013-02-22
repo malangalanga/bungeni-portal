@@ -7,6 +7,7 @@
 
   <div metal:fill-slot="main" class="tutorial">
     <div metal:use-macro="here/tutorial_view/macros/main">
+    <div id="content-core" class="rounded-eigh">    
 	<div metal:fill-slot="sectiontoc">
 	  <ol style="list-style-type: lower-alpha;" tal:condition="here/getPages">
             <li tal:repeat="page here/getPages">
@@ -17,6 +18,7 @@
 
             </li>
 	  </ol>
+	</div>
 	</div>
     </div>
   </div>

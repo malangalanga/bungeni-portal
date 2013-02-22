@@ -32,7 +32,7 @@
         <span tal:replace="here/Title">Title</span>
     </h1>
       
-    
+    <div id="content-core" class="rounded-eigh">    
     <div class="portalMessage"
          tal:condition="python:here.portal_workflow.getInfoFor(here, 'review_state') != 'published'"
          i18n:translate="must_publish_before_visible_to_public">
@@ -139,6 +139,7 @@
     
     <div tal:replace="structure provider:plone.belowcontentbody" />     
 
+  </div>
   </div>
 </div>
 

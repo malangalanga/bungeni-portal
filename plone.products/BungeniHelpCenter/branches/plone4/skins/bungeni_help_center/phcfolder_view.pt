@@ -15,7 +15,8 @@
     <h1 tal:content="here/Title" class="documentFirstHeading">
       Folder Title
     </h1>
-    
+  
+    <div id="content-core" class="rounded-eigh">    
 
     <div class="documentDescription"
          tal:content="here/Description">
@@ -51,7 +52,7 @@
     <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
       see also - shows the references if this feature is switched on
     </div>
-
+    </div>
     </div>
   </body>
 

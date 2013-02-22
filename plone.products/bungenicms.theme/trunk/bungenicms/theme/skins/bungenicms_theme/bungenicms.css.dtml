@@ -394,5 +394,21 @@ table.listing, .stx table {
     font-size: 90% !important;
 }
 
+/*Adjusting tab display in TinyMCE editor*/
+body.mceContentBody h2.content-tab,
+body.mceContentBody h2.default-content-tab {
+    width: 17em !important;
+    font-size: 120% !important;
+} 
+body.mceContentBody h2.default-content-tab 
+{
+    background: none repeat scroll 0 0 #F9AC32 !important;
+    color: black !important;
+}
+
+body.mceContentBody h2.content-tab {
+    background: none repeat scroll 0 0 #464646 !important;
+    color: white !important;
+}
 
 /* </dtml-with> */

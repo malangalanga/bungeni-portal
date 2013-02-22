@@ -14,6 +14,8 @@
         <span tal:replace="here/Title">Title</span>
     </h1>
     
+    <div id="content-core" class="rounded-eigh">    
+    
     <div tal:condition="here/isOutdated" i18n:translate="phc_warning_outdated" class="portalMessage">
            Warning: This item is marked as outdated.
         </div>
@@ -116,6 +118,7 @@
     <div tal:replace="structure provider:plone.belowcontenttitle"/>
 
     <div tal:replace="structure provider:plone.belowcontentbody" />    
+  </div>
   </div>
   </div>
 </body>

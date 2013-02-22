@@ -18,7 +18,7 @@
     </h1>
     
 
-
+    <div id="content-core" class="rounded-eigh">
     <div metal:use-macro="here/phc_macros/macros/identityimage">
       Identity Image 
     </div>
@@ -58,6 +58,7 @@
 
     <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
       see also - shows the references if this feature is switched on
+    </div>
     </div>
     <div tal:replace="structure provider:plone.belowcontenttitle"/>
      

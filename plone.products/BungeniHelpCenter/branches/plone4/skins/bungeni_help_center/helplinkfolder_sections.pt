@@ -17,6 +17,8 @@
       Folder Title
     </h1>
     
+    <div id="content-core" class="rounded-eigh">    
+    
     <p class="visualNoPrint"> <a href="" tal:attributes="href python:here.absolute_url()">Alphabetical View</a><p>
     
     <p class="visualNoPrint">
@@ -94,7 +96,7 @@
     <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
       see also - shows the references if this feature is switched on
     </div>
-
+    </div>
     </div>
     <div tal:replace="structure provider:plone.belowcontentbody" />    
     </div>

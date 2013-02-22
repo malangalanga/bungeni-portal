@@ -30,6 +30,7 @@
       Folder Title
     </h1>
 
+    <div id="content-core" class="rounded-eigh">
     <a href="" tal:condition="not: noSections" tal:attributes="href python:here.absolute_url()+'/helplinkfolder_sections'">Category Based View</a>
     
     <p class="visualNoPrint">
@@ -89,6 +90,7 @@
 
     <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
       see also - shows the references if this feature is switched on
+    </div>
     </div>
     <div tal:replace="structure provider:plone.belowcontenttitle"/>
     </div>

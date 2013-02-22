@@ -26,6 +26,8 @@
 
   <div metal:define-macro="main">
   <div tal:replace="structure provider:plone.documentactions"/>
+  
+  <div id="content-core" class="rounded-eigh">
 
    <tal:define define="parentnode context/@@plone_context_state/parent; results python:parentnode.alphabetiseContext();
    parent_url python:here.navigationParent(here, template.getId())">
@@ -154,6 +156,7 @@
                </span>
 </td></tr></table>
 </div> 
+    </div>
     </div>
 
 

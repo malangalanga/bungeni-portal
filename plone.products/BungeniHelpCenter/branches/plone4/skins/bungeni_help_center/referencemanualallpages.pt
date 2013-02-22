@@ -13,7 +13,7 @@
         <h1>
            <b><span tal:replace="here/Title" /></b>
         </h1>
-
+        <div id="content-core" class="rounded-eigh">
         <p class="discreet visualNoPrint">
 	  Note: Return to <a href="" tal:attributes="href here/absolute_url">hierarchical view</a>.
         </p>
@@ -25,7 +25,7 @@
  
     <metal:recursion use-macro="here/referencemanual_macros/macros/section_collation"/>       
         
-        
+    </div>        
     </div>
     
     <div tal:replace="structure provider:plone.belowcontentbody" />    

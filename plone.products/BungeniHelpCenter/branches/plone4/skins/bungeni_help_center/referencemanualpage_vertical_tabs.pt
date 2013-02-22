@@ -37,7 +37,8 @@
         <span tal:replace="python:here.castNav(numbering)" tal:condition="python:here.getNavType() == 'yes'">1.2.</span>
         <span tal:replace="here/Title">Title</span>
     </h1>
-
+    
+    <div id="content-core" class="rounded-eigh">
     
     <a href=""
            class="link-parent"
@@ -112,7 +113,7 @@
     <div tal:replace="structure provider:plone.belowcontenttitle"/>
     
     <div tal:replace="structure provider:plone.belowcontentbody" />    
-
+   </div>
   </div>
 </div>
 

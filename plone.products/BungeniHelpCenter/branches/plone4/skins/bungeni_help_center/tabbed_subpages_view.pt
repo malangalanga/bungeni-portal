@@ -11,7 +11,9 @@
 
     <div id="tabber-block">
 
-        <h1 class="documentFirstHeading" tal:content="here/Title">Title</h1>
+    <h1 class="documentFirstHeading" tal:content="here/Title">Title</h1>
+        
+    <div id="content-core" class="rounded-eigh">        
 
 
         <div class="stx"
@@ -29,7 +31,7 @@
     <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
       see also - shows the references if this feature is switched on
     </div>
-    
+    </div>
 
     </tal:main-macro>
 </metal:main>

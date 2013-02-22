@@ -17,6 +17,8 @@
         <img tal:replace="structure here/tutorial_icon.gif" />
         <span tal:replace="here/Title" />
         </h1>
+        
+        <div id="content-core" class="rounded-eigh">        
 
         <p class="discreet visualNoPrint"
            i18n:translate="view_paginated_pages">
@@ -74,6 +76,7 @@
         
     <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
       see also - shows the references if this feature is switched on
+    </div>
     </div>
     <div tal:replace="structure provider:plone.belowcontenttitle"/>
 

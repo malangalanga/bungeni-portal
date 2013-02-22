@@ -62,6 +62,8 @@
             <span tal:replace="python:pos + 1">Position</span> -            
             <span tal:replace="here/title_or_id">Title or id</span>
         </h1>
+        
+        <div id="content-core" class="rounded-eigh">        
         <div class="portalMessage" tal:condition="python:here.portal_workflow.getInfoFor(here, 'review_state') != 'published'">
            You must publish this page before it becomes visible to the public.
         </div>
@@ -241,6 +243,7 @@
         <div class="visualClear">&nbsp;</div>
     <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
       see also - shows the references if this feature is switched on
+    </div>
     </div>
 
         <div tal:replace="structure provider:plone.belowcontenttitle"/>   

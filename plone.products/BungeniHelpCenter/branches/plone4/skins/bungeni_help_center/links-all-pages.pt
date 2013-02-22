@@ -18,6 +18,8 @@
     <h1 tal:content="here/Title" class="documentFirstHeading">
       Folder Title
     </h1>
+    
+    <div id="content-core" class="rounded-eigh">    
 
     <div metal:use-macro="here/phc_macros/macros/identityimage">
       Identity Image 
@@ -73,7 +75,7 @@
     </div>
 
     <div tal:replace="structure provider:plone.belowcontenttitle"/>
-
+    </div>
     </div>
     </div>
   </body>
