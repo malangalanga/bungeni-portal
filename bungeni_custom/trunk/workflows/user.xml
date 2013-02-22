@@ -12,8 +12,8 @@
     <facet name="internal">
         <allow permission=".View" roles="Authenticated" />
         <allow permission=".Edit" roles="Clerk Owner" />
-        <allow permission="delegation.Edit" roles="Owner" />
-        <allow permission="delegation.Add" roles="Owner" />
+        <allow permission="user_delegation.Edit" roles="Owner" />
+        <allow permission="user_delegation.Add" roles="Owner" />
     </facet>
     <facet name="internal_frozen">
         <allow permission=".View" roles="Authenticated" />
