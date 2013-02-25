@@ -124,7 +124,7 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="completed" title="Submitted to the Speaker" actions="version">
+    <state id="reviewed" title="Submitted to the Speaker" actions="version">
         <facet ref=".edit_Speaker" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
@@ -133,7 +133,6 @@
     
     <state id="admissible" title="Admissible"
             actions="version set_doc_type_number"
-           
         >
         <facet ref=".public" />
         <facet ref="attachment.public" />
@@ -165,7 +164,6 @@
     
     <state id="adjourned" title="Adjourn" permissions_from_state="admissible" />
     
-    <!-- only after it has been tabled does a tabled_document become public !+?? -->
     <state id="tabled" title="Tabled">
         <facet ref=".public" />
         <facet ref="attachment.public_frozen" />
@@ -248,16 +246,16 @@
         require_confirmation="true"
     />
     
-    <transition title="Complete"
+    <transition title="Reviewed"
         source="received"
-        destination="completed"
+        destination="reviewed"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
     
-    <transition title="Approve"
-        source="completed"
+    <transition title="Admissible"
+        source="reviewed"
         destination="admissible"
         condition=""
         trigger="manual"
@@ -271,8 +269,8 @@
         roles="ClerkSenate ClerkAssembly"
     />
     
-    <transition title="Disapprove"
-        source="completed scheduled"
+    <transition title="Inadmissible"
+        source="reviewed scheduled"
         destination="inadmissible"
         condition=""
         trigger="manual"
@@ -280,8 +278,8 @@
         require_confirmation="true"
     />
     
-    <transition title="Needs Recomplete to Approve"
-        source="completed"
+    <transition title="Needs cla to Approve"
+        source="reviewed"
         destination="incomplete"
         condition=""
         trigger="manual"
@@ -297,9 +295,9 @@
         note="incomplete document needs to be resubmitted to signatories"
     />
 
-    <transition title="Recomplete"
+    <transition title="Re-reviewed"
         source="incomplete"
-        destination="completed"
+        destination="reviewed"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
@@ -360,7 +358,7 @@
     />
     
     <transition title="Withdraw"
-        source="submitted received completed clarification_required"
+        source="submitted received reviewed clarification_required"
         destination="withdrawn_internal"
         grouping_unique_sources="withdrawn"
         condition=""

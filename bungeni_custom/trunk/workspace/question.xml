@@ -23,7 +23,7 @@
         <tab id="inbox" roles="ClerkSenate ClerkAssembly.ClerkHead ClerkSenate ClerkAssembly.ClerkQuestion"/>
         <tab id="pending" roles="Owner"/>
     </state>
-    <state id="completed">
+    <state id="reviewed">
         <tab id="inbox" roles="SpeakerSenate SpeakerAssembly"/>
         <tab id="pending" roles="ClerkSenate ClerkAssembly.ClerkHead ClerkSenate ClerkAssembly.ClerkQuestion Owner"/>
     </state>
@@ -56,7 +56,15 @@
                     SpeakerSenate SpeakerAssembly"/>
     </state>
     <state id="schedule_pending">
-        <tab id="pending" 
+        <tab id="schedule" 
+	     roles="Owner
+		    Signatory
+		    SpeakerSenate SpeakerAssembly
+		    ClerkSenate ClerkAssembly.ClerkHead
+                    ClerkSenate ClerkAssembly.ClerkQuestion"/>
+    </state>
+    <state id="scheduled">
+        <tab id="schedule" 
 	     roles="Owner
 		    Signatory
 		    SpeakerSenate SpeakerAssembly
@@ -64,7 +72,7 @@
                     ClerkSenate ClerkAssembly.ClerkQuestion"/>
     </state>
     <state id="adjourned">
-        <tab id="archive" 
+        <tab id="schedule" 
 	     roles="ClerkSenate ClerkAssembly.ClerkHead
                     ClerkSenate ClerkAssembly.ClerkQuestion
 		    SpeakerSenate SpeakerAssembly
@@ -89,7 +97,7 @@
 		    SpeakerSenate SpeakerAssembly
 	            Signatory"/>
     </state>
-   <state id="response_completed">
+   <state id="response_reviewed">
         <tab id="archive"
 	     roles="Owner
 		    Signatory

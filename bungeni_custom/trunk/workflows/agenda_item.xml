@@ -115,7 +115,7 @@
         <facet ref="signatory.internal" />
     </state>
     
-    <state id="completed" title="Submitted to the Speaker" actions="version">
+    <state id="reviewed" title="Submitted to the Speaker" actions="version">
         <facet ref=".edit_Speaker" />
         <facet ref="attachment.internal" />
         <facet ref="signatory.internal_frozen" />
@@ -237,24 +237,24 @@
         note="incomplete document needs to be resubmitted to signatories"
     />
     
-    <transition title="Complete"
+    <transition title="Reviewed"
         source="received"
-        destination="completed"
+        destination="reviewed"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
     
-    <transition title="Approve"
-        source="completed"
+    <transition title="Admissible"
+        source="reviewed"
         destination="admissible"
         condition=""
         trigger="manual"
         roles="SpeakerSenate SpeakerAssembly"
     />
     
-    <transition title="Disapprove"
-        source="completed"
+    <transition title="Inadmissible"
+        source="reviewed"
         destination="inadmissible"
         condition=""
         trigger="manual"
@@ -270,7 +270,7 @@
     />
     
     <transition title="Require Recomplete to Approve"
-        source="completed"
+        source="reviewed"
         destination="incomplete"
         condition=""
         trigger="manual"
@@ -278,9 +278,9 @@
         require_confirmation="true"
     />
     
-    <transition title="Recomplete"
+    <transition title="Re-reviewed"
         source="incomplete"
-        destination="completed"
+        destination="reviewed"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
@@ -359,7 +359,7 @@
     />
     
     <transition title="Withdraw"
-        source="submitted received completed clarification_required"
+        source="submitted received reviewed clarification_required"
         destination="withdrawn_internal"
         grouping_unique_sources="withdrawn"
         condition=""

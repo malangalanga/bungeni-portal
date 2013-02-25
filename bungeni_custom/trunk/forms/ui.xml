@@ -116,7 +116,7 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
+        <field name="description" label="Summary" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
@@ -157,7 +157,7 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
+        <field name="body" label="Text" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
     </descriptor>
@@ -232,7 +232,7 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
+        <field name="body" label="Text" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
         <field name="audit_id" required="false" value_type="text" render_type="text_line">
@@ -305,7 +305,7 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
+        <field name="body" label="Text" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
         <field name="event_date" label="Event Date" required="false" value_type="datetime" render_type="datetime" extended="datetime">
@@ -601,7 +601,7 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <show modes="view listing" />
             <hide modes="add" />
         </field>
-        <field name="body" label="Body" required="false" value_type="text" render_type="rich_text">
+        <field name="body" label="Text" required="false" value_type="text" render_type="rich_text">
             <show modes="view" />
             <hide modes="edit add listing" />
         </field>

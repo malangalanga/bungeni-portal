@@ -141,47 +141,32 @@
     
     <state id="first_reading_adjourned" title="First Reading Adjourned" 
         permissions_from_state="gazetted" />
-    
-    <state id="first_committee" title="Submitted to Select Committee (after 1st reading)" 
-        permissions_from_state="gazetted" />
-    
-    <state id="first_report_reading_pending" title="First Report Reading Pending" 
-        permissions_from_state="first_committee" />
-    
-    <state id="first_report_reading" title="First Report Reading" actions="version"
-        permissions_from_state="first_committee" />
-    
-    <state id="first_report_reading_adjourned" title="First Report Reading Adjourned" 
-        permissions_from_state="first_committee" />
-    
+
     <state id="second_reading_pending" title="Second Reading Pending" 
-        permissions_from_state="first_committee" />
+        permissions_from_state="first_reading" />
     
     <state id="second_reading" title="Second Reading" actions="version"
-        permissions_from_state="first_committee" />
+        permissions_from_state="first_reading" />
     
     <state id="second_reading_adjourned" title="Second Reading Adjourned"
-        permissions_from_state="first_committee" />
+        permissions_from_state="first_reading" />
     
     <state id="whole_house_pending" title="Whole House Pending" 
-        permissions_from_state="first_committee" />
+        permissions_from_state="first_reading" />
     
     <state id="whole_house" title="Whole House" 
-        permissions_from_state="first_committee" />
+        permissions_from_state="first_reading" />
     
     <state id="whole_house_adjourned" title="Whole House Adjourned" 
-        permissions_from_state="first_committee" />
-        
-    <state id="second_committee" title="Submitted to Select Committee (after 2nd reading)"
-        permissions_from_state="first_committee" />
+        permissions_from_state="first_reading" />
     
     <state id="third_reading_pending" title="Third Reading Pending"
-        permissions_from_state="first_committee" />
+        permissions_from_state="first_reading" />
     
     <state id="third_reading" title="Third Reading"
-        permissions_from_state="first_committee" />
+        permissions_from_state="first_reading" />
     
-    <state id="third_reading_adjourned" permissions_from_state="first_committee"
+    <state id="third_reading_adjourned" permissions_from_state="first_reading"
         title="Third Reading Adjourned" />
     
     <state id="approved" title="Approved Bill">
@@ -300,32 +285,8 @@
         roles="ClerkSenate ClerkAssembly"
     />
     
-    <transition title="Submit Bill to Select Committee (I)"
-        source="first_reading"
-        destination="first_committee"
-        condition=""
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
-    <transition title="Schedule First Report Reading"
-        source="first_report_reading_pending"
-        destination="first_report_reading"
-        condition="is_scheduled"
-        trigger="system"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
-    <transition title="Reschedule First Report Reading"
-        source="first_report_reading"
-        destination="first_report_reading_pending"
-        condition=""
-        trigger="system"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
     <transition title="Allow scheduling of Second Reading"
-        source="first_reading first_report_reading second_reading_adjourned"
+        source="first_reading"
         destination="second_reading_pending"
         condition=""
         trigger="manual"
@@ -347,23 +308,7 @@
         trigger="system"
         roles="ClerkSenate ClerkAssembly"
     />
-    
-    <transition title="Adjourn First Report Reading"
-        source="first_report_reading"
-        destination="first_report_reading_adjourned"
-        condition=""
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
-    <transition title="Allow scheduling of First Report Reading"
-        source="first_committee first_report_reading_adjourned"
-        destination="first_report_reading_pending"
-        condition=""
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
+
     <transition title="Adjourn Second Reading"
         source="second_reading"
         destination="second_reading_adjourned"
@@ -380,14 +325,6 @@
         roles="ClerkSenate ClerkAssembly"
     />
     
-    <transition title="Allow scheduling/rescheduling of Whole House Committee"
-        source="second_committee"
-        destination="whole_house_pending"
-        condition=""
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
     <transition title="Schedule Whole House Committee"
         source="whole_house_pending"
         destination="whole_house"
@@ -395,34 +332,10 @@
         trigger="system"
         roles="ClerkSenate ClerkAssembly"
     />
-    
-    <transition title="Reschedule Whole House Committee"
-        source="whole_house"
-        destination="whole_house_pending"
-        condition=""
-        trigger="system"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
+
     <transition title="Adjourn Whole House Committee"
         source="whole_house"
         destination="whole_house_adjourned"
-        condition=""
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
-    <transition title="Submit Bill to Select Committee (II)"
-        source="second_reading"
-        destination="second_committee"
-        condition=""
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
-    <transition title="Submit/Resubmit Bill to Select Committee (II)"
-        source="whole_house"
-        destination="second_committee"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
@@ -443,15 +356,7 @@
         trigger="system"
         roles="ClerkSenate ClerkAssembly"
     />
-    
-    <transition title="Reschedule Third Reading"
-        source="third_reading"
-        destination="third_reading_pending"
-        condition=""
-        trigger="system"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
+
     <transition title="Adjourn Third Reading"
         source="third_reading"
         destination="third_reading_adjourned"
@@ -468,7 +373,7 @@
         roles="ClerkSenate ClerkAssembly"
     />
     
-    <transition title="Approve"
+    <transition title="Admissible"
         source="third_reading"
         destination="approved"
         condition=""
@@ -490,11 +395,8 @@
         source="
             gazetted
             first_reading
-            first_committee
-            first_report_reading
             second_reading
             whole_house
-            second_committee
             third_reading
         "
         destination="withdrawn"

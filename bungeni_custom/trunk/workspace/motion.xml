@@ -30,7 +30,7 @@
         <tab id="inbox" roles="Owner"/>
         <tab id="pending" roles="ClerkSenate ClerkAssembly Signatory"/>
     </state>
-    <state id="completed">
+    <state id="reviewed">
         <tab id="inbox" roles="SpeakerSenate SpeakerAssembly"/>
         <tab id="pending" 
 	     roles="Owner
@@ -56,7 +56,14 @@
 		    SpeakerSenate SpeakerAssembly"/>
     </state>
     <state id="schedule_pending">
-        <tab id="pending" 
+        <tab id="schedule" 
+	     roles="Owner
+		    Signatory
+		    SpeakerSenate SpeakerAssembly
+		    ClerkSenate ClerkAssembly"/>
+    </state>
+    <state id="scheduled">
+        <tab id="schedule" 
 	     roles="Owner
 		    Signatory
 		    SpeakerSenate SpeakerAssembly
@@ -77,14 +84,14 @@
                      SpeakerSenate SpeakerAssembly"/>
     </state>
     <state id="adjourned">
-         <tab id="archive" 
+         <tab id="schedule" 
 	      roles="Signatory
 		     Owner
 		     ClerkSenate ClerkAssembly
                      SpeakerSenate SpeakerAssembly"/>
     </state>
     <state id="deferred">
-        <tab id="archive" 
+        <tab id="pending" 
 	     roles="Signatory
 		    Owner
 		    ClerkSenate ClerkAssembly

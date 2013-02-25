@@ -17,7 +17,7 @@
         <show modes="view edit add" />
         <hide modes="listing" />
     </field>
-    <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
+    <field name="description" label="Summary" required="false" value_type="text" render_type="text_box">
         <show modes="view edit add" />
         <hide modes="listing" />
     </field>
@@ -87,7 +87,7 @@
     <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
         <hide modes="view edit add listing" />
     </field>
-    <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
+    <field name="body" label="Text" required="true" value_type="text" render_type="rich_text">
         <show modes="view edit add" />
     </field>
 </descriptor>
