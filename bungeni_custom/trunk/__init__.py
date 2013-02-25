@@ -40,6 +40,9 @@ legislature = dict(
     # the legislature end_date, None or iso 8601 date string
     end_date=None,
     
+    # the identifier of the parliament e.g. 9th parliament 
+    identifier="9",
+
     # official country code for legislature locale is running - ISO 3166-1 alpha-2
     country_code="ke",
 )
