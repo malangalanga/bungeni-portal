@@ -19,8 +19,25 @@
     <allow permission="item_schedule_vote.Edit" roles="Clerk" />
     <allow permission="item_schedule_vote.Add" roles="Clerk" />
     <allow permission="item_schedule_vote.Delete" roles="Clerk" />
-    
-    
+
+    <!-- session permissions -->
+    <allow permission="session.Add" roles="Clerk" />
+    <allow permission="session.Edit" roles="Clerk" />
+    <allow permission="session.Delete" roles="Clerk" />
+    <allow permission="session.View" roles="Anonymous" />
+
+    <!-- venue permissions --> 
+    <allow permission="venue.View" roles="Clerk" />
+    <allow permission="venue.Add" roles="Clerk" />  
+    <allow permission="venue.Edit" roles="Clerk" />  
+    <allow permission="venue.Delete" roles="Clerk" />  
+
+    <!-- editorial note permissions --> 
+    <allow permission="editorial_note.View" roles="Clerk" />
+    <allow permission="editorial_note.Add" roles="Clerk" />  
+    <allow permission="editorial_note.Edit" roles="Clerk" />  
+    <allow permission="editorial_note.Delete" roles="Clerk" />  
+
     <!-- features -->
     <!-- !+SITTING_AUDIT cannot support audit/version without a sitting_audit db table ?! -->
     <feature name="audit" enabled="false" />
@@ -35,7 +52,7 @@
         <allow permission=".Edit" roles="Clerk" />
         <allow permission=".Delete" roles="Clerk" />
         <allow permission="item_schedule_discussion.View" roles="Clerk" />
-	<allow permission="debate_record.View" roles="Clerk Transcriber"/>
+    <allow permission="debate_record.View" roles="Clerk Transcriber"/>
     </facet>
     <facet name="draft_agenda">
         <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
@@ -46,7 +63,7 @@
         <allow permission="item_schedule.Add" roles="Clerk" />
         <allow permission="item_schedule.Delete" roles="Clerk" />
         <allow permission="item_schedule_discussion.View" roles="Clerk Speaker" />
-	
+    
     </facet>
     <facet name="published_agenda">
         <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
