@@ -5,9 +5,9 @@
     >
     
     <!-- global grants -->
-    <allow permission=".Add" roles="Clerk" />
-    <allow permission=".Edit" roles="Clerk" />
-    <allow permission=".Delete" roles="Clerk" />
+    <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
+    <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
+    <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
     
     
     <feature name="address" enabled="true" />
@@ -15,15 +15,15 @@
     
     <!-- workflow facets -->
     <facet name="draft">
-        <allow permission=".View" roles="Clerk" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
         <allow permission=".Delete" roles="Owner" />
     </facet>
     <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
         <allow permission="member_of_parliament.View" roles="Authenticated Anonymous" />
-        <allow permission="member_of_parliament.Edit" roles="Clerk" />
-        <allow permission="member_of_parliament.Add" roles="Clerk" />
-        <allow permission="member_of_parliament.Delete" roles="Clerk" /><!-- !+GROUP_MEMBERSHIP_DELETE -->
+        <allow permission="member_of_parliament.Edit" roles="ClerkSenate ClerkAssembly" />
+        <allow permission="member_of_parliament.Add" roles="ClerkSenate ClerkAssembly" />
+        <allow permission="member_of_parliament.Delete" roles="ClerkSenate ClerkAssembly" /><!-- !+GROUP_MEMBERSHIP_DELETE -->
     </facet>
     <facet name="public_frozen">
         <allow permission=".View" roles="Authenticated Anonymous" />
@@ -63,7 +63,7 @@
         source="draft dissolved"
         destination="active"
         trigger="manual"
-        roles="Clerk Speaker"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
     
@@ -72,7 +72,7 @@
         destination="dissolved"
         condition="has_end_date"
         trigger="manual"
-        roles="Clerk Speaker"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
     
@@ -80,7 +80,7 @@
         source="active dissolved"
         destination="draft"
         trigger="manual"
-        roles="Clerk Speaker"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
 

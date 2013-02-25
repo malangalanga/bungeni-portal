@@ -50,7 +50,7 @@
         destination="internal"
         condition="user_may_edit_context_parent"
         trigger="manual"
-        roles="Clerk Owner"
+        roles="ClerkSenate ClerkAssembly Owner"
     />
     
     <transition title="Re-publish"
@@ -58,7 +58,7 @@
         destination="attached"
         condition="user_may_edit_context_parent"
         trigger="manual"
-        roles="Clerk Owner"
+        roles="ClerkSenate ClerkAssembly Owner"
     />
     
     <!--
@@ -67,7 +67,7 @@
         destination="inactive"
         condition="user_may_edit_context_parent"
         trigger="manual"
-        roles="Clerk Owner"
+        roles="ClerkSenate ClerkAssembly Owner"
         require_confirmation="true"
     />
     -->

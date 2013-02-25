@@ -5,7 +5,7 @@
     >
     
     <!-- global grants -->
-    <allow permission=".Add" roles="Clerk.HeadClerk MP" />
+    <allow permission=".Add" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead MP" />
     
     
     <!-- features -->
@@ -29,16 +29,16 @@
     <feature name="email" enabled="true" />
     <feature name="download" enabled="true" />
     <feature name="user_assignment" enabled="true">
-        <parameter name="assigner_roles" value="Clerk.HeadClerk" />
-        <parameter name="assignable_roles" value="Clerk.QuestionClerk" />
+        <parameter name="assigner_roles" value="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead" />
+        <parameter name="assignable_roles" value="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion" />
     </feature>
     
     
     <!-- workflow facets -->
     <facet name="draft_Clerk">
-        <allow permission=".View" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-        <allow permission=".Edit" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-        <allow permission=".Delete" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
+        <allow permission=".View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion" />
+        <allow permission=".Edit" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion" />
+        <allow permission=".Delete" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion" />
     </facet>
     <facet name="draft_Owner">
         <allow permission=".View" roles="Owner" />
@@ -53,20 +53,20 @@
         <allow permission=".Edit" roles="Owner" />
     </facet>
     <facet name="view_Clerk">
-        <allow permission=".View" roles="Clerk.HeadClerk Clerk.QuestionClerk Speaker Owner Signatory" />
+        <allow permission=".View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion SpeakerSenate SpeakerAssembly Owner Signatory" />
     </facet>
     <facet name="edit_Clerk">
-        <allow permission=".View" roles="Clerk.HeadClerk Clerk.QuestionClerk Speaker Owner Signatory" />
-        <allow permission=".Edit" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-        <allow permission="user_assignment.View" roles="Clerk.HeadClerk Clerk.QuestionClerk" />
-        <allow permission="user_assignment.Edit" roles="Clerk.HeadClerk" />
+        <allow permission=".View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion SpeakerSenate SpeakerAssembly Owner Signatory" />
+        <allow permission=".Edit" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion" />
+        <allow permission="user_assignment.View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion" />
+        <allow permission="user_assignment.Edit" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead" />
     </facet>
     <facet name="edit_Speaker">
-        <allow permission=".View" roles="Clerk.HeadClerk Clerk.QuestionClerk Speaker Owner Signatory" />
-        <allow permission=".Edit" roles="Speaker" />
+        <allow permission=".View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion SpeakerSenate SpeakerAssembly Owner Signatory" />
+        <allow permission=".Edit" roles="SpeakerSenate SpeakerAssembly" />
     </facet>
     <facet name="edit_Owner">
-        <allow permission=".View" roles="Clerk.HeadClerk Clerk.QuestionClerk Speaker Owner Signatory" />
+        <allow permission=".View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion SpeakerSenate SpeakerAssembly Owner Signatory" />
         <allow permission=".Edit" roles="Owner" />
     </facet>
     <facet name="public">
@@ -79,7 +79,7 @@
     </facet>
     <facet name="public_response_internal">
         <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="response.View" roles="Clerk.HeadClerk Clerk.QuestionClerk Speaker Minister" />
+        <allow permission="response.View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion SpeakerSenate SpeakerAssembly Minister" />
     </facet>
     <facet name="public_response_public">
         <allow permission=".View" roles="Authenticated Anonymous" />
@@ -139,14 +139,14 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="submitted" title="Submitted to clerk" actions="version">
+    <state id="submitted" title="Submitted to Clerk" actions="version">
         <facet ref=".view_Clerk" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal_frozen" />
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="received" title="Received by clerk" 
+    <state id="received" title="Received by Clerk" 
             actions="set_doc_registry_number"
             
         >
@@ -270,7 +270,7 @@
         destination="submitted"
         condition="pi_signatories_check"
         trigger="manual"
-        roles="Clerk.HeadClerk"
+        roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead"
         order="1"
     />
 
@@ -305,7 +305,7 @@
         destination="received"
         condition=""
         trigger="manual"
-        roles="Clerk.HeadClerk"
+        roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead"
         order="2"
     />
     
@@ -314,7 +314,7 @@
         destination="clarification_required"
         condition=""
         trigger="manual"
-        roles="Clerk.QuestionClerk"
+        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
         order="3"
         require_confirmation="true"
     />
@@ -332,7 +332,7 @@
         destination="completed"
         condition=""
         trigger="manual"
-        roles="Clerk.QuestionClerk"
+        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
         order="4"
         note="The Question has all the formal requirements; forwarded to the
             Speaker's Office as well as to the Ministry for pre-viewing (but
@@ -344,7 +344,7 @@
         destination="admissible"
         condition=""
         trigger="manual"
-        roles="Speaker"
+        roles="SpeakerSenate SpeakerAssembly"
         order="6"
     />
     
@@ -353,7 +353,7 @@
         destination="inadmissible"
         condition=""
         trigger="manual"
-        roles="Speaker"
+        roles="SpeakerSenate SpeakerAssembly"
         order="7"
         require_confirmation="true"
     />
@@ -363,7 +363,7 @@
         destination="incomplete"
         condition=""
         trigger="manual"
-        roles="Speaker"
+        roles="SpeakerSenate SpeakerAssembly"
         order="8"
         require_confirmation="true"
     />
@@ -373,7 +373,7 @@
         destination="completed"
         condition=""
         trigger="manual"
-        roles="Clerk.QuestionClerk"
+        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
         order="9"
     />
     
@@ -391,7 +391,7 @@
         destination="schedule_pending"
         condition="is_oral_response"
         trigger="manual"
-        roles="Clerk.QuestionClerk"
+        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
         order="11"
     />
     
@@ -399,7 +399,7 @@
         source="scheduled"
         destination="schedule_pending"
         trigger="system"
-        roles="Clerk.QuestionClerk"
+        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
     />
     
     <transition title="Schedule"
@@ -407,7 +407,7 @@
         destination="scheduled"
         condition="is_scheduled"
         trigger="system"
-        roles="Clerk.QuestionClerk"
+        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
         order="12"
     />
     
@@ -416,7 +416,7 @@
         destination="response_pending"
         condition="is_written_response"
         trigger="manual"
-        roles="Clerk.QuestionClerk"
+        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
         order="13"
         note="Written-response questions are never scheduled but must be 
             answered directly by the Ministry."
@@ -436,7 +436,7 @@
         destination="response_pending"
         condition=""
         trigger="manual"
-        roles="Clerk.QuestionClerk"
+        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
         order="16"
     />
     
@@ -444,7 +444,7 @@
         source="response_submitted"
         destination="response_completed"
         trigger="manual"
-        roles="Clerk.QuestionClerk"
+        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
         order="17"
     />
     
@@ -453,7 +453,7 @@
         destination="elapsed"
         condition=""
         trigger="manual"
-        roles="Clerk.QuestionClerk"
+        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
         order="18"
         require_confirmation="true"
     />
@@ -463,7 +463,7 @@
         destination="deferred"
         condition=""
         trigger="manual"
-        roles="Clerk.QuestionClerk"
+        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
         order="19"
         note="Oral question, postpone scheduling."
     />
@@ -473,7 +473,7 @@
         destination="dropped"
         condition=""
         trigger="manual"
-        roles="Clerk.QuestionClerk"
+        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
         order="22"
     />
     
@@ -482,7 +482,7 @@
         destination="adjourned"
         condition=""
         trigger="manual"
-        roles="Clerk.QuestionClerk"
+        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
         order="23"
     />
     
@@ -490,7 +490,7 @@
         source="scheduled"
         destination="debated"
         trigger="manual"
-        roles="Clerk.QuestionClerk"
+        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
         order="25"
     />
     
@@ -500,7 +500,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="Clerk.QuestionClerk Owner"
+        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion Owner"
         order="26"
         require_confirmation="true"
         note="The MP can withdraw his question at any stage where it can 
@@ -513,7 +513,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="Clerk.QuestionClerk Owner"
+        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion Owner"
         order="27"
         require_confirmation="true"
     />

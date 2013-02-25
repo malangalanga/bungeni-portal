@@ -10,24 +10,24 @@
     
     <!-- workflow facets -->
     <facet name="draft">
-        <allow permission=".View" roles="Clerk Owner" />
-        <allow permission=".Edit" roles="Clerk Owner" />
-        <allow permission=".Delete" roles="Clerk Owner" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly Owner" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Owner" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Owner" />
     </facet>
     <facet name="internal" default="true">
         <allow permission=".View" roles="Authenticated" />
-        <allow permission=".Edit" roles="Clerk Owner" />
-        <allow permission=".Add" roles="Clerk Owner" />
-        <allow permission=".Delete" roles="Clerk Owner" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Owner" />
+        <allow permission=".Add" roles="ClerkSenate ClerkAssembly Owner" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Owner" />
     </facet>
     <facet name="internal_frozen">
         <allow permission=".View" roles="Authenticated" />
     </facet>
     <facet name="public">
         <allow permission=".View" roles="Anonymous" />
-        <allow permission=".Edit" roles="Clerk Owner" />
-        <allow permission=".Add" roles="Clerk Owner" />
-        <allow permission=".Delete" roles="Clerk Owner" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Owner" />
+        <allow permission=".Add" roles="ClerkSenate ClerkAssembly Owner" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Owner" />
     </facet>
     <facet name="public_frozen">
         <allow permission=".View" roles="Anonymous" />
@@ -80,7 +80,7 @@
         source="internal"
         destination="attached"
         trigger="manual"
-        roles="Clerk Owner"
+        roles="ClerkSenate ClerkAssembly Owner"
     />
     
     <!-- 
@@ -93,7 +93,7 @@
         destination="internal"
         condition="context_parent_is_not_public"
         trigger="manual"
-        roles="Clerk Owner"
+        roles="ClerkSenate ClerkAssembly Owner"
     />
     
     <transition title="Deactivate"
@@ -101,7 +101,7 @@
         destination="inactive"
         condition="context_parent_is_not_public"
         trigger="manual"
-        roles="Clerk Owner"
+        roles="ClerkSenate ClerkAssembly Owner"
         require_confirmation="true"
     />
 

@@ -1,6 +1,6 @@
 <workspace id="motion">
     <state id="working_draft">
-        <tab id="draft" roles="Clerk"/>
+        <tab id="draft" roles="ClerkSenate ClerkAssembly"/>
     </state>
     <state id="draft">
         <tab id="draft" roles="Owner"/>
@@ -11,11 +11,11 @@
     <state id="withdrawn_signatory">
         <tab id="archive"
 	     roles="Owner
-		    Clerk
+		    ClerkSenate ClerkAssembly
                     Signatory"/>
     </state>
     <state id="submitted">
-        <tab id="inbox" roles="Clerk"/>
+        <tab id="inbox" roles="ClerkSenate ClerkAssembly"/>
         <tab id="pending" roles="Owner Signatory"/>
     </state>
     <state id="submitted_signatories">
@@ -23,62 +23,62 @@
         <tab id="pending" roles="Owner"/>
     </state>
     <state id="received">
-        <tab id="inbox" roles="Clerk"/>
+        <tab id="inbox" roles="ClerkSenate ClerkAssembly"/>
         <tab id="pending" roles="Owner Signatory"/>
     </state>
     <state id="completed">
-        <tab id="inbox" roles="Speaker"/>
+        <tab id="inbox" roles="SpeakerSenate SpeakerAssembly"/>
         <tab id="pending"
 	     roles="Owner
-		    Clerk
+		    ClerkSenate ClerkAssembly
 		    Signatory"/>
     </state>
     <state id="admissible">
-        <tab id="inbox" roles="Clerk"/>
+        <tab id="inbox" roles="ClerkSenate ClerkAssembly"/>
         <tab id="pending" 
 	     roles="Owner
 		    Signatory
-		    Speaker"/>
+		    SpeakerSenate SpeakerAssembly"/>
     </state>
     <state id="schedule_pending">
         <tab id="pending" 
 	     roles="Owner
 		    Signatory
-		    Speaker
-		    Clerk"/>
+		    SpeakerSenate SpeakerAssembly
+		    ClerkSenate ClerkAssembly"/>
     </state>
     <state id="incomplete">
-        <tab id="inbox" roles="Clerk"/>
+        <tab id="inbox" roles="ClerkSenate ClerkAssembly"/>
         <tab id="pending" roles="Owner Signatory"/>
     </state>
     <state id="clarification_required">
         <tab id="inbox" roles="Owner"/>
-        <tab id="pending" roles="Clerk Signatory"/>
+        <tab id="pending" roles="ClerkSenate ClerkAssembly Signatory"/>
     </state>
     <state id="scheduled">
         <tab id="pending" roles="Owner
 			      Signatory
-			      Speaker"/>
+			      SpeakerSenate SpeakerAssembly"/>
     </state>
     <state id="adjourned">
          <tab id="archive" 
 	      roles="Signatory 
 		     Owner 
-		     Clerk
-                     Speaker"/>
+		     ClerkSenate ClerkAssembly
+                     SpeakerSenate SpeakerAssembly"/>
     </state>
     <state id="tabled">
         <tab id="archive" 
 	     roles="Signatory
 		    Owner
-		    Clerk
-                    Speaker"/>
+		    ClerkSenate ClerkAssembly
+                    SpeakerSenate SpeakerAssembly"/>
     </state>
     <state id="withdrawn">
         <tab id="archive"
 	     roles="Signatory
 		    Owner
-		    Clerk
-                    Speaker"/>
+		    ClerkSenate ClerkAssembly
+                    SpeakerSenate SpeakerAssembly"/>
     </state>
 </workspace>

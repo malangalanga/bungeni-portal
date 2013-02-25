@@ -21,10 +21,10 @@
     
     <!-- workflow facets -->
     <facet name="draft_Clerk">
-        <allow permission=".View" roles="Clerk" />
-        <allow permission=".Edit" roles="Clerk" />
-        <allow permission=".Add" roles="Clerk" />
-        <allow permission=".Delete" roles="Clerk" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
     </facet>
     <facet name="draft_Owner">
         <allow permission=".View" roles="Owner" />
@@ -33,7 +33,7 @@
         <allow permission=".Delete" roles="Owner" />
     </facet>
     <facet name="internal" default="true">
-        <allow permission=".View" roles="Clerk Owner Signatory MP" /><!-- !+Authenticated? -->
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly Owner Signatory MP" /><!-- !+Authenticated? -->
     </facet>
     <facet name="internal_Owner">
         <allow permission=".View" roles="Authenticated" />

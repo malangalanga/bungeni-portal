@@ -5,9 +5,9 @@
     >
     
     <!-- global grants -->
-    <allow permission=".Edit" roles="Clerk" />
-    <allow permission=".Add" roles="Clerk" />
-    <allow permission=".Delete" roles="Clerk" />
+    <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
+    <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
+    <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
     
     
     <feature name="address" enabled="true" />
@@ -15,15 +15,15 @@
     
     <!-- workflow facets -->
     <facet name="draft">
-        <allow permission=".View" roles="Clerk Owner" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly Owner" />
     </facet>
     <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
         <allow permission="group_membership.View" roles="Authenticated Anonymous" />
-        <allow permission="group_membership.Edit" roles="Clerk" />
-        <allow permission="group_membership.Add" roles="Clerk" />
+        <allow permission="group_membership.Edit" roles="ClerkSenate ClerkAssembly" />
+        <allow permission="group_membership.Add" roles="ClerkSenate ClerkAssembly" />
         <!-- !+GROUP_MEMBERSHIP_DELETE(mr, dec-2012) in sub-item's workflow "draft" state -->
-        <allow permission="group_membership.Delete" roles="Clerk" />
+        <allow permission="group_membership.Delete" roles="ClerkSenate ClerkAssembly" />
         <!-- !+NO_REDEFINE_PERMISSION redefine of political_group_member permissions 
             to group_membership to fails here (and this is the workflow used by 
             political_group_member). Work around options for this is are:
@@ -37,9 +37,9 @@
                to granted permissions for the state/role
         -->
         <allow permission="political_group_member.View" roles="Authenticated Anonymous" />
-        <allow permission="political_group_member.Edit" roles="Clerk" />
-        <allow permission="political_group_member.Add" roles="Clerk" />
-        <allow permission="political_group_member.Delete" roles="Clerk" /><!-- !+GROUP_MEMBERSHIP_DELETE -->
+        <allow permission="political_group_member.Edit" roles="ClerkSenate ClerkAssembly" />
+        <allow permission="political_group_member.Add" roles="ClerkSenate ClerkAssembly" />
+        <allow permission="political_group_member.Delete" roles="ClerkSenate ClerkAssembly" /><!-- !+GROUP_MEMBERSHIP_DELETE -->
     </facet>
     <facet name="public_frozen">
         <allow permission=".View" roles="Authenticated Anonymous" />
@@ -81,7 +81,7 @@
         source="draft dissolved"
         destination="active"
         trigger="manual"
-        roles="Clerk Speaker"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
     
@@ -90,7 +90,7 @@
         destination="dissolved"
         condition="has_end_date"
         trigger="manual"
-        roles="Clerk Speaker"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
     
@@ -99,7 +99,7 @@
         source="active"
         destination="draft"
         trigger="manual"
-        roles="Clerk Speaker"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
 

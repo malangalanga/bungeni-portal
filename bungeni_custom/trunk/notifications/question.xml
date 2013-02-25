@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <notifications>
-  <notify roles="Clerk " onstate="submitted"/>
+  <notify roles="ClerkSenate ClerkAssembly " onstate="submitted"/>
   <notify roles="Owner" onstate="received clarification_required"/>
   <notify roles="Owner" afterstate="clarification_required"
           time="59d"/>

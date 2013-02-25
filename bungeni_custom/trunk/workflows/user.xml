@@ -11,7 +11,7 @@
     <!-- workflow facets -->
     <facet name="internal">
         <allow permission=".View" roles="Authenticated" />
-        <allow permission=".Edit" roles="Clerk Owner" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Owner" />
         <allow permission="user_delegation.Edit" roles="Owner" />
         <allow permission="user_delegation.Add" roles="Owner" />
     </facet>
@@ -44,7 +44,7 @@
         destination="I"
         condition="not_has_date_of_death"
         trigger="manual"
-        roles="Speaker"
+        roles="SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
     
@@ -52,7 +52,7 @@
         source="I"
         destination="A"
         trigger="manual"
-        roles="Speaker"
+        roles="SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
     
@@ -61,7 +61,7 @@
         destination="D"
         condition="has_date_of_death"
         trigger="manual"
-        roles="Speaker"
+        roles="SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
     
@@ -69,7 +69,7 @@
         source="D"
         destination="A"
         trigger="manual"
-        roles="Speaker"
+        roles="SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
 

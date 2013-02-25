@@ -1,5 +1,13 @@
 <?xml version="1.0"?>
-<ui roles="CommitteeMember Transcriber.Editor Minister Owner Clerk.HeadClerk Signatory Anonymous MP Authenticated Speaker PoliticalGroupMember Admin Government Transcriber Clerk.QuestionClerk Transcriber.Reporter Translator Clerk">
+<ui roles="
+Owner Anonymous Authenticated Signatory Admin
+MP CommitteeMember PoliticalGroupMember Government Minister  
+Transcriber Transcriber.Editor
+Transcriber.Reporter Translator 
+SpeakerSenate ClerkSenate ClerkSenate.ClerkHead ClerSenate.ClerkQuestion 
+SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestion
+">
+
     
     <descriptor name="attachment">
         <field name="type" label="Attachment Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="attachment_type">

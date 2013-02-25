@@ -5,8 +5,8 @@
     >
     
     <!-- global grants -->
-    <allow permission=".Edit" roles="Speaker" />
-    <allow permission=".Add" roles="Clerk MP" />
+    <allow permission=".Edit" roles="SpeakerSenate SpeakerAssembly" />
+    <allow permission=".Add" roles="ClerkSenate ClerkAssembly MP" />
     
     
     <!-- features -->
@@ -36,9 +36,9 @@
     
     <!-- workflow facets -->
     <facet name="draft_Clerk">
-        <allow permission=".View" roles="Clerk" />
-        <allow permission=".Edit" roles="Clerk" />
-        <allow permission=".Delete" roles="Clerk" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
     </facet>
     <facet name="draft_Owner">
         <allow permission=".View" roles="Owner" />
@@ -53,15 +53,15 @@
         <allow permission=".Edit" roles="Owner" />
     </facet>
     <facet name="view_Clerk">
-        <allow permission=".View" roles="Owner Clerk Signatory" />
+        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly Signatory" />
     </facet>
     <facet name="edit_Clerk">
-        <allow permission=".View" roles="Owner Clerk Signatory" />
-        <allow permission=".Edit" roles="Clerk" />
+        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly Signatory" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
     </facet>
     <facet name="public_edit_Clerk">
         <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission=".Edit" roles="Clerk" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
     </facet>
     <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
@@ -116,7 +116,7 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="received" title="received by clerk" 
+    <state id="received" title="received by Clerk" 
             actions="set_doc_registry_number"
             
         >
@@ -223,7 +223,7 @@
         destination="submitted"
         condition="pi_signatories_check"
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
 
     <transition title="Submit to Signatories"
@@ -256,7 +256,7 @@
         destination="received"
         trigger="manual"
         condition=""
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
         order="2"
     />
 
@@ -265,7 +265,7 @@
         destination="gazetted"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
 
     <transition title="Allow scheduling of First Reading"
@@ -273,7 +273,7 @@
         destination="first_reading_pending"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Schedule First Reading"
@@ -281,7 +281,7 @@
         destination="first_reading"
         condition="is_scheduled"
         trigger="system"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Reschedule First Reading"
@@ -289,7 +289,7 @@
         destination="first_reading_pending"
         condition=""
         trigger="system"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Adjourn First Reading"
@@ -297,7 +297,7 @@
         destination="first_reading_adjourned"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Submit Bill to Select Committee (I)"
@@ -305,7 +305,7 @@
         destination="first_committee"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Schedule First Report Reading"
@@ -313,7 +313,7 @@
         destination="first_report_reading"
         condition="is_scheduled"
         trigger="system"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Reschedule First Report Reading"
@@ -321,7 +321,7 @@
         destination="first_report_reading_pending"
         condition=""
         trigger="system"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Allow scheduling of Second Reading"
@@ -329,7 +329,7 @@
         destination="second_reading_pending"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Schedule Second Reading"
@@ -337,7 +337,7 @@
         destination="second_reading"
         condition="is_scheduled"
         trigger="system"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Reschedule Second Reading"
@@ -345,7 +345,7 @@
         destination="second_reading_pending"
         condition=""
         trigger="system"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Adjourn First Report Reading"
@@ -353,7 +353,7 @@
         destination="first_report_reading_adjourned"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Allow scheduling of First Report Reading"
@@ -361,7 +361,7 @@
         destination="first_report_reading_pending"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Adjourn Second Reading"
@@ -369,7 +369,7 @@
         destination="second_reading_adjourned"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Allow scheduling of Whole House Committee"
@@ -377,7 +377,7 @@
         destination="whole_house_pending"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Allow scheduling/rescheduling of Whole House Committee"
@@ -385,7 +385,7 @@
         destination="whole_house_pending"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Schedule Whole House Committee"
@@ -393,7 +393,7 @@
         destination="whole_house"
         condition="is_scheduled"
         trigger="system"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Reschedule Whole House Committee"
@@ -401,7 +401,7 @@
         destination="whole_house_pending"
         condition=""
         trigger="system"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Adjourn Whole House Committee"
@@ -409,7 +409,7 @@
         destination="whole_house_adjourned"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Submit Bill to Select Committee (II)"
@@ -417,7 +417,7 @@
         destination="second_committee"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Submit/Resubmit Bill to Select Committee (II)"
@@ -425,7 +425,7 @@
         destination="second_committee"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Allow scheduling of Third Reading"
@@ -433,7 +433,7 @@
         destination="third_reading_pending"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Schedule Third Reading"
@@ -441,7 +441,7 @@
         destination="third_reading"
         condition="is_scheduled"
         trigger="system"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Reschedule Third Reading"
@@ -449,7 +449,7 @@
         destination="third_reading_pending"
         condition=""
         trigger="system"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Adjourn Third Reading"
@@ -457,7 +457,7 @@
         destination="third_reading_adjourned"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Reject"
@@ -465,7 +465,7 @@
         destination="rejected"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Approve"
@@ -473,7 +473,7 @@
         destination="approved"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Withdraw" 
@@ -501,7 +501,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
         require_confirmation="true"
     />
 

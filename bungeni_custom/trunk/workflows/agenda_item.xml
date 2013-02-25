@@ -5,7 +5,7 @@
     >
     
     <!-- global grants -->
-    <allow permission=".Add" roles="Clerk" />
+    <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
     
     <!-- features -->
     <feature name="audit" enabled="true" />
@@ -28,9 +28,9 @@
     
     <!-- workflow facets -->
     <facet name="draft_Clerk">
-        <allow permission=".View" roles="Clerk" />
-        <allow permission=".Edit" roles="Clerk" />
-        <allow permission=".Delete" roles="Clerk" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
     </facet>
     <facet name="draft_Owner">
         <allow permission=".View" roles="Owner" />
@@ -45,19 +45,19 @@
         <allow permission=".Edit" roles="Owner" />
     </facet>
     <facet name="view_internal">
-        <allow permission=".View" roles="Owner Clerk Speaker Signatory" />
+        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Signatory" />
     </facet>
     <facet name="edit_Clerk">
-        <allow permission=".View" roles="Owner Clerk Speaker Signatory" />
-        <allow permission=".Edit" roles="Clerk" />
+        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Signatory" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
     </facet>
     <facet name="edit_Owner">
-        <allow permission=".View" roles="Owner Clerk Speaker Signatory" />
+        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Signatory" />
         <allow permission=".Edit" roles="Owner" />
     </facet>
     <facet name="edit_Speaker">
-        <allow permission=".View" roles="Owner Clerk Speaker Signatory" />
-        <allow permission=".Edit" roles="Speaker" />
+        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Signatory" />
+        <allow permission=".Edit" roles="SpeakerSenate SpeakerAssembly" />
     </facet>
     <facet name="public">
         <allow permission=".View" roles="Anonymous" />
@@ -97,7 +97,7 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="received" title="Received by Clerks Office" 
+    <state id="received" title="Received by Clerk's Office" 
             actions="set_doc_registry_number"
             
         >
@@ -184,7 +184,7 @@
         destination="submitted"
         condition="pi_signatories_check"
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
 
     <transition title="Submit to Signatories"
@@ -217,7 +217,7 @@
         destination="received"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Require Clarification to Receive"
@@ -225,7 +225,7 @@
         destination="clarification_required"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
         require_confirmation="true"
     />
     
@@ -242,7 +242,7 @@
         destination="completed"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Approve"
@@ -250,7 +250,7 @@
         destination="admissible"
         condition=""
         trigger="manual"
-        roles="Speaker"
+        roles="SpeakerSenate SpeakerAssembly"
     />
     
     <transition title="Disapprove"
@@ -258,7 +258,7 @@
         destination="inadmissible"
         condition=""
         trigger="manual"
-        roles="Speaker"
+        roles="SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
     
@@ -266,7 +266,7 @@
         source="admissible deferred"
         destination="schedule_pending"
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Require Recomplete to Approve"
@@ -274,7 +274,7 @@
         destination="incomplete"
         condition=""
         trigger="manual"
-        roles="Speaker"
+        roles="SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
     
@@ -283,7 +283,7 @@
         destination="completed"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Resubmit"
@@ -298,7 +298,7 @@
         source="scheduled"
         destination="schedule_pending"
         trigger="system"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Schedule"
@@ -306,14 +306,14 @@
         destination="scheduled"
         condition="is_scheduled"
         trigger="system"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Revert to admissible"
         source="schedule_pending"
         destination="admissible"
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Drop"
@@ -321,7 +321,7 @@
         destination="dropped"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
         note="For reasons such as absence of the MP, the item cannot be be 
             debated in a sitting, so it is dropped."
     />
@@ -331,7 +331,7 @@
         destination="debated"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Adjourn debate"
@@ -339,7 +339,7 @@
         destination="adjourned"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Defer"
@@ -347,7 +347,7 @@
         destination="deferred"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Elapse"
@@ -355,7 +355,7 @@
         destination="elapsed"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Withdraw"
@@ -364,7 +364,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="Clerk Owner"
+        roles="ClerkSenate ClerkAssembly Owner"
         require_confirmation="true"
     />
     
@@ -374,7 +374,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="Clerk Owner"
+        roles="ClerkSenate ClerkAssembly Owner"
         require_confirmation="true"
     />
 

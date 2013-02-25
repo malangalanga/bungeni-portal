@@ -6,10 +6,10 @@
     >
     
     <facet name="internal">
-        <allow permission=".Add" roles="Clerk" />
-        <allow permission=".View" roles="Clerk" />
-        <allow permission=".Edit" roles="Clerk" />
-        <allow permission=".Delete" roles="Clerk" />
+        <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
     </facet>
     
     <!-- !+ONE_STATE_TRANSITION placeholder state, transation -->

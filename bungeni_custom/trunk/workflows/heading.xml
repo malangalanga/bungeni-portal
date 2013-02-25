@@ -5,13 +5,13 @@
     >
 
     <!-- global grants -->
-    <allow permission=".Edit" roles="Clerk Speaker" />
-    <allow permission=".Add" roles="Clerk Speaker" />
+    <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+    <allow permission=".Add" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
     
     
     <!-- workflow facets -->
     <facet name="view_Clerk">
-        <allow permission=".View" roles="Clerk Speaker" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
     </facet>
     <facet name="view">
         <allow permission=".View" roles="Authenticated Anonymous" />
@@ -37,7 +37,7 @@
         source="public"
         destination="inactive"
         trigger="manual"
-        roles="Clerk Speaker"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
     
@@ -45,7 +45,7 @@
         source="inactive"
         destination="public"
         trigger="manual"
-        roles="Clerk Speaker"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
 

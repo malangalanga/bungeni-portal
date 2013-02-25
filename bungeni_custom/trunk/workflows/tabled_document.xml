@@ -5,7 +5,7 @@
     >
     
     <!-- global grants -->
-    <allow permission=".Add" roles="Clerk MP" />
+    <allow permission=".Add" roles="ClerkSenate ClerkAssembly MP" />
     
     
     <!-- features -->
@@ -33,9 +33,9 @@
     
     <!-- workflow facets -->
     <facet name="draft_Clerk">
-        <allow permission=".View" roles="Clerk" />
-        <allow permission=".Edit" roles="Clerk" />
-        <allow permission=".Delete" roles="Clerk" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
     </facet>
     <facet name="draft_Owner">
         <allow permission=".View" roles="Owner" />
@@ -46,19 +46,19 @@
         <allow permission=".View" roles="Owner Signatory" />
     </facet>
     <facet name="view_Clerk">
-        <allow permission=".View" roles="Clerk Speaker Owner Signatory" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory" />
     </facet>
     <facet name="edit_Clerk">
-        <allow permission=".View" roles="Clerk Speaker Owner Signatory" />
-        <allow permission=".Edit" roles="Clerk" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
     </facet>
     <facet name="edit_Owner">
-        <allow permission=".View" roles="Clerk Speaker Owner Signatory" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory" />
         <allow permission=".Edit" roles="Owner" />
     </facet>
     <facet name="edit_Speaker">
-        <allow permission=".View" roles="Clerk Speaker Owner Signatory" />
-        <allow permission=".Edit" roles="Speaker" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory" />
+        <allow permission=".Edit" roles="SpeakerSenate SpeakerAssembly" />
     </facet>
     <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
@@ -114,7 +114,7 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="received" title="Received by Clerks Office" 
+    <state id="received" title="Received by Clerk's Office" 
             actions="set_doc_registry_number"
             
         >
@@ -204,7 +204,7 @@
         destination="submitted"
         condition="pi_signatories_check"
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Submit to Signatories"
@@ -236,7 +236,7 @@
         destination="received"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Require Clarification to Receive"
@@ -244,7 +244,7 @@
         destination="clarification_required"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
         require_confirmation="true"
     />
     
@@ -253,7 +253,7 @@
         destination="completed"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Approve"
@@ -261,14 +261,14 @@
         destination="admissible"
         condition=""
         trigger="manual"
-        roles="Speaker"
+        roles="SpeakerSenate SpeakerAssembly"
     />
     
     <transition title="Make available for scheduling"
         source="admissible adjourned"
         destination="schedule_pending"
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Disapprove"
@@ -276,7 +276,7 @@
         destination="inadmissible"
         condition=""
         trigger="manual"
-        roles="Speaker"
+        roles="SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
     
@@ -285,7 +285,7 @@
         destination="incomplete"
         condition=""
         trigger="manual"
-        roles="Speaker"
+        roles="SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
 
@@ -302,7 +302,7 @@
         destination="completed"
         condition=""
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Resubmit"
@@ -317,7 +317,7 @@
         source="schedule_pending"
         destination="admissible"
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Schedule"
@@ -325,21 +325,21 @@
         destination="scheduled"
         condition="is_scheduled"
         trigger="system"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Reschedule"
         source="scheduled"
         destination="schedule_pending"
         trigger="system"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Adjourn"
         source="scheduled"
         destination="adjourned"
         trigger="manual"
-        roles="Clerk"
+        roles="ClerkSenate ClerkAssembly"
         condition=""
     />
     
@@ -348,7 +348,7 @@
         destination="tabled"
         condition="pi_signatories_check"
         trigger="manual"
-        roles="Clerk Speaker MP Minister"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly MP Minister"
     />
 
     <transition title="Table"
@@ -356,7 +356,7 @@
         destination="tabled"
         condition=""
         trigger="manual"
-        roles="Clerk Speaker MP Minister"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly MP Minister"
     />
     
     <transition title="Withdraw"
@@ -365,7 +365,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="Clerk Owner"
+        roles="ClerkSenate ClerkAssembly Owner"
         order="26"
         require_confirmation="true"
         note="The MP can withdraw his question at any stage where it can 
@@ -378,7 +378,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="Clerk Owner"
+        roles="ClerkSenate ClerkAssembly Owner"
         order="27"
         require_confirmation="true"
     />

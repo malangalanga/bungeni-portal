@@ -5,42 +5,43 @@
     >
     
     <!-- global grants -->
-    <allow permission=".View" roles="Clerk" />
-    <allow permission=".Add" roles="Clerk" />
-    <allow permission="sitting_attendance.View" roles="Clerk Speaker MP" />
-    <allow permission="sitting_attendance.Edit" roles="Clerk" />
-    <allow permission="sitting_attendance.Add" roles="Clerk" />
-    <allow permission="sitting_attendance.Delete" roles="Clerk" />
+    <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
+    <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
+    <allow permission="sitting_attendance.View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly MP" />
+    <allow permission="sitting_attendance.Edit" roles="ClerkSenate ClerkAssembly" />
+    <allow permission="sitting_attendance.Add" roles="ClerkSenate ClerkAssembly" />
+    <allow permission="sitting_attendance.Delete" roles="ClerkSenate ClerkAssembly" />
     <allow permission="sitting_report.View" roles="Anonymous" />
-    <allow permission="sitting_report.Edit" roles="Clerk" />
-    <allow permission="sitting_report.Add" roles="Clerk" />
-    <allow permission="sitting_report.Delete" roles="Clerk" />
+    <allow permission="sitting_report.Edit" roles="ClerkSenate ClerkAssembly" />
+    <allow permission="sitting_report.Add" roles="ClerkSenate ClerkAssembly" />
+    <allow permission="sitting_report.Delete" roles="ClerkSenate ClerkAssembly" />
     <allow permission="item_schedule_vote.View" roles="Anonymous" />
-    <allow permission="item_schedule_vote.Edit" roles="Clerk" />
-    <allow permission="item_schedule_vote.Add" roles="Clerk" />
-    <allow permission="item_schedule_vote.Delete" roles="Clerk" />
+    <allow permission="item_schedule_vote.Edit" roles="ClerkSenate ClerkAssembly" />
+    <allow permission="item_schedule_vote.Add" roles="ClerkSenate ClerkAssembly" />
+    <allow permission="item_schedule_vote.Delete" roles="ClerkSenate ClerkAssembly" />
 
     <!-- session permissions -->
-    <allow permission="session.Add" roles="Clerk" />
-    <allow permission="session.Edit" roles="Clerk" />
-    <allow permission="session.Delete" roles="Clerk" />
-    <allow permission="session.View" roles="Anonymous" />
+	<allow permission="session.Add" roles="ClerkSenate ClerkAssembly" />
+	<allow permission="session.Edit" roles="ClerkSenate ClerkAssembly" />
+	<allow permission="session.Delete" roles="ClerkSenate ClerkAssembly" />
+	<allow permission="session.View" roles="Anonymous" />
 
-    <!-- venue permissions --> 
-    <allow permission="venue.View" roles="Clerk" />
-    <allow permission="venue.Add" roles="Clerk" />  
-    <allow permission="venue.Edit" roles="Clerk" />  
-    <allow permission="venue.Delete" roles="Clerk" />  
+	<!-- venue permissions -->
+	<allow permission="venue.View" roles="ClerkSenate ClerkAssembly" />
+	<allow permission="venue.Add" roles="ClerkSenate ClerkAssembly" />
+	<allow permission="venue.Edit" roles="ClerkSenate ClerkAssembly" />
+	<allow permission="venue.Delete" roles="ClerkSenate ClerkAssembly" />
 
-    <!-- editorial note permissions --> 
-    <allow permission="editorial_note.View" roles="Clerk" />
-    <allow permission="editorial_note.Add" roles="Clerk" />  
-    <allow permission="editorial_note.Edit" roles="Clerk" />  
-    <allow permission="editorial_note.Delete" roles="Clerk" />  
+	<!-- editorial note permissions -->
+	<allow permission="editorial_note.View" roles="ClerkSenate ClerkAssembly" />
+	<allow permission="editorial_note.Add" roles="ClerkSenate ClerkAssembly" />
+	<allow permission="editorial_note.Edit" roles="ClerkSenate ClerkAssembly" />
+	<allow permission="editorial_note.Delete" roles="ClerkSenate ClerkAssembly" />
 
+    
     <!-- features -->
     <!-- !+SITTING_AUDIT cannot support audit/version without a sitting_audit db table ?! -->
-    <feature name="audit" enabled="false" />
+    <feature name="audit" enabled="false" />Describe all the Offices and their functions
     <feature name="version" enabled="false" />
     <feature name="attachment" enabled="false" />
     <feature name="notification" enabled="true" />
@@ -48,53 +49,53 @@
     
     <!-- workflow facets -->
     <facet name="all_Clerk">
-        <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
-        <allow permission=".Edit" roles="Clerk" />
-        <allow permission=".Delete" roles="Clerk" />
-        <allow permission="item_schedule_discussion.View" roles="Clerk" />
-    <allow permission="debate_record.View" roles="Clerk Transcriber"/>
+        <allow permission=".View" roles="SpeakerSenate SpeakerAssembly Owner Signatory MP Minister Anonymous" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
+        <allow permission="item_schedule_discussion.View" roles="ClerkSenate ClerkAssembly" />
+	    <allow permission="debate_record.View" roles="ClerkSenate ClerkAssembly Transcriber"/>
     </facet>
     <facet name="draft_agenda">
-        <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
-        <allow permission=".Edit" roles="Clerk" />
-        <allow permission=".Delete" roles="Clerk" />
-        <allow permission="item_schedule.View" roles="Clerk Speaker" />
-        <allow permission="item_schedule.Edit" roles="Clerk" />
-        <allow permission="item_schedule.Add" roles="Clerk" />
-        <allow permission="item_schedule.Delete" roles="Clerk" />
-        <allow permission="item_schedule_discussion.View" roles="Clerk Speaker" />
-    
+        <allow permission=".View" roles="SpeakerSenate SpeakerAssembly Owner Signatory MP Minister Anonymous" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
+        <allow permission="item_schedule.View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+        <allow permission="item_schedule.Edit" roles="ClerkSenate ClerkAssembly" />
+        <allow permission="item_schedule.Add" roles="ClerkSenate ClerkAssembly" />
+        <allow permission="item_schedule.Delete" roles="ClerkSenate ClerkAssembly" />
+        <allow permission="item_schedule_discussion.View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+	
     </facet>
     <facet name="published_agenda">
-        <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
-        <allow permission="item_schedule.View" roles="Clerk Speaker Owner Signatory MP Minister Anonymous" />
-        <allow permission="item_schedule_discussion.View" roles="Clerk Speaker" />
+        <allow permission=".View" roles="SpeakerSenate SpeakerAssembly Owner Signatory MP Minister Anonymous" />
+        <allow permission="item_schedule.View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory MP Minister Anonymous" />
+        <allow permission="item_schedule_discussion.View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
     </facet>
     <facet name="published_agenda_internal">
-        <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
-        <allow permission="item_schedule.View" roles="Clerk Speaker Owner Signatory MP Minister" />
-        <allow permission="item_schedule_discussion.View" roles="Clerk Speaker" />
+        <allow permission=".View" roles="SpeakerSenate SpeakerAssembly Owner Signatory MP Minister Anonymous" />
+        <allow permission="item_schedule.View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory MP Minister" />
+        <allow permission="item_schedule_discussion.View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
     </facet>
     <facet name="draft_minutes">
-        <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
-        <allow permission=".Edit" roles="Clerk" />
-        <allow permission="item_schedule.View" roles="Clerk Speaker Owner Signatory MP Minister" />
-        <allow permission="item_schedule_discussion.View" roles="Clerk Speaker" />
-        <allow permission="item_schedule_discussion.Edit" roles="Clerk" />
+        <allow permission=".View" roles="SpeakerSenate SpeakerAssembly Owner Signatory MP Minister Anonymous" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
+        <allow permission="item_schedule.View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory MP Minister" />
+        <allow permission="item_schedule_discussion.View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+        <allow permission="item_schedule_discussion.Edit" roles="ClerkSenate ClerkAssembly" />
     </facet>
     <facet name="published_minutes">
-        <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
-        <allow permission="item_schedule.View" roles="Clerk Speaker Owner Signatory MP Minister" />
-        <allow permission="item_schedule_discussion.View" roles="Clerk Speaker Owner Signatory MP Minister Anonymous" />
+        <allow permission=".View" roles="SpeakerSenate SpeakerAssembly Owner Signatory MP Minister Anonymous" />
+        <allow permission="item_schedule.View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory MP Minister" />
+        <allow permission="item_schedule_discussion.View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory MP Minister Anonymous" />
     </facet>
     <facet name="published_minutes_internal">
-        <allow permission=".View" roles="Speaker Owner Signatory MP Minister Anonymous" />
-        <allow permission="item_schedule.View" roles="Clerk Speaker Owner Signatory MP Minister" />
-        <allow permission="item_schedule_discussion.View" roles="Clerk Speaker Owner Signatory MP Minister" />
+        <allow permission=".View" roles="SpeakerSenate SpeakerAssembly Owner Signatory MP Minister Anonymous" />
+        <allow permission="item_schedule.View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory MP Minister" />
+        <allow permission="item_schedule_discussion.View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory MP Minister" />
     </facet>
     <facet name="archived">
-        <allow permission=".View" roles="Speaker" />
-        <allow permission="item_schedule_discussion.View" roles="Clerk" />
+        <allow permission=".View" roles="SpeakerSenate SpeakerAssembly" />
+        <allow permission="item_schedule_discussion.View" roles="ClerkSenate ClerkAssembly" />
     </facet>
     
     
@@ -146,7 +147,7 @@
         destination="draft_agenda"
         condition=""
         trigger="manual"
-        roles="Clerk Speaker"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
     />
     
     <transition title="Finalize Agenda"
@@ -154,7 +155,7 @@
         destination="published_agenda"
         condition="has_agenda"
         trigger="manual"
-        roles="Clerk Speaker"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="false"
     />
 
@@ -163,7 +164,7 @@
         destination="published_agenda_internal"
         condition="has_agenda"
         trigger="manual"
-        roles="Clerk Speaker"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="false"
     />
 
@@ -172,7 +173,7 @@
         destination="draft_agenda"
         condition=""
         trigger="manual"
-        roles="Clerk Speaker"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
     
@@ -181,7 +182,7 @@
         destination="draft_minutes"
         condition=""
         trigger="manual"
-        roles="Clerk Speaker"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="false"
     />
     
@@ -190,7 +191,7 @@
         destination="published_minutes"
         condition="agenda_finalized"
         trigger="manual"
-        roles="Clerk Speaker"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="false"
     />
 
@@ -199,7 +200,7 @@
         destination="published_minutes_internal"
         condition="agenda_finalized"
         trigger="manual"
-        roles="Clerk Speaker"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="false"
     />
     
@@ -208,7 +209,7 @@
         destination="draft_minutes"
         condition=""
         trigger="manual"
-        roles="Clerk Speaker"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
     <transition title="Auto Archive"

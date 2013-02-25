@@ -4,7 +4,7 @@
 
   <block onstate="received">
     <subject>
-      Question has been received by the Clerk's Office : <span tal:replace="item/title"/>
+      Question has been received by the ClerkSenate ClerkAssembly's Office : <span tal:replace="item/title"/>
     </subject>
     <body>
       The question
@@ -38,7 +38,7 @@
       Clarification for this question was required 59 days ago : <span tal:replace="item/title"/>
     </subject>
     <body>
-      The question <span tal:replace="item/title"/> required clarification 59 days ago and will be dropped by the Clerk tomorrow
+      The question <span tal:replace="item/title"/> required clarification 59 days ago and will be dropped by the ClerkSenate ClerkAssembly tomorrow
     </body>
   </block>
 
