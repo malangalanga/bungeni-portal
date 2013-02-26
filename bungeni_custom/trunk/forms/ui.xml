@@ -670,30 +670,29 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <show modes="listing" />
         </field>
         <field name="salutation" label="Salutation" description="e.g. Mr. Mrs, Prof. etc." required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
         </field>
         <field name="title" label="Title" description="e.g. Chief Advisor, etc." required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
         </field>
         <field name="first_name" label="First Name" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
         </field>
         <field name="middle_name" label="Middle Name" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
-            <hide modes="listing" />
         </field>
         <field name="last_name" label="Last Name" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
         </field>
         <field name="combined_name" label="Full Name" required="false" value_type="text" render_type="text_line" derived="user_combined_name">
-            <show modes="listing" />
+            <hide modes="listing" />
         </field>
         <field name="email" label="Email" description="Email address" required="true" value_type="email" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
         <field name="login" label="Login" description="Must contain only letters, numbers, a period (.) and underscore (_). Should start with a letter and be between 3 and 20 characters long" required="false" value_type="login" render_type="text_line">
             <show modes="view add" />
-            <hide modes="listing" />
+            <show modes="listing" />
         </field>
         <field name="_password" label="Initial password" required="false" value_type="password" render_type="text_line">
             <show modes="add" />
