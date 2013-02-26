@@ -28,10 +28,10 @@
     <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
         <show modes="view edit add" />
     </field>
-    <field name="identifier" label="Ministry Identifier" description="Unique identifier or number for this Ministry" required="false" value_type="text" render_type="text_line">
+    <field name="identifier" label="Ministry Identifier" description="Unique identifier for this Ministry" required="true" value_type="text" render_type="single_select" vocabulary="ministry_id">
         <show modes="view edit add" />
     </field>
-    
+
     <container match="minister.group_id" />
     <container match="question.group_id" />
     <container match="bill.group_id" />
