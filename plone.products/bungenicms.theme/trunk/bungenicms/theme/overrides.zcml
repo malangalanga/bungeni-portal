@@ -21,7 +21,16 @@
 
   <!-- Override next/previous links for folders -->
     <adapter
-        factory=".nextprevious.ATFolderNextPrevious" />
+        factory=".nextprevious.ATFolderNextPrevious" />      
+
+    <!-- The search results page -->        
+    <browser:page
+        name="search"
+        class="plone.app.search.browser.Search"
+        permission="zope2.View"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        template="search.pt"
+        />        
 
     <!-- !+Presentation View Customization(mn, jun-2011)
     <browser:page

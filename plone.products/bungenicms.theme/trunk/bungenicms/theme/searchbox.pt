@@ -4,6 +4,7 @@
                  search_input_id view/search_input_id;">
     <form name="searchform" id="searchGadget_form" 
           action="search"
+          tal:define="sp python:request.get('path', '') or view.folder_path;"          
           tal:attributes="action string:${navigation_root_url}/@@search;
           id string:${search_input_id}_form">
 
@@ -33,7 +34,7 @@
                    class="noborder"
                    type="hidden"
                    name="path"
-                   tal:attributes="value view/folder_path"
+                   tal:attributes="value sp;"
                    value="checked"
                    />
 
