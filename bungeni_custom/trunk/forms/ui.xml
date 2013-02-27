@@ -13,7 +13,7 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="type" label="Attachment Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="attachment_type">
             <show modes="view edit add listing" />
         </field>
-        <field name="title" label="Title" required="false" value_type="text" render_type="text_line">
+        <field name="title" label="Title" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
         <field name="data" label="File" description="Upload a file" required="false" value_type="file" render_type="file">
@@ -28,7 +28,7 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
-        <field name="status_date" label="Status Date" required="false" value_type="date" render_type="date">
+        <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
         <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
@@ -44,13 +44,13 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="user_id" label="User" required="true" value_type="user" render_type="single_select" vocabulary="user">
             <show modes="view listing" />
         </field>
-        <field name="action" required="false" value_type="text" render_type="text_line">
+        <field name="action" required="true" value_type="text" render_type="text_line">
             <show modes="view listing" />
         </field>
-        <field name="seq" required="false" value_type="text" render_type="text_line">
+        <field name="seq" required="true" value_type="text" render_type="text_line">
             <show modes="view listing" />
         </field>
-        <field name="procedure" required="false" value_type="text" render_type="text_line">
+        <field name="procedure" required="true" value_type="text" render_type="text_line">
             <show modes="view listing" />
         </field>
         <field name="date_audit" label="Date Audit" required="true" value_type="datetime" render_type="datetime">
@@ -87,7 +87,7 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="audit_id" required="false" value_type="text" render_type="text_line">
+        <field name="audit_id" required="true" value_type="text" render_type="text_line">
             <hide modes="view listing" />
         </field>
     </descriptor>
@@ -166,13 +166,13 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="user_id" label="User" required="true" value_type="user" render_type="single_select" vocabulary="user">
             <show modes="view listing" />
         </field>
-        <field name="action" required="false" value_type="text" render_type="text_line">
+        <field name="action" required="true" value_type="text" render_type="text_line">
             <show modes="view listing" />
         </field>
-        <field name="seq" required="false" value_type="text" render_type="text_line">
+        <field name="seq" required="true" value_type="text" render_type="text_line">
             <show modes="view listing" />
         </field>
-        <field name="procedure" required="false" value_type="text" render_type="text_line">
+        <field name="procedure" required="true" value_type="text" render_type="text_line">
             <show modes="view listing" />
         </field>
         <field name="date_audit" label="Date Audit" required="true" value_type="datetime" render_type="datetime">
@@ -235,7 +235,7 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="body" label="Text" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="audit_id" required="false" value_type="text" render_type="text_line">
+        <field name="audit_id" required="true" value_type="text" render_type="text_line">
             <hide modes="view listing" />
         </field>
     </descriptor>
@@ -425,7 +425,7 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="item_mover" label="Mover" required="false" value_type="text" render_type="text_line">
             <show modes="view listing" />
         </field>
-        <field name="item_type" label="Item Type" required="false" value_type="text" render_type="text_schedule_type">
+        <field name="item_type" label="Item Type" required="true" value_type="text" render_type="text_schedule_type">
             <show modes="view edit add listing" />
         </field>
         <field name="item_uri" label="Item URI" required="false" value_type="text" render_type="text_line">
@@ -675,13 +675,13 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="title" label="Title" description="e.g. Chief Advisor, etc." required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
         </field>
-        <field name="first_name" label="First Name" required="false" value_type="text" render_type="text_line">
+        <field name="first_name" label="First Name" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add" />
         </field>
         <field name="middle_name" label="Middle Name" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
         </field>
-        <field name="last_name" label="Last Name" required="false" value_type="text" render_type="text_line">
+        <field name="last_name" label="Last Name" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add" />
         </field>
         <field name="combined_name" label="Full Name" required="false" value_type="text" render_type="text_line" derived="user_combined_name">
@@ -690,7 +690,7 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="email" label="Email" description="Email address" required="true" value_type="email" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="login" label="Login" description="Must contain only letters, numbers, a period (.) and underscore (_). Should start with a letter and be between 3 and 20 characters long" required="false" value_type="login" render_type="text_line">
+        <field name="login" label="Login" description="Must contain only letters, numbers, a period (.) and underscore (_). Should start with a letter and be between 3 and 20 characters long" required="true" value_type="login" render_type="text_line">
             <show modes="view add" />
             <show modes="listing" />
         </field>
