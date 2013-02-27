@@ -34,7 +34,9 @@
     <field name="identifier" label="Political Group Identifier" description="Unique identifier for this Political Group" required="true" value_type="text" render_type="single_select" vocabulary="political_group_id">
         <show modes="view edit add" />
     </field>
-    
+    <field name="group_role" label="Role" description="Role given to members of this office" required="true" value_type="text" render_type="single_select" vocabulary="group_role">
+        <show modes="view edit add listing" />
+    </field>
     <container match="member_title.membership_id" name="titles" />
     <container match="political_group_member.group_id" name="group_members" />
     <container match="title_type.group_id" name="title_types" />

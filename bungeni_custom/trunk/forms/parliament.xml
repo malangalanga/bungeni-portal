@@ -33,7 +33,9 @@
     <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
         <show modes="view edit add" />
     </field>
-    
+    <field name="group_role" label="Role" description="Role given to members of this office" required="true" value_type="text" render_type="single_select" vocabulary="group_role">
+        <show modes="view edit add listing" />
+    </field>
     <container match="agenda_item.group_id" name="agendaitems" note="!+naming !+why not parliament_id?" />
     <container match="bill.parliament_id" />
     <container match="motion.parliament_id" />

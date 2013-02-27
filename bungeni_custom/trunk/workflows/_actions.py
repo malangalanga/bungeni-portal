@@ -40,6 +40,7 @@ from bungeni.core.workflows._actions import (
     # group
     activate,
     dissolve,
+    deactivate,
     
     # sitting
     set_real_order,

@@ -31,7 +31,9 @@
     <field name="identifier" label="Ministry Identifier" description="Unique identifier for this Ministry" required="true" value_type="text" render_type="single_select" vocabulary="ministry_id">
         <show modes="view edit add" />
     </field>
-
+    <field name="group_role" label="Role" description="Role given to members of this office" required="true" value_type="text" render_type="single_select" vocabulary="group_role">
+        <show modes="view edit add listing" />
+    </field>
     <container match="minister.group_id" />
     <container match="question.group_id" />
     <container match="bill.group_id" />

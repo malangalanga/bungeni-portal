@@ -67,7 +67,9 @@
         <show modes="view edit add" />
         <hide modes="listing" />
     </field>
-    
+    <field name="group_role" label="Role" description="Role given to members of this office" required="true" value_type="text" render_type="single_select" vocabulary="group_role">
+        <show modes="view edit add listing" />
+    </field>
     <container match="committee_member.group_id" name="committeemembers" />
     <container match="committee_staff.group_id" name="committeestaff" />
     <container match="agenda_item.group_id" name="agendaitems" />

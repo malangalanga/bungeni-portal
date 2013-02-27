@@ -31,7 +31,9 @@
     <field name="identifier" label="Government Identifier" description="Unique identifier for this Government" required="true" value_type="text" render_type="single_select" vocabulary="government_id">
         <show modes="view edit add" />
     </field>
-
+    <field name="group_role" label="Role" description="Role given to members of this office" required="true" value_type="text" render_type="single_select" vocabulary="group_role">
+        <show modes="view edit add listing" />
+    </field>
     <container match="ministry.parent_group_id" name="ministries" />
    
     <!-- Flavio: to test bicameral set up till we move Goverment out from legislatures
