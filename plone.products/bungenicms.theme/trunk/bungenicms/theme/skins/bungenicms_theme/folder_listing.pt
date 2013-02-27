@@ -74,13 +74,15 @@
                 item_sametime python: item_start == item_end;
                 item_samedate python: (
                     item_end - item_start &lt; 1
-                    ) if item_type == 'Event' else False">
+                    ) if item_type == 'Event' else False;
+                item_exclude_in_nav python:item.getObject().getExcludeFromNav()">
                 
                 <metal:block define-slot="entry">
                 <div class="blockitem">
                 <dt metal:define-macro="listitem"
                     tal:attributes="class python:test(
-                        item_type == 'Event', 'vevent', '')">
+                        item_type == 'Event', 'vevent', '')"
+                    tal:condition="python:not item_exclude_in_nav">
 
                     <span class="summary">
                         <a href="#"
