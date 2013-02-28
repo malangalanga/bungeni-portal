@@ -567,6 +567,9 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="short_name" label="Name of activity" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
+        <field name="session_id" label="Session" required="false" value_type="vocabulary" render_type="single_select" vocabulary="session">
+            <show modes="view listing" />
+        </field>
         <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
             <show modes="view edit add" />
             <hide modes="listing" />
