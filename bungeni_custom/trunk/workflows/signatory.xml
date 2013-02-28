@@ -10,7 +10,7 @@
     
     <!-- global grants -->
     <allow permission=".Act" roles="Signatory" /><!-- !+ why is this global? -->
-    <allow permission=".Append" roles="MP" />
+    <allow permission=".Append" roles="MemberSenate MemberAssembly" />
     
     
     <!-- features -->
@@ -33,7 +33,7 @@
         <allow permission=".Delete" roles="Owner" />
     </facet>
     <facet name="internal" default="true">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly Owner Signatory MP" /><!-- !+Authenticated? -->
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly Owner Signatory MemberSenate MemberAssembly" /><!-- !+Authenticated? -->
     </facet>
     <facet name="internal_Owner">
         <allow permission=".View" roles="Authenticated" />

@@ -5,7 +5,7 @@
     >
     
     <!-- global grants -->
-    <allow permission=".Add" roles="ClerkSenate ClerkAssembly MP" />
+    <allow permission=".Add" roles="ClerkSenate ClerkAssembly MemberSenate MemberAssembly" />
     <!-- !+test_event: uncomment below when enabling! Without this you will 
         not get the "add test event" menu option...
         
@@ -69,8 +69,8 @@
         <allow permission=".Edit" roles="Owner" />
     </facet>
     <facet name="internal_Clerk">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory CommitteeMember" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly CommitteeMember" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory MemberCommitteeAssembly MemberCommitteeSenate" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly MemberCommitteeAssembly MemberCommitteeSenate" />
     </facet>
     <facet name="internal_Speaker">
         <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory" />
@@ -198,7 +198,7 @@
         note="A defered motion that was not debated" />
     
     <state id="dropped" title="Dropped" permissions_from_state="adopted"
-        note="A motion was, but dropped e.g. becuase no show of MP." />
+        note="A motion was, but dropped e.g. becuase no show of Member." />
     
     <state id="rejected" title="Rejected" permissions_from_state="adopted" />
     

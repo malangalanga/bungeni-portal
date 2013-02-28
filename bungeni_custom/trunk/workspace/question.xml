@@ -80,7 +80,7 @@
                     SpeakerSenate SpeakerAssembly"/>
     </state>
    <state id="response_pending">
-        <tab id="inbox" roles="Minister"/>
+        <tab id="inbox" roles="MinistryMember"/>
 	<tab id="pending" 
 	     roles="Owner
 		    ClerkSenate ClerkAssembly.ClerkHead
@@ -92,7 +92,7 @@
         <tab id="inbox" roles="ClerkSenate ClerkAssembly.ClerkQuestion"/>
         <tab id="pending" 
 	     roles="ClerkSenate ClerkAssembly.ClerkHead
-                    Minister
+                    MinistryMember
 		    Owner
 		    SpeakerSenate SpeakerAssembly
 	            Signatory"/>
@@ -104,7 +104,7 @@
 		    ClerkSenate ClerkAssembly.ClerkHead
                     ClerkSenate ClerkAssembly.ClerkQuestion
                     SpeakerSenate SpeakerAssembly
-		    Minister"/>
+		    MinistryMember"/>
     </state>
     <state id="deferred">
         <tab id="archive" 
@@ -129,7 +129,7 @@
 		    ClerkSenate ClerkAssembly.ClerkHead
                     ClerkSenate ClerkAssembly.ClerkQuestion
                     SpeakerSenate SpeakerAssembly
-		    Minister"/>
+		    MinistryMember"/>
     </state>
     <state id="dropped">
         <tab id="archive" 

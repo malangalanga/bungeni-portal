@@ -5,7 +5,7 @@
             extended="translated_text"
         >
         <show modes="view edit" />
-        <!-- !+DECL roles="Minister" -->
+        <!-- !+DECL roles="MinistryMember" -->
     </field>
     <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
         <show modes="add view edit listing" />
@@ -71,7 +71,7 @@
     <field name="group_id" label="Ministry" required="true" value_type="group" render_type="single_select" vocabulary="ministry">
         <show modes="view edit add listing" />
     </field>
-    <field name="ministry_submit_date" label="Date submitted to ministry" 
+    <field name="ministry_submit_date" label="Date submitted to Ministry" 
             required="false" value_type="date" render_type="date" derived="response_pending_date"
         >
         <show modes="view" />

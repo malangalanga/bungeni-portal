@@ -5,7 +5,7 @@
     >
     
     <!-- global grants -->
-    <allow permission=".Add" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead MP" />
+    <allow permission=".Add" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead MemberSenate MemberAssembly" />
     
     
     <!-- features -->
@@ -72,14 +72,14 @@
     <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
     </facet>
-    <facet name="public_response_Minister">
+    <facet name="public_response_Ministry">
         <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="response.View" roles="Minister" />
-        <allow permission="response.Edit" roles="Minister" />
+        <allow permission="response.View" roles="MinistryMember" />
+        <allow permission="response.Edit" roles="MinistryMember" />
     </facet>
     <facet name="public_response_internal">
         <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="response.View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion SpeakerSenate SpeakerAssembly Minister" />
+        <allow permission="response.View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion SpeakerSenate SpeakerAssembly MinistryMember" />
     </facet>
     <facet name="public_response_public">
         <allow permission=".View" roles="Authenticated Anonymous" />
@@ -200,7 +200,7 @@
         permissions_from_state="admissible" />
     
     <state id="response_pending" title="Pending response">
-        <facet ref=".public_response_Minister" />
+        <facet ref=".public_response_Ministry" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />
         <facet ref="signatory.public_frozen" />
@@ -427,7 +427,7 @@
         destination="response_submitted"
         condition="response_allow_submit"
         trigger="manual"
-        roles="Minister"
+        roles="MinistryMember"
         order="15"
     />
     
@@ -503,7 +503,7 @@
         roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion Owner"
         order="26"
         require_confirmation="true"
-        note="The MP can withdraw his question at any stage where it can 
+        note="The Member can withdraw his question at any stage where it can 
             still be presented to the ministry/house."
     />
     

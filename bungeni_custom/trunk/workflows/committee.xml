@@ -27,7 +27,7 @@
         <allow permission="committee_staff.Edit" roles="ClerkSenate ClerkAssembly" />
         <allow permission="committee_staff.Add" roles="ClerkSenate ClerkAssembly" />
         <allow permission="committee_staff.Delete" roles="ClerkSenate ClerkAssembly" /><!-- !+GROUP_MEMBERSHIP_DELETE -->
-        <allow permission="agenda_item.Add" roles="CommitteeMember" />
+        <allow permission="agenda_item.Add" roles="MemberCommitteeAssembly MemberCommitteeSenate" />
     </facet>
     <facet name="public_frozen">
         <allow permission=".View" roles="Authenticated Anonymous" />

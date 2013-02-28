@@ -49,7 +49,7 @@ legislature = dict(
 
 
 # language ids, either as a space-separated string or as a list of strings
-zope_i18n_allowed_languages = "ar en fr nl pt sw" 
+zope_i18n_allowed_languages = "ar en fr pt sw" 
 
 # boolean: True, False
 zope_i18n_compile_mo_files = True 
@@ -65,7 +65,7 @@ right_to_left_languages = "ar"
 check_auto_reload_localization = 5
 
 # default number of items in listings
-default_number_of_listing_items = 100
+default_number_of_listing_items = 50
 
 # when listing text columns, only display first so many characters
 long_text_column_listings_truncate_at = 57

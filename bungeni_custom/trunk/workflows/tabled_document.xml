@@ -5,7 +5,7 @@
     >
     
     <!-- global grants -->
-    <allow permission=".Add" roles="ClerkSenate ClerkAssembly MP" />
+    <allow permission=".Add" roles="ClerkSenate ClerkAssembly MemberSenate MemberAssembly" />
     
     
     <!-- features -->
@@ -346,7 +346,7 @@
         destination="tabled"
         condition="pi_signatories_check"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly MP Minister"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly MemberSenate MemberAssembly MinistryMember"
     />
 
     <transition title="Table"
@@ -354,7 +354,7 @@
         destination="tabled"
         condition=""
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly MP Minister"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly MemberSenate MemberAssembly MinistryMember"
     />
     
     <transition title="Withdraw"
@@ -366,7 +366,7 @@
         roles="ClerkSenate ClerkAssembly Owner"
         order="26"
         require_confirmation="true"
-        note="The MP can withdraw his question at any stage where it can 
+        note="The Member can withdraw his question at any stage where it can 
             still be presented to the ministry/house."
     />
     
