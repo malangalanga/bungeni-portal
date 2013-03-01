@@ -15,8 +15,9 @@
                 <metal:block use-macro="context/folder_listing/macros/entries">
                     <metal:entry fill-slot="entry">
                 <div class="tileItem visualIEFloatFix"
-                     tal:define="item_object item/getObject"
-                     tal:condition="python:not item_object.getExcludeFromNav()">
+                     tal:define="item_object item/getObject;
+                                 nav_setting exists:item_object/getExcludeFromNav"
+                                 tal:condition="python:nav_setting and not item_object.getExcludeFromNav()">
 
                     <a href="#"
                        tal:condition="exists:item_object/image_thumb"

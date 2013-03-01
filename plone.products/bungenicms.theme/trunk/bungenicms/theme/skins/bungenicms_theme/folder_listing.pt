@@ -75,14 +75,14 @@
                 item_samedate python: (
                     item_end - item_start &lt; 1
                     ) if item_type == 'Event' else False;
-                item_exclude_in_nav python:item.getObject().getExcludeFromNav()">
+                nav_setting exists:python:item.getObject().getExcludeFromNav()">
                 
                 <metal:block define-slot="entry">
                 <div class="blockitem">
                 <dt metal:define-macro="listitem"
                     tal:attributes="class python:test(
                         item_type == 'Event', 'vevent', '')"
-                    tal:condition="python:not item_exclude_in_nav">
+                    tal:condition="python:nav_setting and not item.getObject().getExcludeFromNav()">
 
                     <span class="summary">
                         <a href="#"
@@ -191,13 +191,14 @@
                     </span>
 
                 </dt>
-
+                <span tal:omit-tag tal:condition="python:nav_setting and not item.getObject().getExcludeFromNav()">
                 <dd tal:condition="item_description" class="indItem">
                     <span class="description"
                            tal:content="item_description">
                         description
                     </span>
                 </dd>
+                </span>
             </div>                
             </metal:block>
             </tal:block>

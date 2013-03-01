@@ -27,8 +27,9 @@
                      normalizeString nocall: context/plone_utils/normalizeString;
                      item_type_class python: 'contenttype-' + normalizeString(item_type);
                      kss_inline_editable python:False;
-                     rendering_error python:[];"
-         tal:condition="python:not context.getExcludeFromNav()">
+                     rendering_error python:[];
+                     nav_setting exists:context/getExcludeFromNav"                   
+                     tal:condition="python:nav_setting and not context.getExcludeFromNav()">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 

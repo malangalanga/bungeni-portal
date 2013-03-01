@@ -39,7 +39,7 @@
                     <tr metal:define-macro="listitem"
                         tal:define="oddrow repeat/item/odd;"
                         tal:attributes="class python:test(oddrow, 'even', 'odd');"
-                        tal:condition="python:not item_exclude_in_nav">
+                        tal:condition="python:nav_setting and not item.getObject().getExcludeFromNav()">
 
                             <td>
                                 <img width="16" height="16"
