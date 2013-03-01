@@ -21,9 +21,7 @@ setup(
     install_requires = [
           'setuptools',
           'bungenicms.policy',
-          "Products.Scrawl", 
-          "collective.contacts",
-             
+          "Products.Scrawl",              
         ],
     zip_safe = False,
     )
