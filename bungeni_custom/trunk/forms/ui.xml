@@ -645,10 +645,12 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <show modes="view edit add listing" />
         </field>
         <field name="zipcode" label="Zip Code" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="country_id" label="Country" required="false" value_type="text" render_type="single_select" vocabulary="country">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
+            <hide modes="listing" />
         </field>
         <field name="phone" label="Phone Number(s)" description="Enter one phone number per line" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />

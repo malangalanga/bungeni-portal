@@ -38,7 +38,6 @@
     
     <state id="active" title="Active Parliament"
             actions="activate"
-           
         >
         <facet ref=".public" />
         <facet ref="address.public" />
@@ -46,10 +45,9 @@
     
     <state id="dissolved" title="Parliament is Dissolved" 
             actions="dissolve"
-           
         >
         <facet ref=".public_frozen" />
-        <facet ref="address.public_frozen" />
+        <facet ref="address.withdrawn" />
     </state>
     
     

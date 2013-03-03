@@ -20,90 +20,59 @@
         <allow permission=".Add" roles="ClerkSenate ClerkAssembly Owner" />
         <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Owner" />
     </facet>
-    <facet name="internal_frozen">
-        <allow permission=".View" roles="Authenticated" />
-    </facet>
     <facet name="public">
-        <allow permission=".View" roles="Anonymous" />
+        <allow permission=".View" roles="Authenticated" />
         <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Owner" />
         <allow permission=".Add" roles="ClerkSenate ClerkAssembly Owner" />
         <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Owner" />
     </facet>
-    <facet name="public_frozen">
-        <allow permission=".View" roles="Anonymous" />
+    <facet name="withdrawn">
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly Owner" />
     </facet>
     
-    
-    <state id="draft" title="Draft Address">
+   <!-- workflow states -->
+
+    <state id="draft" title="Draft">
         <facet ref=".draft" />
     </state>
-    
-    <state id="attached" title="Address" permissions_from_parent="true" />
-    
+    <state id="as_parent" title="Address" permissions_from_parent="true" />
     <state id="internal" title="Published Internal" note="Visible to bungeni users">
         <facet ref=".internal" />
     </state>
-    
-    <!-- !+inactive(mr, aug-2011) review usage and rename across the board 
-    -->
-    <state id="inactive" title="Inactive address" permissions_from_state="internal" />
-    
-    <!-- !+IDENTICAL_TRANSITIONS(mr, sep-2011) attachment, address, event -->
+    <state id="withdrawn" title="Withdrawn" note="Visible to bungeni users">
+        <facet ref=".withdrawn" />
+    </state>
+  
+   <!-- workflow transition -->
+
     <transition title="Create"
         source=""
         destination="draft"
-        condition="context_parent_is_not_draft"
         trigger="automatic"
     />
-    <transition title="Create"
-        source=""
-        destination="attached"
-        condition="context_parent_is_draft"
-        trigger="automatic"
-    />
-    
     <transition title="Publish"
         source="draft"
-        destination="attached"
+        destination="as_parent"
         trigger="manual"
         roles="Owner"
     />
-    
     <transition title="Publish Internal"
-        source="draft"
+        source="draft as_parent"
         destination="internal"
         trigger="manual"
         roles="Owner"
     />
-    
     <transition title="Re-publish"
         source="internal"
-        destination="attached"
+        destination="as_parent"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly Owner"
     />
-    
-    <!-- 
-    if the parent has been published (i.e. is public, assuming that once 
-    published it is never retracted) we do not want to allow transitioning away 
-    from "attached".
-    -->
-    <transition title="Publish Internal"
-        source="attached"
-        destination="internal"
-        condition="context_parent_is_not_public"
+        <transition title="Withdraw"
+        source="internal as_parent"
+        destination="withdrawn"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly Owner"
     />
-    
-    <transition title="Deactivate"
-        source="attached internal"
-        destination="inactive"
-        condition="context_parent_is_not_public"
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly Owner"
-        require_confirmation="true"
-    />
-
 </workflow>
 

@@ -15,9 +15,6 @@
     allowed within a *feature facet* apply only for when the (workflowed, always)
     sub-item itself is in a permissions_from_parent="true" state. -->
     <feature name="attachment" enabled="true" />
-    <feature name="signatory" enabled="false">
-        <parameter name="open_states" value="admissible" />
-    </feature>
     <feature name="schedule" enabled="true">
         <parameter name="schedulable_states" value="schedule_pending" />
         <parameter name="scheduled_states" value="scheduled" />
@@ -37,92 +34,57 @@
         <allow permission=".Edit" roles="Owner" />
         <allow permission=".Delete" roles="Owner" />
     </facet>
-    <facet name="internal_Signatory">
-        <allow permission=".View" roles="Owner Signatory" />
-    </facet>
     <facet name="redraft_Owner">
         <allow permission=".View" roles="Owner" />
         <allow permission=".Edit" roles="Owner" />
     </facet>
     <facet name="view_internal">
-        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Signatory" />
+        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
     </facet>
     <facet name="edit_Clerk">
-        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Signatory" />
+        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
         <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
     </facet>
     <facet name="edit_Owner">
-        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Signatory" />
+        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
         <allow permission=".Edit" roles="Owner" />
     </facet>
     <facet name="edit_Speaker">
-        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Signatory" />
+        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
         <allow permission=".Edit" roles="SpeakerSenate SpeakerAssembly" />
     </facet>
     <facet name="public">
         <allow permission=".View" roles="Anonymous" />
     </facet>
     
-    
+    <!-- workflow states -->    
     <state id="working_draft" title="Working Draft">
         <facet ref=".draft_Clerk" />
         <facet ref="attachment.draft_Clerk" />
-        <facet ref="signatory.draft_Clerk" />
     </state>
     
     <state id="draft" title="Draft">
         <facet ref=".draft_Owner" />
         <facet ref="attachment.draft_Owner" />
-        <facet ref="signatory.draft_Owner" />
-    </state>
-    
-    <state id="submitted_signatories" title="Submitted to Signatories" actions="version">
-        <facet ref=".internal_Signatory" />
-        <facet ref="signatory.internal" />
-    </state>
-    
-    <state id="redraft" title="Redraft" actions="version" note="document under review before resubmission">
-        <facet ref=".redraft_Owner" />
-        <facet ref="attachment.internal_Owner" />
-        <facet ref="signatory.internal_Owner" />
-    </state>
-    
-    <state id="withdrawn_signatory" title="Dropped">
-        <facet ref=".internal_Signatory" />
-        <facet ref="signatory.internal_frozen" />
     </state>
     
     <state id="submitted" title="Submitted" actions="version">
-        <facet ref=".view_internal" />
-        <facet ref="signatory.internal_frozen" />
-    </state>
-    
-    <state id="received" title="Received by Clerk's Office" 
-            actions="set_doc_registry_number"
-            
-        >
         <facet ref=".edit_Clerk" />
         <facet ref="attachment.internal" />
-        <facet ref="signatory.internal_frozen" />
     </state>
-    
+
+    <state id="re_submitted" title="Submitted" actions="version" permissions_from_state="submitted" />
+ 
     <state id="clarification_required" title="Requires Clarification to Receive" 
-            actions="version" 
-            
-        >
+            actions="version"   >
         <facet ref=".edit_Owner" />
         <facet ref="attachment.internal_Owner" />
-        <facet ref="signatory.internal" />
     </state>
     
     <state id="reviewed" title="Submitted to the Speaker" actions="version">
         <facet ref=".edit_Speaker" />
         <facet ref="attachment.internal" />
-        <facet ref="signatory.internal_frozen" />
     </state>
-    
-    <state id="incomplete" title="Requires Clarification to Approve" 
-        permissions_from_state="received" actions="version"  />
     
     <state id="inadmissible" title="Inadmissible">
         <facet ref=".view_internal" />
@@ -134,7 +96,6 @@
     <state id="admissible" title="Admissible" actions="version">
         <facet ref=".public" />
         <facet ref="attachment.public" />
-        <facet ref="signatory.public_frozen" />
     </state>
     
     <state id="schedule_pending" title="Schedule pending" permissions_from_state="admissible" />
@@ -143,20 +104,16 @@
     
     <state id="adjourned" title="Debate adjourned" permissions_from_state="admissible" />
     
-    <state id="deferred" title="Deferred" permissions_from_state="admissible" />
-    
     <state id="debated" title="Debated">
         <facet ref=".public" />
         <facet ref="attachment.public_frozen" />
     </state>
     
-    <state id="elapsed" title="Elapsed" permissions_from_state="debated" />
-    
     <state id="dropped" title="Dropped" permissions_from_state="debated" />
     
     <state id="withdrawn" title="Withdrawn" permissions_from_state="debated" />
     
-    
+    <!-- workflow transition -->    
     <transition title="Create Agenda Item"
         source=""
         destination="draft"
@@ -172,9 +129,9 @@
     />
     
     <transition title="Submit"
-        source="draft redraft submitted_signatories"
+        source="draft"
         destination="submitted"
-        condition="pi_signatories_check"
+        condition=""
         trigger="manual"
         roles="Owner"
     />
@@ -182,67 +139,17 @@
     <transition title="Submit"
         source="working_draft"
         destination="submitted"
-        condition="pi_signatories_check"
+        condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
-
-    <transition title="Submit to Signatories"
-        source="draft redraft"
-        destination="submitted_signatories"
-        condition="pi_has_signatories"
-        roles="Owner"
-        trigger="manual"
-    />
     
-    <transition title="Redraft"
-        source="submitted_signatories"
-        destination="redraft"
-        condition="user_is_context_owner"
-        roles="Owner"
-        trigger="manual"
-    />
-
-    <transition title="Drop"
-        source="redraft submitted_signatories"
-        destination="withdrawn_signatory"
-        grouping_unique_sources="withdrawn"
-        condition="user_is_context_owner"
-        roles="Owner"
-        trigger="manual"
-    />
-
-    <transition title="Receive"
+    <transition title="Submit for Review"
         source="submitted"
-        destination="received"
-        condition=""
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
-    <transition title="Require Clarification to Receive"
-        source="received incomplete"
-        destination="clarification_required"
-        condition=""
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-        require_confirmation="true"
-    />
-    
-    <transition title="Redraft (Automatic)"
-        source="clarification_required"
-        destination="redraft"
-        condition="pi_has_signatories"
-        trigger="automatic"
-        note="incomplete document needs to be resubmitted to signatories"
-    />
-    
-    <transition title="Reviewed"
-        source="received"
         destination="reviewed"
         condition=""
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
+        roles="Owner"
     />
     
     <transition title="Admissible"
@@ -263,56 +170,34 @@
     />
     
     <transition title="Allow scheduling"
-        source="admissible deferred"
+        source="admissible adjourned"
         destination="schedule_pending"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
     
-    <transition title="Require Recomplete to Approve"
-        source="reviewed"
-        destination="incomplete"
-        condition=""
-        trigger="manual"
-        roles="SpeakerSenate SpeakerAssembly"
-        require_confirmation="true"
-    />
-    
-    <transition title="Re-reviewed"
-        source="incomplete"
-        destination="reviewed"
+    <transition title="Require Clarifications"
+        source="submitted"
+        destination="clarification_required"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
+        require_confirmation="true"
     />
     
     <transition title="Resubmit"
         source="clarification_required"
-        destination="submitted"
+        destination="re_submitted"
         condition=""
         trigger="manual"
         roles="Owner"
     />
     
-    <transition title="Reschedule"
-        source="scheduled"
-        destination="schedule_pending"
-        trigger="system"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
     <transition title="Schedule"
-        source="schedule_pending adjourned"
+        source="schedule_pending"
         destination="scheduled"
         condition="is_scheduled"
         trigger="system"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
-    <transition title="Revert to admissible"
-        source="schedule_pending"
-        destination="admissible"
-        trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
     
@@ -342,24 +227,8 @@
         roles="ClerkSenate ClerkAssembly"
     />
     
-    <transition title="Defer"
-        source="admissible schedule_pending adjourned"
-        destination="deferred"
-        condition=""
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
-    <transition title="Elapse"
-        source="deferred"
-        destination="elapsed"
-        condition=""
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
     <transition title="Withdraw"
-        source="submitted received reviewed clarification_required"
+        source="submitted reviewed clarification_required"
         destination="withdrawn_internal"
         grouping_unique_sources="withdrawn"
         condition=""
@@ -369,7 +238,7 @@
     />
     
     <transition title="Withdraw"
-        source="admissible scheduled deferred adjourned schedule_pending"
+        source="admissible scheduled adjourned schedule_pending"
         destination="withdrawn"
         grouping_unique_sources="withdrawn"
         condition=""

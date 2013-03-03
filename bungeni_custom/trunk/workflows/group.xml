@@ -56,7 +56,6 @@
     
     <state id="active" title="Active Group" 
             actions="activate"
-           
         >
         <facet ref=".public" />
         <facet ref="address.public" />
@@ -64,10 +63,9 @@
     
     <state id="dissolved" title="Group is Dissolved" 
             actions="dissolve"
-           
         >
         <facet ref=".public_frozen" />
-        <facet ref="address.public_frozen" />
+        <facet ref="address.withdrawn" />
     </state>
     
     

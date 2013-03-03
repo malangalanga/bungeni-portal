@@ -5,7 +5,6 @@
     >
     
     <!-- global grants -->
-    <allow permission=".Edit" roles="SpeakerSenate SpeakerAssembly" />
     <allow permission=".Add" roles="ClerkSenate ClerkAssembly MemberSenate MemberAssembly" />
     
     
@@ -22,11 +21,10 @@
         <parameter name="open_states" value="gazetted" />
     </feature>
     <feature name="schedule" enabled="true">
-        <parameter name="schedulable_states" value="first_reading_pending 
-            second_reading_pending whole_house_pending
-            third_reading_pending" />
+        <parameter name="schedulable_states" value="first_reading_pending second_reading_pending 
+            whole_house_pending third_reading_pending" />
         <parameter name="scheduled_states" value="first_reading 
-            first_report_reading second_reading whole_house third_reading" />
+           second_reading whole_house third_reading" />
     </feature>
     <feature name="workspace" enabled="true" />
     <feature name="notification" enabled="true" />
@@ -59,6 +57,10 @@
         <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly Signatory" />
         <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
     </facet>
+    <facet name="edit_Speaker">
+        <allow permission=".View" roles="Owner SpeakerSenate SpeakerAssembly Signatory" />
+        <allow permission=".Edit" roles="SpeakerSenate SpeakerAssembly" />
+    </facet>
     <facet name="public_edit_Clerk">
         <allow permission=".View" roles="Authenticated Anonymous" />
         <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
@@ -67,7 +69,7 @@
         <allow permission=".View" roles="Authenticated Anonymous" />
     </facet>
     
-    
+    <!-- workflow states -->    
     <state id="working_draft" title="Working Draft">
         <facet ref=".draft_Clerk" />
         <facet ref="attachment.draft_Clerk" />
@@ -75,7 +77,7 @@
         <facet ref="signatory.draft_Clerk" />
     </state>
     
-    <state id="draft" title="Draft Bill">
+    <state id="draft" title="Legislative Proposal">
         <facet ref=".draft_Owner" />
         <facet ref="attachment.draft_Owner" />
         <facet ref="event.draft_Owner" />
@@ -116,16 +118,30 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="received" title="received by Clerk" 
-            actions="set_doc_registry_number"
-            
-        >
+    <state id="received" title="Received by Clerk" 
+            actions="set_doc_registry_number" >
         <facet ref=".edit_Clerk" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
         <facet ref="signatory.internal_frozen" />
     </state>
-    
+
+    <state id="reviewed_clerk" title="Reviewed by Clerk" 
+            actions="set_doc_registry_number" >
+        <facet ref=".edit_Speaker" />
+        <facet ref="attachment.internal" />
+        <facet ref="event.internal" />
+        <facet ref="signatory.internal_frozen" />
+    </state> 
+
+    <state id="referred_committee" title="Referred to Committee for pre-publication scrutiny" actions="version"  permissions_from_state="reviewed_clerk"/>
+
+    <state id="recommendations_committee" title="Recommendations of the Committee" actions="version" permissions_from_state="reviewed_clerk"/>
+
+    <state id="rejected_proposal" title="Legislative Proposal Rejected" actions="version" permissions_from_state="reviewed_clerk"/>
+
+    <state id="accepted_proposal" title="Legislative Proposal Approved" actions="version set_doc_type_number" permissions_from_state="reviewed_clerk"/>
+ 
     <state id="gazetted" title="Bill Published in Gazette" actions="version">
         <facet ref=".public_edit_Clerk" />
         <facet ref="attachment.public" />
@@ -133,22 +149,22 @@
         <facet ref="signatory.public_frozen" />
     </state>
     
-    <state id="first_reading_pending" title="First Reading Pending" 
+    <state id="first_reading_pending" title="First Reading pending" 
         permissions_from_state="gazetted" />
-    
+
     <state id="first_reading" title="First Reading" 
         permissions_from_state="gazetted" />
-    
-    <state id="first_reading_adjourned" title="First Reading Adjourned" 
+
+    <state id="referred_committee_first_reading" title="Committed to Committees" 
         permissions_from_state="gazetted" />
+    
+<!--  <state id="first_reading_adjourned" title="First Reading Adjourned" 
+        permissions_from_state="gazetted" /> -->
 
     <state id="second_reading_pending" title="Second Reading Pending" 
         permissions_from_state="first_reading" />
     
     <state id="second_reading" title="Second Reading" actions="version"
-        permissions_from_state="first_reading" />
-    
-    <state id="second_reading_adjourned" title="Second Reading Adjourned"
         permissions_from_state="first_reading" />
     
     <state id="whole_house_pending" title="Whole House Pending" 
@@ -157,17 +173,11 @@
     <state id="whole_house" title="Whole House" 
         permissions_from_state="first_reading" />
     
-    <state id="whole_house_adjourned" title="Whole House Adjourned" 
-        permissions_from_state="first_reading" />
-    
     <state id="third_reading_pending" title="Third Reading Pending"
         permissions_from_state="first_reading" />
     
     <state id="third_reading" title="Third Reading"
         permissions_from_state="first_reading" />
-    
-    <state id="third_reading_adjourned" permissions_from_state="first_reading"
-        title="Third Reading Adjourned" />
     
     <state id="approved" title="Approved Bill">
         <facet ref=".public" />
@@ -180,7 +190,8 @@
     
     <state id="withdrawn" title="Bill Withdrawn" permissions_from_state="approved" />
     
-    
+     <!-- workflow transitions --> 
+  
     <transition title="Create Bill"
         source=""
         destination="working_draft"
@@ -188,14 +199,14 @@
         trigger="automatic"
     />
 
-    <transition title="Create Bill"
+    <transition title="Create Legislative Proposal"
         source=""
         destination="draft"
         condition="user_is_context_owner"
         trigger="automatic"
     />
 
-    <transition title="Submit"
+    <transition title="Submit Legislative Proposal"
         source="draft redraft submitted_signatories"
         destination="submitted"
         condition="pi_signatories_check"
@@ -203,7 +214,7 @@
         roles="Owner"
     />
 
-    <transition title="Submit"
+    <transition title="Submit Legislative Proposal"
         source="working_draft"
         destination="submitted"
         condition="pi_signatories_check"
@@ -219,7 +230,7 @@
         roles="Owner"
     />
 
-    <transition title="Redraft"
+    <transition title="Recall to Redraft"
         source="submitted_signatories"
         destination="redraft"
         condition="user_is_context_owner"
@@ -236,7 +247,7 @@
         trigger="manual"
     />
 
-    <transition title="Receive"
+    <transition title="Receive Legislative Proposal"
         source="submitted"
         destination="received"
         trigger="manual"
@@ -245,23 +256,63 @@
         order="2"
     />
 
-    <transition title="Publish in Gazette"
+    <transition title="Clerk reviews Legislative Proposal"
         source="received"
+        destination="reviewed_clerk"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly"
+    />
+
+    <transition title="Speaker refers to Committee for scrutiny"
+        source="reviewed_clerk"
+        destination="referred_committee"
+        condition=""
+        trigger="manual"
+        roles="SpeakerSenate SpeakerAssembly"
+    />
+
+    <transition title="Committee Submits recommendations"
+        source="referred_committee"
+        destination="recommendations_committee"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly"
+    />
+
+     <transition title="Accept Legislative Proposal"
+        source="recommendations_committee"
+        destination="accepted_proposal"
+        condition=""
+        trigger="manual"
+        roles="SpeakerSenate SpeakerAssembly"
+    />
+
+    <transition title="Reject Legislative Proposal"
+        source="recommendations_committee"
+        destination="rejected_proposal"
+        condition=""
+        trigger="manual"
+        roles="SpeakerSenate SpeakerAssembly"
+    />
+
+    <transition title="Publish Bill in Gazette"
+        source="accepted_proposal"
         destination="gazetted"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
 
-    <transition title="Allow scheduling of First Reading"
-        source="gazetted first_reading_adjourned"
+    <transition title="First Reading pending"
+        source="gazetted "
         destination="first_reading_pending"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
     
-    <transition title="Schedule First Reading"
+    <transition title="First Reading Scheduled"
         source="first_reading_pending"
         destination="first_reading"
         condition="is_scheduled"
@@ -269,63 +320,55 @@
         roles="ClerkSenate ClerkAssembly"
     />
     
-    <transition title="Reschedule First Reading"
-        source="first_reading"
-        destination="first_reading_pending"
-        condition=""
-        trigger="system"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
     <transition title="Adjourn First Reading"
         source="first_reading"
-        destination="first_reading_adjourned"
+        destination="first_reading_pending"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
-    
-    <transition title="Allow scheduling of Second Reading"
+
+    <transition title="Committal of Bill to Committees"
         source="first_reading"
+        destination="referred_committee_first_reading"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly"
+    />
+
+    <transition title="Second Reading pending"
+        source="first_reading referred_committee_first_reading"
         destination="second_reading_pending"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
     
-    <transition title="Schedule Second Reading"
+    <transition title="Second Reading Scheduled"
         source="second_reading_pending"
         destination="second_reading"
         condition="is_scheduled"
         trigger="system"
         roles="ClerkSenate ClerkAssembly"
     />
-    
-    <transition title="Reschedule Second Reading"
-        source="second_reading"
-        destination="second_reading_pending"
-        condition=""
-        trigger="system"
-        roles="ClerkSenate ClerkAssembly"
-    />
 
     <transition title="Adjourn Second Reading"
         source="second_reading"
-        destination="second_reading_adjourned"
+        destination="second_reading_pending"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
     
-    <transition title="Allow scheduling of Whole House Committee"
-        source="second_reading whole_house_adjourned"
+    <transition title="Pending scheduling of Committee of the Whole House"
+        source="second_reading"
         destination="whole_house_pending"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
     
-    <transition title="Schedule Whole House Committee"
+    <transition title="Committee of the Whole House Scheduled"
         source="whole_house_pending"
         destination="whole_house"
         condition="is_scheduled"
@@ -333,23 +376,23 @@
         roles="ClerkSenate ClerkAssembly"
     />
 
-    <transition title="Adjourn Whole House Committee"
+    <transition title="Leave to sit again"
         source="whole_house"
-        destination="whole_house_adjourned"
+        destination="whole_house_pending"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
     
-    <transition title="Allow scheduling of Third Reading"
-        source="whole_house third_reading_adjourned"
+    <transition title="Pending scheduling of Third Reading"
+        source="whole_house"
         destination="third_reading_pending"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
     
-    <transition title="Schedule Third Reading"
+    <transition title="Third Reading Scheduled"
         source="third_reading_pending"
         destination="third_reading"
         condition="is_scheduled"
@@ -359,7 +402,7 @@
 
     <transition title="Adjourn Third Reading"
         source="third_reading"
-        destination="third_reading_adjourned"
+        destination="third_reading_pending"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
@@ -394,10 +437,10 @@
     <transition title="Withdraw"
         source="
             gazetted
-            first_reading
-            second_reading
-            whole_house
-            third_reading
+            first_reading first_reading_pending
+            second_reading second_reading_pending
+            whole_house whole_house_pending
+            third_reading third_reading_pending
         "
         destination="withdrawn"
         grouping_unique_sources="withdrawn"

@@ -55,7 +55,7 @@
         <allow permission=".View" roles="Anonymous" />
     </facet>
 
-    
+    <!-- workflow states -->    
     <state id="draft" title="Draft Event">
         <facet ref=".draft_Owner" />
     </state>
@@ -77,8 +77,8 @@
         <facet ref=".internal_frozen" />
     </state>
     
-    
-    <!-- !+IDENTICAL_TRANSITIONS(mr, sep-2011) attachment, address, event -->
+    <!-- workflow facets -->    
+   
     <transition title="Create"
         source=""
         destination="draft"
@@ -147,7 +147,7 @@
         trigger="manual"
         roles="ClerkSenate ClerkAssembly Owner"
     />
-    
+   
     <transition title="Deactivate"
         source="attached internal"
         destination="inactive"
@@ -155,6 +155,6 @@
         trigger="manual"
         roles="ClerkSenate ClerkAssembly Owner"
         require_confirmation="true"
-    />
+    /> 
 
 </workflow>
