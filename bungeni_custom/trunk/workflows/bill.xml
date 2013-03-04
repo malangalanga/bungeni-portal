@@ -54,11 +54,11 @@
         <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly Signatory" />
     </facet>
     <facet name="edit_Clerk">
-        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly Signatory" />
+        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Signatory" />
         <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
     </facet>
     <facet name="edit_Speaker">
-        <allow permission=".View" roles="Owner SpeakerSenate SpeakerAssembly Signatory" />
+        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Signatory" />
         <allow permission=".Edit" roles="SpeakerSenate SpeakerAssembly" />
     </facet>
     <facet name="public_edit_Clerk">
@@ -134,7 +134,7 @@
         <facet ref="signatory.internal_frozen" />
     </state> 
 
-    <state id="referred_committee" title="Referred to Committee for pre-publication scrutiny" actions="version"  permissions_from_state="reviewed_clerk"/>
+    <state id="referred_committee" title="Referred to Committee for pre-publication scrutiny" actions="version"  permissions_from_state="received"/>
 
     <state id="recommendations_committee" title="Recommendations of the Committee" actions="version" permissions_from_state="reviewed_clerk"/>
 

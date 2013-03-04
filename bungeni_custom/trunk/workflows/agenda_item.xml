@@ -81,7 +81,7 @@
         <facet ref="attachment.internal_Owner" />
     </state>
     
-    <state id="reviewed" title="Submitted to the Speaker" actions="version">
+    <state id="review_pending" title="Submitted to the Speaker" actions="version">
         <facet ref=".edit_Speaker" />
         <facet ref="attachment.internal" />
     </state>
@@ -146,14 +146,14 @@
     
     <transition title="Submit for Review"
         source="submitted"
-        destination="reviewed"
+        destination="review_pending"
         condition=""
         trigger="manual"
-        roles="Owner"
+        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Admissible"
-        source="reviewed"
+        source="review_pending"
         destination="admissible"
         condition=""
         trigger="manual"
@@ -161,7 +161,7 @@
     />
     
     <transition title="Inadmissible"
-        source="reviewed"
+        source="review_pending"
         destination="inadmissible"
         condition=""
         trigger="manual"
@@ -228,7 +228,7 @@
     />
     
     <transition title="Withdraw"
-        source="submitted reviewed clarification_required"
+        source="submitted review_pending clarification_required"
         destination="withdrawn_internal"
         grouping_unique_sources="withdrawn"
         condition=""
