@@ -30,7 +30,7 @@
     <feature name="notification" enabled="true" />
     <feature name="email" enabled="true" />
     <feature name="download" enabled="true" />
-    
+    <feature name="group_assignment" enabled="true" />    
     
     <!-- workflow facets -->
     <facet name="draft_Clerk">
@@ -124,6 +124,7 @@
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
         <facet ref="signatory.internal_frozen" />
+        <facet ref="group_assignment.internal" />
     </state>
 
     <state id="reviewed_clerk" title="Reviewed by Clerk" 
@@ -132,6 +133,7 @@
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
         <facet ref="signatory.internal_frozen" />
+        <facet ref="group_assignment.internal" />
     </state> 
 
     <state id="referred_committee" title="Referred to Committee for pre-publication scrutiny" actions="version"  permissions_from_state="received"/>
@@ -147,6 +149,7 @@
         <facet ref="attachment.public" />
         <facet ref="event.public" />
         <facet ref="signatory.public_frozen" />
+        <facet ref="group_assignment.internal" />
     </state>
     
     <state id="first_reading_pending" title="First Reading pending" 
@@ -189,6 +192,11 @@
     <state id="rejected" title="Rejected Bill" permissions_from_state="approved" />
     
     <state id="withdrawn" title="Bill Withdrawn" permissions_from_state="approved" />
+
+    <state id="pending_presidential_assent" title="Pending Presidential Assent" permissions_from_state="approved" />
+    <state id="assented" title="Pending Presidential Assent" permissions_from_state="approved" />
+
+
     
      <!-- workflow transitions --> 
   
@@ -448,6 +456,22 @@
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
         require_confirmation="true"
+    />
+    
+    <transition title="Forward for Presidential Assent"
+        source="approved"
+        destination="pending_presidential_assent"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly"
+    />
+    
+    <transition title="Assented by the President"
+        source="pending_presidential_assent"
+        destination="assented"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly"
     />
 
 </workflow>

@@ -73,8 +73,15 @@
         <tab id="pending" roles="Owner Signatory SpeakerSenate SpeakerAssembly"/>
     </state>
     <state id="approved">
-        <tab id="archive" 
-          roles="ClerkSenate ClerkAssembly Owner Signatory SpeakerSenate SpeakerAssembly"/>
+        <tab id="inbox" roles="ClerkSenate ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory SpeakerSenate SpeakerAssembly"/>
+    </state>
+    <state id="pending_presidential_assent">
+        <tab id="inbox" roles="ClerkSenate ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory SpeakerSenate SpeakerAssembly"/>
+    </state>
+    <state id="assented">
+        <tab id="archive" roles="Owner Signatory SpeakerSenate SpeakerAssembly ClerkSenate ClerkAssembly"/>
     </state>
     <state id="rejected">
         <tab id="archive" 
@@ -88,4 +95,7 @@
       <tab id="archive"
 	   roles="ClerkSenate ClerkAssembly Owner Signatory SpeakerSenate SpeakerAssembly"/>
     </state>
+
+
+
 </workspace>

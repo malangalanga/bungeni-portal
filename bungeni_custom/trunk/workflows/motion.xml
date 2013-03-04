@@ -165,13 +165,12 @@
         permissions_from_state="withdrawn_internal" />
     
     <state id="admissible" title="Admissible"
-            actions="version set_doc_type_number"
-           
-        >
+            actions="version set_doc_type_number" >
         <facet ref=".public" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />
         <facet ref="signatory.public_frozen" />
+        <facet ref="group_assignment.internal" />
     </state>
     
     <state id="schedule_pending" title="Schedule pending" permissions_from_state="admissible" />
