@@ -194,11 +194,17 @@ class BungeniConfigReader:
         self.config = SafeConfigParser()
         self.config.read(inifile)
 
-    def get_config(self, section_name, config_name):
+    def get_config(self, section_name, config_name, raw=False):
+        """
+        The raw parameter gets the raw - non-interpolated value
+        """
         if self.config.has_section(section_name):
             if self.config.has_option(section_name, config_name):
-                return self.config.get(section_name,
-                        config_name).strip()
+                return self.config.get(
+                        section_name,
+                        config_name,
+                        raw
+                        ).strip()
             else:
                 #print "warning : section [", section_name, \
                 #    "] does not have option name ", config_name, " !!!!"
@@ -475,7 +481,9 @@ class BungeniConfigs:
         self.varnish_bind_port = self.cfg.get_config("varnish","bind_port")
         self.varnish_cache_size = self.cfg.get_config("varnish","cache_size")
         # Jython Configuration
-        self.jython_config = self.cfg.get_config("jython", "config")
+        # we pass raw=True to disable value interpolation since it has a interpolation
+        # parameters which are used only at runtime
+        self.jython_config = self.cfg.get_config("jython", "config", raw=True)
 
 
     def get_download_command(self, strURL):
@@ -763,6 +771,7 @@ class Presetup:
                     "user_jython":self.cfg.user_jython,
                     "user_glue":self.cfg.user_glue,
                 }        
+        
         jython_config = self.cfg.jython_config % glue_map
         
         sup_pycfg = PythonConfigs(self.cfg,"supervisor")
@@ -802,8 +811,11 @@ class Presetup:
         run("mkdir -p %s" % self.cfg.user_config)
         run("mkdir -p %s" % self.cfg.user_logs)
         run("mkdir -p %s" % self.cfg.user_pid)
-        self.templates.new_file("supervisord.conf.tmpl", template_map,
-                                self.cfg.user_config)
+        self.templates.new_file(
+            "supervisord.conf.tmpl", 
+            template_map,
+            self.cfg.user_config
+            )
                                 
 
     def supervisor_docs(self):
@@ -1506,8 +1518,9 @@ class PortalTasks:
         if not current_release:
             abort("no release parameter specified in setup.ini")            
         elif current_release["portal"] == "HEAD":
-            self.tasks.src_update(current_release["portal"]) 
+            #UPDATE TO HEAD
             with cd(self.cfg.user_portal):
+                run("svn up -rHEAD `ls | grep -v portal.theme`")
                 with cd("src"):
                     run("svn up -rHEAD ./portal.theme")           
         else:
@@ -2190,10 +2203,12 @@ class GlueScriptTasks:
         self.scm.checkout(current_release["glue"])
 
     def glue_setup_config(self):
+        ct = CustomTasks()
         template_map = {
             "user_bungeni": self.cfg.user_bungeni,
             "user_jython": self.cfg.user_jython,
             "user_glue": self.cfg.user_glue,
+            "user_bungeni_custom": ct.current_bungeni_custom()
             }
         templates = Templates(self.cfg)
         templates.new_file(
@@ -2213,8 +2228,8 @@ class CustomTasks:
         Returns the path to the current active bungeni_custom
         """
         fcustom_pth = open("%s/bungeni_custom.pth" % self.cfg.user_bungeni)
-        bungeni_custom_path = fcustom_path.readline()
-        return "%s/bungeni_custom" % bungeni_custom.strip("\n")
+        bungeni_custom_path = fcustom_pth.readline()
+        return "%s/bungeni_custom" % bungeni_custom_path.strip("\n")
 
     def switch_bungeni_custom(self):
         run("mkdir -p %s" % self.cfg.custom_folder)    
