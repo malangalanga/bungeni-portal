@@ -2,20 +2,22 @@
 # user_glue = the glue install folder
 
 [general]
-country_code = cc
+#country_code = cc
 bungeni_docs_folder = %(user_bungeni)s/parts/xml_db/
-akomantoso_output_folder =%(user_glue)s/outputs/an-output/
-metalex_output_folder = %(user_glue)s/outputs/on-output/
+bungeni_custom_folder = %(user_bungeni_custom)s
+#akomantoso_output_folder =%(user_glue)s/outputs/an-output/
+xml_output_folder = %(user_glue)s/outputs/on-output/
 attachments_output_folder = %(user_glue)s/outputs/atts-output/
 temp_files_folder = %(user_glue)s/tmp/
+cache_file_folder = %(user_glue)s/cache/
 transformer_resources_folder = %(user_glue)s/resources/
 # simultaenously dump metalex info too
 # Warning: Increases overload
-allow_metalex_output = true
+#allow_metalex_output = true
 
-[preprocess]
-replace:nbsp=&nbsp;|&#160;
-replace:xyz=search|replace
+#[preprocess]
+#replace:nbsp=&nbsp;|&#160;
+#replace:xyz=search|replace
 
 [translations]
 # po-files folder for downloaded .po files from paths in the messages section below
@@ -46,11 +48,11 @@ bill = configfiles/configs/config_bungeni_parliamentaryitem.xml
 tabled_document = configfiles/configs/config_bungeni_parliamentaryitem.xml
 agenda_item = configfiles/configs/config_bungeni_parliamentaryitem.xml
 heading = configfiles/configs/config_bungeni_heading.xml
-event = configfiles/configs/config_bungeni_parliamentaryitem.xml
+event = configfiles/configs/config_bungeni_event.xml
 address = configfiles/configs/config_bungeni_address.xml
 parliament = configfiles/configs/config_bungeni_group.xml
 report = configfiles/configs/config_bungeni_parliamentaryitem.xml
-attachment = configfiles/configs/config_bungeni_parliamentaryitem.xml
+attachment = configfiles/configs/config_bungeni_attachment.xml
 debate_record = configfiles/configs/config_bungeni_debate.xml
 
 [webdav]

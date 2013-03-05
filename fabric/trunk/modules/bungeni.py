@@ -474,7 +474,8 @@ class BungeniConfigs:
         self.varnish_bind_host = self.cfg.get_config("varnish","bind_host")
         self.varnish_bind_port = self.cfg.get_config("varnish","bind_port")
         self.varnish_cache_size = self.cfg.get_config("varnish","cache_size")
-        
+        # Jython Configuration
+        self.jython_config = self.cfg.get_config("jython", "config")
 
 
     def get_download_command(self, strURL):
@@ -757,7 +758,13 @@ class Presetup:
         """
         Generate a supervisord config file  using the installation template
         """
-
+        glue_map = {
+                    "java":self.cfg.java_home,
+                    "user_jython":self.cfg.user_jython,
+                    "user_glue":self.cfg.user_glue,
+                }        
+        jython_config = self.cfg.jython_config % glue_map
+        
         sup_pycfg = PythonConfigs(self.cfg,"supervisor")
         template_map = {
             "user_bungeni": self.cfg.user_bungeni,
@@ -790,6 +797,7 @@ class Presetup:
             "varnish_bind_host" : self.cfg.varnish_bind_host,
             "varnish_bind_port" : self.cfg.varnish_bind_port,
             "varnish_cache_size" : self.cfg.varnish_cache_size,
+            "jython_config" : jython_config
             }
         run("mkdir -p %s" % self.cfg.user_config)
         run("mkdir -p %s" % self.cfg.user_logs)
@@ -2157,8 +2165,14 @@ class GlueScriptTasks:
         """
         Downloads .po files, converts them to XML and installs to eXist.
         """
-        run("%(java)s/bin/java -cp %(user_jython)s/jython.jar:%(user_glue)s/lib/jaxen/jaxen.jar:%(user_glue)s/lib/xerces/xercesImpl.jar:%(user_glue)s/lib/saxon/saxon9he.jar:%(user_glue)s/lib/dom4j/dom4j-1.6.1.jar:%(user_glue)s/lib/log4j/log4j.jar:/lib/bungeni/editorplugininterface.jar:%(user_glue)s/lib/transformer/odttransformer.jar:%(user_glue)s/lib/commons-lang/commons-lang-2.3.jar:%(user_glue)s/lib/jsoup/jsoup-1.6.1.jar:%(user_glue)s/lib/zip4j/zip4j_1.2.8.jar:%(user_glue)s/lib/sardine/sardine.jar:%(user_glue)s/lib/sardine/httpclient-4.2.jar:%(user_glue)s/lib/sardine/httpcore-4.2.1.jar:%(user_glue)s/lib/sardine/slf4j-api-1.6.2.jar:%(user_glue)s/lib/sardine/commons-logging-1.1.1.jar:%(user_glue)s/lib/sardine/commons-codec-1.4.jar org.python.util.jython %(user_glue)s/src/glue.py -c %(user_config)s/glue.ini -p" % {"java":self.cfg.java_home,"user_jython":self.cfg.user_jython,
-        "user_glue":self.cfg.user_glue,"user_config":self.cfg.user_config})
+        #self.cfg.jython_config has the full run path
+        run(self.cfg.jython_config + " %(user_glue)s/src/glue.py -c %(user_config)s/glue.ini -p" %
+             {
+                "java":self.cfg.java_home,
+                "user_jython":self.cfg.user_jython,
+                "user_glue":self.cfg.user_glue,
+                "user_config":self.cfg.user_config
+             })
 
     def setup_glue(self):
         """
@@ -2182,13 +2196,25 @@ class GlueScriptTasks:
             "user_glue": self.cfg.user_glue,
             }
         templates = Templates(self.cfg)
-        templates.new_file("glue.ini.tmpl", template_map,self.cfg.user_config)
+        templates.new_file(
+            "glue.ini.tmpl", 
+            template_map,
+            self.cfg.user_config
+            )
 
 class CustomTasks:
     
     def __init__(self):
         # do something here
         self.cfg = BungeniConfigs()
+
+    def current_bungeni_custom(self):
+        """
+        Returns the path to the current active bungeni_custom
+        """
+        fcustom_pth = open("%s/bungeni_custom.pth" % self.cfg.user_bungeni)
+        bungeni_custom_path = fcustom_path.readline()
+        return "%s/bungeni_custom" % bungeni_custom.strip("\n")
 
     def switch_bungeni_custom(self):
         run("mkdir -p %s" % self.cfg.custom_folder)    
