@@ -1207,7 +1207,7 @@ div.main-column #collage h2 {
 		
 .template-portal nav ul > li > a {
 	display: inline-block !important; 
-	padding: 10px 20px !important;
+	padding: 10px 5px 10px 6px!important;
 	text-decoration: none !important;
 }
 		
@@ -1218,6 +1218,7 @@ div.main-column #collage h2 {
     padding:0;
 	display:inline-block !important;
 	background:transparent !important;
+	height: 15px;
 }
 .template-portal nav ul ul.hse-list li,
 .template-portal nav ul ul.parl-list li {
@@ -1243,19 +1244,19 @@ div.main-column #collage h2 {
 nav ul#portal-globalnav li.lower-hse a,
 nav ul#portal-globalnav li.upper-hse a,
 nav ul#portal-globalnav li#aux a {
-    height: 15px;
+    height: 15px !important;
 }
 
-nav ul#portal-globalnav li.lower-hse ul.hse-list li, 
-nav ul#portal-globalnav li.upper-hse ul.hse-list li, 
-nav ul#portal-globalnav li.#aux ul.parl-list li {
-    height: 13px;
+nav ul#portal-globalnav li.lower-hse ul.hse-list, 
+nav ul#portal-globalnav li.upper-hse ul.hse-list, 
+nav ul#portal-globalnav li.#aux ul.parl-list {
+    height: 15px;
 }
     
 .template-portal .subnav {  
     height:25px;
     width:960px;
-	margin-top:-0.55em !important;        
+	margin-top:-0.35em !important;    
 }
 .template-portal .subnav ul {
     padding:0;
@@ -1268,6 +1269,9 @@ nav ul#portal-globalnav li.#aux ul.parl-list li {
 }
 .template-portal.site-plone .subnav ul {
     margin-top:0.25em !important;       
+}
+.template-portal.site-plone .subnav {  
+	margin-top:-0.55em !important;    
 }
 .template-portal .subnav ul li {
     display:inline;
@@ -1288,6 +1292,7 @@ nav ul#portal-globalnav li.#aux ul.parl-list li {
 .template-portal .site-plone .subnav ul li a {
     color:black;   
 }   
+
 .template-portal .subnav ul li a:hover {
 	color:#ffffff;   
 }      
@@ -2183,7 +2188,8 @@ div.dhx_cal_navline div.active {
     box-shadow: 10px 10px 5px #888;    
 }
 .template-portal-eXist div#region-content a {
-    color: #000;
+    color: #25658b !important;
+    text-decoration: underline;
 }
 .template-portal-eXist  .rounded-eigh {
     -moz-border-radius: 8px;
@@ -2508,12 +2514,11 @@ div.dhx_cal_navline div.active {
    .site-plone
    ========================================================================== */
 
-.template-portal.site-plone #content {
-    font-size: 110% !important;
-}
-
 .site-plone #search-results {
     opacity: 1 !important;
 }
 
+.site-plone .listingBar {
+    margin: 1em 0 0 !important;
+}
 
