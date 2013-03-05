@@ -27,7 +27,7 @@
   </order>
   <order manager="plone.belowcontent" skinname="Bungeni CMS theme">
     <viewlet name="plone.belowcontenttitle.keywords" />
-    <viewlet name="plone.nextprevious" />
+    <viewlet name="bungenicmstheme.nextprevious" />
     <viewlet name="plone.manage_portlets_fallback" />
   </order>
   <order manager="plone.portalfooter" skinname="Bungeni CMS theme">
@@ -39,6 +39,14 @@
   <hidden manager="plone.portalheader" skinname="Bungeni CMS theme">
     <viewlet name="plone.personal_bar"/>
     <viewlet name="plone.searchbox"/>    
-  </hidden>  
+  </hidden> 
+  
+  <hidden manager="plone.abovecontent" skinname="Bungeni CMS theme">
+    <viewlet name="plone.nextprevious"/>   
+  </hidden>     
+  
+  <hidden manager="plone.belowcontent" skinname="Bungeni CMS theme">
+    <viewlet name="plone.nextprevious"/>   
+  </hidden>    
   
 </object>

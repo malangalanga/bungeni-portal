@@ -19,9 +19,30 @@
         permission="zope2.View"
         />                
 
-  <!-- Override next/previous links for folders -->
+  <!-- Override next/previous links for folders 
     <adapter
-        factory=".nextprevious.ATFolderNextPrevious" />      
+        factory=".nextprevious.ATFolderNextPrevious" /> -->
+        
+    <browser:viewlet
+        name="bungenicms.nextprevious"
+        manager="plone.app.layout.viewlets.interfaces.IAboveContentTitle"
+        class=".nextprevious.NextPreviousViewlet"
+        permission="zope2.View"
+        />         
+        
+    <browser:viewlet
+        name="bungenicms.nextprevious"
+        manager="plone.app.layout.viewlets.interfaces.IBelowContent"
+        class=".nextprevious.NextPreviousViewlet"
+        permission="zope2.View"
+        />    
+        
+    <browser:viewlet
+        name="bungenicms.nextprevious.links"
+        manager="plone.app.layout.viewlets.interfaces.IHtmlHeadLinks"
+        class=".nextprevious.NextPreviousLinksViewlet"
+        permission="zope2.View"
+        />           
 
     <!-- The search results page -->        
     <browser:page
