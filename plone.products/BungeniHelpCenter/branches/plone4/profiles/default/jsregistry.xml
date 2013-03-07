@@ -25,7 +25,7 @@
      compression="safe"
      cookable="False"
      enabled="True"
-     expression=""
+     expression="python: getattr(here, 'portal_type', None) in ['BungeniHelpCenterReferenceManual']"
      id="collapsor.js"
      inline="False"
      />
