@@ -2179,7 +2179,7 @@ class GlueScriptTasks:
         Downloads .po files, converts them to XML and installs to eXist.
         """
         #self.cfg.jython_config has the full run path
-        run(self.cfg.jython_config + " %(user_glue)s/src/glue.py -c %(user_config)s/glue.ini -p" %
+        run(( self.cfg.jython_config + " %(user_glue)s/src/glue.py -c %(user_config)s/glue.ini -p") %
              {
                 "java":self.cfg.java_home,
                 "user_jython":self.cfg.user_jython,
