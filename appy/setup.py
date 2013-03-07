@@ -7,27 +7,28 @@ Egg setup file for appy 0.7.0
  * run : python setup.py bdist_egg
 """
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(name='appy',
-      version='0.7.0',
+      version='0.8.3',
       description='Appy (Applications in python) is a bunch of tools distributed under the GPL license',
       include_package_data=True,
       author='Gaetan Delannay',
       author_email='ashok@parliaments.info',
       url='https://launchpad.net/appy',
-      packages = find_packages("src"),
+      packages=['appy'],
       package_dir={'appy':'src/appy'},
       package_data={'appy':[
-            'gen/odt/templates/basic.odt', 
+            #'gen/odt/templates/basic.odt', 
+            'shared/*.py', 
+            'shared/data/*.py', 
             'shared/data/*.txt', 
+            'pod/*.py', 
             'pod/*.xml', 
-            'pod/test/*.txt', 
-            'pod/test/*.rtf',
-            'pod/test/results/*.odt',
+            'pod/*.jpg', 
+            'pod/test/*.*', 
+            'pod/test/results/*.*',
             'pod/test/images/*.*',
-            'pod/test/templates/*.odt',
-            'gen/test/applications/*.*',
+            'pod/test/templates/*.*',
 	]},
      )
-
