@@ -30,8 +30,8 @@
         <allow permission=".View" roles="ClerkSenate ClerkAssembly Owner" />
     </facet>
     
-   <!-- workflow states -->
-
+    
+    <!-- workflow states -->
     <state id="draft" title="Draft">
         <facet ref=".draft" />
     </state>
@@ -42,9 +42,9 @@
     <state id="withdrawn" title="Withdrawn" note="Visible to bungeni users">
         <facet ref=".withdrawn" />
     </state>
-  
-   <!-- workflow transition -->
-
+    
+    
+    <!-- workflow transition -->
     <transition title="Create"
         source=""
         destination="draft"
@@ -68,11 +68,12 @@
         trigger="manual"
         roles="ClerkSenate ClerkAssembly Owner"
     />
-        <transition title="Withdraw"
+    <transition title="Withdraw"
         source="internal as_parent"
         destination="withdrawn"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly Owner"
     />
+    
 </workflow>
 

@@ -134,7 +134,6 @@
     
     <state id="received" title="Received by Clerk's Office" 
             actions="set_doc_registry_number"
-            
         >
         <facet ref=".internal_Clerk" />
         <facet ref="attachment.internal" />
@@ -190,8 +189,10 @@
         <facet ref="signatory.public_frozen" />
     </state>
     
-    <state id="adopted_amendments" title="Adopted with amendments" actions="version" permissions_from_state="adopted"
-        />
+    <state id="adopted_amendments" title="Adopted with amendments" 
+        permissions_from_state="adopted"
+        actions="version"
+    />
     
     <state id="elapsed" title="Elapsed" permissions_from_state="adopted"
         note="A defered motion that was not debated" />

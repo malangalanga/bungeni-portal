@@ -89,7 +89,6 @@
     
     <state id="working_draft" title="Working Draft"
             actions="assign_role_minister_question"
-           
         >
         <facet ref=".draft_Clerk" />
         <facet ref="attachment.draft_Clerk" />
@@ -130,7 +129,6 @@
     
     <state id="withdrawn_internal" title="Withdrawn" 
             actions="unschedule_doc"
-           
             note="A question can be withdrawn by the owner, visible as pre-withdrawn, cannot be edited by anyone."
         >
         <facet ref=".internal_Signatory" />
@@ -235,7 +233,6 @@
     
     <state id="withdrawn" title="Withdrawn" permissions_from_state="debated" 
         actions="unschedule_doc"
-        
         note="A question can be withdrawn by the owner, visible as pre-withdrawn, cannot be edited by anyone."
     />
     

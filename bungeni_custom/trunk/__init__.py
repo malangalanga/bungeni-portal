@@ -71,7 +71,7 @@ default_number_of_listing_items = 50
 long_text_column_listings_truncate_at = 57
 
 oauth_access_token_expiry_time = 3600
-
 oauth_authorization_token_expiry_time = 600
-
 oauth_hmac_key = "asdf asdf asdf asddddddddddddddddddd"
+
+
