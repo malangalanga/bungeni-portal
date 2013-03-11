@@ -176,14 +176,15 @@ def reposition_contentActions(content, theme, resource_fetcher, log):
     one top level description.
     """
     element_length = len(theme(".documentDescription"))
-    if element_length == 1:
-        ca = theme(".contentActions")
-        theme.remove(".contentActions")            
-        ca.insertAfter(theme(".documentDescription")) 
-    elif element_length == 2:
-        ca = theme(".contentActions")
-        theme.remove(".contentActions")            
-        ca.insertAfter(theme(".documentDescription:nth-child(2)"))             
+    if "site-plone" not in content("html").html():
+        if element_length == 1:
+            ca = theme(".contentActions")
+            theme.remove(".contentActions")            
+            ca.insertAfter(theme(".documentDescription")) 
+        elif element_length == 2:
+            ca = theme(".contentActions")
+            theme.remove(".contentActions")            
+            ca.insertAfter(theme(".documentDescription:nth-child(2)"))             
  
 
 def enable_text_editor(content, theme, resource_fetcher, log):
