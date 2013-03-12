@@ -21,10 +21,14 @@
         <parameter name="open_states" value="gazetted" />
     </feature>
     <feature name="schedule" enabled="true">
-        <parameter name="schedulable_states" value="first_reading_pending second_reading_pending 
-            whole_house_pending third_reading_pending" />
-        <parameter name="scheduled_states" value="first_reading 
-           second_reading whole_house third_reading" />
+        <parameter name="schedulable_states" value="gazetted first_reading_adjourned 
+            first_reading referred_committee_first_reading 
+            second_reading second_reading_adjourned 
+            whole_house whole_house_adjourned 
+            third_reading third_reading_adjourned" />
+        <parameter name="scheduled_states" value="first_reading_scheduled
+            second_reading_scheduled 
+            whole_house_scheduled third_reading_scheduled" />
     </feature>
     <feature name="workspace" enabled="true" />
     <feature name="notification" enabled="true" />
@@ -152,7 +156,7 @@
         <facet ref="group_assignment.internal" />
     </state>
     
-    <state id="first_reading_pending" title="First Reading pending" 
+    <state id="first_reading_scheduled" title="First Reading Scheduled" 
         permissions_from_state="gazetted" />
 
     <state id="first_reading" title="First Reading" 
@@ -160,26 +164,35 @@
 
     <state id="referred_committee_first_reading" title="Committed to Committees" 
         permissions_from_state="gazetted" />
-    
-<!--  <state id="first_reading_adjourned" title="First Reading Adjourned" 
-        permissions_from_state="gazetted" /> -->
 
-    <state id="second_reading_pending" title="Second Reading Pending" 
+    <state id="first_reading_adjourned" title="First Reading Adjourned" 
+        permissions_from_state="gazetted" />
+
+    <state id="second_reading_adjourned" title="Second Reading Adjourned" 
+        permissions_from_state="gazetted" />
+    
+    <state id="second_reading_scheduled" title="Second Reading Scheduled" 
         permissions_from_state="first_reading" />
     
     <state id="second_reading" title="Second Reading" actions="version"
         permissions_from_state="first_reading" />
     
-    <state id="whole_house_pending" title="Whole House Pending" 
+    <state id="whole_house_scheduled" title="Whole House Scheduled" 
+        permissions_from_state="first_reading" />
+
+    <state id="whole_house_adjourned" title="Whole House Adjourned" 
         permissions_from_state="first_reading" />
     
     <state id="whole_house" title="Whole House" 
         permissions_from_state="first_reading" />
     
-    <state id="third_reading_pending" title="Third Reading Pending"
+    <state id="third_reading_scheduled" title="Third Reading Scheduled"
         permissions_from_state="first_reading" />
     
     <state id="third_reading" title="Third Reading"
+        permissions_from_state="first_reading" />
+
+    <state id="third_reading_adjourned" title="Third Reading"
         permissions_from_state="first_reading" />
     
     <state id="approved" title="Approved Bill">
@@ -194,7 +207,7 @@
     <state id="withdrawn" title="Bill Withdrawn" permissions_from_state="approved" />
 
     <state id="pending_presidential_assent" title="Pending Presidential Assent" permissions_from_state="approved" />
-    <state id="assented" title="Pending Presidential Assent" permissions_from_state="approved" />
+    <state id="assented" title="Assented" permissions_from_state="approved" />
 
 
     
@@ -312,16 +325,16 @@
         roles="ClerkSenate ClerkAssembly"
     />
 
-    <transition title="First Reading pending"
-        source="gazetted "
-        destination="first_reading_pending"
+    <transition title="First Reading Scheduled"
+        source="gazetted first_reading_adjourned"
+        destination="first_reading_scheduled"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
     
-    <transition title="First Reading Scheduled"
-        source="first_reading_pending"
+    <transition title="First Reading"
+        source="first_reading_scheduled"
         destination="first_reading"
         condition="is_scheduled"
         trigger="system"
@@ -329,8 +342,8 @@
     />
     
     <transition title="Adjourn First Reading"
-        source="first_reading"
-        destination="first_reading_pending"
+        source="first_reading_scheduled"
+        destination="first_reading_adjourned"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
@@ -344,16 +357,16 @@
         roles="ClerkSenate ClerkAssembly"
     />
 
-    <transition title="Second Reading pending"
-        source="first_reading referred_committee_first_reading"
-        destination="second_reading_pending"
+    <transition title="Second Reading Scheduled"
+        source="first_reading referred_committee_first_reading second_reading_adjourned "
+        destination="second_reading_scheduled"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
     
-    <transition title="Second Reading Scheduled"
-        source="second_reading_pending"
+    <transition title="Second Reading"
+        source="second_reading_scheduled"
         destination="second_reading"
         condition="is_scheduled"
         trigger="system"
@@ -361,47 +374,47 @@
     />
 
     <transition title="Adjourn Second Reading"
-        source="second_reading"
-        destination="second_reading_pending"
-        condition=""
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
-    <transition title="Pending scheduling of Committee of the Whole House"
-        source="second_reading"
-        destination="whole_house_pending"
+        source="second_reading_scheduled"
+        destination="second_reading_adjourned"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Committee of the Whole House Scheduled"
-        source="whole_house_pending"
+        source="second_reading whole_house_adjourned"
+        destination="whole_house_scheduled"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly"
+    />
+    
+    <transition title="Committee of the Whole House"
+        source="whole_house_scheduled"
         destination="whole_house"
         condition="is_scheduled"
         trigger="system"
         roles="ClerkSenate ClerkAssembly"
     />
 
-    <transition title="Leave to sit again"
+    <transition title="Committee of the Whole House Adjouorned"
         source="whole_house"
-        destination="whole_house_pending"
-        condition=""
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
-    <transition title="Pending scheduling of Third Reading"
-        source="whole_house"
-        destination="third_reading_pending"
+        destination="whole_house_adjourned"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Third Reading Scheduled"
-        source="third_reading_pending"
+        source="whole_house third_reading_adjourned"
+        destination="third_reading_scheduled"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly"
+    />
+    
+    <transition title="Third Reading"
+        source="third_reading_scheduled"
         destination="third_reading"
         condition="is_scheduled"
         trigger="system"
@@ -410,14 +423,14 @@
 
     <transition title="Adjourn Third Reading"
         source="third_reading"
-        destination="third_reading_pending"
+        destination="third_reading_adjourned"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Reject"
-        source="second_reading third_reading"
+        source="first_reading second_reading third_reading whole_house"
         destination="rejected"
         condition=""
         trigger="manual"
@@ -441,14 +454,14 @@
         roles="Owner"
         require_confirmation="true" 
     />
-    
+   
     <transition title="Withdraw"
         source="
             gazetted
-            first_reading first_reading_pending
-            second_reading second_reading_pending
-            whole_house whole_house_pending
-            third_reading third_reading_pending
+            first_reading first_reading_scheduled first_reading_adjourned
+            second_reading second_reading_scheduled second_reading_adjourned
+            whole_house whole_house_scheduled
+            third_reading third_reading_scheduled
         "
         destination="withdrawn"
         grouping_unique_sources="withdrawn"
