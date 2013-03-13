@@ -443,12 +443,14 @@ class BungeniConfigs:
         self.user_rabbitmq_build_path = self.user_build_root + "/rabbitmq"
         # Jython installation folder
         self.jython_install_url = self.cfg.get_config("glue-script", "download_url")
-        self.polib_install_url = self.cfg.get_config("glue-script", "polib_url")
-        self.user_jython = self.user_install_root + "/jython"
+        self.jython_required_libs = filter(
+            None, 
+            self.cfg.get_config("glue-script", "required_libs").split("\n")
+            )
+        self.user_jython_home = self.user_install_root + "/jython"
+        self.user_jython = self.user_jython_home + "/bin/jython"
         self.jython_download_command = self.get_download_command(self.jython_install_url)
-        self.polib_download_command = self.get_download_command(self.polib_install_url)
         self.jython_download_file = self.utils.get_basename(self.jython_install_url)
-        self.user_jython_build_path = self.user_bungeni + "/jython"
         # Glue-script installation folder
         self.glue_repo = self.cfg.get_config("glue-script", "repo")
         self.user_glue = self.user_install_root + "/glue"
@@ -707,19 +709,22 @@ class Presetup:
             print "There was a problem while installing Docsplit"
     
     
-    def __setuptools(self, pybin, pyhome):
+    def install_setuptools(self, pybin, pyhome):
         if os.path.isfile(pybin):
             with cd(pyhome):
                 run("[ -f ./ez_setup.py ] && echo 'ez_setup.py exists' || wget http://peak.telecommunity.com/dist/ez_setup.py")
                 run(pybin + " ./ez_setup.py")
+                # install pip
+                # WARNING pip throws ssl related issues with some versions of Python
+                #run("./bin/easy_install pip==1.3.1")
 
     def setuptools(self):
         """
         Install setuptools for python
         """
-        self.__setuptools(self.cfg.python27,
+        self.install_setuptools(self.cfg.python27,
                           self.cfg.user_python27_home)
-        self.__setuptools(self.cfg.python26,
+        self.install_setuptools(self.cfg.python26,
                           self.cfg.user_python26_home)
 
     def supervisor(self):
@@ -768,7 +773,7 @@ class Presetup:
         """
         glue_map = {
                     "java":self.cfg.java_home,
-                    "user_jython":self.cfg.user_jython,
+                    "user_jython_home":self.cfg.user_jython_home,
                     "user_glue":self.cfg.user_glue,
                 }        
         
@@ -777,7 +782,7 @@ class Presetup:
         sup_pycfg = PythonConfigs(self.cfg,"supervisor")
         template_map = {
             "user_bungeni": self.cfg.user_bungeni,
-            "user_jython": self.cfg.user_jython,
+            "user_jython_home": self.cfg.user_jython_home,
             "user_plone" : self.cfg.user_plone,
             "user_portal" : self.cfg.user_portal,
             "user_postgres" : self.cfg.user_postgres,
@@ -2149,30 +2154,36 @@ class GlueScriptTasks:
         Downloads generic jython jar file from dist.bungeni.org and installs 
         in the given folder.
         """
-        run("mkdir -p %(user_jython)s" %
-                       {"user_jython":self.cfg.user_jython})
-        run("rm -rf %(user_jython)s/*" % 
-                       {"user_jython":self.cfg.user_jython})
+        run("mkdir -p %(user_jython_home)s" %
+                       {"user_jython_home":self.cfg.user_jython_home})
+        run("rm -rf %(user_jython_home)s/*" % 
+                       {"user_jython_home":self.cfg.user_jython_home})
         with cd(self.cfg.user_build_root):
             run(self.cfg.jython_download_command)
             # jython auto-install instructions require an empty install folder so we had to 
             # download the .jar into .bungenitmp and install in seperate user_jython path
-            run("mkdir -p %(user_jython)s" % {"user_jython":self.cfg.user_jython})
+            run("mkdir -p %(user_jython_home)s" % {"user_jython_home":self.cfg.user_jython_home})
             # RUN java -jar jython_installer-2.5.2.jar --help
             # to learn more about the options
-            run("%(java)s/bin/java -jar %(jython_download_file)s -s -d %(user_jython)s -t all -i src -j %(java)s" %
+            run("%(java)s/bin/java -jar %(jython_download_file)s -s -d %(user_jython_home)s -t all -i src -j %(java)s" %
                          {"java" : self.cfg.java_home,
-                          "user_jython":self.cfg.user_jython,
+                          "user_jython_home":self.cfg.user_jython_home,
                           "jython_download_file":self.cfg.jython_download_file})
 
-    def setup_jython_polib(self):
+    def setup_jython_libs(self):
         """
-        Installs polib in jython used in translating .po files into XML catalogues
+        Installs required libs :
+        polib in jython used in translating .po files into XML catalogues
+        babel to get locales info
         """
-        with cd(self.cfg.user_jython + "/bin"):
-            run(self.cfg.polib_download_command)
-            run(self.cfg.user_jython + "/bin/jython ez_setup.py")
-            run(self.cfg.user_jython + "/bin/easy_install polib")
+        pre = Presetup()
+        # install setuptools for Jython
+        pre.install_setuptools(self.cfg.user_jython, self.cfg.user_jython_home)
+        # install required libraries using pip
+        with cd(self.cfg.user_jython_home):
+            for lib in self.cfg.jython_required_libs:
+                run("./bin/easy_install %s" % lib)            
+            
 
     def setup_i18n_catalogues(self):
         """

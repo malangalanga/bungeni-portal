@@ -724,7 +724,7 @@ def glue_install():
     """
     tasks = bungeni.GlueScriptTasks()
     tasks.setup_jython()
-    tasks.setup_jython_polib()
+    tasks.setup_jython_libs()
     tasks.setup_glue()
     tasks.glue_setup_config()
 
