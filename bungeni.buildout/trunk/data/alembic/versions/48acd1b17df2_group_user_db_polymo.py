@@ -21,15 +21,6 @@ def upgrade():
         sa.Column("principal_id", sa.Integer, PrincipalSequence, primary_key=True),
         sa.Column("principal_type", sa.String(30), nullable=False),
     )
-    # adjustments to user table
-    op.create_foreign_key("user_user_id_fkey",
-        "user", "principal", ["user_id"], ["principal_id"])
-    # adjustments to group table
-    op.create_foreign_key("group_group_id_fkey",
-        "group", "principal", ["group_id"], ["principal_id"])
-    op.alter_column("group", "group_principal_id", nullable=False)
-    op.create_unique_constraint("group_group_principal_id_key", 
-        "group", ["group_principal_id"])
     # "populate" newly created principal table
     connection = op.get_bind()
     connection.execute(sa.sql.text("""
@@ -47,6 +38,15 @@ def upgrade():
         $$ LANGUAGE plpgsql;
         SELECT populate_principals();
     """))
+    # adjustments to user table
+    op.create_foreign_key("user_user_id_fkey",
+        "user", "principal", ["user_id"], ["principal_id"])
+    # adjustments to group table
+    op.create_foreign_key("group_group_id_fkey",
+        "group", "principal", ["group_id"], ["principal_id"])
+    op.alter_column("group", "group_principal_id", nullable=False)
+    op.create_unique_constraint("group_group_principal_id_key", 
+        "group", ["group_principal_id"])
 
 
 def downgrade():
