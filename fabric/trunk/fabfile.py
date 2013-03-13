@@ -666,6 +666,15 @@ def exist_load_demodata():
     tasks.ant_demo_setup_config()
     tasks.ant_demo_install()
 
+def exist_dump_data(to_path):
+    """
+    Dumps the eXits-db data
+    Example: ./fl exist_dump_data:/home/undesa/on_db_r10186.tar.gz
+    """
+
+    xmldbtasks = bungeni.XmldbTasks()
+    xmldbtasks.dump_data(to_path)
+
 def exist_load_i18n():
     """
     Loads i18n catalogues retrieved from Bungeni .po files

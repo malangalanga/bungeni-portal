@@ -1937,7 +1937,25 @@ class XmldbTasks:
             "exist_port":self.cfg.exist_port,
         }
         templates.new_file("xmldb.properties.tmpl", xmldb_map, self.cfg.user_config)
-                
+
+    def dump_data(self, output_path):
+        """
+        Dumps the eXist-db data (both XML and Attachments) as a tar.gz archive
+        """
+        exist_map = {
+                    "java":self.cfg.java_home,
+                    "user_exist":self.cfg.user_exist,
+                    "exist_port":self.cfg.exist_port,
+                    "exist_build_path":self.cfg.user_exist_build_path,
+                    "output" : output_path
+                    }
+        dump_prefix = "%(java)s/bin/java -jar -Dexist.home=%(user_exist)s/ %(user_exist)s/start.jar backup -b"
+        dump_suffix = "-d %(exist_build_path)s -ouri=xmldb:exist://localhost:%(exist_port)s/exist/xmlrpc"
+        with cd(self.cfg.user_exist_build_path):
+            run( (dump_prefix + " /db/bungeni-xml " + dump_suffix) % exist_map)
+            run( (dump_prefix + " /db/bungeni-atts " + dump_suffix) % exist_map)
+            run("tar czf %(output)s db" % exist_map)
+
     def ant_fw_setup_config(self):
         """
         Generate the ant script to install the XMLUI framework in eXist
