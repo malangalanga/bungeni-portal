@@ -70,8 +70,13 @@ default_number_of_listing_items = 50
 # when listing text columns, only display first so many characters
 long_text_column_listings_truncate_at = 57
 
+# duration in seconds before an access token expires
 oauth_access_token_expiry_time = 3600
+
+# duration in seconds before an authorisarion token expires
 oauth_authorization_token_expiry_time = 600
-oauth_hmac_key = "asdf asdf asdf asddddddddddddddddddd"
+
+# used to secure information during the OAuth flow
+oauth_hmac_key = "wNo1CvEW5eN4BbzisBdb7Af2Asx6XXoke0GZtIMN3h3HCdA3"
 
 
