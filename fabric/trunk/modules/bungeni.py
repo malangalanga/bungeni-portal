@@ -2211,7 +2211,7 @@ class GlueScriptTasks:
         run(( self.cfg.jython_config + " %(user_glue)s/src/glue.py -c %(user_config)s/glue.ini -p") %
              {
                 "java":self.cfg.java_home,
-                "user_jython":self.cfg.user_jython,
+                "user_jython_home":self.cfg.user_jython_home,
                 "user_glue":self.cfg.user_glue,
                 "user_config":self.cfg.user_config
              })
