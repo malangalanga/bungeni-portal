@@ -24,7 +24,7 @@ def upgrade():
     # "populate" newly created principal table
     connection = op.get_bind()
     connection.execute(sa.sql.text("""
-        CREATE FUNCTION populate_principals() RETURNS integer AS $$
+        CREATE OR REPLACE FUNCTION populate_principals() RETURNS integer AS $$
             DECLARE pid INTEGER;
             BEGIN
                 FOR pid IN select user_id FROM public.user ORDER BY user_id LOOP
