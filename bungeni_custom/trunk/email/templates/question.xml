@@ -2,9 +2,9 @@
 <template html="false"
   xmlns:tal="http://xml.zope.org/namespaces/tal">
 
-  <block onstate="received">
+  <block onstate="reviewed">
     <subject>
-      Question has been received by the ClerkSenate ClerkAssembly's Office : <span tal:replace="item/title"/>
+      Question has been reviewed by the ClerkSenate ClerkAssembly's Office : <span tal:replace="item/title"/>
     </subject>
     <body>
       The question

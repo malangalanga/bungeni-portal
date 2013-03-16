@@ -8,19 +8,8 @@
     <state id="redraft">
         <tab id="draft" roles="Owner"/>
     </state>
-    <state id="withdrawn_signatory">
-        <tab id="archive" roles="Owner Signatory"/>
-    </state>
     <state id="submitted">
         <tab id="inbox" roles="ClerkSenate ClerkAssembly.ClerkHead"/>
-        <tab id="pending" roles="Owner"/>
-    </state>
-    <state id="submitted_signatories">
-        <tab id="inbox" roles="Signatory"/>
-        <tab id="pending" roles="Owner ClerkSenate ClerkAssembly.ClerkHead"/>
-    </state>
-    <state id="received">
-        <tab id="inbox" roles="ClerkSenate ClerkAssembly.ClerkHead ClerkSenate ClerkAssembly.ClerkQuestion"/>
         <tab id="pending" roles="Owner"/>
     </state>
     <state id="reviewed">
@@ -31,14 +20,11 @@
         <tab id="inbox" roles="ClerkSenate ClerkAssembly.ClerkQuestion"/>
 	<tab id="pending" 
 	     roles="ClerkSenate ClerkAssembly.ClerkHead
-                    SpeakerSenate SpeakerAssembly
-		    Signatory
-		    Owner"/>
+                    SpeakerSenate SpeakerAssembly Owner"/>
     </state>
     <state id="inadmissible">
         <tab id="archive"
 	     roles="Owner 
-		    Signatory
 		    ClerkSenate ClerkAssembly.ClerkHead
                     ClerkSenate ClerkAssembly.ClerkQuestion
                     SpeakerSenate SpeakerAssembly"/>
@@ -47,18 +33,9 @@
         <tab id="inbox" roles="Owner"/>
 	      <tab id="pending" roles="ClerkSenate ClerkAssembly.ClerkHead  ClerkSenate ClerkAssembly.ClerkQuestion"/>
     </state>
-    <state id="incomplete">
-        <tab id="archive"
-	     roles="Owner
-		    Signatory
-		    ClerkSenate ClerkAssembly.ClerkHead
-                    ClerkSenate ClerkAssembly.ClerkQuestion
-                    SpeakerSenate SpeakerAssembly"/>
-    </state>
-    <state id="schedule_pending">
+    <state id="scheduled">
         <tab id="schedule" 
 	     roles="Owner
-		    Signatory
 		    SpeakerSenate SpeakerAssembly
 		    ClerkSenate ClerkAssembly.ClerkHead
                     ClerkSenate ClerkAssembly.ClerkQuestion"/>
@@ -66,7 +43,6 @@
     <state id="scheduled">
         <tab id="schedule" 
 	     roles="Owner
-		    Signatory
 		    SpeakerSenate SpeakerAssembly
 		    ClerkSenate ClerkAssembly.ClerkHead
                     ClerkSenate ClerkAssembly.ClerkQuestion"/>
@@ -85,8 +61,7 @@
 	     roles="Owner
 		    ClerkSenate ClerkAssembly.ClerkHead
                     ClerkSenate ClerkAssembly.ClerkQuestion
-		    SpeakerSenate SpeakerAssembly
-	            Signatory"/>
+		    SpeakerSenate SpeakerAssembly"/>
     </state>
    <state id="response_submitted">
         <tab id="inbox" roles="ClerkSenate ClerkAssembly.ClerkQuestion"/>
@@ -94,13 +69,11 @@
 	     roles="ClerkSenate ClerkAssembly.ClerkHead
                     MinistryMember
 		    Owner
-		    SpeakerSenate SpeakerAssembly
-	            Signatory"/>
+		    SpeakerSenate SpeakerAssembly"/>
     </state>
    <state id="response_reviewed">
         <tab id="archive"
 	     roles="Owner
-		    Signatory
 		    ClerkSenate ClerkAssembly.ClerkHead
                     ClerkSenate ClerkAssembly.ClerkQuestion
                     SpeakerSenate SpeakerAssembly
@@ -109,7 +82,6 @@
     <state id="deferred">
         <tab id="archive" 
 	     roles="Owner
-		    Signatory
 		    ClerkSenate ClerkAssembly.ClerkHead
                     ClerkSenate ClerkAssembly.ClerkQuestion
                     SpeakerSenate SpeakerAssembly"/>
@@ -117,7 +89,6 @@
     <state id="debated">
         <tab  id="archive"
 	      roles="Owner
-		     Signatory
 		     ClerkSenate ClerkAssembly.ClerkHead 
                      ClerkSenate ClerkAssembly.ClerkQuestion
                      SpeakerSenate SpeakerAssembly"/>
@@ -125,7 +96,6 @@
     <state id="elapsed">
         <tab id="archive" 
 	     roles="Owner
-		    Signatory
 		    ClerkSenate ClerkAssembly.ClerkHead
                     ClerkSenate ClerkAssembly.ClerkQuestion
                     SpeakerSenate SpeakerAssembly
@@ -134,7 +104,6 @@
     <state id="dropped">
         <tab id="archive" 
 	     roles="Owner
-		    Signatory
 		    ClerkSenate ClerkAssembly.ClerkHead
                     ClerkSenate ClerkAssembly.ClerkQuestion
                     SpeakerSenate SpeakerAssembly"/>
@@ -142,7 +111,6 @@
     <state id="withdrawn">
         <tab id="archive" 
 	     roles="Owner
-		    Signatory
 		    ClerkSenate ClerkAssembly.ClerkHead
                     ClerkSenate ClerkAssembly.ClerkQuestion 
                     SpeakerSenate SpeakerAssembly"/>
@@ -150,7 +118,6 @@
     <state id="withdrawn_internal">
         <tab id="archive"
 	     roles="Owner
-		    Signatory
 		    ClerkSenate ClerkAssembly.ClerkHead
                     ClerkSenate ClerkAssembly.ClerkQuestion
                     SpeakerSenate SpeakerAssembly"/>

@@ -17,11 +17,11 @@
     sub-item itself is in a permissions_from_parent="true" state. -->
     <feature name="attachment" enabled="true" />
     <feature name="event" enabled="true" />
-    <feature name="signatory" enabled="true">
+    <feature name="signatory" enabled="false">
         <parameter name="open_states" value="admissible" />
     </feature>
     <feature name="schedule" enabled="true">
-        <parameter name="schedulable_states" value="schedule_pending" />
+        <parameter name="schedulable_states" value="admissible adjourned" />
         <parameter name="scheduled_states" value="scheduled" />
     </feature>
     <feature name="workspace" enabled="true" />
@@ -45,28 +45,28 @@
         <allow permission=".Edit" roles="Owner" />
         <allow permission=".Delete" roles="Owner" />
     </facet>
-    <facet name="internal_Signatory">
-        <allow permission=".View" roles="Owner Signatory" />
+    <facet name="internal">
+        <allow permission=".View" roles="Owner" />
     </facet>
     <facet name="redraft_Owner">
         <allow permission=".View" roles="Owner" />
         <allow permission=".Edit" roles="Owner" />
     </facet>
     <facet name="view_Clerk">
-        <allow permission=".View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion SpeakerSenate SpeakerAssembly Owner Signatory" />
+        <allow permission=".View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion SpeakerSenate SpeakerAssembly Owner" />
     </facet>
     <facet name="edit_Clerk">
-        <allow permission=".View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion SpeakerSenate SpeakerAssembly Owner Signatory" />
+        <allow permission=".View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion SpeakerSenate SpeakerAssembly Owner" />
         <allow permission=".Edit" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion" />
         <allow permission="user_assignment.View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion" />
         <allow permission="user_assignment.Edit" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead" />
     </facet>
     <facet name="edit_Speaker">
-        <allow permission=".View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion SpeakerSenate SpeakerAssembly Owner Signatory" />
+        <allow permission=".View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion SpeakerSenate SpeakerAssembly Owner" />
         <allow permission=".Edit" roles="SpeakerSenate SpeakerAssembly" />
     </facet>
     <facet name="edit_Owner">
-        <allow permission=".View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion SpeakerSenate SpeakerAssembly Owner Signatory" />
+        <allow permission=".View" roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion SpeakerSenate SpeakerAssembly Owner" />
         <allow permission=".Edit" roles="Owner" />
     </facet>
     <facet name="public">
@@ -93,7 +93,6 @@
         <facet ref=".draft_Clerk" />
         <facet ref="attachment.draft_Clerk" />
         <facet ref="event.draft_Clerk" />
-        <facet ref="signatory.draft_Clerk" />
     </state>
     
     <state id="draft" title="Draft" 
@@ -103,95 +102,62 @@
         <facet ref=".draft_Owner" />
         <facet ref="attachment.draft_Owner" />
         <facet ref="event.draft_Owner" />
-        <facet ref="signatory.draft_Owner" />
     </state>
     
     <state id="submitted_signatories" title="Submitted to Signatories" actions="version">
-        <facet ref=".internal_Signatory" />
+        <facet ref=".internal" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
-        <facet ref="signatory.internal" />
     </state>
     
     <state id="redraft" title="Redraft" actions="version" note="document under review before resubmission">
         <facet ref=".redraft_Owner" />
         <facet ref="attachment.internal_Owner" />
         <facet ref="event.internal" />
-        <facet ref="signatory.internal_Owner" />
-    </state>
-    
-    <state id="withdrawn_signatory" title="Dropped">
-        <facet ref=".internal_Signatory" />
-        <facet ref="attachment.internal_frozen" /><!-- !+private_frozen? -->
-        <facet ref="event.internal_frozen" />
-        <facet ref="signatory.internal_frozen" />
     </state>
     
     <state id="withdrawn_internal" title="Withdrawn" 
             actions="unschedule_doc"
             note="A question can be withdrawn by the owner, visible as pre-withdrawn, cannot be edited by anyone."
         >
-        <facet ref=".internal_Signatory" />
+        <facet ref=".internal" />
         <facet ref="attachment.internal_frozen" />
         <facet ref="event.internal_frozen" />
-        <facet ref="signatory.internal_frozen" />
     </state>
     
     <state id="submitted" title="Submitted to Clerk" actions="version">
         <facet ref=".view_Clerk" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal_frozen" />
-        <facet ref="signatory.internal_frozen" />
     </state>
-    
-    <state id="received" title="Received by Clerk" 
-            actions="set_doc_registry_number"
-            
-        >
-        <facet ref=".edit_Clerk" />
-        <facet ref="attachment.internal" />
-        <facet ref="event.internal" />
-        <facet ref="signatory.internal_frozen" />
-    </state>
-    
+
     <state id="reviewed" title="Submitted to the Speaker" actions="version">
         <facet ref=".edit_Speaker" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
-        <facet ref="signatory.internal_frozen" />
     </state>
     
     <state id="admissible" title="Admissible"
             actions="version set_doc_type_number"
-           
         >
         <facet ref=".public" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />
-        <facet ref="signatory.public_frozen" />
     </state>
     
     <state id="inadmissible" title="Inadmissible">
         <facet ref=".view_Clerk" />
         <facet ref="attachment.internal_frozen" />
         <facet ref="event.internal_frozen" />
-        <facet ref="signatory.internal_frozen" />
     </state>
     
     <state id="clarification_required" title="Requires Clarification to Receive" actions="version">
         <facet ref=".edit_Owner" />
         <facet ref="attachment.internal_Owner" />
         <facet ref="event.internal" />
-        <facet ref="signatory.internal" />
     </state>
     
-    <state id="incomplete" title="Require Clarification to Approve" actions="version"
-        permissions_from_state="received"  />
-    
-    <state id="schedule_pending" title="Schedule pending" 
-        permissions_from_state="admissible" />
-    
-    <state id="scheduled" title="Scheduled" 
+    <state id="scheduled" title="Scheduled for Debate" 
         permissions_from_state="admissible" />
 
     <state id="adjourned" title="Debate adjourned" 
@@ -201,21 +167,18 @@
         <facet ref=".public_response_Ministry" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />
-        <facet ref="signatory.public_frozen" />
     </state>
     
     <state id="response_submitted" title="Response submitted">
         <facet ref=".public_response_internal" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />
-        <facet ref="signatory.public_frozen" />
     </state>
     
     <state id="response_reviewed" title="Response reviewed">
         <facet ref=".public_response_public" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />
-        <facet ref="signatory.public_frozen" />
     </state>
     
     <state id="deferred" title="Deferred" permissions_from_state="admissible" />
@@ -224,7 +187,6 @@
         <facet ref=".public" />
         <facet ref="attachment.public_frozen" />
         <facet ref="event.public_frozen" />
-        <facet ref="signatory.public_frozen" />
     </state>
     
     <state id="elapsed" title="Elapsed" permissions_from_state="debated" />
@@ -288,54 +250,27 @@
         roles="Owner"
     />
 
-    <transition title="Drop"
-        source="redraft submitted_signatories"
-        destination="withdrawn_signatory"
-        grouping_unique_sources="withdrawn"
-        condition="user_is_context_owner"
-        trigger="manual"
-        roles="Owner"
-    />
-    
-    <transition title="Receive"
-        source="submitted"
-        destination="received"
-        condition=""
-        trigger="manual"
-        roles="ClerkSenate.ClerkHead ClerkAssembly.ClerkHead"
-        order="2"
-    />
-    
-    <transition title="Require Clarification to Receive"
-        source="received incomplete"
-        destination="clarification_required"
-        condition=""
-        trigger="manual"
-        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
-        order="3"
-        require_confirmation="true"
-    />
-
-    <transition title="Redraft (Automatic)"
-        source="clarification_required"
-        destination="redraft"
-        condition="pi_has_signatories"
-        trigger="automatic"
-        note="incomplete document needs to be resubmitted to signatories"
-    />
-
     <transition title="Reviewed"
-        source="received"
+        source="submitted"
         destination="reviewed"
         condition=""
         trigger="manual"
         roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
         order="4"
         note="The Question has all the formal requirements; forwarded to the
-            Speaker's Office as well as to the Ministry for pre-viewing (but
-            will only be able to respond when question is approved)."
+            Speaker's Office for approval)."
     />
-    
+
+    <transition title="Request clarifications"
+        source="submitted"
+        destination="clarification_required"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
+        order="4"
+        note="The Question need to be clarieid by the Member"
+    />   
+
     <transition title="Admissible"
         source="reviewed"
         destination="admissible"
@@ -354,24 +289,15 @@
         order="7"
         require_confirmation="true"
     />
-    
-    <transition title="Require Recomplete to Approve"
+
+    <transition title="Request clarifications"
         source="reviewed"
-        destination="incomplete"
+        destination="clarification_required"
         condition=""
         trigger="manual"
         roles="SpeakerSenate SpeakerAssembly"
-        order="8"
+        order="7"
         require_confirmation="true"
-    />
-    
-    <transition title="Re-reviewed"
-        source="incomplete"
-        destination="reviewed"
-        condition=""
-        trigger="manual"
-        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
-        order="9"
     />
     
     <transition title="Resubmit"
@@ -383,24 +309,8 @@
         order="10"
     />
     
-    <transition title="Make available for scheduling"
-        source="admissible deferred adjourned"
-        destination="schedule_pending"
-        condition="is_oral_response"
-        trigger="manual"
-        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
-        order="11"
-    />
-    
-    <transition title="Reschedule"
-        source="scheduled"
-        destination="schedule_pending"
-        trigger="system"
-        roles="ClerkSenate.ClerkQuestion ClerkAssembly.ClerkQuestion"
-    />
-    
-    <transition title="Schedule"
-        source="schedule_pending"
+    <transition title="Scheduled for Debate"
+        source="admissible adjourned"
         destination="scheduled"
         condition="is_scheduled"
         trigger="system"
@@ -456,7 +366,7 @@
     />
     
     <transition title="Defer"
-        source="admissible schedule_pending adjourned"
+        source="admissible scheduled adjourned"
         destination="deferred"
         condition=""
         trigger="manual"
@@ -492,7 +402,7 @@
     />
     
     <transition title="Withdraw"
-        source="submitted received reviewed clarification_required"
+        source="submitted reviewed clarification_required"
         destination="withdrawn_internal"
         grouping_unique_sources="withdrawn"
         condition=""
@@ -505,7 +415,7 @@
     />
     
     <transition title="Withdraw"
-        source="admissible schedule_pending scheduled deferred adjourned"
+        source="admissible scheduled deferred adjourned"
         destination="withdrawn"
         grouping_unique_sources="withdrawn"
         condition=""
