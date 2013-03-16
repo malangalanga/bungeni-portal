@@ -17,7 +17,7 @@
         <tab id="pending" roles="ClerkSenate ClerkAssembly.ClerkHead ClerkSenate ClerkAssembly.ClerkQuestion Owner"/>
     </state>
     <state id="admissible">
-        <tab id="inbox" roles="ClerkSenate ClerkAssembly.ClerkQuestion"/>
+        <tab id="schedule" roles="ClerkSenate ClerkAssembly.ClerkQuestion"/>
 	<tab id="pending" 
 	     roles="ClerkSenate ClerkAssembly.ClerkHead
                     SpeakerSenate SpeakerAssembly Owner"/>
@@ -48,12 +48,10 @@
                     ClerkSenate ClerkAssembly.ClerkQuestion"/>
     </state>
     <state id="adjourned">
-        <tab id="schedule" 
+        <tab id="schedule" roles="ClerkSenate ClerkAssembly.ClerkQuestion"/>
+	<tab id="pending" 
 	     roles="ClerkSenate ClerkAssembly.ClerkHead
-                    ClerkSenate ClerkAssembly.ClerkQuestion
-		    SpeakerSenate SpeakerAssembly
-		    Owner 
-                    SpeakerSenate SpeakerAssembly"/>
+                    SpeakerSenate SpeakerAssembly Owner"/>
     </state>
    <state id="response_pending">
         <tab id="inbox" roles="MinistryMember"/>
