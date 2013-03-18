@@ -13,7 +13,7 @@
     <match path="regex:.*/(row.htm|cell.htm|pastetext.htm|source_editor.htm)$"
         abort="1" />
     <match path="regex:.*/(refbrowser_popup|@@updated_search)$"
-        abort="1" /> 
+        abort="1" />        
     <match path="regex:.*(.jpg|.png|.gif|.js|.css|.ico|.xml|.xsl)$" abort="1"/>
     <match path="regex:.*/(preview)$" abort="1" />                     
     <match environ="QUERY_STRING: wildcard:headless=*" abort="1" />      
@@ -40,41 +40,35 @@
     
     <rule class="drop-navigation">                    
         <drop content="#portal-personaltools" />
-    </rule>    
+    </rule>
     
     <rule class="load-plone-navigation">        
-        <!-- language selector --> 
+        <!-- language selector -->
+        <append content="//head"
+                theme="children:/html/head"
+                nocontent="ignore" />        
         <replace href="/"
             content="#portal-languageselector"
             theme="#portal-languageselector"/>   
         <drop content="ul#portal-personaltools li"
             if-content="not:.navigation"
         />                    
+        <replace href="/"
+            content="children:#portal-personaltools"
+            theme="children:#portal-personaltools"/> 
         <drop theme="children:#portal-personaltools li.navigation" />
         <drop content="children:#personaltools-login" />
         <drop content="children:#user-name" /> 
         <drop content="children:#personaltools-logout" />
 
-        <!-- navigation-->       
-        <append href="/exist" content="#portal-globalnav > li:not(:first-child)"
-            theme="children:ul.hse-list" />      
-        <replace href="/exist"
-            content="attributes(href):#portal-globalnav > li:first-child > a"
-            theme="attributes(href):.lower-hse > a:first-child" />     
-        <drop href="/exist"
-            content="#portal-globalnav > li:first-child" />          
+        <!-- navigation -->
         <prepend href="/"
             content="#portal-globalnav > li:first-child"
-            theme="children:#portal-globalnav > ul" />  -->   
-        <replace href="/plone" content="#portaltab-parliament"
-            theme="#aux" /> 
-        <replace href="/plone"
-            content="attributes(href):#portal-globalnav > li:first-child > a"
-            theme="attributes(href):#aux > a:first-child" />
-        <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
-            theme="children:ul.parl-list" />   
-        <prepend content="ul#portal-personaltools li"
-            theme="children:#subnav ul" />   
+            theme="children:#portal-globalnav > ul" /> 
+        <append href="/exist" content="#portal-globalnav > li:not(:first-child)"
+            theme="children:#portal-globalnav > ul" />        
+        <append content="#portal-globalnav > li:not(:first-child)"
+            theme="children:#portal-globalnav > ul" />         
         <drop href="/plone"
             content="#portal-globalnav > li:first-child"/>           
         <drop theme="#processing_indicatron" />           
@@ -84,24 +78,20 @@
         
         <!-- navigation -->        
         <append content="#portal-globalnav > li:not(:first-child)"
-            theme="children:ul.hse-list" />      
-        <replace href="/exist"
-            content="attributes(href):#portal-globalnav > li:nth-child(2) > a"
-            theme="attributes(href):.lower-hse > a:first-child" />     
+            theme="children:#portal-globalnav > ul" />      
         <drop href="/exist"
-            content="#portal-globalnav > li:first-child" />          
+            content="#portal-globalnav > li:first-child"/>     
         <prepend href="/"
             content="#portal-globalnav > li:first-child"
-            theme="children:#portal-globalnav > ul" /> 
-
-        <replace href="/plone"
-            content="attributes(href):#portal-globalnav > li:nth-child(2) > a"
-            theme="attributes(href):#aux > a:first-child" />
-        <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
-            theme="children:ul.parl-list" />
-       
+            theme="children:#portal-globalnav > ul" />            
         <prepend content="ul#portal-personaltools li"
-            theme="children:#subnav ul" />     
+            theme="children:#portal-globalnav ul.level1" />      
+     
+        <!-- login link -->
+        <append href="/"
+                content="ul#portal-personaltools li:not(.navigation)"
+                theme="children:#portal-personaltools"
+        />        
         
         <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
             theme="children:#portal-globalnav > ul" />
@@ -150,8 +140,8 @@
     
     <rule class="frontpage">
         <append href="/plone"
-                theme="children:/html/head"
                 content="//head"
+                theme="children:/html/head"
                 nocontent="ignore" />                
         <replace content="#portal-logo" theme="#portal-logo" />
         <replace content="#portal-siteactions" theme="#portal-siteactions" />
@@ -159,28 +149,27 @@
             content="#portal-breadcrumbs" />
         <drop content="#portal-search" />                      
         
-        <!-- navigation -->        
-        <append href="/exist" content="#portal-globalnav > li:not(:first-child)"
-            theme="children:ul.hse-list" />      
-        <replace href="/exist"
-            content="attributes(href):#portal-globalnav > li:nth-child(2) > a"
-            theme="attributes(href):.lower-hse > a:first-child" />     
+        <!-- menu -->
+        <drop href="/plone"
+            content="#portal-globalnav > li:first-child"/>
         <drop href="/exist"
-            content="#portal-globalnav > li:first-child" />          
-        <prepend href="/"
+            content="#portal-globalnav > li:first-child"/>         
+        <append href="/bungeni"
             content="#portal-globalnav > li:first-child"
-            theme="children:#portal-globalnav > ul" />   
-        <replace href="/plone"
-            content="attributes(href):#portal-globalnav > li:nth-child(2) > a"
-            theme="attributes(href):#aux > a:first-child" />
+            theme="children:#portal-globalnav > ul" />
+        <append href="/exist" content="#portal-globalnav > li:not(:first-child)"
+            theme="children:#portal-globalnav > ul" />          
+        <append content="#portal-globalnav > li"
+            theme="children:#portal-globalnav > ul" />
         <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
-            theme="children:ul.parl-list" />       
-        <!--<prepend href="/exist" content="ul#portal-personaltools li"
-            theme="children:#subnav ul" /> -->
-
-
+            theme="children:#portal-globalnav > ul" />            
+        <prepend href="/bungeni"
+            content=".contentActions"
+            theme="children:.main-content"
+        />
+        <drop content="#portal-column-content" />
         
-<!--        <replace content="#portal-personaltools" theme="#portal-personaltools" />-->
+        <replace content="#portal-personaltools" theme="#portal-personaltools" />
         <append href="/bungeni"
             content="ul#portal-personaltools li.navigation"
             theme="children:#portal-globalnav ul.level1"
@@ -205,11 +194,9 @@
     
     
     <rule class="primary">
-        <prepend theme="/html/head" content="//head/meta" nocontent="ignore" />
-        <append href="/plone"
-                theme="children:/html/head"
-                content="//head"
-                nocontent="ignore" />    
+        <prepend content="//head/meta"
+            theme="/html/head"
+            nocontent="ignore" />
         <!-- menu -->
         <prepend content="#portal-globalnav > li"
             theme="children:#portal-globalnav > ul"
@@ -220,6 +207,9 @@
             if-content=".navigation"
         />
         
+        <append content="children:#portal-personaltools"
+            theme="children:#portal-personaltools"
+        />
         <pyquery pyref="portal.theme.static.themes.rules:image_links" />
         
         <!-- language selector -->
@@ -253,6 +243,13 @@
         <replace content=".portalMessage"
             theme="children:.workspace_add_parliamentary_content"
         />     
+        
+        <!-- column-one -->
+        <append content="children:#portal-column-one"
+            theme="children:#portal-column-one"
+        />
+                
+        
         
         <!-- content -->
         <append content="children:#portal-column-content"

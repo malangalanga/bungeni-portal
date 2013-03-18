@@ -78,7 +78,7 @@
 	clear:both;
 }
 #portal-searchbox {
-    margin: -0.5em 0 3em 0 !important;
+    margin-top: 3em !important
 }
 #portal-searchbox input.searchButton {
     height: 17px;
@@ -145,10 +145,43 @@ div.main-column h3 {
 #portal-column-two .visualPadding {
     padding: 0;
 }
-#portal-column-one .portletHeader {
-    display: none;
+
+#portal-column-one .portletHeader{
+    line-height: 60px;
+    position: relative;
+    margin: 0;
+    margin-right:0px !important;
+    padding: 0 .25em;
+    width: auto;
 }
-#portal-column-one .portletHeader,
+
+.template-portal.site-plone.section-national-assembly #portal-column-one .portletHeader {
+    line-height: 40px;
+    height: 40px;
+    background: url("../images/portlet_header_assembly.png") no-repeat scroll left top #ffffff !important;
+    border-right: transparent;
+}
+
+.template-portal.site-plone.section-senate #portal-column-one .portletHeader {
+    line-height: 40px;
+    height: 40px;
+    background: url("../images/portlet_header_senate.png") no-repeat scroll left top #ffffff !important;
+    border-right: transparent;
+}
+
+.template-portal.site-plone.section-national-assembly #portal-column-one .portletHeader a,
+.template-portal.site-plone.section-senate #portal-column-one .portletHeader a {
+    color: #FFFFFF !important;
+    text-transform: uppercase !important;
+    margin-top: -0.55em; 
+    margin-left: 1em;
+}
+
+.template-portal.site-plone.section-national-assembly #portal-column-one .portletHeader a:hover,
+.template-portal.site-plone.section-senate #portal-column-one .portletHeader a:hover {
+    background-color: transparent !important;
+}
+
 #portal-column-content .portletHeader,
 #portal-column-two .portletHeader,
 #portal-column-two .portlet dt,
@@ -169,6 +202,64 @@ div.main-column h3 {
     margin: 0;
     padding: 0;
 }
+
+.template-portal.site-plone.section-national-assembly .callout-right {
+    background: url("../images/read_more_assembly.png") no-repeat scroll right top #ffffff !important;
+}
+
+.template-portal.site-plone.section-national-assembly .callout {
+    background: url("../images/read_more_assembly.png") no-repeat scroll top #ffffff !important;
+}
+
+.template-portal.site-plone.section-senate .callout-right {
+    background: url("../images/read_more_senate.png") no-repeat scroll right top #ffffff !important;
+}
+
+.template-portal.site-plone.section-senate .callout {
+    background: url("../images/read_more_senate.png") no-repeat scroll top #ffffff !important;
+}
+
+.template-portal.site-plone.section-national-assembly .callout a,
+.template-portal.site-plone.section-senate .callout a,
+.template-portal.site-plone.section-national-assembly .callout-right a,
+.template-portal.site-plone.section-senate .callout-right a,
+.template-portal.site-plone.section-national-assembly .callout a.internal-link,
+.template-portal.site-plone.section-senate .callout a.internal-link,
+.template-portal.site-plone.section-national-assembly .callout-right a.internal-link,
+.template-portal.site-plone.section-senate .callout-right a.internal-link {
+    color: #ffffff;
+    text-decoration:none;
+}
+
+.template-portal.site-plone.section-national-assembly .callout-right a,
+.template-portal.site-plone.section-senate .callout-right a,
+.template-portal.site-plone.section-national-assembly .callout-right a.internal-link,
+.template-portal.site-plone.section-senate .callout-right a.internal-link {
+    margin-right: 1.5em;
+   }
+
+.template-portal.site-plone.section-national-assembly .callout a:hover,
+.template-portal.site-plone.section-senate .callout a:hover,
+.template-portal.site-plone.section-national-assembly .callout-right a:hover,
+.template-portal.site-plone.section-senate .callout-right a:hover,
+.template-portal.site-plone.section-national-assembly .callout a:visited,
+.template-portal.site-plone.section-senate .callout a:visited,
+.template-portal.site-plone.section-national-assembly .callout-right a:visited,
+.template-portal.site-plone.section-senate .callout-right a:visited {
+    color: #ffffff !important;
+    text-decoration:none !important;
+    background: transparent !important;
+}
+
+.template-portal.site-plone.portaltype-document.section-national-assembly.template-document_view .listingBar {
+    display:none;
+}
+
+.template-portal.site-plone .field {
+    clear: none !important;
+}
+
+
 /* Misc-portlets
 -------------------------------------------------------------- */
 .portlet, .portletHeader, .portletFooter { margin: 0; }
@@ -200,6 +291,9 @@ div.main-column h3 {
     padding: 0;
     margin: 0;
 }
+.site-plone #portal-column-content {
+    margin-left: 18em !important;
+}
 /* Content
 -------------------------------------------------------------- */
 div#region-content div#content > div:first-child {
@@ -210,6 +304,12 @@ div#region-content div#content > div:first-child {
 }
 /* document-content
 -------------------------------------------------------------- */
+
+#content div.pane-container div.pane {
+    clear: none !important;
+    margin-top: 2em !important;
+}
+
 .documentContent {
     padding: .25em !important;
 }
@@ -352,6 +452,10 @@ div#region-content div#content > div:first-child {
 }
 /* portal-column-one portlets */
 
+.portlet.portletNavigationTree {
+    margin-top: -1em !important;
+}
+
 /* hides the portlet header. */
 #portal-column-one .portlet .portletItem.even,
 #portal-column-one .portlet .portletItem {
@@ -362,6 +466,7 @@ div#region-content div#content > div:first-child {
     margin: 1px 0;
     float: left;
 }
+
 #portal-column-one .portlet .portletItem a.navTreeCurrentItem {
     line-height: 20px;
 }
@@ -377,7 +482,18 @@ div#region-content div#content > div:first-child {
 #portal-column-one .portlet .portletItem ul li a {
     display: block;
     line-height: 20px;
-    padding: 0 .5em 0 0;
+    padding: 1em 0 1em 0;
+    text-align: left;
+}
+
+.template-portal.site-plone.section-national-assembly #portal-column-one .portlet .portletItem ul li a{
+    border-bottom: 1.5px solid #00a260 !important;
+    color: black !important;
+}
+
+.template-portal.site-plone.section-senate #portal-column-one .portlet .portletItem ul li a{
+    border-bottom: 1.5px solid #005ba3 !important;
+    color: black !important;
 }
 #portal-column-one .portlet .portletItem ul li ul {
     padding-left: 1em;
@@ -884,111 +1000,7 @@ h4.tabberHeading {
     float: none;
     margin: 0;
 }
-/* cynin customizations
--------------------------------------------------------------- */
-.addnewbuttonholder {
-    margin-left: 1em;
-}
-#col1_content {
-    width:225px;
-}
 
-#col1_content #sidenavigationlogoholder {
-    height: 35px;
-    min-height: 35px;
-    width: 220px;
-    margin:0 .5em .5em;
-}
-.portletWrapper, #comcynapsecyninmyareablock {
-    margin-bottom: 0;
-}
-#col1_content .verticalnavigationholder {
-    margin: 0;
-    width: 220px;
-    padding-top: 0;
-}
-#col1_content #portal-languageselector select {
-    padding: .1em;
-}
-#main {
-    margin-top: 0;
-}
-#col3 {
-    margin-left: 230px !important;
-}
-#col3_content {
-    width: 100% !important;
-}
-.template-login_form #portal-columns {
-    margin-bottom: -15em;
-}
-/* front-page
--------------------------------------------------------------- */
- .section-bungeni-\@\@index #portal-column-one {
-    display: none;
-}
-div.main-column #collage h2 {
-    display: block;
-    line-height: 20px;
-    padding: 0;
-    margin: 0em 0 .5em;
-}
-
-#collage .three-columns-equal .block_1 ul li.2ndlevel{
-    margin-left: 12em;
-}
-
-#collage .three-columns-equal .block_1{
-    width:15% !important;
-    margin-left: 0em;
-    margin-right: 0.5em;  
-}
-#collage .three-columns-equal .block_2 {
-    width:50% !important;
-    margin-right: 2em;
-}
-#collage .three-columns-equal .block_3 {
-    width:30% !important;
-}
-#collage .three-columns-equal .block_1 ul li {
-    margin-bottom: 1px;
-}
-#collage .three-columns-equal .block_1 ul li.navigation,
-#collage .three-columns-equal .block_1 ul li.plain{
-    margin-left: 1em;
-}
-#collage .tileImage {
-    float:right;
-    margin:2em 0 0.5em 0.5em;
-}
-#collage > h1:first-child {
-    display: none;
-}
-#collage .documentActions {
-    display: none;
-}
-.section-bungeni-\@\@index #content div{
-    margin:0;
-}
-.section-bungeni-\@\@index #portal-columns {
-    margin-top: -2.5em;
-}
-#document-toc .portletItem {
-    margin:0;
-    padding:1em;
-}
-.hide{
-    display: none;
-}
-#tabber-block .tabberlive .tabbertab {
-    padding:0 0 0 1em;
-}
-#portal-languageselector li.selected a {
-    padding-left:4px;
-}
-#secondary {
-	display:none !important;
-}
 
 /* search results
 -------------------------------------------------------------- */
@@ -1097,8 +1109,7 @@ div.main-column #collage h2 {
     float:right;
 }
 .template-portal #top-layer {
-    margin-left:auto;
-    margin-right:auto;    
+    display: none;
 }
 .template-portal #top-layer #demoWarning {
     height: 12px;
