@@ -1,0 +1,208 @@
+.yui-skin-sam tr.schedule-text-item{
+    background-color: #EBE9D2;
+    text-transform:italic;
+}
+.yui-overlay.yui-panel .yui-dt-bd {
+    overflow:hidden;
+}
+
+#headings-available table {
+    width:100% !important;
+}
+
+.schedule-available-item-filters{
+    margin:0.2em 0em;
+    padding:0.2em;
+}
+
+.yui-skin-sam .yui-dt-first {
+    vertical-align:top;
+}
+
+.yui-skin-sam .row-heading {
+    background-color:#eeeeee !important;
+}
+
+.list-minutes.yui-dt-liner {
+    width:96% !important;
+}
+
+.schedule-available-item-filters button em {
+    font-style: normal;
+    display: block;
+    text-align: left;
+    white-space: nowrap;
+    width: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+   -o-text-overflow: ellipsis;
+}
+
+label.scheduler-label{
+    display: block;
+    font-size: 13px;
+    height: 15px;
+    margin:0px 0px 2px 0px;
+}
+
+input.scheduler-bigtext{
+    border-radius:1px;
+    border: 1px solid #4D90FE;
+    color: #333;
+    display: inline-block;
+    font-size: 15px;
+    height: 32px;
+    line-height: 27px;
+    margin:2px 0 30px 0;
+    padding:3px 3px 3px 8px;
+    width: 98.8%;
+    visibility:inherit;
+}
+span.minutes-header{
+    display:block;
+    background-color:#cfcfcf;
+    border-top:1px solid #666;
+    color:#000000;
+    font-size:10px;
+}
+.minute-record{
+    display:block;
+    font-size:10px;
+    background-color:#e8e8e8;
+    color:#39361E;
+    white-space:nowrap;
+    position:relative;
+    border-bottom:1px solid #ffe;
+    padding-bottom:0.5em;
+}
+p span.minute-record{
+    padding-left:40px;
+}
+span.minute-record-error{
+    display:block;
+    font-size:10px;
+    background-color:#e4702d;
+    color:#ffffff;
+}
+span.minute-control{
+    position:absolute;
+    top:0;
+    left:0;
+    padding:1px;
+    background-color:#fff;
+    border:1px solid #CCC dotted;
+    color:#545450;
+    width:16px;
+    height:16px;
+}
+span.edit-minute-control{
+    background:url("/@@/portal/images/page_white_edit.png") right center no-repeat;
+}
+span.delete-minute-control{
+    left:18px;
+    background:url("/@@/portal/images/cross.png") right center no-repeat;
+}
+span.dt_title_unit{
+    padding:0.2em 0.4em;
+    margin-left: 0.3em;
+    border-left: 3px solid #ddd;
+}
+
+#minute-editor_c,
+#text-records-dialog_c {
+  left:auto !important;
+  margin:25% !important;
+}
+
+#agenda-preview-dialog_c {
+    margin:0 auto !important;
+    left:20%;
+    top:25%;
+}
+
+.yui-skin-sam .yui-dt-data .wf-action-dropdown {
+    clear:both;
+    position:relative;
+    margin-top:0px;
+    margin-left:0px;
+}
+.yui-skin-sam .yui-dt-data .wf-action-dropdown .first-child button {
+    padding-right:20px !important;
+}
+
+.yui-skin-sam #scheduler-layout .yui-layout-wrap .yui-button {
+    margin-top: .20em;
+}
+
+#yui-gen0 .yui-button,
+#yui-gen0 .yui-radio-button {
+    float:left;
+    display:inline;
+    background: transparent !important;
+}
+
+#yui-gen0 .yui-button, 
+#yui-gen0 .yui-button span {
+    border-style:none;
+    border:none;
+}
+
+/* edit */
+#yui-gen0 .yui-button.schedule_noteedit button {
+    background-image: url(/@@/portal/images/page_white_edit.png);
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left:0px;
+    padding-right: 12px;
+    border: none;
+}
+
+/* minutes add */
+#yui-gen0 span.minute-add {
+    position:absolute;
+    top:0;
+    left:0;
+    padding:1px;
+    background-color:#fff;
+    border:1px solid #CCC dotted;
+    color:#545450;
+    width:14px;
+    height:14px;
+    background:url("/@@/portal/images/plus_16.png") right center no-repeat;
+}
+/* edit/add */
+#yui-gen0 .yui-button.schedule_edit button {
+    background-image: url(/@@/portal/images/plus_16.png);
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left:0px;
+    padding-right: 12px;
+    border: none;
+}
+/* up */
+#yui-gen0 .yui-radio-button.schedule_up button {
+    background-image: url(/@@/portal/images/move_up.png);
+    background-repeat: no-repeat;
+    background-position: left;
+    margin-top:4px;
+    padding: 0 10px 0 0 !important;
+    height:10px;
+    border: none;
+}
+/* up */
+#yui-gen0 .yui-radio-button.schedule_down button {
+    background-image: url(/@@/portal/images/move_down.png);
+    background-repeat: no-repeat;
+    background-position: left;
+    padding: 6px 10px 0 5px !important;
+    border: none;
+}
+/* delete */
+#yui-gen0 .yui-button.schedule_delete button {
+    background-image: url(/@@/portal/images/unchecked.png);
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left:0px;
+    padding-right: 12px;
+    background-color:inherit !important;
+}

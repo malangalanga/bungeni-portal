@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Bungeni Parliamentary Information System - http://www.bungeni.org/
+  Copyright (C) 2010 - Africa i-Parliaments - http://www.parliaments.info/
+  Licensed under GNU GPL v2 - http://www.gnu.org/licenses/gpl-2.0.txt
+  
+  RNC Schema for Bungeni Descriptor XML Format
+  Created: Mario Ruggier, 28-nov-2012
+  
+  Note: Always modify the RNC file - the RNG version is auto-derived from it:
+  one way to auto-derive descriptor.rng from this file is:
+    java -jar trang.jar -I rnc -O rng descriptor.rnc generated/descriptor.rng
+  
+  $Id$
+-->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <include href="common.rng"/>
+  <start>
+    <choice>
+      <ref name="UI"/>
+      <!-- custom descriptor, in own file -->
+      <element name="descriptor">
+        <attribute name="name">
+          <ref name="SYMBOL_NAME"/>
+        </attribute>
+        <optional>
+          <!-- type_key -->
+          <attribute name="order">
+            <data type="integer"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="note"/>
+        </optional>
+        <!-- Attrs only in custom descriptors: -->
+        <attribute name="archetype">
+          <ref name="SYMBOL_NAME"/>
+        </attribute>
+        <optional>
+          <!-- an archetype key, custom types MUST specify this -->
+          <!--
+            Note: if label/container_label present, the mechanism to 
+            auto-derive the display_name/container_name from name->type_key 
+            will be "hidden" by the specified fixed value.
+          -->
+          <attribute name="label"/>
+        </optional>
+        <optional>
+          <!-- i18n msgid, descriptor.display_name -->
+          <attribute name="container_label"/>
+        </optional>
+        <optional>
+          <!-- i18n msgid, descriptor.container_name -->
+          <!-- default sorting settings -->
+          <attribute name="sort_on">
+            <ref name="SPACE_SEPARATED_TOKENS"/>
+          </attribute>
+        </optional>
+        <optional>
+          <!-- field names -->
+          <attribute name="sort_dir">
+            <choice>
+              <value>asc</value>
+              <value>desc</value>
+            </choice>
+          </attribute>
+        </optional>
+        <zeroOrMore>
+          <ref name="FIELD"/>
+        </zeroOrMore>
+        <zeroOrMore>
+          <ref name="CONTAINER"/>
+        </zeroOrMore>
+        <optional>
+          <!-- only in custom descriptor -->
+          <ref name="INTEGRITY"/>
+        </optional>
+      </element>
+    </choice>
+  </start>
+  <define name="UI">
+    <element name="ui">
+      <attribute name="roles">
+        <ref name="SPACE_SEPARATED_TOKENS"/>
+      </attribute>
+      <oneOrMore>
+        <!-- (un/qualified) roles -->
+        <ref name="DESCRIPTOR"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="DESCRIPTOR">
+    <element name="descriptor">
+      <attribute name="name">
+        <ref name="SYMBOL_NAME"/>
+      </attribute>
+      <optional>
+        <!-- type_key -->
+        <attribute name="order">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="note"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="FIELD"/>
+      </zeroOrMore>
+      <optional>
+        <ref name="INTEGRITY"/>
+      </optional>
+    </element>
+  </define>
+  <define name="FIELD">
+    <element name="field">
+      <attribute name="name">
+        <ref name="SYMBOL_NAME"/>
+      </attribute>
+      <optional>
+        <attribute name="label"/>
+      </optional>
+      <optional>
+        <!-- i18n msgid !+ should really be required in *UI* fields -->
+        <attribute name="description"/>
+      </optional>
+      <optional>
+        <!-- i18n msgid -->
+        <attribute name="required">
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <!-- default:false -->
+        <attribute name="value_type">
+          <ref name="FIELD_VALUE_TYPE"/>
+        </attribute>
+      </optional>
+      <optional>
+        <!-- vocabulary is required for some render_types -->
+        <choice>
+          <group>
+            <optional>
+              <attribute name="render_type">
+                <ref name="FIELD_RENDER_TYPE"/>
+              </attribute>
+            </optional>
+            <optional>
+              <attribute name="vocabulary">
+                <ref name="SYMBOL_NAME"/>
+              </attribute>
+            </optional>
+          </group>
+          <group>
+            <optional>
+              <attribute name="render_type">
+                <ref name="FIELD_RENDER_TYPE_VOCABULARY"/>
+              </attribute>
+            </optional>
+            <attribute name="vocabulary">
+              <ref name="SYMBOL_NAME"/>
+            </attribute>
+          </group>
+        </choice>
+      </optional>
+      <optional>
+        <attribute name="note"/>
+      </optional>
+      <!-- extended | derived -->
+      <choice>
+        <optional>
+          <!--
+            A field may NOT be declared extended if it is defined in super 
+            (archetype) descriptor. Value is one of allowed extended types.
+          -->
+          <attribute name="extended">
+            <ref name="EXTENDED_PROPERTY_TYPE"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="derived">
+            <ref name="SYMBOL_NAME"/>
+          </attribute>
+        </optional>
+      </choice>
+      <!-- each mode token may appear only ONCE in sum of all show/hide elements -->
+      <interleave>
+        <zeroOrMore>
+          <element name="show">
+            <attribute name="modes">
+              <list>
+                <oneOrMore>
+                  <ref name="FORM_MODE"/>
+                </oneOrMore>
+              </list>
+            </attribute>
+            <optional>
+              <!-- (un/qualified) roles, not present implies ALL ui.@roles -->
+              <attribute name="roles">
+                <ref name="SPACE_SEPARATED_TOKENS"/>
+              </attribute>
+            </optional>
+            <optional>
+              <attribute name="note"/>
+            </optional>
+          </element>
+        </zeroOrMore>
+        <zeroOrMore>
+          <element name="hide">
+            <attribute name="modes">
+              <list>
+                <oneOrMore>
+                  <ref name="FORM_MODE"/>
+                </oneOrMore>
+              </list>
+            </attribute>
+            <optional>
+              <!-- (un/qualified) roles, not present implies ALL ui.@roles -->
+              <attribute name="roles">
+                <ref name="SPACE_SEPARATED_TOKENS"/>
+              </attribute>
+            </optional>
+            <optional>
+              <attribute name="note"/>
+            </optional>
+          </element>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </define>
+  <!--
+    UI-traversible container attributes - - is only loaded and instrumented if 
+    the {target_type_key} i.e. the part of the required value of @match that 
+    precedes the ".", is enabled.
+  -->
+  <define name="CONTAINER">
+    <element name="container">
+      <!--
+        value of @match is {target_type_key}.{rel_attr_name} and will match
+        all instances of the given type related to this instance via
+        {rel_attr_name} (that is usually a direct or indirect fk field).
+      -->
+      <attribute name="match">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <optional>
+        <!-- @name defaults to naming.plural(target_type_key) -->
+        <attribute name="name">
+          <ref name="SYMBOL_NAME"/>
+        </attribute>
+      </optional>
+      <optional>
+        <!--
+          value of @indirect_key must be the name of a field defined by this type
+          when @indirect_key is not set, the foreign key defined in underlying 
+          data model determines the relation.
+        -->
+        <attribute name="indirect_key">
+          <ref name="SYMBOL_NAME"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="note"/>
+      </optional>
+    </element>
+  </define>
+  <define name="INTEGRITY">
+    <element name="integrity">
+      <optional>
+        <attribute name="constraints">
+          <ref name="SPACE_SEPARATED_TOKENS"/>
+        </attribute>
+      </optional>
+      <optional>
+        <!-- forms._constraints -->
+        <attribute name="validations">
+          <ref name="SPACE_SEPARATED_TOKENS"/>
+        </attribute>
+      </optional>
+      <optional>
+        <!-- forms._validations -->
+        <attribute name="note"/>
+      </optional>
+    </element>
+  </define>
+  <!-- enums -->
+  <define name="FORM_MODE">
+    <choice>
+      <value>view</value>
+      <value>edit</value>
+      <value>add</value>
+      <value>listing</value>
+    </choice>
+  </define>
+  <define name="FIELD_VALUE_TYPE">
+    <choice>
+      <value>text</value>
+      <value>date</value>
+      <value>datetime</value>
+      <value>duration</value>
+      <!-- !+ this "consumes" 2 columns, so probably have dedicated widget type? entirely -->
+      <value>bool</value>
+      <!-- default: True -->
+      <value>number</value>
+      <value>status</value>
+      <value>language</value>
+      <value>vocabulary</value>
+      <!-- !+ should a real value_type e.g. text or number? -->
+      <value>email</value>
+      <!-- "constraint": constraints.check_email -->
+      <value>login</value>
+      <!-- "min_length": 3, "max_length": 20, "constraint": constraints.check_login -->
+      <value>password</value>
+      <value>image</value>
+      <value>file</value>
+      <value>user</value>
+      <value>member</value>
+      <!-- !+ should be "archetype generic" e.g. should not assume "member of parliament" -->
+      <value>signatory</value>
+      <!-- !+ -->
+      <value>combined_name</value>
+      <!-- !+ -->
+      <value>group</value>
+    </choice>
+  </define>
+  <define name="FIELD_RENDER_TYPE">
+    <choice>
+      <value>text_line</value>
+      <value>text_raw</value>
+      <value>text_schedule_type</value>
+      <value>text_box</value>
+      <value>rich_text</value>
+      <value>date</value>
+      <value>datetime</value>
+      <value>bool</value>
+      <value>number</value>
+      <value>image</value>
+      <value>file</value>
+      <value>no_input</value>
+    </choice>
+    <!-- !+ remove? -->
+  </define>
+  <define name="FIELD_RENDER_TYPE_VOCABULARY">
+    <choice>
+      <!-- special other user-conf params: "vocabulary" -> "type:vocabulary, required:True" -->
+      <value>single_select</value>
+      <!-- vocabulary -->
+      <value>radio</value>
+      <!-- vocabulary -->
+      <value>tree_text</value>
+    </choice>
+    <!-- VocabularyTextField -->
+  </define>
+  <define name="EXTENDED_PROPERTY_TYPE">
+    <choice>
+      <value>text</value>
+      <value>translated_text</value>
+      <value>datetime</value>
+    </choice>
+  </define>
+</grammar>

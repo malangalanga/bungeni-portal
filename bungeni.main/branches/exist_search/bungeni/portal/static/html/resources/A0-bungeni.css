@@ -1,0 +1,219 @@
+#version-history table.listingdescription {
+    margin-bottom: 0.5em;
+}
+
+div#workspace table th.yui-dt-col-status select#input_type,
+div#workspace table th.yui-dt-col-status select#input_status { 
+    max-width:200px !important;
+}
+div#workspace table th:first-child { 
+    width: 100% !important; 
+}
+table.diff {
+    display: block;
+    overflow: auto;
+    border: 1px solid #ccc;
+}
+
+table.diff td {
+    padding: 3px;
+}
+
+label.discreet {
+    line-height: 2em;
+}
+
+table.side-by-side th {
+  text-align: left;
+}
+
+table.side-by-side td {
+  padding: 5px;
+}
+
+table.side-by-side th span.fieldRequired {
+  color: #DEE7EC;
+}
+
+#bungeni-workspace .item {
+  width: 50%;
+  float: left;
+  background: transparent;
+}
+
+#bungeni-workspace .even .portlet {
+  margin-right: 5px;
+}
+
+#bungeni-workspace .odd .portlet {
+  margin-left: 5px;
+}
+
+.yui-toolbar-group ul {
+  list-style-image: none;
+}
+
+#portletArchiveDates form .field {
+  float: left;
+  clear: none;
+  margin-right: 5em;
+  width: auto;
+  white-space: nowrap;
+}
+
+#portletArchiveDates .widget-dropdownwidget.field {
+  margin-left: 1em;
+  width: auto;
+  white-space: nowrap;
+}
+
+.inlinePortlet {
+    width: 100%;
+    float: left;
+}
+
+.contentViewsLeftPort li.selected {
+    background-color: white;
+    text-decoration: bold;
+}
+
+.contentViewsLeftPort li:hover {
+    background-color: white;
+    text-decoration: bold;
+}
+
+#contentBottomLeft {
+  clear: both;
+  display: block;
+}
+
+#portletArchiveDates #actionsView {
+  clear: none;
+  float: right;
+}
+
+#portletArchiveDates .formHelp {
+  display: none;
+}
+
+#portletArchiveDates .portletItem {
+  padding-bottom: 0;
+}
+  
+#portletArchiveDates label {
+  float: left;
+  margin-right: 0.6em;
+}
+
+#portletArchiveDates .documentDescription {
+  display: none;
+}
+
+#portletArchiveDates .portletItem.dates-filtered  {
+  background: yellow;
+}
+
+.rowspacer {
+    clear: both;
+}
+
+.workspace-viewlet dd {
+    height: 40em;
+    overflow: auto;
+}
+
+.widget-multicheckboxwidget .widget label {
+  display: inline;
+  margin-right: 1em;
+    font-size: 0.9em;
+}
+
+.widget-multicheckboxwidget br {
+   display: none;
+}
+
+div.content-left-column{
+float: left;
+width : 30%;
+}
+
+div.content-right-column{
+float: right;
+width: 70%;
+}
+
+tr.yui-dt-last th {
+white-space: nowrap; 
+}
+
+dl.enableFormTabbing dd {
+padding-top:15px;
+}
+
+dl.enableFormTabbing form {
+padding-top:1px;
+}
+
+span.workflow_info { /* inlined workflow info */
+    color: #888;
+}
+.title span.workflow_info {
+    font-size: 80%;
+}
+
+/* WORKFLOW-POPUP */
+.button {
+    background-color: #2b91af;
+    border-radius: 10px;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+}
+.button:hover {
+    background-color: #1e1e1e
+}
+.button>span {
+    font-size: 84%
+}
+.button.bClose {
+    border-radius: 7px 7px 7px 7px;
+    box-shadow: none;
+    font: bold 131% sans-serif;
+    padding: 0 6px 2px;
+    position: absolute;
+    right: -7px;
+    top: -7px;
+}
+#popup,
+#popup-load,
+.bMulti {
+    background-color: #fff;
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 0 0 25px 5px #999;
+    color: #111;
+    display: none;
+    min-width: 450px;
+    padding: 10px 15px;
+}
+#popup,
+.bMulti {
+    min-height: 250px
+}
+#popup-load iframe {
+    background: url('loader.gif') center center no-repeat;
+    min-height: 240px;
+    min-width: 450px;
+}
+.lt-ie9 .bModal {
+    background-color: #000
+}
+
+span.chamber_identity{
+    color:#576341;
+    background-color:#CDE2A7;
+    padding:auto 0.5em;
+}

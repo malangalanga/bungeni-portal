@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="bungeni">
+    
+    <include package="zope.component" file="meta.zcml" />
+    <include package="zope.app.authentication" />
+    
+    <!-- Global/Local Role/Permission/Principal Maps -->
+    <adapter for="bungeni.models.interfaces.IBungeniApplication"
+        provides="zope.securitypolicy.interfaces.IPrincipalRoleMap"
+        factory="bungeni.alchemist.security.GlobalPrincipalRoleMap"
+    />
+    <!-- !+RolePermissionMap
+    <adapter for=".interfaces.IBungeniApplication"
+        provides="zope.securitypolicy.interfaces.IRolePermissionMap"
+        factory="bungeni.alchemist.security.GlobalRolePermissionMap"
+    />
+    -->
+    <adapter for="bungeni.alchemist.interfaces.IAlchemistContent"
+        provides="zope.securitypolicy.interfaces.IPrincipalRoleMap"
+        factory="bungeni.alchemist.security.LocalPrincipalRoleMap"
+    />
+    <adapter for="bungeni.models.interfaces.IDebateRecord"
+        provides="zope.securitypolicy.interfaces.IPrincipalRoleMap"
+        factory="bungeni.alchemist.security.LocalPrincipalRoleMap"
+    />
+    <adapter for="bungeni.core.interfaces.IWorkspaceContainer"
+        provides="zope.securitypolicy.interfaces.IPrincipalRoleMap"
+        factory="bungeni.core.workspace.WorkspacePrincipalRoleMap"
+    />
+    <adapter for="bungeni.core.interfaces.IWorkspaceUnderConsiderationContainer"
+        provides="zope.securitypolicy.interfaces.IPrincipalRoleMap"
+        factory="bungeni.core.workspace.WorkspacePrincipalRoleMap"
+    />
+    <adapter for="bungeni.core.interfaces.IWorkspaceScheduling"
+        provides="zope.securitypolicy.interfaces.IPrincipalRoleMap"
+        factory="bungeni.core.workspace.WorkspacePrincipalRoleMap"
+    />
+    <!-- !+RolePermissionMap
+    <adapter for="bungeni.alchemist.interfaces.IAlchemistContent"
+        provides="zope.securitypolicy.interfaces.IRolePermissionMap"
+        factory="bungeni.alchemist.security.LocalRolePermissionMap"
+    />
+    -->
+
+</configure>
+

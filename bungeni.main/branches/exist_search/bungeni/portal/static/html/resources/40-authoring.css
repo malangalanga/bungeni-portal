@@ -1,0 +1,676 @@
+/* - authoring.css - */
+@media screen {
+/*
+** Plone style sheet - Authoring Elements
+**
+** Style sheet documentation can be found at http://plone.org/documentation
+**
+** You should preferrably use ploneCustom.css to add your own CSS classes and to
+** customize your portal, as these are the base fundaments of Plone, and will
+** change and be refined in newer versions. Keeping your changes in
+** ploneCustom.css will make it easier to upgrade.
+**
+** Feel free to use whole or parts of this for your own designs, but give credit
+** where credit is due.
+**
+*/
+
+/*  (do not remove this :) */
+/*  (not this either :) */
+
+/* Editable border */
+
+.contentViews {
+    background-color: transparent;
+    padding-left: 1em;
+    line-height: normal;
+    margin: 0;
+    list-style: none;
+    border: 1px solid #74ae0b;
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+}
+.contentViews li {
+    display: inline;
+    padding-top: 0.5em;
+}
+.contentViews li a {
+    background-color: transparent;
+    border: 1px solid #74ae0b;
+    border-style: solid;
+    color: #578308;
+    height: auto;
+    margin-right: 0.5em;
+    padding: 0em 1em;
+    line-height: normal;
+    text-decoration: none;
+    text-transform: none;
+    z-index: 1;
+}
+.contentViews .selected a {
+    background-color: #cde2a7;
+    border-bottom: #cde2a7 1px solid;
+    color: #578308;
+}
+.contentViews li a:hover {
+    background-color: #cde2a7;
+    color: #578308;
+}
+.configlet .contentViews {
+    font-size: 90%;
+}
+
+/*
+** begin ECMAScript Content Action Menus
+*/
+.contentActions {
+    background-color: #cde2a7;
+	border: 1px solid #aaa;
+    border-left: 1px solid #74ae0b;
+    border-right: 1px solid #74ae0b;
+    color: #578308;
+    text-align: right;
+    text-transform: none;
+    padding: 0 0 0 1em;
+    position:relative;
+    height: 1.8em !important;
+}
+.contentActions ul {
+    margin: 0;
+    list-style: none;
+    list-style-image: none;
+    color: #000;
+    text-align: left;
+}
+.contentActions li {
+    height: 1.8em;
+    line-height: 1.8em;
+    z-index: 4;
+    border-left: 1px solid #74ae0b;
+	border: 0 none;
+	display: block;
+    float: right;
+}
+.contentActions li.context_actions {
+    float: left;
+    position:absolute;
+}
+.contentActions a {
+    text-decoration: none;
+    color: #578308;
+    padding: 0 0.5em;
+    cursor: pointer;
+}
+.contentActions span.subMenuTitle {
+    padding: 0em 0.5em;
+    position: relative;
+    white-space: nowrap;
+    display: inline;
+}
+.contentActions a span.subMenuTitle {
+    padding: 0px;
+    display: inline;
+}
+.actionMenu {
+    /*  The spec says we can't put this on an element with a float (although
+        Opera is the only one that cares) and we need it in order to catch
+        the position:absolute bubbling up */
+
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+.actionMenu .actionMenuHeader {
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+}
+.actionMenu.activated .actionMenuHeader {
+    position: relative;
+    z-index: 10;
+}
+.actionMenu .actionMenuHeader a {
+    display: block;
+}
+
+.actionMenu .actionMenuHeader a:first-child {
+    display: block;
+	z-index:99999 !important;
+}
+
+.arrowDownAlternative {
+    font-size: 0.85em;
+}
+.actionMenu .actionMenuContent {
+    display: none;
+    z-index: 5;
+    position: absolute;
+    top: 1.8em;
+    right: -1px;
+    height: auto;
+    padding: 0;
+    margin: 0;
+}
+.actionMenu.activated .actionMenuContent {
+    display: block !important;
+}
+.actionMenu.activated .actionMenuContent {
+    /* this one will be ignored by IE, it is here to fix the cut-off error in
+       Firefox */
+    display: table !important;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+.actionMenu.deactivated .actionMenuContent {
+    display: none !important;
+}
+.actionMenu .actionMenuContent ul {
+    display: block;
+    background: #cde2a7;
+    border: 1px #74ae0b;
+    border-style: none solid solid solid;
+    margin: -2px 0 0 0;
+    padding: 0;
+	border: 0 none;
+}
+.actionMenu .actionMenuContent li {
+    float: none;
+    background-color: transparent;
+    display: inline;
+    padding: 0;
+    margin: 0;
+    border: 0 none;
+    display: block;
+    border-bottom: 1px solid #aaa;
+}
+.actionMenu .actionMenuContent li a {
+    display: block;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0 .25em;
+	border: 0 none;
+}
+.actionMenu .actionMenuContent .selected {
+    display: block;
+    white-space: nowrap;
+    padding: 0 .5em;
+    margin: 0;
+}
+.actionMenu .actionMenuContent li a:hover {
+    background-color: #74ae0b;
+    color: #fff;
+}
+.actionMenu .actionMenuContent .actionSeparator a {
+    padding-top: 0.2em;
+    border-top: 1px solid #74ae0b;
+}
+
+dl#add_content dt a {
+	padding-left: 22px;
+	background: transparent url(images/plus_16.png) 2px 2px no-repeat;
+}
+dl#reports dt a {
+	padding-left: 22px;
+	background: transparent url(images/clipboard.png) 2px 2px no-repeat;
+}
+dl#context_workflow dt a {
+	padding-left: 22px;
+	background: transparent url(images/clock_16.png) 2px 2px no-repeat;
+}
+dl#context_translate dt a {
+	padding-left: 22px;
+	background: transparent url(images/flag_grey.png) 2px 2px no-repeat;
+}
+dl#context_calendar dt a {
+	padding-left: 22px;
+	background: transparent url(images/calendar_2.png) 2px 2px no-repeat;
+}
+
+dl#context_workflow dt a {
+	border-left:1px solid #fff !important; /**/
+}
+
+/* !+CSS_ID(mr, may-2011) see description in ploned.ui/ui/menu.py
+    as mentioned there, styling should use class not id... all css here 
+    should be reworked. 
+    besides, even if continue to use id, the following 
+    "dl#context_actions.actionMenu" selector is the equivalent of simply
+    "#context_actions". 
+*/
+dl#context_actions.actionMenu .actionMenuHeader a:first-child {
+    float:left;
+ 
+}
+dl#context_actions.actionMenu.activated .actionMenuContent {
+    display: none;
+    z-index: 5;
+    position: relative !important;
+    top: 0;
+}
+dl#context_actions.actionMenu.deactivated .actionMenuContent {
+    display: none !important;
+    border-collapse: collapse;
+    border-spacing: 0;
+	/*display: block !important;
+	position: relative;
+	margin: 0;
+	padding: 0;
+	top: auto;
+	left: auto;*/
+}
+dl#context_actions.actionMenu .actionMenuContent ul {
+	margin: 0;
+	padding: 0;
+	border: 0 none;
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a {
+	padding: 0;
+	margin: 0;
+    height: 1.8em;
+	line-height: 1.8em;
+	border: 0 none;
+    border-right: 1px solid #aaa;
+    width: auto;
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a.selected,
+dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
+	border-right: 1px solid #090;
+	background-color: #74AE0B !important;
+	color: #fff !important;
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#view,
+dl#context_actions.actionMenu .actionMenuContent ul li a#schedule,
+dl#context_actions.actionMenu .actionMenuContent ul li a#edit,
+dl#context_actions.actionMenu .actionMenuContent ul li a#edit-profile,
+dl#context_actions.actionMenu .actionMenuContent ul li a#change-password,
+dl#context_actions.actionMenu .actionMenuContent ul li a#calendar,
+dl#context_actions.actionMenu .actionMenuContent ul li a#version-log,
+dl#context_actions.actionMenu .actionMenuContent ul li a#workflow,
+dl#context_actions.actionMenu .actionMenuContent ul li a#audit-log,
+dl#context_actions.actionMenu .actionMenuContent ul li a#odt,
+dl#context_actions.actionMenu .actionMenuContent ul li a#pdf,
+dl#context_actions.actionMenu .actionMenuContent ul li a#delete,
+dl#context_actions.actionMenu .actionMenuContent ul li a#respond,
+dl#context_actions.actionMenu .actionMenuContent ul li a#feedrss,
+dl#context_actions.actionMenu .actionMenuContent ul li a#feedakomantoso,
+dl#context_actions.actionMenu .actionMenuContent ul li a#files,
+dl#context_actions.actionMenu .actionMenuContent ul li a#download,
+dl#context_actions.actionMenu .actionMenuContent ul li a#st-attendance,
+dl#context_actions.actionMenu .actionMenuContent ul li a#signatory-review,
+dl#context_actions.actionMenu .actionMenuContent ul li a#sign-open-document,
+dl#context_actions.actionMenu .actionMenuContent ul li a#report-builder{
+	padding: 0 .5em;
+	margin: 0;
+	display: block;
+	padding-left: 22px;
+	background: transparent 2px 2px no-repeat;
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#view {
+	background-image: url(images/page_portrait.png);
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#delete {
+	background-image: url(images/cross.png);
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#schedule {
+	background-image: url(images/calendar_2.png);
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#edit {
+	background-image: url(images/page_white_edit.png);
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#edit-profile {
+	background-image: url(images/page_white_edit.png);
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#change-password {
+	background-image: url(images/reset_password.png);
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#calendar {
+	background-image: url(images/calendar.png);
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#version-log {
+	background-image: url(images/page_2_copy.png);
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#workflow {
+	background-image: url(images/chart_line.png);
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#audit-log {
+	background-image: url(images/page_white_database.png) ;
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#odt {
+	background-image: url(images/ODF_16x16.png);
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#pdf {
+	background-image: url(images/PDF_16x16.png) ;
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#respond {
+	background-image: url(images/respond.png);
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#feedrss {
+	background-image: url(images/rss.png);
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#feedakomantoso {
+	background-image: url(images/akoma.png);
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#download {
+	background-image: url(images/download.png);
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#files {
+	background-image: url(images/database.png) ;
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#st-attendance {
+	background-image: url(images/page_white_edit.png) ;
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#signatory-review {
+	background-image: url(images/consent.png) ;
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#sign-open-document {
+	background-image: url(images/sign-document.png) ;
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a#report-builder {
+	background-image: url(images/report-builder.png) ;
+}
+dl#context_actions.actionMenu .actionMenuContent ul li a {
+	border-right:0px solid #fff !important; /**/
+}
+ul#contentActionMenus li {
+	border-left:0px solid #fff !important; /**/
+}
+.contentActions ul#contentActionMenus a {
+	border-bottom:0px solid #fff !important; /**/
+}
+#templateMenu li a {
+    padding-left: 16px;
+}
+/*
+** end ECMAScript Content Action Menus
+*/
+
+ul.configlets {
+    margin: 1em 0;
+    list-style-image: none;
+    list-style: none;
+}
+ul.configlets li {
+    margin-bottom: 1em;
+}
+ul.configlets li a {
+    text-decoration: none;
+    border: none;
+}
+ul.configlets li a:visited {
+    color: #436976;
+    background-color: transparent;
+}
+ul.configlets li a:active {
+    color: #436976;
+    background-color: transparent;
+}
+ul.configlets li label {
+    font-weight: bold;
+}
+ul.configletDetails {
+    margin: 0em 1em 1em 4em;
+    list-style-image: none;
+    list-style: none;
+}
+ul.configletDetails li {
+    margin-bottom: 1em;
+    display: inline;
+}
+ul.configletDetails li a {
+	text-decoration: none;
+}
+ul.configletDetails li label {
+    font-weight: bold;
+}
+ul.configletDetails li.configletDescription {
+    display: block;
+    color: #76797c;
+    font-size: 90%;
+    margin: 0;
+}
+/* Additional STX workaround classes */
+.stx table p {
+    margin: 0;
+    padding: 0;
+}
+.stx table {
+    border: 1px solid #8cacbb ! important;
+}
+.stx table td {
+    border-bottom: 1px solid #8cacbb;
+}
+
+.reviewHistory,
+.contentHistory {
+    display: inline;
+    font-size: 110% !important; 
+    color: Black;
+}
+.comment {
+    background: #eef3f5; 
+    border: 1px solid #8cacbb; 
+    padding: 0.25em 1em 0.5em 1em;
+    margin-bottom: 1em;
+}
+.comment h1,
+.comment h2,
+.comment h3,
+.comment h4, 
+.comment h5,
+.comment h6 {
+    border-bottom: 1px solid #76797c;
+    font-weight: normal;
+}
+.comment h3 a {
+    background-image: url(discussionitem_icon.gif);
+    background-repeat: no-repeat;
+    padding-left: 18px;
+    margin-left: -1px;
+    margin-bottom: 1px;
+    min-height: 1.6em;
+    height: auto;
+    line-height: 1.6em;	
+}
+.commentBody {
+    margin: 0 1em 1em 1em;
+}
+.spacer {
+    margin: 1em;
+}
+
+/* Collapsible elements */
+dl.collapsible {
+    border: 1px solid #8cacbb !important;
+    margin: 1em 0 0 0;
+    padding: 0;
+}
+dl.collapsible dt.collapsibleHeader {
+    display: block;
+    float: left;
+    background: White;
+    line-height: 1.2em;
+    vertical-align: middle;
+    font-size: 90%;
+    position: relative;
+    top: -0.6em;
+    width: auto;
+    margin: 0 0 -0.6em 1em;
+    padding: 0 0.5em;
+}
+dl.collapsible dd.collapsibleContent {
+    margin: 0;
+    padding: 0 1em;
+    clear: left;
+}
+
+/* for IE the following isn't needed, that's why the css2 selector is used */
+dl.collapsible dd.collapsibleContent > dl {
+    margin: 0;
+    padding: 0;
+}
+
+dl.expandedInlineCollapsible dt.collapsibleHeader,
+dl.expandedBlockCollapsible dt.collapsibleHeader {
+    padding: 0 6px 0 22px;
+    background: White url(treeExpanded.gif) no-repeat 6px 50%;
+    cursor: pointer;
+}
+
+dl.collapsedBlockCollapsible {
+    border: none !important;
+    height: 1em;
+    width: auto;
+}
+dl.collapsedBlockCollapsible dt.collapsibleHeader {
+    float: none;
+    position: static;
+    margin: 0;
+    padding: 0 0 0 22px;
+    line-height: 1em;
+    background: transparent url(treeCollapsed.gif) no-repeat 6px 50%;
+    cursor: pointer;
+}
+dl.collapsedInlineCollapsible dd.collapsibleContent,
+dl.collapsedBlockCollapsible dd.collapsibleContent {
+    display: none;
+}
+dl.collapsedInlineCollapsible {
+    border: none !important;
+    height: 1em;
+    width: auto;
+    display: inline;
+}
+dl.collapsedInlineCollapsible dt.collapsibleHeader {
+    position: static;
+    float: none;
+    margin: 0;
+    padding: 0 0 0 22px;
+    line-height: 1em;
+    background: transparent url(treeCollapsed.gif) no-repeat 6px 50%;
+    cursor: pointer;
+    display: inline;
+}
+
+.configlet .documentEditable {
+    padding: 0em !important;
+}
+.documentEditable .documentContent {
+    border: 1px solid #74ae0b;
+    padding: 0;
+}
+.label {
+    font-weight: bold;
+    display: inline;
+    padding-right: 0.5em;
+}
+.optionsToggle {
+    border: 1px solid #8cacbb;
+    color: Black;
+    background-color: #dee7ec;
+    font-weight: normal !important;
+    font-size: 90%;
+}
+/* Used on all descriptions relevant to those not logged in */
+.portalNotLoggedIn {} 
+
+#portal-column-content fieldset > * input:focus,
+#portal-column-content fieldset > * textarea:focus {
+    border-color: #ffa500;
+    border-width: 1px;
+}
+
+/* for highlighting of search terms */
+.highlightedSearchTerm {
+   background-color: #ffa;
+}
+
+dl.searchResults .highlightedSearchTerm {
+    background-color: transparent;
+    font-weight: bold;
+}
+/* for greying out inherited roles */
+.noInheritedRoles {
+    color: #a0a0a0;
+}
+/* for highlighting current items, like the language or today in the calendar */
+.currentItem {
+    border-collapse: collapse;
+    border: 2px solid #ffa500;
+    padding: 1px;
+}
+.managePortletsLink {
+    display:  block;
+    color: #76797c;
+    font-size: 90%;
+    font-weight: normal;
+}
+ul.formTabs {
+    position: relative;
+    display: block;
+    margin: 0 0 -2em 0;
+    padding: 0;
+    list-style-type: none;
+    text-align: center;
+}
+li.formTab {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+li.formTab a {
+    /* this isn't supported by all browsers, so we keep it in a separate rule */
+    display: inline-block;
+}
+li.formTab a {
+    border-top: 1px solid #8cacbb;
+    border-bottom: 1px solid #8cacbb;
+    border-left: 1px dotted #8cacbb;
+    background: White;
+    margin: 0;
+    padding: 0.125em 0.75em;
+    text-decoration: none;
+}
+li.formTab a:visited {
+    color: #436976;
+}
+li.firstFormTab a {
+    border-left: 1px solid #8cacbb;
+}
+li.lastFormTab a {
+    border-right: 1px solid #8cacbb;
+}
+li.formTab a.selected {
+    background: #dee7ec;
+}
+li.formTab a:hover {
+    background: #dee7ec;
+}
+li.formTab a.notify {
+    background-color: #ffce7b;
+    color: Black;
+}
+li.formTab a.required span, td.required-flag {
+    background-image: url(required.gif);
+    background-position: center right;
+    background-repeat: no-repeat;
+    padding-right: 8px;
+}
+li.formTab a.notify:hover {
+    background-color: #ffa500;
+}
+.formPanel {
+    padding: 1em 1em 1em 1em; 
+    border: 1px solid #8cacbb;
+}
+.formPanel.hidden {
+    display: none;
+}
+div.formControls input.hidden {
+    display: none;
+}
+
+/*  */
+
+}
+

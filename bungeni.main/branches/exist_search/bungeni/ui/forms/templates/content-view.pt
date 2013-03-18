@@ -1,0 +1,29 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="context/@@standard_macros/page">
+  <body>
+    <metal:title fill-slot="title">
+      <title i18n:translate="" >
+        <span tal:replace="view/page_title"/> 
+        <span i18n:translate tal:condition="view/is_workflowed" 
+                             tal:replace="python:view.get_wf_state()"/>
+      </title>
+    </metal:title>
+    <div metal:fill-slot="body">
+      <h2 class="title">
+        <span tal:replace="view/page_title"/> 
+        <tal:block tal:condition="view/is_workflowed">
+          [<span i18n:translate tal:replace="python:view.get_wf_state()"
+                             class="workflow_info"/>]
+           <span tal:replace="structure provider:bungeni.content.rss" />
+        </tal:block>
+      </h2>
+      <p class="documentDescription"
+	 i18n:translate="" tal:content="view/page_description" />
+      <div
+	  tal:replace="structure provider:alchemist.content.view">
+	Form
+      </div>
+    </div>
+  </body>
+</html>

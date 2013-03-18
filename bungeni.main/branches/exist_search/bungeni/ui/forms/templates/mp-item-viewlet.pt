@@ -1,0 +1,27 @@
+<dt id="fieldsetlegend-mp-items" i18n:translate="">
+  Parliamentary activities
+</dt>
+
+<dd id="fieldset-mp-items">
+  <table class="listing">
+    <thead>
+      <tr>
+        <th> Type </th>
+        <th> Title </th>
+        <th> Status </th> 
+        <th> Submission Date </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr tal:repeat="item view/items"> 
+          <td> <span tal:content="item/type"/></td>
+          <td> 
+	    <a tal:attributes="href item/url"
+	       tal:content="item/title"/>
+	  </td>
+          <td><span tal:content="item/status"/></td>
+          <td><span tal:content="item/submission_date"/></td>
+      </tr>
+    </tbody>
+  </table>
+</dd>
