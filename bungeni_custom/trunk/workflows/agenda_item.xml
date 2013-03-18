@@ -16,7 +16,7 @@
     sub-item itself is in a permissions_from_parent="true" state. -->
     <feature name="attachment" enabled="true" />
     <feature name="schedule" enabled="true">
-        <parameter name="schedulable_states" value="schedule_pending" />
+        <parameter name="schedulable_states" value="admissible adjourned" />
         <parameter name="scheduled_states" value="scheduled" />
     </feature>
     <feature name="workspace" enabled="true" />
@@ -72,8 +72,6 @@
         <facet ref=".edit_Clerk" />
         <facet ref="attachment.internal" />
     </state>
-
-    <state id="re_submitted" title="Submitted" actions="version" permissions_from_state="submitted" />
  
     <state id="clarification_required" title="Requires Clarification to Receive" 
             actions="version"   >
@@ -97,8 +95,6 @@
         <facet ref=".public" />
         <facet ref="attachment.public" />
     </state>
-    
-    <state id="schedule_pending" title="Schedule pending" permissions_from_state="admissible" />
     
     <state id="scheduled" title="Scheduled" permissions_from_state="admissible" />
     
@@ -169,9 +165,10 @@
         require_confirmation="true"
     />
     
-    <transition title="Allow scheduling"
+    <transition title="Scheduled for Debate"
         source="admissible adjourned"
-        destination="schedule_pending"
+        destination="scheduled"
+        condition="is_scheduled"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
@@ -187,18 +184,10 @@
     
     <transition title="Resubmit"
         source="clarification_required"
-        destination="re_submitted"
+        destination="submitted"
         condition=""
         trigger="manual"
         roles="Owner"
-    />
-    
-    <transition title="Schedule"
-        source="schedule_pending"
-        destination="scheduled"
-        condition="is_scheduled"
-        trigger="system"
-        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Drop"
@@ -238,7 +227,7 @@
     />
     
     <transition title="Withdraw"
-        source="admissible scheduled adjourned schedule_pending"
+        source="admissible scheduled adjourned"
         destination="withdrawn"
         grouping_unique_sources="withdrawn"
         condition=""

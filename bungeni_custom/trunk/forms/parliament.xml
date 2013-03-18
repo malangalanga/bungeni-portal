@@ -42,6 +42,7 @@
     <container match="question.parliament_id" />
     <container match="tabled_document.parliament_id" name="tableddocuments" note="!+naming" />
     <container match="test_doc.parliament_id" />
+    <container match="bicameral_document.parliament_id" />
     
     <container match="session.parliament_id" />
     <container match="committee.parent_group_id" />
@@ -50,6 +51,7 @@
     <container match="political_group.parent_group_id" name="politicalgroups" />
     <container match="sitting.group_id" />
     <container match="title_type.group_id" />
+
     
 <!-- FLAVIO: to have run TWO CHAMBERS 
    <integrity 

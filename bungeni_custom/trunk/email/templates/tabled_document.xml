@@ -11,16 +11,6 @@
     </body>
   </block>
 
-  <block onstate="received">
-    <subject>
-      Tabled Document has been received by the ClerkSenate ClerkAssembly's Office : <span tal:replace="item/title"/>
-    </subject>
-    <body>
-      The tabled document
-      <span tal:replace="item/title"/> was received on <span tal:replace="item/status_date"/>
-    </body>
-  </block>
-
   <block onstate="inadmissible">
     <subject>
       Tabled Document is inadmissible : <span tal:replace="item/title"/>

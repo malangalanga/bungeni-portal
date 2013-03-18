@@ -33,7 +33,7 @@
         <parameter name="open_states" value="admissible" />
     </feature>
     <feature name="schedule" enabled="true">
-        <parameter name="schedulable_states" value="schedule_pending" />
+        <parameter name="schedulable_states" value="admissible deferred adjourned" />
         <parameter name="scheduled_states" value="scheduled" />
     </feature>
     <feature name="workspace" enabled="true" />
@@ -126,15 +126,7 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="submitted" title="Submitted" actions="version">
-        <facet ref="attachment.internal" />
-        <facet ref="event.internal_frozen" />
-        <facet ref="signatory.internal_frozen" />
-    </state>
-    
-    <state id="received" title="Received by Clerk's Office" 
-            actions="set_doc_registry_number"
-        >
+    <state id="submitted" title="Submitted" actions="version set_doc_registry_number">
         <facet ref=".internal_Clerk" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
@@ -157,9 +149,6 @@
         <facet ref="signatory.internal_frozen" />
     </state>
     
-    <state id="incomplete" title="Requires Clarification to Approve"
-        actions="version" permissions_from_state="received"  />
-    
     <state id="inadmissible" title="Inadmissible" 
         permissions_from_state="withdrawn_internal" />
     
@@ -171,8 +160,6 @@
         <facet ref="signatory.public_frozen" />
         <facet ref="group_assignment.internal" />
     </state>
-    
-    <state id="schedule_pending" title="Schedule pending" permissions_from_state="admissible" />
     
     <state id="scheduled" title="Scheduled" permissions_from_state="admissible" />
     
@@ -260,16 +247,8 @@
         trigger="manual"
     />
 
-    <transition title="Receive" 
-        source="submitted"
-        destination="received" 
-        condition=""
-        trigger="manual" 
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
-    <transition title="Require Clarification to Receive"
-        source="received incomplete" 
+    <transition title="Require Clarification"
+        source="submitted reviewed" 
         destination="clarification_required"
         condition=""
         trigger="manual"
@@ -286,7 +265,7 @@
     />
 
     <transition title="Reviewed"
-        source="received" 
+        source="submitted" 
         destination="reviewed" 
         condition=""
         trigger="manual"
@@ -310,26 +289,10 @@
         require_confirmation="true"
     />
     
-    <transition title="Make available for scheduling" 
+    <transition title="Scheduled for Debate" 
         source="admissible deferred adjourned"
-        destination="schedule_pending"
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
-    <transition title="Require to be reviewed"
-        source="reviewed" 
-        destination="incomplete" 
-        condition=""
-        trigger="manual"
-        roles="SpeakerSenate SpeakerAssembly"
-        require_confirmation="true"
-    />
-    
-    <transition title="Re-reviewed"
-        source="incomplete"
-        destination="reviewed"
-        condition=""
+        destination="scheduled"
+        condition="is_scheduled"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
@@ -357,30 +320,6 @@
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
         require_confirmation="true"
-    />
-    
-    <transition title="Schedule"
-        source="schedule_pending"
-        destination="scheduled" 
-        condition="is_scheduled"
-        trigger="system" 
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
-    <transition title="Re-schedule" 
-        source="scheduled"
-        destination="schedule_pending"
-        condition=""
-        trigger="system"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
-    <transition title="Revert to admissible" 
-        source="schedule_pending"
-        destination="admissible"
-        condition=""
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
     />
     
     <transition title="Drop" 
@@ -427,7 +366,7 @@
     />
     
     <transition title="Withdraw" 
-        source="submitted received reviewed clarification_required"
+        source="submitted reviewed clarification_required"
         destination="withdrawn_internal"
         grouping_unique_sources="withdrawn"
         condition=""
@@ -437,7 +376,7 @@
     />
     
     <transition title="Withdraw"
-        source="admissible scheduled deferred adjourned schedule_pending"
+        source="admissible scheduled deferred adjourned"
         destination="withdrawn"
         grouping_unique_sources="withdrawn"
         condition=""

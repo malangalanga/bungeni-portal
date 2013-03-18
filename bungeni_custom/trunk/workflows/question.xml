@@ -126,9 +126,9 @@
     </state>
     
     <state id="submitted" title="Submitted to Clerk" actions="version">
-        <facet ref=".view_Clerk" />
+        <facet ref=".edit_Clerk" />
         <facet ref="attachment.internal" />
-        <facet ref="event.internal_frozen" />
+        <facet ref="event.internal" />
     </state>
 
     <state id="reviewed" title="Submitted to the Speaker" actions="version">
@@ -310,7 +310,7 @@
     />
     
     <transition title="Scheduled for Debate"
-        source="admissible adjourned"
+        source="admissible adjourned deferred"
         destination="scheduled"
         condition="is_scheduled"
         trigger="system"

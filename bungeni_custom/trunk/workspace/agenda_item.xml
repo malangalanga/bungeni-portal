@@ -24,28 +24,26 @@
 		    Owner"/>
     </state>
     <state id="admissible">
-        <tab id="inbox" roles="ClerkSenate ClerkAssembly"/>
-        <tab id="pending" roles="Owner SpeakerSenate SpeakerAssembly"/>
-    </state>
-    <state id="schedule_pending">
         <tab id="schedule" 
-	     roles="Owner
-		    Signatory
-		    SpeakerSenate SpeakerAssembly
+	     roles="SpeakerSenate SpeakerAssembly
 		    ClerkSenate ClerkAssembly"/>
+        <tab id="pending" 
+	     roles="Owner Signatory"/>
     </state>
+
     <state id="scheduled">
         <tab id="schedule" 
-	     roles="Owner
-		    Signatory
-		    SpeakerSenate SpeakerAssembly
+	     roles="SpeakerSenate SpeakerAssembly
 		    ClerkSenate ClerkAssembly"/>
+        <tab id="pending" 
+	     roles="Owner Signatory"/>
     </state>
     <state id="adjourned">
         <tab id="schedule" 
-	     roles="ClerkSenate ClerkAssembly
-		    SpeakerSenate SpeakerAssembly
-		    Owner"/>
+	     roles="SpeakerSenate SpeakerAssembly
+		    ClerkSenate ClerkAssembly"/>
+        <tab id="pending" 
+	     roles="Owner Signatory"/>
     </state>
     <state id="dropped">
         <tab id="archive" 

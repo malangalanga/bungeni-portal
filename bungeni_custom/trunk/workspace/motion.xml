@@ -14,15 +14,11 @@
 		    ClerkSenate ClerkAssembly
                     Signatory"/>
     </state>
-    <state id="submitted">
-        <tab id="inbox" roles="ClerkSenate ClerkAssembly"/>
-        <tab id="pending" roles="Owner Signatory"/>
-    </state>
     <state id="submitted_signatories">
         <tab id="inbox" roles="Signatory"/>
         <tab id="pending" roles="Owner"/>
     </state>
-    <state id="received">
+    <state id="submitted">
         <tab id="inbox" roles="ClerkSenate ClerkAssembly MemberCommitteeAssembly MemberCommitteeSenate"/>
         <tab id="pending" roles="Owner Signatory"/>
     </state>
@@ -37,10 +33,6 @@
 		    ClerkSenate ClerkAssembly 
 		    Signatory"/>
     </state>
-    <state id="incomplete">
-        <tab id="inbox" roles="ClerkSenate ClerkAssembly"/>
-        <tab id="pending" roles="Owner Signatory"/>
-    </state>
     <state id="withdrawn_internal">
         <tab id="archive" 
 	     roles="Signatory
@@ -49,25 +41,18 @@
                     SpeakerSenate SpeakerAssembly"/>
     </state>
      <state id="admissible">
-        <tab id="inbox" roles="ClerkSenate ClerkAssembly"/>
+        <tab id="schedule" roles="ClerkSenate ClerkAssembly"/>
         <tab id="pending"
 	     roles="Owner
 		    Signatory
 		    SpeakerSenate SpeakerAssembly"/>
     </state>
-    <state id="schedule_pending">
-        <tab id="schedule" 
-	     roles="Owner
-		    Signatory
-		    SpeakerSenate SpeakerAssembly
-		    ClerkSenate ClerkAssembly"/>
-    </state>
     <state id="scheduled">
-        <tab id="schedule" 
+        <tab id="schedule" roles="ClerkSenate ClerkAssembly"/>
+        <tab id="pending"
 	     roles="Owner
 		    Signatory
-		    SpeakerSenate SpeakerAssembly
-		    ClerkSenate ClerkAssembly"/>
+		    SpeakerSenate SpeakerAssembly"/>
     </state>
     <state id="adopted">
         <tab id="archive" 
@@ -84,18 +69,18 @@
                      SpeakerSenate SpeakerAssembly"/>
     </state>
     <state id="adjourned">
-         <tab id="schedule" 
-	      roles="Signatory
-		     Owner
-		     ClerkSenate ClerkAssembly
-                     SpeakerSenate SpeakerAssembly"/>
+        <tab id="schedule" roles="ClerkSenate ClerkAssembly"/>
+        <tab id="pending"
+	     roles="Owner
+		    Signatory
+		    SpeakerSenate SpeakerAssembly"/>
     </state>
     <state id="deferred">
-        <tab id="pending" 
-	     roles="Signatory
-		    Owner
-		    ClerkSenate ClerkAssembly
-                    SpeakerSenate SpeakerAssembly"/>
+        <tab id="schedule" roles="ClerkSenate ClerkAssembly"/>
+        <tab id="pending"
+	     roles="Owner
+		    Signatory
+		    SpeakerSenate SpeakerAssembly"/>
     </state>
     <state id="elapsed">
         <tab id="archive" 

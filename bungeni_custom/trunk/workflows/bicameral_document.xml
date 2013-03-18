@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<workflow title="Document Workflow"
-    description="A document"
+<workflow title="Bicameral document Workflow"
+    description="A bicameral document"
     permission_actions=".View .Edit .Add .Delete"
     >
     
@@ -18,7 +18,7 @@
     sub-item itself is in a permissions_from_parent="true" state. -->
     <feature name="attachment" enabled="true" />
     <feature name="event" enabled="true" />
-    <feature name="signatory" enabled="true">
+    <feature name="signatory" enabled="false">
         <parameter name="open_states" value="admissible" />
     </feature>
     <feature name="schedule" enabled="true">
@@ -31,96 +31,92 @@
     <feature name="download" enabled="true" />
     
     
-    <!-- workflow facets -->
-    <facet name="draft_Clerk">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
-    </facet>
+    <!-- workflow FACETS -->
     <facet name="draft_Owner">
         <allow permission=".View" roles="Owner" />
         <allow permission=".Edit" roles="Owner" />
         <allow permission=".Delete" roles="Owner" />
     </facet>
-    <facet name="internal_Signatory">
-        <allow permission=".View" roles="Owner Signatory" />
-    </facet>
-    <facet name="view_Clerk">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory" />
-    </facet>
-    <facet name="edit_Clerk">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
-    </facet>
-    <facet name="edit_Owner">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory" />
-        <allow permission=".Edit" roles="Owner" />
-    </facet>
-    <facet name="edit_Speaker">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner Signatory" />
-        <allow permission=".Edit" roles="SpeakerSenate SpeakerAssembly" />
-    </facet>
     <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
     </facet>
-    
-    
+
+    <!-- workflow facets Assembly-->
+    <facet name="draft_Clerk_Assembly">
+        <allow permission=".View" roles="ClerkAssembly" />
+        <allow permission=".Edit" roles="ClerkAssembly" />
+        <allow permission=".Delete" roles="ClerkAssembly" />
+    </facet>
+    <facet name="view_Clerk_Assembly">
+        <allow permission=".View" roles="ClerkAssembly SpeakerAssembly Owner" />
+    </facet>
+    <facet name="edit_Clerk_Assembly">
+        <allow permission=".View" roles="ClerkAssembly SpeakerAssembly Owner" />
+        <allow permission=".Edit" roles="ClerkAssembly" />
+    </facet>
+    <facet name="edit_Owner_Assembly">
+        <allow permission=".View" roles="ClerkAssembly SpeakerAssembly Owner" />
+        <allow permission=".Edit" roles="Owner" />
+    </facet>
+    <facet name="edit_Speaker_Assembly">
+        <allow permission=".View" roles="ClerkAssembly SpeakerAssembly Owner" />
+        <allow permission=".Edit" roles="SpeakerAssembly" />
+    </facet>
+
+    <!-- workflow facets Senate-->
+    <facet name="draft_Clerk_Senate">
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".Edit" roles="ClerkSenate" />
+        <allow permission=".Delete" roles="ClerkSenate" />
+    </facet>
+    <facet name="view_Clerk_Senate">
+        <allow permission=".View" roles="ClerkSenate SpeakerSenate ClerkAssembly SpeakerAssembly Owner" />
+    </facet>
+    <facet name="edit_Clerk_Senate">
+        <allow permission=".View" roles="ClerkSenate SpeakerSenate ClerkAssembly SpeakerAssembly Owner" />
+        <allow permission=".Edit" roles="ClerkSenate" />
+    </facet>
+    <facet name="edit_Owner_Senate">
+        <allow permission=".View" roles="ClerkSenate SpeakerSenate ClerkAssembly SpeakerAssembly Owner" />
+        <allow permission=".Edit" roles="Owner" />
+    </facet>
+    <facet name="edit_Speaker_Senate">
+        <allow permission=".View" roles="ClerkSenate SpeakerSenate ClerkAssembly SpeakerAssembly Owner" />
+        <allow permission=".Edit" roles="SpeakerSenate" />
+    </facet>
+
+
+    <!-- workflow STATES - ASSEMBLY -->    
     <state id="working_draft" title="Working Draft">
-        <facet ref=".draft_Clerk" />
+        <facet ref=".draft_Clerk_Assembly" />
         <facet ref="attachment.draft_Clerk" />
         <facet ref="event.draft_Clerk" />
-        <facet ref="signatory.draft_Clerk" />
     </state>
     
     <state id="draft" title="Draft">
         <facet ref=".draft_Owner" />
         <facet ref="attachment.draft_Owner" />
         <facet ref="event.draft_Owner" />
-        <facet ref="signatory.draft_Owner" />
-    </state>
-
-    <state id="submitted_signatories" title="Submitted to Signatories" actions="version">
-        <facet ref=".internal_Signatory" />
-        <facet ref="attachment.internal" />
-        <facet ref="event.internal" />
-        <facet ref="signatory.internal" />
-    </state>
-    
-    <state id="redraft" title="Redraft" actions="version" note="document under review before resubmission">
-        <facet ref=".edit_Owner" />
-        <facet ref="attachment.internal_Owner" />
-        <facet ref="event.internal" />
-        <facet ref="signatory.internal_Owner" />
-    </state>
-    
-    <state id="withdrawn_signatory" title="Dropped">
-        <facet ref=".internal_Signatory" />
-        <facet ref="attachment.internal_frozen" /><!-- !+private_frozen? -->
-        <facet ref="event.internal_frozen" />
-        <facet ref="signatory.internal_frozen" />
     </state>
     
     <state id="withdrawn_internal" title="Withdrawn">
-        <facet ref=".internal_Signatory" />
+        <facet ref=".view_Clerk_Assembly" />
         <facet ref="attachment.internal_frozen" /><!-- !+private_frozen? -->
         <facet ref="event.internal_frozen" />
-        <facet ref="signatory.internal_frozen" />
     </state>
 
     <state id="submitted" title="Submitted" 
             actions="version set_doc_registry_number"
         >
-        <facet ref=".edit_Clerk" />
+        <facet ref=".edit_Clerk_Assembly" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
-        <facet ref="signatory.internal_frozen" />
     </state>
     
     <state id="reviewed" title="Submitted to the Speaker" actions="version">
-        <facet ref=".edit_Speaker" />
+        <facet ref=".edit_Speaker_Assembly" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
-        <facet ref="signatory.internal_frozen" />
     </state>
     
     <state id="admissible" title="Admissible"
@@ -129,21 +125,18 @@
         <facet ref=".public" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />
-        <facet ref="signatory.public_frozen" />
     </state>
    
     <state id="inadmissible" title="Inadmissible">
-        <facet ref=".view_Clerk" />
+        <facet ref=".view_Clerk_Assembly" />
         <facet ref="attachment.internal_frozen" />
         <facet ref="event.internal_frozen" />
-        <facet ref="signatory.internal_frozen" />
     </state>
     
     <state id="clarification_required" title="Requires Clarification to Receive" actions="version">
-        <facet ref=".edit_Owner" />
+        <facet ref=".edit_Owner_Assembly" />
         <facet ref="attachment.internal_Owner" />
         <facet ref="event.internal_frozen" />
-        <facet ref="signatory.internal" />
     </state>
     
     <state id="scheduled" title="Scheduled" permissions_from_state="admissible" />
@@ -154,21 +147,42 @@
         <facet ref=".public" />
         <facet ref="attachment.public_frozen" />
         <facet ref="event.public_frozen" />
-        <facet ref="signatory.public_frozen" />
     </state>
     
     <state id="withdrawn" title="Withdrawn" 
         permissions_from_state="tabled" />
+
+    <!-- workflow STATES - SENATE -->   
+    <state id="forwarded_other_senate" title="Forwarded to Senate" actions="version">
+        <facet ref=".edit_Clerk_Senate" />
+        <facet ref="attachment.internal" />
+        <facet ref="event.internal" />
+    </state>
+    <state id="reviewed_senate" title="Submitted to the Speaker" actions="version">
+        <facet ref=".edit_Speaker_Senate" />
+        <facet ref="attachment.internal" />
+        <facet ref="event.internal" />
+    </state>
+
+<!-- FLAVIO, what will happen if we allow this ... actions="version set_doc_type_number" -->
+    <state id="admissible_senate" title="Admissible"
+        >
+        <facet ref=".public" />
+        <facet ref="attachment.public" />
+        <facet ref="event.public" />
+    </state>
+
     
-    
-    <transition title="Create Document"
+
+    <!-- workflow TRANSITIONS ASSEMBLY -->
+    <transition title="Create Bicameral Document"
         source=""
         destination="draft"
         condition="user_is_context_owner"
         trigger="automatic"
     />
     
-    <transition title="Create Document (On behalf of)"
+    <transition title="Create Bicameral Document (On behalf of)"
         source=""
         destination="working_draft"
         condition="user_is_not_context_owner"
@@ -176,9 +190,9 @@
     />
     
     <transition title="Submit"
-        source="redraft draft submitted_signatories"
+        source="draft"
         destination="submitted"
-        condition="pi_signatories_check"
+        condition=""
         trigger="manual"
         roles="Owner"
     />
@@ -186,33 +200,9 @@
     <transition title="Submit"
         source="working_draft"
         destination="submitted"
-        condition="pi_signatories_check"
+        condition=""
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
-    <transition title="Submit to Signatories"
-        source="draft redraft"
-        destination="submitted_signatories"
-        condition="pi_has_signatories"
-        roles="Owner"
-        trigger="manual"
-    />
-    
-    <transition title="Redraft"
-        source="submitted_signatories"
-        destination="redraft"
-        condition="user_is_context_owner"
-        roles="Owner"
-        trigger="manual"
-    />
-    
-    <transition title="Drop"
-        source="redraft submitted_signatories"
-        destination="withdrawn_signatory"
-        condition="user_is_context_owner"
-        roles="Owner"
-        trigger="manual"
+        roles="ClerkAssembly"
     />
     
     <transition title="Reviewed"
@@ -220,7 +210,7 @@
         destination="reviewed"
         condition=""
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
+        roles="ClerkAssembly"
     />
     
     <transition title="Require Clarifications"
@@ -228,7 +218,7 @@
         destination="clarification_required"
         condition=""
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
+        roles="ClerkAssembly"
         require_confirmation="true"
     />
     
@@ -237,15 +227,23 @@
         destination="admissible"
         condition=""
         trigger="manual"
-        roles="SpeakerSenate SpeakerAssembly"
+        roles="SpeakerAssembly"
     />
-    
+
+    <transition title="Forwarded to Senate"
+        source="reviewed"
+        destination="forwarded_other_senate"
+        condition=""
+        trigger="manual"
+        roles="SpeakerAssembly"
+    />   
+
     <transition title="Scheduled for Debate"
         source="admissible adjourned"
         destination="scheduled"
         condition="is_scheduled"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
+        roles="ClerkAssembly"
     />
     
     <transition title="Inadmissible"
@@ -253,7 +251,7 @@
         destination="inadmissible"
         condition=""
         trigger="manual"
-        roles="SpeakerSenate SpeakerAssembly"
+        roles="SpeakerAssembly"
         require_confirmation="true"
     />
     
@@ -269,7 +267,7 @@
         source="scheduled"
         destination="adjourned"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
+        roles="ClerkAssembly"
         condition=""
     />
 
@@ -278,7 +276,7 @@
         destination="tabled"
         condition=""
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly MemberSenate MemberAssembly MinistryMember"
+        roles="ClerkAssembly"
     />
     
     <transition title="Withdraw"
@@ -287,7 +285,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly Owner"
+        roles="ClerkAssembly Owner"
         order="26"
         require_confirmation="true"
         note="The Member can withdraw his question at any stage where it can 
@@ -300,9 +298,30 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly Owner"
+        roles="ClerkAssembly Owner"
         order="27"
         require_confirmation="true"
     />
+
+
+
+     <!-- workflow TRANSITIONS SENATE -->
+
+    <transition title="Reviewed Senate"
+        source="forwarded_other_senate"
+        destination="reviewed_senate"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+
+    <transition title="Admissible"
+        source="reviewed_senate"
+        destination="admissible_senate"
+        condition=""
+        trigger="manual"
+        roles="SpeakerSenate"
+    />
+
 
 </workflow>

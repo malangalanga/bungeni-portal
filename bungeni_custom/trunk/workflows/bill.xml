@@ -115,15 +115,9 @@
         <facet ref="event.internal_frozen" />
         <facet ref="signatory.internal_frozen" />
     </state>
-    
-    <state id="submitted" title="Submitted to Clerk" actions="version">
-        <facet ref=".view_Clerk" />
-        <facet ref="event.internal_frozen" />
-        <facet ref="signatory.internal_frozen" />
-    </state>
-    
-    <state id="received" title="Received by Clerk" 
-            actions="set_doc_registry_number" >
+
+    <state id="submitted" title="Submitted to Clerk" 
+            actions="set_doc_registry_number version" >
         <facet ref=".edit_Clerk" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
@@ -131,7 +125,7 @@
         <facet ref="group_assignment.internal" />
     </state>
 
-    <state id="reviewed_clerk" title="Reviewed by Clerk" 
+    <state id="reviewed" title="Reviewed by Clerk" 
             actions="set_doc_registry_number" >
         <facet ref=".edit_Speaker" />
         <facet ref="attachment.internal" />
@@ -140,13 +134,13 @@
         <facet ref="group_assignment.internal" />
     </state> 
 
-    <state id="referred_committee" title="Referred to Committee for pre-publication scrutiny" actions="version"  permissions_from_state="received"/>
+    <state id="referred_committee" title="Referred to Committee for pre-publication scrutiny" actions="version"  permissions_from_state="submitted"/>
 
-    <state id="recommendations_committee" title="Recommendations of the Committee" actions="version" permissions_from_state="reviewed_clerk"/>
+    <state id="recommendations_committee" title="Recommendations of the Committee" actions="version" permissions_from_state="reviewed"/>
 
-    <state id="rejected_proposal" title="Legislative Proposal Rejected" actions="version" permissions_from_state="reviewed_clerk"/>
+    <state id="rejected_proposal" title="Legislative Proposal Rejected" actions="version" permissions_from_state="reviewed"/>
 
-    <state id="accepted_proposal" title="Legislative Proposal Approved" actions="version set_doc_type_number" permissions_from_state="reviewed_clerk"/>
+    <state id="accepted_proposal" title="Legislative Proposal Approved" actions="version set_doc_type_number" permissions_from_state="reviewed"/>
  
     <state id="gazetted" title="Bill Published in Gazette" actions="version">
         <facet ref=".public_edit_Clerk" />
@@ -268,25 +262,16 @@
         trigger="manual"
     />
 
-    <transition title="Receive Legislative Proposal"
+    <transition title="Clerk reviewed Legislative Proposal"
         source="submitted"
-        destination="received"
-        trigger="manual"
-        condition=""
-        roles="ClerkSenate ClerkAssembly"
-        order="2"
-    />
-
-    <transition title="Clerk reviews Legislative Proposal"
-        source="received"
-        destination="reviewed_clerk"
+        destination="reviewed"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
 
     <transition title="Speaker refers to Committee for scrutiny"
-        source="reviewed_clerk"
+        source="reviewed"
         destination="referred_committee"
         condition=""
         trigger="manual"
@@ -328,7 +313,7 @@
     <transition title="First Reading Scheduled"
         source="gazetted first_reading_adjourned"
         destination="first_reading_scheduled"
-        condition=""
+        condition="is_scheduled"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
@@ -336,7 +321,7 @@
     <transition title="First Reading"
         source="first_reading_scheduled"
         destination="first_reading"
-        condition="is_scheduled"
+        condition=""
         trigger="system"
         roles="ClerkSenate ClerkAssembly"
     />
@@ -360,7 +345,7 @@
     <transition title="Second Reading Scheduled"
         source="first_reading referred_committee_first_reading second_reading_adjourned "
         destination="second_reading_scheduled"
-        condition=""
+        condition="is_scheduled"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
@@ -368,7 +353,7 @@
     <transition title="Second Reading"
         source="second_reading_scheduled"
         destination="second_reading"
-        condition="is_scheduled"
+        condition=""
         trigger="system"
         roles="ClerkSenate ClerkAssembly"
     />
@@ -384,7 +369,7 @@
     <transition title="Committee of the Whole House Scheduled"
         source="second_reading whole_house_adjourned"
         destination="whole_house_scheduled"
-        condition=""
+        condition="is_scheduled"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
@@ -392,7 +377,7 @@
     <transition title="Committee of the Whole House"
         source="whole_house_scheduled"
         destination="whole_house"
-        condition="is_scheduled"
+        condition=""
         trigger="system"
         roles="ClerkSenate ClerkAssembly"
     />
@@ -408,7 +393,7 @@
     <transition title="Third Reading Scheduled"
         source="whole_house third_reading_adjourned"
         destination="third_reading_scheduled"
-        condition=""
+        condition="is_scheduled"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
@@ -416,7 +401,7 @@
     <transition title="Third Reading"
         source="third_reading_scheduled"
         destination="third_reading"
-        condition="is_scheduled"
+        condition=""
         trigger="system"
         roles="ClerkSenate ClerkAssembly"
     />
