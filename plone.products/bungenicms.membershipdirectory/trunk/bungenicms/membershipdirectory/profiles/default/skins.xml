@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<object name="portal_skins">
+    
+    <object name="membership_custom_templates"
+        meta_type="Filesystem Directory View"
+        directory="bungenicms.membershipdirectory:skins/membership_custom_templates"/>
+        
+    <skin-path name="*">
+        <layer name="membership_custom_templates" insert-after="custom"/>  
+    </skin-path>
+</object>

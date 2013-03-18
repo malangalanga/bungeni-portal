@@ -1,0 +1,22 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    i18n_domain="bungenicms.membershipdirectory">
+
+  <!-- configure your content components here -->
+  
+  <!-- -*- extra stuff goes here -*- -->
+  <class class=".membershipdirectory.MembershipDirectory">
+    <require
+        permission="zope2.View"
+        interface="..interfaces.IMembershipDirectory"
+        />
+  </class>
+  
+  <class class=".memberprofile.MemberProfile">
+    <require
+        permission="zope2.View"
+        interface="..interfaces.IMemberProfile"
+        />
+  </class>
+</configure>

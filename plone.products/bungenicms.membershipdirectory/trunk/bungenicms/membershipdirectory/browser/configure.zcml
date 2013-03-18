@@ -1,0 +1,58 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="bungenicms.membershipdirectory">
+  
+    <browser:resourceDirectory
+        name="bungenicms.membershipdirectory.icons"
+        directory="icons"
+    />
+    
+    <!-- Resource directory for javascript Files --> 
+    <browser:resourceDirectory
+        name="bungenicms.membershipdirectory.js"
+        directory="js"
+    />
+    
+    <!-- Resource directory for CSS Files --> 
+    <browser:resourceDirectory
+        name="bungenicms.membershipdirectory.css"
+        directory="css"
+    />
+    
+    <browser:page
+        for="..interfaces.IMembershipDirectory"
+        name="membership_directory_view_tabular"
+        class=".member_browser.Html"
+        permission="zope2.View"
+        template="templates/membership_directory_view_tabular.pt"
+    />
+    
+    <browser:page
+        for="..interfaces.IMembershipDirectory"
+        name="membership_directory_view_standard"
+        class=".member_browser.Html"
+        permission="zope2.View"
+        template="templates/membership_directory_view_standard.pt"
+    />
+    
+    <browser:page
+        for="..interfaces.IMemberProfile"
+        name="member_profile_view"
+        permission="zope2.View"
+        template="templates/member_profile_view.pt"
+    /> 
+    
+    <browser:pages
+        for="*"
+        class=".member_browser.Html"
+        permission="zope2.View">
+        
+        <browser:page
+            name="fetch_constituencies"
+            attribute="fetch_constituencies"
+        /> 
+            
+    </browser:pages>
+        
+</configure>

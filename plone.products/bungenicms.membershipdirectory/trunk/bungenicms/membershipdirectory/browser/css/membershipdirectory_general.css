@@ -1,0 +1,77 @@
+.clickme {
+    background-color: #eee;
+    border-radius: 4px;
+    color: #666;
+    display: block;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    text-decoration: none;
+}
+
+.clickme:hover {
+    text-decoration: underline;
+}
+
+.box {
+    background-color: #ccc;
+    border-radius: 4px;
+    color: #333;
+    margin: 5px 0;
+    padding: 5px 10px;
+    width: auto;
+}
+
+.member-photo {
+    float:left; 
+    padding-right:20px;
+}
+
+/* Search box form */
+div.box label{
+    width:100%;
+    display: block;
+    padding:5px 0 5px 0;
+}
+div.box label span{
+    display: block;
+    color:#000000;
+    font-size:12px;
+    float:left;
+    width:100px;
+    text-align:right;
+    padding:5px 10px 0 0;
+}
+
+div.box .input_text{
+    padding:5px 5px;
+    width:150px;
+    border-bottom: 1px double #171717;
+    border-top: 1px double #171717;
+    border-left:1px double #333;
+    border-right:1px double #333;
+}
+
+div.box .message{
+    padding:7px 7px;
+    width:350px;
+    background:#262626;
+    border-bottom: 1px double #171717;
+    border-top: 1px double #171717;
+    border-left:1px double #333;
+    border-right:1px double #333;
+    overflow:hidden;
+    height:150px;
+}
+
+div.box .button
+{
+    margin:0 0 10px 0;
+    padding:4px 7px;
+    background:#205C90;
+    color:#FFFFFF;
+    border:0px;
+    position: relative;
+    top:10px;
+    float:right;
+    width:100px;
+}
