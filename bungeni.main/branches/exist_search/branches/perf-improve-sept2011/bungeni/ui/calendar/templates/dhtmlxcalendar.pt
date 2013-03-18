@@ -1,0 +1,122 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="context/@@standard_macros/page">
+      <tal:block metal:fill-slot="header">
+        <script type="text/javascript">
+            function init() {
+                scheduler.config.xml_date="%Y-%m-%d %H:%i";
+                scheduler.config.show_loading=true;
+                scheduler.config.scroll_hour=8;
+                scheduler.config.details_on_create=true;
+                
+                //scheduler.locale.labels.agenda_tab = "Upcoming";
+                scheduler.init('scheduler_here', null, "week");
+                scheduler.setLoadMode("month");
+                
+                scheduler.load(location.href+"/dhtmlxcalendar?uid="+scheduler.uid());
+                
+                scheduler.form_blocks["my_editor"]={
+                    render:function(sns){
+                        return $("#calendar_form_html").html();
+                                  
+                    },
+                    set_value:function(node,value,ev){
+                        //node.childNodes[1].value=ev.type||"";
+                        //node.childNodes[4].value=ev.venue||"";
+                        //node.childNodes[7].value=ev.language||"";
+                        $("#select_sitting_venue").val(ev.venue||"");
+                        $("#select_sitting_lang").val(ev.language||"en");
+                    },
+                    get_value:function(node,ev){
+                        //ev.type = node.childNodes[1].value;
+                        //var w = node.childNodes[1].selectedIndex;
+                        //ev.text =  node.childNodes[1].options[w].text + ev.status;
+                        //ev.venue = node.childNodes[4].value;
+                        //ev.language = node.childNodes[7].value;
+                        //return node.childNodes[1].value;
+                        //ev.text = $("#select_sitting_type").options[ev.type].text;
+                        
+                        ev.language = $("#select_sitting_lang").val();
+                        ev.venue = $("#select_sitting_venue").val();
+                        ev.text = '<span tal:replace="structure python:'&lt;b&gt;Venue:&lt;/b&gt;&lt;/br&gt;'"/>' + $("#select_sitting_venue option:selected").text();
+                    },
+                    focus:function(node){
+                    }
+                }
+                
+                
+                
+                 
+                scheduler.config.lightbox.sections=[    
+                        { name:"description", height:200, type:"my_editor" },
+                        {name:"recurring", height:115, type:"recurring", map_to:"rec_type", button:"recurring"},
+                        { name:"time", height:72, type:"time", map_to:"auto"}
+                    ]
+                
+                 
+                
+            }
+            
+        </script>
+        <script tal:condition="view/edit">
+            function canEdit()
+            {
+                init();
+                scheduler.attachEvent("onDblClick", function (event_id, native_event_object){
+                    parent.location = '<span tal:replace="structure view/url"/>' + "/sittings/obj-"+event_id+"/schedule";
+                });
+                scheduler.config.icons_select=["icon_details","icon_delete"]
+                scheduler.config.readonly = false;
+                var dp = new dataProcessor(location.href+"/dhtmlxcalendaredit");
+                dp.init(scheduler);
+            }
+            window.onload = canEdit;
+        </script>
+        <script tal:condition ="not:view/edit">
+            function cannotEdit()
+            {
+                init();
+                scheduler.attachEvent("onDblClick", function (event_id, native_event_object){
+                    parent.location = '<span tal:replace="structure view/url"/>' + "/sittings/obj-"+event_id+"/view";
+                });
+                scheduler.config.icons_select=[]
+                scheduler.config.drag_resize = false;
+                scheduler.config.drag_move = false;
+                scheduler.config.drag_create = false;
+                scheduler.config.dblclick_create = false;
+                //scheduler.config.readonly = true;
+                //scheduler.getEvent("onClick").readonly = true;
+                //scheduler.getEvent("onDblClick").readonly = true;
+                var dp = new dataProcessor(location.href+"/dhtmlxcalendaredit");
+                dp.init(scheduler);
+            }
+            window.onload = cannotEdit;
+        </script>
+        
+      </tal:block>
+      <div metal:fill-slot="body" i18n:domain="bungeni" class="dhtmlx_calendar_main">
+          <div class="dhtmlx_calendar_title">
+            <span i18n:translate="">Calendar of </span>
+            <span tal:replace="view/title"></span>
+          </div>
+          <div id="scheduler_here" class="dhx_cal_container" >
+                <div class="dhx_cal_navline">
+                    <div class="dhx_cal_prev_button">&nbsp;</div>
+                    <div class="dhx_cal_next_button">&nbsp;</div>
+                    <div class="dhx_cal_today_button"></div>
+                    <div class="dhx_cal_date"></div>
+                    <div class="dhx_cal_tab" name="day_tab" id="day_tab"></div>
+                    <div class="dhx_cal_tab" name="week_tab" id="week_tab"></div>
+                    <div class="dhx_cal_tab" name="month_tab" id="month_tab"></div>
+                    <!-- div class="dhx_cal_tab" name="agenda_tab" style="right:20px;"></div-->
+                </div>
+                <div class="dhx_cal_header">
+                </div>
+                <div class="dhx_cal_data">
+                </div>        
+          </div>
+          <div id="calendar_form_html" style="display:none;">
+            <span metal:use-macro="view/calendar_macros/eventformhtml"/>
+          </div>
+      </div>
+</html>  

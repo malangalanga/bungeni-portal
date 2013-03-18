@@ -1,0 +1,12 @@
+<configure xmlns:meta="http://namespaces.zope.org/meta">
+  <meta:directive
+      name="openoffice"
+      namespace="http://namespaces.bungeni.org"
+      schema="bungeni.ui.interfaces.IOpenOfficeConfigSchema"
+      handler="bungeni.ui.zcml.registerOpenOfficeConfig"
+      >
+      OpenOffice Configuration
+  </meta:directive>
+</configure>
+
+  

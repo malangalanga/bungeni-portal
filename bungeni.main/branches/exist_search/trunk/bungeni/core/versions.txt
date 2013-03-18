@@ -1,0 +1,102 @@
+Versions
+========
+
+  >>> import bungeni.core.version
+  >>> import datetime
+
+Setting up database connection and utilities:
+
+    >>> from bungeni.core.testing import setup_db
+    >>> engine = setup_db()
+
+Adding a question.
+
+  >>> from bungeni.models.testing import add_content
+  >>> from bungeni.models import domain
+  >>> from bungeni.alchemist import Session
+  >>> session = Session()
+
+  >>> country = domain.Country()
+  >>> country.country_id = "KE"
+  >>> country.country_name = u"Kenya"
+  >>> country.iso_name = u"KENYA"
+  >>> country.language = "en"
+  >>> session.add(country)
+  >>> session.flush() 
+
+  >>> mp_1 = domain.User(u"mp_1", 
+  ...        first_name=u"a", 
+  ...        last_name=u"ab", 
+  ...        birth_country="KE",
+  ...        email=u"mp1@example.com", 
+  ...        date_of_birth=datetime.datetime.now(),
+  ...        language="en",
+  ...        gender="M") 
+  >>> session.add(mp_1)
+  >>> session.flush()
+
+In order to create a participation, we need a principal:
+
+  >>> from bungeni.core.testing import set_interaction
+  >>> set_interaction(None)
+
+  >>> from bungeni.core.testing import create_principal
+  >>> member = create_principal("mp_1", "Member", ())
+
+  >>> set_interaction(member)
+  >>> from bungeni.utils import common
+  >>> common.get_request_login()
+  'mp_1'
+
+    >>> question = add_content(
+    ...     domain.Question,
+    ...     title="A question",
+    ...     type="question",
+    ...     owner_id=mp_1.user_id,
+    ...     language="en")
+
+
+Verify that no versions exist yet (assuming questions are IFeatureVersion):
+
+    >>> len(question.versions)
+    0
+
+To be versioned, a question should be in a valid state:
+
+!+INTERACTION(mr, jul-2011) remaining tests need to be upgraded to take into 
+account richer testing possibilities given the above newly added principal 
+interaction
+
+!+register_specific_workflow_adapter
+    >>> from bungeni.capi import capi
+    >>> ti = capi.get_type_info("question")
+    >>> from bungeni.core.workflows import adapters
+    >>> adapters.register_specific_workflow_adapter(ti)
+    >>> #from bungeni.core.workflow.interfaces import IWorkflow
+    >>> #wf = IWorkflow(question) #!+fails
+    
+!+ running this test file alone "test -c bungeni.core -t versions.txt" fails with:
+TypeError: ('Could not adapt', <bungeni.models.domain.Question object at 0x4f48e10>, <InterfaceClass zope.securitypolicy.interfaces.IPrincipalRoleMap>
+    >>> from bungeni.core.workflow.interfaces import IWorkflowController
+    >>> wfc = IWorkflowController(question)
+    >>> wfc
+    <bungeni.core.workflow.states.WorkflowController object at ...>
+    >>> wfc.fireAutomatic()
+    >>> question.status
+    'draft'
+
+After creating a version, verify availability:
+
+    >>> bungeni.core.version.create_version(question)
+    >>> session.refresh(question) # !+ otherwise question.versions is stale
+    >>> len(question.versions)
+    1
+
+Cleanup
+-------
+  
+  >>> session.flush()
+  >>> session.commit()
+  >>> session.close()
+  >>> set_interaction(None)
+

@@ -1,0 +1,36 @@
+<data i18n:domain="bungeni">
+<tal:loop tal:repeat="s python:view.sittings_and_sessions">
+<event tal:define="event_id python:view.get_event_id(s);event_type python:view.get_event_type(s); is_recurring python:getattr(s, ' rec_end_date', None)" tal:attributes="id event_id; color python:view.get_colour(s)">
+<start_date><span tal:replace="structure python:s.start_date.strftime('%Y-%m-%d %H:%M')"/></start_date>
+<end_date tal:condition="is_recurring"><span tal:replace="structure python:s.recurring_end_date.strftime('%Y-%m-%d %H:%M')"/></end_date>
+<end_date tal:condition="not:is_recurring"><span tal:replace="structure python:s.end_date.strftime('%Y-%m-%d %H:%M')"/></end_date>
+<rec_type><span tal:replace="structure python:'&lt;![CDATA['"/><span tal:replace="s/recurring_type|string:"/><span tal:replace="structure python:']]&gt;'"/></rec_type>
+<event_pid><span tal:replace="structure python:'&lt;![CDATA['"/><span tal:replace="s/recurring_id|string:"/><span tal:replace="structure python:']]&gt;'"/></event_pid>
+<event_length><span tal:replace="structure python:'&lt;![CDATA['"/><span tal:replace="s/sitting_length|string:"/><span tal:replace="structure python:']]&gt;'"/></event_length>
+<short_name><span tal:replace="s/short_name"/></short_name>
+<event_type><span tal:replace="event_type"/></event_type>
+<activity_type><span tal:replace="s/activity_type|nothing"/></activity_type>
+<meeting_type><span tal:replace="s/meeting_type|nothing"/></meeting_type>
+<convocation_type><span tal:replace="s/convocation_type|nothing"/></convocation_type>
+<text><span tal:replace="structure python:'&lt;![CDATA['"/>
+<tal:activity tal:condition="s/short_name">
+<span tal:replace="s/short_name"/>
+</tal:activity>
+<tal:noactivity tal:condition="not:s/short_name">
+<span i18n:translate="scheduler_label_sitting">Sitting</span>
+</tal:noactivity>
+<tal:withvenue tal:condition="s/venue|nothing">
+<b><span tal:omit-tag="">&nbsp;&ndash;&nbsp;</span></b>
+<span tal:replace="s/venue/dc:title"/><br/>
+</tal:withvenue>
+<span tal:replace="structure python:']]&gt;'"/>
+</text>
+<venue><span tal:condition="s/venue | nothing" tal:replace="structure python:str(s.venue.venue_id)"/></venue>
+<venue_name><span tal:condition="s/venue | nothing" tal:replace="s/venue/dc:title"/></venue_name>
+<group><span tal:replace="s/group/dc:title"/></group>
+<group_id><span tal:replace="s/group/group_id"/></group_id>
+<status><span tal:condition="s/status | nothing" tal:replace="structure python:s.status"/></status>
+<language><span tal:condition="s/language | nothing" tal:replace="structure python:s.language"/></language>
+</event>
+</tal:loop>
+</data>

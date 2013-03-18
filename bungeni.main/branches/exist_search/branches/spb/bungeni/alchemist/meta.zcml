@@ -1,0 +1,15 @@
+<configure xmlns='http://namespaces.zope.org/zope'
+    xmlns:meta="http://namespaces.zope.org/meta"
+    i18n_domain="zalchemy">
+    
+    <include package="ore.alchemist" file="meta.zcml"/>
+    
+    <!-- !+ gives conflict, defined in python: bungeni.alchemist.model
+    <adapter for="ore.alchemist.interfaces.IAlchemistContent"
+        provides="ore.alchemist.interfaces.IModelAnnotation"
+        factory=".model.queryModelDescriptor"
+    />
+    -->
+
+</configure>
+

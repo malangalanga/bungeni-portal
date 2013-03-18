@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="bungeni">
+
+    <include file="workspace.zcml" />
+
+    <!--
+    <browser:viewlet
+        name="bungeni.content-actions-portlet"
+        for="*"
+        layer="..interfaces.IBungeniAuthenticatedSkin"
+        permission="zope.Public"
+        manager="ploned.ui.interfaces.ILeftColumnManager"
+        class="ploned.ui.viewlet.ContentViewsViewlet"
+        weight="5"
+    />       logged in, for all sections
+    <browser:viewlet
+        name="bungeni.content-actions-portlet"
+        for="*"
+        layer="..interfaces.IArchiveSectionLayer"
+        permission="zope.Public"
+        manager="ploned.ui.interfaces.ILeftColumnManager"
+        class="ploned.ui.viewlet.ContentViewsViewlet"
+        weight="5"
+    />      not logged in, for Archive Section
+    -->
+
+    <!-- navigation  - the navigation is Public -->
+
+    <browser:viewlet name="bungeni.navigation.breadcrumbs"
+        for="*"
+        manager="ploned.ui.interfaces.IPortalHeaderManager"
+        class=".navigation.BreadCrumbsViewlet"
+        permission="zope.Public"
+        weight="50"
+    />
+    <browser:viewlet name="bungeni.navigation.globalsections"
+        for="*"
+        manager="ploned.ui.interfaces.IPortalHeaderManager"
+        class=".navigation.GlobalSectionsViewlet"
+        permission="zope.Public"
+        weight="30"
+    />
+    <browser:viewlet name="bungeni.navigation.search"
+        for="*"
+        manager="ploned.ui.interfaces.IPortalHeaderManager"
+        class=".search.SearchViewlet"
+        permission="zope.Public"
+        weight="10000"
+    />
+    <!--
+        IPortalHeaderManager ViewletManager defined in ploned/ui/viewlet.zcml
+    -->
+    <browser:viewlet name="bungeni.navigation.navtree"
+        manager="ploned.ui.interfaces.ILeftColumnManager"
+        class=".navigation.TopLevelContainerNavigation"
+        permission="zope.Public"
+        layer="bungeni.ui.interfaces.IArchiveSectionLayer"
+        weight="5"
+    />
+    <browser:viewlet name="bungeni.navigation.admin.navtree"
+        manager="ploned.ui.interfaces.ILeftColumnManager"
+        class=".navigation.NavigationTreeViewlet"
+        permission="zope.Public"
+        layer="bungeni.ui.interfaces.IAdminSectionLayer"
+        weight="10"
+    />
+    <browser:viewlet name="bungeni.navigation.secondary"
+        for="*"
+        class=".navigation.SecondaryNavigationViewlet"
+        manager="ploned.ui.interfaces.IPersonalBarMenu"
+        permission="zope.Public"
+        weight="0"
+    />
+
+
+    <!-- Languages -->
+    
+    <browser:page name="change-language"
+        for="*"
+        permission="zope.Public"
+        class=".language.ChangeLanguage"
+    />
+    
+    <browser:viewlet name="bungeni.content.languages"
+        for="*"
+        permission="zope.Public"
+        manager="ploned.ui.interfaces.IPortalHeaderManager"
+        class=".language.LanguageViewlet"
+    />
+    <browser:viewlet name="bungeni.activity_indicator"
+        for="*"
+        permission="zope.Public"
+        manager="ploned.ui.interfaces.IPortalHeaderManager"
+        class=".enhance.ProcessingViewlet"
+    />
+    <browser:viewlet name="bungeni.reports.preview"
+        for="bungeni.ui.interfaces.IWorkspaceReportGeneration"
+        permission="bungeni.report.View"
+        manager="ploned.ui.interfaces.IBelowContentManager"
+        class=".reports.ReportPreview"
+    />
+</configure>

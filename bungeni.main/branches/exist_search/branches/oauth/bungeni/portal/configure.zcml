@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns:bungeni="http://namespaces.bungeni.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:db="http://namespaces.objectrealms.net/rdb"
+    i18n_domain="bungeni">
+    
+    <include package="bungeni.alchemist" file="meta.zcml" />
+    <include package="bungeni.core" file="meta.zcml"  />
+    
+    <!-- Setup file storage -->
+    <bungeni:fs fs_path="fs" />
+    <!-- Setup notifications -->
+    <bungeni:messagequeue
+      message_exchange="bungeni" 
+      task_exchange="bungeni_notification_tasks"/>
+    
+    <!-- Setup Database Connection -->
+    <!-- load from bungeni_custom -->
+    <include package="bungeni_custom.sys" file="db.zcml" />
+    <!-- Bind Application Model to Database -->
+    <db:bind engine="bungeni-db" metadata="bungeni.models.schema.metadata" />
+    <!-- Bind Security Model to Database (role, permission maps) -->
+    <db:bind engine="bungeni-db" 
+        metadata="bungeni.alchemist.security.metadata" 
+    />
+    
+    <!-- The ``bungeni.portal`` package is shared between Bungeni (z3)
+        and Plone; part of the configuration is platform-dependent -->
+
+    <configure zcml:condition="not-installed bungenicms.plonepas">
+        <browser:resourceDirectory name="portal"
+            directory="static/html/resources"
+            permission="zope.Public"
+        />
+        <!--Skin Images-->
+        <browser:resourceDirectory name="images"
+            directory="static/html/resources"
+            layer="ploned.ui.interfaces.IPlonedSkin"
+        />
+        <!--Skin css-->
+        <browser:resourceDirectory name="css"
+            directory="static/html/resources"
+            layer="ploned.ui.interfaces.IPlonedSkin"
+        />
+        <include package="ploned.ui" file="skin.zcml" />
+    </configure> 
+    
+</configure>

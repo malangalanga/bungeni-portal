@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser" 
+    xmlns:i18n="http://namespaces.zope.org/i18n">
+  <browser:defaultView
+     for="bungeni.models.interfaces.IHansard"
+     name="index"
+     />
+  <browser:page
+      for="bungeni.models.interfaces.IHansard"
+      name="index"
+      class="bungeni.ui.hansard.browser.HansardView"
+      permission="zope.View"
+      />
+</configure>

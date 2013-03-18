@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="bungeni">
+    
+    <include package="zope.component" file="meta.zcml" />
+    <include package="zope.app.component" file="meta.zcml" />
+    
+    <includeOverrides package="repoze.whooze" file="overrides.zcml" />
+    <include package="zope.app.security" />
+    
+    <!-- Exclude ZCML Directives -->
+    <include package="zc.configuration" file="meta.zcml" />
+    
+    <!-- Load up AppServer Configuration -->
+    <include package="bungeni.server" />
+    
+    <!-- bypass default publishers, don't publish/open the zodb -->
+    <includeOverrides package="ore.wsgiapp" />
+
+  <!-- Security Debugging Tools 
+  <include package="zope.session"/>
+  <utility 
+      provides="zope.session.interfaces.IClientIdManager"
+      factory="zope.session.http.CookieClientIdManager"/>
+      
+  <utility
+      provides="zope.session.interfaces.ISessionDataContainer"
+      factory="zope.session.session.RAMSessionDataContainer" />
+
+  <include package="z3c.macro" file="meta.zcml"/>
+  <include package="z3c.macro"/>
+  <include package="z3c.securitytool" />
+   -->
+    
+    <include package="ore.alchemist" />
+    
+    <!-- configure menu subsystem -->
+    <include package="z3c.template" file="meta.zcml" />
+    <include package="z3c.menu.ready2go" file="meta.zcml" />
+    <include package="z3c.menu.ready2go" />
+    
+    <!-- include cookie authentication -->
+  <!-- 
+  <include package="wc.cookiecredentials"/>
+  -->
+    
+    <!-- default indexing setup -->
+    <!-- !+DISABLE_XAPIAN
+    <include package="ore.xapian" />
+    -->
+    <!-- App Security -->
+    <include file="security.zcml" />
+    
+    <!-- Application Configuration -->
+    <include package="ploned.ui" file="meta.zcml" />
+    
+    <include package="bungeni.core" />
+    <includeOverrides file="overrides.zcml" package="bungeni.core" />
+    
+    <!-- Application Theme -->
+    <include package="ploned.ui" />
+    
+    <!-- Application UI -->
+    <include package="bungeni.ui" />
+    
+    <!-- Open office configuration for PDF generation -->
+    <include package="bungeni.ui" file="meta.zcml" />
+    <include package="bungeni_custom.sys" file="openoffice.zcml" />
+    
+    <!-- Debate Record configuration -->
+    <include package="bungeni.core" file="meta.zcml" />
+    <include package="bungeni_custom.sys" file="debaterecord.zcml"/>
+    
+    <!-- REST API support -->
+    <include package="bungeni.rest" />  
+    
+    <!-- Transcripts for sittings -->
+    <!-- include package="hansard"/-->
+    
+    <!-- Default skin -->
+    <browser:defaultSkin name="bungeni" />
+    
+</configure>

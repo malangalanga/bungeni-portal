@@ -1,0 +1,891 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="bungeni">
+
+<!-- Naming convention for Page Views / Templates / Class Handlers:
+
+- PageView.name is the same as template file name, without the extension.
+- The "index" view is always postfixed with "-index".
+- The name of all children of a section always start with the same base
+  (as a prefix) as for the "index" view of the containing section.
+- The word separator in names for Views or Template Files is the "-" character,
+  i.e. not underscore or dot.
+
+-->
+
+    <!-- Application UI -->
+
+    <!-- !+app-index(mr) -:- the names of these two IBungeniApplication views
+       should both be "app-index" -->
+    <browser:page name="index"
+        for="bungeni.models.interfaces.IBungeniApplication"
+        permission="zope.Public"
+        template="templates/app-index.pt"
+    />
+
+    <!-- Setup Access to Browser Resources on the Application -->
+
+    <browser:page name=""
+        for="bungeni.models.interfaces.IBungeniApplication"
+        class="zope.app.publisher.browser.resources.Resources"
+        permission="zope.Public"
+        allowed_interface="zope.publisher.interfaces.browser.IBrowserPublisher"
+    />
+
+    <!-- redirects -->
+
+    <browser:page name="current"
+        for="bungeni.models.interfaces.IBungeniApplication"
+        permission="zope.Public"
+        class=".redirect.RedirectToCurrent"
+    />
+    <browser:page name="index"
+        for="bungeni.models.interfaces.IBungeniApplication"
+        permission="zope.View"
+        layer=".interfaces.IBungeniAuthenticatedSkin"
+        class=".redirect.WorkspaceRootRedirect"
+    />
+    <browser:view for="bungeni.alchemist.interfaces.IAlchemistContent"
+        permission="zope.View"
+        name="file-image"
+        class=".file.RawView"
+    />
+
+  <browser:view
+     for="bungeni.models.interfaces.IAttachedFile"
+     permission="zope.View"
+     name="download"
+     class=".file.FileDownload"
+     />
+
+  <browser:view
+     for="bungeni.models.interfaces.IAttachedFileVersion"
+     permission="zope.View"
+     name="download"
+     class=".file.FileDownload"
+     />
+
+    <browser:view for="bungeni.models.interfaces.IAttachedFile"
+        permission="bungeni.attachedfile.wf.public.internal.inactive"
+        name="deactivate"
+        class=".file.FileDeactivate"
+    /><!-- !+WORKFLOW_TRANSITION(mr, feb-2011) -->
+
+  <!-- Login UI -->
+
+  <browser:page
+     for="bungeni.models.interfaces.IBungeniApplication"
+     permission="zope.Public"
+     name="login"
+     class=".login.Login"
+     />
+
+  <browser:page
+     for="bungeni.models.interfaces.IBungeniApplication"
+     permission="zope.Public"
+     name="logout"
+     class=".login.Logout"
+     />
+
+    <!-- Content Search Form -->
+
+    <!--<browser:page name="search"
+        for="bungeni.core.interfaces.ISection"
+        permission="zope.View"
+        class=".search.PagedSearch"
+    />-->
+    
+    <browser:page name="search"
+        for="bungeni.core.interfaces.ISearchableSection"
+        permission="zope.View"
+        class=".search.PagedSearch"
+    />
+
+
+    <!-- Advanced search form -->
+    <browser:page name="advanced-search"
+        for="bungeni.core.interfaces.ISection"
+        permission="zope.View"
+        class=".search.AdvancedPagedSearch"
+    />
+
+    <browser:page
+     for="*"
+     name="ajax_get_class_statuses"
+     permission="zope.View"
+     class=".search.AjaxGetClassStatuses"
+    />
+
+    <!-- signatories -->
+    <browser:page name="signatory-review"
+        for="bungeni.models.interfaces.IBungeniParliamentaryContent"
+        permission="zope.View"
+        class=".redirect.SignatoryReview"
+    />
+
+    <browser:page
+     for="*"
+     name="ajax_get_class_fields"
+     permission="zope.View"
+     class=".search.AjaxGetClassFields"
+    />
+
+    <!-- View for item in search results -->
+    <browser:page name="searchresult"
+        for="ore.xapian.interfaces.IIndexable"
+        permission="zope.View"
+        class=".search.SearchResultItem"
+    />
+
+  <!-- Reporting -->
+
+  <browser:page
+     name="agenda"
+     for="bungeni.models.interfaces.IGroupSitting"
+     permission="bungeni.reports.Edit"
+     class=".reports.GroupSittingContextAgendaReportView"
+     />
+
+  <browser:page
+     name="agenda"
+     for="bungeni.models.interfaces.ICommittee"
+     permission="bungeni.reports.Edit"
+     class=".reports.SchedulingContextAgendaReportView"
+     />
+    <browser:page
+     name="agenda"
+     for="bungeni.core.interfaces.IWorkspaceScheduling"
+     permission="bungeni.reports.Edit"
+     class=".reports.SchedulingContextAgendaReportView"
+     />
+   <browser:page
+     name="votes-and-proceedings"
+     for="bungeni.models.interfaces.IGroupSitting"
+     permission="bungeni.reports.Edit"
+     class=".reports.GroupSittingContextMinutesReportView"
+     />
+
+    <browser:page
+     name="votes-and-proceedings"
+     for="bungeni.models.interfaces.ICommittee"
+     permission="bungeni.reports.Edit"
+     class=".reports.SchedulingContextAgendaReportView"
+     />
+    <browser:page
+     name="votes-and-proceedings"
+     for="bungeni.core.interfaces.IWorkspaceScheduling"
+     permission="bungeni.reports.Edit"
+     class=".reports.SchedulingContextAgendaReportView"
+     />
+  <browser:page
+     name="save-report"
+     for="bungeni.models.interfaces.IGroupSitting"
+     permission="bungeni.reports.Edit"
+     class=".reports.SaveReportView"
+     />
+    <browser:page
+     name="save-report"
+     for="bungeni.core.interfaces.ISection"
+     permission="bungeni.reports.Edit"
+     class=".reports.SaveReportView"
+     />
+
+  <!-- Calendar -->
+
+  <browser:page
+     name="view"
+     for="bungeni.core.interfaces.IDailySchedulingContext"
+     permission="zope.View"
+     class=".calendar.browser.DailyCalendarView"
+     />
+
+    <!--
+    <browser:page
+     for="bungeni.models.interfaces.IBungeniApplication"
+     permission="zope.Public"
+     name="calendar"
+     class=".calendar.browser.DhtmlxCalendarScheduleView"
+    /> -->
+    <browser:page
+     for="bungeni.models.interfaces.IReport"
+     permission="zope.Public"
+     name="odt"
+     class=".downloaddocument.ReportODT"
+    />
+
+    <browser:page
+     for="bungeni.models.interfaces.IReport"
+     permission="zope.Public"
+     name="pdf"
+     class=".downloaddocument.ReportPDF"
+    />
+    <browser:page
+     for="bungeni.models.interfaces.IReport4Sitting"
+     permission="zope.Public"
+     name="odt"
+     class=".downloaddocument.ReportODT"
+    />
+    <browser:page
+     for="bungeni.models.interfaces.IReport4Sitting"
+     permission="zope.Public"
+     name="pdf"
+     class=".downloaddocument.ReportPDF"
+    />
+    <browser:page
+     for="bungeni.models.interfaces.IMotion"
+     permission="zope.Public"
+     name="odt"
+     class=".downloaddocument.BungeniContentODT"
+    />
+    <browser:page
+     for="bungeni.models.interfaces.IMotion"
+     permission="zope.Public"
+     name="pdf"
+     class=".downloaddocument.BungeniContentPDF"
+    />
+    <browser:page
+     for="bungeni.models.interfaces.IBill"
+     permission="zope.Public"
+     name="odt"
+     class=".downloaddocument.BungeniContentODT"
+    />
+    <browser:page
+     for="bungeni.models.interfaces.IBill"
+     permission="zope.Public"
+     name="pdf"
+     class=".downloaddocument.BungeniContentPDF"
+    />
+    <browser:page
+     for="bungeni.models.interfaces.IQuestion"
+     permission="zope.Public"
+     name="odt"
+     class=".downloaddocument.BungeniContentODT"
+    />
+    <browser:page
+     for="bungeni.models.interfaces.IQuestion"
+     permission="zope.Public"
+     name="pdf"
+     class=".downloaddocument.BungeniContentPDF"
+    />
+    <browser:page
+     for="bungeni.models.interfaces.ITabledDocument"
+     permission="zope.Public"
+     name="odt"
+     class=".downloaddocument.BungeniContentODT"
+    />
+    <browser:page
+     for="bungeni.models.interfaces.ITabledDocument"
+     permission="zope.Public"
+     name="pdf"
+     class=".downloaddocument.BungeniContentPDF"
+    />
+    <browser:page
+     for="bungeni.models.interfaces.IAgendaItem"
+     permission="zope.Public"
+     name="odt"
+     class=".downloaddocument.BungeniContentODT"
+    />
+    <browser:page
+     for="bungeni.models.interfaces.IAgendaItem"
+     permission="zope.Public"
+     name="pdf"
+     class=".downloaddocument.BungeniContentPDF"
+    />
+    <browser:page
+     for="*"
+     permission="zope.Public"
+     name="dhtmlxcalendar"
+     class=".calendar.browser.DhtmlxCalendarSittings"
+    />
+
+    <browser:page
+     for="*"
+     permission="bungeni.sitting.Edit"
+     name="dhtmlxcalendaredit"
+     class=".calendar.browser.DhtmlxCalendarSittingsEdit"
+    />
+
+  <browser:page
+     for="bungeni.models.interfaces.ICommittee"
+     permission="zope.View"
+     name="schedule"
+     class=".calendar.browser.CommitteeCalendarView"
+    />
+    <browser:page
+     for="bungeni.models.interfaces.IBungeniApplication"
+     permission="zope.View"
+     name="schedule"
+     class=".calendar.browser.CalendarView"
+    />
+  <browser:page
+     for="bungeni.models.interfaces.IGroupSittingContainer"
+     permission="zope.View"
+     name="index"
+     class=".calendar.browser.CalendarView"
+     layer=".interfaces.IBusinessSectionLayer"
+    />
+    <browser:page
+        name="index"
+        for="bungeni.core.interfaces.IWorkspaceScheduling"
+        layer=".interfaces.IWorkspaceSchedulingSectionLayer"
+        class=".calendar.browser.CalendarView"
+        permission="zope.View"
+    />
+    <browser:page name="schedule"
+        for="bungeni.models.interfaces.IGroupSitting"
+        permission="bungeni.sittingschedule.View"
+        class=".calendar.browser.GroupSittingScheduleView"
+    />
+    
+      <browser:page
+     name="schedule_order"
+     for="bungeni.models.interfaces.IGroupSitting"
+     class=".calendar.browser.ItemScheduleOrder"
+     permission="bungeni.sittingschedule.Edit"
+     />
+     <browser:page
+     name="st-attendance"
+     for="bungeni.models.interfaces.IGroupSitting"
+     class=".attendance.AttendanceEditor"
+     permission="bungeni.sittingattendance.Edit"
+     />
+     
+  <!-- Similar Content -->
+
+  <browser:page
+    for="bungeni.models.interfaces.IBungeniContent"
+    permission="zope.View"
+    name="similar"
+    class=".search.Similar"
+    />
+
+    <!-- workflow view -->
+
+    <browser:page name="workflow"
+        for="bungeni.models.interfaces.IBungeniContent"
+        class=".workflow.WorkflowView"
+        permission="zope.Public"
+    />
+    <browser:page name="change_workflow_state"
+        for="bungeni.alchemist.interfaces.IAlchemistContent"
+        class=".workflow.WorkflowChangeStateView"
+        permission="zope.View"
+    />
+
+    <!-- versions -->
+    <browser:page name="index"
+        for="bungeni.models.interfaces.IVersionContainer"
+        class=".versions.VersionLogView"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        permission="zope.Public"
+    />
+
+    <!-- Attachments viewer -->
+    <browser:page name="index"
+        for="bungeni.models.domain.AttachedFileContainer"
+        class=".file.FileListingView"
+        permission="zope.Public"
+        template="templates/attachments.pt"
+    />
+
+  <!-- business -->
+
+    <browser:page name="business-index"
+        for="*"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        class=".redirect.BusinessIndexRedirect"
+        permission="zope.Public"
+    />
+    <browser:page name="whats-on"
+        for="bungeni.core.interfaces.ISection"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        class=".viewlets.whatson.WhatsOnBrowserView"
+        permission="zope.Public"
+    />
+    <browser:page name="whats-on-portlet"
+        for="bungeni.models.interfaces.IBungeniApplication"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        class=".viewlets.whatson.WhatsOnPortletBrowserView"
+        permission="zope.Public"
+    />
+
+  <!-- members -->
+
+    <browser:page
+        name="members-index"
+        for="*"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        class=".redirect.MembersIndexRedirect"
+        permission="zope.Public"
+    />
+
+  <!-- archive -->
+
+    <browser:page
+        name="archive-index"
+        for="*"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        class=".redirect.ArchiveIndexRedirect"
+        permission="zope.Public"
+    />
+    <browser:page
+        name="browse-archive"
+        for="bungeni.core.interfaces.ISection"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        class=".archive.ArchiveBrowseContentView"
+        permission="zope.Public"
+    />
+
+    <!-- admin -->
+    <browser:page name="admin-index"
+        for="*"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        class=".redirect.AdminIndexRedirect"
+        permission="zope.View"
+    />
+    <browser:page name="browse-admin"
+        for="bungeni.core.interfaces.ISection"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        class=".archive.AdminBrowseContentView"
+        permission="zope.ManageSite"
+    />
+
+    <!-- json view of containers-->
+    <browser:page name="jsonlisting"
+        for="bungeni.alchemist.interfaces.IAlchemistContainer"
+        permission="zope.Public"
+        class=".container.ContainerJSONListing"
+    />
+    <browser:page name="jsonlisting"
+        for="bungeni.alchemist.interfaces.IAlchemistContainer"
+        permission="zope.Public"
+        class=".container.PublicStatesContainerJSONListing"
+        layer=".interfaces.IBusinessSectionLayer"
+    />
+    <browser:page name="jsonlisting"
+        for="bungeni.alchemist.interfaces.IAlchemistContainer"
+        permission="zope.Public"
+        class=".container.PublicStatesContainerJSONListing"
+        layer=".interfaces.IMembersSectionLayer"
+    />
+    <browser:page name="jsonlisting"
+        for="bungeni.alchemist.interfaces.IAlchemistContainer"
+        permission="zope.Public"
+        class=".container.PublicStatesContainerJSONListing"
+        layer=".interfaces.IArchiveSectionLayer"
+    />
+    <browser:page name="jsontableheaders"
+        for="bungeni.alchemist.interfaces.IAlchemistContainer"
+        permission="zope.Public"
+        class=".container.ContainerJSONTableHeaders"
+    />
+    <browser:page name="jsonlisting"
+        for="bungeni.models.interfaces.IWorkspaceContainer"
+        permission="bungeni.workspace.View"
+        class=".workspace.WorkspaceContainerJSONListing"
+    />
+   
+    <!-- container UI -->
+    <browser:page name="index"
+        for="bungeni.alchemist.interfaces.IAlchemistContainer"
+        permission="zope.Public"
+        menu="context_actions"
+        title="Listing"
+        class=".table.AjaxContainerListing"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+    />
+    <browser:page name="index"
+        for="bungeni.models.interfaces.IWorkspaceContainer"
+        class=".workspace.WorkspaceContainerListing"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        permission="bungeni.workspace.View"
+    />
+    
+    <!-- Workspace Add views -->
+    <!-- CONVENTION - view names must follow the following convention
+    the word "add", then an undescore(_) then the item type as registered in the
+    workspace configuration in  bungeni.core.workspace-->
+    <browser:page name="add_question"
+        for="bungeni.core.interfaces.IWorkspaceDraft"
+        class=".workspace.WorkspaceAddForm"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        permission="bungeni.question.Add"
+    />
+    <browser:page name="add_motion"
+        for="bungeni.core.interfaces.IWorkspaceDraft"
+        class=".workspace.WorkspaceAddForm"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        permission="bungeni.motion.Add"
+    />
+    <browser:page name="add_tableddocument"
+        for="bungeni.core.interfaces.IWorkspaceDraft"
+        class=".workspace.WorkspaceAddForm"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        permission="bungeni.tableddocument.Add"
+    />
+    <browser:page name="add_bill"
+        for="bungeni.core.interfaces.IWorkspaceDraft"
+        class=".workspace.WorkspaceAddForm"
+        layer="bungeni.ui.interfaces.IBungeniSkin"
+        permission="bungeni.bill.Add"
+    />
+  <!-- RSS/XML views -->
+
+  <!-- RSS views for html content -->
+
+  <browser:page
+      name="feed.rss"
+      for="bungeni.models.interfaces.IBillContainer"
+      class=".rss.BillRSSView"
+      permission="zope.View"
+    layer=".interfaces.IRSSRepresentationLayer"
+   />
+
+   <browser:page
+        name="feed.rss"
+        for="bungeni.models.interfaces.ICommitteeContainer"
+        class=".rss.CommitteeRSSView"
+        permission="zope.View"
+    layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+   <browser:page
+        name="feed.rss"
+        for="bungeni.models.interfaces.IQuestionContainer"
+        class=".rss.QuestionRSSView"
+        permission="zope.View"
+    layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+   <browser:page
+        name="feed.rss"
+        for="bungeni.models.interfaces.IMotionContainer"
+        class=".rss.MotionRSSView"
+        permission="zope.View"
+    layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+   <browser:page
+        name="feed.rss"
+        for="bungeni.models.interfaces.ITabledDocumentContainer"
+        class=".rss.TabledDocumentRSSView"
+        permission="zope.View"
+    layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+   <browser:page
+        name="feed.rss"
+        for="bungeni.models.interfaces.IAgendaItemContainer"
+        class=".rss.AgendaItemRSSView"
+        permission="zope.View"
+    layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+   <browser:page
+        name="feed.rss"
+        for="bungeni.models.interfaces.IGroupSittingContainer"
+        class=".rss.SittingRSSView"
+        permission="zope.View"
+    layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+   <browser:page
+        name="feed.rss"
+        for="bungeni.models.interfaces.IReportContainer"
+        class=".rss.ReportRSSView"
+        permission="zope.View"
+    layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+   <browser:page
+      name="feed.rss"
+    for="bungeni.models.interfaces.IBill"
+    class=".rss.BillTimelineRSSView"
+    permission="zope.View"
+    layer=".interfaces.IRSSRepresentationLayer"
+   />
+
+   <browser:page
+        name="feed.rss"
+        for="bungeni.models.interfaces.IQuestion"
+        class=".rss.QuestionTimelineRSSView"
+        permission="zope.View"
+    layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+   <browser:page
+        name="feed.rss"
+        for="bungeni.models.interfaces.IMotion"
+        class=".rss.MotionTimelineRSSView"
+        permission="zope.View"
+    layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+   <browser:page
+        name="feed.rss"
+        for="bungeni.models.interfaces.ITabledDocument"
+        class=".rss.TabledDocumentTimelineRSSView"
+        permission="zope.View"
+    layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+   <browser:page
+        name="feed.rss"
+        for="bungeni.models.interfaces.IAgendaItem"
+        class=".rss.AgendaItemTimelineRSSView"
+        permission="zope.View"
+    layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+   <!-- RSS views for akomantoso xml content -->
+
+     <browser:page
+        name="feed.akomantoso"
+        for="bungeni.models.interfaces.IBillContainer"
+        class=".rss.AkomantosoBillRSSView"
+        permission="zope.View"
+        layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+   <browser:page
+        name="feed.akomantoso"
+        for="bungeni.models.interfaces.IQuestionContainer"
+        class=".rss.AkomantosoQuestionRSSView"
+        permission="zope.View"
+        layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+   <browser:page
+        name="feed.akomantoso"
+        for="bungeni.models.interfaces.IMotionContainer"
+        class=".rss.AkomantosoMotionRSSView"
+        permission="zope.View"
+        layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+     <browser:page
+        name="feed.akomantoso"
+        for="bungeni.models.interfaces.ITabledDocumentContainer"
+        class=".rss.AkomantosoTabledDocumentRSSView"
+        permission="zope.View"
+        layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+     <browser:page
+        name="feed.akomantoso"
+        for="bungeni.models.interfaces.IAgendaItemContainer"
+        class=".rss.AkomantosoAgendaItemRSSView"
+        permission="zope.View"
+        layer=".interfaces.IRSSRepresentationLayer"
+     />
+   <!-- Akomantoso XML views -->
+
+   <browser:page
+      name="feed.akomantoso"
+    for="bungeni.models.interfaces.IBill"
+    class=".rss.AkomantosoBillXMLView"
+    permission="zope.View"
+    layer=".interfaces.IRSSRepresentationLayer"
+   />
+   <browser:page
+        name="feed.akomantoso"
+        for="bungeni.models.interfaces.IQuestion"
+        class=".rss.AkomantosoQuestionXMLView"
+        permission="zope.View"
+        layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+   <browser:page
+        name="feed.akomantoso"
+        for="bungeni.models.interfaces.IMotion"
+        class=".rss.AkomantosoMotionXMLView"
+        permission="zope.View"
+        layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+   <browser:page
+        name="feed.akomantoso"
+        for="bungeni.models.interfaces.ITabledDocument"
+        class=".rss.AkomantosoTabledDocumentXMLView"
+        permission="zope.View"
+        layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+   <browser:page
+        name="feed.akomantoso"
+        for="bungeni.models.interfaces.IAgendaItem"
+        class=".rss.AkomantosoAgendaItemXMLView"
+        permission="zope.View"
+        layer=".interfaces.IRSSRepresentationLayer"
+     />
+
+   <browser:pages
+      for="bungeni.models.interfaces.IAgendaItem"
+        class=".rss.SubscriptionView"
+        permission="zope.View"
+        layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin">
+          <browser:page
+         name="subscribe"
+         attribute="subscribe"
+      />
+      <browser:page
+               name="unsubscribe"
+               attribute="unsubscribe"
+            />
+     </browser:pages>
+    <browser:pages
+      for="bungeni.models.interfaces.ITabledDocument"
+        class=".rss.SubscriptionView"
+        permission="zope.View"
+        layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin">
+          <browser:page
+         name="subscribe"
+         attribute="subscribe"
+      />
+      <browser:page
+               name="unsubscribe"
+               attribute="unsubscribe"
+            />
+     </browser:pages>
+     <browser:pages
+      for="bungeni.models.interfaces.IMotion"
+        class=".rss.SubscriptionView"
+        permission="zope.View"
+        layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin">
+          <browser:page
+         name="subscribe"
+         attribute="subscribe"
+      />
+      <browser:page
+               name="unsubscribe"
+               attribute="unsubscribe"
+            />
+     </browser:pages>
+     <browser:pages
+      for="bungeni.models.interfaces.IQuestion"
+        class=".rss.SubscriptionView"
+        permission="zope.View"
+        layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin">
+          <browser:page
+         name="subscribe"
+         attribute="subscribe"
+      />
+      <browser:page
+               name="unsubscribe"
+               attribute="unsubscribe"
+            />
+     </browser:pages>
+     <browser:pages
+      for="bungeni.models.interfaces.IBill"
+        class=".rss.SubscriptionView"
+        permission="zope.View"
+        layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin">
+          <browser:page
+         name="subscribe"
+         attribute="subscribe"
+      />
+      <browser:page
+               name="unsubscribe"
+               attribute="unsubscribe"
+            />
+     </browser:pages>
+
+     <browser:page
+        name="filter"
+        for=".widgets.IAutoCompleteWidget"
+        class=".widgets.AutoCompleteAjax"
+        permission="zope.View"
+     />
+
+    <!-- error pages -->
+  <browser:page
+      for="zope.security.interfaces.IException"
+      name="index"
+      permission="zope.Public"
+      class=".errors.SystemError"
+      template="templates/errorpage.pt"
+      />
+  <browser:page
+      for="zope.security.interfaces.IUnauthorized"
+      name="index"
+      permission="zope.Public"
+      class=".errors.Unauthorized"
+      template="templates/errorpage.pt"
+      />
+    <browser:defaultView
+        for="zope.security.interfaces.IUnauthorized"
+        layer="zope.publisher.interfaces.http.IHTTPRequest"
+        name="index"
+        />
+    <browser:defaultView
+        for="zope.interface.common.interfaces.IException"
+        layer="zope.publisher.interfaces.http.IHTTPRequest"
+        name="index"
+        />
+
+
+    <!--Traversers -->
+   	<view
+       for="bungeni.core.interfaces.IAkomaNtosoSection"
+       type="bungeni.ui.interfaces.IBungeniSkin"
+       provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+       factory=".traversal.SiteTraverser"
+       permission="zope.Public"
+       allowed_interface="zope.publisher.interfaces.browser.IBrowserPublisher"
+       />
+    
+    <!-- Redefining AbsoluteURL for permalink traversal section-->   
+  	<view
+       for="bungeni.models.interfaces.IBungeniParliamentaryContent"
+       name="absolute_url"
+       factory=".traversal.Permalink"
+       type="bungeni.ui.interfaces.IPermalinkSectionLayer"
+       permission="zope.Public"
+       allowed_interface="zope.traversing.browser.interfaces.IAbsoluteURL"
+       />
+       
+    <view
+       for="bungeni.models.interfaces.IBungeniParliamentaryContent"
+       factory=".traversal.Permalink"
+       type="bungeni.ui.interfaces.IPermalinkSectionLayer"
+       permission="zope.Public"
+       provides="zope.traversing.browser.interfaces.IAbsoluteURL"
+       />
+    
+    <!-- premalink view for parliamentary items -->
+    <browser:view
+        for="bungeni.models.interfaces.IBungeniParliamentaryContent"
+        name="permalink"
+        class=".traversal.Permalink"
+        permission="zope.Public"
+        />
+        
+   
+   <!-- View to store and retreive the document that the user is being editing -->
+   <browser:page
+   		for="bungeni.models.interfaces.IBungeniParliamentaryContent"
+   		name="nowediting"
+   		class=".views.StoreNowEditView"
+   		layer="bungeni.ui.interfaces.IBungeniAuthenticatedSkin"
+   		permission="zope.View"
+   		/>
+   		
+   <adapter
+      for="zope.schema.interfaces.IText
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides=".widgets.IDiffDisplayWidget"
+      factory=".widgets.HTMLDisplay"
+      permission="zope.Public"
+      />
+      
+   <adapter
+      for="zope.schema.interfaces.ITextLine
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides=".widgets.IDiffDisplayWidget"
+      factory=".widgets.HTMLDisplay"
+      permission="zope.Public"
+      />
+       
+</configure>
