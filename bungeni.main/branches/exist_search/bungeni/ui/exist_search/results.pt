@@ -1,0 +1,15 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      i18n_domain="bungeni" tal:omit-tag="">
+  <div class="search_results" tal:condition="view/available">
+    <ul>
+        <tal:results tal:repeat=" doc view/search_results/doc"
+            tal:condition="view/search_results/doc|nothing">
+            <li>
+                <span tal:content="doc/ontology/document/title/#text"/>
+                <span tal:content="doc/ontology/document/statusDate/#text "/>
+            </li>
+        </tal:results>
+    </ul>
+  </div>
+</html>
