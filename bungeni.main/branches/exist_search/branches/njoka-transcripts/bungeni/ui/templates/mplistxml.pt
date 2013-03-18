@@ -1,5 +1,0 @@
-<mps>
-    <tal:loop tal:repeat="mp python:view.mps">
-        <mp tal:attributes="name python:(str(mp.first_name) + ' ' + str(mp.last_name)); id mp/user_id;"/>
-    </tal:loop>
-</mps>
