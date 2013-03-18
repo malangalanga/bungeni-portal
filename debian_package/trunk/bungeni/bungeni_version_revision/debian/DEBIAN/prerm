@@ -27,8 +27,8 @@ remove|purge)
 		echo "Stopping services.."
 		service  bungeni_services stop
 
-		while ps -A | grep supervisord; do sleep 1; done
-		echo "Bungeni services stopped."
+		#while ps -A | grep supervisord; do sleep 1; done
+		#echo "Bungeni services stopped."
     ;;
 *)
 
