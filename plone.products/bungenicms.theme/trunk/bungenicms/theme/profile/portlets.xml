@@ -39,9 +39,10 @@
         type="portlets.Calendar"
      />
      
-    <!-- Move the events portlet to the right bar -->         
-    <assignment name="events"  
-        manager="plone.leftcolumn"
+    <!-- Removing the events portlet from the right bar -->         
+    <assignment name="events"
+        remove="true"           
+        manager="plone.rightcolumn"
         category="context"
         key="/"
         type="portlets.Events"
