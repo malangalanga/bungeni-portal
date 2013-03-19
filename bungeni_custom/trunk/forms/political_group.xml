@@ -31,7 +31,11 @@
     <field name="logo_data" label="Logo" required="false" value_type="image" render_type="image">
         <show modes="view edit add" />
     </field>
-    <field name="identifier" label="Political Group Identifier" description="Unique identifier for this Political Group" required="true" value_type="text" render_type="single_select" vocabulary="political_group_id">
+    <field name="principal_name" label="Political Group Identifier" description="Unique identifier for this Political Group" required="true" value_type="text" render_type="single_select" vocabulary="political_group_id"
+        note="
+            Should contain only letters, numbers, a period (.) and underscore (_). 
+            Should start with a letter and be between 3 and 20 characters long"
+        >
         <show modes="view edit add" />
     </field>
     <field name="group_role" label="Role" description="Role given to members of this office" required="true" value_type="text" render_type="single_select" vocabulary="group_role">

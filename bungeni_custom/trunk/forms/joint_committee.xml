@@ -30,7 +30,11 @@
     <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
         <show modes="view edit add" />
     </field>
-    <field name="identifier" label="Committee Identifier" description="Unique identifier for this Committee" required="true" value_type="text" render_type="single_select" vocabulary="committee_id">
+    <field name="principal_name" label="Committee Identifier" description="Unique identifier for this Committee" required="true" value_type="text" render_type="single_select" vocabulary="committee_id"
+        note="
+            Should contain only letters, numbers, a period (.) and underscore (_). 
+            Should start with a letter and be between 3 and 20 characters long"
+        >
         <show modes="view edit add" />
     </field>
     <field name="sub_type" label="Committee Type" required="false" value_type="vocabulary" render_type="single_select" vocabulary="committee_type">

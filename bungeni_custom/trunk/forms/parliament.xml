@@ -6,7 +6,11 @@
     <field name="short_name" label="Short Name" description="Shorter name for the parliament" required="true" value_type="text" render_type="text_line">
         <show modes="view edit add listing" />
     </field>
-    <field name="identifier" label="Chamber/Legislature Identifier" description="Unique identifier for this Chamber/Legislature" required="true" value_type="text" render_type="text_line">
+    <field name="principal_name" label="Chamber/Legislature Identifier" description="Unique identifier for this Chamber/Legislature" required="true" value_type="text" render_type="text_line"
+        note="
+            Should contain only letters, numbers, a period (.) and underscore (_). 
+            Should start with a letter and be between 3 and 20 characters long"
+        >
         <show modes="view edit add listing" />
     </field>
     <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
@@ -47,8 +51,8 @@
     <container match="session.parliament_id" />
     <container match="committee.parent_group_id" />
     <container match="office.parent_group_id" />
-    <container match="member_of_parliament.group_id" name="parliamentmembers" />
-    <container match="political_group.parent_group_id" name="politicalgroups" />
+    <container match="member_of_parliament.group_id" name="parliamentmembers" note="!+naming" />
+    <container match="political_group.parent_group_id" name="politicalgroups" note="!+naming" />
     <container match="sitting.group_id" />
     <container match="title_type.group_id" />
 

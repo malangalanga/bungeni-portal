@@ -56,7 +56,7 @@ def get_user_groups(login_id):
                     domain.GroupMembership.active_p == True)
             ).options(eagerload("group"), lazyload("user"))
         for membership in query:
-            principal_ids.append(membership.group.group_principal_id)
+            principal_ids.append(membership.group.principal_name)
         return principal_ids
     groups = set()
     user = get_user(login_id)  # user may be None
