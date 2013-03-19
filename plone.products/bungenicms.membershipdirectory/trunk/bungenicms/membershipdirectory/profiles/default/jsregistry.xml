@@ -10,8 +10,9 @@
         compression="safe" 
         cookable="True"
         enabled="True" 
-        expression=""
+        expression="python:object.meta_type in ['MembershipDirectory', 'MembershipProfile']" 
         inline="False"
+        insert-before="jquery-integration.js"
     />
     
     <!-- Table sorting javascript -->
@@ -22,8 +23,9 @@
         compression="safe" 
         cookable="True"
         enabled="True" 
-        expression=""
+        expression="python:object.meta_type in ['MembershipDirectory', 'MembershipProfile']" 
         inline="False"
+        insert-before="jquery-integration.js"
     />
 
 </object>
