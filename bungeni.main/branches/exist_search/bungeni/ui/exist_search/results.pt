@@ -2,14 +2,21 @@
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       i18n_domain="bungeni" tal:omit-tag="">
   <div class="search_results" tal:condition="view/available">
-    <ul>
-        <tal:results tal:repeat=" doc view/search_results/doc"
-            tal:condition="view/search_results/doc|nothing">
-            <li>
-                <span tal:content="doc/ontology/document/title/#text"/>
-                <span tal:content="doc/ontology/document/statusDate/#text "/>
-            </li>
-        </tal:results>
-    </ul>
+    <tal:results tal:repeat="doc view/search_results/items"
+        tal:condition="view/search_results/items|nothing">
+        <ul>
+                <li>
+                    <a tal:attributes="href doc/url" tal:content="doc/title"/><br/>
+                    <span tal:content="doc/type"/>
+                    <span tal:content="doc/author"/>
+                    <span tal:content="doc/status"/>
+                    <span tal:content="doc/status_date"/>
+                    <p tal:content="doc/doc_id"/>
+                </li>
+        </ul>
+    </tal:results>
+    <tal:noresults tal:condition="not:view/search_results/items|python:True">
+        <p i18n:translate="">No items found</p>
+    </tal:noresults>
   </div>
 </html>
