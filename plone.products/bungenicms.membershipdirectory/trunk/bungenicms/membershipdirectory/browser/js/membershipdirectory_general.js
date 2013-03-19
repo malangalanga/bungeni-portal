@@ -10,7 +10,6 @@ jQuery(function($) {
     });
     
     $('#county').change(function(e) {
-        //alert($(this).val());
         $.ajax({
             type: 'POST',
             url:'/fetch_constituencies',

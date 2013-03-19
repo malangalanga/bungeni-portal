@@ -42,18 +42,37 @@
             </div>
             
             <div class="member-details">
-                <strong>County</strong> : <span tal:content="python: context.county.title()"></span>  <br/>      
+            <table>
+                <tr>
+                    <td align="right"><strong>County</strong> :</td>
+                    <td><span tal:content="python: context.county.title()"></span></td>
+                </tr>
                 
-                <strong>Constituency</strong> : <span tal:content="python: context.constituency.title()"></span>  <br/>            
+                <tr>
+                    <td align="right"><strong>Constituency</strong> :</td>
+                    <td><span tal:content="python: context.constituency.title()"></span></td>
+                </tr>
                 
-                <strong>Party</strong> : <span tal:content="context/political_party"></span>  <br/>  
+                <tr>
+                    <td align="right"><strong>Party</strong> :</td>
+                    <td><span tal:content="context/political_party"></span></td>
+                </tr>
                 
-                <strong>Role</strong> : <span tal:content="context/member_role"></span>  <br/>  
+                <tr>
+                    <td align="right"><strong>Role</strong> :</td>
+                    <td><span tal:content="context/member_role"></span></td>
+                </tr>
                 
-                <strong>Type</strong> : <span tal:content="python: context.elected_nominated.title()" ></span> <br/>
+                <tr>
+                    <td align="right"><strong>Type</strong> :</td>
+                    <td><span tal:content="python: context.elected_nominated.title()" ></span></td>
+                </tr>
                 
-                <strong>Status</strong> : <span tal:content="python: context.member_status.title()" ></span> <br/>                     
-                            
+                <tr>
+                    <td align="right"><strong>Status</strong> :</td>
+                    <td><span tal:content="python: context.member_status.title()" ></span></td>
+                </tr>
+            </table>                            
             </div>            
         </div>
         
@@ -66,7 +85,8 @@
             <br/>
             
             <h3>Full Profile</h3>
-            <div tal:content="structure context/body_text|nothing">Body Text</div>
+            <div tal:condition="context/body_text" tal:content="structure context/body_text|nothing">Body Text</div>
+            <div tal:condition="not: context/body_text"><i>Content not available.</i></div>
         </div>
 
         <hr />
