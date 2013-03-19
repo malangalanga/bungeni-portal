@@ -4,6 +4,7 @@ Revision ID: 35a46050c0d
 Revises: 48acd1b17df2
 Create Date: 2013-03-14 17:41:52.506236 mr
 
+$Id$
 """
 
 # revision identifiers, used by Alembic.
@@ -80,6 +81,7 @@ def upgrade():
 
 
 def downgrade():
+    print 'Dropping table "address"'
     op.drop_table("address")
     # !+ USER_GROUP_ADDRESS 
     # downgrade would need: re-create old tables user_address, group_address
