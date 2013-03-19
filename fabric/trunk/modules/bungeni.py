@@ -437,8 +437,10 @@ class BungeniConfigs:
         self.exist_config_editor_repo = self.cfg.get_config("exist", "config_editor_repo")
         # RabbitMQ installation folder
         self.rabbitmq_install_url = self.cfg.get_config("rabbitmq", "download_url")
+        self.rabbitmq_admin_url = self.cfg.get_config("rabbitmq", "download_admin_url")
         self.user_rabbitmq = self.user_install_root + "/rabbitmq"
         self.rabbitmq_download_command = self.get_download_command(self.rabbitmq_install_url)
+        self.rabbitmq_download_admin_command = self.get_download_command(self.rabbitmq_admin_url)
         self.rabbitmq_download_file = self.utils.get_basename(self.rabbitmq_install_url)
         self.user_rabbitmq_build_path = self.user_build_root + "/rabbitmq"
         # Jython installation folder
@@ -2141,21 +2143,22 @@ class RabbitMQTasks:
                        {"rabbitmq_build_path":self.cfg.user_rabbitmq_build_path})
         with cd(self.cfg.user_rabbitmq_build_path):
             run(self.cfg.rabbitmq_download_command)
+            run("rm -rf %(user_rabbitmq)s" % {"user_rabbitmq":self.cfg.user_rabbitmq})
             run("mkdir -p %(user_rabbitmq)s" % {"user_rabbitmq":self.cfg.user_rabbitmq})
             run("tar --strip-components=1 -xvf %(rabbitmq_download_file)s -C %(user_rabbitmq)s" %
                          {"user_rabbitmq":self.cfg.user_rabbitmq,
                           "rabbitmq_download_file":self.cfg.rabbitmq_download_file})
             with cd(self.cfg.user_rabbitmq + "/sbin"):
                 run("./rabbitmq-plugins enable rabbitmq_management rabbitmq_management_visualiser")
+                run(self.cfg.rabbitmq_download_admin_command)
+                run("chmod +x rabbitmq-admin")
 
     def rabbitmq_purge(self):
         """
-        Resets all the queues created for Bungeni operations
+        Reset the serialization queue
         """
         with cd(self.cfg.user_rabbitmq + "/sbin"):
-            run("./rabbitmqctl stop_app")
-            run("./rabbitmqctl reset")
-            run("./rabbitmqctl start_app")
+            run("./rabbitmq-admin purge queue name='bungeni_serialization_output_queue'")
 
 class GlueScriptTasks:
     """
