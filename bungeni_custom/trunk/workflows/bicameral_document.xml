@@ -153,7 +153,7 @@
         permissions_from_state="tabled" />
 
     <!-- workflow STATES - SENATE -->   
-    <state id="forwarded_other_senate" title="Forwarded to Senate" actions="version">
+    <state id="forwarded_senate" title="Forwarded to Senate" actions="version">
         <facet ref=".edit_Clerk_Senate" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
@@ -232,7 +232,7 @@
 
     <transition title="Forwarded to Senate"
         source="reviewed"
-        destination="forwarded_other_senate"
+        destination="forwarded_senate"
         condition=""
         trigger="manual"
         roles="SpeakerAssembly"
@@ -308,7 +308,7 @@
      <!-- workflow TRANSITIONS SENATE -->
 
     <transition title="Reviewed Senate"
-        source="forwarded_other_senate"
+        source="forwarded_senate"
         destination="reviewed_senate"
         condition=""
         trigger="manual"

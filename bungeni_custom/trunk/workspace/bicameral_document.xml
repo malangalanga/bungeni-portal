@@ -53,7 +53,7 @@
     </state>
 
     <!-- SENATE -->
-    <state id="forwarded_other_senate">
+    <state id="forwarded_senate">
         <tab id="inbox" roles="ClerkSenate"/>
         <tab id="pending" roles="Owner
         ClerkAssembly SpeakerAssembly"/>
@@ -65,7 +65,8 @@
          ClerkAssembly SpeakerAssembly"/>
     </state>
     <state id="admissible_senate">
-        <tab id="schedule" roles=" ClerkSenate"/>
+        <tab id="inbox" roles="MinistryMember"/>
+        <tab id="schedule" roles=" ClerkSenate "/>
         <tab id="pending"
 	     roles="Owner SpeakerSenate
         ClerkAssembly SpeakerAssembly"/>

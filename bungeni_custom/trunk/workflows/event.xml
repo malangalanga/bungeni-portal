@@ -41,8 +41,10 @@
     </facet>
     <facet name="internal" default="true">
         <allow permission=".View" roles="Authenticated" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
-        <allow permission=".Add" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly 
+        MinistryMember" />
+        <allow permission=".Add" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly 
+        MinistryMember" />
     </facet>
     <facet name="internal_frozen">
         <allow permission=".View" roles="Authenticated" />
