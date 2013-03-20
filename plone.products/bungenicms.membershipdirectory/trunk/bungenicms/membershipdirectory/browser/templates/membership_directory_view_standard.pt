@@ -21,7 +21,7 @@
               
              <form method="get" tal:attributes="action request/getURL" >
              
-                <table>
+                <table width="100%">
                     <tr>
                     
                         <td>
@@ -46,9 +46,8 @@
                         </td>
                         
                         <td>
-                            <label>
-                                <span>Constituency :</span>
-                                <input type="text" class="input_text" name="constituency" id="constituency"/>
+                            <label id="constituencies-container">                               
+                            <!-- Constituencies will show here -->    
                             </label> 
                         </td>
                         
@@ -83,7 +82,7 @@
                             </label>
                         </td>
                         
-                        <td></td>
+                        <td><span id="test"></span></td>
                     </tr>
                     
                     <tr>

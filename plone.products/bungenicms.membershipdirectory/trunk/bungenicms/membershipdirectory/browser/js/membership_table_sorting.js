@@ -21,11 +21,11 @@ var TableIDvalue = "memberstable";
 //////////////////////////////////////
 var TableLastSortedColumn = -1;
 
-function SortTable() {
+function SortMemberTable() {
     var sortColumn = parseInt(arguments[0]);
     var type = arguments.length > 1 ? arguments[1] : 'T';
     var dateformat = arguments.length > 2 ? arguments[2] : '';
-    var table = document.getElementById(TableIDvalue);
+    var table = document.getElementById("memberstable");
     var tbody = table.getElementsByTagName("tbody")[0];
     var rows = tbody.getElementsByTagName("tr"); 
     var arrayOfRows = new Array();
@@ -79,13 +79,13 @@ function SortTable() {
     table.replaceChild(newTableBody,tbody);
     
     // CRUDE HACK: To re-paginate after sorting (Should not be here at all)
-	var pager = new Pager('memberstable', 30, 'pager', 'pageNavPosition'); 
+	/*var pager = new Pager('memberstable', 30, 'pager', 'pageNavPosition'); 
     pager.init(); 
     pager.showPageNav(); 
-    pager.showPage(1);
+    pager.showPage(1);*/
                 
     alternate(table);
-} // function SortTable()
+} // function SortMemberTable()
 
 function CompareRowOfText(a,b) {
     var aval = a.value;
