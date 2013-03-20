@@ -9,7 +9,7 @@ $Id$
 
 # revision identifiers, used by Alembic.
 revision = "48acd1b17df2"
-down_revision = "2df675e61324"
+down_revision = "29f4b7d2a8e0"
 
 from alembic import op
 import sqlalchemy as sa
