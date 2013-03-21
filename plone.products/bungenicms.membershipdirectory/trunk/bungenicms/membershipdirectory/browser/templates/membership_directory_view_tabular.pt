@@ -120,12 +120,12 @@
               </tr>
               <tr>
                 <th>&nbsp;Photo&nbsp;</th>
-                <th>&nbsp;<a href="javascript:SortMemberTable(1,'T');">Member<span class="sortDown">&#x25bc;</span></a>&nbsp;</th>
-                <th>&nbsp;<a href="javascript:SortMemberTable(2,'T');">County<span class="sortDown">&#x25bc;</span></a>&nbsp;</th>
-                <th>&nbsp;<a href="javascript:SortMemberTable(3,'T');">Constituency<span class="sortDown">&#x25bc;</span></a>&nbsp;</th>
-                <th>&nbsp;<a href="javascript:SortMemberTable(4,'T');">Elected<span class="sortDown">&#x25bc;</span></a>&nbsp;</th>
-                <th>&nbsp;<a href="javascript:SortMemberTable(5,'T');">Status<span class="sortDown">&#x25bc;</span></a>&nbsp;</th>
-                <th width="1" style="display:none;">&nbsp;<a href="javascript:SortMemberTable(5,'T');"><span class="sortDown"></span></a>&nbsp;</th>
+                <th>&nbsp;<a href="javascript:SortMemberTable(1,'T');">Member <span class="sortDown">&#x25bc;</span></a>&nbsp;</th>
+                <th>&nbsp;<a href="javascript:SortMemberTable(2,'T');">County <span class="sortDown">&#x25bc;</span></a>&nbsp;</th>
+                <th>&nbsp;<a href="javascript:SortMemberTable(3,'T');">Constituency <span class="sortDown">&#x25bc;</span></a>&nbsp;</th>
+                <th>&nbsp;<a href="javascript:SortMemberTable(4,'T');">Elected <span class="sortDown">&#x25bc;</span></a>&nbsp;</th>
+                <th>&nbsp;<a href="javascript:SortMemberTable(5,'T');">Status <span class="sortDown">&#x25bc;</span></a>&nbsp;</th>
+                <th width="1" style="display:none;">&nbsp;<a href="javascript:SortMemberTable(5,'T');"> <span class="sortDown"></span></a>&nbsp;</th>
               </tr>
             </thead>
           
@@ -164,7 +164,7 @@
                                 </div>
                                 
                                 <div tal:condition="not:object/getMember_image">
-                                    <img tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++resource++bungenicms.membershipdirectory.icons/empty_profile.png" width="50"/>
+                                    <img tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++resource++bungenicms.membershipdirectory.icons/empty_profile.jpg" width="50"/>
                                 </div>
                             </td>
                             <td>

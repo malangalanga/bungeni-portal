@@ -38,7 +38,7 @@
             </div>
             
             <div tal:condition="not:context/getMember_image" class="member-photo">
-                <img tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++resource++bungenicms.membershipdirectory.icons/empty_profile.png" width="160"/>
+                <img tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++resource++bungenicms.membershipdirectory.icons/empty_profile.jpg" width="160"/>
             </div>
             
             <div class="member-details">
