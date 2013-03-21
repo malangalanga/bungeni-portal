@@ -151,7 +151,8 @@
     
     <state id="withdrawn" title="Withdrawn" 
         permissions_from_state="tabled" />
-
+    
+    
     <!-- workflow STATES - SENATE -->   
     <state id="forwarded_senate" title="Forwarded to Senate" actions="version">
         <facet ref=".edit_Clerk_Senate" />
@@ -163,17 +164,15 @@
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
     </state>
-
-<!-- FLAVIO, what will happen if we allow this ... actions="version set_doc_type_number" -->
+    <!-- FLAVIO, what will happen if we allow this ... actions="version set_doc_type_number" -->
     <state id="admissible_senate" title="Admissible"
         >
         <facet ref=".public" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />
     </state>
-
     
-
+    
     <!-- workflow TRANSITIONS ASSEMBLY -->
     <transition title="Create Bicameral Document"
         source=""
@@ -302,11 +301,10 @@
         order="27"
         require_confirmation="true"
     />
-
-
-
-     <!-- workflow TRANSITIONS SENATE -->
-
+    
+    
+    <!-- workflow TRANSITIONS SENATE -->
+    
     <transition title="Reviewed Senate"
         source="forwarded_senate"
         destination="reviewed_senate"
@@ -314,7 +312,7 @@
         trigger="manual"
         roles="ClerkSenate"
     />
-
+    
     <transition title="Admissible"
         source="reviewed_senate"
         destination="admissible_senate"

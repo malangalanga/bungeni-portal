@@ -1,49 +1,35 @@
 <roles>
-
-  <!-- LEGISLATURE roles -->
-  <role id="MemberLegislature" title="Member of Parliament" />
-
-  <role id="ClerkLegislature" title="Legislature - Clerk Office" />
-
-  <role id="GovernmentMember" title="Government Member" />
-  <role id="MinistryMember" title="Gov Ministry Member" />
-
-  <role id="Translator" title="Translators Office" />
-
-  <role id="Transcriber" title="Transcription Office">
-    <subrole id="Transcriber.Editor" title="Transcription Editor" />
-    <subrole id="Transcriber.Reporter" title="Transcription Reporter" />
-  </role>
-
-  <!-- SENATE roles -->
-  <role id="MemberSenate" title="Senate - Member" />
-
-  <role id="MemberCommitteeSenate" title="Senate - Committee Member" />
-
-  <role id="MemberPoliticalGroupSenate" title="Senate - Political Group Member" />
-
-  <role id="ClerkSenate" title="Senate - Clerk Office">
-    <subrole id="ClerkSenate.ClerkQuestion" title="Senate - Questions' Clerk" />
-    <subrole id="ClerkSenate.ClerkHead" title="Senate - Head Clerk" />
-  </role>
-  
-  <role id="SpeakerSenate" title="Speaker Office - Senate" />
-
-
+    
+    <!-- LEGISLATURE roles -->
+    <role id="MemberLegislature" title="Member of Parliament" />
+    <role id="ClerkLegislature" title="Legislature - Clerk Office" />
+    <role id="GovernmentMember" title="Government Member" />
+    <role id="MinistryMember" title="Gov Ministry Member" />
+    <role id="Translator" title="Translators Office" />
+    <role id="Transcriber" title="Transcription Office">
+        <subrole id="Transcriber.Editor" title="Transcription Editor" />
+        <subrole id="Transcriber.Reporter" title="Transcription Reporter" />
+    </role>
+    
+    <!-- SENATE roles -->
+    <role id="MemberSenate" title="Senate - Member" />
+    <role id="MemberCommitteeSenate" title="Senate - Committee Member" />
+    <role id="MemberPoliticalGroupSenate" title="Senate - Political Group Member" />
+    <role id="ClerkSenate" title="Senate - Clerk Office">
+        <subrole id="ClerkSenate.ClerkQuestion" title="Senate - Questions' Clerk" />
+        <subrole id="ClerkSenate.ClerkHead" title="Senate - Head Clerk" />
+    </role>
+    <role id="SpeakerSenate" title="Speaker Office - Senate" />
+    
     <!-- ASSEMBLY roles -->
-  <role id="MemberAssembly" title="Assembly - Member" />
+    <role id="MemberAssembly" title="Assembly - Member" />
+    <role id="MemberCommitteeAssembly" title="Assembly - Committee Member" />
+    <role id="MemberPoliticalGroupAssembly" title="Assembly - Political Group Member" />
+    <role id="ClerkAssembly" title="Assembly - Clerk Office">
+        <subrole id="ClerkAssembly.ClerkQuestion" title="Assembly - Questions' Clerk" />
+        <subrole id="ClerkAssembly.ClerkHead" title="Assembly - Head Clerk" />
+    </role>
+    <role id="SpeakerAssembly" title="Assembly - Speaker Office" />
 
-  <role id="MemberCommitteeAssembly" title="Assembly - Committee Member" />
-
-  <role id="MemberPoliticalGroupAssembly" title="Assembly - Political Group Member" />
-
-
-  <role id="ClerkAssembly" title="Assembly - Clerk Office">
-    <subrole id="ClerkAssembly.ClerkQuestion" title="Assembly - Questions' Clerk" />
-    <subrole id="ClerkAssembly.ClerkHead" title="Assembly - Head Clerk" />
-  </role>
-
-  <role id="SpeakerAssembly" title="Assembly - Speaker Office" />
-  
 </roles>
 
