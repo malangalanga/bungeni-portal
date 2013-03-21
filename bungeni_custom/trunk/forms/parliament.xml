@@ -40,6 +40,7 @@
     <field name="group_role" label="Role" description="Role given to members of this office" required="true" value_type="text" render_type="single_select" vocabulary="group_role">
         <show modes="view edit add listing" />
     </field>
+    
     <container match="agenda_item.group_id" name="agendaitems" note="!+naming !+why not parliament_id?" />
     <container match="bill.parliament_id" />
     <container match="motion.parliament_id" />
@@ -55,6 +56,7 @@
     <container match="political_group.parent_group_id" name="politicalgroups" note="!+naming" />
     <container match="sitting.group_id" />
     <container match="title_type.group_id" />
+    <container match="venue.group_id" />
 
     
 <!-- FLAVIO: to have run TWO CHAMBERS 
