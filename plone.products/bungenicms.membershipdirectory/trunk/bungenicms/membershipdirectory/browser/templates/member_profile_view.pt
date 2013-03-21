@@ -21,11 +21,7 @@
             </metal:field>, <span tal:omit-tag="" tal:content="context/other_names"></span>
         </h1>      
 
-        <div tal:replace="structure provider:plone.belowcontenttitle" />
-        
-        
-        
-        
+        <div tal:replace="structure provider:plone.belowcontenttitle" />        
         
         <div id="basic-details" style="clear: both; display:block;">
             <div tal:condition="context/getMember_image|nothing" class="member-photo" >
@@ -44,6 +40,16 @@
             <div class="member-details">
             <table>
                 <tr>
+                    <td align="right"><strong>Title</strong> :</td>
+                    <td><span tal:content="context/member_title"></span></td>
+                </tr>
+                
+                <tr>
+                    <td align="right"><strong>Role</strong> :</td>
+                    <td><span tal:content="context/member_role"></span></td>
+                </tr>
+                
+                <tr>
                     <td align="right"><strong>County</strong> :</td>
                     <td><span tal:content="python: context.county.title()"></span></td>
                 </tr>
@@ -59,11 +65,6 @@
                 </tr>
                 
                 <tr>
-                    <td align="right"><strong>Role</strong> :</td>
-                    <td><span tal:content="context/member_role"></span></td>
-                </tr>
-                
-                <tr>
                     <td align="right"><strong>Type</strong> :</td>
                     <td><span tal:content="python: context.elected_nominated.title()" ></span></td>
                 </tr>
@@ -71,6 +72,11 @@
                 <tr>
                     <td align="right"><strong>Status</strong> :</td>
                     <td><span tal:content="python: context.member_status.title()" ></span></td>
+                </tr>
+                
+                <tr>
+                    <td align="right"><strong>Special Interests</strong> :</td>
+                    <td><span tal:content="python: context.special_interest.title()" ></span></td>
                 </tr>
             </table>                            
             </div>            

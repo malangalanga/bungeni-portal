@@ -15,6 +15,7 @@ from bungenicms.membershipdirectory.config import PROJECTNAME
 
 from bungenicms.membershipdirectory.vocabularies import COUNTY_LIST
 from bungenicms.membershipdirectory.vocabularies import CONSTITUENCIES_LIST
+from bungenicms.membershipdirectory.vocabularies import SPECIAL_INTERESTS_LIST
 
 ELECTED_LIST = atapi.DisplayList((
     ('elected', 'Elected'), 
@@ -47,7 +48,14 @@ MemberProfileSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
         required = 0,
         widget = atapi.StringWidget(
             label=u"Role",
-            description=u"Role of member",
+            description=u"Role of member i.e. Speaker, Deputy Speaker, Chief Whip etc.",
+        ),
+    ),
+    atapi.StringField('member_title',
+        required = 0,
+        widget = atapi.StringWidget(
+            label=u"Title",
+            description=u"Title of member i.e. Senator, Legislator, Governor etc.",
         ),
     ),
     atapi.StringField('political_party',
@@ -95,6 +103,16 @@ MemberProfileSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
         widget = atapi.SelectionWidget(
             label = u"Current / Former",
             description = u"Is this a current member or a former member?",
+            type = 'radio',
+        ),
+    ),
+    atapi.StringField('special_interest',
+        required = 0,
+        default = '',
+        vocabulary = SPECIAL_INTERESTS_LIST,
+        widget = atapi.SelectionWidget(
+            label = u"Special Interests",
+            description = u"Area of special interest",
             type = 'radio',
         ),
     ),

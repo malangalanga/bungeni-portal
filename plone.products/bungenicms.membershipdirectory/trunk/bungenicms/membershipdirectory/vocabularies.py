@@ -1,5 +1,12 @@
 from Products.Archetypes import atapi
 
+SPECIAL_INTERESTS_LIST = atapi.DisplayList((
+    ('women', 'Women Representative'),
+    ('youth', 'Youth Representative'),
+    ('disabled', 'Persons with disabilities'),
+    ))
+
+
 COUNTY_LIST = atapi.DisplayList((
     ('bungoma', 'Bungoma'),
     ('busia', 'Busia'),

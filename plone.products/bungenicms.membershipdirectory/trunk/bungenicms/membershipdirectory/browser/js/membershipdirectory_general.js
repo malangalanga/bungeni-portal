@@ -23,6 +23,7 @@ jQuery(function($) {
                 
                 var selectList = "<span>Constituency :</span>";
                 selectList += "<select id='constituency' name='constituency'>";
+                selectList += "<option value=''>All</option>";
                 for (var x = 0; x < constituencies_obj.length; x++) {
                     selectList += "<option value='" + constituencies_obj[x] + "'>" + constituencies_obj[x] + "</option>";
                 }
