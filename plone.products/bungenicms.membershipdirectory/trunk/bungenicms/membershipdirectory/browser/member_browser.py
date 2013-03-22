@@ -5,6 +5,7 @@ from bungenicms.membershipdirectory.content.memberprofile import ELECTED_LIST
 from bungenicms.membershipdirectory.content.memberprofile import STATUS_LIST
 from bungenicms.membershipdirectory.vocabularies import COUNTY_LIST
 from bungenicms.membershipdirectory.vocabularies import CONSTITUENCIES_LIST
+from bungenicms.membershipdirectory.vocabularies import SPECIAL_INTERESTS_LIST
 
 import json
 
@@ -75,3 +76,13 @@ class Html(BrowserView):
         results = CONSTITUENCIES_LIST[str(county)]        
         return json.dumps(results) 
         
+    
+    def getInterestVocabValue(self, interestKey):
+        """
+        Return the corresponding value matching the special interest key
+        """
+        itemValue = None
+        for item in SPECIAL_INTERESTS_LIST.items():
+            if item[0] == interestKey:
+                itemValue = item[1]
+        return itemValue

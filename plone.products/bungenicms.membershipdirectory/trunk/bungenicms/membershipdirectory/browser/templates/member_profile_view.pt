@@ -76,7 +76,7 @@
                 
                 <tr>
                     <td align="right"><strong>Special Interests</strong> :</td>
-                    <td><span tal:content="python: context.special_interest.title()" ></span></td>
+                    <td><span tal:content="python: view.getInterestVocabValue(context.special_interest)" ></span></td>
                 </tr>
             </table>                            
             </div>            
