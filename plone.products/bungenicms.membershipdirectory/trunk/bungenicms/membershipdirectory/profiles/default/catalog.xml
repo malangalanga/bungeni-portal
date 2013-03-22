@@ -15,6 +15,9 @@
 	<index name="member_status" meta_type="FieldIndex">
 		<indexed_attr value="member_status"/>
 	</index>
+	<index name="special_interest" meta_type="FieldIndex">
+		<indexed_attr value="special_interest"/>
+	</index>
 	<index name="member_full_names" meta_type="KeywordIndex">
 	    <indexed_attr value="member_full_names"/>
 	</index>
@@ -24,5 +27,6 @@
 	<column value="political_party"/>
 	<column value="elected_nominated"/>
 	<column value="member_status"/>
+	<column value="special_interest"/>
 	<column value="member_full_names"/>
 </object>

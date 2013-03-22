@@ -67,6 +67,13 @@ class Html(BrowserView):
         return STATUS_LIST.items()
         
         
+    def getSpecialInterestList(self):
+        """
+        Return a list of special interests
+        """
+        return SPECIAL_INTERESTS_LIST.items()
+        
+        
     def fetch_constituencies(self):
         """
         Return constituencies belonging to a county

@@ -31,29 +31,6 @@
                             </label>
                         </td>
                         
-                        <td>
-                            <label>
-                               <span>County :</span>
-                               <select id="county" name="county">
-                                    <option value="">All</option>
-                                    <option 
-                                        tal:repeat="county view/getCountyList" 
-                                        tal:content="python: county[1]"
-                                        tal:attributes="value python: county[0]">
-                                    </option>
-                                </select>  
-                            </label>
-                        </td>
-                        
-                        <td>
-                            <label id="constituencies-container">                               
-                            <!-- Constituencies dropdown list -->    
-                            </label> 
-                        </td>
-                        
-                    </tr>
-                    
-                    <tr>
                         <td >
                             <label>
                                 <span>Type :</span>
@@ -82,7 +59,43 @@
                             </label>
                         </td>
                         
-                        <td><span id="test"></span></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <label>
+                                <span>Special Interest :</span>
+                                <select id="special_interest" name="special_interest">
+                                    <option value="">All</option>
+                                    <option 
+                                        tal:repeat="status view/getSpecialInterestList" 
+                                        tal:content="python: status[1]"
+                                        tal:attributes="value python: status[0]">
+                                    </option>
+                                </select>                                                       
+                            </label>
+                        </td>
+                        
+                        <td>
+                            <label>
+                               <span>County :</span>
+                               <select id="county" name="county">
+                                    <option value="">All</option>
+                                    <option 
+                                        tal:repeat="county view/getCountyList" 
+                                        tal:content="python: county[1]"
+                                        tal:attributes="value python: county[0]">
+                                    </option>
+                                </select>  
+                            </label>
+                        </td>
+                        
+                        <td>
+                            <label id="constituencies-container">                               
+                            <!-- Constituencies dropdown list -->    
+                            </label> 
+                        </td>
+                        
                     </tr>
                     
                     <tr>

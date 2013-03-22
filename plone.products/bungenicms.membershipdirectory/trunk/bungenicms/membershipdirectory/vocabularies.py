@@ -8,6 +8,7 @@ SPECIAL_INTERESTS_LIST = atapi.DisplayList((
 
 
 COUNTY_LIST = atapi.DisplayList((
+    ('', ''),
     ('bungoma', 'Bungoma'),
     ('busia', 'Busia'),
     ('elgeyo_marakwet', 'Elgeyo/Marakwet'),
@@ -58,6 +59,7 @@ COUNTY_LIST = atapi.DisplayList((
 
 
 CONSTITUENCIES_LIST = {
+    '' : ('',),
     'bungoma' : ('Mt. Elgon', 'Sirisia', 'Kabuchia', 'Bumula', 'Kandunyi', 'Webuye', 'Bokoli', 'Kimilili', 'Tongaren'),
     'busia' : ('Teso North', 'Teso South', 'Nambale', 'Matayos', 'Butula', 'Funyula', 'Budalangi'),
     'elgeyo_marakwet' : ('Marakwet East', 'Marakwet West', 'Keiyo East', 'Keiyo South'),
