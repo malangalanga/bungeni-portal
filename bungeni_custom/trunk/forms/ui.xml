@@ -20,10 +20,10 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <show modes="view edit add" />
         </field>
         <field name="name" label="Name" required="false" value_type="text" render_type="no_input">
-            <show modes="view add" />
+            <show modes="view edit add" />
         </field>
         <field name="mimetype" label="MIME Type" required="false" value_type="text" render_type="no_input">
-            <show modes="view add" />
+            <show modes="view edit add" />
         </field>
         <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" />
