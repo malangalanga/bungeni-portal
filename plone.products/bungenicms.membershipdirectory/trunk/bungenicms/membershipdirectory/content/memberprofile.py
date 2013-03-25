@@ -20,6 +20,7 @@ from bungenicms.membershipdirectory.vocabularies import SPECIAL_INTERESTS_LIST
 ELECTED_LIST = atapi.DisplayList((
     ('elected', 'Elected'), 
     ('nominated', 'Nominated'),
+    ('exofficio', 'Ex officio'),
     ))
     
 STATUS_LIST = atapi.DisplayList((
@@ -39,6 +40,7 @@ MemberProfileSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     # -*- Your Archetypes field definitions here ... -*-
     atapi.StringField('other_names',
         required = 1,
+        searchable=1,
         widget = atapi.StringWidget(
             label=u"Other Names",
             description=u"Other Names",
@@ -46,6 +48,7 @@ MemberProfileSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     ),
     atapi.StringField('member_role',
         required = 0,
+        searchable=1,
         widget = atapi.StringWidget(
             label=u"Role",
             description=u"Role of member i.e. Speaker, Deputy Speaker, Chief Whip etc.",
@@ -53,6 +56,7 @@ MemberProfileSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     ),
     atapi.StringField('member_title',
         required = 0,
+        searchable=1,
         widget = atapi.StringWidget(
             label=u"Title",
             description=u"Title of member i.e. Senator, Legislator, Governor etc.",
@@ -60,6 +64,7 @@ MemberProfileSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     ),
     atapi.StringField('political_party',
         required = 1,
+        searchable=1,
         widget = atapi.StringWidget(
             label=u"Political Party",
             description=u"Political Party of member",
@@ -89,6 +94,7 @@ MemberProfileSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     atapi.StringField('elected_nominated',
         required = True,
         default = 'elected',
+        searchable=1,
         vocabulary = ELECTED_LIST,
         widget = atapi.SelectionWidget(
             label = u"Elected / Nominated",
@@ -98,6 +104,7 @@ MemberProfileSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     ),
     atapi.StringField('member_status',
         required = True,
+        searchable=1,
         default = 'current',
         vocabulary = STATUS_LIST,
         widget = atapi.SelectionWidget(
@@ -109,6 +116,7 @@ MemberProfileSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     atapi.StringField('special_interest',
         required = 0,
         default = '',
+        searchable=1,
         vocabulary = SPECIAL_INTERESTS_LIST,
         widget = atapi.SelectionWidget(
             label = u"Special Interests",
