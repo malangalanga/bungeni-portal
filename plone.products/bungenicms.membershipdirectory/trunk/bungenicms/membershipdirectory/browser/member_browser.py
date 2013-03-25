@@ -11,6 +11,14 @@ import json
 
 class Html(BrowserView):
 
+    def get_queryLength(self): 
+        """
+        Get length of query items.
+        """             
+        results = self.generateQuery()
+        return len(results)
+        
+    
     def queryMembers(self): 
         """
         Generate result items.
@@ -35,7 +43,7 @@ class Html(BrowserView):
         
         query['portal_type'] = ['MemberProfile', 'MembershipDirectory'] #"MemberProfile"
         query['path'] = {'query' : folder_path, 'depth' : 2 }
-        query['sort_on'] = "member_full_names" # 'sortable_title' # see indexers.py
+        query['sort_on'] = "sortable_title" # 'sortable_title' # see indexers.py
         query['sort_order'] = "descending"
       
         for key, value in self.request.form.iteritems():

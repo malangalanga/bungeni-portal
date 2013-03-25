@@ -113,6 +113,13 @@
             </div>
           <!-- End search form -->
           
+          
+          <span>
+          <strong id="search-results-number"
+              tal:content="python:view.get_queryLength()">234</strong> 
+              items matching your search terms.
+          </span>
+          
                  
           
           <table class="listing nosort"

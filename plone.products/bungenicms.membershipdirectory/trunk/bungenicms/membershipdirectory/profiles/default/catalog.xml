@@ -18,8 +18,22 @@
 	<index name="special_interest" meta_type="FieldIndex">
 		<indexed_attr value="special_interest"/>
 	</index>
-	<index name="member_full_names" meta_type="KeywordIndex">
+	<index name="other_names" meta_type="FieldIndex">
+		<indexed_attr value="other_names"/>
+	</index>
+	<index name="member_role" meta_type="FieldIndex">
+		<indexed_attr value="member_role"/>
+	</index>
+	<index name="member_title" meta_type="FieldIndex">
+		<indexed_attr value="member_title"/>
+	</index>
+	<index name="body_text" meta_type="FieldIndex">
+		<indexed_attr value="body_text"/>
+	</index>
+	<index name="member_full_names" meta_type="ZCTextIndex">
 	    <indexed_attr value="member_full_names"/>
+	    <extra name="index_type" value="Okapi BM25 Rank"/>
+	    <extra name="lexicon_id" value="plone_lexicon"/>
 	</index>
 	
 	<column value="county"/>
@@ -28,5 +42,9 @@
 	<column value="elected_nominated"/>
 	<column value="member_status"/>
 	<column value="special_interest"/>
+	<column value="other_names"/>
+	<column value="member_role"/>
+	<column value="member_title"/>
+	<column value="body_text"/>
 	<column value="member_full_names"/>
 </object>
