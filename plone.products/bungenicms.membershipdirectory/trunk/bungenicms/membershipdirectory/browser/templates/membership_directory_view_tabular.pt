@@ -114,11 +114,37 @@
           <!-- End search form -->
           
           
-          <span>
-          <strong id="search-results-number"
-              tal:content="python:view.get_queryLength()">234</strong> 
-              items matching your search terms.
-          </span>
+          <div tal:omit-tag=""
+                tal:define="st python:request.get('SearchableText', '');
+                            ct python:request.get('county', '');">
+                            
+              <h5 class="documentFirstHeading"
+                i18n:translate=""
+                tal:condition="python:st or ct">
+                Search results for:
+                <span tal:condition="st">
+                <strong tal:condition="st"
+                 tal:content="st">
+                    Search Term
+                </strong> 
+                </span>  
+                 
+                <span tal:condition="ct">
+                <span tal:condition="st">, </span>
+                County:
+                <strong tal:condition="ct"
+                 tal:content="ct">
+                    Search Term
+                </strong> 
+                </span>                                                                
+              </h5>
+                
+              <span>
+                  <strong id="search-results-number"
+                      tal:content="python:view.get_queryLength()">234</strong> 
+                      items matching your search terms.
+              </span>
+          </div>
           
                  
           
