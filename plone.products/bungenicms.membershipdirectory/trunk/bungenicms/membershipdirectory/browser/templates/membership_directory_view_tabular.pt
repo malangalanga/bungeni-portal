@@ -146,6 +146,20 @@
               </span>
           </div>
           
+          
+          <span style="float:right;">
+            <label>Show</label> 
+            <select name="listDisplayPerPgTop" 
+                    id="listDisplayPerPgTop" 
+                    onchange="mpager.init2(this);" 
+                    style="vertical-align: middle;">
+              <option value="10">10</option>
+              <option value="25" selected="selected">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select> <label>items</label>
+          </span>
+          
                  
           
           <table class="listing nosort"
@@ -245,6 +259,36 @@
                 </div>
             </tbody>
           </table>          
+          
+          
+          <span style="float:right;">
+            <label>Show</label> 
+            <select name="listDisplayPerPgBottom" 
+                    id="listDisplayPerPgBottom" 
+                    onchange="mpager.init2(this);" 
+                    style="vertical-align: middle;">
+              <option value="10">10</option>
+              <option value="25" selected="selected">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select> <label>items</label>
+          </span>
+            
+          <input type="hidden" name="itemsToShow" id="itemsToShow" value="25" />
+    		    		
+          <div id="pageNavPosition"></div>
+        
+          <script type="text/javascript">// <!--
+                var itemsPerPage = itemsToShow.value;
+                var mpager = new MemberPager('memberstable', itemsPerPage, 'mpager', 'pageNavPosition'); 
+                mpager.init(); 
+                mpager.showPageNav(); 
+                mpager.showPage(1);
+                //-->
+          </script> 
+          
+          
+                   
           
         </metal:entries>
       </metal:block>

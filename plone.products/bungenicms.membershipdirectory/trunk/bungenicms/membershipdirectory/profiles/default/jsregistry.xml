@@ -27,5 +27,18 @@
         inline="False"
         insert-before="jquery-integration.js"
     />
+    
+    <!-- Table paging javascript -->
+    <javascript
+        id="++resource++bungenicms.membershipdirectory.js/membership_table_paging.js"
+        authenticated="False"
+        cacheable="True" 
+        compression="safe" 
+        cookable="True"
+        enabled="True" 
+        expression="python:object.meta_type in ['MembershipDirectory', 'MembershipProfile']" 
+        inline="False"
+        insert-before="jquery-integration.js"
+    />
 
 </object>

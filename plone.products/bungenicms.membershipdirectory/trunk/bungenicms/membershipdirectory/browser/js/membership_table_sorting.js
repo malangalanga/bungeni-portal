@@ -79,10 +79,10 @@ function SortMemberTable() {
     table.replaceChild(newTableBody,tbody);
     
     // CRUDE HACK: To re-paginate after sorting (Should not be here at all)
-	/*var pager = new Pager('memberstable', 30, 'pager', 'pageNavPosition'); 
-    pager.init(); 
-    pager.showPageNav(); 
-    pager.showPage(1);*/
+	var mpager = new MemberPager('memberstable', 30, 'mpager', 'pageNavPosition'); 
+    mpager.init(); 
+    mpager.showPageNav(); 
+    mpager.showPage(1);
                 
     alternate(table);
 } // function SortMemberTable()
