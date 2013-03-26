@@ -21,7 +21,7 @@
               
              <form method="get" tal:attributes="action request/getURL" >
              
-                <table width="100%">
+                <table id="profile-search">
                     <tr>
                     
                         <td>
@@ -151,8 +151,7 @@
             <label>Show</label> 
             <select name="listDisplayPerPgTop" 
                     id="listDisplayPerPgTop" 
-                    onchange="mpager.init2(this);" 
-                    style="vertical-align: middle;">
+                    onchange="mpager.init2(this);" >
               <option value="10">10</option>
               <option value="25" selected="selected">25</option>
               <option value="50">50</option>
@@ -165,7 +164,6 @@
           <table class="listing nosort"
                  summary="Content listing"
                  i18n:attributes="summary summary_content_listing;"
-                 style="width:100%;"
                  id="memberstable"
                  tal:define="context_state context/@@plone_context_state;
                              page_url context_state/view_url;">
@@ -265,8 +263,7 @@
             <label>Show</label> 
             <select name="listDisplayPerPgBottom" 
                     id="listDisplayPerPgBottom" 
-                    onchange="mpager.init2(this);" 
-                    style="vertical-align: middle;">
+                    onchange="mpager.init2(this);" >
               <option value="10">10</option>
               <option value="25" selected="selected">25</option>
               <option value="50">50</option>
@@ -285,9 +282,7 @@
                 mpager.showPageNav(); 
                 mpager.showPage(1);
                 //-->
-          </script> 
-          
-          
+          </script>     
                    
           
         </metal:entries>

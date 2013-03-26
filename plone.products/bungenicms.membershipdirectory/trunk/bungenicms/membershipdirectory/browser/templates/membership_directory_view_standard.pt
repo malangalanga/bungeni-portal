@@ -21,7 +21,7 @@
               
              <form method="get" tal:attributes="action request/getURL" >
              
-                <table width="100%">
+                <table id="profile-search">
                     <tr>
                     
                         <td>
@@ -31,29 +31,6 @@
                             </label>
                         </td>
                         
-                        <td>
-                            <label>
-                               <span>County :</span>
-                               <select id="county" name="county">
-                                    <option value="">All</option>
-                                    <option 
-                                        tal:repeat="county view/getCountyList" 
-                                        tal:content="python: county[1]"
-                                        tal:attributes="value python: county[0]">
-                                    </option>
-                                </select>  
-                            </label>
-                        </td>
-                        
-                        <td>
-                            <label id="constituencies-container">                               
-                            <!-- Constituencies will show here -->    
-                            </label> 
-                        </td>
-                        
-                    </tr>
-                    
-                    <tr>
                         <td >
                             <label>
                                 <span>Type :</span>
@@ -82,7 +59,43 @@
                             </label>
                         </td>
                         
-                        <td><span id="test"></span></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <label>
+                                <span>Special Interest :</span>
+                                <select id="special_interest" name="special_interest">
+                                    <option value="">All</option>
+                                    <option 
+                                        tal:repeat="status view/getSpecialInterestList" 
+                                        tal:content="python: status[1]"
+                                        tal:attributes="value python: status[0]">
+                                    </option>
+                                </select>                                                       
+                            </label>
+                        </td>
+                        
+                        <td>
+                            <label>
+                               <span>County :</span>
+                               <select id="county" name="county">
+                                    <option value="">All</option>
+                                    <option 
+                                        tal:repeat="county view/getCountyList" 
+                                        tal:content="python: county[1]"
+                                        tal:attributes="value python: county[0]">
+                                    </option>
+                                </select>  
+                            </label>
+                        </td>
+                        
+                        <td>
+                            <label id="constituencies-container">                               
+                            <!-- Constituencies dropdown list -->    
+                            </label> 
+                        </td>
+                        
                     </tr>
                     
                     <tr>
@@ -148,8 +161,7 @@
                             
                             <div id="basic-details" style="clear: both; display:block;">
                                 <div tal:condition="object/getMember_image|nothing" 
-                                     class="member-photo" 
-                                     style="float:left; padding-right:20px;">
+                                     class="member-photo" >
                                     <a href="#"
                                        tal:define="here_url object/@@plone_context_state/object_url;"
                                        tal:attributes="href string:$here_url/member_image/image_view_fullscreen"
@@ -159,8 +171,7 @@
                                 </div>
                                 
                                 <div tal:condition="not:object/getMember_image"
-                                     class="member-photo" 
-                                     style="float:left; padding-right:20px;">
+                                     class="member-photo" >
                                     <img tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++resource++bungenicms.membershipdirectory.icons/empty_profile.jpg" width="150"/>
                                 </div>
                                 
@@ -191,27 +202,7 @@
                     </tal:entry>
                 </div>
             </tbody>
-          </table>  
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
+          </table>          
                   
           
         </metal:entries>
