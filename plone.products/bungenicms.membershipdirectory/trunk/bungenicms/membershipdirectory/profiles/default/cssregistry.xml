@@ -10,6 +10,6 @@
         compression="safe"
         cookable="True"
         enabled="1"
-        expression=""
+        expression="python:object.meta_type in ['MembershipDirectory', 'MembershipProfile']" 
     />
 </object>
