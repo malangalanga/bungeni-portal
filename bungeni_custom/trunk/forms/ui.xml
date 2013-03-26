@@ -199,8 +199,8 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="doc_type" label="Document Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="doc_type">
-            <show modes="view edit add listing" />
+        <field name="doc_type" label="Document Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="doc_version_tmp_aggregated_type">
+            <show modes="view listing" />
         </field>
         <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select" vocabulary="parliament">
             <hide modes="view listing" />
