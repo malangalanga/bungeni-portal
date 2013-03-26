@@ -5,6 +5,8 @@
 """Bungeni search implementation
 - Searches eXist database from within
 """
+log = __import__("logging").getLogger("bungeni.ui.search")
+
 import json
 import urllib2
 import urllib
@@ -15,52 +17,101 @@ from zope.app.pagetemplate import ViewPageTemplateFile
 from ploned.ui.interfaces import IBelowContentManager
 from bungeni.core.interfaces import ISection, IWorkspaceTabsUtility
 from bungeni.ui import interfaces as ui_ifaces, browser
+from bungeni.ui.widgets import MultiCheckBoxWidget
 import interfaces
 from bungeni.ui.utils.common import get_context_roles, get_workspace_roles
 from bungeni.ui.i18n import _
 
-from bungeni.models import domain
+from bungeni.models import domain, interfaces as model_ifaces
 
-from bungeni.utils import register
+from bungeni.utils import register, naming
 from bungeni.capi import capi
 
 def make_url(type_id, type_name, status):
     if type_id and type_name and status:
-        tabs_config = zope.component.getUtility(IWorkspaceTabsUtility)
-        ws_roles = get_workspace_roles()
-        domain_class = getattr(domain, type_name)
-        ti = capi.get_type_info(domain_class)
-        tab = tabs_config.get_tab(ws_roles[0], domain_class, status)
-        if tab:
-            return "./my-documents/%s/%s-%s" %(
-                tab, ti.workflow_key, type_id
-            )
-    return "#"
+        domain_class = getattr(domain, type_name, None)
+        if domain_class is None:
+            domain_class = getattr(domain, naming.model_name(type_name))
+        if model_ifaces.IFeatureWorkspace.implementedBy(domain_class):
+            ws_roles = get_workspace_roles()
+            tabs_config = zope.component.getUtility(IWorkspaceTabsUtility)
+            ti = capi.get_type_info(domain_class)
+            tab = tabs_config.get_tab(ws_roles[0], domain_class, status)
+            if tab:
+                return "./my-documents/%s/%s-%s" %(
+                    tab, ti.workflow_key, type_id
+                )
+    return "javascript:void()"
 
 SEARCH_URL = "http://localhost:8088/exist/restxq/ontology"
+
+BASE_MAPPING = {
+    "status": "status",
+    "type": "docType"
+}
+MAPPING = {
+    "document": {
+        "title": "title",
+        "author": ["owner", "person", "showAs"],
+        "status_date": "statusDate",
+    },
+    "group": {
+        "title": "fullName"
+    }
+}
+
+def get_node_value(context, key):
+    if isinstance(key, list):
+        val = None
+        ctx = context
+        for k in key:
+            val = ctx.get(k)
+            ctx = val
+        return val
+    node = context.get(key, None)
+    if node:
+        if node.has_key("#text"):
+            return node.get("#text")
+        elif node.has_key("showAs"):
+            return node.get("showAs")
+        elif node.has_key("value"):
+            return node.get("value").get("#text")
+
+def get_results_meta(items_list):
+    """return a dict of fields for display
+    """
+    items = []
+    for result in items_list:
+        result_type = result.get("for")
+        record = result.get(result_type)
+        item = {}
+        #unique ids take this form Legislature.9-Chamber.2-AgendaItem.54
+        unique_id = record.get("unique-id")
+        doc_type, obj_key = unique_id.split("-")[-1].split(".")
+        status_key = record.get("status").get("value").get("#text")
+        item["type"] = doc_type
+        item["url"] = make_url(obj_key, doc_type, status_key)
+        MAP = BASE_MAPPING.items() + MAPPING.get(result_type, []).items()
+        for (key, node_key) in MAP:
+            item[key] = get_node_value(record, node_key)
+            
+        items.append(item) 
+    return items
+
 def execute_search(data, prefix):
-    data = dict([(key.lstrip("%s." % prefix), value) 
-        for key,value in data.iteritems()])
+    data = dict([(key.lstrip("%s." % prefix), 
+        (",".join(value) if isinstance(value, list) else value))
+        for key,value in data.iteritems() if value])
     search_request = urllib2.Request(SEARCH_URL, urllib.urlencode(data))
     exist_results = json.loads(urllib2.urlopen(search_request).read())
+    item_count = int(exist_results.get("total"))
     results = {
-        "total": exist_results.get("total"),
+        "total": item_count,
         "items": []
     }
-    for doc in exist_results.get("doc", []):
-        record = doc.get("ontology")
-        doc = record.get("document") or record.get("group") or record.get("sitting") or {}
-        item = {}
-        item["type"] = doc.get("docType").get("value").get("#text")
-        item["title"] = doc.get("title", {}).get("#text", item["type"])
-        item["author"] = doc.get("author", "Unknown Author")
-        item["status"] = doc.get("status").get("value").get("#text")
-        item["status_date"] = doc.get("statusDate", {}).get("#text", "")
-        item["keys"] = doc.keys()
-        item["id"] = doc.get("id")
-        item["doc_id"] = doc.get("docId", {}).get("#text", "")
-        item["url"] = make_url(item["doc_id"], item["type"], item["status"])
-        results["items"].append(item)
+    if item_count:
+        results["items"] = get_results_meta(
+            exist_results.get("ontology"))
     return results
 
 @register.view(ISection, ui_ifaces.IBungeniSkin, 
@@ -70,6 +121,8 @@ class Search(form.PageForm, browser.BungeniBrowserView):
     action_method="get"
     template = namedtemplate.NamedTemplate("alchemist.form")
     form_fields = form.FormFields(interfaces.ISearchRequest)
+    form_fields["type"].custom_widget = MultiCheckBoxWidget
+    form_fields["group"].custom_widget = MultiCheckBoxWidget
     form_name = _(u"Bungeni Search")
     form_description = _(u"Search Documents in Bungeni")
     show_results = False

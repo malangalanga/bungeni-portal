@@ -25,7 +25,7 @@ import zope.security.proxy
 import zope.traversing
 from zope.formlib.widgets import (TextAreaWidget, FileWidget, RadioWidget,
     DropdownWidget)
-from zope.formlib.itemswidgets import (ItemsEditWidgetBase, ItemDisplayWidget)
+from zope.formlib import itemswidgets
 from zope.formlib import form
 from zope.formlib.namedtemplate import NamedTemplate
 from zope.i18n import translate
@@ -103,21 +103,24 @@ class MultiDateTextAreaWidget(TextAreaWidget):
             return u"\n".join(date.strftime("%F") for date in value)
         return u""
 
+
+class MultiCheckBoxWidget(itemswidgets.MultiCheckBoxWidget):
+    def __init__(self, field, request):
+        itemswidgets.MultiCheckBoxWidget.__init__(self, 
+            field, field.value_type.vocabulary, request)
+
 def CustomRadioWidget(field, request):
     """ to replace the default combo box widget for a schema.choice field"""
     vocabulary = field.vocabulary
     return RadioWidget(field, vocabulary, request)
 
-class ImageInputWidget(FileWidget):
-    """
-    render a inputwidget that displays the current
-    image and lets you choose to delete, replace or just
-    leave the current image as is.
-    """
+class DefaultFileInputWidget(FileWidget):
+    '''
+    This is the default FileInputWidget implementation, 
+    other FileInputWidget types extend this
+    '''
+
     _missing = u""
-
-
-    __call__ = ViewPageTemplateFile("templates/image-widget.pt")
 
     @property
     def update_action_name(self):
@@ -126,10 +129,6 @@ class ImageInputWidget(FileWidget):
     @property
     def upload_name(self):
         return self.name.replace(".", "_") + "_file"
-
-    @property
-    def imageURL(self):
-        return "./file-image/%s" % self.context.__name__
 
     def empty_field(self):
         return self._data is None
@@ -191,6 +190,7 @@ class ImageInputWidget(FileWidget):
             raise NotImplementedError
             return
 
+
     def hasInput(self):
         """
         determins if the widget widget has changed
@@ -207,8 +207,26 @@ class ImageInputWidget(FileWidget):
                 return self.upload_name  in self.request.form
 
 
-class FileInputWidget(ImageInputWidget):
+class ImageInputWidget(DefaultFileInputWidget):
+    '''
+    render a inputwidget that displays the current
+    image and lets you choose to delete, replace or just
+    leave the current image as is.
+    '''
+    __call__ = ViewPageTemplateFile("templates/image-widget.pt")
+
+    @property
+    def imageURL(self):
+        return "./file-image/%s" % self.context.__name__
+
+
+class FileInputWidget(DefaultFileInputWidget):
+    '''
+    Upload file attachments
+    Replace file attachments
+    '''
     fileURL = "./download"
+
     def _toFieldValue(self, (update_action, upload)):
         value = super(FileInputWidget, self
             )._toFieldValue((update_action, upload))
@@ -870,7 +888,7 @@ class IAutoCompleteWidget(interface.Interface):
     """Markup interface for autocomplete widget
     """
 
-class _AutoCompleteWidget(ItemsEditWidgetBase):
+class _AutoCompleteWidget(itemswidgets.ItemsEditWidgetBase):
     """Zope3 Implementation of YUI autocomplete widget.
     Can be used with common ChoiceProperty. remote_data - parameter to choose
     type of datasourse, if False (by default, when local) else True when remote
@@ -1282,7 +1300,7 @@ class TermsDisplayWidget(zope.formlib.widget.UnicodeDisplayWidget):
             "".join([ "<li>%s</li>" % (t) for t in term_texts ]))
 
 
-class YesNoDisplayWidgetBase(ItemDisplayWidget):
+class YesNoDisplayWidgetBase(itemswidgets.ItemDisplayWidget):
 
     def __call__(self):
         value = self._getFormValue()

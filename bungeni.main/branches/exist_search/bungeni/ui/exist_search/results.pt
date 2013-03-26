@@ -8,15 +8,11 @@
                 <li>
                     <a tal:attributes="href doc/url" tal:content="doc/title"/><br/>
                     <span tal:content="doc/type"/>
-                    <span tal:content="doc/author"/>
+                    <span tal:content="doc/author|nothing"/>
                     <span tal:content="doc/status"/>
-                    <span tal:content="doc/status_date"/>
-                    <p tal:content="doc/doc_id"/>
+                    <span tal:content="doc/status_date|nothing"/>
                 </li>
         </ul>
     </tal:results>
-    <tal:noresults tal:condition="not:view/search_results/items|python:True">
-        <p i18n:translate="">No items found</p>
-    </tal:noresults>
   </div>
 </html>

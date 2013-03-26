@@ -7,19 +7,30 @@ class ISearchResults(Interface):
     """
     pass
 
+doc_type = schema.Choice(title=_("document type"),
+    values=("*", "Bill", "Question", "AgendaItem", "Motion", 
+        "TabledDocument", "Committee", "PoliticalGroup"),
+    default="*",
+    required=False
+)
+
+search_group = schema.Choice(title=_("group type"),
+    values=("*", "document", "group", "membership"),
+    default="*",
+    required=False
+)
+
+
 class ISearchRequest(Interface):
     """Schema definition for search request parameters
     """
     search = schema.TextLine(title=_("search text"), required=False)
-    group = schema.Choice(title=_("group type"),
-        values=("*", "document", "group", "membership"),
-        default="*",
+    type = schema.List(title=_("document types"),
+        value_type=doc_type,
         required=False
     )
-    type = schema.Choice(title=_("document type"),
-        values=("*", "Bill", "Question", "AgendaItem", "Motion", 
-            "TabledDocument", "Committee", "PoliticalGroup"),
-        default="*",
+    group = schema.List(title=_("document groups"),
+        value_type=search_group,
         required=False
     )
     limit = schema.Choice(title=_("items per page"),
