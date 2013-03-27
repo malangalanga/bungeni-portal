@@ -7,6 +7,7 @@
 """
 log = __import__("logging").getLogger("bungeni.ui.search")
 
+import re
 import json
 import urllib2
 import urllib
@@ -82,8 +83,9 @@ def get_results_meta(items_list):
     """
     items = []
     for result in items_list:
-        result_type = result.get("for")
-        record = result.get(result_type)
+        ontology = result.get("ontology")
+        result_type = ontology.get("for")
+        record = ontology.get(result_type)
         item = {}
         #unique ids take this form Legislature.9-Chamber.2-AgendaItem.54
         unique_id = record.get("unique-id")
@@ -98,20 +100,33 @@ def get_results_meta(items_list):
         items.append(item) 
     return items
 
-def execute_search(data, prefix):
-    data = dict([(key.lstrip("%s." % prefix), 
+def make_pages(item_count, offset, next_offset, limit):
+    num_pages = item_count/limit + int(bool(item_count%limit))
+    return list(xrange(1, num_pages+1))
+
+def execute_search(data, prefix, request):
+    data = dict([(key, 
         (",".join(value) if isinstance(value, list) else value))
         for key,value in data.iteritems() if value])
+    if data.get("page"):
+        data["offset"] = (int(data["page"])-1)*int(data.get("limit"))+1
+        del data["page"]
     search_request = urllib2.Request(SEARCH_URL, urllib.urlencode(data))
     exist_results = json.loads(urllib2.urlopen(search_request).read())
     item_count = int(exist_results.get("total"))
+    page_query_string = request.get("QUERY_STRING")
+    page_query_string = re.sub("&page=\d+", "", page_query_string)
     results = {
         "total": item_count,
-        "items": []
+        "items": [],
+        "current_page": int(exist_results.get("offset")),
+        "pages": make_pages(item_count, int(exist_results.get("offset")),
+            int(exist_results.get("next-offset")),
+            int(exist_results.get("limit"))),
+        "page_query_string": page_query_string
     }
     if item_count:
-        results["items"] = get_results_meta(
-            exist_results.get("ontology"))
+        results["items"] = get_results_meta(exist_results.get("doc"))
     return results
 
 @register.view(ISection, ui_ifaces.IBungeniSkin, 
@@ -133,12 +148,19 @@ class Search(form.PageForm, browser.BungeniBrowserView):
         )
         super(Search, self).__init__(context, request)
 
+    def setUpWidgets(self, ignore_request=False):
+        self.widgets = form.setUpInputWidgets(
+            self.form_fields, self.prefix, self.context, self.request,
+            ignore_request=ignore_request,
+            )
+
     @form.action(_(u"Search"), name="execute-search")
     def handle_search(self, action, data):
         self.show_results = True
         #data["role"] = get_context_roles(self.context, 
         #    self.request.principal)
-        self.search_results = execute_search(data, self.prefix)
+        data["page"] = self.request.form.get("page", 1)
+        self.search_results = execute_search(data, self.prefix, self.request)
         self.status = _("Searched for '${search_string}' and found ${count} "
             "items", 
             mapping={ 

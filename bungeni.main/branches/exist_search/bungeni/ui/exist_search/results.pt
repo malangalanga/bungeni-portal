@@ -14,5 +14,17 @@
                 </li>
         </ul>
     </tal:results>
+    <div tal:condition="view/search_results/items|nothing"
+        tal:define="current_page view/search_results/current_page;">
+        <span tal:repeat="page view/search_results/pages"
+            tal:define="href_base string: ${request/PATH_INFO}?${view/search_results/page_query_string}">
+            <a tal:attributes="href string:${href_base}&page=${page}"
+                tal:content="page" tal:condition="python:current_page!=page">
+            </a>
+            <span tal:condition="python:current_page==page"
+                tal:content="page">
+            </span>
+        </span>
+    </div>
   </div>
 </html>
