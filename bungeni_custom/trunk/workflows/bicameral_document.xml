@@ -17,7 +17,9 @@
     allowed within a *feature facet* apply only for when the (workflowed, always)
     sub-item itself is in a permissions_from_parent="true" state. -->
     <feature name="attachment" enabled="true" />
-    <feature name="event" enabled="true" />
+    <feature name="event" enabled="true">
+        <parameter name="types" value="event test_event" />
+    </feature>
     <feature name="signatory" enabled="false">
         <parameter name="open_states" value="admissible" />
     </feature>
@@ -90,7 +92,9 @@
     <state id="working_draft" title="Working Draft">
         <facet ref=".draft_Clerk_Assembly" />
         <facet ref="attachment.draft_Clerk" />
+        <!-- NOTE: stating event.FACET_NAME is **SAME** as stating event#event.FACET_NAME -->
         <facet ref="event.draft_Clerk" />
+        <facet ref="event#test_event.draft_Clerk" />
     </state>
     
     <state id="draft" title="Draft">
