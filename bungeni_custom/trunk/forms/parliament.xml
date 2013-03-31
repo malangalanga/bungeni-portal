@@ -41,12 +41,22 @@
         <show modes="view edit add listing" />
     </field>
     
-    <container match="agenda_item.group_id" name="agendaitems" note="!+naming !+why not parliament_id?" />
-    <container match="bill.parliament_id" />
-    <container match="motion.parliament_id" />
-    <container match="question.parliament_id" />
-    <container match="tabled_document.parliament_id" name="tableddocuments" note="!+naming" />
-    <container match="test_doc.parliament_id" />
+<container match="agenda_item.group_id" name="agendaitems" note="not parliament_id?" />
+
+<!--     <container match="assembly_agenda_item.group_id" name="assemblyagendaitems" note="!+naming !+why not parliament_id?" /> -->
+    <container match="assembly_bill.parliament_id" />
+    <container match="assembly_motion.parliament_id" />
+    <container match="assembly_question.parliament_id" />
+    <container match="assembly_tabled_document.parliament_id" name="assemblytableddocuments" note="!+naming" />
+    <container match="assembly_test_doc.parliament_id" />
+
+<!--     <container match="senate_agenda_item.group_id" name="senateagendaitems" note="!+naming !+why not parliament_id?" /> -->
+    <container match="senate_bill.parliament_id" />
+    <container match="senate_motion.parliament_id" />
+    <container match="senate_question.parliament_id" />
+    <container match="senate_tabled_document.parliament_id" name="senatetableddocuments" note="!+naming" />
+    <container match="senate_test_doc.parliament_id" />
+
     <container match="bicameral_document.parliament_id" />
     
     <container match="session.parliament_id" />

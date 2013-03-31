@@ -9,7 +9,7 @@
     <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
         <show modes="view edit add listing" />
     </field>
-    <field name="combined_name" label="Full Name [Short Name]" required="false" value_type="text" render_type="text_line">
+    <field name="combined_name" label="Full Name [acronym]" required="false" value_type="text" render_type="text_line">
         <show modes="listing" />
     </field>
     <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">

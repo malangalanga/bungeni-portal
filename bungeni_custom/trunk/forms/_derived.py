@@ -44,5 +44,5 @@ def user_combined_name(user):
 
 #!+i18n?
 def group_combined_name(group):
-    return "%s [%s]" % (group.full_name, group.short_name)
+    return "%s [%s]" % (group.full_name, group.acronym)
 

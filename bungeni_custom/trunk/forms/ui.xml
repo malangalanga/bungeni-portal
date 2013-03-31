@@ -1,22 +1,25 @@
 <?xml version="1.0"?>
 <ui roles="
 Owner Anonymous Authenticated Signatory Admin
-MemberSenate MemberAssembly MemberCommitteeAssembly MemberCommitteeSenate MemberPoliticalGroupAssembly MemberPoliticalGroupSenate GovernmentMember MinistryMember  
+MemberSenate MemberAssembly MemberCommitteeAssembly MemberCommitteeSenate 
+MemberPoliticalGroupAssembly MemberPoliticalGroupSenate GovernmentMember MinistryMember  
 Transcriber Transcriber.Editor
 Transcriber.Reporter Translator 
 SpeakerSenate ClerkSenate ClerkSenate.ClerkHead ClerSenate.ClerkQuestion 
 SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestion
 ">
 
-    
+    <!-- ATTACHMENT -->
     <descriptor name="attachment">
-        <field name="type" label="Attachment Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="attachment_type">
+        <field name="type" label="Attachment Type" required="true" value_type="vocabulary" 
+        render_type="single_select" vocabulary="attachment_type">
             <show modes="view edit add listing" />
         </field>
         <field name="title" label="Title" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="data" label="File" description="Upload a file" required="false" value_type="file" render_type="file">
+        <field name="data" label="File" description="Upload a file" required="false" value_type="file" 
+        render_type="file">
             <show modes="view edit add" />
         </field>
         <field name="name" label="Name" required="false" value_type="text" render_type="no_input">
@@ -25,13 +28,15 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="mimetype" label="MIME Type" required="false" value_type="text" render_type="no_input">
             <show modes="view edit add" />
         </field>
-        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" 
+        vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
         <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" 
+        vocabulary="language">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
@@ -39,7 +44,7 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <show modes="view edit add" />
         </field>
     </descriptor>
-    
+
     <descriptor name="attachment_version">
         <field name="user_id" label="User" required="true" value_type="user" render_type="single_select" vocabulary="user">
             <show modes="view listing" />
@@ -59,7 +64,8 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="date_active" label="Date Active" required="true" value_type="datetime" render_type="datetime">
             <show modes="view listing" />
         </field>
-        <field name="type" label="Attachment Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="attachment_type">
+        <field name="type" label="Attachment Type" required="true" value_type="vocabulary" render_type="single_select"
+        vocabulary="attachment_type">
             <show modes="view edit add listing" />
         </field>
         <field name="title" label="Title" required="false" value_type="text" render_type="text_line">
@@ -74,13 +80,15 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="mimetype" label="MIME Type" required="false" value_type="text" render_type="no_input">
             <show modes="view edit add listing" />
         </field>
-        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" 
+        vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
         <field name="status_date" label="Status Date" required="false" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" 
+        vocabulary="language">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
@@ -91,20 +99,25 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <hide modes="view listing" />
         </field>
     </descriptor>
-    
+
+    <!-- COUNTRY -->    
     <descriptor name="country">
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" 
+        vocabulary="language">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="country_id" label="Country Code" description="Two letter ISO Code for this country e.g. DZ for Algeria" required="true" value_type="text" render_type="text_line">
+        <field name="country_id" label="Country Code" description="Two letter ISO Code e.g. DZ for Algeria" 
+        required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="country_name" label="Country" description="Name of the Country" required="true" value_type="text" render_type="text_line">
+        <field name="country_name" label="Country" description="Name of the Country" required="true" 
+        value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
     </descriptor>
-    
+
+    <!-- DOCUMENT ARCHETYPE -->
     <descriptor name="doc">
         <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
@@ -120,17 +133,21 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" 
+        vocabulary="language">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="doc_type" label="Document Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="doc_type">
+        <field name="doc_type" label="Document Type" required="true" value_type="vocabulary" render_type="single_select"
+        vocabulary="doc_type">
             <show modes="view edit add listing" />
         </field>
-        <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select" vocabulary="parliament">
+        <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select"
+        vocabulary="parliament">
             <hide modes="view listing" />
         </field>
-        <field name="owner_id" label="Moved by" description="Select the user who moved the document" required="true" value_type="member" render_type="single_select" vocabulary="parliament_member_delegation">
+        <field name="owner_id" label="Moved by" description="Select the user who moved the document" 
+        required="true" value_type="member" render_type="single_select" vocabulary="parliament_member_delegation">
             <show modes="edit add" />
             <hide modes="view listing" roles="Anonymous" />
         </field>
@@ -142,19 +159,23 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <show modes="view" />
             <hide modes="edit listing" />
         </field>
-        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" 
+        vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
         <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="text_line">
+        <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text"
+        render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" render_type="text_line">
+        <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" 
+        render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
+        <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" 
+        value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
         <field name="body" label="Text" required="true" value_type="text" render_type="rich_text">
@@ -195,17 +216,21 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" 
+        vocabulary="language">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="doc_type" label="Document Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="doc_version_tmp_aggregated_type">
+        <field name="doc_type" label="Document Type" required="true" value_type="vocabulary" render_type="single_select"
+        vocabulary="doc_version_tmp_aggregated_type">
             <show modes="view listing" />
         </field>
-        <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select" vocabulary="parliament">
+        <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select"
+        vocabulary="parliament">
             <hide modes="view listing" />
         </field>
-        <field name="owner_id" label="Moved by" description="Select the user who moved the document" required="true" value_type="member" render_type="single_select" vocabulary="parliament_member_delegation">
+        <field name="owner_id" label="Moved by" description="Select the user who moved the document" required="true" 
+        value_type="member" render_type="single_select" vocabulary="parliament_member_delegation">
             <show modes="edit add" />
             <hide modes="view listing" roles="Anonymous" />
         </field>
@@ -217,19 +242,23 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <show modes="view" />
             <hide modes="edit listing" />
         </field>
-        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" 
+        vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
         <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="text_line">
+        <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text"
+        render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" render_type="text_line">
+        <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" 
+        render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
+        <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text"
+        render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
         <field name="body" label="Text" required="true" value_type="text" render_type="rich_text">
@@ -240,6 +269,7 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         </field>
     </descriptor>
     
+    <!-- EDITORIAL NOTES -->
     <descriptor name="editorial_note">
         <field name="text" label="Text" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add listing" />
@@ -249,7 +279,8 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <hide modes="listing" />
         </field>
     </descriptor>
-    
+
+    <!-- EVENTS ARCHETYPE -->   
     <descriptor name="event">
         <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
@@ -269,17 +300,21 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="doc_type" label="Event Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="event_type">
+        <field name="doc_type" label="Event Type" required="true" value_type="vocabulary" render_type="single_select"
+        vocabulary="event_type">
             <show modes="view edit add listing" />
         </field>
-        <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select" vocabulary="parliament">
+        <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select"
+        vocabulary="parliament">
             <hide modes="view listing" />
         </field>
-        <field name="owner_id" label="Owner" required="true" value_type="user" render_type="single_select" vocabulary="owner_or_login">
+        <field name="owner_id" label="Owner" required="true" value_type="user" render_type="single_select" 
+        vocabulary="owner_or_login">
             <show modes="edit add" />
             <hide modes="view listing" roles="Anonymous" />
         </field>
-        <field name="group_id" label="Group" required="false" value_type="text" render_type="single_select" vocabulary="group">
+        <field name="group_id" label="Group" required="false" value_type="text" render_type="single_select" 
+        vocabulary="group">
             <show modes="view edit add listing" />
         </field>
         <field name="registry_number" label="Registry Number" required="false" value_type="text" render_type="text_line">
@@ -290,34 +325,79 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <show modes="view" />
             <hide modes="edit listing" />
         </field>
-        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" 
+        vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
         <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="text_line">
+        <field name="subject" label="Subject Terms" description="Select Subjects" required="false" 
+        value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" render_type="text_line">
+        <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" 
+        render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
-        <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
+        <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" 
+        value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
         <field name="body" label="Text" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="event_date" label="Event Date" required="false" value_type="datetime" render_type="datetime" extended="datetime">
+        <field name="event_date" label="Event Date" required="false" value_type="datetime" render_type="datetime" 
+        extended="datetime">
             <show modes="view edit add listing" />
         </field>
     </descriptor>
-    
-    <descriptor name="group_address">
-        <field name="logical_address_type" label="Address Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="logical_address_type">
+
+    <!-- GROUPS -->
+    <descriptor name="group">
+        <field name="full_name" label="Full Name" required="false" value_type="text"
+        render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="postal_address_type" label="Postal Address Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="postal_address_type">
+        <field name="short_name" label="Short Name" required="true" value_type="text"
+        render_type="text_line">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="combined_name" label="Full Name [acronym]" required="false" value_type="text"
+        render_type="text_line" derived="group_combined_name">
+            <show modes="listing" />
+        </field>
+        <field name="language" label="Language" required="true" value_type="language"
+        render_type="single_select" vocabulary="language">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select"
+        vocabulary="workflow_states">
+            <show modes="view listing" />
+        </field>
+        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
+            <show modes="view edit add" />
+        </field>
+        <integrity constraints="end_after_start" validations="validate_date_range_within_parent" />
+    </descriptor>
+
+    <descriptor name="group_address">
+        <field name="logical_address_type" label="Address Type" required="true" value_type="vocabulary" 
+        render_type="single_select" vocabulary="logical_address_type">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="postal_address_type" label="Postal Address Type" required="true" value_type="vocabulary"
+        render_type="single_select" vocabulary="postal_address_type">
             <show modes="view edit add listing" />
         </field>
         <field name="street" label="Street" required="false" value_type="text" render_type="text_box">
@@ -330,50 +410,22 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="zipcode" label="Zip Code" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="country_id" label="Country" required="false" value_type="text" render_type="single_select" vocabulary="country">
+        <field name="country_id" label="Country" required="false" value_type="text" render_type="single_select" 
+        vocabulary="country">
             <show modes="view edit add listing" />
         </field>
-        <field name="phone" label="Phone Number(s)" description="Enter one phone number per line" required="false" value_type="text" render_type="text_box">
+        <field name="phone" label="Phone Number(s)" description="Enter one phone number per line" required="false" 
+        value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
         </field>
-        <field name="fax" label="Fax Number(s)" description="Enter one fax number per line" required="false" value_type="text" render_type="text_box">
+        <field name="fax" label="Fax Number(s)" description="Enter one fax number per line" required="false" 
+        value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
         </field>
-        <field name="email" label="Email" description="Email address" required="false" value_type="text" render_type="text_line">
+        <field name="email" label="Email" description="Email address" required="false" value_type="text" 
+        render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-    </descriptor>
-    
-    <descriptor name="group">
-        <field name="full_name" label="Full Name" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="combined_name" label="Full Name [Short Name]" required="false" value_type="text" render_type="text_line" derived="group_combined_name">
-            <show modes="listing" />
-        </field>
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
-            <show modes="view edit add" />
-            <hide modes="listing" />
-        </field>
-        <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
-            <show modes="view edit add listing" />
-        </field>
-        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
-            <show modes="view listing" />
-        </field>
-        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
-            <show modes="view edit add" />
-        </field>
-        <integrity constraints="end_after_start" validations="validate_date_range_within_parent" />
     </descriptor>
     
     <descriptor name="group_membership">
@@ -386,14 +438,16 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="active_p" label="Active" required="false" value_type="bool" render_type="bool">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" 
+        vocabulary="language">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
         <field name="substitution_type" label="Type of Substitution" required="false" value_type="text" render_type="text_line">
             <show modes="view edit listing" />
         </field>
-        <field name="replaced_id" label="Substituted by" required="false" value_type="text" render_type="single_select" vocabulary="substitution">
+        <field name="replaced_id" label="Substituted by" required="false" value_type="text" render_type="single_select"
+        vocabulary="substitution">
             <show modes="view edit listing" />
         </field>
         <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
@@ -402,9 +456,11 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <integrity constraints="end_after_start active_and_substituted substituted_end_date inactive_no_end_date" validations="validate_date_range_within_parent validate_group_membership_dates" />
+        <integrity constraints="end_after_start active_and_substituted substituted_end_date inactive_no_end_date"
+        validations="validate_date_range_within_parent validate_group_membership_dates" />
     </descriptor>
-    
+
+    <!-- HEADING -->    
     <descriptor name="heading" order="3">
         <field name="text" label="Heading" required="true" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
@@ -414,7 +470,8 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <hide modes="listing" />
         </field>
     </descriptor>
-    
+
+    <!-- ITEM SCHEDULED -->     
     <descriptor name="item_schedule">
         <field name="item_title" label="Title" required="false" value_type="text" render_type="text_raw">
             <show modes="view listing" />
@@ -431,7 +488,8 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
     </descriptor>
     
     <descriptor name="item_schedule_discussion">
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" 
+        vocabulary="language">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
@@ -459,19 +517,23 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="description" label="Title/Description" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
         </field>
-        <field name="vote_type" label="Vote type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="sitting_schedule_vote_types">
+        <field name="vote_type" label="Vote type" required="true" value_type="vocabulary" render_type="single_select"
+        vocabulary="sitting_schedule_vote_types">
             <show modes="view edit add" />
         </field>
-        <field name="majority_type" label="Majority type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="sitting_schedule_vote_majority_types">
+        <field name="majority_type" label="Majority type" required="true" value_type="vocabulary" 
+        render_type="single_select" vocabulary="sitting_schedule_vote_majority_types">
             <show modes="view edit add" />
         </field>
-        <field name="result" label="Vote result" required="true" value_type="text" render_type="single_select" vocabulary="sitting_schedule_vote_result">
+        <field name="result" label="Vote result" required="true" value_type="text" 
+        render_type="single_select" vocabulary="sitting_schedule_vote_result">
             <show modes="view edit add listing" />
         </field>
         <field name="notes" label="Vote Notes" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
         </field>
-        <field name="eligible_votes" label="Total Eligible Votes" required="false" value_type="number" render_type="number">
+        <field name="eligible_votes" label="Total Eligible Votes" required="false" value_type="number" 
+        render_type="number">
             <show modes="view edit add" />
         </field>
         <field name="cast_votes" label="Total votes cast" required="false" value_type="number" render_type="number">
@@ -486,26 +548,31 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="votes_abstained" label="Abstained" required="false" value_type="number" render_type="number">
             <show modes="view edit add" />
         </field>
-        <field name="roll_call" label="Vote Record File" description="Upload Vote Record File (XML)" required="false" value_type="file" render_type="file">
+        <field name="roll_call" label="Vote Record File" description="Upload Vote Record File (XML)" 
+        required="false" value_type="file" render_type="file">
             <show modes="view edit add" />
         </field>
         <field name="mimetype" label="MIME Type" required="false" value_type="text" render_type="no_input">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" 
+        vocabulary="language">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
     </descriptor>
-    
+
+    <!-- MEMBER TITLE --> 
     <descriptor name="member_title">
-        <field name="title_type_id" label="Title" required="true" value_type="vocabulary" render_type="single_select" vocabulary="group_title_types">
+        <field name="title_type_id" label="Title" required="true" value_type="vocabulary" 
+        render_type="single_select" vocabulary="group_title_types">
             <show modes="view edit add listing" />
         </field>
         <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="end_date" label="End Date" description="Date of the dissolution" required="false" value_type="date" render_type="date">
+        <field name="end_date" label="End Date" description="Date of the dissolution" required="false" 
+        value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
         <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
@@ -514,7 +581,8 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         </field>
         <integrity constraints="end_after_start" validations="validate_date_range_within_parent validate_member_titles" />
     </descriptor>
-    
+
+    <!-- SESSION -->     
     <descriptor name="session" order="16">
         <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
@@ -529,7 +597,8 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="end_date" label="End Date" required="true" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" 
+        vocabulary="language">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
@@ -538,36 +607,46 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         </field>
         <integrity constraints="end_after_start" validations="validate_date_range_within_parent" />
     </descriptor>
-    
+
+    <!-- SIGNATORY -->     
     <descriptor name="signatory">
-        <field name="status" label="Signature Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
+        <field name="status" label="Signature Status" required="true" value_type="status" 
+        render_type="single_select" vocabulary="workflow_states">
             <show modes="view listing" roles="Owner Signatory" />
         </field>
-        <field name="user_id" label="Signatory" required="true" value_type="member" render_type="single_select" vocabulary="signatory">
+        <field name="user_id" label="Signatory" required="true" value_type="member" render_type="single_select" 
+        vocabulary="signatory">
             <show modes="view add listing" />
         </field>
-        <field name="party" label="Political Party" required="false" value_type="text" render_type="single_select" vocabulary="party">
+        <field name="party" label="Political Party" required="false" value_type="text" 
+        render_type="single_select" vocabulary="party">
             <show modes="listing" />
         </field>
     </descriptor>
-    
+
+    <!-- SITTING ATTENDANCE -->      
     <descriptor name="sitting_attendance">
-        <field name="member_id" label="Member of Parliament" required="true" value_type="user" render_type="single_select" vocabulary="sitting_attendance">
+        <field name="member_id" label="Member of Parliament" required="true" value_type="user" 
+        render_type="single_select" vocabulary="sitting_attendance">
             <show modes="view add listing" />
         </field>
-        <field name="attendance_type" label="Attendance" required="true" value_type="vocabulary" render_type="single_select" vocabulary="attendance_type">
+        <field name="attendance_type" label="Attendance" required="true" value_type="vocabulary" 
+        render_type="single_select" vocabulary="attendance_type">
             <show modes="view edit add listing" />
         </field>
     </descriptor>
-    
+
+    <!-- SITTING -->    
     <descriptor name="sitting" order="17">
         <field name="short_name" label="Name of activity" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="session_id" label="Session" required="false" value_type="vocabulary" render_type="single_select" vocabulary="session">
+        <field name="session_id" label="Session" required="false" value_type="vocabulary" 
+        render_type="single_select" vocabulary="session">
             <show modes="view listing" />
         </field>
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+        <field name="language" label="Language" required="true" value_type="language" 
+        render_type="single_select" vocabulary="language">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
@@ -577,27 +656,34 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         <field name="end_date" label="End" required="true" value_type="datetime" render_type="datetime">
             <show modes="view edit add listing" />
         </field>
-        <field name="venue_id" label="Venue" required="false" value_type="vocabulary" render_type="single_select" vocabulary="venue">
+        <field name="venue_id" label="Venue" required="false" value_type="vocabulary" 
+        render_type="single_select" vocabulary="venue">
             <show modes="view edit add listing" />
         </field>
-        <field name="activity_type" label="Activity Type" description="Sitting Activity Type" required="false" value_type="vocabulary" render_type="single_select" vocabulary="sitting_activity_types">
+        <field name="activity_type" label="Activity Type" description="Sitting Activity Type" 
+        required="false" value_type="vocabulary" render_type="single_select" vocabulary="sitting_activity_types">
             <show modes="view edit add" />
         </field>
-        <field name="meeting_type" label="Meeting Type" description="Sitting Meeting Type" required="false" value_type="vocabulary" render_type="single_select" vocabulary="sitting_meeting_types">
+        <field name="meeting_type" label="Meeting Type" description="Sitting Meeting Type" 
+        required="false" value_type="vocabulary" render_type="single_select" vocabulary="sitting_meeting_types">
             <show modes="view edit add" />
         </field>
-        <field name="convocation_type" label="Convocation Type" description="Sitting Convocation Type" required="false" value_type="vocabulary" render_type="single_select" vocabulary="sitting_convocation_types">
+        <field name="convocation_type" label="Convocation Type" description="Sitting Convocation Type" 
+        required="false" value_type="vocabulary" render_type="single_select" vocabulary="sitting_convocation_types">
             <show modes="view edit add" />
         </field>
         <integrity constraints="end_after_start" validations="validate_date_range_within_parent validate_venues" />
     </descriptor>
-    
+
+    <!-- SITTING REPORT -->     
     <descriptor name="sitting_report">
-        <field name="sitting_id" label="Sitting" required="true" value_type="vocabulary" render_type="single_select" vocabulary="sitting">
+        <field name="sitting_id" label="Sitting" required="true" value_type="vocabulary"
+        render_type="single_select" vocabulary="sitting">
             <show modes="view listing" />
             <hide modes="add" />
         </field>
-        <field name="report_id" label="Report" required="true" value_type="vocabulary" render_type="single_select" vocabulary="report">
+        <field name="report_id" label="Report" required="true" value_type="vocabulary" 
+        render_type="single_select" vocabulary="report">
             <show modes="view listing" />
             <hide modes="add" />
         </field>
@@ -611,27 +697,36 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
         </field>
     </descriptor>
     
+    <!-- TYTLE TYPE --> 
     <descriptor name="title_type" order="22">
         <field name="title_name" label="Name" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="user_unique" label="Only one user may have this title" description="Limits persons with this title to one" required="false" value_type="text" render_type="single_select" vocabulary="yes_no">
+        <field name="user_unique" label="Only one user may have this title" 
+        description="Limits persons with this title to one" required="false" value_type="text" 
+        render_type="single_select" vocabulary="yes_no">
             <show modes="view edit add listing" />
         </field>
-        <field name="sort_order" label="Sort Order" description="The order in which members with this title will appear relative to other members" required="true" value_type="number" render_type="number">
+        <field name="sort_order" label="Sort Order" 
+        description="The order in which members with this title will appear relative to other members" 
+        required="true" value_type="number" render_type="number">
             <show modes="view edit add listing" />
         </field>
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+        <field name="language" label="Language" required="true" value_type="language" 
+        render_type="single_select" vocabulary="language">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
     </descriptor>
     
+    <!-- USER ADDRESS --> 
     <descriptor name="user_address">
-        <field name="logical_address_type" label="Address Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="logical_address_type">
+        <field name="logical_address_type" label="Address Type" required="true" value_type="vocabulary" 
+        render_type="single_select" vocabulary="logical_address_type">
             <show modes="view edit add listing" />
         </field>
-        <field name="postal_address_type" label="Postal Address Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="postal_address_type">
+        <field name="postal_address_type" label="Postal Address Type" required="true" 
+        value_type="vocabulary" render_type="single_select" vocabulary="postal_address_type">
             <show modes="view edit add listing" />
         </field>
         <field name="street" label="Street" required="false" value_type="text" render_type="text_box">
@@ -645,86 +740,107 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="country_id" label="Country" required="false" value_type="text" render_type="single_select" vocabulary="country">
+        <field name="country_id" label="Country" required="false" value_type="text" 
+        render_type="single_select" vocabulary="country">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="phone" label="Phone Number(s)" description="Enter one phone number per line" required="false" value_type="text" render_type="text_box">
+        <field name="phone" label="Phone Number(s)" description="Enter one phone number per line" 
+        required="false" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
         </field>
-        <field name="fax" label="Fax Number(s)" description="Enter one fax number per line" required="false" value_type="text" render_type="text_box">
+        <field name="fax" label="Fax Number(s)" description="Enter one fax number per line" 
+        required="false" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
         </field>
-        <field name="email" label="Email" description="Email address" required="false" value_type="text" render_type="text_line">
+        <field name="email" label="Email" description="Email address" required="false" 
+        value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
     </descriptor>
     
+    <!-- USER DELEGATION --> 
     <descriptor name="user_delegation" order="3">
         <field name="delegation_id" label="User" required="true" value_type="user" render_type="single_select" vocabulary="user">
             <show modes="view edit add listing" />
         </field>
     </descriptor>
-    
+
+    <!-- USER -->     
     <descriptor name="user" order="4">
         <field name="user_id" label="Name" required="true" value_type="user" render_type="no_input">
             <hide modes="view" />
             <show modes="listing" />
         </field>
-        <field name="salutation" label="Salutation" description="e.g. Mr. Mrs, Prof. etc." required="false" value_type="text" render_type="text_line">
+        <field name="salutation" label="Salutation" description="e.g. Mr. Mrs, Prof. etc." 
+        required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
         </field>
-        <field name="title" label="Title" description="e.g. Chief Advisor, etc." required="false" value_type="text" render_type="text_line">
+        <field name="title" label="Title" description="e.g. Chief Advisor, etc." 
+        required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
         </field>
-        <field name="first_name" label="First Name" required="true" value_type="text" render_type="text_line">
+        <field name="first_name" label="First Name" required="true" value_type="text" 
+        render_type="text_line">
             <show modes="view edit add" />
         </field>
-        <field name="middle_name" label="Middle Name" required="false" value_type="text" render_type="text_line">
+        <field name="middle_name" label="Middle Name" required="false" value_type="text" 
+        render_type="text_line">
             <show modes="view edit add" />
         </field>
-        <field name="last_name" label="Last Name" required="true" value_type="text" render_type="text_line">
+        <field name="last_name" label="Last Name" required="true" value_type="text" 
+        render_type="text_line">
             <show modes="view edit add" />
         </field>
-        <field name="combined_name" label="Full Name" required="false" value_type="text" render_type="text_line" derived="user_combined_name">
+        <field name="combined_name" label="Full Name" required="false" value_type="text" 
+        render_type="text_line" derived="user_combined_name">
             <hide modes="listing" />
         </field>
-        <field name="email" label="Email" description="Email address" required="true" value_type="email" render_type="text_line">
+        <field name="email" label="Email" description="Email address" required="true" 
+        value_type="email" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="login" label="Login" description="May contain only letters, numbers, a period (.) and underscore (_). Should start with a letter and be between 3 and 20 characters long" required="true" value_type="login" render_type="text_line">
+        <field name="login" label="Login"
+        description="May contain only letters, numbers, a period (.) and underscore (_). Should start with a letter and be between 3 and 20 characters long" required="true" value_type="login" render_type="text_line">
             <show modes="view add" />
             <show modes="listing" />
         </field>
-        <field name="_password" label="Initial password" required="false" value_type="password" render_type="text_line">
+        <field name="_password" label="Initial password" required="false" value_type="password" 
+        render_type="text_line">
             <show modes="add" />
         </field>
-        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" 
+        vocabulary="workflow_states">
             <show modes="view listing" />
         </field>
         <field name="national_id" label="National Id" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="gender" label="Gender" required="false" value_type="text" render_type="radio" vocabulary="gender">
+        <field name="gender" label="Gender" required="false" value_type="text" render_type="radio" 
+        vocabulary="gender">
             <show modes="view edit add listing" />
         </field>
         <field name="date_of_birth" label="Date of Birth" required="false" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
-        <field name="birth_country" label="Country of Birth" required="false" value_type="text" render_type="single_select" vocabulary="country">
+        <field name="birth_country" label="Country of Birth" required="false" value_type="text" 
+        render_type="single_select" vocabulary="country">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="birth_nationality" label="Nationality at Birth" required="false" value_type="text" render_type="single_select" vocabulary="country">
+        <field name="birth_nationality" label="Nationality at Birth" required="false" value_type="text" 
+        render_type="single_select" vocabulary="country">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="current_nationality" label="Current Nationality" required="false" value_type="text" render_type="single_select" vocabulary="country">
+        <field name="current_nationality" label="Current Nationality" required="false" value_type="text" 
+        render_type="single_select" vocabulary="country">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="marital_status" label="Marital Status" required="false" value_type="vocabulary" render_type="single_select" vocabulary="marital_status">
+        <field name="marital_status" label="Marital Status" required="false" value_type="vocabulary" 
+        render_type="single_select" vocabulary="marital_status">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
@@ -732,10 +848,12 @@ SpeakerAssembly ClerkAssembly ClerkAssembly.ClerkHead ClerkAssembly.ClerkQuestio
             <show modes="view edit" />
             <hide modes="listing" />
         </field>
-        <field name="image" label="Image" description="Picture of the person" required="false" value_type="image" render_type="image">
+        <field name="image" label="Image" description="Picture of the person" required="false" value_type="image" 
+        render_type="image">
             <show modes="view edit add" />
         </field>
-        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" 
+        vocabulary="language">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>

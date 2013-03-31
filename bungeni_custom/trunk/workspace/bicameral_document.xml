@@ -12,12 +12,12 @@
         <tab id="pending" roles="Owner"/>
     </state>
     <state id="reviewed">
-        <tab id="inbox" roles="SpeakerAssembly"/>
+        <tab id="inbox" roles="SpeakerAssembly ClerkLegal  MinistryMember"/>
         <tab id="pending"
-	     roles="Owner
-		     ClerkAssembly"/>
+	     roles="Owner ClerkAssembly"/>
     </state>
     <state id="admissible">
+        <tab id="inbox" roles="MinistryMember ClerkLegal"/>
         <tab id="schedule"
 	     roles="SpeakerAssembly
 		     ClerkAssembly"/>
@@ -54,12 +54,12 @@
 
     <!-- SENATE -->
     <state id="forwarded_senate">
-        <tab id="inbox" roles="ClerkSenate"/>
+        <tab id="inbox" roles="ClerkSenate MinistryMember"/>
         <tab id="pending" roles="Owner
         ClerkAssembly SpeakerAssembly"/>
     </state>
     <state id="reviewed_senate">
-        <tab id="inbox" roles="SpeakerSenate"/>
+        <tab id="inbox" roles="SpeakerSenate  MinistryMember"/>
         <tab id="pending"
 	     roles="Owner ClerkSenate
          ClerkAssembly SpeakerAssembly"/>
