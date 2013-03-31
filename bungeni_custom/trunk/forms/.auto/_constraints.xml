@@ -1,0 +1,9 @@
+<constraints>
+  <constraint name="active_and_substituted">Person: a person cannot be active and also substituted at the same time</constraint>
+  <constraint name="end_after_start">End Date must be after Start Date</constraint>
+  <constraint name="inactive_no_end_date">Person: when a person is set to inactive, an end date for the inactive period must be set</constraint>
+  <constraint name="log">log</constraint>
+  <constraint name="member_start_after_elected">Member: the start date for a member must be after the election date</constraint>
+  <constraint name="substituted_end_date">Person: when a person is substituted, an end date for the substitution must be set</constraint>
+  <constraint name="user_birth_death_dates">Person: the date of death must be after the date of birth</constraint>
+</constraints>

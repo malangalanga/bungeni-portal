@@ -1,0 +1,9 @@
+<validations>
+  <validation name="validate_chamber_dates">Check if the start - end date range of a parliament does not overlap with another parliament</validation>
+  <validation name="validate_date_range_within_parent">Check if the date range of the item is within the date range of the parent document containing it</validation>
+  <validation name="validate_email_availability">Check if email address is already in use</validation>
+  <validation name="validate_government_dates">Checks if the government start/end dates fall within the start/end dates of the parliament</validation>
+  <validation name="validate_group_membership_dates">Checks if a user is already a member of the group in a particular date range</validation>
+  <validation name="validate_member_titles">Checks if a title has been assigned to another user, and if the title can be assigned only once within the group</validation>
+  <validation name="validate_venues">Checks if a venue is already booked for sitting in a particular date range</validation>
+</validations>

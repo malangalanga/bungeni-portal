@@ -1,0 +1,29 @@
+<conditions>
+  <condition name="agenda_finalized">sitting: Require agenda to be finalized</condition>
+  <condition name="context_is_public">Require public view access</condition>
+  <condition name="context_parent_is_draft">attachments, events etc: Require parent document to be in draft state</condition>
+  <condition name="context_parent_is_not_draft">attachments, events etc: Require parent document not to be in draft state</condition>
+  <condition name="context_parent_is_not_public">attachments, events etc: Require parent document not to be visible to the public</condition>
+  <condition name="context_parent_is_public">attachments, events etc: Require parent document to be visible to the public</condition>
+  <condition name="has_agenda">sitting: Require agenda in the current context</condition>
+  <condition name="has_date_of_death">user: Require date of death to be set</condition>
+  <condition name="has_end_date">group: Require end date to be set for the group</condition>
+  <condition name="has_venue">sitting: Require a venue set in the current context</condition>
+  <condition name="is_oral_response">question: Require an oral response</condition>
+  <condition name="is_scheduled">Require document to be scheduled</condition>
+  <condition name="is_written_response">question: Require a written response</condition>
+  <condition name="not_has_date_of_death">user: Require date of death to be not set</condition>
+  <condition name="pi_allow_signature">signatory: Require the signatory be allowed to sign</condition>
+  <condition name="pi_allow_signature_actions">signatory: Require the signatory to be allowed to withdraw or reject</condition>
+  <condition name="pi_has_signatories">signatory: Require signatories</condition>
+  <condition name="pi_signatories_check">signatory: Require consented signatories</condition>
+  <condition name="pi_signature_period_expired">signatory: Require signature period to have expired</condition>
+  <condition name="pi_unsign_signature">signatory: Require the signature to have been withdrawn</condition>
+  <condition name="response_allow_submit">question: Require the response to be submitted in the current context</condition>
+  <condition name="signatory_auto_sign">signatory: Require the owner to be the signatory. Auto-signs the document</condition>
+  <condition name="signatory_manual_sign">signatory: Require the signatory to manually sign the document</condition>
+  <condition name="sitting_dummy">sitting: dummy ?</condition>
+  <condition name="user_is_context_owner">Require current user to be the owner</condition>
+  <condition name="user_is_not_context_owner">Require current user to not be the owner</condition>
+  <condition name="user_may_edit_context_parent">attachments, events etc: Require parent document to be editable by the user</condition>
+</conditions>
