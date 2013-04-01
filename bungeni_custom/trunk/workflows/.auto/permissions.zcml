@@ -1235,54 +1235,6 @@ See Bungeni Custom documentation (and workflows/README.txt) for further details.
 <grant permission="bungeni.political_group_member.wf.internal.attached" role="bungeni.Owner" />
 
 
-<!-- ministry -->
-<permission id="bungeni.ministry.View" title="View Ministry" />
-<permission id="bungeni.ministry.Edit" title="Edit Ministry" />
-<permission id="bungeni.ministry.Add" title="Add Ministry" />
-<permission id="bungeni.ministry.Delete" title="Delete Ministry" />
-<grant permission="bungeni.ministry.Edit" role="bungeni.ClerkAssembly" />
-<grant permission="bungeni.ministry.Edit" role="bungeni.ClerkSenate" />
-<grant permission="bungeni.ministry.Add" role="bungeni.ClerkAssembly" />
-<grant permission="bungeni.ministry.Add" role="bungeni.ClerkSenate" />
-<grant permission="bungeni.ministry.Delete" role="bungeni.ClerkAssembly" />
-<grant permission="bungeni.ministry.Delete" role="bungeni.ClerkSenate" />
-
-<permission id="bungeni.ministry.wf.draft.active" title="Activate" />
-<grant permission="bungeni.ministry.wf.draft.active" role="bungeni.ClerkAssembly" />
-<grant permission="bungeni.ministry.wf.draft.active" role="bungeni.ClerkSenate" />
-<grant permission="bungeni.ministry.wf.draft.active" role="bungeni.SpeakerAssembly" />
-<grant permission="bungeni.ministry.wf.draft.active" role="bungeni.SpeakerSenate" />
-
-<permission id="bungeni.ministry.wf.active.dissolved" title="Dissolve" />
-<grant permission="bungeni.ministry.wf.active.dissolved" role="bungeni.ClerkAssembly" />
-<grant permission="bungeni.ministry.wf.active.dissolved" role="bungeni.ClerkSenate" />
-<grant permission="bungeni.ministry.wf.active.dissolved" role="bungeni.SpeakerAssembly" />
-<grant permission="bungeni.ministry.wf.active.dissolved" role="bungeni.SpeakerSenate" />
-
-<permission id="bungeni.ministry.wf.active.draft" title="Deactivate" />
-<grant permission="bungeni.ministry.wf.active.draft" role="bungeni.ClerkAssembly" />
-<grant permission="bungeni.ministry.wf.active.draft" role="bungeni.ClerkSenate" />
-<grant permission="bungeni.ministry.wf.active.draft" role="bungeni.SpeakerAssembly" />
-<grant permission="bungeni.ministry.wf.active.draft" role="bungeni.SpeakerSenate" />
-
-
-<!-- minister -->
-<permission id="bungeni.minister.View" title="View Minister" />
-<permission id="bungeni.minister.Edit" title="Edit Minister" />
-<permission id="bungeni.minister.Add" title="Add Minister" />
-<permission id="bungeni.minister.Delete" title="Delete Minister" />
-
-<permission id="bungeni.minister.wf.attached.internal" title="Publish Internal" />
-<grant permission="bungeni.minister.wf.attached.internal" role="bungeni.ClerkAssembly" />
-<grant permission="bungeni.minister.wf.attached.internal" role="bungeni.ClerkSenate" />
-<grant permission="bungeni.minister.wf.attached.internal" role="bungeni.Owner" />
-
-<permission id="bungeni.minister.wf.internal.attached" title="Re-publish" />
-<grant permission="bungeni.minister.wf.internal.attached" role="bungeni.ClerkAssembly" />
-<grant permission="bungeni.minister.wf.internal.attached" role="bungeni.ClerkSenate" />
-<grant permission="bungeni.minister.wf.internal.attached" role="bungeni.Owner" />
-
-
 <!-- committee -->
 <permission id="bungeni.committee.View" title="View Committee" />
 <permission id="bungeni.committee.Edit" title="Edit Committee" />
@@ -1408,6 +1360,54 @@ See Bungeni Custom documentation (and workflows/README.txt) for further details.
 <grant permission="bungeni.government.wf.active.draft" role="bungeni.ClerkSenate" />
 <grant permission="bungeni.government.wf.active.draft" role="bungeni.SpeakerAssembly" />
 <grant permission="bungeni.government.wf.active.draft" role="bungeni.SpeakerSenate" />
+
+
+<!-- ministry -->
+<permission id="bungeni.ministry.View" title="View Ministry" />
+<permission id="bungeni.ministry.Edit" title="Edit Ministry" />
+<permission id="bungeni.ministry.Add" title="Add Ministry" />
+<permission id="bungeni.ministry.Delete" title="Delete Ministry" />
+<grant permission="bungeni.ministry.Edit" role="bungeni.ClerkAssembly" />
+<grant permission="bungeni.ministry.Edit" role="bungeni.ClerkSenate" />
+<grant permission="bungeni.ministry.Add" role="bungeni.ClerkAssembly" />
+<grant permission="bungeni.ministry.Add" role="bungeni.ClerkSenate" />
+<grant permission="bungeni.ministry.Delete" role="bungeni.ClerkAssembly" />
+<grant permission="bungeni.ministry.Delete" role="bungeni.ClerkSenate" />
+
+<permission id="bungeni.ministry.wf.draft.active" title="Activate" />
+<grant permission="bungeni.ministry.wf.draft.active" role="bungeni.ClerkAssembly" />
+<grant permission="bungeni.ministry.wf.draft.active" role="bungeni.ClerkSenate" />
+<grant permission="bungeni.ministry.wf.draft.active" role="bungeni.SpeakerAssembly" />
+<grant permission="bungeni.ministry.wf.draft.active" role="bungeni.SpeakerSenate" />
+
+<permission id="bungeni.ministry.wf.active.dissolved" title="Dissolve" />
+<grant permission="bungeni.ministry.wf.active.dissolved" role="bungeni.ClerkAssembly" />
+<grant permission="bungeni.ministry.wf.active.dissolved" role="bungeni.ClerkSenate" />
+<grant permission="bungeni.ministry.wf.active.dissolved" role="bungeni.SpeakerAssembly" />
+<grant permission="bungeni.ministry.wf.active.dissolved" role="bungeni.SpeakerSenate" />
+
+<permission id="bungeni.ministry.wf.active.draft" title="Deactivate" />
+<grant permission="bungeni.ministry.wf.active.draft" role="bungeni.ClerkAssembly" />
+<grant permission="bungeni.ministry.wf.active.draft" role="bungeni.ClerkSenate" />
+<grant permission="bungeni.ministry.wf.active.draft" role="bungeni.SpeakerAssembly" />
+<grant permission="bungeni.ministry.wf.active.draft" role="bungeni.SpeakerSenate" />
+
+
+<!-- minister -->
+<permission id="bungeni.minister.View" title="View Minister" />
+<permission id="bungeni.minister.Edit" title="Edit Minister" />
+<permission id="bungeni.minister.Add" title="Add Minister" />
+<permission id="bungeni.minister.Delete" title="Delete Minister" />
+
+<permission id="bungeni.minister.wf.attached.internal" title="Publish Internal" />
+<grant permission="bungeni.minister.wf.attached.internal" role="bungeni.ClerkAssembly" />
+<grant permission="bungeni.minister.wf.attached.internal" role="bungeni.ClerkSenate" />
+<grant permission="bungeni.minister.wf.attached.internal" role="bungeni.Owner" />
+
+<permission id="bungeni.minister.wf.internal.attached" title="Re-publish" />
+<grant permission="bungeni.minister.wf.internal.attached" role="bungeni.ClerkAssembly" />
+<grant permission="bungeni.minister.wf.internal.attached" role="bungeni.ClerkSenate" />
+<grant permission="bungeni.minister.wf.internal.attached" role="bungeni.Owner" />
 
 
 <!-- parliament -->

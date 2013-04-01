@@ -42,15 +42,19 @@
     </field>
     
 <container match="agenda_item.group_id" name="agendaitems" note="not parliament_id?" />
-
-<!--     <container match="assembly_agenda_item.group_id" name="assemblyagendaitems" note="!+naming !+why not parliament_id?" /> -->
+<!--
+    <container match="assembly_agenda_item.group_id" name="assemblyagendaitems" 
+    note="!+naming !+why not parliament_id?" />
+-->
     <container match="assembly_bill.parliament_id" />
     <container match="assembly_motion.parliament_id" />
     <container match="assembly_question.parliament_id" />
     <container match="assembly_tabled_document.parliament_id" name="assemblytableddocuments" note="!+naming" />
     <container match="assembly_test_doc.parliament_id" />
-
-<!--     <container match="senate_agenda_item.group_id" name="senateagendaitems" note="!+naming !+why not parliament_id?" /> -->
+<!--
+    <container match="senate_agenda_item.group_id" name="senateagendaitems" 
+    note="!+naming !+why not parliament_id?" />
+-->
     <container match="senate_bill.parliament_id" />
     <container match="senate_motion.parliament_id" />
     <container match="senate_question.parliament_id" />
