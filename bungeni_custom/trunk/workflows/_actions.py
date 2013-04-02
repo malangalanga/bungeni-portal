@@ -33,9 +33,7 @@ from bungeni.core.workflows._actions import (
     set_doc_registry_number, # when a doc is received
     set_doc_type_number, # when a doc is admitted
     unschedule_doc, # when a doc is withdrawn
-    
-    # queston !+CUSTOM
-    assign_role_minister_question,
+    assign_role_group,
     
     # group
     activate,

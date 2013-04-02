@@ -53,10 +53,24 @@
         <allow permission=".Edit" roles="Owner" />
     </facet>
     <facet name="view_Clerk">
-        <allow permission=".View" roles="  ClerkAssembly.ClerkHead   ClerkAssembly.ClerkQuestion   SpeakerAssembly Owner" />
+        <allow permission=".View"
+            roles="
+                ClerkAssembly.ClerkHead
+                ClerkAssembly.ClerkQuestion
+                SpeakerAssembly 
+                Owner
+            "
+        />
     </facet>
     <facet name="edit_Clerk">
-        <allow permission=".View" roles="  ClerkAssembly.ClerkHead   ClerkAssembly.ClerkQuestion   SpeakerAssembly Owner" />
+        <allow permission=".View"
+            roles="
+                ClerkAssembly.ClerkHead
+                ClerkAssembly.ClerkQuestion
+                SpeakerAssembly 
+                Owner
+            "
+        />
         <allow permission=".Edit" roles="  ClerkAssembly.ClerkHead   ClerkAssembly.ClerkQuestion" />
         <allow permission="user_assignment.View" roles="  ClerkAssembly.ClerkHead   ClerkAssembly.ClerkQuestion" />
         <allow permission="user_assignment.Edit" roles="  ClerkAssembly.ClerkHead" />
@@ -66,7 +80,14 @@
         <allow permission=".Edit" roles="  SpeakerAssembly" />
     </facet>
     <facet name="edit_Owner">
-        <allow permission=".View" roles="  ClerkAssembly.ClerkHead   ClerkAssembly.ClerkQuestion   SpeakerAssembly Owner" />
+        <allow permission=".View"
+            roles="
+                ClerkAssembly.ClerkHead
+                ClerkAssembly.ClerkQuestion
+                SpeakerAssembly 
+                Owner
+            "
+        />
         <allow permission=".Edit" roles="Owner" />
     </facet>
     <facet name="public">
@@ -79,7 +100,14 @@
     </facet>
     <facet name="public_response_internal">
         <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="response.View" roles="  ClerkAssembly.ClerkHead   ClerkAssembly.ClerkQuestion   SpeakerAssembly MinistryMember" />
+        <allow permission="response.View" 
+            roles="
+                ClerkAssembly.ClerkHead
+                ClerkAssembly.ClerkQuestion
+                SpeakerAssembly 
+                MinistryMember
+            "
+        />
     </facet>
     <facet name="public_response_public">
         <allow permission=".View" roles="Authenticated Anonymous" />
@@ -87,18 +115,13 @@
     </facet>
 
     
-    <state id="working_draft" title="Working Draft"
-            actions="assign_role_minister_question"
-        >
+    <state id="working_draft" title="Working Draft" actions="assign_role_group">
         <facet ref=".draft_Clerk" />
         <facet ref="attachment.draft_Clerk" />
         <facet ref="event.draft_Clerk" />
     </state>
     
-    <state id="draft" title="Draft" 
-            actions="assign_role_minister_question"
-           
-        >
+    <state id="draft" title="Draft" actions="assign_role_group">
         <facet ref=".draft_Owner" />
         <facet ref="attachment.draft_Owner" />
         <facet ref="event.draft_Owner" />
