@@ -16,6 +16,9 @@ class Html(BrowserView):
         Get length of query items.
         """             
         results = self.generateQuery()
+        for match in results:
+            if match.getPath() == '/'.join(self.aq_parent.getPhysicalPath()):
+                return len(results)-1
         return len(results)
         
     

@@ -82,15 +82,15 @@
             </div>            
         </div>
         
-        <div style="clear:both;">
+        <div>
+	    <span tal:omit-tag="" tal:condition="context/Description">
             <h3>Description</h3>
             <div metal:use-macro="here/kss_generic_macros/macros/generic_description_view">
                 Description
             </div>
-            
+            </span>
             <br/>
             
-            <h3>Full Profile</h3>
             <div tal:condition="context/body_text" tal:content="structure context/body_text|nothing">Body Text</div>
             <div tal:condition="not: context/body_text"><i>Content not available.</i></div>
         </div>
