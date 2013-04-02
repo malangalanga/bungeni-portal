@@ -1,21 +1,60 @@
 from zope.interface import Interface
 import zope.schema as schema
 from bungeni.ui.i18n import _
+from bungeni.ui.vocabulary import BaseVocabularyFactory
+from bungeni.utils import naming
+from bungeni.capi import capi
 
 class ISearchResults(Interface):
     """Marker interface for results layer
     """
     pass
 
+GROUP_TYPES = [ ("*", _(u"documents and people")), 
+    ("document", _(u"documents")), 
+    ("membership", _(u"people")) ]
+class SearchGroupTypes(BaseVocabularyFactory):
+    """vocabulary of searchable root types (limited to document)
+    """
+    def __call__(self, context):
+        terms = []
+        for value, title in GROUP_TYPES:
+            terms.append(schema.vocabulary.SimpleTerm(value=value,
+                token=value, title=title
+            ))
+        return schema.vocabulary.SimpleVocabulary(terms)
+search_group_types = SearchGroupTypes()
+
+class SearchDocumentTypes(BaseVocabularyFactory):
+    """Searchable document types
+    """
+    def __call__(self, context):
+        terms = []
+        for type_key, info in capi.iter_type_info():
+            if info.workflow and info.workflow.has_feature("workspace"):
+                use_name = info.domain_model.__name__
+                terms.append(schema.vocabulary.SimpleTerm(
+                    value=use_name, 
+                    token=use_name,
+                    title=naming.split_camel(use_name)
+                ))
+        terms.sort(key=lambda item:item.value)
+        all_types=",".join([t.value for t in terms])
+        terms.insert(0, schema.vocabulary.SimpleTerm(
+            value=all_types,
+            token=all_types,
+            title=_(u"* all document types")
+        ))
+        return schema.vocabulary.SimpleVocabulary(terms)
+search_document_types = SearchDocumentTypes()
+
 doc_type = schema.Choice(title=_("document type"),
-    values=("*", "Bill", "Question", "AgendaItem", "Motion", 
-        "TabledDocument", "Committee", "PoliticalGroup"),
-    default="*",
+    vocabulary=search_document_types,
     required=False
 )
 
 search_group = schema.Choice(title=_("group type"),
-    values=("*", "document", "group", "membership"),
+    vocabulary=search_group_types,
     default="*",
     required=False
 )
@@ -29,10 +68,10 @@ class ISearchRequest(Interface):
         value_type=doc_type,
         required=False
     )
-    group = schema.List(title=_("document groups"),
-        value_type=search_group,
-        required=False
-    )
+    #group = schema.List(title=_("document groups"),
+    #    value_type=search_group,
+    #    required=False
+    #)
     limit = schema.Choice(title=_("items per page"),
         values=(10, 20, 50, 100),
         default=10,

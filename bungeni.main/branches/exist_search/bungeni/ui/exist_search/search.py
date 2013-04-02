@@ -111,6 +111,7 @@ def execute_search(data, prefix, request):
     if data.get("page"):
         data["offset"] = (int(data["page"])-1)*int(data.get("limit"))+1
         del data["page"]
+    data["group"]  = "document"
     search_request = urllib2.Request(SEARCH_URL, urllib.urlencode(data))
     exist_results = json.loads(urllib2.urlopen(search_request).read())
     item_count = int(exist_results.get("total"))
@@ -137,7 +138,7 @@ class Search(form.PageForm, browser.BungeniBrowserView):
     template = namedtemplate.NamedTemplate("alchemist.form")
     form_fields = form.FormFields(interfaces.ISearchRequest)
     form_fields["type"].custom_widget = MultiCheckBoxWidget
-    form_fields["group"].custom_widget = MultiCheckBoxWidget
+    #form_fields["group"].custom_widget = MultiCheckBoxWidget
     form_name = _(u"Bungeni Search")
     form_description = _(u"Search Documents in Bungeni")
     show_results = False
@@ -157,8 +158,9 @@ class Search(form.PageForm, browser.BungeniBrowserView):
     @form.action(_(u"Search"), name="execute-search")
     def handle_search(self, action, data):
         self.show_results = True
-        #data["role"] = get_context_roles(self.context, 
-        #    self.request.principal)
+        #data["role"] = \
+        #    get_context_roles(self.context, self.request.principal) + \
+        #    get_workspace_roles() + ["bungeni.Anonymous"]
         data["page"] = self.request.form.get("page", 1)
         self.search_results = execute_search(data, self.prefix, self.request)
         self.status = _("Searched for '${search_string}' and found ${count} "
