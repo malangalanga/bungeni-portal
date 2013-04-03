@@ -15,7 +15,9 @@
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
-    <feature name="event" enabled="true" />
+    <feature name="event" enabled="true">
+        <parameter name="types" value="event event_response" />
+    </feature>
     <feature name="signatory" enabled="false">
         <parameter name="open_states" value="admissible" />
     </feature>
@@ -31,7 +33,7 @@
         <parameter name="assigner_roles" value="ClerkAssembly.ClerkHead" />
         <parameter name="assignable_roles" value="ClerkAssembly.ClerkQuestion" />
     </feature>
-    
+    <feature name="group_assignment" enabled="true" />
     
     <!-- workflow facets -->
     <facet name="draft">
@@ -70,6 +72,11 @@
                 ClerkAssembly.ClerkQuestion
             " />
         <allow permission="user_assignment.Edit" roles="ClerkAssembly.ClerkHead" />
+        <allow permission="group_assignment.View" roles="
+                ClerkAssembly.ClerkHead
+                ClerkAssembly.ClerkQuestion
+            " />
+        <allow permission="group_assignment.Edit" roles="ClerkAssembly.ClerkHead" />
     </facet>
     <facet name="edit_Speaker">
         <allow permission=".View" roles="
@@ -101,6 +108,7 @@
             " />
         <allow permission="response.View" roles="MinistryMember" />
         <allow permission="response.Edit" roles="MinistryMember" />
+        <allow permission="event#event_response.Add" roles="MinistryMember" />
     </facet>
     <facet name="public_response_internal">
         <allow permission=".View" roles="
@@ -158,6 +166,7 @@
         <facet ref=".edit_Clerk" />
         <facet ref="attachment.internal" />
         <facet ref="event.internal" />
+        <facet ref="group_assignment.internal" />
     </state>
 
     <state id="reviewed" title="Submitted to the Speaker" actions="version">
@@ -196,18 +205,21 @@
         <facet ref=".public_response_Ministry" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />
+        <facet ref="event#event_response.public" />
     </state>
     
     <state id="response_submitted" title="Response submitted">
         <facet ref=".public_response_internal" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />
+        <facet ref="event#event_response.public" />
     </state>
     
     <state id="response_reviewed" title="Response reviewed">
         <facet ref=".public_response_public" />
         <facet ref="attachment.public" />
         <facet ref="event.public" />
+        <facet ref="event#event_response.public" />
     </state>
     
     <state id="deferred" title="Deferred" permissions_from_state="admissible" />
@@ -216,6 +228,7 @@
         <facet ref=".public" />
         <facet ref="attachment.public_frozen" />
         <facet ref="event.public_frozen" />
+        <facet ref="event#event_response.public" />
     </state>
     
     <state id="elapsed" title="Elapsed" permissions_from_state="debated" />
