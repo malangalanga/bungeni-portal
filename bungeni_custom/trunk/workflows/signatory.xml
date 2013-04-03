@@ -26,11 +26,11 @@
         <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
         <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
     </facet>
-    <facet name="draft_Owner">
-        <allow permission=".View" roles="Owner" />
-        <allow permission=".Edit" roles="Owner" />
-        <allow permission=".Add" roles="Owner" />
-        <allow permission=".Delete" roles="Owner" />
+    <facet name="draft_Owner" note="!+rename">
+        <allow permission=".View" roles="Drafter" />
+        <allow permission=".Edit" roles="Drafter" />
+        <allow permission=".Add" roles="Drafter" />
+        <allow permission=".Delete" roles="Drafter" />
     </facet>
     <facet name="internal" default="true">
         <allow permission=".View" roles="ClerkSenate ClerkAssembly Owner Signatory MemberSenate MemberAssembly" /><!-- !+Authenticated? -->

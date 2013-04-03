@@ -95,6 +95,7 @@ workflow as a single XML document.
   with the following known ones first:
     <role id="bungeni.Clerk" title="Clerks Office" />
     <role id="bungeni.Speaker" title="Speaker Office" />
+    <role id="bungeni.Drafter" title="Drafter" />
     <role id="bungeni.Owner" title="Owner" />
     <role id="bungeni.Signatory" title="Signatory" />
     <role id="bungeni.MP" title="Member of parliament" />
