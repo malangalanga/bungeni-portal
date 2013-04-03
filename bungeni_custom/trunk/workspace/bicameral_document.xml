@@ -1,26 +1,20 @@
 <workspace id="bicameral_document">
 
     <!-- ASSEMBLY -->
-    <state id="working_draft">
-        <tab id="draft" roles="ClerkAssembly"/>
-    </state>
     <state id="draft">
-        <tab id="draft" roles="Owner"/>
+        <tab id="draft" roles="Drafter" />
     </state>
     <state id="submitted">
-        <tab id="inbox" roles="ClerkAssembly"/>
-        <tab id="pending" roles="Owner"/>
+        <tab id="inbox" roles="ClerkAssembly" />
+        <tab id="pending" roles="Owner" />
     </state>
     <state id="reviewed">
-        <tab id="inbox" roles="SpeakerAssembly ClerkLegal  MinistryMember"/>
-        <tab id="pending"
-	     roles="Owner ClerkAssembly"/>
+        <tab id="inbox" roles="SpeakerAssembly ClerkLegal MinistryMember"/>
+        <tab id="pending" roles="Owner ClerkAssembly"/>
     </state>
     <state id="admissible">
         <tab id="inbox" roles="MinistryMember ClerkLegal"/>
-        <tab id="schedule"
-	     roles="SpeakerAssembly
-		     ClerkAssembly"/>
+        <tab id="schedule" roles="SpeakerAssembly ClerkAssembly"/>
         <tab id="pending" roles="Owner"/>
     </state>
     <state id="clarification_required">

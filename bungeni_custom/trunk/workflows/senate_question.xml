@@ -5,7 +5,10 @@
     >
     
     <!-- global grants -->
-    <allow permission=".Add" roles="  ClerkSenate.ClerkHead   MemberSenate" />
+    <allow permission=".Add" roles="
+            ClerkSenate.ClerkHead
+            MemberSenate
+        " />
     
     
     <!-- features -->
@@ -25,72 +28,107 @@
     <feature name="email" enabled="true" />
     <feature name="download" enabled="true" />
     <feature name="user_assignment" enabled="true">
-        <parameter name="assigner_roles" value="  ClerkSenate.ClerkHead" />
-        <parameter name="assignable_roles" value="  ClerkSenate.ClerkQuestion" />
+        <parameter name="assigner_roles" value="ClerkSenate.ClerkHead" />
+        <parameter name="assignable_roles" value="ClerkSenate.ClerkQuestion" />
     </feature>
     
     
     <!-- workflow facets -->
-    <facet name="draft_Clerk">
-        <allow permission=".View" roles="  ClerkSenate.ClerkHead   ClerkSenate.ClerkQuestion" />
-        <allow permission=".Edit" roles="  ClerkSenate.ClerkHead   ClerkSenate.ClerkQuestion" />
-        <allow permission=".Delete" roles="  ClerkSenate.ClerkHead   ClerkSenate.ClerkQuestion" />
-    </facet>
-    <facet name="draft_Owner">
-        <allow permission=".View" roles="Owner" />
-        <allow permission=".Edit" roles="Owner" />
-        <allow permission=".Delete" roles="Owner" />
+    <facet name="draft">
+        <allow permission=".View" roles="Drafter" />
+        <allow permission=".Edit" roles="Drafter" />
+        <allow permission=".Delete" roles="Drafter" />
     </facet>
     <facet name="internal">
-        <allow permission=".View" roles="Owner" />
+        <allow permission=".View" roles="Drafter Owner" />
     </facet>
-    <facet name="redraft_Owner">
-        <allow permission=".View" roles="Owner" />
-        <allow permission=".Edit" roles="Owner" />
+    <facet name="redraft">
+        <allow permission=".View" roles="Drafter Owner" />
+        <allow permission=".Edit" roles="Drafter" />
     </facet>
     <facet name="view_Clerk">
-        <allow permission=".View" roles="  ClerkSenate.ClerkHead   ClerkSenate.ClerkQuestion   SpeakerSenate Owner" />
+        <allow permission=".View" roles="
+                ClerkSenate.ClerkHead
+                ClerkSenate.ClerkQuestion
+                SpeakerSenate 
+                Owner
+            " />
     </facet>
     <facet name="edit_Clerk">
-        <allow permission=".View" roles="  ClerkSenate.ClerkHead   ClerkSenate.ClerkQuestion   SpeakerSenate Owner" />
-        <allow permission=".Edit" roles="  ClerkSenate.ClerkHead   ClerkSenate.ClerkQuestion" />
-        <allow permission="user_assignment.View" roles="  ClerkSenate.ClerkHead   ClerkSenate.ClerkQuestion" />
-        <allow permission="user_assignment.Edit" roles="  ClerkSenate.ClerkHead" />
+        <allow permission=".View" roles="
+                ClerkSenate.ClerkHead
+                ClerkSenate.ClerkQuestion
+                SpeakerSenate 
+                Owner
+            " />
+        <allow permission=".Edit" roles="
+                ClerkSenate.ClerkHead
+                ClerkSenate.ClerkQuestion
+            " />
+        <allow permission="user_assignment.View" roles="
+                ClerkSenate.ClerkHead
+                ClerkSenate.ClerkQuestion
+            " />
+        <allow permission="user_assignment.Edit" roles="ClerkSenate.ClerkHead" />
     </facet>
     <facet name="edit_Speaker">
-        <allow permission=".View" roles="  ClerkSenate.ClerkHead   ClerkSenate.ClerkQuestion   SpeakerSenate Owner" />
-        <allow permission=".Edit" roles="  SpeakerSenate" />
+        <allow permission=".View" roles="
+                ClerkSenate.ClerkHead
+                ClerkSenate.ClerkQuestion
+                SpeakerSenate Owner
+            " />
+        <allow permission=".Edit" roles="SpeakerSenate" />
     </facet>
     <facet name="edit_Owner">
-        <allow permission=".View" roles="  ClerkSenate.ClerkHead   ClerkSenate.ClerkQuestion   SpeakerSenate Owner" />
+        <allow permission=".View" roles="
+                ClerkSenate.ClerkHead
+                ClerkSenate.ClerkQuestion
+                SpeakerSenate
+                Owner
+            " />
         <allow permission=".Edit" roles="Owner" />
     </facet>
     <facet name="public">
-        <allow permission=".View" roles="Authenticated Anonymous" />
+        <allow permission=".View" roles="
+                Authenticated 
+                Anonymous
+            " />
     </facet>
     <facet name="public_response_Ministry">
-        <allow permission=".View" roles="Authenticated Anonymous" />
+        <allow permission=".View" roles="
+                Authenticated
+                Anonymous
+            " />
         <allow permission="response.View" roles="MinistryMember" />
         <allow permission="response.Edit" roles="MinistryMember" />
     </facet>
     <facet name="public_response_internal">
-        <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="response.View" roles="  ClerkSenate.ClerkHead   ClerkSenate.ClerkQuestion   SpeakerSenate MinistryMember" />
+        <allow permission=".View" roles="
+                Authenticated
+                Anonymous
+            " />
+        <allow permission="response.View" roles="
+                ClerkSenate.ClerkHead
+                ClerkSenate.ClerkQuestion
+                SpeakerSenate 
+                MinistryMember
+            " />
     </facet>
     <facet name="public_response_public">
-        <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="response.View" roles="Authenticated Anonymous" />
+        <allow permission=".View" roles="
+                Authenticated
+                Anonymous
+            " />
+        <allow permission="response.View" roles="
+                Authenticated
+                Anonymous
+            " />
     </facet>
-
     
-    <state id="working_draft" title="Working Draft" actions="assign_role_group">
-        <facet ref=".draft_Clerk" />
-        <facet ref="attachment.draft_Clerk" />
-        <facet ref="event.draft_Clerk" />
-    </state>
     
+    <state id="working_draft" title="Working Draft" obsolete="true" />
     <state id="draft" title="Draft" actions="assign_role_group">
-        <facet ref=".draft_Owner" />
+        <facet ref=".draft" />
         <facet ref="attachment.draft_Owner" />
         <facet ref="event.draft_Owner" />
     </state>
@@ -102,7 +140,7 @@
     </state>
     
     <state id="redraft" title="Redraft" actions="version" note="document under review before resubmission">
-        <facet ref=".redraft_Owner" />
+        <facet ref=".redraft" />
         <facet ref="attachment.internal_Owner" />
         <facet ref="event.internal" />
     </state>
@@ -193,52 +231,34 @@
     <transition title="Create Question"
         source=""
         destination="draft"
-        condition="user_is_context_owner"
         trigger="automatic"
         order="0"
     />
     
-    <transition title="Create Question (On behalf of)"
-        source=""
-        destination="working_draft"
-        condition="user_is_not_context_owner"
-        trigger="automatic"
-        order="0"
-    />
-
     <transition title="Submit"
         source="draft redraft submitted_signatories"
         destination="submitted"
         condition="pi_signatories_check"
         trigger="manual"
-        roles="Owner"
+        roles="Drafter"
         order="1"
     />
-
-    <transition title="Submit"
-        source="working_draft"
-        destination="submitted"
-        condition="pi_signatories_check"
-        trigger="manual"
-        roles="  ClerkSenate.ClerkHead"
-        order="1"
-    />
-
+    
     <transition title="Submit to Signatories"
         source="draft redraft"
         destination="submitted_signatories"
         condition="pi_has_signatories"
         trigger="manual"
-        roles="Owner"
+        roles="Drafter"
         order="1"
     />
-
+    
     <transition title="Redraft"
         source="submitted_signatories"
         destination="redraft"
         condition="user_is_context_owner"
         trigger="manual"
-        roles="Owner"
+        roles="Drafter"
     />
 
     <transition title="Reviewed"
@@ -246,7 +266,7 @@
         destination="reviewed"
         condition=""
         trigger="manual"
-        roles="  ClerkSenate.ClerkQuestion"
+        roles="ClerkSenate.ClerkQuestion"
         order="4"
         note="The Question has all the formal requirements; forwarded to the
             Speaker's Office for approval)."
@@ -257,7 +277,7 @@
         destination="clarification_required"
         condition=""
         trigger="manual"
-        roles="  ClerkSenate.ClerkQuestion"
+        roles="ClerkSenate.ClerkQuestion"
         order="4"
         note="The Question need to be clarieid by the Member"
     />   
@@ -267,7 +287,7 @@
         destination="admissible"
         condition=""
         trigger="manual"
-        roles="  SpeakerSenate"
+        roles="SpeakerSenate"
         order="6"
     />
     
@@ -276,7 +296,7 @@
         destination="inadmissible"
         condition=""
         trigger="manual"
-        roles="  SpeakerSenate"
+        roles="SpeakerSenate"
         order="7"
         require_confirmation="true"
     />
@@ -286,7 +306,7 @@
         destination="clarification_required"
         condition=""
         trigger="manual"
-        roles="  SpeakerSenate"
+        roles="SpeakerSenate"
         order="7"
         require_confirmation="true"
     />
@@ -305,7 +325,7 @@
         destination="scheduled"
         condition="is_scheduled"
         trigger="system"
-        roles="  ClerkSenate.ClerkQuestion"
+        roles="ClerkSenate.ClerkQuestion"
         order="12"
     />
     
@@ -314,7 +334,7 @@
         destination="response_pending"
         condition="is_written_response"
         trigger="manual"
-        roles="  ClerkSenate.ClerkQuestion"
+        roles="ClerkSenate.ClerkQuestion"
         order="13"
         note="Written-response questions are never scheduled but must be 
             answered directly by the Ministry."
@@ -334,7 +354,7 @@
         destination="response_pending"
         condition=""
         trigger="manual"
-        roles="  ClerkSenate.ClerkQuestion"
+        roles="ClerkSenate.ClerkQuestion"
         order="16"
     />
     
@@ -342,7 +362,7 @@
         source="response_submitted"
         destination="response_reviewed"
         trigger="manual"
-        roles="  ClerkSenate.ClerkQuestion"
+        roles="ClerkSenate.ClerkQuestion"
         order="17"
     />
     
@@ -351,7 +371,7 @@
         destination="elapsed"
         condition=""
         trigger="manual"
-        roles="  ClerkSenate.ClerkQuestion"
+        roles="ClerkSenate.ClerkQuestion"
         order="18"
         require_confirmation="true"
     />
@@ -361,7 +381,7 @@
         destination="deferred"
         condition=""
         trigger="manual"
-        roles="  ClerkSenate.ClerkQuestion"
+        roles="ClerkSenate.ClerkQuestion"
         order="19"
         note="Oral question, postpone scheduling."
     />
@@ -371,7 +391,7 @@
         destination="dropped"
         condition=""
         trigger="manual"
-        roles="  ClerkSenate.ClerkQuestion"
+        roles="ClerkSenate.ClerkQuestion"
         order="22"
     />
     
@@ -380,7 +400,7 @@
         destination="adjourned"
         condition=""
         trigger="manual"
-        roles="  ClerkSenate.ClerkQuestion"
+        roles="ClerkSenate.ClerkQuestion"
         order="23"
     />
     
@@ -388,7 +408,7 @@
         source="scheduled"
         destination="debated"
         trigger="manual"
-        roles="  ClerkSenate.ClerkQuestion"
+        roles="ClerkSenate.ClerkQuestion"
         order="25"
     />
     
@@ -398,7 +418,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="  ClerkSenate.ClerkQuestion Owner"
+        roles="ClerkSenate.ClerkQuestion Owner"
         order="26"
         require_confirmation="true"
         note="The Member can withdraw his question at any stage where it can 
@@ -411,7 +431,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="  ClerkSenate.ClerkQuestion Owner"
+        roles="ClerkSenate.ClerkQuestion Owner"
         order="27"
         require_confirmation="true"
     />

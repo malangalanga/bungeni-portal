@@ -29,15 +29,15 @@
     
     
     <!-- workflow FACETS -->
-    <facet name="draft_Owner">
-        <allow permission=".View" roles="Owner" />
-        <allow permission=".Edit" roles="Owner" />
-        <allow permission=".Delete" roles="Owner" />
+    <facet name="draft">
+        <allow permission=".View" roles="Drafter" />
+        <allow permission=".Edit" roles="Drafter" />
+        <allow permission=".Delete" roles="Drafter" />
     </facet>
     <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
     </facet>
-
+    
     <!-- workflow facets Assembly-->
     <facet name="draft_Clerk_Assembly">
         <allow permission=".View" roles="ClerkAssembly" />
@@ -84,18 +84,12 @@
 
 
     <!-- workflow STATES - ASSEMBLY -->    
-    <state id="working_draft" title="Working Draft">
-        <facet ref=".draft_Clerk_Assembly" />
-        <facet ref="attachment.draft_Clerk" />
-        <!-- NOTE: stating event.FACET_NAME is **SAME** as stating event#event.FACET_NAME -->
-        <facet ref="event.draft_Clerk" />
-        <facet ref="event#test_event.draft_Clerk" />
-    </state>
-    
     <state id="draft" title="Draft">
-        <facet ref=".draft_Owner" />
+        <facet ref=".draft" />
         <facet ref="attachment.draft_Owner" />
+        <!-- NOTE: stating event.FACET_NAME is **SAME** as stating event#event.FACET_NAME -->
         <facet ref="event.draft_Owner" />
+        <facet ref="event#test_event.draft_Owner" />
     </state>
     
     <state id="withdrawn_internal" title="Withdrawn">
@@ -176,14 +170,6 @@
     <transition title="Create Bicameral Document"
         source=""
         destination="draft"
-        condition="user_is_context_owner"
-        trigger="automatic"
-    />
-    
-    <transition title="Create Bicameral Document (On behalf of)"
-        source=""
-        destination="working_draft"
-        condition="user_is_not_context_owner"
         trigger="automatic"
     />
     
@@ -192,15 +178,7 @@
         destination="submitted"
         condition=""
         trigger="manual"
-        roles="Owner"
-    />
-    
-    <transition title="Submit"
-        source="working_draft"
-        destination="submitted"
-        condition=""
-        trigger="manual"
-        roles="ClerkAssembly"
+        roles="Drafter"
     />
     
     <transition title="Reviewed"

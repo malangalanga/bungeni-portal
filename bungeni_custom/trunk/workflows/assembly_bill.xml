@@ -5,7 +5,10 @@
     >
     
     <!-- global grants -->
-    <allow permission=".Add" roles="  ClerkAssembly   MemberAssembly" />
+    <allow permission=".Add" roles="
+            ClerkAssembly
+            MemberAssembly
+        " />
     
     
     <!-- features -->
@@ -33,52 +36,41 @@
     <feature name="group_assignment" enabled="true" />    
     
     <!-- workflow facets -->
-    <facet name="draft_Clerk">
-        <allow permission=".View" roles="  ClerkAssembly" />
-        <allow permission=".Edit" roles="  ClerkAssembly" />
-        <allow permission=".Delete" roles="  ClerkAssembly" />
-    </facet>
-    <facet name="draft_Owner">
-        <allow permission=".View" roles="Owner" />
-        <allow permission=".Edit" roles="Owner" />
-        <allow permission=".Delete" roles="Owner" />
+    <facet name="draft">
+        <allow permission=".View" roles="Drafter" />
+        <allow permission=".Edit" roles="Drafter" />
+        <allow permission=".Delete" roles="Drafter" />
     </facet>
     <facet name="internal_Signatory">
-        <allow permission=".View" roles="Owner Signatory" />
+        <allow permission=".View" roles="Drafter Owner Signatory" />
     </facet>
-    <facet name="redraft_Owner">
-        <allow permission=".View" roles="Owner" />
-        <allow permission=".Edit" roles="Owner" />
+    <facet name="redraft">
+        <allow permission=".View" roles="Drafter Owner" />
+        <allow permission=".Edit" roles="Drafter" />
     </facet>
     <facet name="view_Clerk">
-        <allow permission=".View" roles="Owner   ClerkAssembly Signatory" />
+        <allow permission=".View" roles="Owner ClerkAssembly Signatory" />
     </facet>
     <facet name="edit_Clerk">
-        <allow permission=".View" roles="Owner   ClerkAssembly   SpeakerAssembly Signatory" />
-        <allow permission=".Edit" roles="  ClerkAssembly" />
+        <allow permission=".View" roles="Owner ClerkAssembly SpeakerAssembly Signatory" />
+        <allow permission=".Edit" roles="ClerkAssembly" />
     </facet>
     <facet name="edit_Speaker">
-        <allow permission=".View" roles="Owner   ClerkAssembly   SpeakerAssembly Signatory" />
-        <allow permission=".Edit" roles="  SpeakerAssembly" />
+        <allow permission=".View" roles="Owner ClerkAssembly SpeakerAssembly Signatory" />
+        <allow permission=".Edit" roles="SpeakerAssembly" />
     </facet>
     <facet name="public_edit_Clerk">
         <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission=".Edit" roles="  ClerkAssembly" />
+        <allow permission=".Edit" roles="ClerkAssembly" />
     </facet>
     <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
     </facet>
     
-    <!-- workflow states -->    
-    <state id="working_draft" title="Working Draft">
-        <facet ref=".draft_Clerk" />
-        <facet ref="attachment.draft_Clerk" />
-        <facet ref="event.draft_Clerk" />
-        <facet ref="signatory.draft_Clerk" />
-    </state>
     
+    <state id="working_draft" title="Working Draft" obsolete="true" />
     <state id="draft" title="Legislative Proposal">
-        <facet ref=".draft_Owner" />
+        <facet ref=".draft" />
         <facet ref="attachment.draft_Owner" />
         <facet ref="event.draft_Owner" />
         <facet ref="signatory.draft_Owner" />
@@ -92,7 +84,7 @@
     </state>
     
     <state id="redraft" title="Redraft" actions="version" note="document under review before resubmission">
-        <facet ref=".redraft_Owner" />
+        <facet ref=".redraft" />
         <facet ref="attachment.internal_Owner" />
         <facet ref="event.internal" />
         <facet ref="signatory.internal_Owner" />
@@ -201,51 +193,35 @@
 
 
     
-     <!-- workflow transitions --> 
-  
-    <transition title="Create Bill"
-        source=""
-        destination="working_draft"
-        condition="user_is_not_context_owner"
-        trigger="automatic"
-    />
-
+    <!-- workflow transitions --> 
+    
     <transition title="Create Legislative Proposal"
         source=""
         destination="draft"
-        condition="user_is_context_owner"
         trigger="automatic"
     />
-
+    
     <transition title="Submit Legislative Proposal"
         source="draft redraft submitted_signatories"
         destination="submitted"
         condition="pi_signatories_check"
         trigger="manual"
-        roles="Owner"
+        roles="Drafter"
     />
-
-    <transition title="Submit Legislative Proposal"
-        source="working_draft"
-        destination="submitted"
-        condition="pi_signatories_check"
-        trigger="manual"
-        roles="  ClerkAssembly"
-    />
-
+    
     <transition title="Submit to Signatories"
         source="draft redraft"
         destination="submitted_signatories"
         condition="pi_has_signatories"
         trigger="manual"
-        roles="Owner"
+        roles="Drafter"
     />
 
     <transition title="Recall to Redraft"
         source="submitted_signatories"
         destination="redraft"
         condition="user_is_context_owner"
-        roles="Owner"
+        roles="Drafter"
         trigger="manual"
     />
     
