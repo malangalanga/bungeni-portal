@@ -13,7 +13,7 @@
     <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select" vocabulary="parliament">
         <hide modes="view listing" />
     </field>
-    <field name="owner_id" label="Owner" required="false" value_type="user" render_type="single_select" vocabulary="owner_or_login">
+    <field name="owner_id" label="Owner" required="true" value_type="user" render_type="single_select" vocabulary="owner_or_login">
         <show modes="edit add" />
         <hide modes="view listing" roles="Anonymous" />
     </field>
@@ -32,10 +32,10 @@
     <field name="body" label="Text" required="true" value_type="text" render_type="rich_text">
         <show modes="view edit add" />
     </field>
-
+<!-- FLAVIO add to comment because "AssertionError("May not add 'event_date' as extended field, already defined in archetype 'event'",)" 
     <field name="event_date" label="Event Date" required="false" value_type="datetime" render_type="datetime" extended="datetime">
         <show modes="view edit add listing" />
     </field>
-
+-->
 </descriptor>
 
