@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<descriptor name="parliament" archetype="group" order="1" sort_on="start_date">
+<descriptor name="parliament" archetype="group" order="2" sort_on="start_date"
+            label="parliament" container_label="parliaments" >
     <field name="full_name" label="Parliament Name" required="false" value_type="text" render_type="text_line">
         <show modes="view edit add listing" />
     </field>
@@ -66,7 +67,7 @@
     <container match="session.parliament_id" />
     <container match="committee.parent_group_id" />
     <container match="office.parent_group_id" />
-    <container match="member_of_parliament.group_id" name="parliamentmembers" note="!+naming" />
+    <container match="member_of_parliament.group_id" name="parliamentmembers" />
     <container match="political_group.parent_group_id" name="politicalgroups" note="!+naming" />
     <container match="sitting.group_id" />
     <container match="title_type.group_id" />

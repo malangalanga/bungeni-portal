@@ -35,17 +35,15 @@
     <doc name="assembly_motion" enabled="true" />
     <doc name="assembly_question" enabled="true" />
     <doc name="assembly_tabled_document" enabled="true" />
-    <doc name="event_response" workflow="event_response" archetype="event" enabled="true" />
     
     <doc name="senate_bill" enabled="true" />
     <doc name="senate_motion" enabled="true" />
     <doc name="senate_question" enabled="true" />
     <doc name="senate_tabled_document" enabled="true" />
-    <doc name="senate_test_event" workflow="event" archetype="event" enabled="true" />
     
     <doc name="report" enabled="true" />
     <doc name="bicameral_document" enabled="true" />
-    <doc name="test_doc" enabled="false" />
+    <doc name="event_response" workflow="event_response" archetype="event" enabled="true" />
     
     <group name="office" workflow="group" enabled="true">
         <member name="office_member" workflow="group_membership" enabled="true" />
@@ -63,8 +61,7 @@
         <member name="minister" workflow="group_membership" enabled="true"/>
     </group>
     <group name="parliament" enabled="true">
-        <member name="member_of_parliament" workflow="group_membership" enabled="true" 
-            note="!+ inconsistent naming, use parliament_member" />
+        <member name="member_of_parliament" workflow="group_membership" enabled="true" />
     </group>
 
 </types>
