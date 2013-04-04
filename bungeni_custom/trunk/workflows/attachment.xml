@@ -8,11 +8,9 @@
     
     <!-- features -->
     <feature name="audit" enabled="true" />
-    <feature name="version" enabled="true" /><!-- !+SHOULD be enabled (both 
-    audit and version) if parent documents are to be able to include such 
-    changes in their audit/version log -->
+    <feature name="version" enabled="true" />
+
     <!-- !+attachments may NOT recursivley support other attachments -->
-    
     
     <!-- workflow facets -->
     <facet name="draft_Clerk">
@@ -56,105 +54,47 @@
     </facet>
 
     <!-- workflow states -->    
-    <state id="draft" title="Draft Event">
+    <state id="draft" title="Draft">
         <facet ref=".draft_Owner" />
     </state>
     
-    <state id="attached" title="Attachment" permissions_from_parent="true" />
-    
-    <state id="review" title="Review" permissions_from_parent="true" />
-    
-    
-    <state id="review_complete" title="Review Complete" permissions_from_parent="true" />
-    
-    
-    <state id="internal" title="Published Internal">
+    <state id="bound_parent" title="Bound to Parent" permissions_from_parent="true" />
+   
+    <state id="internal" title="Internal">
         <facet ref=".internal" />
     </state>
-    
-    <!-- !+inactive(mr, aug-2011) review usage and rename across the board -->
-    <state id="inactive" title="Inactive file">
+
+    <state id="withdrawn" title="Withdrawn">
         <facet ref=".internal_frozen" />
     </state>
     
-    <!-- workflow facets -->    
-   
+    <!-- workflow transision -->    
     <transition title="Create"
         source=""
         destination="draft"
         condition="context_parent_is_not_draft"
         trigger="automatic"
     />
-    <transition title="Create"
-        source=""
-        destination="attached"
-        condition="context_parent_is_draft"
-        trigger="automatic"
-    />
-
-    <transition title="Attachment Review"
-        source="attached"
-        destination="review"
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-    />
-
-    <transition title="Attachment Review Complete"
-        source="review"
-        destination="review_complete"
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-    />
-
-    <transition title="Attachment Review"
-        source="review_complete"
-        destination="review"
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
-    <transition title="Publish"
-        source="draft"
-        destination="attached"
-        trigger="manual"
-        roles="Owner"
-    />
-    
-    <transition title="Publish Internal"
-        source="draft"
-        destination="internal"
-        trigger="manual"
-        roles="Owner"
-    />
-    
-    <transition title="Re-publish"
-        source="internal review_complete"
-        destination="attached"
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly Owner"
-    />
-    
-    <!-- 
-    if the parent has been published (i.e. is public, assuming that once 
-    published it is never retracted) we do not want to allow transitioning away 
-    from "attached".
-    -->
-    
-    <transition title="Publish Internal"
-        source="attached"
-        destination="internal"
-        condition="context_parent_is_not_public"
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly Owner"
-    />
-   
-    <transition title="Deactivate"
-        source="attached internal"
-        destination="inactive"
-        condition="context_parent_is_not_public"
+    <transition title="Bound to Parent"
+        source="draft internal"
+        destination="bound_parent"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly Owner"
         require_confirmation="true"
-    /> 
+    />
+    <transition title="Visible Internally"
+        source="draft bound_parent"
+        destination="internal"
+        trigger="manual"
+        roles="Owner"
+        require_confirmation="true"
+    />
+    <transition title="Withdraw"
+        source="internal bound_parent"
+        destination="withdrawn"
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly Owner"
+        require_confirmation="true"
+    />
 
 </workflow>
