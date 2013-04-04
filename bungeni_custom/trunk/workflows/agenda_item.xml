@@ -20,19 +20,14 @@
     <feature name="download" enabled="true" />
     
     <!-- workflow facets -->
-    <facet name="draft_Clerk">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
+    <facet name="draft">
+        <allow permission=".View" roles="Drafter" />
+        <allow permission=".Edit" roles="Drafter" />
+        <allow permission=".Delete" roles="Drafter" />
     </facet>
-    <facet name="draft_Owner">
-        <allow permission=".View" roles="Owner" />
-        <allow permission=".Edit" roles="Owner" />
-        <allow permission=".Delete" roles="Owner" />
-    </facet>
-    <facet name="redraft_Owner">
-        <allow permission=".View" roles="Owner" />
-        <allow permission=".Edit" roles="Owner" />
+    <facet name="redraft">
+        <allow permission=".View" roles="Drafter Owner" />
+        <allow permission=".Edit" roles="Drafter" />
     </facet>
     <facet name="view_internal">
         <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
@@ -54,88 +49,54 @@
     </facet>
     
     <!-- workflow states -->    
-    <state id="working_draft" title="Working Draft">
-        <facet ref=".draft_Clerk" />
-        <facet ref="attachment.draft_Clerk" />
-    </state>
-    
     <state id="draft" title="Draft">
-        <facet ref=".draft_Owner" />
+        <facet ref=".draft" />
         <facet ref="attachment.draft_Owner" />
     </state>
-    
     <state id="submitted" title="Submitted" actions="version">
         <facet ref=".edit_Clerk" />
         <facet ref="attachment.internal" />
     </state>
- 
     <state id="clarification_required" title="Requires Clarification to Receive" 
             actions="version"   >
         <facet ref=".edit_Owner" />
         <facet ref="attachment.internal_Owner" />
     </state>
-    
     <state id="review_pending" title="Submitted to the Speaker" actions="version">
         <facet ref=".edit_Speaker" />
         <facet ref="attachment.internal" />
     </state>
-    
     <state id="inadmissible" title="Inadmissible">
         <facet ref=".view_internal" />
         <facet ref="attachment.internal_frozen" />
     </state>
-    
     <state id="withdrawn_internal" title="Withdrawn" permissions_from_state="inadmissible" />
-    
     <state id="admissible" title="Admissible" actions="version">
         <facet ref=".public" />
         <facet ref="attachment.public" />
     </state>
-    
     <state id="scheduled" title="Scheduled" permissions_from_state="admissible" />
-    
     <state id="adjourned" title="Debate adjourned" permissions_from_state="admissible" />
-    
     <state id="debated" title="Debated">
         <facet ref=".public" />
         <facet ref="attachment.public_frozen" />
     </state>
-    
     <state id="dropped" title="Dropped" permissions_from_state="debated" />
-    
     <state id="withdrawn" title="Withdrawn" permissions_from_state="debated" />
     
     <!-- workflow transition -->    
     <transition title="Create Agenda Item"
         source=""
         destination="draft"
-        condition="user_is_context_owner"
         trigger="automatic"
     />
-    
-    <transition title="Create Agenda Item (On behalf of)"
-        source=""
-        destination="working_draft"
-        condition="user_is_not_context_owner"
-        trigger="automatic"
-    />
-    
     <transition title="Submit"
         source="draft"
         destination="submitted"
         condition=""
         trigger="manual"
-        roles="Owner"
+        roles="Drafter"
     />
-
-    <transition title="Submit"
-        source="working_draft"
-        destination="submitted"
-        condition=""
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
-    />
-    
     <transition title="Submit for Review"
         source="submitted"
         destination="review_pending"
@@ -143,7 +104,6 @@
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
-    
     <transition title="Admissible"
         source="review_pending"
         destination="admissible"
@@ -151,7 +111,6 @@
         trigger="manual"
         roles="SpeakerSenate SpeakerAssembly"
     />
-    
     <transition title="Inadmissible"
         source="review_pending"
         destination="inadmissible"
@@ -160,7 +119,6 @@
         roles="SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
-    
     <transition title="Scheduled for Debate"
         source="admissible adjourned"
         destination="scheduled"
@@ -168,7 +126,6 @@
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
-    
     <transition title="Require Clarifications"
         source="submitted"
         destination="clarification_required"
@@ -177,7 +134,6 @@
         roles="ClerkSenate ClerkAssembly"
         require_confirmation="true"
     />
-    
     <transition title="Resubmit"
         source="clarification_required"
         destination="submitted"
@@ -185,7 +141,6 @@
         trigger="manual"
         roles="Owner"
     />
-    
     <transition title="Drop"
         source="scheduled"
         destination="dropped"
@@ -195,7 +150,6 @@
         note="For reasons such as absence of the MemberSenate MemberAssembly, the item cannot be be 
             debated in a sitting, so it is dropped."
     />
-    
     <transition title="Debate"
         source="scheduled"
         destination="debated"
@@ -203,7 +157,6 @@
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
-    
     <transition title="Adjourn debate"
         source="scheduled"
         destination="adjourned"
@@ -211,7 +164,6 @@
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
-    
     <transition title="Withdraw"
         source="submitted review_pending clarification_required"
         destination="withdrawn_internal"
@@ -221,7 +173,6 @@
         roles="ClerkSenate ClerkAssembly Owner"
         require_confirmation="true"
     />
-    
     <transition title="Withdraw"
         source="admissible scheduled adjourned"
         destination="withdrawn"

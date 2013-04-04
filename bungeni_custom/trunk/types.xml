@@ -28,25 +28,24 @@
             note that if parent is disabled, then all nested elements are also 
             disabled (even if they set enabled="true")
     -->
-
+    
     <doc name="agenda_item" enabled="true" />
-
+    
     <doc name="assembly_bill" enabled="true" />
     <doc name="assembly_motion" enabled="true" />
     <doc name="assembly_question" enabled="true" />
     <doc name="assembly_tabled_document" enabled="true" />
-    <doc name="assembly_test_doc" enabled="false" />
     <doc name="event_response" workflow="event_response" archetype="event" enabled="true" />
     
     <doc name="senate_bill" enabled="true" />
     <doc name="senate_motion" enabled="true" />
     <doc name="senate_question" enabled="true" />
     <doc name="senate_tabled_document" enabled="true" />
-    <doc name="senate_test_doc" enabled="false" />
     <doc name="senate_test_event" workflow="event" archetype="event" enabled="true" />
-
+    
     <doc name="report" enabled="true" />
     <doc name="bicameral_document" enabled="true" />
+    <doc name="test_doc" enabled="false" />
     
     <group name="office" workflow="group" enabled="true">
         <member name="office_member" workflow="group_membership" enabled="true" />

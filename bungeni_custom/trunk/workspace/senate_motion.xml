@@ -1,25 +1,19 @@
 <workspace id="motion">
-    <state id="working_draft">
-        <tab id="draft" roles="  ClerkSenate"/>
-    </state>
     <state id="draft">
-        <tab id="draft" roles="Owner"/>
+        <tab id="draft" roles="Drafter" />
     </state>
     <state id="redraft">
-        <tab id="draft" roles="Owner"/>
-    </state>
-    <state id="withdrawn_signatory">
-        <tab id="archive" 
-	     roles="Owner
-		      ClerkSenate
-                    Signatory"/>
+        <tab id="draft" roles="Drafter" />
     </state>
     <state id="submitted_signatories">
         <tab id="inbox" roles="Signatory"/>
-        <tab id="pending" roles="Owner"/>
+        <tab id="pending" roles="Drafter Owner"/>
+    </state>
+    <state id="withdrawn_signatory">
+        <tab id="archive" roles="Owner ClerkSenate Signatory"/>
     </state>
     <state id="submitted">
-        <tab id="inbox" roles="  ClerkSenate MemberCommitteeSenate  "/>
+        <tab id="inbox" roles="ClerkSenate MemberCommitteeSenate  "/>
         <tab id="pending" roles="Owner Signatory"/>
     </state>
     <state id="clarification_required">
