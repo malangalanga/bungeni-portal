@@ -10,12 +10,6 @@
             MemberAssembly
         " />
 
-    <allow permission="event_response.Add" roles="
-            ClerkAssembly.ClerkHead
-            MinistryMember
-        " />
-    
-    
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
@@ -113,7 +107,6 @@
             " />
         <allow permission="response.View" roles="MinistryMember" />
         <allow permission="response.Edit" roles="MinistryMember" />
-        <allow permission="event#event_response.Add" roles="MinistryMember" />
     </facet>
     <facet name="public_response_internal">
         <allow permission=".View" roles="
