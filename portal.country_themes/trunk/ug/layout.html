@@ -12,47 +12,45 @@
   <body>
     <span id="corner-a"></span>
     <span id="corner-b"></span>
-    <div id="header-wrapper">
-      <div id="header-in-left">&nbsp;</div>
-      <div id="header-in-right">&nbsp;</div>
+    <div id="header-wrapper" class="clearfix">
       <div id="top-layer">
-        <div>
-          <ul id="portal-personaltools"></ul>
-          <!--<div id="demo">Demo Site</div>-->
-          <div id="processing_indicatron">
-            <img src="/static/images/progressbar.gif" />
-          </div>
-          <ul id="portal-languageselector"> </ul>
-          <div id="demoWarning">
-            <blink>!!! THIS IS A DEMO SITE !!!</blink>
-          </div>
+        <ul id="portal-languageselector"> </ul>        
+        <div id="processing_indicatron">
+          <img src="/static/images/progressbar.gif" />
         </div>
+        <ul id="portal-personaltools"></ul>        
       </div>
       <!-- end of top-layer A.K.A language menus -->
       
       <div id="portal-logo-wrapper">
         <a id="portal-logo" href="/">
-          <img src="images/workspace_parliament.png" class="ws-left" alt="Your Parliament banner here" />
+          <img src="images/workspace_parliament.png" class="ws-left"
+            alt="Your Parliament banner here" />
           <img src="images/workspace_logo.png" class="ws-right" alt="The Workspace logo" />
         </a>
-        <!-- global navigation -->
-        <div id="portal-globalnav">
-          <ul class="level0">
-            <!-- top-level navigation -->
-          </ul>
-          <ul class="level1">
-            <!-- second-level navigation -->
-          </ul>
-        </div>        
       </div>
     </div>
     <!-- end of header-wrapper -->
-    <!--div style="clear:both;">&nbsp;</div-->
+    
+    <!-- global navigation -->
+    <div class="nav">
+      <nav>
+        <ul id="portal-globalnav">
+          <li id="aux">
+            <a href="../plone">Parliament</a>
+            <ul class="hse-list"/>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div id="subnav" class="nav subnav">
+      <ul class="level1"></ul>
+    </div>
     
     <div id="visual-table-wrapper">
       <div id="main-body-table" class="clearfix">
         
-        <div class="main-column" class="clearfix">
+        <div class="main-column">
           <!-- breadcrumbs -->
           <div id="portal-breadcrumbs" class="main"></div>
           
@@ -69,7 +67,7 @@
           <div class="portalMessage"></div>
           <!-- main content-->
           <div id="portal-columns">
-            <div id="popup-load"/>
+            <div id="popup-load"></div>
             <div id="portal-column-one"> </div>
             <div id="portal-column-content"> </div>
             <div id="portal-column-two"></div>
@@ -79,8 +77,9 @@
     </div>
     <div id="portal-footer">
       <div>
-        <img src="/static/images/bungeni-logo-tiny.gif" alt="The bungeni portal logo" /> empowered
-        by Bungeni </div>
+        <img src="/static/images/bungeni-logo-tiny.gif" alt="The bungeni portal logo" /> 
+        <span>empowered by Bungeni</span>
+      </div>
     </div>
   </body>
 </html>

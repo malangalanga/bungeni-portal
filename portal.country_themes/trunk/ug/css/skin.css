@@ -11,15 +11,14 @@
 -------------------------------------------------------------- */
 #top-layer {
     text-align:center;
-    border: 1px solid transparent;
-    background: #30354a;
-    
-    border-bottom-left-radius: 5px;
-    -moz-border-radius-bottomleft: 5px;
-    -webkit-border-bottom-left-radius: 5px;      
-    border-bottom-right-radius: 5px;
-    -moz-border-radius-bottomright: 5px;
-    -webkit-border-bottom-right-radius: 5px;     
+    border: 0 none;
+    background-image: -webkit-gradient(
+                    linear, 95% 96%, 0% 0%, from(rgba(240,246,244,0)),
+                    to(rgba(50,50,50,0.8)), color-stop(.5,#333333)
+                    );
+    background-image: -moz-linear-gradient(center right,rgba(255,255,255,0) 5%, rgba(50,50,50,0.8) 70%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#FFFFFFFF, endColorstr=#550000FF);
+    -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#FFFFFFFF, endColorstr=#550000FF); /* IE8 */    
 }
 #top-layer div {
     background: transparent;
@@ -40,21 +39,22 @@
     color: #fff;
 }
 #top-layer ul#portal-personaltools li a:hover {
-    color: #888;
+    color: #FF8A00 !important;
 }
 #top-layer ul#portal-languageselector {
-    font-size: 0.96em !important;
+    font-size: 100%;
 }
 #top-layer ul#portal-languageselector li a {
     color: #fff;
 }
 #top-layer ul#portal-languageselector li a:hover {
-    color: #000 !important;
-    background: #FFFD6E none repeat scroll 0 0;
-    text-decoration: none;    
+    color: #FF8A00;
 }
 #top-layer ul#portal-languageselector li.selected a {
     color: #000000;
+    background:#FFFD6E none repeat scroll 0 0;
+    border:1px solid #CCCCCC;
+    text-decoration:none;
 }
 /*#top-layer ul#portal-personaltools li a.link-overlay {
     margin-right:-60px;
@@ -95,7 +95,7 @@
 #portal-breadcrumbs {
     font-size: 95%;
     color: #000;
-    background: transparent;
+    background: #fff;
     text-align: left;
 }
 #portal-breadcrumbs a {
@@ -127,16 +127,12 @@
     text-transform: none;
 }
 
-.template-portal #main-body-table {
-    background: transparent;
-}
-
 /* main-columns
 -------------------------------------------------------------- */
 div.main-column h1 {
     font-weight: bold;
-    line-height: 20px;
-    color: #FF8A09 !important;
+    line-height: 30px;
+    color: #000 !important;
     text-shadow: 0 0 1px #fff;
     text-align:center;
 }
@@ -147,16 +143,16 @@ div.main-column h1.title {
     line-height: 20px;
     text-shadow: 0 0 1px #fff;
     text-align: center;
-    color:#FF8A09 !important;
+    color:#FF8A00 !important;
 }
 div.main-column h1.reportmaintitle,
 div.main-column h1.reportdoctype {
     font-size: 180%;
-    color:#FF8A09 !important;
+    color:#828282 !important;
 }
 div.main-column h2.reportdate {
     font-size: 180%;
-    color:#FF8A09 !important;
+    color:#828282 !important;
     font-weight: bold !important;
 }
 
@@ -166,37 +162,38 @@ div.main-column h1.reportheading {
     border-radius: 6px;
     font-size: 130%;
     font-weight: bold !important;
-    border:1px solid #f79f10;
-    color:#000 !important;
+    border:1px solid #ccc;
+    color:#828282 !important;
 }
 .documentContent div h2:first-child {
     font-size:1.4em;
     font-weight:normal !important;
-    color:#FF8A09 !important;
+    color:#090 !important;
 }
 div.main-column h2.reporttitle {
     text-align:left;
-    color:#FF8A09 !important;
+    color:#f79f10 !important;
     font-size:1.1em;    
-    font-weight:normal !important;
+    font-weight:bold !important;
 }
 div.main-column h2 {
     text-shadow: 0px 0px 1px #fff;
     font-size: 120%;
     font-weight: normal !important;
-    color: #FF8A09 !important;
-    text-align: center;
+    color: #090 !important;
 }
 div.main-column h2 span {
     font-size: 75%;
-    font-weight: normal;
+    font-weight: bold;
     color: #444;
 }
 div.main-column h3 {
+    color: #444444;
     text-shadow: 0px 0px 1px #fff;
     font-size: 100%;
     font-weight: normal !important;
 }
+
 /* portal-columns-*
 -------------------------------------------------------------- */
 
@@ -211,35 +208,21 @@ div.main-column h3 {
     font-weight:bold;
     line-height:20px;
 }
-/* portal-column-one */
+
 #portal-column-one {
-    border-color: #aaf;
+    border-color: #ccc;
 }
 .section-bungeni-workspace #portal-column-one {
-    border-color: #333436;  
+    border-color: #FB9C14;  
 }
 .section-bungeni-archive #portal-column-one {
-    border-color: #333436;
-}
-
-/* footer  */
-#portal-footer {
-    color: #444;
-    text-align: center;
-    border: 0 none;
-    border-top: 1px solid #D4E2EF;
-    background: #fff;
-}
-#portal-footer div {
-    border-top: 1px solid #ccc;
-    background: #fff;
+    border-color: #FB9C14;
 }
 
 /* documentContent
 -------------------------------------------------------------- */
 .documentContent {
     border: 0 none;
-    background: transparent;
 }
 input.inputLabelActive {
     color: transparent;
@@ -253,7 +236,7 @@ input.inputLabelActive {
 }
 #whats-on-overview h1 a {
     text-decoration: none;
-    color: #FF8A09 !important;
+    color: #090 !important;
 }
 #whats-on-overview p {
     color: #222;
@@ -270,15 +253,15 @@ input.inputLabelActive {
 }
 #portal-column-content #whats-on-overview .whats-on-viewlet dd {
     border: 0 none;
-    border-top: 4px solid #FF8A09;
-    border-bottom: 1px solid #FF8A09;
+    border-top: 4px solid #fe0000;
+    border-bottom: 1px solid #fe0000;
 }
 #portal-column-content #whats-on-overview .whats-on-viewlet dd ul {
     background: #fff;
     list-style: none;
     list-style-type: none;
-    border: 1px solid #ccc;
-    border-bottom-color: #aaa;
+    border: 1px solid #fe0000;
+    border-bottom-color: #fe0000;
     border-top: 0 none;
 }
 #portal-column-content #whats-on-overview .whats-on-viewlet dd ul li h2 {
@@ -341,7 +324,7 @@ input.inputLabelActive {
  * Portlets
  */
 .portlet, .portletHeader, .portletFooter { border: 0 none; } 
-.portletItem { border: 1px solid #333436; border-top: 0 none; }
+.portletItem { border: 1px solid #fe0000; border-top: 0 none; }
 #portal-column-one .portletHeader,
 #portal-column-content .portletHeader,
 #portal-column-two .portletHeader,
@@ -365,21 +348,21 @@ input.inputLabelActive {
 #portal-column-one .portletFooter,
 #portal-column-content .portletFooter,
 #whats-on-overview .portletFooter {
-    border: 1px solid #333436;
+    border: 1px solid #fe0000;
 }
 /* hides the portlet header. */
 #portal-column-one .portlet .portletItem.even,
 #portal-column-one .portlet .portletItem {
     background: #fff;
-    border: 1px solid #333436;
+    border: 1px solid #fe0000;
 }
 #portal-column-one .portlet .portletItem a {
     background: #fff;
     border: 0 none;
 }
 #portal-column-one .portlet .portletItem a.navTreeCurrentItem {
-    background: #333436;
-    border-bottom-color: #333436 !important;
+    background: #fe0000;
+    border-bottom-color: #fe0000 !important;
     border-top: 0 none !important;
     line-height: 20px;
 }
@@ -396,7 +379,8 @@ input.inputLabelActive {
     border:0 none !important;
 }
 #portal-column-one .portlet .portletItem .navTreeCurrentItem a {
-    border:1px solid #21a1ba !important;
+    background-color:#21a1ba !important;
+    color:#ffffff !important;
 }
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode a {
     font-weight: bold;
@@ -409,9 +393,6 @@ input.inputLabelActive {
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul {
     border-bottom: 1px solid #aaa;
 }
-.template-workspace #portal-column-one .portlet .portletItem  a {
-    color:#000 !important;
-}
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul a {
     font-weight: normal;
     font-size: 95%;
@@ -421,12 +402,12 @@ input.inputLabelActive {
 }
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul a:hover,
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul a.navTreeCurrentItem {
-    background: #333436 !important;
+    background: #fe0000 !important;
     
 }
 #portal-column-one .portlet .portletItem ul li.navTreeCurrentNode ul a:hover,
 #portal-column-one .portlet .portletItem ul li.navTreeCurrentNode a.navTreeCurrentItem {
-    background: #333436 !important;
+    background: #fe0000 !important;
     color:#fff !important;
 }
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul ul {
@@ -438,19 +419,19 @@ input.inputLabelActive {
     font-weight: normal;
 }
 #whats-on-overview .portlet dd {
-    border: 1px solid #333436;
+    border: 1px solid #fe0000;
     border-top: 0 none;
 }
 /* portal-column-two portlets */
 #portal-column-two .portlet dd {
-    border: 1px solid #333436;
+    border: 1px solid #fe0000;
     border-top: 0 none;
 }
 /*
  * DocumentActions & contentActions
  */
 .contentActions a {
-    color: #000;
+    color: #000 !important;
     text-decoration: none;
 }
 .contentActions li {
@@ -459,18 +440,15 @@ input.inputLabelActive {
 .contentActions ul {
     border: 0 none;
 }
-.contentActions ul a {
-    color:#000 !important;
-}
 .actionMenu .actionMenuContent ul {
-    border: 1px solid #FF8A09;
+    border: 1px solid #fe0000;
     border-bottom: 0 none;
     border-top: 0 none;
-    background:#FF8A09;
+    background:#fe0000;
 }
 .actionMenu .actionMenuContent ul li {
     border: 0 none;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #ccc;
 }
 .actionMenu .actionMenuContent ul li a {
     color: #fff !important;
@@ -478,6 +456,10 @@ input.inputLabelActive {
 .actionMenu .actionMenuContent ul li a#calendar-link-15 {
     background: none;
     color: #fff !important;
+}
+.actionMenu .actionMenuContent ul li a#calendar-link-15:hover {
+    background: none;
+    color: #000 !important;
 }
 .actionMenu .actionMenuContent ul li a:hover {
     background-color: #f5f1f2 !important;
@@ -493,89 +475,14 @@ dl#context_actions.actionMenu .actionMenuContent ul {
 dl#context_actions.actionMenu .actionMenuContent ul li {
     border-bottom: 0 none;
 }
-/*
- * portal-globalnav
- */
-div#portal-globalnav {
-    background: transparent;
+dl#context_actions.actionMenu .actionMenuContent ul li a {
+    color: #000 !important;
 }
-div#portal-globalnav ul.level0 {
-    border: 0 none;
-	list-style-type: none;
-    background: transparent;
-}
-div#portal-globalnav ul.level0 li {
-    border-radius: 0;
-}
-div#portal-globalnav ul.level0 li a { 
-    text-shadow: 0 0 0 #fff;
-    color: #D2D2D2;
-    background:#444444;
-    border: 1px solid #444444;
-    border-bottom: 1px solid #444444;
-    border-top-left-radius: 5px;
-    -moz-border-radius-topleft: 5px;    
-    border-top-right-radius: 5px;
-    -moz-border-radius-topright: 5px;
-    font-family: tahoma,verdana,sans-serif;
-    font-size: 12px;
-}
-div#portal-globalnav ul.level0 li.selected a,
-div#portal-globalnav ul.level0 li a:hover {
-    font-weight: normal;
-    color: #FF8A09;
-    border-right: 1px solid #444444;
-    border-left: 1px solid #444444;
-    border-top: 1px solid #444444;
-    border-bottom: 1px solid #444444;
-    background:#444444;
-}
-/*
- * Notes:
- * - this has been positioned absolutely because of it's location in the
- *   html structure, the current layout is:
- *   <ul class="level0">
- *       <ul class="level1">
- *           <li>...</li>
- *        </ul>
- *        <li>...</li>
- *   </ul>
- *   a suggested structure would be to have the <ul> elements separately:
- *   !+IMPLEMENTED (9th July, 2012 - this is current layout) 
- *   <ul class="level0">...</ul>
- *   <ul class="level1">...</ul>
- */
- div#portal-globalnav-bottom {
- 	border:0;
-}
-div#portal-globalnav-bottom:empty{
-    display:none
-}
-div#portal-globalnav ul.level1 {
-    border-top: 0 none;
-    background: #444444;       
-}
-div#portal-globalnav ul.level1 a,
-.template-workspace div#portal-globalnav ul.level1 a,
-.template-portal div#portal-globalnav ul.level1 a {
-    background: transparent;
-    border: 0 none;
-    text-shadow: none;
-    color:#D2D2D2 !important;
-}
-div#portal-globalnav ul.level1 li a:hover {
-    color: #ff0000;
-    text-decoration: underline;
-    border: 0 none;
-}
-div#portal-globalnav ul.level1 li.selected a {
-    background: transparent;
-    border: 0 none;
-    font-weight: normal;
-    color: #FF8A09 !important;
-}
-.template-portal div#portal-globalnav ul.level1 li.selected a {
-	color:#FF8A09 !important;
+dl#context_actions.actionMenu .actionMenuContent ul li a.selected, 
+dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
+    border-right: 1px solid #090;
+    background-color: #009901 !important;
+    color: white !important;
 }
 
 /*
@@ -596,12 +503,9 @@ div#portal-globalnav ul.level1 li.selected a {
 /*
  * portletArchiveDates
  */
-.template-portal .portlet {
-    background-color: transparent;
-} 
 #portletArchiveDates .portletHeader {
     text-align: right;
-    background: transparent;
+    background: #fff;
     color: #444;
     border: 0 none;
 }
@@ -660,6 +564,11 @@ div#portal-globalnav ul.level1 li.selected a {
     border-color: #EEE685;
     border-bottom-color: #BDB76B;
 }
+
+.date_input_search_widget {
+    background: #e6e6e6;
+    border: 1px solid #7F7F7F;
+}
 /* table
 -------------------------------------------------------------- */
  
@@ -682,7 +591,7 @@ table.listingdescription tr:hover,
 .stx table tr:hover,
 .yui-skin-sam .yui-dt table tr.yui-dt-odd:hover,
 .yui-skin-sam .yui-dt table tr:hover {
-    background:#f8f4b8;
+    background:#ffe685;
 }
 .yui-skin-sam .yui-dt table tr.yui-dt-odd {
     background: #e6e6e6;
@@ -690,23 +599,25 @@ table.listingdescription tr:hover,
 table.listing tr.past.odd {
     background: transparent;
 }
+
 table.listing th,
 table.listingdescription th,
 .stx table th,
 .yui-skin-sam .yui-dt-first th {
-    background:#FF8A09 !important;
+    background:#fe0000 !important;
     border: 0 none;
-    border-left: 1px solid #bbf;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #7f7f7f;
     border-top: 0 none;
     text-shadow: 0 0 0 #fff;
     color: #fff !important;
 }
 .dhx_now .dhx_month_head {
-    background-color:#010044 !important;
+    background-color:#fe0000 !important;
     color:#f1f1f1 !important;
 }
 .dhx_now .dhx_month_body {
-    background-color:#020263 !important;
+    background-color:#ececec !important;
     color:#f1f1f1 !important;
 }
 .yui-skin-sam .yui-dt-last th {
@@ -731,28 +642,28 @@ table.listingdescription th a,
     color: #fff !important;
     border: 0 none;
 }
+.portaltype-repositorycollection table.listing th a {
+	color: #FF8A00 !important;
+}
+.ls-row li a,
+.yui-skin-sam td a,
 table.listing td a,
 table.listingdescription td a,
-.stx table th a,
-.yui-skin-sam td a {
-    color: #FF8A09 !important;
+.stx table th a {
+    color: #FF8A00 !important;
     border: 0 none;
 }
 table.listing td,
 table.listingdescription td,
 .stx table td,
 .yui-skin-sam .yui-dt table tr td {
+    border-right: 1px solid #ccc;
     color: #222;
     text-shadow: 0 0 0 #fff;
 }
-#alchemist\.container\.listing th .yui-dt-liner {
-    background: url(../images/sort_none.gif) no-repeat right !important;
-}
-#alchemist\.container\.listing th.yui-dt-asc .yui-dt-liner {
-    background: url(../images/sort_up.gif) no-repeat right !important;
-}
-#alchemist\.container\.listing th.yui-dt-desc .yui-dt-liner {
-    background: url(../images/sort_down.gif) no-repeat right !important;
+.yui-skin-sam .yui-calendar td.calcell.calcellhover a {
+    background-color: #090;
+    color: #ffffff !important;
 }
 /* formTabs
 -------------------------------------------------------------- */
@@ -794,30 +705,25 @@ li.formTab a.selected {
     border-top-color: #000000;
     border-right: 1px solid #000000;
     border-left: 1px solid #000000;
-    border-bottom: 2px solid #FF8A09;
+    border-bottom: 2px solid #fe0000;
     text-decoration: none;
-    background-color:#FF8A09 !important;
-    background:#FF8A09 !important;
+    background:#fe0000;
 }
-#content a:target {
-background-color: #FF8A09 !important;
-}
-
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:hover,
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:active,
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a.selected {
     text-align: left;
     text-decoration: none;
-    background: #333436;
+    background: #fe0000;
     border: 1px solid #aaa;
-    border-bottom-color: #333436;
+    border-bottom-color: #fe0000;
     border-top-color: #999;
     color: #222;
 }
 
 /* formPanel
 -------------------------------------------------------------- */
- .formPanel,
+.section-bungeni-workspace .formPanel,
 dd#items-to-be-scheduled-dl .formPanel {
     text-align: center;
     border: 1px solid #aaa;
@@ -858,10 +764,10 @@ dl.portalMessage dd {
     text-shadow: 0.1em #f79f10;
 }
 #display_form_spacer {
-    background: #FF8A09;
+    background: #fe0000;
 }
 .template-portal dd#fieldset-written-question-response div.documentDescription {
-    background:#FF8A09 !important;
+    background:#fe0000 !important;
     color:#fff;
     font-weight:normal;
 }
@@ -910,9 +816,10 @@ dl.portalMessage dd {
 .formPanel.Report4Sitting .field .content-right-column h2 {
     text-align: left;
 }
-.formPanel, dd#items-to-be-scheduled-dl .formPanel div:last-child {
+.formPanel div:last-child {
     text-align: justify !important;
 }
+
 /* Calendar
 -------------------------------------------------------------- */
 div.calendar th.description a,
@@ -925,9 +832,8 @@ div.calendar div.sitting {
 span.yui-button.yui-link-button span a {
     font-size: 90%;    
 }
-/*
- * YUI paginator styles
- */
+/* YUI paginator
+-------------------------------------------------------------- */
 .yui-dt-paginator {
     font-size: 90%;
     text-align: left;
@@ -973,9 +879,9 @@ span.yui-button.yui-link-button span a {
 #field\.form\.item_types {
     border-bottom: 1px dotted #ccc;
 }
-/*
- * cynin customizations
- */
+
+/* cynin customizations
+-------------------------------------------------------------- */
 #portal-titlebar {
     background:#fff !important;
     border-bottom: 1px solid #ccc;
@@ -1015,7 +921,7 @@ div.main-column #collage h2 {
     text-shadow:  0 0 0 #fff;
     font-size: 120%;
     font-weight: bold !important;
-    color: #FF8A09 !important;
+    color: #090 !important;
 }
 #collage .three-columns-equal .block_1 ul {
     list-style-type:none; 
@@ -1042,6 +948,9 @@ div.main-column #collage h2 {
 .template-document_view #content h1.documentFirstHeading {
     font-size:160% !important;
 }
+#portal-column-content h1.documentFirstHeading {
+    border-bottom: 1px solid #c1c1c0 !important;
+}
 .template-document_view #content p.documentDescription {
     font-size:115% !important;
 }
@@ -1066,20 +975,12 @@ div.main-column #collage h2 {
 .section-bungeni-\@\@index #content h1.documentFirstHeading {
     font-size:140% !important;
 }
-#portal-column-content h1.documentFirstHeading {
-    border-bottom: 1px solid #c1c1c0 !important;
-}
-#portal-languageselector li.selected a {
-    background:#FFFD6E none repeat scroll 0 0;
-    border:1px solid #CCCCCC;
-    text-decoration:none;
-}
 /* modifies the dhx_cal object */
 .section-bungeni-business .dhx_scale_holder .dhx_cal_event .dhx_body[style],
 .section-bungeni-business .dhx_scale_holder_now .dhx_cal_event .dhx_body[style] {
     cursor: pointer !important;
 }
-/* search results
+/* search result
 -------------------------------------------------------------- */
 .search-result-item div.title {
     font-size:1.8em !important;
@@ -1089,7 +990,6 @@ div.main-column #collage h2 {
     font-weight:bold;    
 }
 
-
 /* footer
 -------------------------------------------------------------- */
 #portal-footer {
@@ -1098,6 +998,11 @@ div.main-column #collage h2 {
     border: 0 none;
     border-top: 1px solid #D4E2EF;
     background: #fff;
+}
+#portal-footer a {
+    background: url(../images/padlock.png) no-repeat center left;
+    color:#3a3a3a;
+    padding-left:14px;
 }
 
 #portal-footer div {
@@ -1109,12 +1014,12 @@ div.main-column #collage h2 {
    TEMPLATE PORTAL - Styling applied on portal
    ========================================================================== */
 
-body {
-background: #F8FFFF;
+.template-portal {
+    background: #ffffff;
 }
+
 .template-portal #header-wrapper {
-    background: transparent;
-    border-bottom: 18px solid transparent;    
+    background: #ffffff url('../images/headbg.jpg') no-repeat top right;    
 }
 
 .template-portal #top-layer div {
@@ -1122,14 +1027,24 @@ background: #F8FFFF;
 }
 
 .template-portal #visual-table-wrapper {
-    background:transparent;
+    background: url(/static/images/shadow_3.png) repeat-y top center;
     border: 0 none;
 }
+.template-portal #visual-table-wrapper,
+.template-portal #portal-footer {
+    -moz-border-radius-bottomleft: 8px;
+    -webkit-border-bottom-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    -moz-border-radius-bottomright: 8px;
+    -webkit-border-bottom-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
 .template-portal #portal-logo-wrapper {
-    background:transparent;
+    background: transparent;
 }
 .template-portal #portal-logo {
-    background:transparent url(../images/portal_banner.png) top left no-repeat;
+    background: transparent url(../images/portal_banner.png) top left no-repeat;
 }
 /* 
  * if display is set to block it will display the logo used on the workspace
@@ -1141,49 +1056,325 @@ background: #F8FFFF;
     border-bottom: 1px solid transparent;
 }
 .template-portal #top-layer ul#portal-personaltools li a {
-    color: #fff;
-    font-size:1.1em !important;
-}
-.template-portal #top-layer ul#portal-languageselector li a {
-    color: #fff;
-    font-size:1.1em !important;    
-}
-.template-portal #top-layer ul#portal-languageselector li.selected a {
-    color: #000000;
-}
-.template-portal #portal-breadcrumbs {
-    border-bottom:1px solid #333436;
-}
-.template-portal div#portal-globalnav-bottom {
-    background:transparent;
+    color: #3A3A3A;
 }
 
-.template-portal div#portal-globalnav ul.level1 {
-    border-bottom-left-radius: 5px;
-    -moz-border-radius-bottomleft: 5px;
-    -webkit-border-bottom-left-radius: 5px;      
-    border-bottom-right-radius: 5px;
-    -moz-border-radius-bottomright: 5px;
-    -webkit-border-bottom-right-radius: 5px; 
-    
-    -moz-box-shadow:0 8px 8px -6px rgba(0,0,0,0.6);
-    -webkit-box-shadow:0 8px 8px -6px rgba(0,0,0,0.6);
-    box-shadow:0 8px 8px -6px rgba(0,0,0,0.6);        
+.template-portal #portal-breadcrumbs {
+
 }
+
+/* BICAMERAL MENU START
+-------------------------------------------------------------- */
+
+.template-portal @font-face {
+    font-family: "Droid Sans";
+    src: url(../fonts/DroidSans.ttf) format("truetype");
+}
+.template-portal @font-face {
+    font-family: "Droid Sans";
+    src: url("../fonts/DroidSans-Bold.ttf");
+    font-weight: bold;
+}
+
+.template-portal .nav {
+    width:960px;
+    margin:0 auto;    
+}
+
+.template-portal .nav * {
+    font-family: 'Droid Sans', sans-serif;   
+}
+
+.template-portal nav {
+	margin: 0 auto; 
+	text-align: left;
+}
+
+.template-portal nav ul ul.mouseover {
+	display: none;
+}
+
+.template-portal nav ul li:hover > ul.mouseover {
+    display: block;
+}
+
+/*.template-portal nav ul {
+    padding:0 !important;
+    margin:0 !important;
+	background: #efefef !important; 
+	background: linear-gradient(top, #efefef 0%, #bbbbbb 100%) !important;  
+	background: -moz-linear-gradient(top, #efefef 0%, #bbbbbb 100%) !important; 
+	background: -webkit-linear-gradient(top, #efefef 0%,#bbbbbb 100%) !important; 
+	list-style: none !important;
+	position: relative !important;
+}*/
+
+.template-portal nav ul:after {
+    content: ""; 
+	clear: both; 
+	display: block;
+}
+
+.template-portal nav ul li {
+ float: left;
+}
+.template-portal ul#portal-globalnav {
+	background: transparent;
+}
+
+/* The National Assembly */
+.template-portal nav ul li#lower-hse {
+    display:inline !important;
+    width:320px !important;       
+    background: linear-gradient(top, #9ea2a1 0%, #757877 100%);  
+    background: -moz-linear-gradient(top, #9ea2a1 0%, #757877 100%); 
+    background: -webkit-linear-gradient(top, #9ea2a1 0%,#757877 100%); 
+    white-space: nowrap !important;	
+}
+.template-portal nav ul li#lower-hse > a {
+	font-weight:bold;
+    color:#eeeeee !important;
+    font-size:16px;
+    margin-top: 0em !important
+}
+	   
+/* The Senate */
+.template-portal nav ul li#upper-hse {
+	width:320px;
+    background: linear-gradient(top, #444444 0%, #3a3a3a 100%);  
+    background: -moz-linear-gradient(top, #444444 0%, #3a3a3a 100%); 
+    background: -webkit-linear-gradient(top, #444444 0%,#3a3a3a 100%); 
+	white-space: nowrap !important;		    
+}
+.template-portal nav ul li#upper-hse > a {
+	font-weight:bold;
+	color:white !important;
+	font-size:16px;                
+}
+
+/* Auxilliary menus */
+.template-portal nav ul li#aux { 
+	width:320px;       
+	background: linear-gradient(top, #f0de00 0%, #f9ce1d 100%) !important;  
+	background: -moz-linear-gradient(top, #f0de00 0%, #f9ce1d 100%) !important; 
+	background: -webkit-linear-gradient(top, #f0de00 0%,#f9ce1d 100%) !important; 
+	white-space: nowrap !important;
+}
+.template-portal nav ul li#aux a {
+	font-weight:bold !important;
+	color:#000 !important;
+    font-size:16px; 
+}
+.template-portal nav ul li#aux ul.parl-list {
+	background-color: #f9ce1d;
+}
+.template-portal nav ul li#aux ul.parl-list a {
+    font-size:11px; 
+}	
+.template-portal #aux li {
+	padding: 0;
+}
+.template-portal li#aux.plain {
+	width: 200px !important;
+}
+	   
+.template-portal nav ul li:hover {
+	-webkit-box-shadow: rgba(0,0,0,.2) 2px 4px 4px;
+	-moz-box-shadow: rgba(0,0,0,.2) 2px 4px 4px;
+	box-shadow: rgba(0,0,0,.2) 2px 4px 4px;                
+}
+
+.template-portal nav ul li#aux:hover {
+	-webkit-box-shadow: rgba(0,0,0,.2) 0.5px 1px 1px;
+	-moz-box-shadow: rgba(0,0,0,.2) 0.5px 1px 1px;
+	box-shadow: rgba(0,0,0,.2) 0.5px 1px 1px;                
+}
+.template-portal nav ul li:hover a {
+	color: #fff;
+}
+		
+/* HOUSE TOP-NAVS */	
+.template-portal nav ul ul.hse-list,
+.template-portal nav ul ul.parl-list {
+    margin: 0;
+    padding: 0 0 4px 0;
+    display: inline-block;
+    background: transparent;	
+}
+.template-portal nav ul ul.hse-list li,
+.template-portal nav ul ul.parl-list li {
+    display:inline;
+    padding:0 5px !important;
+	background-color:transparent !important;
+}
+.template-portal nav ul ul.hse-list li a,
+.template-portal nav ul ul.parl-list li a {
+    padding:0 !important;
+    margin:0 !important;
+    color:white !important;   
+    background-color:transparent !important;
+	border: transparent !important;
+    font-size:.9em;
+    font-size-adjust:0.49;	
+} 
+.template-portal nav ul ul.hse-list li a:hover,
+.template-portal nav ul ul.parl-list li a:hover {
+	color:#ffffff;   
+}
+    
+.template-portal .subnav {  
+    height:25px;
+    width:960px;      
+}
+.template-portal .subnav ul {
+    padding:0;
+	display:inline-block;
+    background:transparent;
+	float:left;        
+}
+.template-portal-eXist.template-portal .subnav ul {
+    margin-top:0.30em !important;       
+}
+.template-portal.site-plone .subnav ul {
+    margin-top:0.25em !important;       
+}
+.template-portal .subnav ul li {
+    display:inline;
+    padding:0 5px;
+	background-color:transparent;
+	font-size: 12px;
+}
+.template-portal .subnav ul li a {
+    padding:0;
+    margin:0;
+	background-color:transparent;
+} 
+
+.template-portal-eXist.template-portal .subnav ul li a {
+    color:white;   
+}
+
+.template-portal .site-plone .subnav ul li a {
+    color:black;   
+}   
+.template-portal .subnav ul li a:hover {
+	color:#ffffff;   
+}      
+		
+.template-portal nav ul ul.mouseover {
+	background: #555556; 
+	border-radius: 0px; 
+	padding: 0;
+	position: absolute; top: 100%;
+}
+.template-portal nav ul ul.mouseover li {
+	float: none; 
+	border-top: 1px solid #6b727c;
+	border-bottom: 1px solid #555556; 
+	position: relative;
+}
+.template-portal nav ul ul.mouseover li a {
+	padding: 15px 20px;
+	color: #fff;
+}	
+.template-portal nav ul ul.mouseover li a:hover {
+	background: #444;
+}
+		
+.template-portal nav ul ul.mouseover ul {
+	position: absolute; 
+	left: 100%; 
+	top:0 
+}
+.template-portal #portal-globalnav li.lower-hse a:hover,
+.template-portal #portal-globalnav li.upper-hse a:hover {
+	background-color: transparent;
+}
+.template-portal #portal-globalnav li.lower-hse a:hover,
+.template-portal #portal-globalnav li.upper-hse a:hover,
+.template-portal #portal-globalnav li#aux a:hover {
+	text-decoration: underline !important;
+}
+
+.yui-skin-sam.section-bungeni- #portal-globalnav-bottom {
+	display: none !important;
+}
+/*------------------------------*/
+.template-portal .index {
+    background: linear-gradient(top, #333636 0%, #0a0000 100%);  
+    background: -moz-linear-gradient(top, #333636 0%, #0a0000 100%); 
+    background: -webkit-linear-gradient(top, #333636 0%,#0a0000 100%); 	              
+}
+.template-portal .index ul li  a {
+    color:#eeeeef;
+}
+.template-portal .index ul li  a:hover {
+    color:#ffffff;
+}
+
+#top-layer,
+.template-portal .subnav {
+    border-radius: 0px 0px 5px 5px; 
+    -moz-border-radius: 0px 0px 5px 5px; 
+    -webkit-border-radius: 0px 0px 5px 5px;            
+}
+
+.template-portal-eXist.template-portal.lower_house .subnav {
+    background-color: #757877;            
+}
+
+.template-portal-eXist.template-portal.higher_house .subnav {
+    background-color: #3a3a3a;
+}
+
+.template-portal.site-plone .subnav {
+	background-color: #f9ce1d; 
+}
+
+.template-portal.site-plone #content h1.documentFirstHeading {
+    margin-top: 0.5em !important;
+    margin-bottom: 1.5em !important;
+    border:0px !important;
+}
+.template-portal.site-plone .rounded-eigh {
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+}
+
+.template-portal.site-plone #content-core .documentDescription {
+    margin-top: 0.25em !important;
+}
+
+/* BICAMERAL MENU END
+-------------------------------------------------------------- */
+.clearfix {
+	display: inline-block;
+}
+html[xmlns] .clearfix {
+	display: block;
+}
+* html .clearfix {
+	height: 1%;
+}
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    margin-bottom:10px;
+    visibility: hidden;
+}
+
+
 
 /*
  * main-columns
  */
 
-.template-portal #content {
-    border: 1px solid #d2dfe7;
-    -moz-border-radius: 8px;
-    -webkit-border-radius: 8px;
-    border-radius: 8px;
-    background-color:#ffffff;
-}
+.template-portal #visual-table-wrapper, 
 .template-portal div.main-column {
-    background: transparent;
+    background:#fff;
 }
 
 .template-portal #portal-footer {
@@ -1195,22 +1386,9 @@ background: #F8FFFF;
  * DocumentActions & contentActions
  */
 .template-portal .contentActions {
-    background: transparent;
-}
-.subMenuTitle {
-    color:#010101;
-}
-.subMenuTitle:hover {
-    color:#ffffff;
-}
-.template-portal .subMenuTitle:hover {
-    color:#010101;
-}
-.template-portal dl#context_actions.actionMenu .actionMenuContent ul li a.selected, 
-.template-portal dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
-    border-right: 1px solid #c6d7f3;
-    background-color: #dbe4f3 !important;
-    color: white !important;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border:1px solid transparent;
+    border-bottom: 1px solid #fe0000;
 }
 /*
  * portal-searchbox
@@ -1247,8 +1425,14 @@ background: #F8FFFF;
     border-left: 0 none;
     border-top: 0 none;
     border-right: 1px solid #aaa;
-    border-bottom:1px solid #FF8A09;
-    background:#FF8A09 !important;
+    border-bottom:1px solid #fe0000;
+    background:#fe0000 !important;
+}
+.portaltype-repositorycollection table.listing th {
+    background:#ffffff !important;
+	color: black !important;
+	border-top: 1px solid #aaa;
+	border-bottom:1px solid #aaa;
 }
 /*
  * formTabs
@@ -1304,19 +1488,22 @@ background: #F8FFFF;
 .template-workspace #portal-logo img {
     border: 0 none;
 }
+.template-workspace #top-layer ul#portal-personaltools li a:hover {
+    color: #fffd6e !important;
+}
+.template-workspace #top-layer ul#portal-languageselector li a:hover {
+    color: #fffd6e !important;
+}
+.template-workspace #top-layer ul#portal-languageselector li.selected a:hover {
+    color: #000000;
+}
 
 /*
  * Breadcrumbs
  */
 .template-workspace #portal-breadcrumbs {
     border-bottom:1px solid #d4e2ef;
-} background: #FFFD6E none repeat scroll 0 0;
-border: 1px solid #CCC;
-text-decoration: none;
-.template-workspace.section-bungeni-workspace #portal-breadcrumbs a {
-    color:#21a1ba;
-    font-weight:bold;
-}
+} 
 
 /*
  * portal-searchbox
@@ -1382,12 +1569,12 @@ text-decoration: none;
 .template-workspace.section-bungeni-members .dhx_cal_container,
 .template-workspace.section-bungeni-members .dhx_scale_bar,
 .template-workspace.section-bungeni-members .dhx_scale_hour,
-.template-portal .dhx_cal_container,
-.template-portal .dhx_scale_bar,
-.template-portal .dhx_scale_hour {
-    background: #333436;
-    border-color: #fff;
-    color:#fff !important;
+.template-portal .dhtmlx_calendar_main .dhx_cal_container,
+.template-portal .dhtmlx_calendar_main .dhx_scale_bar,
+.template-portal .dhtmlx_calendar_main .dhx_scale_hour {
+    background: #fe8c8c;
+    border-color: #fe0000;
+    color:#000 !important;
 }
 .dhx_scale_holder {
     border-right: 1px dotted #000 !important;
@@ -1396,15 +1583,8 @@ div.dhx_cal_navline {
     color:#000 !important;
 }
 div.dhx_cal_navline div.active {
-    background:#ff8a00 !important;
-    color:#fff;
-}
-
-div.dhx_cal_navline .dhx_cal_today_button {
-    color:#fff;
-}
-div.dhx_cal_navline .dhx_cal_date {
-    color:#fff;
+    background:#fe0000 !important;
+    color:#fff !important;
 }
 .template-workspace.section-bungeni-archive .dhx_cal_header,
 .template-workspace.section-bungeni-archive .dhx_cal_data,
@@ -1412,14 +1592,14 @@ div.dhx_cal_navline .dhx_cal_date {
 .template-workspace.section-bungeni-business .dhx_cal_data,
 .template-workspace.section-bungeni-members .dhx_cal_header,
 .template-workspace.section-bungeni-members .dhx_cal_data,
-.template-portal .dhx_cal_header,
-.template-portal .dhx_cal_data{
-    border-color: #fff;
+.template-portal .dhtmlx_calendar_main .dhx_cal_header,
+.template-portal .dhtmlx_calendar_main .dhx_cal_data{
+    border-color: #fe0000;
 }
 .template-workspace.section-bungeni-archive .dhx_cal_tab,
 .template-workspace.section-bungeni-business .dhx_cal_tab,
 .template-workspace.section-bungeni-members .dhx_cal_tab,
-.template-portal .dhx_cal_tab {
+.template-portal .dhtmlx_calendar_main .dhx_cal_tab {
     background-image:url(../images/white_tab2.png);
 }
 .template-workspace.section-bungeni-archive .dhx_cal_prev_button,
@@ -1431,9 +1611,9 @@ div.dhx_cal_navline .dhx_cal_date {
 .template-workspace.section-bungeni-members .dhx_cal_prev_button,
 .template-workspace.section-bungeni-members .dhx_cal_next_button,
 .template-workspace.section-bungeni-members .dhx_cal_today_button,
-.template-portal .dhtmlx_calendar_main .dhx_cal_container,
-.template-portal .dhtmlx_calendar_main .dhx_scale_bar,
-.template-portal .dhtmlx_calendar_main .dhx_scale_hour {
+.template-portal .dhtmlx_calendar_main .dhx_cal_prev_button,
+.template-portal .dhtmlx_calendar_main .dhx_cal_next_button,
+.template-portal .dhtmlx_calendar_main .dhx_cal_today_button {
     background-image:url(../images/orange_buttons.png);
 }
 .template-workspace.section-bungeni-archive .dhx_cal_tab.active,
@@ -1445,7 +1625,7 @@ div.dhx_cal_navline .dhx_cal_date {
 .template-workspace.section-bungeni-archive .dhx_scale_holder_now,
 .template-workspace.section-bungeni-business .dhx_scale_holder_now,
 .template-workspace.section-bungeni-members .dhx_scale_holder_now,
-.template-portal .dhtmlx_calendar_main .dhx_scale_holder_now {
+.template-portal .dhtmlx_calendar_main .dhtmlx_calendar_main .dhx_scale_holder_now {
     background-image:url(../images/databg_now3.png);
 }
 .template-workspace.section-bungeni-archive .dhx_now .dhx_month_head,
@@ -1483,7 +1663,7 @@ div.dhx_cal_navline .dhx_cal_date {
 .section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li.selected a,
 .section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li a:hover {
     background: #21a1ba;
-    color: #fff !important;
+    color: #fff;
 }
 /* hides the portlet header. */
 .section-bungeni-admin #portal-column-one .portlet .portletItem.even,
@@ -1495,44 +1675,57 @@ div.dhx_cal_navline .dhx_cal_date {
     background: #eee;
     border: 0 none !important;
 }
-.template-workspace #portal-column-one .portlet .portletItem .navTreeCurrentItem a {
-    background-color:#21a1ba !important;
-    color:#ffffff !important;
+
+.template-workspace.section-bungeni-admin #portal-column-one .portlet .portletItem ul li.navTreeCurrentNode ul a:hover, 
+.template-workspace.section-bungeni-admin #portal-column-one .portlet .portletItem ul li.navTreeCurrentNode a.navTreeCurrentItem {
+    background: #888888 !important;
+    color: white !important;
 }
 /*
  * DocumentActions & contentActions
  */
 .template-workspace.section-bungeni-admin .contentActions {
-    border: 1px solid #333436 !important;
+    border: 1px solid #86a26a !important;
     background: #888888 url(wrong/static/images/w-bg-admin.png) repeat-x top center;
-} 
+}
+
 .template-workspace.section-bungeni-archive .contentActions,
 .template-workspace.section-bungeni-business .contentActions,
 .template-workspace.section-bungeni-members .contentActions {
-    border: 1px solid #333436 !important;
+    border: 1px solid #fe0000 !important;
     background: #fff;
 }
 .section-bungeni-workspace .actionMenu .actionMenuContent ul,
 .section-bungeni-admin .actionMenu .actionMenuContent ul {
-    background: #bdd1d7;
-    border: 1px solid #aaf;
+    background: #abdae4;
+    border: 1px solid #ccc;
     border-bottom: 0 none;
-    border-top: 0 none;
+    border-top: 0 none; 
+}
+.section-bungeni-workspace .actionMenu .actionMenuContent ul li a {
+    color: #000 !important;
 }
 .template-workspace dl#context_actions.actionMenu .actionMenuContent ul li a.selected,
 .template-workspace dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
-    border-right: 1px solid #aaf;
-    background-color: #888888 !important;
+    border-right: 1px solid #090;
+    background-color: #009901 !important;
+    color: #fff !important;
 }
-.template-workspace div.contentActions dt.label-state-first_reading_pending a,
-.template-workspace div.contentActions dt.label-state-active a,
-.template-workspace div.contentActions dt.label-state-admissible a,
-.template-workspace div.contentActions dt.label-state-public a {
+.template-workspace div.contentActions dt.label-state-active a {
+    color:#000 !important;
+}
+.template-workspace div.contentActions dd.actionMenuContent ul li > a:hover span {
     color:#000 !important;
 }
 .section-bungeni-workspace .contentActions {
     background: url(/static/images/content-actions-bg.png) repeat-x top left;
     border: 0 none;
+}
+.portaltype-folder .contentActions {
+    height:1.8em;
+}
+.portaltype-folder #content .contentActions ul {
+    margin: 0 0 0 -2px !important;
 }
 /*
  * portal-globalnav
@@ -1546,18 +1739,24 @@ div.dhx_cal_navline .dhx_cal_date {
 .template-workspace div#portal-globalnav ul.level0 li.selected a {
     border-bottom-color: #d8d8d9;
     border-bottom-color: #222;
-    background:#333436;
+    background:#fe0000;
 }
 .template-workspace div#portal-globalnav ul.level0 li.selected a,
 .template-workspace div#portal-globalnav ul.level0 li a:hover {
-    border-top: 1px solid #444444;
-    border-bottom: 1px solid #444444;
-    background:#444444;
+    border-top: 1px solid #fe0000;
+    border-bottom: 1px solid transparent;
+    border-left:1px solid #fe0000;
+    border-right:1px solid #fe0000;
+    background:#fe0000;
+}
+.section-bungeni-workspace table td div a {
+    color: #099dbe !important;
+    border: 0 none;
 }
 .template-workspace.section-bungeni-business div#portal-globalnav ul.level0 li#portaltab-business-whats-on a {
-    border-top: 1px solid #444444;
-    border-bottom: 1px solid #444444;
-    background:#444444;
+    border-top: 1px solid #fe0000;
+    border-bottom: 1px solid #fe0000;
+    background:#fe0000;
 }
 .template-workspace div#portal-globalnav ul.level0 li#portaltab-:first-child a,
 .template-workspace div#portal-globalnav ul.level0 li#portaltab-:first-child a:hover {
@@ -1587,15 +1786,15 @@ div.dhx_cal_navline .dhx_cal_date {
     border-radius: 0px;
 }
 .template-workspace div#portal-globalnav ul.level1 {
-    border: 1px solid #aaf;
+    border: 1px solid #ccc;
     border-right: 0 !important;
     border-top: 0 none !important;
     border-bottom:1px solid #d8d8d9;
-    background:#444444 !important;
+    background:#fe0000 !important;
     display: block;
 }
 .section-bungeni-workspace div#portal-globalnav ul.level1 {
-    border: 1px solid #aaf;
+    border: 1px solid #ccc;
     border-right: 0 none;
     border-top: 0 none !important;
     border-bottom:1px solid #1763aa;
@@ -1603,7 +1802,7 @@ div.dhx_cal_navline .dhx_cal_date {
     display: block;
 }
 .section-bungeni-admin div#portal-globalnav ul.level1 {
-    border: 1px solid #aaf;
+    border: 1px solid #ccc;
     border-right: 0 none;
     border-top: 0 none !important;
     border-bottom:1px solid #1763aa;
@@ -1611,13 +1810,10 @@ div.dhx_cal_navline .dhx_cal_date {
     display: block;
 }
 .template-workspace div#portal-globalnav ul.level1 li.selected a {
-    color: #FF8A09 !important;
+    color: #000 !important;
 }
 .section-bungeni-workspace div#portal-globalnav ul.level1 li.selected a {
-    color:#333 !important;
-}
-.section-bungeni-admin div#portal-globalnav ul.level1 li.selected a {
-    color:#000 !important;
+    color:#3f3f3f !important;
 }
 /*
  * Table styles
@@ -1644,22 +1840,8 @@ div.dhx_cal_navline .dhx_cal_date {
     border-left: 0 none;
     border-top: 0 none;
     border-right: 1px solid #aaa;
-    border-bottom:1px solid #FF8A09;
-    background:#FF8A09 !important;
-}
-.section-bungeni-workspace table.listing th, 
-.section-bungeni-workspace table.listingdescription th, 
-.section-bungeni-workspace .stx table th, .yui-skin-sam .yui-dt-first th {
-    background: #21a1ba !important;
-}
-.section-bungeni-admin table.listing th, 
-.section-bungeni-admin table.listingdescription th, 
-.section-bungeni-admin .stx table th, .yui-skin-sam .yui-dt-first th {
-    background: #888 !important;
-}
-.section-bungeni-workspace table.listing th a, 
-.section-bungeni-workspace table.listingdescription th a {
-    color:black !important;
+    border-bottom:1px solid #fe0000;
+    background:#fe0000 !important;
 }
 /*
  * formTabs
@@ -1695,7 +1877,7 @@ div.dhx_cal_navline .dhx_cal_date {
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a.selected {
     text-align: left;
     text-decoration: none;
-    background: #333436;
+    background: #fe0000;
     border: 1px solid #aaa;
     border-bottom-color: #bbb;
     border-top-color: #999;
@@ -1704,7 +1886,7 @@ div.dhx_cal_navline .dhx_cal_date {
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:hover,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:active,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a.selected {
-    background: #21a1ba url(/static/images/w-globalnav-level0-a-first.png) top left repeat-x !important;
+    background: #21a1ba url(/static/images/w-globalnav-level0-a-first.png) top left repeat-x;
     color: #000;
 	text-shadow:0 0 0 #fff;
 }
@@ -1712,10 +1894,17 @@ div.dhx_cal_navline .dhx_cal_date {
 .template-workspace.section-bungeni-workspace table.listing th,
 .template-workspace.section-bungeni-workspace table.listingdescription th,
 .template-workspace.section-bungeni-workspace .stx table th,
-.template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th {
-    background:#21a1ba url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x !important;
+.template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th,
+.section-bungeni-workspace tr.yui-dt-first th {
+    background:#21a1ba !important;
     text-shadow: 0 0 0  #fff;
     color: #000;
+}
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a.selected, 
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
+    border-right: 1px solid #090;
+    background-color: #e4702d !important;
+    color: #fff !important;
 }
 .template-workspace.section-bungeni-admin ul.formTabs li.formTab a:hover,
 .template-workspace.section-bungeni-admin ul.formTabs li.formTab a:active,
@@ -1724,8 +1913,14 @@ div.dhx_cal_navline .dhx_cal_date {
     margin-left:3px;
     margin-right:3px;
     border-bottom: 0 none;
-    background: #888 !important;    
 }
+.template-workspace.section-bungeni-admin li.formTab a:hover, 
+.template-workspace.section-bungeni-admin li.formTab a:active, 
+.template-workspace.section-bungeni-admin li.formTab a.selected {
+    border-bottom: 2px solid #888888;
+    background: #888888;
+}
+
 .template-workspace.section-bungeni-admin ul li.context_workflow dt a {
     color:#000 !important;
 }
@@ -1737,14 +1932,19 @@ div.dhx_cal_navline .dhx_cal_date {
     color: #333;
 }
 .template-workspace dd#fieldset-written-question-response div.documentDescription {
-    background:#FF8A09 !important;
+    background:#fe0000 !important;
     color:#fff !important;
 }
 .template-workspace div.documentContent p.documentDescription {
     margin-top:15px !important;
 }
 .template-workspace.section-bungeni-admin .formPanel #display_form_spacer {
-    background:#888;
+    background:#888888;
+}
+.template-workspace.section-bungeni-admin table.listingdescription th, 
+.template-workspace.section-bungeni-admin .stx table th, 
+.yui-skin-sam.section-bungeni-admin .yui-dt-first th {
+    background: #888888 !important;
 }
 .template-workspace.section-bungeni-workspace .formPanel #display_form_spacer {
     background: url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x;
@@ -1780,7 +1980,12 @@ div.dhx_cal_navline .dhx_cal_date {
 .template-workspace table.listing td a,
 .template-workspace table.listing td a:visited,
 .template-workspace table.listing td a:active {
-    color:#FF8A09 !important;
+    color:#090 !important;
+} 
+.template-workspace.section-bungeni-workspace table.listing td a,
+.template-workspace.section-bungeni-workspace table.listing td a:visited,
+.template-workspace.section-bungeni-workspace table.listing td a:active {
+    color:#21a1ba !important;
 } 
 /*
  * yui paginator
@@ -1788,12 +1993,6 @@ div.dhx_cal_navline .dhx_cal_date {
 .template-workspace.section-bungeni-admin div#container_contents_sessions div#yui-dt5-paginator0 {
     display:none;
 } 
-/* footer  */
-.template-workspace #portal-footer div {
-
-    border: 0 none;
-}
-
 /* footer  */
 .template-workspace #portal-footer div {
 
@@ -1810,8 +2009,10 @@ div.dhx_cal_navline .dhx_cal_date {
     text-shadow: 0 0 0  #fff;
     color: #000 !important;
 }
+.template-workspace.section-bungeni-workspace dd#fieldset-written-question-response div.documentDescription, 
 .template-workspace.section-bungeni-workspace #display_form_spacer {
     background:#aaa !important;
+    color:black;
 }
 
 /*MailBox*/
@@ -1840,6 +2041,11 @@ div.dhx_cal_navline .dhx_cal_date {
     background: #147b92 url(/static/images/content-actions-bg.png) repeat-x top left;
     border: 1px solid gray;
     color: white !important;
+}
+
+.yui-skin-sam #yui-gen1 .yui-dt table tr.yui-dt-even,
+.yui-skin-sam #yui-gen1 .yui-dt table tr.yui-dt-odd {
+    background: #fff;
 }
 
 .yui-skin-sam #scheduler-layout .yui-layout-unit .yui-resize-handle-r {
@@ -1889,8 +2095,18 @@ div.dhx_cal_navline .dhx_cal_date {
 .yui-skin-sam #scheduler-layout tr.yui-dt-selected td, 
 .yui-skin-sam #scheduler-layout tr.yui-dt-selected td.yui-dt-asc, 
 .yui-skin-sam #scheduler-layout tr.yui-dt-selected td.yui-dt-desc {
-    background-color: #21a1ba !important;
-    color: white;
+    background-color: transparent !important;
+    border: 2px solid #ee1c25;    
+    color: #000000;
+}
+.yui-skin-sam #text-records-dialog tr.yui-dt-selected td.yui-dt-first,
+.yui-skin-sam #scheduler-layout tr.yui-dt-selected td.yui-dt-first {
+    border-left: 1px solid #ee1c25;
+    border-right: 1px solid #ee1c25;
+}
+.yui-skin-sam #text-records-dialog tr.yui-dt-selected td.yui-dt-last,
+.yui-skin-sam #scheduler-layout tr.yui-dt-selected td.yui-dt-last {
+    border-left: 1px solid #ee1c25;
 }
 .yui-skin-sam #scheduler-layout th.yui-dt-highlighted,
 .yui-skin-sam #scheduler-layout th.yui-dt-highlighted a {
@@ -1932,9 +2148,12 @@ div.dhx_cal_navline .dhx_cal_date {
 .template-portal-eXist div#region-content {
     background-color:#fff;
     border:1px solid #c1c1c0;
+    -moz-box-shadow: 10px 10px 5px #888;
+    -webkit-box-shadow: 10px 10px 5px #888;
+    box-shadow: 10px 10px 5px #888;    
 }
 .template-portal-eXist div#region-content a {
-    color: #FF8A09;
+    color: #FF8A00;
 }
 .template-portal-eXist  .rounded-eigh {
     -moz-border-radius: 8px;
@@ -2002,9 +2221,18 @@ div.dhx_cal_navline .dhx_cal_date {
 .template-portal-eXist .description {
     font-size:100% !important;
 }
+/*
 .template-portal-eXist div#portal-globalnav ul.level1 li a {
     font-family:Verdana, sans-serif;
     font-size:12px;
+}*/
+
+/* Search
+-------------------------------------------------------------- */
+.template-portal-eXist #portal-search a.header-links:visited,
+#portal-search a.header-links {
+	margin-right: 2px;
+	color: black;
 }
 
 /* Listing - version
@@ -2123,7 +2351,7 @@ div.dhx_cal_navline .dhx_cal_date {
 }
 .template-portal-eXist  .paginate a 
 {
-	color:#FF8A09 !important;
+	color:#090 !important;
 	font-size:12px;
 	font-weight:bold;
 	background:#fff;
@@ -2138,8 +2366,8 @@ div.dhx_cal_navline .dhx_cal_date {
 .template-portal-eXist  .paginate a:hover
 {
 	color: #ffffff !important;
-	background-color: #FF8A09;
-	border:1px solid #FF8A09;
+	background-color: #090;
+	border:1px solid #090;
 }
 
 .template-portal-eXist  .paginate a.disabled {
@@ -2153,9 +2381,9 @@ div.dhx_cal_navline .dhx_cal_date {
 }
 
 .template-portal-eXist  .paginate a.curr-no {
-	color: #ffffff !important;
-	background-color: #FF8A09;
-	border:1px solid #FF8A09;
+	color: #FF8A00 !important;
+	background-color: #444444;
+	border:1px solid #090;
 }
 
 /* Form elements
@@ -2204,21 +2432,10 @@ div.dhx_cal_navline .dhx_cal_date {
 /* DHTMLX Calendar
 -------------------------------------------------------------- */
 
-.template-portal-eXist .dhx_cal_tab.active {
-    text-shadow: none;
-}
-.template-portal-eXist .dhx_cal_tab.active {
-    color: #ffffff;
-}
-.template-portal-eXist .dhx_cal_tab {
-    color: #D2D2D2;
-}
-
-.template-portal-eXist .dhx_cal_today_button,
-.template-portal-eXist .dhx_cal_tab,
-.template-portal-eXist .dhx_cal_prev_button,
-.template-portal-eXist .dhx_cal_next_button {
-    background-color:#444 !important;
+.template-portal-eXist .dhx_cal_container,
+.template-portal-eXist .dhx_scale_bar,
+.template-portal-eXist .dhx_scale_hour {
+    background:inherit;
 }
 
 /* Whatson datepicker
@@ -2249,3 +2466,27 @@ div.dhx_cal_navline .dhx_cal_date {
 .template-portal-eXist  div.datepicker td.datepickerNotInMonth a:hover {
 	color: #999;
 }
+.template-portal-eXist #utility-nav li a {
+    color: #FF8A00;
+}
+
+.template-portal.site-plone #content h1.documentFirstHeading {
+    margin-top: 0.5em !important;
+    margin-bottom: 1.5em !important;
+    border: 0px !important;
+}
+
+/* =============================================================================
+   Plone - Plone CMS content styling
+   .site-plone
+   ========================================================================== */
+
+.template-portal.site-plone #content {
+    font-size: 110% !important;
+}
+
+.site-plone #search-results {
+    opacity: 1 !important;
+}
+
+
