@@ -19,27 +19,31 @@
         <parameter name="assigner_roles" value="Transcriber.Editor" />
         <parameter name="assignable_roles" value="Transcriber.Reporter" />
     </feature>
-    
+    <feature name="workspace" enabled="true" />
     <facet name="draft">
       <allow permission=".View" roles="Transcriber.Editor Transcriber.Reporter" />
       <allow permission="user_assignment.View" roles="Transcriber.Editor Transcriber.Reporter" />
       <allow permission="user_assignment.Edit" roles="Transcriber.Editor" />
       <allow permission="debate_media.Edit" roles="Transcriber.Editor" />
     </facet>
-
+    <facet name="in_progress">
+      <allow permission=".View" roles="Transcriber.Editor Transcriber.Reporter" />
+      <allow permission="user_assignment.View" roles="Transcriber.Editor Transcriber.Reporter" />
+    </facet>
     <facet name="published">
       <allow permission=".View" roles="Transcriber.Editor Transcriber.Reporter" />
-       <allow permission="user_assignment.View" roles="Transcriber.Editor Transcriber.Reporter" />
-      <allow permission="user_assignment.Edit" roles="Transcriber.Editor" />
+      <allow permission="user_assignment.View" roles="Transcriber.Editor Transcriber.Reporter" />
       <allow permission="debate_media.Edit" roles="Transcriber.Editor" />
     </facet>
 
     <state id="draft" title="Draft">
-      <facet ref=".draft"/>
+      <facet ref=".draft" />
     </state>
-
+    <state id="in_progress" title="In Progress">
+      <facet ref=".in_progress" />
+    </state>
     <state id="published" title="Published">
-      <facet ref=".published"/>
+      <facet ref=".published" />
     </state>
     
     
@@ -49,13 +53,19 @@
         trigger="automatic"
         order="0"
     />
-
+    <transition title="Distribute for transcription"
+        source="draft"
+        destination="in_progress"
+        trigger="manual"
+        order="0"
+        roles="Transcriber.Editor"
+    />
     <transition title="Publish debate"
-	source="draft"
-	destination="published"
-	trigger="manual"
-	order="0"
-	roles="Transcriber.Editor"
+	      source="in_progress"
+	      destination="published"
+	      trigger="manual"
+	      order="0"
+	      roles="Transcriber.Editor"
      />
 
 </workflow>
