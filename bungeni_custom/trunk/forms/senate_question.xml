@@ -68,7 +68,7 @@
         >
         <show modes="view listing" />
     </field>
-    <field name="group_id" label="Ministry" required="true" value_type="group" render_type="single_select" vocabulary="ministry">
+    <field name="group_id" label="Ministry" required="true" value_type="group" render_type="single_select" vocabulary="ministry" note="!+validate ministry group constraint, or value_type=ministry?">
         <show modes="view edit add listing" />
     </field>
     <field name="ministry_submit_date" label="Date submitted to Ministry" 

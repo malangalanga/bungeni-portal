@@ -6,10 +6,12 @@
     
     <!-- sub-item: NO global grants -->
     
+    
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
+    
     
     <!-- workflow facets -->
     <facet name="draft_Clerk">
@@ -26,10 +28,8 @@
     </facet>
     <facet name="internal" default="true">
         <allow permission=".View" roles="Authenticated" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly 
-        MinistryMember" />
-        <allow permission=".Add" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly 
-        MinistryMember" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly MinistryMember" />
+        <allow permission=".Add" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly MinistryMember" />
     </facet>
     <facet name="internal_frozen">
         <allow permission=".View" roles="Authenticated" />
@@ -42,21 +42,20 @@
     <facet name="public_frozen">
         <allow permission=".View" roles="Anonymous" />
     </facet>
-
+    
+    
     <!-- workflow states -->    
     <state id="draft" title="Draft">
         <facet ref=".draft_Owner" />
     </state>
-    
     <state id="bound_parent" title="Bound to Parent" permissions_from_parent="true" />
-   
     <state id="internal" title="Internal">
         <facet ref=".internal" />
     </state>
-
     <state id="withdrawn" title="Withdrawn">
         <facet ref=".internal_frozen" />
     </state>
+    
     
     <!-- workflow transision -->    
     <transition title="Create"

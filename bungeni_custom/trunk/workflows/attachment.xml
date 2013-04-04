@@ -9,8 +9,9 @@
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
-
+    
     <!-- !+attachments may NOT recursivley support other attachments -->
+    
     
     <!-- workflow facets -->
     <facet name="draft_Clerk">
@@ -35,7 +36,7 @@
             attachments, even if the attachment was not created (owned) by 
             them. Should finer distinctions be needed e.g. allowing editing by
             an office/mp only attachments that they originally created (own) 
-            then the permission granting shoudl be Owner based.
+            then the permission granting should be Owner based.
         ">
         <allow permission=".View" roles="Authenticated" />
         <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
@@ -52,21 +53,20 @@
     <facet name="public_frozen">
         <allow permission=".View" roles="Anonymous" />
     </facet>
-
+    
+    
     <!-- workflow states -->    
     <state id="draft" title="Draft">
         <facet ref=".draft_Owner" />
     </state>
-    
     <state id="bound_parent" title="Bound to Parent" permissions_from_parent="true" />
-   
     <state id="internal" title="Internal">
         <facet ref=".internal" />
     </state>
-
     <state id="withdrawn" title="Withdrawn">
         <facet ref=".internal_frozen" />
     </state>
+    
     
     <!-- workflow transision -->    
     <transition title="Create"
