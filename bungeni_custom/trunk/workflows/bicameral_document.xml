@@ -13,7 +13,7 @@
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
     <feature name="event" enabled="true">
-        <parameter name="types" value="event test_event" />
+        <parameter name="types" value="event" />
     </feature>
     <feature name="signatory" enabled="false">
         <parameter name="open_states" value="admissible" />
@@ -86,10 +86,9 @@
     <!-- workflow STATES - ASSEMBLY -->    
     <state id="draft" title="Draft">
         <facet ref=".draft" />
-        <facet ref="attachment.draft_Owner" />
+        <facet ref="attachment.add" />
         <!-- NOTE: stating event.FACET_NAME is **SAME** as stating event#event.FACET_NAME -->
-        <facet ref="event.draft_Owner" />
-        <facet ref="event#test_event.draft_Owner" />
+        <facet ref="event.add" />
     </state>
     
     <state id="withdrawn_internal" title="Withdrawn">

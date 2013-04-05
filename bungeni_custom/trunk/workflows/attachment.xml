@@ -13,13 +13,7 @@
     <!-- !+attachments may NOT recursivley support other attachments -->
     
     <!-- workflow facets -->
-    <facet name="draft_Clerk">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
-    </facet>
-    <facet name="draft_Owner" note="!+rename">
+    <facet name="add">
         <allow permission=".View" roles="Drafter" />
         <allow permission=".Edit" roles="Drafter" />
         <allow permission=".Add" roles="Drafter" />
@@ -55,7 +49,7 @@
     
     <!-- workflow states -->    
     <state id="draft" title="Draft">
-        <facet ref=".draft_Owner" />
+        <facet ref=".add" />
     </state>
     <state id="bound_parent" title="Bound to Parent" permissions_from_parent="true" />
     <state id="internal" title="Internal">
