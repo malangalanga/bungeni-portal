@@ -142,8 +142,6 @@
     only pertinent to the "container" i.e. it is, by definition, unbound to 
     any *yet-to-exist* item.
     -->
-    
-    <state id="working_draft" title="Working Draft" obsolete="true" />
     <state id="draft" title="Draft" actions="assign_role_group">
         <facet ref=".draft" />
         <facet ref="attachment.draft_Owner" />
@@ -253,7 +251,6 @@
     <transition title="Redraft"
         source="submitted_signatories"
         destination="redraft"
-        condition="user_is_context_owner"
         trigger="manual"
         roles="Drafter"
     />

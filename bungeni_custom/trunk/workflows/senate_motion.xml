@@ -205,15 +205,13 @@
     <transition title="Redraft"
         source="submitted_signatories"
         destination="redraft"
-        condition="user_is_context_owner"
-        roles="Owner"
+        roles="Drafter"
         trigger="manual"
     />
     <transition title="Drop"
         source="redraft submitted_signatories"
         destination="withdrawn_signatory"
         grouping_unique_sources="withdrawn"
-        condition="user_is_context_owner"
         roles="Owner"
         trigger="manual"
     />
