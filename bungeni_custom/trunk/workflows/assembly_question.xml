@@ -318,7 +318,6 @@
     <transition title="Send to Ministry"
         source="admissible deferred"
         destination="response_pending"
-        condition="is_written_response"
         trigger="manual"
         roles="ClerkAssembly.ClerkQuestion"
         order="13"
