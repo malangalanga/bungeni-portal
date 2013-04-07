@@ -51,35 +51,35 @@
     <!-- workflow states -->    
     <state id="draft" title="Draft">
         <facet ref=".draft" />
-        <facet ref="attachment.add" />
+        <facet ref="attachment.add_drafter" />
     </state>
     <state id="submitted" title="Submitted" actions="version">
         <facet ref=".edit_Clerk" />
-        <facet ref="attachment.internal" />
+        <facet ref="attachment.add_clerk" />
     </state>
     <state id="clarification_required" title="Requires Clarification to Receive" 
             actions="version"   >
         <facet ref=".edit_Owner" />
-        <facet ref="attachment.internal_Owner" />
+        <facet ref="attachment.add_clerk" />
     </state>
     <state id="review_pending" title="Submitted to the Speaker" actions="version">
         <facet ref=".edit_Speaker" />
-        <facet ref="attachment.internal" />
+        <facet ref="attachment.add_speaker" />
     </state>
     <state id="inadmissible" title="Inadmissible">
         <facet ref=".view_internal" />
-        <facet ref="attachment.internal_frozen" />
+        <facet ref="attachment.add_clerk" />
     </state>
     <state id="withdrawn_internal" title="Withdrawn" permissions_from_state="inadmissible" />
     <state id="admissible" title="Admissible" actions="version">
         <facet ref=".public" />
-        <facet ref="attachment.public" />
+        <facet ref="attachment.add_clerk" />
     </state>
     <state id="scheduled" title="Scheduled" permissions_from_state="admissible" />
     <state id="adjourned" title="Debate adjourned" permissions_from_state="admissible" />
     <state id="debated" title="Debated">
         <facet ref=".public" />
-        <facet ref="attachment.public_frozen" />
+        <facet ref="attachment.add_clerk" />
     </state>
     <state id="dropped" title="Dropped" permissions_from_state="debated" />
     <state id="withdrawn" title="Withdrawn" permissions_from_state="debated" />

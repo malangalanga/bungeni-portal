@@ -4,58 +4,65 @@
     permission_actions=".View .Edit .Add .Delete"
     >
     
-    <!-- sub-item: NO global grants -->
-    
+    <!-- sub-item: NO global grants mmmmmm public> attached -->
     
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
     
-    
-    <!-- workflow facets 
-    <facet name="draft_Clerk">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly ClerkLegal MinistryMember" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
-    </facet> -->
-    <facet name="add" note="!+rename">
-        <allow permission=".View" roles="Drafter" />
-        <allow permission=".Edit" roles="Drafter" />
-        <allow permission=".Add" roles="Drafter" />
-        <allow permission=".Delete" roles="Drafter" />
-    </facet>
-    <facet name="internal" default="true">
-        <allow permission=".View" roles="Authenticated" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly MinistryMember" />
-        <allow permission=".Add" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly MinistryMember" />
-    </facet>
-    <facet name="internal_frozen">
-        <allow permission=".View" roles="Authenticated" />
-    </facet>
-    <facet name="public">
-        <allow permission=".View" roles="Anonymous" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
+    <!-- FACETS -->
+    <!-- fz: it is not mandatory and it can be managed differently
+	 but the one below is simplest way that I found to deal with management
+	 of "child-documents" (events/attachements).
+	 We have "parent facets" where you just handle who has the right to "add" a "child-document"
+	 and we have "workflow factes" where you handle, as in any document, the permission of the
+	 "child document". In these facets you should not use the ".Add" action.
+        
+         Please also note the different way to refer to facets of
+	 default event         <facet ref="event.facet" />
+	 default custom event  <facet ref="event#custom.facet" />
+   -->
+
+    <!-- parent factes -->  
+    <facet name="add_clerk">
         <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
     </facet>
-    <facet name="public_frozen">
-        <allow permission=".View" roles="Anonymous" />
+    <facet name="add_speaker">
+        <allow permission=".Add" roles="SpeakerSenate SpeakerAssembly" />
     </facet>
-    
+
+    <!-- workflow factes --> 
+    <facet name="state_draft">
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+    </facet>
+    <facet name="state_internal" default="true">
+        <allow permission=".View" roles="Authenticated" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+    </facet>
+    <facet name="state_as_parent">
+        <allow permission=".View" roles="Anonymous" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+    </facet>
+    <facet name="state_withdrawn">
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+    </facet>
     
     <!-- workflow states -->    
-    <state id="draft" title="Draft">
-        <facet ref=".add" />
+    <state id="draft" title="Draft"> 
+	<facet ref=".state_draft" />
     </state>
-    <state id="bound_parent" title="Bound to Parent" permissions_from_parent="true" />
+    <state id="as_parent" title="Visible as Parent">
+	<facet ref=".state_as_parent" />
+    </state>
     <state id="internal" title="Internal">
-        <facet ref=".internal" />
+        <facet ref=".state_internal" />
     </state>
     <state id="withdrawn" title="Withdrawn">
-        <facet ref=".internal_frozen" />
+        <facet ref=".state_withdrawn" />
     </state>
-    
     
     <!-- workflow transision -->    
     <transition title="Create"
@@ -63,25 +70,25 @@
         destination="draft"
         trigger="automatic"
     />
-    <transition title="Bound to Parent"
+    <transition title="Visible as Parent"
         source="draft internal"
-        destination="bound_parent"
+        destination="as_parent"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly Owner"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
     <transition title="Visible Internally"
-        source="draft bound_parent"
+        source="draft as_parent"
         destination="internal"
         trigger="manual"
-        roles="Owner"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
     <transition title="Withdraw"
-        source="internal bound_parent"
+        source="internal as_parent"
         destination="withdrawn"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly Owner"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
 

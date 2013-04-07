@@ -70,47 +70,47 @@
     
     <state id="draft" title="Legislative Proposal">
         <facet ref=".draft" />
-        <facet ref="attachment.add" />
-        <facet ref="event.add" />
+        <facet ref="attachment.add_drafter" />
+        <facet ref="event.add_clerk" />
         <facet ref="signatory.draft_Owner" />
     </state>
     <state id="submitted_signatories" title="Submitted to Signatories" actions="version">
         <facet ref=".internal_Signatory" />
-        <facet ref="attachment.internal_Owner" />
-        <facet ref="event.internal" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
         <facet ref="signatory.internal" />
     </state>
     <state id="redraft" title="Redraft" actions="version" note="document under review before resubmission">
         <facet ref=".redraft" />
-        <facet ref="attachment.internal_Owner" />
-        <facet ref="event.internal" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
         <facet ref="signatory.internal_Owner" />
     </state>
     <state id="withdrawn_signatory" title="Dropped">
         <facet ref=".internal_Signatory" />
-        <facet ref="attachment.internal_frozen" /><!-- !+private_frozen? -->
-        <facet ref="event.internal_frozen" />
+        <facet ref="attachment.add_clerk" /><!-- !+private_frozen? -->
+        <facet ref="event.add_clerk" />
         <facet ref="signatory.internal_frozen" />
     </state>
     <state id="withdrawn_internal" title="Withdrawn">
         <facet ref=".internal_Signatory" />
-        <facet ref="attachment.internal_frozen" />
-        <facet ref="event.internal_frozen" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
         <facet ref="signatory.internal_frozen" />
     </state>
     <state id="submitted" title="Submitted to Clerk" 
             actions="set_doc_registry_number version" >
         <facet ref=".edit_Clerk" />
-        <facet ref="attachment.internal" />
-        <facet ref="event.internal" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
         <facet ref="signatory.internal_frozen" />
         <facet ref="group_assignment.internal" />
     </state>
     <state id="reviewed" title="Reviewed by Clerk" 
             actions="set_doc_registry_number" >
         <facet ref=".edit_Speaker" />
-        <facet ref="attachment.internal" />
-        <facet ref="event.internal" />
+        <facet ref="attachment.add_speaker" />
+        <facet ref="event.add_speaker" />
         <facet ref="signatory.internal_frozen" />
         <facet ref="group_assignment.internal" />
     </state> 
@@ -136,8 +136,8 @@
     />
     <state id="gazetted" title="Bill Published in Gazette" actions="version">
         <facet ref=".public_edit_Clerk" />
-        <facet ref="attachment.public" />
-        <facet ref="event.public" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
         <facet ref="signatory.public_frozen" />
         <facet ref="group_assignment.internal" />
     </state>
@@ -156,8 +156,8 @@
     <state id="third_reading_adjourned" title="Third Reading" permissions_from_state="first_reading" />
     <state id="approved" title="Approved Bill">
         <facet ref=".public" />
-        <facet ref="attachment.public_frozen" />
-        <facet ref="event.public_frozen" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
         <facet ref="signatory.public_frozen" />
     </state>
     <state id="rejected" title="Rejected Bill" permissions_from_state="approved" />

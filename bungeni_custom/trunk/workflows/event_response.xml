@@ -1,79 +1,66 @@
 <?xml version="1.0"?>
-<workflow title="Question Responce Workflow"
+<workflow title="Event Workflow"
     description="Workflow for base Event"
     permission_actions=".View .Edit .Add .Delete"
     >
-
-    <!-- sub-item: NO global grants -->
+    
+    <!-- sub-item: NO global grants mmmmmm public> attached -->
     
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
     
-    <!-- workflow facets -->
-     <!-- NOTE: as guidelines it is useful to think facets in the context of "children document" (e.g. events/attachments) as conceptually divided in two parts:
+    <!-- FACETS -->
+    <!-- fz: it is not mandatory and it can be managed differently
+	 but the one below is simplest way that I found to deal with management
+	 of "child-documents" (events/attachements).
+	 We have "parent facets" where you just handle who has the right to "add" a "child-document"
+	 and we have "workflow factes" where you handle, as in any document, the permission of the
+	 "child document". In these facets you should not use the ".Add" action.
+        
+         Please also note the different way to refer to facets of
+	 default event         <facet ref="event.facet" />
+	 default custom event  <facet ref="event#custom.facet" />
+   -->
 
-1) facets that will be used in the parent documents to grant the permission to add/view/delete action on the children document and
-
-2) facets that are used by in the states of the child document itself. In that context .add shuld not be used (it will not be effective anyhow)   -->
-    <facet name="add">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly " />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
-    </facet>
-    <facet name="view">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly 
-            SpeakerSenate SpeakerAssembly" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly
-            SpeakerSenate SpeakerAssembly" />
-    </facet>
-
-<!-- see public below -->  
-   
-    <facet name="visible_internally" >
-        <allow permission=".View" roles="Authenticated" />
-    </facet>
-    <facet name="withdrawm" >
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
+    <!-- parent factes -->  
+    <facet name="add_ministry">
+        <allow permission=".Add" roles="MinistryMember" />
     </facet>
 
-<!-- OLD FROM HERE -->    
-    <facet name="internal" default="false">
-        <allow permission=".View" roles="Authenticated" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly 
-            SpeakerSenate SpeakerAssembly MinistryMember" />
-        <allow permission=".Add" roles="ClerkSenate ClerkAssembly 
-            SpeakerSenate SpeakerAssembly MinistryMember" />
+    <!-- workflow factes --> 
+    <facet name="state_draft">
+        <allow permission=".View" roles="MinistryMember" />
+        <allow permission=".Edit" roles="MinistryMember" />
+        <allow permission=".Delete" roles="MinistryMember" />
     </facet>
-    <facet name="internal_frozen">
-        <allow permission=".View" roles="Authenticated" />
+    <facet name="state_internal" default="true">
+        <allow permission=".View" roles="MinistryMember" />
+        <allow permission=".Edit" roles="MinistryMember" />
+        <allow permission=".Add" roles="MinistryMember" />
     </facet>
-    <facet name="public">
+    <facet name="state_completed">
         <allow permission=".View" roles="Anonymous" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".Edit" roles="MinistryMember ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
     </facet>
-    <facet name="public_frozen">
+    <facet name="state_reviewed">
         <allow permission=".View" roles="Anonymous" />
     </facet>
-<!-- END OLD HERE -->  
     
     <!-- workflow states -->    
-    <state id="draft" title="Draft">
-        <facet ref=".add" />
-    </state>
-    <state id="public" title="Public">
-        <facet ref=".public" />
+    <state id="draft" title="Draft"> 
+	<facet ref=".state_draft" />
     </state>
     <state id="internal" title="Internal">
-        <facet ref=".visible_internally" />
+        <facet ref=".state_internal" />
     </state>
-    <state id="withdrawn" title="Withdrawn">
-        <facet ref=".withdrawm" />
+    <state id="completed" title="Completed">
+	<facet ref=".state_completed" />
     </state>
-    
+    <state id="state_reviewed" title="Reviewed">
+	<facet ref=".state_reviewed" />
+    </state>
     
     <!-- workflow transision -->    
     <transition title="Create"
@@ -81,25 +68,25 @@
         destination="draft"
         trigger="automatic"
     />
-    <transition title="Bound to Parent"
-        source="draft internal"
-        destination="public"
-        trigger="manual"
-        roles="ClerkSenate ClerkAssembly Owner"
-        require_confirmation="true"
-    />
-    <transition title="Visible Internally"
-        source="draft public"
+    <transition title="Internal"
+        source="draft"
         destination="internal"
         trigger="manual"
-        roles="Owner"
+        roles="MinistryMember"
         require_confirmation="true"
     />
-    <transition title="Withdraw"
-        source="internal public"
-        destination="withdrawn"
+    <transition title="Completed"
+        source="draft internal"
+        destination="completed"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly Owner"
+        roles="MinistryMember"
+        require_confirmation="true"
+    />
+    <transition title="Reviewed"
+        source="completed"
+        destination="state_reviewed"
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly"
         require_confirmation="true"
     />
 
