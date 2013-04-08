@@ -189,7 +189,7 @@ class GroupManager(BasePlugin, Cacheable):
         groups = simplejson.loads(content)
         if not groups:
             return
-        return groups["group_principal_id"]
+        return groups["principal_name"]
         
 
     def _uid(self, login):
