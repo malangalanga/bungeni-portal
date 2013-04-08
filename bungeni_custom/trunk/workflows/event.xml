@@ -4,7 +4,7 @@
     permission_actions=".View .Edit .Add .Delete"
     >
     
-    <!-- sub-item: NO global grants mmmmmm public> attached -->
+    <!-- sub-item: NO global grants -->
     
     <!-- features -->
     <feature name="audit" enabled="true" />
@@ -12,27 +12,33 @@
     <feature name="attachment" enabled="true" />
     
     <!-- FACETS -->
-    <!-- fz: it is not mandatory and it can be managed differently
-	 but the one below is simplest way that I found to deal with management
-	 of "child-documents" (events/attachements).
-	 We have "parent facets" where you just handle who has the right to "add" a "child-document"
-	 and we have "workflow factes" where you handle, as in any document, the permission of the
-	 "child document". In these facets you should not use the ".Add" action.
-        
-         Please also note the different way to refer to facets of
-	 default event         <facet ref="event.facet" />
-	 default custom event  <facet ref="event#custom.facet" />
-   -->
-
-    <!-- parent factes -->  
+    <!-- fz: a recommendation for simple management of "child-documents" 
+    (events/attachments) facets. 
+    
+    We have "parent facets" (facets intended only for use by parent type) where 
+    you just handle who has the right to "add" a "child-document" and we have 
+    "workflow facets" (for this workflow AND for parent) where you handle 
+    (as in any document) the permission of the "child document".
+    In these facets you should not use the ".Add" action.
+    
+    Please also note that for the "event" feature we may specify a facet per 
+    event type we specify, in the following manner:
+        <facet ref="event#{event_type_key}.{facet_name}" />
+    That, for the default "event" type, the above would therefore become:
+        <facet ref="event#event.{facet_name}" />
+    Or, simply (as this is the default case):
+        <facet ref="event.{facet_name}" />
+    -->
+    
+    <!-- parent facets -->
     <facet name="add_clerk">
         <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
     </facet>
     <facet name="add_speaker">
         <allow permission=".Add" roles="SpeakerSenate SpeakerAssembly" />
     </facet>
-
-    <!-- workflow factes --> 
+    
+    <!-- workflow facets -->
     <facet name="state_draft">
         <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
         <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
@@ -50,12 +56,12 @@
         <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
     </facet>
     
-    <!-- workflow states -->    
+    <!-- workflow states -->
     <state id="draft" title="Draft"> 
-	<facet ref=".state_draft" />
+	    <facet ref=".state_draft" />
     </state>
     <state id="as_parent" title="Visible as Parent">
-	<facet ref=".state_as_parent" />
+	    <facet ref=".state_as_parent" />
     </state>
     <state id="internal" title="Internal">
         <facet ref=".state_internal" />
