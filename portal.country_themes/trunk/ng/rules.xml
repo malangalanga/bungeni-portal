@@ -62,13 +62,14 @@
         <drop content="children:#personaltools-logout" />
 
         <!-- navigation -->
-        <prepend href="/"
-            content="#portal-globalnav > li:first-child"
-            theme="children:#portal-globalnav > ul" /> 
-        <append href="/exist" content="#portal-globalnav > li:not(:first-child)"
-            theme="children:#portal-globalnav > ul" />        
+        <prepend href="/" content="children:#portal-globalnav > li:first-child"
+            theme="children:#portal-globalnav li#aux" />        
         <append content="#portal-globalnav > li:not(:first-child)"
-            theme="children:#portal-globalnav > ul" />         
+            theme="children:#portal-globalnav li#aux ul.hse-list" />
+
+        <append href="/exist" content="children:#portal-globalnav"
+            theme="children:#portal-globalnav" />     
+                
         <drop href="/plone"
             content="#portal-globalnav > li:first-child"/>           
         <drop theme="#processing_indicatron" />           
@@ -94,8 +95,12 @@
                 theme="children:#portal-footer"
         />        
         
+        <!-- Plone as Home -->
+        <prepend href="/plone" content="children:#portal-globalnav > li:first-child"
+            theme="children:#portal-globalnav li#aux" />  
+        <!-- Append 2 menus from plone -->
         <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
-            theme="children:#portal-globalnav > ul" />
+            theme="children:#portal-globalnav li#aux ul.hse-list" />
         <drop theme="#processing_indicatron" /> 
         <drop content="attributes(class):#portal-globalnav li:first-child" />          
     </rule>    
@@ -209,7 +214,7 @@
         />
         
         <append content="children:#portal-personaltools"
-            theme="children:#portal-personaltools"
+            theme="children:#subnav ul.level1"
         />
         <pyquery pyref="portal.theme.static.themes.rules:image_links" />
         
