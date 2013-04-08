@@ -34,6 +34,7 @@ from bungeni.core.workflows._actions import (
     set_doc_type_number, # when a doc is admitted
     unschedule_doc, # when a doc is withdrawn
     assign_role_group,
+    propagate_parent_assigned_group_role,
     
     # group
     activate,

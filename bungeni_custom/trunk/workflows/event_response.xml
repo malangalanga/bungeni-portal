@@ -25,13 +25,7 @@
         <allow permission=".Delete" roles="Drafter Owner" />
     </facet>
     <facet name="state_internal" default="true">
-        <allow permission=".View" roles="MinistryMember"
-            note="!+MinistryMemberRoleEvent(mr, apr-2013)
-                The MinistryMember role is currently only established by the 
-                system on the *parent* document instance, NOT on *this* event 
-                sub-item instance. So, local-granting any permission here to 
-                MinistryMember is like granting to /dev/null !
-            " />
+        <allow permission=".View" roles="MinistryMember" />
         <allow permission=".Edit" roles="MinistryMember" />
     </facet>
     <facet name="state_completed">
@@ -43,7 +37,7 @@
     </facet>
     
     <!-- workflow states -->    
-    <state id="draft" title="Draft"> 
+    <state id="draft" title="Draft" actions="propagate_parent_assigned_group_role"> 
 	    <facet ref=".state_draft" />
     </state>
     <state id="internal" title="Internal">
