@@ -1,0 +1,39 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    i18n_domain="bungenicms.repository">
+
+  <!-- configure your content components here -->
+  
+  <!-- -*- extra stuff goes here -*- -->
+  <!--<class class=".repositorycommunity.RepositoryCommunity">
+    <require
+        permission="zope2.View"
+        interface="..interfaces.IRepositoryCommunity"
+        />
+  </class>
+  <class class=".documentrepository.DocumentRepository">
+    <require
+        permission="zope2.View"
+        interface="..interfaces.IDocumentRepository"
+        />
+  </class>-->
+  <class class=".repositoryitem.RepositoryItem">
+    <require
+        permission="zope2.View"
+        interface="..interfaces.IRepositoryItem"
+        />
+  </class>
+  <class class=".repositorycollection.RepositoryCollection">
+    <require
+        permission="zope2.View"
+        interface="..interfaces.IRepositoryCollection"
+        />
+  </class>
+  <!--<class class=".community.Community">
+    <require
+        permission="zope2.View"
+        interface="..interfaces.ICommunity"
+        />
+  </class>-->
+</configure>

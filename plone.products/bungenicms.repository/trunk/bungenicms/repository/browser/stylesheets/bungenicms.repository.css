@@ -1,0 +1,369 @@
+.repositorySearchForm{
+    display:inline-block;
+    margin:0.25em;
+    padding: 0.15em 0.5em;
+    border-bottom:1px solid #ccc;
+    background-color:#f1f1f1;
+    line-height:33px;
+    width:100% !important;
+}
+
+.repositorySearchForm input{
+    border-color:#999 #CCC #CCC;
+    border-style:solid;
+    border-width:1px;
+    padding:2px 1px;
+}
+
+.repositorySearchForm button{
+    padding:2px 1px;
+}
+
+/* Form Input Fields : Copied from theme */
+#content .field.ArchetypesField-ComputedField,
+#content .field.ArchetypesField-ImageField,
+#content .field.ArchetypesField-ReferenceField,
+#content .field.ArchetypesField-StringField,
+#content .field.ArchetypesField-DateTimeField,
+#content .field.ArchetypesField-IntegerField,
+#content .field.ArchetypesField-LinesField,
+#content .field.ArchetypesField-TextField,
+#content .field.ArchetypesField-MultiFileField,
+#content .field.ArchetypesField-ArrayField {
+	border-bottom: 1px dotted #ccc;
+	padding: .25em 0;
+	margin: 0 .5em;
+	text-shadow: 0px 0px 1px #fff;
+	clear: left;
+	overflow: hidden;
+	line-height: 20px;
+}
+#content .field.ArchetypesField-ComputedField br,
+#content .field.ArchetypesField-ImageField br,
+#content .field.ArchetypesField-ReferenceField br,
+#content .field.ArchetypesField-StringField br,
+#content .field.ArchetypesField-DateTimeField br,
+#content .field.ArchetypesField-IntegerField br,
+#content .field.ArchetypesField-LinesField br,
+#content .field.ArchetypesField-TextField br,
+#content .field.ArchetypesField-MultiFileField br,
+#content .field.ArchetypesField-ArrayField br {
+	display: none;
+}
+#content .field.ArchetypesField-ComputedField label,
+#content .field.ArchetypesField-ImageField label,
+#content .field.ArchetypesField-ReferenceField label,
+#content .field.ArchetypesField-StringField label,
+#content .field.ArchetypesField-DateTimeField label,
+#content .field.ArchetypesField-IntegerField label,
+#content .field.ArchetypesField-LinesField label,
+#content .field.ArchetypesField-TextField label,
+#content .field.ArchetypesField-MultiFileField label,
+#content .field.ArchetypesField-ArrayField label {
+	font-weight: bold;
+	float: left;
+	width: 30%;
+	display: block;
+	line-height: 20px;
+	text-align: right;
+	margin-right: 1em;
+	color: #444;
+}
+#content .field.ArchetypesField-StringField span,
+#content .field.ArchetypesField-DateTimeField div,
+#content .field.ArchetypesField-ReferenceField span,
+#content .field.ArchetypesField-TextField span,
+#content .field.ArchetypesField-StringField a,
+#content .field.ArchetypesField-DateTimeField a,
+#content .field.ArchetypesField-IntegerField a,
+#content .field.ArchetypesField-ReferenceField a,
+#content .field.ArchetypesField-TextField a {
+	float: left;
+	width: 68%;
+	display: block;
+	line-height: 20px;
+	border: 0 none;
+	text-align: left;
+}
+#content .field.ArchetypesField-ReferenceField label span,
+#content .field.ArchetypesField-StringField label span,
+#content .field.ArchetypesField-DateTimeField label span,
+#content .field.ArchetypesField-ArrayField label span,
+#content .field.ArchetypesField-TextField label span {
+	width: auto;
+	display: inline;
+	float: none;
+	clear: none;
+}
+#content .field.ArchetypesField-TextField div,
+#content .field.ArchetypesField-DateTimeField div,
+#content .field.ArchetypesField-LinesField div,
+#content .field.ArchetypesField-MultiFileField div {
+	width: 68%;
+	margin: 0;
+	float: right;
+	clear: none;
+	text-align: left;
+}
+#content .field.ArchetypesField-TextField div br,
+#content .field.ArchetypesField-DateTimeField div br,
+#content .field.ArchetypesField-LinesField div ul,
+#content .field.ArchetypesField-MultiFileField div ul {
+	clear: left;
+	display: block;
+}
+
+#content .field.ArchetypesField-MultiFileField ul,
+#parent-fieldname-subject_terms ul {
+    margin: 0 0 0 0 !important;
+}
+
+#content .field.ArchetypesField-MultiFileField li,
+#content #parent-fieldname-subject_terms li {
+    list-style-type: none !important;
+    list-style-image: none !important;
+}
+
+#content .field.ArchetypesField-ReferenceField a,
+#content .field.ArchetypesField-StringField a,
+#content .field.ArchetypesField-TextField a {
+	text-decoration: none;
+}
+#content .field.ArchetypesField-ReferenceField a:hover,
+#content .field.ArchetypesField-StringField a:hover,
+#content .field.ArchetypesField-TextField a:hover {
+	text-decoration: none;
+}
+
+#parent-fieldname-subject_terms ul li span {
+    display: none;
+}
+
+.template-repositoryitem_view #archetypes-fieldname-carouselprovider {
+    display: none !important;
+}
+
+/* Repository Collection Table */
+#sortable  {
+	width: 100%;
+}
+
+table.gridtable {
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+}
+table.gridtable th {
+	border-width: 1px;
+	padding: 6px;
+	border-style: solid;
+	border-color: #F5B228;
+	background-color: #FFFFAE;
+}
+table.gridtable td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff;
+}
+table.gridtable #sortable th {
+	border: none;
+	padding: 0px;
+	background-color: #FFFFFF;
+}
+table.gridtable #sortable td {
+	border-width: 1px;
+	padding: 0px;
+	border-style: none;
+	background-color: #ffffff;
+}
+table.gridtable #collListing th {
+	border: none;
+	padding: 0px;
+	background-color: #FFFFFF;
+}
+table.gridtable #collListing td {
+	border-width: 1px;
+	padding: 0px;
+	border-style: none;
+	background-color: #ffffff;
+}
+table#listview{
+    width: 100%;
+    border: 0px !important;
+}
+table#listview td {
+    border: 0px !important;
+    padding: 0em 0 2em 0 !important;
+}
+
+
+/* Repository Collection Search Form Panel */
+/* panel */
+.panel, .panelcollapsed 
+{
+	background: #eee;
+	margin: 5px 0 0 0;
+	padding: 0px 0px 5px;
+	width: 100%;
+	border: 1px solid #999;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+}
+
+/* panel heading */
+.panel h2, .panelcollapsed h2 
+{
+	font-size: 18px;
+	font-weight: normal;
+	margin: 0px;
+	padding: 4px;
+	background: #CCC url(++resource++bungenicms.repository.icons/arrow-up.gif) no-repeat 98%;
+	border-bottom: 1px solid #999;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-top: 1px solid #FFF;
+	border-right: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+}
+
+/* panel heading on rollover */
+.panel h2:hover, .panelcollapsed h2:hover { background-color: #FFFFAE; }
+
+/* heading of a collapsed panel */
+.panelcollapsed h2 
+{
+	background: #CCC url(++resource++bungenicms.repository.icons/arrow-dn.gif) no-repeat 98%;
+	border-color: #CCC;
+}
+
+/* panel content - do not set borders or paddings */
+.panelcontent 
+{ 
+	background: #EEE; 
+	overflow: hidden;
+}
+
+/* collapsed panel content */
+.panelcollapsed .panelcontent { display: none; }
+
+
+/* For the custom table pagination navigation */
+.pg-normal {
+    color: black;
+    font-weight: normal;
+    text-decoration: none;    
+    cursor: pointer;    
+}
+.pg-selected {
+    color: black;
+    font-weight: bold;        
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Collapsible Search form panel */
+#collapsible h2 {
+    margin: 0px;
+    text-align: center;
+}
+form.collapsibleform {
+margin: 0;
+padding: 0em 0;
+width: 100%;
+/*background: #ffe;*/
+color: #000;
+font: small Verdana, sans-serif;
+}
+form.collapsibleform div.row {
+width: 95%;
+margin: 0 auto;
+padding: 1em 0;
+}
+form.collapsibleform label {
+vertical-align: middle;
+font-weight: bold;
+}
+form.collapsibleform input {
+font: 1em Verdana, sans-serif;
+vertical-align: middle;
+}
+form.collapsibleform select {
+font: 1em Verdana, sans-serif;
+vertical-align: middle;
+}
+form.collapsibleform select.restricted {
+width: 140px;
+}
+form.collapsibleform input.btn {
+background: #FFFFAE;
+border: 1px solid #800;
+color: #000000;
+font-weight: bold;
+width:80px;
+} 
+
+/*.template-atct_edit.portaltype-repositoryitem #archetypes-fieldname-item_publication_year,
+.template-atct_edit.portaltype-repositoryitem #archetypes-fieldname-item_publication_month,
+.template-atct_edit.portaltype-repositoryitem #archetypes-fieldname-item_publication_day {
+float: left !important;
+width: 30%;
+clear: none;
+}*/
+
+.customRep #archetypes-fieldname-item_publication_year,
+.customRep #archetypes-fieldname-item_publication_month,
+.customRep #archetypes-fieldname-item_publication_day {
+    float: left !important;
+    width: 30%;
+    clear: none;
+}
+
+/* Modifications for Document Viewer */
+
+.template-documentviewer #portal-column-two {
+    display: none;
+}
+
+.template-documentviewer #portal-column-content.sr {
+    margin-right: 0.5em;
+}
+
+.template-documentviewer #content div.DV-views{
+    margin: 0 0 0 8px;
+    clear: none;
+    padding: 0;
+}
+
+.template-documentviewer #content p.visualNoPrint, 
+.template-documentviewer #content p, 
+.template-documentviewer #content div {
+    clear: none;
+    margin: 0 auto;
+    padding: 0 auto;
+}
+
+.template-documentviewer #content div.DV-well, 
+.template-documentviewer #content div.DV-navControlsContainer {
+    margin: 0 0 0 8px;
+}
+
+.template-documentviewer #content div.DV-well div.DV-navigation {
+    padding: 10px;
+    line-height: normal;     
+}
+
+.template-documentviewer #content div.DV-clearfix {
+    margin: 0 auto;
+    text-align: center;
+}
+
+#fileframe {
+    width: 100%;
+    height: 700px;
+    display: none;
+}

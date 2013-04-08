@@ -1,0 +1,42 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="bungenicms.repository">
+	<body>  
+		<metal:main fill-slot="main">
+			<tal:main-macro metal:define-macro="main">
+				   <h2>Document Collections</h2>
+						<ul class="collectionListing">
+							<li class="collectionItem"
+							tal:repeat="collection view/getCollections">
+								<a tal:content="collection/Title"
+								tal:attributes="href collection/getURL">
+								</a>
+							</li>
+						</ul>
+				   <h2>Recent Items</h2>
+						<ul class="recentItemsListing">
+							<li class="recentItem"
+							tal:repeat="ritem view/getRecentItems">
+								<a tal:content="ritem/Title"
+								tal:attributes="href ritem/getURL">
+								</a>
+							</li>
+						</ul>
+				   <h2>Communities Here</h2>
+						<ul class="recentCommunitiesListing">
+							<li class="communityItem"
+							tal:repeat="ritem view/getSubCommunities">
+								<a tal:content="ritem/Title"
+								tal:attributes="href ritem/getURL">
+								</a>
+							</li>
+						</ul>
+			</tal:main-macro>
+		</metal:main>
+		
+	</body>
+</html>

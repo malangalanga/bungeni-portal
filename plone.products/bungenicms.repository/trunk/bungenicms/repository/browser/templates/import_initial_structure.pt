@@ -1,0 +1,46 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="bungenicms.repository">
+	<body>  
+		<metal:main fill-slot="main">
+			<tal:main-macro metal:define-macro="main">
+                <h2 class="documentFirstHeading"
+                 i18n:translate="import_structure_title">
+                 Import Initial Structure
+                </h2>
+                <h3>Sample XML File</h3>
+                <p>
+                    Upload an XML file with the structure shown here
+                    to create communities and their collections
+                </p>
+                <p>
+                    <textarea rows="5" columns="40" readonly="1" 
+                        tal:content="structure view/sample_xml">
+                    </textarea>
+                </p>
+                <h3>Upload your Repository Structure</h3>
+              <form action="#" method="post" enctype="multipart/form-data"
+                    tal:attributes="action string:${context/absolute_url}/@@import-structure">
+                <div class="field">
+                  <label class="formQuestion" for="import_file">Choose file</label>
+                  <input type="file" id="import_file" name="import_file">
+                </div>
+                <input type="hidden" name="import.submitted" value="1">
+                <div class="formControls">
+                  <input type="submit"
+                         name="submit"
+                         value="Import"
+                         id="submit"
+                         class="context"
+                         />
+                </div>
+              </form>
+			</tal:main-macro>
+		</metal:main>
+		
+	</body>
+</html>

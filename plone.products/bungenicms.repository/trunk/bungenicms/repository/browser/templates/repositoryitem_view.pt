@@ -1,0 +1,217 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone">
+
+  <head><title></title></head>
+
+  <metal:javascript_head fill-slot="javascript_head_slot">
+    <tal:block define="macro context/archetypes_custom_js/macros/javascript_head | nothing"
+               condition="macro">
+      <metal:block use-macro="macro" />
+    </tal:block>
+    <tal:comment replace="nothing">
+      Many of the following defines duplicated from the tal:defines in the
+      main slot. With base_edit, edit_macros could be reused as it was defined
+      for the entire document. base_view uses main_template and thus must
+      create additional defines for each slot it fills.
+    </tal:comment>
+    <tal:js define="fields python:context.Schema().viewableFields(here);
+                    portal context/portal_url/getPortalObject;
+                    js python:context.getUniqueWidgetAttr(fields, 'helper_js')"
+            condition="js"
+            repeat="item js">
+      <script type="text/javascript"
+              charset="iso-8859-1"
+              tal:condition="python:exists('portal/%s' % item)"
+              tal:attributes="src string:$portal_url/$item">
+      </script>
+    </tal:js>
+    <tal:block define="portal_type python:context.getPortalTypeName().lower().replace(' ', '_');
+                       view_template python:'%s_view' % portal_type;
+                       view_macros python:path('context/%s/macros|nothing' % view_template);
+                       macro view_macros/js | nothing"
+               condition="macro">
+      <metal:block use-macro="macro" />
+    </tal:block>
+  </metal:javascript_head>
+
+  <metal:css fill-slot="style_slot">
+    <tal:comment replace="nothing">
+      Many of the following defines duplicated from the tal:defines in the
+      main slot. With base_edit, edit_macros could be reused as it was defined
+      for the entire document. base_view uses main_template and thus must
+      create additional defines for each slot it fills.
+    </tal:comment>
+    <tal:css define="fields python:context.Schema().viewableFields(here);
+                     css python:context.getUniqueWidgetAttr(fields, 'helper_css');
+                     portal context/portal_url/getPortalObject;"
+             condition="css"
+             repeat="item css">
+      <style type="text/css"
+             media="all"
+             tal:condition="python:exists('portal/%s' % item)"
+             tal:content="structure string:&lt;!-- @import url($portal_url/$item); --&gt;">
+      </style>
+    </tal:css>
+    <tal:block define="portal_type python:context.getPortalTypeName().lower().replace(' ', '_');
+                       view_template python:'%s_view' % portal_type;
+                       view_macros python:path('context/%s/macros|nothing' % view_template);
+                       macro view_macros/css | nothing"
+               condition="macro">
+      <metal:block use-macro="macro" />
+    </tal:block>
+  </metal:css>
+
+  <body>
+    <metal:fill fill-slot="content-core">
+      <metal:main_macro define-macro="content-core"
+            tal:define="portal_type python:context.getPortalTypeName().lower().replace(' ', '_');
+            base_macros context/base/macros;
+            view_template python:'%s_view' % portal_type;
+            view_macros python:path('context/%s/macros|nothing' % view_template);
+            body_macro view_macros/body | body_macro | base_macros/body;
+            folderlisting_macro view_macros/folderlisting | folderlisting | base_macros/folderlisting;
+            errors python:request.get('errors', {})">
+
+        <tal:body_macro metal:define-macro="body">
+    
+            <tal:fields tal:define="field_macro field_macro | context/widgets/field/macros/view;
+                                    ipy python:context.Schema().item_publication_year;
+                                    ipm python:context.Schema().item_publication_month;
+                                    ipd python:context.Schema().item_publication_day;"
+                      tal:repeat="field python:context.Schema().filterFields(isMetadata=0)">
+
+            <tal:if_visible define="purl nocall:context/portal_url;
+                                    portal purl/getPortalObject;
+                                    mode string:view;
+                                    visState python:field.widget.isVisible(here, mode);
+                                    visCondition python:field.widget.testCondition(None, portal, context);"
+                            condition="python:visState == 'visible' and visCondition">                            
+                            
+                            
+              <tal:comment tal:replace="nothing">
+              ***********************************
+              If the following values listed in the condition are empty, then DO NOT display them
+              </tal:comment>
+              <span tal:condition="python:(field.getName() in ['publication_number', 'item_publisher', 'item_publication_year', 'item_publication_month', 'item_publication_day', 'item_contributors', 'item_abstract']) and ((field.get(context) is  '--') or (field.get(context) is '') or (field.get(context) is 0) or (field.get(context) is None) or (type(field.get(context)) is tuple and  len(field.get(context)) is 0) )">
+                
+              </span>
+              
+              
+              <tal:comment tal:replace="nothing">
+              ***********************************
+              If the following values listed in the condition are NOT empty, then display them
+              </tal:comment>
+              <span tal:condition="python:(field.getName() not in ['item_abstract', 'item_files', 'item_description', 'item_publication_year', 'item_publication_month', 'item_publication_day']) and 
+              (
+                (field.get(context) is not  '--') and 
+                (field.get(context) is not '') and 
+                (field.get(context) is not '0') and 
+                (field.get(context) is not 0) and 
+                (field.get(context) is not None) and 
+                (type(field.get(context)) is not tuple or  len(field.get(context)) is not 0) 
+              )">
+                <metal:use_field use-macro="field_macro" />
+              </span>
+              
+            <div tal:condition="python:(field.getName() in ['item_publication_year'])" 
+                 class="field ArchetypesField-StringField">
+                <label class="formQuestion"><span>Date</span>:</label>
+                <br>
+                <span tal:content="python:view.get_full_date(ipd, ipm, ipy)"></span>
+            </div>                         
+              
+              <span tal:condition="python:(field.getName() in ['item_files']) and (len(field.get(context)) is not 0)">  
+                  
+                  <tal:comment tal:replace="nothing">
+                  <ul>
+                        <li tal:repeat="item python:field.get(context)">
+                            <a href="" 
+                                tal:attributes="href python:context.absolute_url() + '/at_multi_download/item_files?name=' + item['filename']">
+                                <img src="" tal:attributes="src python:item['icon']" /> 
+                                <b><span tal:content="python:item['filename']"></span></b>
+                            </a> (<span tal:content="python:item['content_type']"></span>) - 
+                            
+                            <form method="post" tal:attributes="action request/getURL">
+                              <input type="hidden" name="filename" value="" tal:attributes="value python:item['filename']" />
+                              <input type="submit" name="form.action.convert" value="Convert" /> 
+                            </form>
+                        </li>
+                  </ul>
+                  </tal:comment>
+                  
+                  
+                  
+                  
+                  <div id="archetypes-fieldname-item_files" class="field ArchetypesField-MultiFileField">
+                        <label class="formQuestion"><span>Files</span>:</label>
+                        <br>
+                        <div>
+                            <ul>
+                                    <li tal:repeat="item python:field.get(context)">
+                                        <img src="" tal:attributes="src python:item['icon']" /> 
+                                            <b><span tal:content="python:item['filename']"></span></b>
+                                         (<span tal:content="python:item['content_type']"></span>) - 
+                                        
+                                        <a href="" tal:attributes="href python:context.absolute_url() + '/at_multi_download/item_files?name=' + item['filename']">Download</a> | 
+                                        <form method="POST" 
+                                              class="fileform" 
+                                              style="display:inline;" 
+                                              tal:attributes="id python:'form' + item['filename']; 
+                                                              action python:context.absolute_url()">
+                                          <input type="hidden" name="filename" value="" tal:attributes="value python:item['filename']" />
+                                          <input type="submit" name="form.action.convert" value="View" style="background:none!important; border:none; padding:0!important; border-bottom:1px solid #444; cursor: hand; cursor: pointer;" /> 
+                                        </form>
+                                    </li>
+                              </ul>
+                          </div>
+                      </div>                 
+              </span>
+              
+              
+              <tal:comment tal:replace="nothing">
+              ***********************************
+              Ensure Abstract is the last field, as long as it is not empty
+              </tal:comment>
+              <span tal:condition="python:(field.getName() in ['item_abstract']) and ((field.get(context) is not '') or (field.get(context) is not None) or (type(field.get(context)) is not tuple and  len(field.get(context)) is not 0) )">
+              
+                <span tal:omit-tag="" tal:condition="python:len(field.get(context)) is not 0">
+                  <h3>Text</h3>             
+                  <span tal:define="description python:field.get(context)" 
+                        tal:content="structure description">
+                  </span>
+                </span>
+              </span>
+              
+               <span tal:condition="python:(field.getName() in ['item_description']) and 
+                                    ((field.get(context) is not '') or 
+                                    (field.get(context) is not None) or 
+                                    (type(field.get(context)) is not tuple and  
+                                    len(field.get(context)) is not 0) )">
+                    <div id="archetypes-fieldname-item_description" 
+                         class="field ArchetypesField-TextField"
+                         tal:condition="python:len(field.get(context)) is not 0">
+                        <label class="formQuestion"><span>Description</span>:</label><br>
+                        
+                        <span class="kssattr-atfieldname-item_description kssattr-templateId-widgets/textarea kssattr-macro-textarea-field-view"
+                                tal:content="structure python:field.get(context)">Random description about this repository no. 6</span>
+                    </div>
+                  </span>
+              
+                
+            </tal:if_visible>
+          </tal:fields>
+          
+          <iframe id="fileframe" name="fileframe" src="" ></iframe>
+        
+        </tal:body_macro>
+
+      </metal:main_macro>
+    </metal:fill>
+  </body>
+</html>

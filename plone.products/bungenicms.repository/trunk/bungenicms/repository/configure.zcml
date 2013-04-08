@@ -1,0 +1,65 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="bungenicms.repository">
+    
+    <cmf:registerDirectory name="bungenicms_repository_custom_templates"/>
+    
+  <five:registerPackage package="." initialize=".initialize" />
+
+  <include package=".browser" />
+  <include package=".content" />
+  <include package=".portlets" />
+  <include package=".events" />
+  <include file="skins.zcml" />
+  
+  <genericsetup:registerProfile
+      name="default"
+      title="BungeniCMS Repository Content Types"
+      directory="profiles/default"
+      description="BungeniCMS Respository Content Types and Views"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+      
+  <cmf:registerDirectory 
+      directory="skins" 
+      name="repository_skins" 
+      recursive="True" />
+  
+  <genericsetup:importStep
+      name="bungenicms_repository_update_portal_types"
+      handler="bungenicms.repository.setuphandlers.update_portal_types"
+      title="BungeniCMS Repository Update Portal Types"
+      description="Updates repository type to spaceless names"
+   />
+   <utility 
+        provides="zope.schema.interfaces.IVocabularyFactory" 
+        component="bungenicms.repository.vocabgroups.GroupsVocabulary" 
+        name="bungenicms_repository_groups_vocab" 
+   /> 
+   <utility 
+        provides="zope.schema.interfaces.IVocabularyFactory" 
+        component="bungenicms.repository.vocabpublicationdate.YearVocabulary" 
+        name="bungenicms_repository_years_vocab" 
+   /> 
+   <utility 
+        provides="zope.schema.interfaces.IVocabularyFactory" 
+        component="bungenicms.repository.vocabpublicationdate.MonthVocabulary" 
+        name="bungenicms_repository_months_vocab" 
+   /> 
+   <utility 
+        provides="zope.schema.interfaces.IVocabularyFactory" 
+        component="bungenicms.repository.vocabpublicationdate.DayVocabulary" 
+        name="bungenicms_repository_days_vocab" 
+   />
+   
+   <subscriber 
+        for="bungenicms.repository.interfaces.IRepositoryItem
+             Products.Archetypes.interfaces.IObjectInitializedEvent"
+        handler=".subscribers.notifyCreatedRepositoryItem"
+   />   
+   
+</configure>

@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<portlets
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="bungenicms.repository">
+    
+    <portlet
+        title="Repository Navigator"
+        addview="portlets.RepositoryNavigator"
+        description="Renders custom navigation for repository content types"
+    />
+    
+    <blacklist
+        manager="plone.leftcolumn"
+        category="context"
+        location="/repository"
+        status="block"
+    />
+    
+    <assignment
+        name="repositorynavigator"
+        category="content_type"
+        key="DocumentRepository"
+        manager="plone.leftcolumn"
+        type="portlets.RepositoryNavigator"/>
+        
+    <assignment
+        name="repositorynavigator"
+        category="content_type"
+        key="RepositoryCommunity"
+        manager="plone.leftcolumn"
+        type="portlets.RepositoryNavigator"/>
+        
+    <assignment
+        name="repositorytreenav"
+        category="content_type"
+        key="DocumentRepository"
+        manager="plone.leftcolumn"
+        insert-after="repositorynavigator"
+        type="collective.portlet.explore.ExplorerPortlet">
+        <property name="name">This Repository</property>
+    </assignment>    
+
+    <assignment
+        name="repositorynavigator"    
+        category="content_type"
+        key="DocumentRepository"
+        manager="plone.leftcolumn"
+        type="portlets.RepositoryNavigator"/>
+        
+    <assignment
+        name="repositorynavigator"    
+        category="content_type"
+        key="RepositoryCommunity"
+        manager="plone.leftcolumn"
+        type="portlets.RepositoryNavigator"/>
+        
+    <assignment
+        name="repositorynavigator"    
+        category="content_type"
+        key="RepositoryCollection"
+        manager="plone.leftcolumn"
+        type="portlets.RepositoryNavigator"/>
+        
+    <assignment
+        name="repositorytreenav"    
+        category="content_type"
+        key="DocumentRepository"
+        manager="plone.leftcolumn"
+        insert-after="repositorynavigator"
+        type="collective.portlet.explore.ExplorerPortlet">
+        <property name="name">This Repository</property>
+    </assignment>
+    
+    
+    <assignment
+        name="repositorytreenav"    
+        category="content_type"
+        key="RepositoryCommunity"
+        manager="plone.leftcolumn"
+        insert-after="repositorynavigator"
+        type="collective.portlet.explore.ExplorerPortlet">
+        <property name="name">This Community</property>
+    </assignment>    
+
+    <!-- Remove Assignments -->
+    <assignment
+        name="repositorynavigator"    
+        remove="True"
+        category="content_type"
+        key="DocumentRepository"
+        manager="plone.rightcolumn"
+        type="portlets.RepositoryNavigator"/>
+        
+    <assignment
+        name="repositorynavigator"    
+        remove="True"
+        category="content_type"
+        key="RepositoryCommunity"
+        manager="plone.rightcolumn"
+        type="portlets.RepositoryNavigator"/>
+    
+    <assignment
+        name="repositorynavigator"    
+        remove="True"
+        category="content_type"
+        key="RepositoryCollection"
+        manager="plone.rightcolumn"
+        type="portlets.RepositoryNavigator"/>
+        
+    <assignment
+        remove="True"
+        name="repositorynavigator"
+        category="content_type"
+        key="RepositoryCollection"
+        manager="plone.leftcolumn"
+        type="portlets.RepositoryNavigator"/>        
+    
+    <assignment
+        name="repositorytreenav"                
+        remove="True"
+        category="content_type"
+        key="DocumentRepository"
+        manager="plone.rightcolumn"
+        insert-after="repositorynavigator"
+        type="collective.portlet.explore.ExplorerPortlet">
+        <property name="name">This Repository</property>
+    </assignment>
+    
+    <assignment
+        name="repositorytreenav"    
+        remove="True"
+        category="content_type"
+        key="RepositoryCollection"
+        manager="plone.rightcolumn"
+        insert-after="repositorynavigator"
+        type="collective.portlet.explore.ExplorerPortlet">
+        <property name="name">This Collection</property>
+    </assignment>  
+    
+    <assignment
+        name="repositorytreenav"    
+        remove="True"
+        category="content_type"
+        key="RepositoryCollection"
+        manager="plone.leftcolumn"
+        insert-after="repositorynavigator"
+        type="collective.portlet.explore.ExplorerPortlet">
+        <property name="name">This Collection</property>
+    </assignment>       
+    
+    <assignment
+        name="repositorytreenav"    
+        remove="True"
+        category="content_type"
+        key="RepositoryCommunity"
+        manager="plone.rightcolumn"
+        insert-after="repositorynavigator"
+        type="collective.portlet.explore.ExplorerPortlet">
+        <property name="name">This Community</property>
+    </assignment>    
+    <!-- End remove assignments -->
+</portlets>

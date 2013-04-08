@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<object name="portal_catalog" meta_type="Plone Catalog Tool">
+	<index name="subject_terms" meta_type="KeywordIndex">
+		<indexed_attr value="subject_terms"/>
+	</index>
+	<index name="item_authors" meta_type="KeywordIndex">
+		<indexed_attr value="item_authors"/>
+	</index>
+	<index name="legislative_type" meta_type="FieldIndex">
+		<indexed_attr value="legislative_type"/>
+	</index>
+	<index name="item_publisher" meta_type="KeywordIndex">
+		<indexed_attr value="item_publisher"/>
+	</index>
+	<index name="item_publication_year" meta_type="FieldIndex">
+		<indexed_attr value="item_publication_year"/>
+	</index>
+	<index name="item_publication_month" meta_type="FieldIndex">
+		<indexed_attr value="item_publication_month"/>
+	</index>
+	<index name="item_publication_day" meta_type="FieldIndex">
+		<indexed_attr value="item_publication_day"/>
+	</index>
+	<index name="item_description" meta_type="FieldIndex">
+		<indexed_attr value="item_description"/>
+	</index>
+	<column value="subject_terms"/>
+	<column value="item_authors"/>
+	<column value="legislative_type"/>
+	<column value="item_publisher"/>
+	<column value="item_publication_year"/>
+	<column value="item_publication_month"/>
+	<column value="item_publication_day"/>
+	<column value="item_description"/>
+</object>

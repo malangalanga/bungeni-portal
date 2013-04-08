@@ -1,0 +1,264 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+
+<body>
+
+    <div metal:fill-slot="main">
+    <metal:main-macro define-macro="main"
+                      tal:define="kssClassesView context/@@kss_field_decorator_view;
+                                  getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
+                                  templateId template/getId">
+                                  
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 metal:use-macro="here/kss_generic_macros/macros/generic_title_view">
+            Title or id
+        </h1>
+
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+        <div tal:replace="structure provider:plone.abovecontentbody" /> 
+               
+        <div id="content-core" class="rounded-eigh">
+        
+        <p metal:use-macro="here/kss_generic_macros/macros/generic_description_view">
+            Description
+        </p>
+
+        
+        <div metal:define-macro="text-field-view"
+             id="parent-fieldname-text" class="stx"
+             tal:define="kss_class python:getKssClasses('text',
+                         templateId=templateId, macro='text-field-view');
+                         has_text exists:context/aq_base/getText;
+                         text python:has_text and here.getText() or ''"
+             tal:condition="text"
+             tal:attributes="class python:test(here.Format() in ('text/structured',
+                                                   'text/x-rst', ), 'stx' + kss_class, 'plain' + kss_class)">
+                                                   
+            <div metal:define-slot="inside" tal:replace="structure text">
+                The body
+            </div>
+        
+            <!-- Search form -->
+            </div>
+                <div class="panel" id="collapsible">
+                    <h2>click here for search options</h2>
+                    <div class="panelcontent">
+	        
+	                <form method="get" 
+	                    tal:attributes="action request/getURL" 
+	                    tal:define="form_data view/get_form_data"
+	                    class="collapsibleform" >
+	            
+	                <div class="row">&nbsp;
+	                    <label for="SearchableText">Keyword: </label>
+	                    <input name="SearchableText" type="text" 
+                            id="SearchableText" 
+                            tal:attributes="value form_data/SearchableText"
+                            placeholder="Enter keyword here" />&nbsp;                    
+	                    <label for="item_publication_year">
+	                        Publication Year: </label>
+	                    <select id="item_publication_year"
+	                        name="item_publication_year">
+                            <option value="">All</option>
+                            <option 
+                                tal:repeat="year view/get_available_years" 
+                                tal:content="year"
+                                tal:attributes="value year">
+                            </option>
+                        </select>
+                      
+                        &nbsp;
+                        <label for="legislative_type">Type: </label>
+                        <select id="legislative_type" name="legislative_type" 
+                            class="restricted"
+                            tal:attributes="value form_data/legislative_type">
+                            <option value="">All</option>
+                            <option 
+                                tal:repeat="legType view/get_parliamentary_types" 
+                                tal:content="python:legType[1]"
+                                tal:attributes="value python:legType[0]">
+                            </option>
+                        </select>
+                        &nbsp;&nbsp;
+ 
+                        <input name="Search" type="submit" 
+                            value="Search" class="btn"/>
+                            &nbsp;
+	                    
+	                    <input name="Clear" type="reset"
+	                        value="Clear" class="btn" />
+	                    
+	                </div>	            	                
+	            </form>	        	        
+          </div>
+        </div>        
+        
+        <metal:listingmacro define-macro="listing">
+        <tal:foldercontents define="contentFilter contentFilter|request/contentFilter|nothing;
+                            limit_display limit_display|request/limit_display|nothing;
+                            more_url more_url|request/more_url|string:folder_contents;
+                            is_a_topic python:here.portal_type=='Topic';
+                            folderContents folderContents|nothing; folderContents python:folderContents or is_a_topic and here.queryCatalog(contentFilter, batch=True) or here.getFolderContents(contentFilter, batch=True, b_size=limit_display or 10);
+                            use_view_action site_properties/typesUseViewActionInListings|python:();
+                            over_limit python: limit_display and len(folderContents) > limit_display;
+                            folderContents python: (over_limit and folderContents[:limit_display]) or folderContents;
+                            batch folderContents;
+                            st python:request.get('SearchableText', '');
+                            py python:request.get('item_publication_year', '');
+                            lt python:request.get('legislative_type', '')">
+
+            <tal:listing condition="folderContents">       
+                <h5 class="documentFirstHeading"
+                    i18n:translate=""
+                    tal:condition="python:st or py or lt">
+                    Search results for:
+                    <span tal:condition="st">
+                    <strong tal:condition="st"
+                     tal:content="st">
+                        Search Term
+                    </strong> 
+                    </span>  
+                     
+                    <span tal:condition="py">
+                    <span tal:condition="st">, </span>
+                    Publication Year:
+                    <strong tal:condition="py"
+                     tal:content="py">
+                        Search Term
+                    </strong> 
+                    </span>     
+                    
+                    <span tal:condition="lt">
+                    <span tal:condition="python:st or py">, </span>
+                    Legislative Type:
+                    <strong tal:condition="lt"
+                     tal:content="lt">
+                        Search Term
+                    </strong> 
+                    </span>                                                                       
+                </h5>
+                
+                <span>
+                <strong id="search-results-number"
+                    tal:condition="python:st or py or lt"
+                    tal:content="python:view.get_queryLength()">234</strong>
+                <strong id="search-results-number"
+                    tal:condition="python:not(st or py or lt)"
+                    tal:content="python:view.get_queryLength()-1">234</strong>                    
+                    items matching your search terms.
+                </span>        
+
+            <dl>            
+            <table class="listing" id="sortable" 
+                tal:define="context_state context/@@plone_context_state;
+                page_url context_state/view_url;">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="nosort">
+                        <a href="#" tal:attributes="href python:page_url">
+                            Tabular View
+                        </a>
+                        </th>
+                        </tr> 
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+                
+            <table class="nosort" id="listview"
+                tal:define="context_state context/@@plone_context_state;
+                page_url context_state/view_url;">
+                                       
+                <tal:entry tal:repeat="item view/queryItemRepository">
+		            <tal:block tal:define="normalizeString nocall:context/@@plone/normalizeString; 
+					           item_url item/getURL|item/absolute_url;
+		                                   item_id item/getId|item/id;
+		                                   item_title_or_id item/pretty_title_or_id;
+		                                   item_description item/Description;
+		                                   item_type item/portal_type;
+		                                   item_type_title item/Type;
+		                                   item_modified item/ModificationDate;
+		                                   item_created item/CreationDate;
+		                                   item_icon python:plone_view.getIcon(item);
+		                                   item_type_class python:'contenttype-' + normalizeString(item_type);
+		                                   item_wf_state item/review_state|python: wtool.getInfoFor(item, 'review_state', '');
+		                                   item_wf_state_class python:'state-' + normalizeString(item_wf_state);
+		                                   item_creator item/Creator;
+		                                   item_start item/start/ISO|item/StartDate|nothing;
+		                                   item_end item/end/ISO|item/EndDate|nothing;">
+		                           
+		   
+                        <tr>
+                            <td>                
+			                    <span class="summary" tal:attributes="class string:$item_type_class summary">
+                                    <img tal:replace="structure item_icon/html_tag" />
+                                    <a href="#" tal:attributes="href python:item_url+'/view';
+                                        class string:${item_wf_state_class} url"                       
+                                        tal:content="item_title_or_id">
+                                            Item Title
+                                    </a>
+                                </span><br />
+                                <b>Type:</b> <span tal:content="python:view.get_parliamentary_term(item.legislative_type)"></span> | 
+                
+                                <span tal:condition="python:(item.item_publisher) and (len(str(item.item_publisher).strip()) > 1)">
+                                    <b>Published By:</b> 
+                                    <span  tal:content="item/item_publisher"></span>
+                                    <br />
+                                </span>
+                
+                                <span tal:condition="item/item_publication_year">
+                                    <b>Publication Year:</b> 
+                                    <span tal:content="item/item_publication_year">
+                                    </span>
+                                    <br />
+                                </span>
+                                
+                                <span tal:condition="item/item_description">
+                                    <b>Description:</b> 
+                                    <span tal:replace="structure python:(item.item_description)[:50]">
+                                    </span> ... <a href="#" tal:attributes="href python:item_url+'/view';">Read More</a>
+                                    <br />
+                                </span>
+                                             
+                            </td>
+                        </tr>                
+		            </tal:block>
+		        </tal:entry>
+            </table>		        
+		        
+            <div id="pageNavPosition"></div>
+                <script type="text/javascript">// <!--
+                    var pager = new PagerNoHeader('listview', 30, 'pager', 'pageNavPosition'); 
+                    pager.init(); 
+                    pager.showPageNav(); 
+                    pager.showPage(1);
+                    //-->
+                </script> 
+        </dl>
+            
+    </tal:listing>
+        
+    <metal:empty metal:define-slot="no_items_in_listing">
+        <p class="discreet"
+            tal:condition="not: folderContents"
+            i18n:translate="description_no_items_in_folder">
+            There are currently no items in this folder.
+        </p>
+    </metal:empty>
+
+    </tal:foldercontents>
+    </metal:listingmacro>
+    </div>
+    <div tal:replace="structure provider:plone.belowcontentbody" />
+
+    </metal:main-macro>
+    </div>
+
+</body>
+</html>

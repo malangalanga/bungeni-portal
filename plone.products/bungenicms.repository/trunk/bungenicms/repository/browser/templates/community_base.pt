@@ -1,0 +1,86 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="bungenicms.repository">
+<body>
+<metal:content-core fill-slot="content-core">
+<metal:block define-macro="content-core"
+                    tal:define="kssClassesView context/@@kss_field_decorator_view;
+                                getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
+                                templateId template/getId">
+                                
+                                
+            <table class="gridtable">
+                <tr>
+                    <th style="width:35%;"><h2>Document Collections</h2></th>
+                    <th><h2>Recent Items</h2></th>
+                </tr>
+                <tr>
+                    <td valign="top" style="border-bottom:0px;">                        
+                        						
+						<table tal:define="docCollections python:view.getCollections()" 
+						        id="collListing" name="collListing">
+						    <tbody>
+						        <tal:coll tal:repeat="collection docCollections">
+					            <tr style="line-height: 1.5em;">
+					                <td><a tal:content="collection/Title" tal:attributes="href collection/getURL"></a></td>
+					            </tr>
+						        </tal:coll>
+						    </tbody>
+						</table>
+						
+                    </td>
+                    
+                    <td valign="top" style="border-bottom:0px;">                       
+						
+						 <table tal:define="restrictedRecentItems python:view.getRecentItems()" 
+                                id="sortable" name="sortable" >						    
+						    <tbody>
+						    <tal:entry tal:repeat="ritem restrictedRecentItems">
+						        <tr style="line-height: 1.5em;">
+						            <td><a tal:content="ritem/Title" tal:attributes="href ritem/getURL"></a></td>
+						        </tr>
+						    </tal:entry>
+						    </tbody>
+						</table>					
+            
+                    </td>                   
+                </tr>
+                
+                <tr>
+                    <td style="border-top:0px;">
+                    
+                        <div id="pageNavPos"></div>
+            
+                		<script type="text/javascript">// <!--
+                            var pagerDoc = new PagerNoHeader2('collListing', 10, 'pagerDoc', 'pageNavPos'); 
+                            pagerDoc.init(); 
+                            pagerDoc.showPageNav(); 
+                            pagerDoc.showPage(1);
+                        //--></script>
+                    
+                    </td>
+                    
+                    <td style="border-top:0px;">
+                    
+                        <div id="pageNavPosition"></div>
+            
+                		<script type="text/javascript">// <!--
+                            var pager = new PagerNoHeader('sortable', 10, 'pager', 'pageNavPosition'); 
+                            pager.init(); 
+                            pager.showPageNav(); 
+                            pager.showPage(1);
+                        //--></script>
+                    
+                    </td>
+                </tr>
+            </table>
+						
+</metal:block>
+</metal:content-core>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="bungenicms.repository">
+
+  <include package="plone.app.contentmenu" />
+  
+  <browser:resourceDirectory
+    name="bungenicms.repository.icons"
+    directory="icons"
+    />
+    
+  <browser:resource
+    name="bungenicms.repository.style.css"
+    file="stylesheets/bungenicms.repository.css"
+    />   
+    
+  <!-- Resource directory for javascript Files -->    
+  <browser:resourceDirectory
+      name="bungenicms.repository.js"
+      directory="js"
+      />
+      
+  <browser:page
+    for="..interfaces.IDocumentRepository"
+    name="import-structure"
+    class=".importviews.ImportInitialStructure"
+    permission="cmf.ManagePortal"
+    template="templates/import_initial_structure.pt"
+    />
+  <browser:page
+    for="..interfaces.IDocumentRepository"
+    name="my-community"
+    class=".itembrowser.CommunityRedirect"
+    permission="zope2.View"
+    />
+  <browser:page
+    for="..interfaces.IRepositoryCommunity"
+    name="view-community"
+    class=".community.CommunityBase"
+    permission="zope2.View"
+    template="templates/community_base.pt"
+    />
+    <browser:page
+    for=".interfaces.IRepositoryItemBrowser"
+    name="browse-items"
+    class=".itembrowser.RepositoryItemsBrowser"
+    permission="zope2.View"
+    template="templates/repository_browser.pt"
+    />
+    <browser:page
+    for=".interfaces.IRepositoryItemBrowser"
+    name="search-items"
+    class=".itembrowser.SearchItems"
+    permission="zope2.View"
+    template="templates/search_items.pt"
+    />
+    <browser:page
+    for="..interfaces.IRepositoryCollection"
+    name="collection-items"
+    class=".web.Html"
+    permission="zope2.View"
+    template="templates/folder_items_listing.pt"
+    />
+    <browser:page
+    for="..interfaces.IRepositoryCollection"
+    name="collection-items-tabular"
+    class=".web.Html"
+    permission="zope2.View"
+    template="templates/folder_items_listing_tabular.pt"
+    />
+    <browser:page
+    for="..interfaces.IRepositoryItem"
+    name="repositoryitem_view"
+    class=".web.Html"
+    permission="zope2.View"
+    template="templates/repositoryitem_view.pt"
+    />
+    
+    <!--<browser:viewlet
+        name="bungenicms.repository.browsermenu"
+        for=".interfaces.IRepositoryItemBrowser"
+        manager="plone.app.layout.viewlets.interfaces.IAboveContentTitle"
+        permission="zope2.View"
+        class=".viewlets.BrowseItemsMenu"
+    />-->
+    <!--browser:viewlet
+        name="bungenicms.repository.browsersearch"
+        for=".interfaces.IRepositoryItemBrowser"
+        manager="plone.app.layout.viewlets.interfaces.IAboveContentTitle"
+        permission="zope2.View"
+        class=".viewlets.SearchControl"
+    />-->
+    
+    <browser:pages
+        for="*"
+        class=".web.Html"
+        permission="zope2.View">
+        
+        <browser:page
+            name="load_file"
+            attribute="load_file"
+        /> 
+            
+    </browser:pages>
+</configure>

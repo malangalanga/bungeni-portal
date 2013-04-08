@@ -1,0 +1,11 @@
+<div class="repositorySearchForm">
+    <form method="get"
+    tal:attributes="action string:${context/absolute_url}/search-items">
+            <input  name="search_query" size="40" max_length="2048" 
+            type="text"/>
+            <button type="submit" name="go" value="01"
+             i18n:translate="bungenicms_repository_search_go">
+             Search
+             </button>
+    </form>
+</div>

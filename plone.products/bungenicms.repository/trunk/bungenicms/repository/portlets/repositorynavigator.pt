@@ -1,0 +1,38 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      tal:omit-tag="">
+<dl class="portlet portletNavigationTree repositoryNavigator"
+    i18n:domain="bungenicms.repository">
+
+  <dt class="portletHeader">
+      <span class="portletTopLeft"></span>
+      <a class="tile"
+         tal:attributes="href context/absolute_url"
+         i18n:translate="repo_nav_title">Repository Browser</a>
+      <span class="portletTopRight"></span>
+  </dt>
+    <dd class="portletItem lastItem">
+        <ul class="navTree navTreeLevel0"
+        tal:define="this_page_url context/@@plone_context_state/current_page_url">
+            <metal:block tal:repeat="menuitem view/menuitems">
+                <li tal:define="item_url string:${context/absolute_url}/${menuitem/view_link};
+                    is_active python:item_url in this_page_url;
+                    selected_class_item python:is_active and 'navTreeCurrentNode' or '';
+                    selected_class_link python:is_active and 'navTreeCurrentNode navTreeCurrentItem' or ''"
+                    tal:attributes="class string:navTreeItem 
+                    visualNoMarker navTreeFolderish 
+                    ${selected_class_item}">
+                    <a  
+                    tal:attributes="href item_url;
+                    class string:navTreeFolderish 
+                    ${selected_class_link}">
+                    <span tal:content="menuitem/title">Menu Item</span>
+                    </a>
+                </li>
+            </metal:block>
+        </ul>
+    </dd>
+
+</dl>
+</html>

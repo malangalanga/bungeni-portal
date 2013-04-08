@@ -1,0 +1,8 @@
+<ul id="reponav">
+    <metal:block tal:repeat="item_filter view/item_filters">
+        <li>
+            <a tal:content="item_filter/title"
+            tal:attributes="href string:${context/absolute_url}/browse-items?index=${item_filter/index}"></a>
+        </li>
+    </metal:block>
+</ul>

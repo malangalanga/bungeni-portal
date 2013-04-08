@@ -1,0 +1,17 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="bungenicms.repository">
+
+  <include package="plone.app.portlets" />
+  
+  <plone:portlet
+  name="portlets.RepositoryNavigator"
+  interface=".repositorynavigator.IRepositoryNavigatorPortlet"
+  assignment=".repositorynavigator.Assignment"
+  renderer=".repositorynavigator.Renderer"
+  addview=".repositorynavigator.AddForm"
+  editview=".repositorynavigator.EditForm"
+  />
+
+</configure>
