@@ -17,7 +17,7 @@
     
     We have "parent facets" (facets intended only for use by parent type) where 
     you just handle who has the right to "add" a "child-document" and we have 
-    "workflow facets" (for this workflow AND for parent) where you handle 
+    "workflow facets" (for this workflow) where you handle 
     (as in any document) the permission of the "child document".
     In these facets you should not use the ".Add" action.
     
@@ -60,8 +60,10 @@
     <state id="draft" title="Draft"> 
 	    <facet ref=".state_draft" />
     </state>
+    <!-- gives an error "your account is not authorized to view this item"
+	<state id="as_parent" title="Visible as Parent" permissions_from_parent="true" /> -->
     <state id="as_parent" title="Visible as Parent">
-	    <facet ref=".state_as_parent" />
+        <facet ref=".state_as_parent" />
     </state>
     <state id="internal" title="Internal">
         <facet ref=".state_internal" />
@@ -81,21 +83,21 @@
         destination="as_parent"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
-        require_confirmation="true"
+        require_confirmation="false"
     />
     <transition title="Visible Internally"
         source="draft as_parent"
         destination="internal"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
-        require_confirmation="true"
+        require_confirmation="false"
     />
     <transition title="Withdraw"
         source="internal as_parent"
         destination="withdrawn"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
-        require_confirmation="true"
+        require_confirmation="false"
     />
 
 </workflow>

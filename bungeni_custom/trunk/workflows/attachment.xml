@@ -54,9 +54,8 @@
     <state id="draft" title="Draft">
         <facet ref=".state_draft" />
     </state>
-    <state id="attached" title="Attached">
-        <facet ref=".state_internal" />
-    </state>
+    <!-- gives an error "your account is not authorized to view this item"
+	<state id="as_parent" title="Visible as Parent" permissions_from_parent="true" /> -->
     <state id="as_parent" title="Visible as Parent">
         <facet ref=".state_as_parent" />
     </state>
@@ -73,34 +72,28 @@
         destination="draft"
         trigger="automatic"
     />
-    <transition title="Attached"
-        source="draft"
-        destination="attached"
-        trigger="manual"
-        condition="context_parent_is_draft"
-        roles="Owner"
-        require_confirmation="true"
-    />
+
+    <!-- flavio: remove owner once "as parent works -->   
     <transition title="Visible as Parent"
-        source="draft internal attached"
+        source="draft internal"
         destination="as_parent"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
-        require_confirmation="true"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner"
+        require_confirmation="false"
     />
     <transition title="Visible Internally"
         source="draft as_parent"
         destination="internal"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
-        require_confirmation="true"
+        require_confirmation="false"
     />
     <transition title="Withdraw"
         source="internal as_parent"
         destination="withdrawn"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
-        require_confirmation="true"
+        require_confirmation="false"
     />
 
 </workflow>
