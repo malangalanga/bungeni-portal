@@ -17,6 +17,23 @@
     <feature name="event" enabled="true">
         <parameter name="types" value="event event_response" />
     </feature>
+    <!-- !+QUALIFIED_FEATURES(mr, apr-2013)
+    A possible extension of feature syntax to allow for:
+        a) a same feature to support multiple types
+        b) settings specific to each type e.g. cardinality constraints
+    
+    E.g. above "event" multi-type feature config could be elaborated
+    into something like:
+    
+    <feature name="event" qualifier="event" enabled="true">
+        <parameter name="min_allowed" value="0" />  # parent may have from none
+        <parameter name="max_allowed" value="*" />  # to many
+    </feature>
+    <feature name="event" qualifier="event_response" enabled="true">
+        <parameter name="min_allowed" value="1" />  # parent must have exactly one 
+        <parameter name="max_allowed" value="1" />  # (when parent.response_type=written)
+    </feature>
+    -->
     <feature name="signatory" enabled="false">
         <parameter name="open_states" value="admissible" />
     </feature>
@@ -33,7 +50,15 @@
         <parameter name="assignable_roles" value="ClerkAssembly.ClerkQuestion" />
     </feature>
     <feature name="group_assignment" enabled="true" />
+    <!-- !+QUALIFIED_FEATURES(mr, apr-2013)
+    this additional info is needed to formally state which assigned group
+    is precisely the one participating in / responsible for the event_response:
     
+    <feature name="group_assignment" qualifier="event_response" enabled="true">
+        <parameter name="group_type" value="ministry" />
+    </feature>
+    -->
+        
     <!-- workflow facets -->
     <facet name="draft">
         <allow permission=".View" roles="Drafter" />
