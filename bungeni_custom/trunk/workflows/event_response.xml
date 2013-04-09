@@ -46,8 +46,8 @@
     <state id="completed" title="Completed">
 	    <facet ref=".state_completed" />
     </state>
-    <state id="state_reviewed" title="Reviewed">
-	    <facet ref=".state_reviewed" />
+    <state id="reviewed" title="Reviewed">
+        <facet ref=".state_reviewed" />
     </state>
     
     <!-- workflow transision -->    
@@ -72,7 +72,7 @@
     />
     <transition title="Reviewed"
         source="completed"
-        destination="state_reviewed"
+        destination="reviewed"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
         require_confirmation="true"

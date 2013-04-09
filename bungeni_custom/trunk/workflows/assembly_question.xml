@@ -58,7 +58,7 @@
         <parameter name="group_type" value="ministry" />
     </feature>
     -->
-        
+    
     <!-- workflow facets -->
     <facet name="draft">
         <allow permission=".View" roles="Drafter" />
@@ -81,7 +81,7 @@
             " />
     </facet>
     <facet name="edit_Clerk">
-        <allow permission=".View" roles="
+        <allow permission="assembly_question.View" roles="
                 ClerkAssembly.ClerkHead
                 ClerkAssembly.ClerkQuestion
                 SpeakerAssembly 
@@ -119,40 +119,7 @@
         <allow permission=".Edit" roles="Owner" />
     </facet>
     <facet name="public">
-        <allow permission=".View" roles="
-                Authenticated 
-                Anonymous
-            " />
-    </facet>
-    <facet name="public_response_Ministry">
-        <allow permission=".View" roles="
-                Authenticated
-                Anonymous
-            " />
-        <allow permission="response.View" roles="MinistryMember" />
-        <allow permission="response.Edit" roles="MinistryMember" />
-    </facet>
-    <facet name="public_response_internal">
-        <allow permission=".View" roles="
-                Authenticated
-                Anonymous
-            " />
-        <allow permission="response.View" roles="
-                ClerkAssembly.ClerkHead
-                ClerkAssembly.ClerkQuestion
-                SpeakerAssembly 
-                MinistryMember
-            " />
-    </facet>
-    <facet name="public_response_public">
-        <allow permission=".View" roles="
-                Authenticated
-                Anonymous
-            " />
-        <allow permission="response.View" roles="
-                Authenticated
-                Anonymous
-            " />
+        <allow permission=".View" roles="Anonymous" />
     </facet>
     
     
@@ -219,18 +186,18 @@
     <state id="scheduled" title="Scheduled for Debate" permissions_from_state="admissible" />
     <state id="adjourned" title="Debate adjourned" permissions_from_state="admissible" />
     <state id="response_pending" title="Pending response">
-        <facet ref=".public_response_Ministry" />
+        <facet ref=".public" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
         <facet ref="event#event_response.add_ministry" />
     </state>
     <state id="response_submitted" title="Response submitted">
-        <facet ref=".public_response_internal" />
+        <facet ref=".public" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
     </state>
     <state id="response_reviewed" title="Response reviewed">
-        <facet ref=".public_response_public" />
+        <facet ref=".public" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
     </state>

@@ -24,12 +24,18 @@
     <!-- parent facets -->
     <facet name="add_drafter">
         <allow permission=".Add" roles="Drafter" />
+        <allow permission=".View" roles="Drafter" />
+        <allow permission=".Edit" roles="Drafter" />
     </facet>  
     <facet name="add_clerk">
         <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
     </facet>
     <facet name="add_speaker">
         <allow permission=".Add" roles="SpeakerSenate SpeakerAssembly" />
+        <allow permission=".View" roles="SpeakerSenate SpeakerAssembly" />
+        <allow permission=".Edit" roles="SpeakerSenate SpeakerAssembly" />
     </facet>
     
     <!-- workflow facets -->
@@ -42,10 +48,6 @@
         <allow permission=".View" roles="Authenticated" />
         <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
     </facet>
-    <facet name="state_as_parent">
-        <allow permission=".View" roles="Anonymous" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
-    </facet>
     <facet name="state_withdrawn">
         <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
     </facet>   
@@ -54,11 +56,7 @@
     <state id="draft" title="Draft">
         <facet ref=".state_draft" />
     </state>
-    <!-- gives an error "your account is not authorized to view this item"
-	<state id="as_parent" title="Visible as Parent" permissions_from_parent="true" /> -->
-    <state id="as_parent" title="Visible as Parent">
-        <facet ref=".state_as_parent" />
-    </state>
+	<state id="bound_to_parent" title="Visible (Parent)" permissions_from_parent="true" />
     <state id="internal" title="Internal">
         <facet ref=".state_internal" />
     </state>
@@ -72,24 +70,24 @@
         destination="draft"
         trigger="automatic"
     />
-
+    
     <!-- flavio: remove owner once "as parent works -->   
     <transition title="Visible as Parent"
         source="draft internal"
-        destination="as_parent"
+        destination="bound_to_parent"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner"
         require_confirmation="false"
     />
     <transition title="Visible Internally"
-        source="draft as_parent"
+        source="draft bound_to_parent"
         destination="internal"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="false"
     />
     <transition title="Withdraw"
-        source="internal as_parent"
+        source="internal bound_to_parent"
         destination="withdrawn"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"

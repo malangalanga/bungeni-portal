@@ -35,7 +35,7 @@
     <state id="draft" title="Draft">
         <facet ref=".draft" />
     </state>
-    <state id="as_parent" title="Address" permissions_from_parent="true" />
+    <state id="bound_to_parent" title="Address" permissions_from_parent="true" />
     <state id="internal" title="Published Internal" note="Visible to bungeni users">
         <facet ref=".internal" />
     </state>
@@ -52,24 +52,24 @@
     />
     <transition title="Publish"
         source="draft"
-        destination="as_parent"
+        destination="bound_to_parent"
         trigger="manual"
         roles="Owner"
     />
     <transition title="Publish Internal"
-        source="draft as_parent"
+        source="draft bound_to_parent"
         destination="internal"
         trigger="manual"
         roles="Owner"
     />
     <transition title="Re-publish"
         source="internal"
-        destination="as_parent"
+        destination="bound_to_parent"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly Owner"
     />
     <transition title="Withdraw"
-        source="internal as_parent"
+        source="internal bound_to_parent"
         destination="withdrawn"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly Owner"

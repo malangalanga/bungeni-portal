@@ -60,11 +60,11 @@
         <allow permission=".Edit" roles="SpeakerSenate" />
     </facet>
     <facet name="public_edit_Clerk">
-        <allow permission=".View" roles="Authenticated Anonymous" />
+        <allow permission=".View" roles="Anonymous" />
         <allow permission=".Edit" roles="ClerkSenate" />
     </facet>
     <facet name="public">
-        <allow permission=".View" roles="Authenticated Anonymous" />
+        <allow permission=".View" roles="Anonymous" />
     </facet>
     
     
