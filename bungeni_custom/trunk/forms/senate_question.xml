@@ -1,13 +1,6 @@
 <?xml version="1.0"?>
 <descriptor name="senate_question" archetype="doc" order="1"
             label="senate question" container_label="senate questions">
-    <field name="response_text" label="Response" required="false" 
-            value_type="text" render_type="rich_text" 
-            extended="translated_text"
-        >
-        <show modes="view edit" />
-        <!-- !+DECL roles="MinistryMember" -->
-    </field>
     <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
         <show modes="add view edit listing" />
     </field>
@@ -68,15 +61,6 @@
             value_type="date" render_type="date" derived="admissible_date"
         >
         <show modes="view listing" />
-    </field>
-    <field name="group_id" label="Ministry" required="false" value_type="group" render_type="single_select" vocabulary="ministry" note="!+validate ministry group constraint, or value_type=ministry?">
-        <show modes="view edit add listing" />
-    </field>
-    <field name="ministry_submit_date" label="Date submitted to Ministry" 
-            required="false" value_type="date" render_type="date" derived="response_pending_date"
-        >
-        <show modes="view" />
-        <hide modes="listing" />
     </field>
     <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="tree_text" vocabulary="subject_terms">
         <show modes="view edit add" />
