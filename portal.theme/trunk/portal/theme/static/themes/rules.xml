@@ -65,8 +65,8 @@
         <prepend href="/"
             content="#portal-globalnav > li:first-child"
             theme="children:#portal-globalnav > ul" /> 
-        <append href="/exist" content="#portal-globalnav > li:not(:first-child)"
-            theme="children:#portal-globalnav > ul" />        
+        <append href="/exist" content="#portal-globalnav > li"
+            theme="children:#portal-globalnav > ul" />         
         <append content="#portal-globalnav > li:not(:first-child)"
             theme="children:#portal-globalnav > ul" />         
         <drop href="/plone"
@@ -77,8 +77,8 @@
     <rule class="load-exist-navigation">        
         
         <!-- navigation -->        
-        <append content="#portal-globalnav > li:not(:first-child)"
-            theme="children:#portal-globalnav > ul" />      
+        <append content="#portal-globalnav > li"
+            theme="children:#portal-globalnav > ul" />                   
         <drop href="/exist"
             content="#portal-globalnav > li:first-child"/>     
         <prepend href="/"
@@ -132,10 +132,9 @@
         />        
         <!-- navigation -->
         <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
-            theme="children:#portal-globalnav > ul" />
-        
-        <prepend href="/exist" content="#portal-globalnav > li:not(:first-child)"
-            theme="children:#portal-globalnav > ul" />        
+            theme="children:#portal-globalnav > ul" />      
+        <prepend href="/exist" content="#portal-globalnav > li"
+            theme="children:#portal-globalnav > ul" />                        
     </rule>    
     
     <rule class="frontpage">
@@ -157,7 +156,7 @@
         <append href="/bungeni"
             content="#portal-globalnav > li:first-child"
             theme="children:#portal-globalnav > ul" />
-        <append href="/exist" content="#portal-globalnav > li:not(:first-child)"
+        <append href="/exist" content="#portal-globalnav > li"
             theme="children:#portal-globalnav > ul" />          
         <append content="#portal-globalnav > li"
             theme="children:#portal-globalnav > ul" />

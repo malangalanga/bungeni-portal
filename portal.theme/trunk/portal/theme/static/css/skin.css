@@ -442,6 +442,7 @@ dl#context_actions.actionMenu .actionMenuContent ul {
  */
 div#portal-globalnav {
     background: transparent;
+    text-align: left;
 }
 div#portal-globalnav ul.level0 {
     border: 0 none;
@@ -450,18 +451,13 @@ div#portal-globalnav ul.level0 {
 }
 div#portal-globalnav ul.level0 li {
     border-radius: 0;
+    display:inline;
 }
 div#portal-globalnav ul.level0 li a { 
-    color: #222;
+    color: #fff;
     background: #eee;
     border: 1px solid #aaa;
     border-bottom:1px solid #7E7E7E;
-    -webkit-border-top-left-radius: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-topright: 5px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
     font-size: 12px;
 }
 div#portal-globalnav ul.level0 li.selected a,
@@ -470,22 +466,27 @@ div#portal-globalnav ul.level0 li a:hover {
     background:#7E7E7E;
     border-bottom-color: transparent;
     border-color: #7E7E7E;
+} 
+div#portal-globalnav ul.level0 {
+    bottom: -3px !important;
 }
-/*
- * Notes:
- * - this has been positioned absolutely because of it's location in the
- *   html structure, the current layout is:
- *   <ul class="level0">
- *       <ul class="level1">
- *           <li>...</li>
- *        </ul>
- *        <li>...</li>
- *   </ul>
- *   a suggested structure would be to have the <ul> elements separately:
- *   !+IMPLEMENTED (9th July, 2012 - this is current layout) 
- *   <ul class="level0">...</ul>
- *   <ul class="level1">...</ul>
- */
+div#portal-globalnav ul.level0 li#upper-hse,
+div#portal-globalnav ul.level0 li#upper-hse a {    
+    background: #b22b14 !important; 
+    border: 0px;	
+} 
+div#portal-globalnav ul.level0 li#lower-hse,
+div#portal-globalnav ul.level0 li#lower-hse a{    
+    background: #f79f10 !important;	
+    border: 0px; 
+} 
+
+div#portal-globalnav ul li#lower-hse a,
+div#portal-globalnav ul li#upper-hse a {
+    font-weight:bold;
+    color:#eeeeee;               
+}
+
 div#portal-globalnav-bottom {
  	border:0;
 }
@@ -500,6 +501,7 @@ div#portal-globalnav ul.level1 li a {
     background: transparent;
     border: 0 none;
     text-shadow: none;
+    color: #fff;
 }
 div#portal-globalnav ul.level1 li a:hover {
     color: #000;
@@ -515,7 +517,6 @@ div#portal-globalnav ul.level1 li.selected a {
 .template-portal div#portal-globalnav ul.level1 li.selected a {
 	color:#F9C675 !important;
 }
-
 /*
  * Notes:
  * this tag is not used for any data or structure.
@@ -1035,23 +1036,7 @@ span.yui-button.yui-link-button span a {
  * DocumentActions & contentActions
  */
  
- /*
- * portal-globalnav
- */
-.template-portal div#portal-globalnav ul.level0 li.selected a,
-.template-portal div#portal-globalnav ul.level0 li a:hover {
-    color: #F9C675;
-    text-shadow: #222 0 1px 0;
-}
 
-.template-portal div#portal-globalnav ul.level1 li a {
-    color:#FFFFFF !important;
-}
-
-/* Login */
-.template-login_form div#portal-globalnav {
-    display: none;
-}
 #login-forgotten-password .discreet {
     color: #76797C !important;
 }
@@ -1338,78 +1323,7 @@ span.yui-button.yui-link-button span a {
 .template-workspace div.contentActions dd.actionMenuContent ul li > a:hover span {
     color:#000 !important;
 }
-/*
- * portal-globalnav
- */
- .template-workspace div#portal-globalnav {
-    background: #4d4d4d;
-}
-.template-workspace div#portal-globalnav ul.level0 {
-    background: transparent;
-}
-.template-workspace div#portal-globalnav ul.level0 li.selected a {
-    border-bottom-color: #d8d8d9;
-    border-bottom-color: #222;
-    color:#000;
-    background:#d8d8d9  url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
-}
-.template-workspace div#portal-globalnav ul.level0 li.selected a,
-.template-workspace div#portal-globalnav ul.level0 li a:hover {
-    background: #d8d8d9 url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
-}
-.template-workspace.section-bungeni-business div#portal-globalnav ul.level0 li#portaltab-business-whats-on a {
-    border-bottom: 1px solid #d8d8d9;
-    background: #f9ac32 url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
-}
-.template-workspace div#portal-globalnav ul.level0 li#portaltab-:first-child a,
-.template-workspace div#portal-globalnav ul.level0 li#portaltab-:first-child a:hover {
-	border-top:2px solid #1763aa;
-    background: url(/static/images/w-globalnav-level0-a-first.png) top left repeat-x !important;
-	color:#fff !important;
-	text-shadow:0 0 0 #fff;
-}
 
-.template-workspace div#portal-globalnav ul.level0 li#portaltab-admin-content a:hover,
-.section-bungeni-admin div#portal-globalnav ul.level0 li#portaltab-admin-content a,
-.section-bungeni-admin div#portal-globalnav ul.level0 li#portaltab-admin-content a:hover {
-	border-top:2px solid #666;
-    background: url(/static/images/w-globalnav-level0-a-last.png) top left repeat-x !important;
-	color:#fff !important;
-	text-shadow:0 0 0 #fff;
-}
-.template-workspace div#portal-globalnav ul.level1 a:hover {
-    background:transparent;
-    border:0px;
-    -webkit-border-radius: 0px;
-    -moz-border-radius: 0px;
-    border-radius: 0px;
-}
-.template-workspace div#portal-globalnav ul.level1 {
-    border: 1px solid #aaf;
-    border-right: 0 !important;
-    border-top: 0 none !important;
-    border-bottom:1px solid #d8d8d9;
-    background:#f9ac32 !important;
-    display: block;
-}
-.section-bungeni-workspace div#portal-globalnav ul.level1 {
-    top: 1.8em !important;
-    border: 1px solid #aaf;
-    border-right: 0 none;
-    border-top: 0 none !important;
-    border-bottom:1px solid #1763aa;
-    background:#21a1ba url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x !important;
-    display: block;
-    z-index: 1;
-}
-.section-bungeni-admin div#portal-globalnav ul.level1 {
-    border: 1px solid #aaf;
-    border-right: 0 none;
-    border-top: 0 none !important;
-    border-bottom:1px solid #1763aa;
-    background:#888888 url(/static/images/w-globalnav-level1-bg-last.png) bottom left repeat-x !important;
-    display: block;
-}
 .section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a {
     color: #000 !important;
 }
@@ -1419,15 +1333,7 @@ span.yui-button.yui-link-button span a {
     background-color: #c8631b !important;
     color: white !important;
 }
-.template-workspace div#portal-globalnav ul.level1 li.selected a {
-    color: #1763aa !important;
-}
-.section-bungeni-workspace div#portal-globalnav ul.level1 a {
-    color:#fff !important;
-}
-.section-bungeni-workspace div#portal-globalnav ul.level1 li.selected a {
-    color:#3f3f3f !important;
-}
+
 /*
  * Table styles
  */
@@ -1762,42 +1668,20 @@ span.yui-button.yui-link-button span a {
    .section-bungeni-workspace
    .section-bungeni-admin
    ========================================================================== */
-.template-workspace.section-bungeni-admin div#portal-globalnav ul.level0 li#portaltab- a {
-    color: #222 !important;
-    background: #eee !important;
-    border: 1px solid #aaa !important;
-    border-bottom:1px solid #7E7E7E !important;
-    -webkit-border-top-left-radius: 5px !important;
-    -webkit-border-top-right-radius: 5px !important;
-    -moz-border-radius-topleft: 5px !important;
-    -moz-border-radius-topright: 5px !important;
-    border-top-left-radius: 5px !important;
-    border-top-right-radius: 5px !important;
-    font-size: 12px;
-    text-shadow: none !important;    
-}
 
 /* =============================================================================
    Plone - Plone CMS content styling
    .site-plone
    ========================================================================== */
-.site-plone.template-workspace div#portal-globalnav ul.level0 li#portaltab- a,
-.template-portal.site-plone div#portal-globalnav ul.level0 li#portaltab- a {
-    color: #222 !important;
-    background: #eee !important;
-    border: 1px solid #aaa !important;
-    border-bottom:1px solid #7E7E7E !important;
-    -webkit-border-top-left-radius: 5px !important;
-    -webkit-border-top-right-radius: 5px !important;
-    -moz-border-radius-topleft: 5px !important;
-    -moz-border-radius-topright: 5px !important;
-    border-top-left-radius: 5px !important;
-    border-top-right-radius: 5px !important;
-    font-size: 12px;
-    text-shadow: none !important;    
-} 
 .template-portal.site-plone #portal-breadcrumbs{
     padding-top: 1em !important;
+}
+.template-portal.site-plone div#portal-globalnav ul.level1 {
+    margin-top: 0.25em;
+}
+.site-plone div#portal-globalnav ul.level0 li#upper-hse a,
+.site-plone div#portal-globalnav ul.level0 li#lower-hse a {
+    float: left;
 }
 .template-portal.site-plone #content h1.documentFirstHeading {
     margin-top: 0.5em !important;
@@ -1840,23 +1724,7 @@ span.yui-button.yui-link-button span a {
     -webkit-border-radius:5px; 
     border-radius:5px;
 } 
-.template-workspace.template-portal-eXist div#portal-globalnav ul.level0 li#portaltab- a,
-.template-portal.template-portal-eXist div#portal-globalnav ul.level0 li#portaltab- a
-{
-    color: #222 !important;
-    background: #eee !important;
-    border: 1px solid #aaa !important;
-    border-bottom:1px solid #7E7E7E !important;
-    -webkit-border-top-left-radius: 5px !important;
-    -webkit-border-top-right-radius: 5px !important;
-    -moz-border-radius-topleft: 5px !important;
-    -moz-border-radius-topright: 5px !important;
-    border-top-left-radius: 5px !important;
-    border-top-right-radius: 5px !important;
-    font-size: 12px;
-    font-weight: normal !important;
-    text-shadow: none !important;
-}
+
 .template-portal-eXist  .tab_container {
 	border: 1px solid #999;
 	border-top: none;
@@ -2116,10 +1984,6 @@ color: black;
     padding-right:3px;
 }
 
-
-.template-portal-eXist div#portal-globalnav ul.level1 li a {
-    font-size:12px;
-}
 
 /* DHTMLX Calendar
 -------------------------------------------------------------- */
