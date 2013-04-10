@@ -30,7 +30,7 @@
     </facet>
     <facet name="state_completed">
         <allow permission=".View" roles="Anonymous" />
-        <allow permission=".Edit" roles="MinistryMember ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+        <allow permission=".Edit" roles="MinistryMember ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly" />
     </facet>
     <facet name="state_reviewed">
         <allow permission=".View" roles="Anonymous" />
@@ -74,7 +74,7 @@
         source="completed"
         destination="reviewed"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
+        roles="ClerkQuestionAssembly ClerkQuestionSenate"
         require_confirmation="true"
     />
 

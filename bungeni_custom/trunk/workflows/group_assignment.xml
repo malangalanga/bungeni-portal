@@ -6,10 +6,14 @@
     >
     
     <facet name="internal">
-        <allow permission=".Add" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly  SpeakerSenate SpeakerAssembly" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly  SpeakerSenate SpeakerAssembly" />
-        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+        <allow permission=".Add" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly 
+		ClerkQuestionSenate ClerkQuestionAssembly.ClerkHead" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly 
+		ClerkQuestionSenate ClerkQuestionAssembly.ClerkHead" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly 
+		ClerkQuestionSenate ClerkQuestionAssembly" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly 
+		ClerkQuestionSenate ClerkQuestionAssembly" />
     </facet>
     
     <!-- !+ONE_STATE_TRANSITION placeholder state, transation -->

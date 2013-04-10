@@ -16,9 +16,10 @@
     <role id="MemberSenate" title="Senate - Member" />
     <role id="MemberCommitteeSenate" title="Senate - Committee Member" />
     <role id="MemberPoliticalGroupSenate" title="Senate - Political Group Member" />
-    <role id="ClerkSenate" title="Senate - Clerk Office">
-        <subrole id="ClerkSenate.ClerkQuestion" title="Senate - Questions' Clerk" />
-        <subrole id="ClerkSenate.ClerkHead" title="Senate - Head Clerk" />
+    <role id="ClerkSenate" title="Senate - Clerk Office" />
+    <role id="ClerkQuestionSenate" title="Senate - Clerk Questions Office">
+        <subrole id="ClerkQuestionSenate.ClerkHead" title="Assembly - Head Clerk" />
+        <subrole id="ClerkQuestionSenate.ClerkQuestion" title="Assembly - Questions' Clerk" />
     </role>
     <role id="SpeakerSenate" title="Speaker Office - Senate" />
     
@@ -26,12 +27,12 @@
     <role id="MemberAssembly" title="Assembly - Member" />
     <role id="MemberCommitteeAssembly" title="Assembly - Committee Member" />
     <role id="MemberPoliticalGroupAssembly" title="Assembly - Political Group Member" />
-    <role id="ClerkAssembly" title="Assembly - Clerk Office">
-        <subrole id="ClerkAssembly.ClerkQuestion" title="Assembly - Questions' Clerk" />
-        <subrole id="ClerkAssembly.ClerkHead" title="Assembly - Head Clerk" />
+    <role id="ClerkAssembly" title="Assembly - Clerk Office" />
+    <role id="ClerkQuestionAssembly" title="Assembly - Clerk Questions Office">
+        <subrole id="ClerkQuestionAssembly.ClerkHead" title="Assembly - Head Clerk" />
+        <subrole id="ClerkQuestionAssembly.ClerkQuestion" title="Assembly - Questions' Clerk" />
     </role>
     <role id="SpeakerAssembly" title="Assembly - Speaker Office" />
-    <role id="ClerkLegal" title="Assembly - Legal Office"/>
-
+    <role id="ClerkLegalAssembly" title="Assembly - Legal Office"/>
 </roles>
 

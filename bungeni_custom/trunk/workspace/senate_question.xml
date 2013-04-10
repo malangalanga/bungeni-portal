@@ -6,63 +6,63 @@
         <tab id="draft" roles="Drafter" />
     </state>
     <state id="submitted">
-        <tab id="inbox" roles="ClerkSenate.ClerkHead
-          ClerkSenate.ClerkQuestion"/>
+        <tab id="inbox" roles="ClerkQuestionSenate.ClerkHead
+          ClerkQuestionSenate.ClerkQuestion"/>
         <tab id="pending" roles="Owner"/>
     </state>
     <state id="reviewed">
         <tab id="inbox" roles="SpeakerSenate"/>
-        <tab id="pending" roles="ClerkSenate.ClerkHead   ClerkSenate.ClerkQuestion Owner"/>
+        <tab id="pending" roles="ClerkQuestionSenate.ClerkHead   ClerkQuestionSenate.ClerkQuestion Owner"/>
     </state>
     <state id="admissible">
-        <tab id="schedule" roles="ClerkSenate.ClerkQuestion"/>
+        <tab id="schedule" roles="ClerkQuestionSenate.ClerkQuestion"/>
 	<tab id="pending" 
-	     roles="  ClerkSenate.ClerkHead
+	     roles="  ClerkQuestionSenate.ClerkHead
                       SpeakerSenate Owner"/>
     </state>
     <state id="inadmissible">
         <tab id="archive"
 	     roles="Owner 
-		      ClerkSenate.ClerkHead
-                      ClerkSenate.ClerkQuestion
+		      ClerkQuestionSenate.ClerkHead
+                      ClerkQuestionSenate.ClerkQuestion
                       SpeakerSenate"/>
     </state>
      <state id="clarification_required">
         <tab id="inbox" roles="Owner"/>
-	      <tab id="pending" roles="ClerkSenate.ClerkHead   ClerkSenate.ClerkQuestion"/>
+	      <tab id="pending" roles="ClerkQuestionSenate.ClerkHead   ClerkQuestionSenate.ClerkQuestion"/>
     </state>
     <state id="scheduled">
         <tab id="schedule" 
 	     roles="Owner
 		      SpeakerSenate
-		    ClerkSenate.ClerkHead
-                        ClerkSenate.ClerkQuestion"/>
+		    ClerkQuestionSenate.ClerkHead
+                        ClerkQuestionSenate.ClerkQuestion"/>
     </state>
     <state id="scheduled">
         <tab id="schedule" 
 	     roles="Owner
 		      SpeakerSenate
-		    ClerkSenate.ClerkHead
-                        ClerkSenate.ClerkQuestion"/>
+		    ClerkQuestionSenate.ClerkHead
+                        ClerkQuestionSenate.ClerkQuestion"/>
     </state>
     <state id="adjourned">
-        <tab id="schedule" roles="  ClerkSenate.ClerkQuestion"/>
+        <tab id="schedule" roles="  ClerkQuestionSenate.ClerkQuestion"/>
 	<tab id="pending" 
-	     roles="  ClerkSenate.ClerkHead
+	     roles="  ClerkQuestionSenate.ClerkHead
                       SpeakerSenate Owner"/>
     </state>
    <state id="response_pending">
         <tab id="inbox" roles="MinistryMember"/>
 	<tab id="pending" 
 	     roles="Owner
-		      ClerkSenate.ClerkHead
-              ClerkSenate.ClerkQuestion
+		      ClerkQuestionSenate.ClerkHead
+              ClerkQuestionSenate.ClerkQuestion
 		      SpeakerSenate"/>
     </state>
    <state id="response_submitted">
-        <tab id="inbox" roles="  ClerkSenate.ClerkQuestion"/>
+        <tab id="inbox" roles="  ClerkQuestionSenate.ClerkQuestion"/>
         <tab id="pending" 
-	     roles="  ClerkSenate.ClerkHead
+	     roles="  ClerkQuestionSenate.ClerkHead
                     MinistryMember
 		    Owner
 		      SpeakerSenate"/>
@@ -70,16 +70,16 @@
    <state id="response_reviewed">
         <tab id="archive"
 	     roles="Owner
-		      ClerkSenate.ClerkHead
-              ClerkSenate.ClerkQuestion
+		      ClerkQuestionSenate.ClerkHead
+              ClerkQuestionSenate.ClerkQuestion
                       SpeakerSenate
 		    MinistryMember"/>
     </state>
     <state id="deferred">
         <tab id="schedule" 
 	     roles="Owner
-		      ClerkSenate.ClerkHead
-              ClerkSenate.ClerkQuestion
+		      ClerkQuestionSenate.ClerkHead
+              ClerkQuestionSenate.ClerkQuestion
                       SpeakerSenate"/>
         <tab id="pending" 
 	     roles="MinistryMember Owner"/>
@@ -87,37 +87,37 @@
     <state id="debated">
         <tab  id="archive"
 	      roles="Owner
-		       ClerkSenate.ClerkHead 
-               ClerkSenate.ClerkQuestion
+		       ClerkQuestionSenate.ClerkHead 
+               ClerkQuestionSenate.ClerkQuestion
                        SpeakerSenate"/>
     </state>
     <state id="elapsed">
         <tab id="archive" 
 	     roles="Owner
-		      ClerkSenate.ClerkHead
-              ClerkSenate.ClerkQuestion
+		      ClerkQuestionSenate.ClerkHead
+              ClerkQuestionSenate.ClerkQuestion
                       SpeakerSenate
 		    MinistryMember"/>
     </state>
     <state id="dropped">
         <tab id="archive" 
 	     roles="Owner
-		      ClerkSenate.ClerkHead
-              ClerkSenate.ClerkQuestion
+		      ClerkQuestionSenate.ClerkHead
+              ClerkQuestionSenate.ClerkQuestion
                       SpeakerSenate"/>
     </state>
     <state id="withdrawn">
         <tab id="archive" 
 	     roles="Owner
-		      ClerkSenate.ClerkHead
-              ClerkSenate.ClerkQuestion 
+		      ClerkQuestionSenate.ClerkHead
+              ClerkQuestionSenate.ClerkQuestion 
                       SpeakerSenate"/>
     </state>
     <state id="withdrawn_internal">
         <tab id="archive"
 	     roles="Owner
-		      ClerkSenate.ClerkHead
-              ClerkSenate.ClerkQuestion
+		      ClerkQuestionSenate.ClerkHead
+              ClerkQuestionSenate.ClerkQuestion
                       SpeakerSenate"/>
     </state>
 </workspace>

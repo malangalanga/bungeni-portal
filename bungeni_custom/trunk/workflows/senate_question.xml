@@ -6,7 +6,7 @@
     
     <!-- global grants -->
     <allow permission=".Add" roles="
-            ClerkSenate.ClerkHead
+            ClerkQuestionSenate.ClerkHead
             MemberSenate
         " />
     
@@ -29,8 +29,8 @@
     <feature name="email" enabled="true" />
     <feature name="download" enabled="true" />
     <feature name="user_assignment" enabled="true">
-        <parameter name="assigner_roles" value="ClerkSenate.ClerkHead" />
-        <parameter name="assignable_roles" value="ClerkSenate.ClerkQuestion" />
+        <parameter name="assigner_roles" value="ClerkQuestionSenate.ClerkHead" />
+        <parameter name="assignable_roles" value="ClerkQuestionSenate.ClerkQuestion" />
     </feature>
     <feature name="group_assignment" enabled="true" />
     
@@ -49,45 +49,45 @@
     </facet>
     <facet name="view_Clerk">
         <allow permission=".View" roles="
-                ClerkSenate.ClerkHead
-                ClerkSenate.ClerkQuestion
+                ClerkQuestionSenate.ClerkHead
+                ClerkQuestionSenate.ClerkQuestion
                 SpeakerSenate 
                 Owner
             " />
     </facet>
     <facet name="edit_Clerk">
         <allow permission=".View" roles="
-                ClerkSenate.ClerkHead
-                ClerkSenate.ClerkQuestion
+                ClerkQuestionSenate.ClerkHead
+                ClerkQuestionSenate.ClerkQuestion
                 SpeakerSenate 
                 Owner
             " />
         <allow permission=".Edit" roles="
-                ClerkSenate.ClerkHead
-                ClerkSenate.ClerkQuestion
+                ClerkQuestionSenate.ClerkHead
+                ClerkQuestionSenate.ClerkQuestion
             " />
         <allow permission="user_assignment.View" roles="
-                ClerkSenate.ClerkHead
-                ClerkSenate.ClerkQuestion
+                ClerkQuestionSenate.ClerkHead
+                ClerkQuestionSenate.ClerkQuestion
             " />
-        <allow permission="user_assignment.Edit" roles="ClerkSenate.ClerkHead" />
+        <allow permission="user_assignment.Edit" roles="ClerkQuestionSenate.ClerkHead" />
         <allow permission="group_assignment.View" roles="
-                ClerkSenate.ClerkHead
-                ClerkSenate.ClerkQuestion
+                ClerkQuestionSenate.ClerkHead
+                ClerkQuestionSenate.ClerkQuestion
             " />
     </facet>
     <facet name="edit_Speaker">
         <allow permission=".View" roles="
-                ClerkSenate.ClerkHead
-                ClerkSenate.ClerkQuestion
+                ClerkQuestionSenate.ClerkHead
+                ClerkQuestionSenate.ClerkQuestion
                 SpeakerSenate Owner
             " />
         <allow permission=".Edit" roles="SpeakerSenate" />
     </facet>
     <facet name="edit_Owner">
         <allow permission=".View" roles="
-                ClerkSenate.ClerkHead
-                ClerkSenate.ClerkQuestion
+                ClerkQuestionSenate.ClerkHead
+                ClerkQuestionSenate.ClerkQuestion
                 SpeakerSenate
                 Owner
             " />
@@ -223,7 +223,7 @@
         destination="reviewed"
         condition=""
         trigger="manual"
-        roles="ClerkSenate.ClerkQuestion"
+        roles="ClerkQuestionSenate.ClerkQuestion"
         order="4"
         note="The Question has all the formal requirements; forwarded to the
             Speaker's Office for approval)."
@@ -233,7 +233,7 @@
         destination="clarification_required"
         condition=""
         trigger="manual"
-        roles="ClerkSenate.ClerkQuestion"
+        roles="ClerkQuestionSenate.ClerkQuestion"
         order="4"
         note="The Question need to be clarieid by the Member"
     />
@@ -276,14 +276,14 @@
         destination="scheduled"
         condition="is_scheduled"
         trigger="system"
-        roles="ClerkSenate.ClerkQuestion"
+        roles="ClerkQuestionSenate.ClerkQuestion"
         order="12"
     />
     <transition title="Send to Ministry"
         source="admissible deferred"
         destination="response_pending"
         trigger="manual"
-        roles="ClerkSenate.ClerkQuestion"
+        roles="ClerkQuestionSenate.ClerkQuestion"
         order="13"
         note="Written-response questions are never scheduled but must be 
             answered directly by the Ministry."
@@ -301,14 +301,14 @@
         destination="response_pending"
         condition=""
         trigger="manual"
-        roles="ClerkSenate.ClerkQuestion"
+        roles="ClerkQuestionSenate.ClerkQuestion"
         order="16"
     />
     <transition title="Complete Response"
         source="response_submitted"
         destination="response_reviewed"
         trigger="manual"
-        roles="ClerkSenate.ClerkQuestion"
+        roles="ClerkQuestionSenate.ClerkQuestion"
         order="17"
     />
     <transition title="Elapse"
@@ -316,7 +316,7 @@
         destination="elapsed"
         condition=""
         trigger="manual"
-        roles="ClerkSenate.ClerkQuestion"
+        roles="ClerkQuestionSenate.ClerkQuestion"
         order="18"
         require_confirmation="true"
     />
@@ -325,7 +325,7 @@
         destination="deferred"
         condition=""
         trigger="manual"
-        roles="ClerkSenate.ClerkQuestion"
+        roles="ClerkQuestionSenate.ClerkQuestion"
         order="19"
         note="Oral question, postpone scheduling."
     />
@@ -334,7 +334,7 @@
         destination="dropped"
         condition=""
         trigger="manual"
-        roles="ClerkSenate.ClerkQuestion"
+        roles="ClerkQuestionSenate.ClerkQuestion"
         order="22"
     />
     <transition title="Debate adjourned"
@@ -342,14 +342,14 @@
         destination="adjourned"
         condition=""
         trigger="manual"
-        roles="ClerkSenate.ClerkQuestion"
+        roles="ClerkQuestionSenate.ClerkQuestion"
         order="23"
     />
     <transition title="Debated"
         source="scheduled"
         destination="debated"
         trigger="manual"
-        roles="ClerkSenate.ClerkQuestion"
+        roles="ClerkQuestionSenate.ClerkQuestion"
         order="25"
     />
     <transition title="Withdraw"
@@ -358,7 +358,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="ClerkSenate.ClerkQuestion Owner"
+        roles="ClerkQuestionSenate.ClerkQuestion Owner"
         order="26"
         require_confirmation="true"
         note="The Member can withdraw his question at any stage where it can 
@@ -370,7 +370,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="ClerkSenate.ClerkQuestion Owner"
+        roles="ClerkQuestionSenate.ClerkQuestion Owner"
         order="27"
         require_confirmation="true"
     />

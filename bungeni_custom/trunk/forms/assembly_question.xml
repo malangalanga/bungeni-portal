@@ -63,7 +63,8 @@
         <show modes="view listing" />
     </field>
     <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="tree_text" vocabulary="subject_terms">
-        <show modes="view edit add" />
+        <show modes="view" />
+        <show modes="edit add" roles="ClerkAssembly" />
         <hide modes="listing" />
     </field>
     <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" render_type="text_line">

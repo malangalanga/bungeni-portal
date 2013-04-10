@@ -28,9 +28,9 @@
         <allow permission=".Edit" roles="Drafter" />
     </facet>  
     <facet name="add_clerk">
-        <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
+        <allow permission=".Add" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate" />
     </facet>
     <facet name="add_speaker">
         <allow permission=".Add" roles="SpeakerSenate SpeakerAssembly" />
@@ -40,16 +40,16 @@
     
     <!-- workflow facets -->
     <facet name="state_draft">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
-        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly Owner" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly" />
     </facet>
     <facet name="state_internal" default="true">
         <allow permission=".View" roles="Authenticated" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly" />
     </facet>
     <facet name="state_withdrawn">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly" />
     </facet>   
     
     <!-- workflow states -->
@@ -70,27 +70,25 @@
         destination="draft"
         trigger="automatic"
     />
-    
-    <!-- flavio: remove owner once "as parent works -->   
     <transition title="Visible as Parent"
         source="draft internal"
         destination="bound_to_parent"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly Owner"
+        roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly Owner"
         require_confirmation="false"
     />
     <transition title="Visible Internally"
         source="draft bound_to_parent"
         destination="internal"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
+        roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly"
         require_confirmation="false"
     />
     <transition title="Withdraw"
         source="internal bound_to_parent"
         destination="withdrawn"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
+        roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly"
         require_confirmation="false"
     />
 
