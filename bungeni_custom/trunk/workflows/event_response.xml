@@ -13,42 +13,43 @@
     
     <!-- FACETS (see explanation in event workflow) -->
     
-    <!-- parent facets -->  
+    <!-- parent facets -->
     <facet name="add_ministry">
         <allow permission=".Add" roles="MinistryMember" />
     </facet>
     
-    <!-- workflow facets --> 
-    <facet name="state_draft">
-        <allow permission=".View" roles="Drafter Owner" />
-        <allow permission=".Edit" roles="Drafter Owner" />
-        <allow permission=".Delete" roles="Drafter Owner" />
-    </facet>
-    <facet name="state_internal" default="true">
+    <!-- workflow facets -->
+    <facet name="DEFAULT" default="true">
         <allow permission=".View" roles="MinistryMember" />
         <allow permission=".Edit" roles="MinistryMember" />
     </facet>
-    <facet name="state_completed">
-        <allow permission=".View" roles="Anonymous" />
-        <allow permission=".Edit" roles="MinistryMember ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly" />
-    </facet>
-    <facet name="state_reviewed">
-        <allow permission=".View" roles="Anonymous" />
-    </facet>
+    
     
     <!-- workflow states -->    
     <state id="draft" title="Draft" actions="propagate_parent_assigned_group_role"> 
-	    <facet ref=".state_draft" />
+        <facet>
+            <allow permission=".View" roles="Drafter Owner" />
+            <allow permission=".Edit" roles="Drafter Owner" />
+            <allow permission=".Delete" roles="Drafter Owner" />
+        </facet>
     </state>
-    <state id="internal" title="Internal">
-        <facet ref=".state_internal" />
-    </state>
+    <state id="internal" title="Internal" />
     <state id="completed" title="Completed">
-	    <facet ref=".state_completed" />
+        <facet>
+            <allow permission=".View" roles="Anonymous" />
+            <allow permission=".Edit" roles="
+                    MinistryMember 
+                    ClerkQuestionAssembly ClerkQuestionSenate
+                    SpeakerSenate SpeakerAssembly
+                " />
+        </facet>
     </state>
     <state id="reviewed" title="Reviewed">
-        <facet ref=".state_reviewed" />
+        <facet>
+            <allow permission=".View" roles="Anonymous" />
+        </facet>
     </state>
+    
     
     <!-- workflow transision -->    
     <transition title="Create"
@@ -79,3 +80,4 @@
     />
 
 </workflow>
+

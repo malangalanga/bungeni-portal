@@ -24,45 +24,43 @@
     <!-- parent facets -->
     <facet name="add_drafter">
         <allow permission=".Add" roles="Drafter" />
-        <allow permission=".View" roles="Drafter" />
-        <allow permission=".Edit" roles="Drafter" />
     </facet>  
     <facet name="add_clerk">
         <allow permission=".Add" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate" />
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate" />
     </facet>
     <facet name="add_speaker">
         <allow permission=".Add" roles="SpeakerSenate SpeakerAssembly" />
-        <allow permission=".View" roles="SpeakerSenate SpeakerAssembly" />
-        <allow permission=".Edit" roles="SpeakerSenate SpeakerAssembly" />
     </facet>
     
     <!-- workflow facets -->
-    <facet name="state_draft">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly Owner" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly" />
-        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly" />
-    </facet>
-    <facet name="state_internal" default="true">
+    <facet name="DEFAULT" default="true">
         <allow permission=".View" roles="Authenticated" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly" />
+        <allow permission=".Edit" roles="
+                ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
+                SpeakerSenate SpeakerAssembly
+            " />
     </facet>
-    <facet name="state_withdrawn">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly" />
-    </facet>   
+    
     
     <!-- workflow states -->
     <state id="draft" title="Draft">
-        <facet ref=".state_draft" />
+        <facet>
+            <allow permission=".View" roles="Owner" />
+            <allow permission=".Edit" roles="Owner" />
+            <allow permission=".Delete" roles="Owner" />
+        </facet>
     </state>
 	<state id="bound_to_parent" title="Visible (Parent)" permissions_from_parent="true" />
-    <state id="internal" title="Internal">
-        <facet ref=".state_internal" />
-    </state>
+    <state id="internal" title="Internal" />
     <state id="withdrawn" title="Withdrawn">
-        <facet ref=".state_withdrawn" />
+        <facet>
+            <allow permission=".View" roles="
+                    ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
+                    SpeakerSenate SpeakerAssembly
+                " />
+        </facet>   
     </state>
+    
     
     <!-- workflow transision -->    
     <transition title="Create"
@@ -93,3 +91,4 @@
     />
 
 </workflow>
+
