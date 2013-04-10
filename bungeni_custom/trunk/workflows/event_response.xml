@@ -28,9 +28,9 @@
     <!-- workflow states -->    
     <state id="draft" title="Draft" actions="propagate_parent_assigned_group_role"> 
         <facet>
-            <allow permission=".View" roles="Drafter Owner" />
-            <allow permission=".Edit" roles="Drafter Owner" />
-            <allow permission=".Delete" roles="Drafter Owner" />
+            <allow permission=".View" roles="Drafter" />
+            <allow permission=".Edit" roles="Drafter" />
+            <allow permission=".Delete" roles="Drafter" />
         </facet>
     </state>
     <state id="internal" title="Internal" />

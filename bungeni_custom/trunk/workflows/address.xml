@@ -10,24 +10,24 @@
     
     <!-- workflow facets -->
     <facet name="draft">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly Owner" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Owner" />
-        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Owner" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly Drafter" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Drafter" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Drafter" />
     </facet>
     <facet name="internal" default="true">
         <allow permission=".View" roles="Authenticated" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Owner" />
-        <allow permission=".Add" roles="ClerkSenate ClerkAssembly Owner" />
-        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Owner" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Drafter" />
+        <allow permission=".Add" roles="ClerkSenate ClerkAssembly Drafter" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Drafter" />
     </facet>
     <facet name="public">
         <allow permission=".View" roles="Authenticated" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Owner" />
-        <allow permission=".Add" roles="ClerkSenate ClerkAssembly Owner" />
-        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Owner" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Drafter" />
+        <allow permission=".Add" roles="ClerkSenate ClerkAssembly Drafter" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Drafter" />
     </facet>
     <facet name="withdrawn">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly Owner" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly Drafter" />
     </facet>
     
     
@@ -54,25 +54,25 @@
         source="draft"
         destination="bound_to_parent"
         trigger="manual"
-        roles="Owner"
+        roles="Drafter"
     />
     <transition title="Publish Internal"
         source="draft bound_to_parent"
         destination="internal"
         trigger="manual"
-        roles="Owner"
+        roles="Drafter"
     />
     <transition title="Re-publish"
         source="internal"
         destination="bound_to_parent"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly Owner"
+        roles="ClerkSenate ClerkAssembly Drafter"
     />
     <transition title="Withdraw"
         source="internal bound_to_parent"
         destination="withdrawn"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly Owner"
+        roles="ClerkSenate ClerkAssembly Drafter"
     />
     
 </workflow>

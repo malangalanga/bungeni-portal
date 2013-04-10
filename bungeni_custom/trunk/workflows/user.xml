@@ -11,16 +11,16 @@
     <!-- workflow facets -->
     <facet name="internal">
         <allow permission=".View" roles="Authenticated" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Owner" />
-        <allow permission="user_delegation.Edit" roles="Owner" />
-        <allow permission="user_delegation.Add" roles="Owner" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Drafter" />
+        <allow permission="user_delegation.Edit" roles="Drafter" />
+        <allow permission="user_delegation.Add" roles="Drafter" />
     </facet>
     <facet name="internal_frozen">
         <allow permission=".View" roles="Authenticated" />
     </facet>
     
     
-    <state id="A" title="Active User" actions="assign_owner_role">
+    <state id="A" title="Active User">
         <facet ref=".internal" />
         <facet ref="address.internal" />
     </state>

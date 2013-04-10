@@ -43,9 +43,6 @@ from bungeni.core.workflows._actions import (
     
     # sitting
     schedule_sitting_items,
-    
-    # user
-    assign_owner_role,
 
 )
 

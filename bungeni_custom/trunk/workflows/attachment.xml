@@ -45,9 +45,9 @@
     <!-- workflow states -->
     <state id="draft" title="Draft">
         <facet>
-            <allow permission=".View" roles="Owner" />
-            <allow permission=".Edit" roles="Owner" />
-            <allow permission=".Delete" roles="Owner" />
+            <allow permission=".View" roles="Drafter" />
+            <allow permission=".Edit" roles="Drafter" />
+            <allow permission=".Delete" roles="Drafter" />
         </facet>
     </state>
 	<state id="bound_to_parent" title="Visible (Parent)" permissions_from_parent="true" />
@@ -72,7 +72,7 @@
         source="draft internal"
         destination="bound_to_parent"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly Owner"
+        roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly Drafter"
         require_confirmation="false"
     />
     <transition title="Visible Internally"

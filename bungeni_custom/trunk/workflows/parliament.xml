@@ -16,7 +16,7 @@
     <!-- workflow facets -->
     <facet name="draft">
         <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Delete" roles="Owner" />
+        <allow permission=".Delete" roles="Drafter" />
     </facet>
     <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
