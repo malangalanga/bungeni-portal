@@ -5,6 +5,10 @@ from Products.CMFCore.utils import getToolByName
 PROFILE_ID = 'profile-bungenicms.membershipdirectory:default'
 
 
+class Empty:
+    pass
+    
+
 def add_catalog_indexes(context, logger):
     """Method to add our wanted indexes to portal_catalog and uid_catalog
     
@@ -46,7 +50,15 @@ def add_catalog_indexes(context, logger):
     indexables = []
     for (name, meta_type) in wanted:
         if meta_type and name not in indexes:
-            catalog.addIndex(name, meta_type)
+            if meta_type == 'ZCTextIndex':
+                item_extras = Empty()
+                item_extras.doc_attr = name
+                item_extras.index_type = 'Okapi BM25 Rank'
+                item_extras.lexicon_id = 'plone_lexicon'
+                catalog.addIndex(name, meta_type, item_extras)
+            else:
+                catalog.addIndex(name, meta_type)
+            
             indexables.append(name)
             logger.info('Added %s for field %s.', meta_type, name)
     if len(indexables) > 0:

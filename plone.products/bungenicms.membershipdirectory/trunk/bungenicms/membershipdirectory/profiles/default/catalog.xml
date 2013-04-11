@@ -2,13 +2,7 @@
 <object name="portal_catalog" meta_type="Plone Catalog Tool">
 
 	<!-- Add indexes here on penalty of death or worse.
-       See add_catalog_indexes in setuphandlers.py instead. -->       
-	
-	<index name="member_full_names" meta_type="ZCTextIndex">
-	    <indexed_attr value="member_full_names"/>
-	    <extra name="index_type" value="Okapi BM25 Rank"/>
-	    <extra name="lexicon_id" value="plone_lexicon"/>
-	</index>
+       See add_catalog_indexes in setuphandlers.py instead. --> 
 	
 	<column value="county"/>
 	<column value="constituency"/>
