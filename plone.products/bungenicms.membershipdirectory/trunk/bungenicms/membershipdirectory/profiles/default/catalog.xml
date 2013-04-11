@@ -1,35 +1,9 @@
 <?xml version="1.0"?>
 <object name="portal_catalog" meta_type="Plone Catalog Tool">
-	<index name="county" meta_type="FieldIndex">
-		<indexed_attr value="county"/>
-	</index>
-	<index name="constituency" meta_type="FieldIndex">
-		<indexed_attr value="constituency"/>
-	</index>
-	<index name="political_party" meta_type="FieldIndex">
-		<indexed_attr value="political_party"/>
-	</index>
-	<index name="elected_nominated" meta_type="FieldIndex">
-		<indexed_attr value="elected_nominated"/>
-	</index>
-	<index name="member_status" meta_type="FieldIndex">
-		<indexed_attr value="member_status"/>
-	</index>
-	<index name="special_interest" meta_type="FieldIndex">
-		<indexed_attr value="special_interest"/>
-	</index>
-	<index name="other_names" meta_type="FieldIndex">
-		<indexed_attr value="other_names"/>
-	</index>
-	<index name="member_role" meta_type="FieldIndex">
-		<indexed_attr value="member_role"/>
-	</index>
-	<index name="member_title" meta_type="FieldIndex">
-		<indexed_attr value="member_title"/>
-	</index>
-	<index name="body_text" meta_type="FieldIndex">
-		<indexed_attr value="body_text"/>
-	</index>
+
+	<!-- Add indexes here on penalty of death or worse.
+       See add_catalog_indexes in setuphandlers.py instead. -->       
+	
 	<index name="member_full_names" meta_type="ZCTextIndex">
 	    <indexed_attr value="member_full_names"/>
 	    <extra name="index_type" value="Okapi BM25 Rank"/>

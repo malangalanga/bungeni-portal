@@ -1,0 +1,41 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+    
+    <!-- Register the installation GenericSetup extension profile -->
+    <genericsetup:registerProfile
+        name="default"
+        title="Bungeni CMS Membership Directory"
+        directory="profiles/default"
+        description="Extension profile for Membership Directory"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+    />
+    
+    <!-- Register the uninstallation GenericSetup extension profile -->
+    <genericsetup:registerProfile
+        name="uninstall"
+        title="Bungeni CMS Membership Directory Uninstall"
+        directory="profiles/uninstall"
+        description="Uninstall profile for Membership Directory"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+    />
+    
+    <!-- Register the import step -->
+    <genericsetup:importStep
+        name="bungenicms_membershipdirectory_update_portal_types"
+        title="Bungeni CMS Membership Directory Update Portal Types"
+        description="Updates membership types to spaceless names"
+        handler="bungenicms.membershipdirectory.setuphandlers.setup_various"
+    />
+    
+    <!-- Register the upgrade step -->
+    <genericsetup:upgradeStep
+        title="Add catalog indexes"
+        description="Add catalog indexes to portal_catalog"
+        source="1"
+        destination="10"
+        handler="bungenicms.membershipdirectory.setuphandlers.add_catalog_indexes"
+        profile="bungenicms.membershipdirectory:default"
+    />
+    
+</configure>
