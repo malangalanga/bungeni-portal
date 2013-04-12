@@ -32,11 +32,10 @@ class SearchDocumentTypes(BaseVocabularyFactory):
         terms = []
         for type_key, info in capi.iter_type_info():
             if info.workflow and info.workflow.has_feature("workspace"):
-                use_name = info.domain_model.__name__
                 terms.append(schema.vocabulary.SimpleTerm(
-                    value=use_name, 
-                    token=use_name,
-                    title=naming.split_camel(use_name)
+                    value=type_key, 
+                    token=type_key,
+                    title=naming.split_camel(info.domain_model.__name__)
                 ))
         terms.sort(key=lambda item:item.value)
         all_types=",".join([t.value for t in terms])

@@ -11,30 +11,29 @@ import re
 import json
 import urllib2
 import urllib
+import dateutil.parser
 import zope.interface
 import zope.component
 from zope.formlib import form, namedtemplate
 from zope.app.pagetemplate import ViewPageTemplateFile
 from ploned.ui.interfaces import IBelowContentManager
-from bungeni.core.interfaces import ISection, IWorkspaceTabsUtility
+from bungeni.core.interfaces import IWorkspaceTabsUtility, ISearchableSection
 from bungeni.ui import interfaces as ui_ifaces, browser
 from bungeni.ui.widgets import MultiCheckBoxWidget
 import interfaces
-from bungeni.ui.utils.common import get_context_roles, get_workspace_roles
+from bungeni.ui.utils import common, date
 from bungeni.ui.i18n import _
 
-from bungeni.models import domain, interfaces as model_ifaces
+from bungeni.models import interfaces as model_ifaces
 
-from bungeni.utils import register, naming
+from bungeni.utils import register
 from bungeni.capi import capi
 
-def make_url(type_id, type_name, status):
+def make_workspace_url(type_id, type_name, status):
     if type_id and type_name and status:
-        domain_class = getattr(domain, type_name, None)
-        if domain_class is None:
-            domain_class = getattr(domain, naming.model_name(type_name))
+        domain_class = capi.get_type_info(type_name).domain_model
         if model_ifaces.IFeatureWorkspace.implementedBy(domain_class):
-            ws_roles = get_workspace_roles()
+            ws_roles = common.get_workspace_roles()
             tabs_config = zope.component.getUtility(IWorkspaceTabsUtility)
             ti = capi.get_type_info(domain_class)
             tab = tabs_config.get_tab(ws_roles[0], domain_class, status)
@@ -44,7 +43,18 @@ def make_url(type_id, type_name, status):
                 )
     return "javascript:void()"
 
-SEARCH_URL = "http://localhost:8088/exist/restxq/ontology"
+def make_admin_url(type_id, type_name, status):
+    return "javascript:void()"
+
+SEARCH_WORKSPACE = "ws"
+SEARCH_ADMIN = "ad"
+URL_MAKERS = {
+    SEARCH_WORKSPACE : make_workspace_url,
+    SEARCH_ADMIN : make_admin_url
+}
+DEFAULT_URL_MAKER = make_workspace_url
+
+SEARCH_URL = "http://localhost:8088/exist/restxq/ontology_bungeni"
 
 BASE_MAPPING = {
     "status": "status",
@@ -61,6 +71,18 @@ MAPPING = {
     }
 }
 
+@common.request_cached
+def get_formatter():
+    return date.getLocaleFormatter(common.get_request(), "date")
+
+def format_date(val):
+    _date = dateutil.parser.parse(val)
+    return get_formatter().format(_date)
+
+CUSTOM_FORMATTERS = {
+    "statusDate": format_date
+}
+
 def get_node_value(context, key):
     if isinstance(key, list):
         val = None
@@ -70,18 +92,25 @@ def get_node_value(context, key):
             ctx = val
         return val
     node = context.get(key, None)
+    val = None
     if node:
         if node.has_key("#text"):
-            return node.get("#text")
+            val = node.get("#text")
         elif node.has_key("showAs"):
-            return node.get("showAs")
+            val = node.get("showAs")
         elif node.has_key("value"):
-            return node.get("value").get("#text")
+            val = node.get("value").get("#text")
+    if val:
+        formatter = CUSTOM_FORMATTERS.get(key, None)
+        if formatter:
+            val = formatter(val)
+    return val
 
-def get_results_meta(items_list):
+def get_results_meta(items_list, search_context=SEARCH_WORKSPACE):
     """return a dict of fields for display
     """
     items = []
+    url_maker = URL_MAKERS.get(search_context, DEFAULT_URL_MAKER)
     for result in items_list:
         ontology = result.get("ontology")
         result_type = ontology.get("for")
@@ -89,10 +118,11 @@ def get_results_meta(items_list):
         item = {}
         #unique ids take this form Legislature.9-Chamber.2-AgendaItem.54
         unique_id = record.get("unique-id")
-        doc_type, obj_key = unique_id.split("-")[-1].split(".")
+        type_name, obj_key = unique_id.split("-")[-1].split(".")
         status_key = record.get("status").get("value").get("#text")
-        item["type"] = doc_type
-        item["url"] = make_url(obj_key, doc_type, status_key)
+        item["type"] = type_name
+        type_key = ontology.get("document").get("type").get("value").get("#text")
+        item["url"] = url_maker(obj_key, type_key, status_key)
         MAP = BASE_MAPPING.items() + MAPPING.get(result_type, []).items()
         for (key, node_key) in MAP:
             item[key] = get_node_value(record, node_key)
@@ -111,6 +141,7 @@ def execute_search(data, prefix, request):
     if data.get("page"):
         data["offset"] = (int(data["page"])-1)*int(data.get("limit"))+1
         del data["page"]
+    # we are only interested in documents
     data["group"]  = "document"
     search_request = urllib2.Request(SEARCH_URL, urllib.urlencode(data))
     exist_results = json.loads(urllib2.urlopen(search_request).read())
@@ -127,10 +158,14 @@ def execute_search(data, prefix, request):
         "page_query_string": page_query_string
     }
     if item_count:
-        results["items"] = get_results_meta(exist_results.get("doc"))
+        _results = exist_results.get("doc")
+        if ui_ifaces.IAdminSectionLayer.providedBy(request):
+            results["items"] = get_results_meta(_results, SEARCH_ADMIN)
+        else:
+            results["items"] = get_results_meta(_results)
     return results
 
-@register.view(ISection, ui_ifaces.IBungeniSkin, 
+@register.view(ISearchableSection, ui_ifaces.IBungeniSkin, 
     name="search.exist", protect={ "zope.Public": register.VIEW_DEFAULT_ATTRS })
 class Search(form.PageForm, browser.BungeniBrowserView):
     zope.interface.implements(interfaces.ISearchResults)
@@ -159,8 +194,8 @@ class Search(form.PageForm, browser.BungeniBrowserView):
     def handle_search(self, action, data):
         self.show_results = True
         #data["role"] = \
-        #    get_context_roles(self.context, self.request.principal) + \
-        #    get_workspace_roles() + ["bungeni.Anonymous"]
+        #    common.get_context_roles(self.context, self.request.principal) + \
+        #    common.get_workspace_roles() + ["bungeni.Anonymous"]
         data["page"] = self.request.form.get("page", 1)
         self.search_results = execute_search(data, self.prefix, self.request)
         self.status = _("Searched for '${search_string}' and found ${count} "
