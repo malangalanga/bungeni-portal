@@ -62,6 +62,15 @@
     />
     -->
 
+    <!-- The sharing tab -->            
+    <browser:page
+        name="sharing"
+        for="*"
+        class=".sharing.SharingView"
+        layer=".layer.ILayer"
+        permission="plone.DelegateRoles"
+        />     
+
 </configure>
 
 
