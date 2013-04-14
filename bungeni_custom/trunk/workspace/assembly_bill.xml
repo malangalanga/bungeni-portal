@@ -1,4 +1,5 @@
-<workspace id="bill">
+<workspace id="bicameral_document">
+
     <state id="draft">
         <tab id="draft" roles="Drafter" />
     </state>
@@ -94,7 +95,7 @@
         <tab id="pending" roles="Owner Signatory SpeakerAssembly"/>
     </state>
     <state id="assented">
-        <tab id="archive" roles="Owner Signatory SpeakerAssembly ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly ClerkAssembly"/>
     </state>
     <state id="rejected">
         <tab id="archive" 
@@ -108,7 +109,19 @@
       <tab id="archive"
        roles="ClerkAssembly Owner Signatory SpeakerAssembly"/>
     </state>
-
-
+    <state id="reconsideration">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly"/>
+    </state>
+    <state id="approved_with_amendments">
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly ClerkAssembly"/>
+    </state>
+    <state id="approved_with_amendments">
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly ClerkAssembly"/>
+    </state>
+    <state id="come_into_force">
+        <tab id="archive" 
+             roles="ClerkAssembly Owner Signatory SpeakerAssembly"/>
+    </state>
 
 </workspace>
