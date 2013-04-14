@@ -104,7 +104,7 @@
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
         <facet ref="signatory.internal_frozen" />
-        <facet ref="group_assignment.internal" />
+        <facet ref="group_assignment.add_internal" />
     </state>
     <state id="reviewed" title="Reviewed by Clerk" 
             actions="set_doc_registry_number" >
@@ -112,7 +112,7 @@
         <facet ref="attachment.add_speaker" />
         <facet ref="event.add_speaker" />
         <facet ref="signatory.internal_frozen" />
-        <facet ref="group_assignment.internal" />
+        <facet ref="group_assignment.add_internal" />
     </state> 
     <state id="referred_committee" 
         title="Referred to Committee for pre-publication scrutiny" 
@@ -139,7 +139,7 @@
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
         <facet ref="signatory.public_frozen" />
-        <facet ref="group_assignment.internal" />
+        <facet ref="group_assignment.add_internal" />
     </state>
     <state id="first_reading_scheduled" title="First Reading Scheduled" permissions_from_state="gazetted" />
     <state id="first_reading" title="First Reading" permissions_from_state="gazetted" />
@@ -164,7 +164,11 @@
     <state id="withdrawn" title="Bill Withdrawn" permissions_from_state="approved" />
     <state id="pending_presidential_assent" title="Pending Presidential Assent" permissions_from_state="approved" />
     <state id="assented" title="Assented" permissions_from_state="approved" />
-    
+    <state id="reconsideration" title="Referred Reconsideration" permissions_from_state="approved" />
+    <state id="approved_with_amendments" title="Approved with Amendments" permissions_from_state="approved" />
+    <state id="approved_without_amendments" title="Approved without Amendments" permissions_from_state="approved" />
+    <state id="come_into_force" title="Come into Force" permissions_from_state="approved" />
+
     
     <!-- workflow transitions -->
     <transition title="Create Legislative Proposal"
@@ -339,7 +343,7 @@
         trigger="manual"
         roles="ClerkAssembly"
     />
-    <transition title="Admissible"
+    <transition title="Approve"
         source="third_reading"
         destination="approved"
         condition=""
@@ -377,13 +381,41 @@
         trigger="manual"
         roles="ClerkAssembly"
     />
-    <transition title="Assented by the President"
-        source="pending_presidential_assent"
+    <transition title="President Assent"
+        source="pending_presidential_assent approved_with_amendments approved_without_amendments"
         destination="assented"
         condition=""
         trigger="manual"
         roles="ClerkAssembly"
     />
-
+    <transition title="President Refered Back for Reconsideration"
+        source="pending_presidential_assent"
+        destination="reconsideration"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Approve with Amendments"
+        source="reconsideration"
+        destination="approved_with_amendments"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Approve without Amendments"
+        source="reconsideration"
+        destination="approved_without_amendments"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Comes into Force"
+        source="assented"
+        destination="come_into_force"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+ 
 </workflow>
 

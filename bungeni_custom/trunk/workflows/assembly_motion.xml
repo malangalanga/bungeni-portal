@@ -25,6 +25,7 @@
     </feature>
     <feature name="signatory" enabled="true">
         <parameter name="min_signatories" value="1" />
+        <parameter name="max_signatories" value="5" />
         <parameter name="open_states" value="admissible" />
     </feature>
     <feature name="schedule" enabled="true">
@@ -133,7 +134,7 @@
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
         <facet ref="signatory.internal_frozen" />
-        <facet ref="group_assignment.internal" />
+        <facet ref="group_assignment.add_internal" />
     </state>
     <state id="clarification_required" title="Requires Clarification to Receive"
             actions="version">
@@ -156,7 +157,7 @@
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
         <facet ref="signatory.public_frozen" />
-        <facet ref="group_assignment.internal" />
+        <facet ref="group_assignment.add_internal" />
     </state>
     <state id="scheduled" title="Scheduled" permissions_from_state="admissible" />
     <state id="adjourned" title="Debate adjourned" permissions_from_state="admissible"
