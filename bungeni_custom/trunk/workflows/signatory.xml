@@ -15,23 +15,22 @@
     
     <!-- features -->
     <feature name="audit" enabled="true" />
-    <feature name="version" enabled="false" />
-    <feature name="attachment" enabled="false" />
-    
-    
-    <!-- workflow facets !+OWNER_TO_DRAFTER -->
+  
+   
+    <!-- facets -->
     <facet name="draft_Clerk">
         <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
         <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
         <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
         <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
     </facet>
-    <facet name="draft_Owner" note="!+rename">
+    <facet name="draft_Drafter">
         <allow permission=".View" roles="Drafter" />
         <allow permission=".Edit" roles="Drafter" />
         <allow permission=".Add" roles="Drafter" />
         <allow permission=".Delete" roles="Drafter" />
     </facet>
+
     <facet name="internal" default="true">
         <allow permission=".View" roles="ClerkSenate ClerkAssembly Owner Signatory MemberSenate MemberAssembly" /><!-- !+Authenticated? -->
     </facet>
@@ -47,9 +46,9 @@
         <allow permission=".View" roles="Anonymous" />
     </facet>
     
-    
+    <!-- workflow states -->       
     <state id="awaiting_consent" title="Awaiting Consent">
-        <facet ref=".draft_Owner" />
+        <facet ref=".draft_Drafter" />
     </state>
     
     <state id="consented" title="Signature Consented">
@@ -64,21 +63,20 @@
         <facet ref=".internal_frozen" />
     </state>
     
-    
+
+    <!-- workflow transision -->      
     <transition title="Create"
         source=""
         condition="signatory_manual_sign"
         destination="awaiting_consent"
         trigger="automatic"
     />
-    
     <transition title="Create and Sign"
         source=""
         destination="consented"
         trigger="automatic"
         condition="signatory_auto_sign"
     />
-    
     <transition title="consent"
         source="awaiting_consent"
         destination="consented"
@@ -87,7 +85,6 @@
         require_confirmation="true"
         condition="pi_allow_signature"
     />
-    
     <transition title="reject"
         source="awaiting_consent"
         destination="rejected"
@@ -96,7 +93,6 @@
         require_confirmation="true"
         condition="pi_allow_signature_actions"
     />
-    
     <transition title="withdraw signature"
         source="consented"
         destination="withdrawn"
@@ -105,14 +101,12 @@
         require_confirmation="true"
         condition="pi_allow_signature_actions"
     />
-    
     <transition title="withdraw signature - automatic"
         source="awaiting_consent"
         destination="withdrawn"
         trigger="automatic"
         condition="pi_signature_period_expired"
     />
-    
     <transition title="unsign document - automatic"
         source="consented rejected withdrawn"
         destination="awaiting_consent"

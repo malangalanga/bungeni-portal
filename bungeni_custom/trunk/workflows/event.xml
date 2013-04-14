@@ -13,7 +13,7 @@
     
     <!-- FACETS -->
     <!-- fz: a recommendation for simple management of "child-documents" 
-    (events/attachments) facets. 
+    (events) facets. 
     
     We have "parent facets" (facets intended only for use by parent type) where 
     you just handle who has the right to "add" a "child-document" and we have 
@@ -40,16 +40,6 @@
         <allow permission=".Add" roles="SpeakerSenate SpeakerAssembly" />
     </facet>
     
-    <!-- workflow facets -->
-    <facet name="DEFAULT" default="true">
-        <allow permission=".View" roles="Authenticated" />
-        <allow permission=".Edit" roles="
-                ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
-                SpeakerSenate SpeakerAssembly
-            " />
-    </facet>
-    
-    
     <!-- workflow states -->
     <state id="draft" title="Draft"> 
         <facet>
@@ -58,17 +48,29 @@
             <allow permission=".Delete" roles="Drafter" />
         </facet>
     </state>
-	<state id="bound_to_parent" title="Visible (Parent)" parent_permissions="true" />
-    <state id="internal" title="Internal" />
+    <state id="bound_to_parent" title="Bound to Main Document">
+        <facet>
+        <allow permission=".View" roles="Anonymous" />
+        <allow permission=".Edit" roles="
+                ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
+                SpeakerSenate SpeakerAssembly" />
+        </facet>
+    </state>
+    <state id="internal" title="Internal">
+        <facet>
+	    <allow permission=".View" roles="Authenticated" />
+	    <allow permission=".Edit" roles="
+		ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
+                SpeakerSenate SpeakerAssembly" />
+        </facet>
+    </state>
     <state id="withdrawn" title="Withdrawn">
         <facet>
             <allow permission=".View" roles="
-                    ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
-                    SpeakerSenate SpeakerAssembly
-                " />
+		ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
+		SpeakerSenate SpeakerAssembly" />
         </facet>
     </state>
-    
     
     <!-- workflow transision -->    
     <transition title="Create"
@@ -76,7 +78,7 @@
         destination="draft"
         trigger="automatic"
     />
-    <transition title="Visible as Parent"
+    <transition title="Bind to main document"
         source="draft internal"
         destination="bound_to_parent"
         trigger="manual"

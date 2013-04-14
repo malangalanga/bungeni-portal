@@ -18,13 +18,6 @@
         <allow permission=".Add" roles="MinistryMember" />
     </facet>
     
-    <!-- workflow facets -->
-    <facet name="DEFAULT" default="true">
-        <allow permission=".View" roles="MinistryMember" />
-        <allow permission=".Edit" roles="MinistryMember" />
-    </facet>
-    
-    
     <!-- workflow states -->    
     <state id="draft" title="Draft" actions="propagate_parent_assigned_group_role"> 
         <facet>
@@ -33,23 +26,29 @@
             <allow permission=".Delete" roles="Drafter" />
         </facet>
     </state>
-    <state id="internal" title="Internal" />
-    <state id="completed" title="Completed">
+    <state id="internal" title="Internal Review">
         <facet>
-            <allow permission=".View" roles="Anonymous" />
-            <allow permission=".Edit" roles="
-                    MinistryMember 
-                    ClerkQuestionAssembly ClerkQuestionSenate
-                    SpeakerSenate SpeakerAssembly
-                " />
+	    <allow permission=".View" roles="MinistryMember" />
+	    <allow permission=".Edit" roles="MinistryMember" />
         </facet>
     </state>
-    <state id="reviewed" title="Reviewed">
+    <state id="completed" title="Response Completed">
+        <facet>
+            <allow permission=".View" roles="
+		MinistryMember ClerkQuestionAssembly ClerkQuestionSenate" />
+        </facet>
+    </state>
+    <state id="reviewed" title="Written Response">
         <facet>
             <allow permission=".View" roles="Anonymous" />
         </facet>
     </state>
-    
+    <state id="incomplete" title="Response Incomplete">
+        <facet>
+	    <allow permission=".View" roles="MinistryMember ClerkQuestionAssembly ClerkQuestionSenate" />
+	    <allow permission=".Edit" roles="MinistryMember" />
+        </facet>
+    </state>
     
     <!-- workflow transision -->    
     <transition title="Create"
@@ -57,23 +56,30 @@
         destination="draft"
         trigger="automatic"
     />
-    <transition title="Internal"
+    <transition title="Internal Review"
         source="draft"
         destination="internal"
         trigger="manual"
         roles="MinistryMember"
         require_confirmation="true"
     />
-    <transition title="Completed"
-        source="draft internal"
+    <transition title="Response Completed"
+        source="draft internal incomplete"
         destination="completed"
         trigger="manual"
         roles="MinistryMember"
         require_confirmation="true"
     />
-    <transition title="Reviewed"
+    <transition title="Publish Written Response"
         source="completed"
         destination="reviewed"
+        trigger="manual"
+        roles="ClerkQuestionAssembly ClerkQuestionSenate"
+        require_confirmation="true"
+    />
+    <transition title="Response Incomplete"
+        source="completed"
+        destination="incomplete"
         trigger="manual"
         roles="ClerkQuestionAssembly ClerkQuestionSenate"
         require_confirmation="true"

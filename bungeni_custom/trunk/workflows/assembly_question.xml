@@ -68,10 +68,6 @@
     <facet name="internal">
         <allow permission=".View" roles="Drafter Owner" />
     </facet>
-    <facet name="redraft">
-        <allow permission=".View" roles="Drafter Owner" />
-        <allow permission=".Edit" roles="Drafter" />
-    </facet>
     <facet name="view_Clerk">
         <allow permission=".View" roles="
                 ClerkQuestionAssembly.ClerkHead
@@ -123,8 +119,6 @@
     
     Feature "sub-type" permissions specified in workflow states of a head type:
     - ALWAYS apply to the *head instance*
-    - apply to the *sub-item* ONLY when the sub-item itself is in a state
-    that sets parent_permissions="true".
     
     In addition note that the Add permission is somewhat special, as it is 
     only pertinent to the "container" i.e. it is, by definition, unbound to 
@@ -133,16 +127,6 @@
     <state id="draft" title="Draft" actions="assign_role_group">
         <facet ref=".draft" />
         <facet ref="attachment.add_drafter" />
-        <facet ref="event.add_clerk" />
-    </state>
-    <state id="submitted_signatories" title="Submitted to Signatories" actions="version">
-        <facet ref=".internal" />
-        <facet ref="attachment.add_clerk" />
-        <facet ref="event.add_clerk" />
-    </state>
-    <state id="redraft" title="Redraft" actions="version" note="document under review before resubmission">
-        <facet ref=".redraft" />
-        <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
     </state>
     <state id="withdrawn_internal" title="Withdrawn" 
@@ -218,26 +202,12 @@
         order="0"
     />
     <transition title="Submit"
-        source="draft redraft submitted_signatories"
+        source="draft"
         destination="submitted"
-        condition="pi_signatories_check"
+        condition=""
         trigger="manual"
         roles="Drafter"
         order="1"
-    />
-    <transition title="Submit to Signatories"
-        source="draft redraft"
-        destination="submitted_signatories"
-        condition="pi_has_signatories"
-        trigger="manual"
-        roles="Drafter"
-        order="1"
-    />
-    <transition title="Redraft"
-        source="submitted_signatories"
-        destination="redraft"
-        trigger="manual"
-        roles="Drafter"
     />
     <transition title="Reviewed"
         source="submitted"
@@ -301,13 +271,22 @@
         order="12"
     />
     <transition title="Send to Ministry"
-        source="admissible deferred"
+        source="admissible"
         destination="response_pending"
+        condition=""
         trigger="manual"
         roles="ClerkQuestionAssembly.ClerkQuestion"
         order="13"
-        note="Written-response questions are never scheduled but must be 
-            answered directly by the Ministry."
+        note="Written-response questions are never scheduled."
+    />
+    <transition title="Send to Ministry for Written Response"
+        source="deferred"
+        destination="response_pending"
+        condition=""
+        trigger="manual"
+        roles="ClerkQuestionAssembly.ClerkQuestion"
+        order="13"
+        note="Oral-response questions if not discussed may be answered in writing by the Ministry."
     />
     <transition title="Submit Response"
         source="response_pending"
