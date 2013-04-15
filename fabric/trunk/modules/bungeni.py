@@ -706,9 +706,18 @@ class Presetup:
         cmd = sudo("gem install docsplit")
         
         if 'gem installed' in cmd:
-            print "Docsplit installed successfully."
+            print "Docsplit gem installed successfully."
         else:
-            print "There was a problem while installing Docsplit"
+            print "There was a problem while installing Docsplit gem"
+            
+        # [3] Test that docsplit can be accessed from the commandline
+        docsplit_cmd = run("docsplit")
+        if 'docsplit: command not found' in docsplit_cmd:
+            # By default, docsplit installs in the following location: /var/lib/gems/1.8/bin
+            # Try adding a symbolic link
+            cmd = sudo("ln -s /var/lib/gems/1.8/bin/docsplit /usr/local/bin/docsplit")
+        else:
+            print "Docsplit is fully functional on this system."
     
     
     def install_setuptools(self, pybin, pyhome):
