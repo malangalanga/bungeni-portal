@@ -61,7 +61,7 @@
                             tal:attributes="value form_data/SearchableText"
                             placeholder="Enter keyword here" />&nbsp;                    
 	                    <label for="item_publication_year">
-	                        Publication Year: </label>
+	                        Year: </label>
 	                    <select id="item_publication_year"
 	                        name="item_publication_year">
                             <option value="">All</option>
@@ -128,7 +128,7 @@
                      
                     <span tal:condition="py">
                     <span tal:condition="st">, </span>
-                    Publication Year:
+                    Year:
                     <strong tal:condition="py"
                      tal:content="py">
                         Search Term
@@ -190,7 +190,7 @@
                         </th>                                        
                         <th class="nosort">
                             <a href="javascript:SortTable(2,'D','mdy');">
-                                Publication Date
+                                Date
                                 <span class="sortDown">&#x25bc;</span>
                             </a>
                         </th>

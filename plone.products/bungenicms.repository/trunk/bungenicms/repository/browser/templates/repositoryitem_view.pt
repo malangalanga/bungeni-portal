@@ -181,7 +181,6 @@
               <span tal:condition="python:(field.getName() in ['item_abstract']) and ((field.get(context) is not '') or (field.get(context) is not None) or (type(field.get(context)) is not tuple and  len(field.get(context)) is not 0) )">
               
                 <span tal:omit-tag="" tal:condition="python:len(field.get(context)) is not 0">
-                  <h3>Text</h3>             
                   <span tal:define="description python:field.get(context)" 
                         tal:content="structure description">
                   </span>
