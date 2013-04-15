@@ -305,7 +305,7 @@ class Html(BrowserView):
             uid = None
             for id, item in container.objectItems():
                 if context.UID() == "FILE".join( item.UID().split( 'FILE' )[0:1] ):
-                    if filename.translate(None, " ?.!/;:-") == item.UID().split("FNIX",1)[1]:
+                    if filename.translate(None, " ?.!/\;:-{}[]()|~^`") == item.UID().split("FNIX",1)[1]:
                         print "A file with the same name already exists. No need to re-convert."
                         isFileConverted = True
                         uid = item.UID()
@@ -327,7 +327,7 @@ class Html(BrowserView):
                 # NOTE: The file-name generation mechanism used here is 
                 # used in other parts of the application. Make sure to 
                 # change those parts as well when you make change the following two lines.
-                new_fname = filename.translate(None, " ?.!/;:-")
+                new_fname = filename.translate(None, " ?.!/\;:-{}[]()|~^`")
                 uid = context.UID() + "FILE" + str(DateTime().millis()) + "FNIX" + new_fname
                 
                 # Try to create the file object
