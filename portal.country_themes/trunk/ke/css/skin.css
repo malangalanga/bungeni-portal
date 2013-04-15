@@ -66,8 +66,67 @@
  */
  
 #portal-globalnav {
-    display: none;
+    margin-top: -7em !important;
+    z-index: 0 !important;
 }
+
+#portal-globalnav li {
+    float: right !important;
+    margin: 0;
+    padding: 0;
+    margin-right: -1em !important;
+}
+
+#portal-globalnav li a {
+    border: 0px !important;
+    color: #000000 !important;
+}
+
+.template-portal.site-plone.section-national-assembly #portal-globalnav li a, 
+.template-portal.site-plone.section-senate #portal-globalnav li a {
+    color: #ffffff !important;
+}
+
+.template-portal.site-plone #portal-globalnav li#portaltab-index_html {
+    margin-right: 1em !important;
+}
+
+.template-portal.site-plone.section-archive #portal-globalnav li#portaltab-statutory-documents{
+    margin-right: -13em !important;
+}
+
+.template-portal #portal-globalnav li#portaltab-archive {
+    margin-right: -15em !important;
+}
+
+.template-portal #portal-globalnav li#portaltab-statutory-documents {
+    margin-right: -9em !important;
+}
+
+.template-portal.site-plone.section-statutory-documents #portal-globalnav li#portaltab-about-parliament{
+    margin-right: -9em !important;
+}
+
+.template-portal.site-plone.section-national-assembly #portal-globalnav li#portaltab-national-assembly,
+.template-portal.site-plone.section-senate #portal-globalnav li#portaltab-senate,
+.template-portal.site-plone.section-about-parliament #portal-globalnav li#portaltab-about-parliament,
+.template-portal.site-plone.section-statutory-documents #portal-globalnav li#portaltab-statutory-documents,
+.template-portal.site-plone.section-archive #portal-globalnav li#portaltab-archive,
+.template-portal.site-plone #portal-globalnav li#portaltab-related-links   {
+    display: none !important;
+}
+
+.template-portal.site-plone.section-related-links #portal-column-content {
+    margin-left: 0em !important;
+}
+
+#basic-details {
+    clear: none !important;
+}
+.template-portal.site-plone.template-member_profile_view.portaltype-memberprofile h3 {
+    margin-top: 1em !important;
+}
+
 #top-layer #demoWarning {
     color: #fff;
     background: #900;
@@ -132,7 +191,6 @@ div.main-column h1 {
     line-height: 30px;
     color: #000 !important;
     text-shadow: 0 0 1px #fff;
-    text-align:center;
 }
 div.main-column h1.title {
     border: 0 none;
@@ -178,8 +236,16 @@ div.main-column h2 {
     text-shadow: 0px 0px 1px #fff;
     font-size: 120%;
     font-weight: normal !important;
-    color: #090 !important;
+    color: #000 !important;
 }
+.template-portal.site-plone.section-senate div.main-column h2 {
+    color: #005BA3 !important;
+}
+
+.template-portal.site-plone.section-national-assembly div.main-column h2 {
+    color: #00A260 !important;
+}
+
 div.main-column h2 span {
     font-size: 75%;
     font-weight: bold;
@@ -332,7 +398,7 @@ input.inputLabelActive {
     text-shadow: 0px 1px 1px #fff;
 }
 .portlet.portletNavigationTree {
-    margin-top: -1em !important;
+    margin-top: 0em !important;
 }
 
 #portal-column-content .portletHeader span.tile {
@@ -352,6 +418,7 @@ input.inputLabelActive {
     border: 1px solid #fe0000;
     display: none !important;
 }
+
 /* hides the portlet header. */
 #portal-column-one .portlet .portletItem.even,
 #portal-column-one .portlet .portletItem {
@@ -1191,6 +1258,7 @@ html[xmlns] .clearfix {
 }
 
 .template-portal #portal-footer {
+    display: none;
     border: 0 none;
     background: url(/static/images/footer-bg.png) repeat-x bottom center;
 }
@@ -1560,14 +1628,21 @@ div.dhx_cal_navline div.active {
  */
  .template-workspace div#portal-globalnav {
     background: #4d4d4d;
+    margin-top: 0.5em !important;
 }
-.template-workspace div#portal-globalnav ul.level0 {
-    background: transparent;
+ .template-workspace #portal-globalnav li {
+    float: left !important;
+    margin-right: 0em !important;
+}
+.template-workspace #portal-globalnav ul.level0 li a {
+    background: transparent !important;
+	color: white !important;
 }
 .template-workspace div#portal-globalnav ul.level0 li.selected a {
     border-bottom-color: #d8d8d9;
     border-bottom-color: #222;
-    background:#fe0000;
+    background:#F9CE1D !important;
+	color: black !important;
 }
 .template-workspace div#portal-globalnav ul.level0 li.selected a,
 .template-workspace div#portal-globalnav ul.level0 li a:hover {
@@ -1575,8 +1650,27 @@ div.dhx_cal_navline div.active {
     border-bottom: 1px solid transparent;
     border-left:1px solid #fe0000;
     border-right:1px solid #fe0000;
-    background:#fe0000;
+    background:#F9CE1D;
 }
+.template-workspace.section-national-assembly div#portal-globalnav ul.level0 li.selected a,
+.template-workspace.section-national-assembly div#portal-globalnav ul.level0 li a:hover {
+    border-top: 1px solid #fe0000;
+    border-bottom: 1px solid transparent;
+    border-left:1px solid #fe0000;
+    border-right:1px solid #fe0000;
+    background:#00A260 !important;
+	color: white !important;
+}
+.template-workspace.section-senate div#portal-globalnav ul.level0 li.selected a,
+.template-workspace.section-senate div#portal-globalnav ul.level0 li a:hover {
+    border-top: 1px solid #fe0000;
+    border-bottom: 1px solid transparent;
+    border-left:1px solid #fe0000;
+    border-right:1px solid #fe0000;
+    background:#005BA3 !important;
+	color: white !important;
+}
+
 .section-bungeni-workspace table td div a {
     color: #099dbe !important;
     border: 0 none;
@@ -1618,8 +1712,31 @@ div.dhx_cal_navline div.active {
     border-right: 0 !important;
     border-top: 0 none !important;
     border-bottom:1px solid #d8d8d9;
-    background:#fe0000 !important;
+    background:#F9CE1D !important;
     display: block;
+    clear: both !important;
+}
+.template-workspace.section-senate div#portal-globalnav ul.level1 {
+    border: 1px solid #ccc;
+    border-right: 0 !important;
+    border-top: 0 none !important;
+    border-bottom:1px solid #d8d8d9;
+    background:#005BA3 !important;
+    display: block;
+    clear: both !important;
+}
+.template-workspace.section-national-assembly div#portal-globalnav ul.level1 {
+    border: 1px solid #ccc;
+    border-right: 0 !important;
+    border-top: 0 none !important;
+    border-bottom:1px solid #d8d8d9;
+    background:#00A260 !important;
+    display: block;
+    clear: both !important;
+}
+.template-workspace.section-senate div#portal-globalnav ul.level1 a,
+.template-workspace.section-national-assembly div#portal-globalnav ul.level1 a {
+	color: white !important;
 }
 .section-bungeni-workspace div#portal-globalnav ul.level1 {
     border: 1px solid #ccc;
@@ -2310,6 +2427,16 @@ div.dhx_cal_navline div.active {
     clear: none !important;
 }
 
+.site-plone .listingBar .next {
+    margin-right: -13em !important;
+}
+
+/* Hide the default content paginator */
+.site-plone.portaltype-membershipdirectory .listingBar {
+    display:none !important;
+}
+
+
 .site-plone .tileItem .visualClear {
     clear: none !important;
 }
@@ -2329,6 +2456,10 @@ div.dhx_cal_navline div.active {
 
 .site-plone.section-national-assembly {
     opacity: 1 !important;
+}
+
+.template-portal.site-plone #portal-logo {
+    background: url("../images/portal_banner.png") no-repeat scroll left top #f9ce1d !important;
 }
 
 .template-portal.site-plone.section-national-assembly #portal-logo {
@@ -2363,4 +2494,5 @@ div.dhx_cal_navline div.active {
 .template-portal.site-plone.section-national-assembly #portal-column-one .portletHeader {
     background-color: #00a260 !important;
 }
+
 

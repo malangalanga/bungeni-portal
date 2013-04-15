@@ -34,7 +34,9 @@
         class="drop-navigation" />               
     <match path="exact:/"
         class="frontpage" />
-    <match path="exact:/front-page"
+    <match path="exact:/plone"
+        class="frontpage" />        
+    <match path="exact:/plone/front-page/"
         class="frontpage" />
     <match path="/" class="primary" />
     
@@ -61,16 +63,9 @@
         <drop content="children:#user-name" /> 
         <drop content="children:#personaltools-logout" />
 
-        <!-- navigation -->
-        <prepend href="/"
-            content="#portal-globalnav > li:first-child"
-            theme="children:#portal-globalnav > ul" /> 
-        <append href="/exist" content="#portal-globalnav > li:not(:first-child)"
-            theme="children:#portal-globalnav > ul" />        
-        <append content="#portal-globalnav > li:not(:first-child)"
-            theme="children:#portal-globalnav > ul" />         
+        <!-- navigation -->  
         <drop href="/plone"
-            content="#portal-globalnav > li:first-child"/>           
+            content="#portal-globalnav li#portaltab-index_html"/>                                                 
         <drop theme="#processing_indicatron" />           
     </rule>
     
@@ -202,6 +197,7 @@
             theme="children:#portal-globalnav > ul"
             if-content="not:base[href*='plone']"
         />
+
         <prepend content="ul#portal-personaltools li.navigation"
             theme="children:#portal-globalnav ul.level1"
             if-content=".navigation"
