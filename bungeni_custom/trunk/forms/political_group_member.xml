@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<descriptor name="political_group_member" archetype="group_membership" order="3" 
-            label="member" container_label="members" >
+<descriptor name="political_group_member" order="3" label="member" container_label="members">
     <field name="user_id" label="Name" required="true" value_type="member" render_type="single_select" vocabulary="parliament_member">
         <show modes="view add listing" />
     </field>

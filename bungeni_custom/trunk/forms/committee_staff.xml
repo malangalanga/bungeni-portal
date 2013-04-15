@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<descriptor name="committee_staff" archetype="group_membership" 
-            order="2" label="staff" container_label="member" >
+<descriptor name="committee_staff" order="2" label="staff" container_label="member">
     <field name="user_id" label="Name" required="true" value_type="user" render_type="single_select" vocabulary="user_not_mp">
         <show modes="view add listing" />
     </field>

@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
-<descriptor name="member_of_parliament" archetype="group_membership" order="3"
-        label="member" container_label="members"
-        sort_on="start_date"
-    >
+<descriptor name="member_of_parliament" order="3" label="member" container_label="members" sort_on="start_date">
+
     <field name="user_id" label="Name" required="true" value_type="user" render_type="single_select" vocabulary="member">
         <show modes="view add listing" />
     </field>

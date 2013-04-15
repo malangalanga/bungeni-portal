@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<descriptor name="office_member" archetype="group_membership" order="3" 
-            label="member" container_label="members" >
+<descriptor name="office_member" order="3" label="member" container_label="members">
     <field name="user_id" label="Name" required="true" value_type="user" render_type="single_select" vocabulary="user_not_mp">
         <show modes="view add listing" />
     </field>

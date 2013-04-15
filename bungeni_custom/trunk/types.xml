@@ -4,10 +4,15 @@
     
     All custom types must be declared, enabled/disabled, here.
     
-    The "archetype" of a custom type is indicated by a dedicated tag name.
-    This also allows for different types to have different attributes e.g. a
+    The system "archetype" of a custom type is indicated by a dedicated tag 
+    name. [Having a dedicated tag name per system archetype allows for the 
+    possibility that different types could have different attributes e.g. a
     group and/or a membership could specify an associated role (even if such 
-    info could well be specified elsewhere).
+    info could well be specified elsewhere). Note that as yet the XML attrs
+    for all sys archetype tags are the *same*.]
+    
+    Furthermore, a custom type may refine which "archetype" by specifying 
+    another custom type as its "archetype", via the @archetype attribute.
     
     Some custom types are dependent on another custom type e.g. a membership
     on a group, hence the nesting of these declarations. 
@@ -24,6 +29,8 @@
         @name: the type name used throughout the system as the type key, REQUIRED
         @workflow: the worklow key (the name of the workflow definition file, 
             in `workflows/` folder), if not set then value of @name is used.
+        @archetype: the "custom" archetype key (a custom sub-type of the system
+            archetype specified via the element tag name).
         @enabled: "true" | "false", default is "true"
             note that if parent is disabled, then all nested elements are also 
             disabled (even if they set enabled="true")
@@ -43,13 +50,15 @@
     
     <doc name="report" enabled="true" />
     <doc name="bicameral_document" enabled="true" />
-    <doc name="event_response" workflow="event_response" archetype="event" enabled="true" />
+    
+    <event name="event_response" workflow="event_response" archetype="event" enabled="true" />
+    
     
     <group name="office" workflow="group" enabled="true">
         <member name="office_member" workflow="group_membership" enabled="true" />
     </group>
     <group name="political_group" workflow="group" enabled="true">
-        <member name="political_group_member" workflow="group_membership" enabled="true"/>
+        <member name="political_group_member" workflow="group_membership" enabled="true" />
     </group>
     <group name="committee" enabled="true">
         <member name="committee_member" workflow="group_membership" enabled="true" />
@@ -58,7 +67,7 @@
     <group name="joint_committee" workflow="committee" enabled="true" />
     <group name="government" workflow="group" enabled="true" />
     <group name="ministry" workflow="group" enabled="true">
-        <member name="minister" workflow="group_membership" enabled="true"/>
+        <member name="minister" workflow="group_membership" enabled="true" />
     </group>
     <group name="parliament" enabled="true">
         <member name="member_of_parliament" workflow="group_membership" enabled="true" />
