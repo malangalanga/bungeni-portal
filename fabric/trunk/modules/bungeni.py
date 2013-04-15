@@ -2501,9 +2501,10 @@ class VarnishTasks:
             
             print("Creating varnish VCL file in %s " % self.cfg.varnish_vcl_folder)
             
-            contents = "backend default { \n\t.host = \"%(server_name)s\"; \n\t.port = \"%(server_port)s\"; \n} \n\nsub vcl_recv { \n\t# allow PURGE from upon POST \n\tif (req.request == \"POST\" || req.request == \"PURGE\") { \n\t\tpurge(\"req.http.host == \" req.http.host); \n\t\tpurge(\"req.url == \" req.url \" && req.http.host == \" req.http.host); \n\t\tpurge(\"req.http.host == \" req.http.host \" && req.url ~ \" req.url \"$\"); \n\t\treturn (pass); \n\t} \n\n\t# remove unnecessary cookies \n\tif (req.http.cookie ~ \"wc.cookiecredentials\") { \n\t\t# found wc.cookiecredentials in request, passing to backend server \n\t\treturn (lookup); \n\t} else { \n\t\tunset req.http.cookie; \n\t} \n} \n\nsub vcl_fetch { \n\tunset beresp.http.Set-Cookie; \n\tset beresp.ttl = 12h; \n\treturn(deliver); \n} \n\n# Routine used to determine the cache key if storing/retrieving a cached page. \nsub vcl_hash { \n\t# Do NOT use this unless you want to store per-user caches. \n\tif (req.http.Cookie) { \n\t\tset req.hash += req.http.Cookie; \n\t} \n} \n\nsub vcl_deliver { \n\t# send some handy statistics back, useful for checking cache \n\tif (obj.hits > 0) { \n\t\tset resp.http.X-Cache-Action = \"HIT\"; \n\t\tset resp.http.X-Cache-Hits = obj.hits; \n\t} else { \n\t\tset resp.http.X-Cache-Action = \"MISS\"; \n\t} \n} \n" % {
+            contents = "backend default { \n\t.host = \"%(server_name)s\"; \n\t.port = \"%(server_port)s\"; \n} \n\nsub vcl_recv { \n\t# allow PURGE from upon POST \n\tif (req.request == \"POST\" || req.request == \"PURGE\") { \n\t\tpurge(\"req.http.host == \" req.http.host); \n\t\tpurge(\"req.url == \" req.url \" && req.http.host == \" req.http.host); \n\t\tpurge(\"req.http.host == \" req.http.host \" && req.url ~ \" req.url \"$\"); \n\t\treturn (pass); \n\t} \n\n\t# remove unnecessary cookies \n\tif (req.http.cookie ~ \"wc.cookiecredentials\") { \n\t\t# found wc.cookiecredentials in request, passing to backend server \n\t\treturn (lookup); \n\t} else { \n\t\tunset req.http.cookie; \n\t} \n} \n\nsub vcl_fetch { \n\tunset beresp.http.Set-Cookie; \n\tset beresp.ttl = \"%(time_to_live)s\"; \n\treturn(deliver); \n} \n\n# Routine used to determine the cache key if storing/retrieving a cached page. \nsub vcl_hash { \n\t# Do NOT use this unless you want to store per-user caches. \n\tif (req.http.Cookie) { \n\t\tset req.hash += req.http.Cookie; \n\t} \n} \n\nsub vcl_deliver { \n\t# send some handy statistics back, useful for checking cache \n\tif (obj.hits > 0) { \n\t\tset resp.http.X-Cache-Action = \"HIT\"; \n\t\tset resp.http.X-Cache-Hits = obj.hits; \n\t} else { \n\t\tset resp.http.X-Cache-Action = \"MISS\"; \n\t} \n} \n" % {
                     "server_name": self.cfg.varnish_backend_host, 
-                    "server_port": self.cfg.varnish_backend_port
+                    "server_port": self.cfg.varnish_backend_port,
+                    "time_to_live": self.cfg.varnish_time_to_live
                 }
             
             vcl_file = open("%(vcl_folder)s/default.vcl" % {"vcl_folder": self.cfg.varnish_vcl_folder}, "w")
@@ -2517,7 +2518,37 @@ class VarnishTasks:
         """
         print "Updating varnish default VCL file"
         self.create_vlc_file()
-    
-
-       
+        self.create_secret_file()
+        
+        
+    def create_secret_file(self):
+        """
+        Create varnish secret file
+        """
+        with cd(self.cfg.varnish_vcl_folder):
+            run("uuidgen > secret && chmod 0600 secret")
+            print("Created varnish secret file in %s " % self.cfg.varnish_vcl_folder)
+        
+        
+    def varnish_warmup_cache(self):
+        """
+        Warmup the varnish cache
+        """
+        print "Preparing to warmup the varnish cache."
+        print "Please wait. This may take a few minutes ..."
+        run("wget -rq -nd --delete-after http://%(bind_name)s:%(bind_port)s" % 
+                         {"bind_name": self.cfg.varnish_bind_host, 
+                         "bind_port": self.cfg.varnish_bind_port})
+        print "Done warming-up the varnish cache."
+        
+    def varnish_purge_cache(self):
+        """
+        Purge the varnish cache
+        """
+        with cd(self.cfg.varnish_install_path):
+            run("pwd")
+            run("./bin/varnishadm -T http://%(bind_name)s:%(bind_port)s -S secret url.purge ." % 
+                         {"bind_name": self.cfg.varnish_bind_host, 
+                         "bind_port": self.cfg.varnish_bind_port})
+            print("Purged the varnish cache.")
 

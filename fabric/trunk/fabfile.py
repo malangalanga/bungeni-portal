@@ -791,6 +791,20 @@ def config_varnish():
     """
     varnish = bungeni.VarnishTasks()
     varnish.varnish_config()
+    
+def varnish_warmup():
+    """
+    Warmup the varnish cache
+    """
+    varnish = bungeni.VarnishTasks()
+    varnish.varnish_warmup_cache()
+    
+def varnish_purge():
+    """
+    Warmup the varnish cache
+    """
+    varnish = bungeni.VarnishTasks()
+    varnish.varnish_purge_cache()
 
 	
 def reset_all():
