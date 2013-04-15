@@ -6,7 +6,15 @@
         tal:condition="view/search_results/items|nothing">
         <ul>
                 <li>
-                    <a tal:attributes="href doc/url" tal:content="doc/title"/><br/>
+                    <tal:link tal:condition="doc/url">
+                        <a  tal:condition="doc/url" 
+                            tal:attributes="href doc/url" 
+                                tal:content="doc/title"/><br/>
+                    </tal:link>
+                    <tal:nolink tal:condition="not:doc/url">
+                        <span tal:content="doc/title"/>
+                        <span i18n:translate="">(unknown location)</span><br/>
+                    </tal:nolink>
                     <span tal:content="doc/type"/>
                     <span tal:content="doc/author|nothing"/>
                     <span tal:content="doc/status"/>

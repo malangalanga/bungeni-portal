@@ -17,20 +17,29 @@ import zope.component
 from zope.formlib import form, namedtemplate
 from zope.app.pagetemplate import ViewPageTemplateFile
 from ploned.ui.interfaces import IBelowContentManager
+
+from bungeni.alchemist.utils import get_managed_containers
 from bungeni.core.interfaces import IWorkspaceTabsUtility, ISearchableSection
+
 from bungeni.ui import interfaces as ui_ifaces, browser
 from bungeni.ui.widgets import MultiCheckBoxWidget
 import interfaces
 from bungeni.ui.utils import common, date
+from bungeni.ui.utils.url import absoluteURL
 from bungeni.ui.i18n import _
 
 from bungeni.models import interfaces as model_ifaces
 
 from bungeni.utils import register
+from bungeni.utils.common import getattr_ancestry
 from bungeni.capi import capi
 
-def make_workspace_url(type_id, type_name, status):
-    if type_id and type_name and status:
+
+def container_obj_key(key):
+    return "obj-%s" % key
+
+def make_workspace_url(obj_id, type_name, status, context, chamber_id):
+    if obj_id and type_name and status:
         domain_class = capi.get_type_info(type_name).domain_model
         if model_ifaces.IFeatureWorkspace.implementedBy(domain_class):
             ws_roles = common.get_workspace_roles()
@@ -39,12 +48,50 @@ def make_workspace_url(type_id, type_name, status):
             tab = tabs_config.get_tab(ws_roles[0], domain_class, status)
             if tab:
                 return "./my-documents/%s/%s-%s" %(
-                    tab, ti.workflow_key, type_id
+                    tab, ti.workflow_key, obj_id
                 )
-    return "javascript:void()"
 
-def make_admin_url(type_id, type_name, status):
-    return "javascript:void()"
+@common.request_cached
+def get_parl_container(context, chamber_id):
+    parl = None
+    chamber_key = container_obj_key(chamber_id)
+    container = getattr_ancestry(context, None, 
+        acceptable=model_ifaces.IParliamentContainer.providedBy)
+    if container:
+        parl = container[chamber_key]
+    else:
+        #check locally for container
+        containers = get_managed_containers(context) or context.items()
+        for key, container in containers:
+            if model_ifaces.IParliamentContainer.providedBy(container):
+                return container[chamber_key]
+    return parl
+
+@common.request_cached
+def get_chamber_containers(chamber):
+    return get_managed_containers(chamber)
+
+@common.request_cached
+def get_type_container(chamber, type_name):
+    info = capi.get_type_info(type_name)
+    containers = get_chamber_containers(chamber)
+    for key, container in containers:
+        if info.container_interface.providedBy(container):
+            return container
+
+def make_admin_url(obj_id, type_name, status, context, chamber_id):
+    """Use traversal to find parent parliament
+    """
+    url = None
+    chamber = get_parl_container(context, chamber_id)
+    if chamber:
+        items_container = get_type_container(chamber, type_name)
+        if items_container:
+            url = "/".join([ 
+                absoluteURL(items_container, common.get_request()),
+                container_obj_key(obj_id)
+            ])
+    return url
 
 SEARCH_WORKSPACE = "ws"
 SEARCH_ADMIN = "ad"
@@ -83,15 +130,15 @@ CUSTOM_FORMATTERS = {
     "statusDate": format_date
 }
 
-def get_node_value(context, key):
+def get_node_value(root, key):
     if isinstance(key, list):
         val = None
-        ctx = context
+        ctx = root
         for k in key:
             val = ctx.get(k)
             ctx = val
         return val
-    node = context.get(key, None)
+    node = root.get(key, None)
     val = None
     if node:
         if node.has_key("#text"):
@@ -106,7 +153,7 @@ def get_node_value(context, key):
             val = formatter(val)
     return val
 
-def get_results_meta(items_list, search_context=SEARCH_WORKSPACE):
+def get_results_meta(items_list, context, search_context=SEARCH_WORKSPACE):
     """return a dict of fields for display
     """
     items = []
@@ -115,6 +162,7 @@ def get_results_meta(items_list, search_context=SEARCH_WORKSPACE):
         ontology = result.get("ontology")
         result_type = ontology.get("for")
         record = ontology.get(result_type)
+        chamber_id = ontology.get("chamber").get("parliamentId").get("select")
         item = {}
         #unique ids take this form Legislature.9-Chamber.2-AgendaItem.54
         unique_id = record.get("unique-id")
@@ -122,7 +170,7 @@ def get_results_meta(items_list, search_context=SEARCH_WORKSPACE):
         status_key = record.get("status").get("value").get("#text")
         item["type"] = type_name
         type_key = ontology.get("document").get("type").get("value").get("#text")
-        item["url"] = url_maker(obj_key, type_key, status_key)
+        item["url"] = url_maker(obj_key, type_key, status_key, context, chamber_id)
         MAP = BASE_MAPPING.items() + MAPPING.get(result_type, []).items()
         for (key, node_key) in MAP:
             item[key] = get_node_value(record, node_key)
@@ -134,7 +182,7 @@ def make_pages(item_count, offset, next_offset, limit):
     num_pages = item_count/limit + int(bool(item_count%limit))
     return list(xrange(1, num_pages+1))
 
-def execute_search(data, prefix, request):
+def execute_search(data, prefix, request, context):
     data = dict([(key, 
         (",".join(value) if isinstance(value, list) else value))
         for key,value in data.iteritems() if value])
@@ -160,9 +208,10 @@ def execute_search(data, prefix, request):
     if item_count:
         _results = exist_results.get("doc")
         if ui_ifaces.IAdminSectionLayer.providedBy(request):
-            results["items"] = get_results_meta(_results, SEARCH_ADMIN)
+            results["items"] = get_results_meta(_results, 
+                context, SEARCH_ADMIN)
         else:
-            results["items"] = get_results_meta(_results)
+            results["items"] = get_results_meta(_results, context)
     return results
 
 @register.view(ISearchableSection, ui_ifaces.IBungeniSkin, 
@@ -197,7 +246,8 @@ class Search(form.PageForm, browser.BungeniBrowserView):
         #    common.get_context_roles(self.context, self.request.principal) + \
         #    common.get_workspace_roles() + ["bungeni.Anonymous"]
         data["page"] = self.request.form.get("page", 1)
-        self.search_results = execute_search(data, self.prefix, self.request)
+        self.search_results = execute_search(data, self.prefix, 
+            self.request, self.context)
         self.status = _("Searched for '${search_string}' and found ${count} "
             "items", 
             mapping={ 
