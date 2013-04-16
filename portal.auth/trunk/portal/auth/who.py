@@ -208,9 +208,9 @@ class OAuthAuthenticatorPlugin(AlchemistWhoPlugin):
             # One in a gazillion chance that same access token is generated twice
             log.error("Multiple records for same access token.")
             return None
-        if access_token.authorization.active == False:
+        if access_token.authorization_token.authorization.active == False:
             return None
-        return access_token.authorization.user.login
+        return access_token.authorization_token.authorization.user.login
 
 
 
