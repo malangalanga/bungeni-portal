@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<workflow title="Address Workflow"
+    description="Workflow for addresses"
+    note="Used for both bungeni.models types: UserAddress, GroupAddress"
+    permission_actions=".View .Edit .Add .Delete"
+    >
+    
+    <!-- sub-item: NO global grants -->
+    
+    
+    <!-- workflow facets -->
+    <facet name="draft">
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly Drafter" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Drafter" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Drafter" />
+    </facet>
+    <facet name="internal" default="true">
+        <allow permission=".View" roles="Authenticated" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Drafter" />
+        <allow permission=".Add" roles="ClerkSenate ClerkAssembly Drafter" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Drafter" />
+    </facet>
+    <facet name="public">
+        <allow permission=".View" roles="Authenticated" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Drafter" />
+        <allow permission=".Add" roles="ClerkSenate ClerkAssembly Drafter" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Drafter" />
+    </facet>
+    <facet name="withdrawn">
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly Drafter" />
+    </facet>
+    
+    
+    <!-- workflow states -->
+    <state id="draft" title="Draft">
+        <facet ref=".draft" />
+    </state>
+    <state id="bound_to_parent" title="Address" parent_permissions="true" />
+    <state id="internal" title="Published Internal" note="Visible to bungeni users">
+        <facet ref=".internal" />
+    </state>
+    <state id="withdrawn" title="Withdrawn" note="Visible to bungeni users">
+        <facet ref=".withdrawn" />
+    </state>
+    
+    
+    <!-- workflow transition -->
+    <transition title="Create"
+        source=""
+        destination="draft"
+        trigger="automatic"
+    />
+    <transition title="Publish"
+        source="draft"
+        destination="bound_to_parent"
+        trigger="manual"
+        roles="Drafter"
+    />
+    <transition title="Publish Internal"
+        source="draft bound_to_parent"
+        destination="internal"
+        trigger="manual"
+        roles="Drafter"
+    />
+    <transition title="Re-publish"
+        source="internal"
+        destination="bound_to_parent"
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly Drafter"
+    />
+    <transition title="Withdraw"
+        source="internal bound_to_parent"
+        destination="withdrawn"
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly Drafter"
+    />
+    
+</workflow>
+

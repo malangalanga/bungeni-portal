@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<descriptor name="office" order="2" label="role" container_label="roles">
+    <field name="full_name" label="Full Name" required="false" value_type="text" render_type="text_line">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="combined_name" label="Full Name [acronym]" required="false" value_type="text" render_type="text_line">
+        <show modes="listing" />
+    </field>
+    <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+        <show modes="view edit add" />
+        <hide modes="listing" />
+    </field>
+    <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
+        <show modes="view listing" />
+    </field>
+    <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
+        <show modes="view edit add" />
+    </field>
+    <field name="principal_name" label="Role Identifier"
+        description="Unique identifier for this Role - 
+            May contain only letters, numbers, a period (.) and underscore (_). 
+            Should start with a letter and be between 3 and 20 characters long" 
+        required="true" value_type="login" render_type="text_line">
+        <show modes="view edit add" />
+    </field>
+    <field name="group_role" label="Role" description="Role given to members of this office" required="true" value_type="text" render_type="single_select" vocabulary="group_role">
+        <show modes="view edit add listing" />
+    </field>
+    
+    <container match="office_member.group_id" name="officemembers" />
+    <container match="title_type.group_id" />
+    
+    <integrity validations="validate_date_range_within_parent" />
+
+</descriptor>
+

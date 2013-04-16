@@ -1,0 +1,6046 @@
+# #############################################################################
+#
+# Copyright (c) 2003-2004 Zope Foundation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+# #############################################################################
+msgid ""
+msgstr ""
+"Project-Id-Version: VERSION\n"
+"POT-Creation-Date: Mon Feb 25 11:49:48 2013\n"
+"PO-Revision-Date: 2012-05-15 10:22+0300\n"
+"Last-Translator: UNDESA\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/locales/extract.py\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: src/bungeni.main/bungeni/alchemist/container.py:89
+msgid "Actions"
+msgstr "Действия"
+
+#: src/bungeni.main/bungeni/alchemist/container.py:114
+#: src/bungeni.main/bungeni/ui/forms/viewlets.py:467
+msgid "Add"
+msgstr "Добавлять"
+
+#: src/bungeni.main/bungeni/alchemist/ui.py:405
+#: src/bungeni.main/bungeni/alchemist/ui.py:448
+#: src/bungeni.main/bungeni/ui/assignment.py:194
+#: src/bungeni.main/bungeni/ui/attendance.py:143
+#: src/bungeni.main/bungeni/ui/forms/common.py:417
+#: src/bungeni.main/bungeni/ui/forms/common.py:577
+#: src/bungeni.main/bungeni/ui/forms/common.py:899
+#: src/bungeni.main/bungeni/ui/forms/common.py:952
+#: src/bungeni.main/bungeni/ui/login.py:382
+#: src/bungeni.main/bungeni/ui/widgets.py:380
+msgid "Cancel"
+msgstr "Отменить"
+
+#: src/bungeni.main/bungeni/alchemist/ui.py:410
+#, fuzzy
+msgid "Save and continue editing"
+msgstr "Дата и время сидения"
+
+#: src/bungeni.main/bungeni/alchemist/ui.py:418
+#: src/bungeni.main/bungeni/ui/forms/common.py:434
+msgid "Save and add another"
+msgstr "Сохранить и добавить еще один"
+
+#: src/bungeni.main/bungeni/alchemist/ui.py:444
+#: src/bungeni.main/bungeni/ui/assignment.py:188
+#: src/bungeni.main/bungeni/ui/attendance.py:132
+#: src/bungeni.main/bungeni/ui/forms/common.py:425
+#: src/bungeni.main/bungeni/ui/forms/common.py:561
+#: src/bungeni.main/bungeni/ui/forms/common.py:810
+msgid "Save"
+msgstr "Экономить"
+
+#: src/bungeni.main/bungeni/alchemist/ui.py:496
+msgid "Updated on ${date_time}"
+msgstr ""
+
+#: src/bungeni.main/bungeni/alchemist/ui.py:501
+#, fuzzy
+msgid "No changes"
+msgstr "Сохранить изменения"
+
+#: src/bungeni.main/bungeni/core/app.py:157
+msgid "Bungeni"
+msgstr "Bungeni"
+
+#: src/bungeni.main/bungeni/core/app.py:158
+#: src/bungeni.main/bungeni/core/app.py:165
+msgid "Current parliamentary activity"
+msgstr "Текущий парламентской деятельности"
+
+#. Default: "Workspace"
+#: src/bungeni.main/bungeni/core/app.py:164
+#, fuzzy
+msgid "section_workspace"
+msgstr "Действия Workspace"
+
+#. Default: "my documents"
+#: src/bungeni.main/bungeni/core/app.py:171
+#, fuzzy
+msgid "section_workspace_documents"
+msgstr "архивных документов"
+
+#: src/bungeni.main/bungeni/core/app.py:172
+msgid "my documents workspace section"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/app.py:180
+#, fuzzy
+msgid "section_workspace_%s"
+msgstr "Действия Workspace"
+
+#: src/bungeni.main/bungeni/core/app.py:185
+#: src/bungeni.main/bungeni/core/app.py:191
+msgid "under consideration"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/app.py:186
+#: src/bungeni.main/bungeni/core/app.py:192
+msgid "documents under consideration"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/app.py:196
+#: src/bungeni.main/bungeni/core/app.py:197
+#, fuzzy
+msgid "tracked documents"
+msgstr "архивных документов"
+
+#. Default: "Scheduling"
+#: src/bungeni.main/bungeni/core/app.py:200
+#, fuzzy
+msgid "section_scheduling"
+msgstr "Обсуждения в планировании"
+
+#: src/bungeni.main/bungeni/core/app.py:201
+#, fuzzy
+msgid "Workspace Scheduling"
+msgstr "Изменить порядок планирования"
+
+#. Default: "Committees"
+#: src/bungeni.main/bungeni/core/app.py:206
+msgid "section_scheduling_committees"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/app.py:208
+msgid "Committee schedules"
+msgstr "Комитет графики"
+
+#: src/bungeni.main/bungeni/core/app.py:210
+#: src/bungeni.main/bungeni/core/app.py:211
+#, fuzzy
+msgid "schedulable items"
+msgstr "Расписание пункт"
+
+#: src/bungeni.main/bungeni/core/app.py:212
+#, fuzzy
+msgid "documents available for scheduling"
+msgstr "Сделать доступным для планирования"
+
+#. Default: "Sittings"
+#: src/bungeni.main/bungeni/core/app.py:215
+msgid "section_scheduling_sittings"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/app.py:216
+msgid "Plenary Sittings"
+msgstr "Пленарные заседания"
+
+#. Default: "Agenda items"
+#: src/bungeni.main/bungeni/core/app.py:219
+msgid "section_scheduling_agenda_items"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/app.py:222
+#, fuzzy
+msgid "Manage agenda items"
+msgstr "Пункты повестки дня"
+
+#. Default: "Groups"
+#: src/bungeni.main/bungeni/core/app.py:225
+msgid "section_groups"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/app.py:226
+#, fuzzy
+msgid "Bungeni Groups"
+msgstr "Bungeni"
+
+#: src/bungeni.main/bungeni/core/app.py:231
+#, fuzzy
+msgid "My Groups"
+msgstr "Группы"
+
+#: src/bungeni.main/bungeni/core/app.py:232
+msgid "Groups that the user is a member of"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/app.py:258
+#: src/bungeni.main/bungeni/ui/menu.zcml:866
+msgid "Administration"
+msgstr "Управление"
+
+#: src/bungeni.main/bungeni/core/app.py:259
+msgid "Manage bungeni settings"
+msgstr "Управление настройками bungeni"
+
+#: src/bungeni.main/bungeni/core/app.py:265
+#: src/bungeni.main/bungeni/ui/menu.zcml:418
+msgid "Content"
+msgstr "Содержание"
+
+#: src/bungeni.main/bungeni/core/app.py:266
+msgid "browse bungeni content"
+msgstr "просматривать содержание bungeni"
+
+#: src/bungeni.main/bungeni/core/app.py:271
+msgid "email settings"
+msgstr "параметры электронной почты"
+
+#: src/bungeni.main/bungeni/core/app.py:272
+msgid "manage email settings"
+msgstr "управлять настройки электронной почты"
+
+#: src/bungeni.main/bungeni/core/app.py:277
+msgid "search index settings"
+msgstr "искать индекс настройки"
+
+#: src/bungeni.main/bungeni/core/app.py:278
+msgid "manage search index settings"
+msgstr "управлять настройками поискового индекса"
+
+#: src/bungeni.main/bungeni/core/app.py:283
+msgid "registry settings"
+msgstr "параметров реестра"
+
+#: src/bungeni.main/bungeni/core/app.py:284
+msgid "manage registry settings"
+msgstr "управлять параметрами реестра"
+
+#: src/bungeni.main/bungeni/core/app.py:289
+msgid "serialization manager"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/app.py:290
+msgid "batch serialization of content"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/dc.py:154
+#: src/bungeni.main/bungeni/core/dc.py:171
+#: src/bungeni.main/bungeni/core/dc.py:186
+msgid "Submitted by"
+msgstr "Представлено"
+
+#: src/bungeni.main/bungeni/core/dc.py:159
+msgid "Approved on"
+msgstr "Утверждено"
+
+#: src/bungeni.main/bungeni/core/dc.py:174
+msgid "published on"
+msgstr "опубликованы на"
+
+#: src/bungeni.main/bungeni/core/dc.py:189
+msgid "notice given on"
+msgstr "уведомлением о"
+
+#: src/bungeni.main/bungeni/core/dc.py:205
+msgid "Sitting:"
+msgstr "Сидят:"
+
+#: src/bungeni.main/bungeni/core/dc.py:208
+#: src/bungeni.main/bungeni/core/dc.py:217
+msgid "to"
+msgstr "к"
+
+#: src/bungeni.main/bungeni/core/dc.py:214
+msgid "Sitting scheduled for"
+msgstr "Сидя запланирован на"
+
+#. Default: "Sitting of ${group_name} @ ${sitting_venue}"
+#: src/bungeni.main/bungeni/core/dc.py:223
+msgid "verbose_sitting_title"
+msgstr "Заседание ${group_name} @ ${sitting_venue}"
+
+#: src/bungeni.main/bungeni/core/dc.py:246
+msgid "Scheduled for sitting ($start to $end)"
+msgstr "Запланированные для сидения (в $start $end)"
+
+#: src/bungeni.main/bungeni/core/dc.py:283
+msgid "translation"
+msgstr "перевод"
+
+#: src/bungeni.main/bungeni/core/dc.py:284
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:491
+msgid "Version"
+msgstr "Версия"
+
+#: src/bungeni.main/bungeni/core/dc.py:288
+msgid "Last modified"
+msgstr "Последние изменения"
+
+#. Default: "Member of Parliament for ${representation} (${member})"
+#: src/bungeni.main/bungeni/core/dc.py:353
+#, fuzzy
+msgid "member_title_with_representation"
+msgstr "Член парламента ${representation} (${member})"
+
+#: src/bungeni.main/bungeni/core/dc.py:442
+msgid "Discussion"
+msgstr "Обсуждение"
+
+#: src/bungeni.main/bungeni/core/dc.py:450
+#, fuzzy
+msgid "Vote record"
+msgstr "минуты записи"
+
+#: src/bungeni.main/bungeni/core/dc.py:472
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:48
+msgid "Address"
+msgstr "Адрес"
+
+#: src/bungeni.main/bungeni/core/schedule.py:93
+msgid "Unknown user group"
+msgstr "Неизвестная группа пользователей"
+
+#: src/bungeni.main/bungeni/core/schedule.py:230
+msgid "$x"
+msgstr "$x"
+
+#. Default: "HTML fragment to OpenDocument format"
+#: src/bungeni.main/bungeni/core/transformation.py:189
+msgid "title_html_fragment_odf_transform"
+msgstr "HTML-фрагмент OpenDocument Format"
+
+#: src/bungeni.main/bungeni/core/workflows/_actions.py:60
+#, fuzzy
+msgid "Activate a group"
+msgstr "Активная группа"
+
+#: src/bungeni.main/bungeni/core/workflows/_actions.py:67
+#, fuzzy
+msgid "Dissolve a group"
+msgstr "Растворять"
+
+#: src/bungeni.main/bungeni/core/workflows/_actions.py:83
+msgid "Apply the planned order of a setting as  the real order"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_actions.py:92
+msgid "Assign owner role to the user"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:33
+msgid "Require current user to not be the owner"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:38
+msgid "Require current user to be the owner"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:58
+msgid "Require public view access"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:68
+msgid "Require document to be scheduled"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:76
+msgid "group: Require end date to be set for the group"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:85
+msgid "sitting: Require a venue set in the current context"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:89
+msgid "sitting: Require agenda in the current context"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:93
+msgid "sitting: Require agenda to be finalized"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:97
+msgid "sitting: dummy ?"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:103
+msgid "question: Require a written response"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:109
+msgid "question: Require an oral response"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:113
+msgid "question: Require the response to be submitted in the current context"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:129
+msgid "user: Require date of death to be set"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:133
+msgid "user: Require date of death to be not set"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:140
+msgid "attachments, events etc: Require parent document to be in draft state"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:148
+msgid ""
+"attachments, events etc: Require parent document not to be in draft state"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:152
+msgid ""
+"attachments, events etc: Require parent document to be visible to the public"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:158
+msgid ""
+"attachments, events etc: Require parent document not to be visible to the "
+"public"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:162
+msgid ""
+"attachments, events etc: Require parent document to be editable by the user"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:174
+msgid "signatory: Require the user to be the owner of the parent document"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:178
+msgid ""
+"signatory: Require the owner to be the signatory. Auto-signs the document"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:200
+msgid "signatory: Require the signatory to manually sign the document"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:204
+msgid "signatory: Require the user not to be the owner of the parent document"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:208
+msgid "signatory: Require signatories"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:215
+#, fuzzy
+msgid "signatory: Require consented signatories"
+msgstr "Минимальное согласие подписали по векселю"
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:222
+msgid "signatory: Require signature period to have expired"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:230
+msgid "signatory: Require parent document to have been redrafted"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:236
+msgid "signatory: Require the signature to have been withdrawn"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:245
+msgid "signatory: Require the signatory be allowed to sign"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/_conditions.py:252
+msgid "signatory: Require the signatory to be allowed to withdraw or reject"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/dbutils.py:44
+msgid "Unschedule a document which has been scheduled"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/simple.py:14
+msgid "visible"
+msgstr "видимый"
+
+#: src/bungeni.main/bungeni/core/workflows/simple.py:15
+msgid "pending"
+msgstr "в ожидании"
+
+#: src/bungeni.main/bungeni/core/workflows/simple.py:16
+msgid "scheduled"
+msgstr "запланировано"
+
+#: src/bungeni.main/bungeni/core/workflows/simple.py:28
+msgid "Submit to Clerk"
+msgstr "Отправить на Клерк"
+
+#: src/bungeni.main/bungeni/core/workflows/simple.py:33
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:397
+msgid "Schedule"
+msgstr "Расписание"
+
+#: src/bungeni.main/bungeni/core/workflows/utils.py:97
+#, fuzzy
+msgid "Sets the document's registry number"
+msgstr "Сброс представленных документов, регистрационный номер"
+
+#: src/bungeni.main/bungeni/core/workflows/utils.py:134
+msgid "Sets the serial number of the document in the order of approval"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/utils.py:152
+msgid "Grant the ministry access to a question"
+msgstr ""
+
+#: src/bungeni.main/bungeni/core/workflows/utils.py:213
+#, fuzzy
+msgid "Schedules the items on a sitting"
+msgstr "Удаление сидя"
+
+#: src/bungeni.main/bungeni/core/workflows/utils.py:255
+#, fuzzy
+msgid "retract scheduled items"
+msgstr "Удалить запланирован пункт"
+
+#. Default: "Undo - ${title}"
+#: src/bungeni.main/bungeni/core/workflows/utils.py:343
+#, fuzzy
+msgid "revert_transition_title"
+msgstr "Заседание ${group_name} @ ${sitting_venue}"
+
+#: src/bungeni.main/bungeni/models/interfaces.py:282
+msgid "Reset global registry number"
+msgstr "Сброс общее число реестр"
+
+#: src/bungeni.main/bungeni/models/interfaces.py:286
+msgid "Reset questions registry number"
+msgstr "Сброс вопросов регистрационный номер"
+
+#: src/bungeni.main/bungeni/models/interfaces.py:290
+msgid "Reset motions registry number"
+msgstr "Сброс движения регистрационный номер"
+
+#: src/bungeni.main/bungeni/models/interfaces.py:294
+msgid "Reset agenda items registry number"
+msgstr "Сброс повестки дня регистрационный номер"
+
+#: src/bungeni.main/bungeni/models/interfaces.py:298
+msgid "Reset bills registry number"
+msgstr "Сброс счета регистрационный номер"
+
+#: src/bungeni.main/bungeni/models/interfaces.py:302
+msgid "Reset reports registry number"
+msgstr "Сброс отчетов регистрационный номер"
+
+#: src/bungeni.main/bungeni/models/interfaces.py:306
+msgid "Reset tabled documents registry number"
+msgstr "Сброс представленных документов, регистрационный номер"
+
+#: src/bungeni.main/bungeni/models/interfaces.py:316
+msgid "Email Notifications Enabled?"
+msgstr "Уведомления по электронной почте включена?"
+
+#: src/bungeni.main/bungeni/models/interfaces.py:322
+msgid "Email server hostname or IP address"
+msgstr "Почтовый сервер хоста или IP-адрес"
+
+#: src/bungeni.main/bungeni/models/interfaces.py:326
+msgid "Email server port"
+msgstr "Email порт сервера"
+
+#: src/bungeni.main/bungeni/models/interfaces.py:330
+msgid "Email server login name"
+msgstr "Почтовый сервер имя"
+
+#: src/bungeni.main/bungeni/models/interfaces.py:334
+msgid "Email server password"
+msgstr "Email пароль сервера"
+
+#: src/bungeni.main/bungeni/models/interfaces.py:338
+msgid "Default sender address"
+msgstr "По умолчанию адрес отправителя"
+
+#: src/bungeni.main/bungeni/models/interfaces.py:342
+msgid "Connect securely to mail server (using TLS)"
+msgstr "Безопасно подключаться к почтовому серверу (с помощью TLS)"
+
+#: src/bungeni.main/bungeni/ui/admin.py:119
+#, fuzzy
+msgid "Batch Serialization"
+msgstr "перевод"
+
+#: src/bungeni.main/bungeni/ui/admin.py:120
+msgid ""
+"This will serialize all workflowable objects in Bungeni to XML. You can "
+"limit by type below or choose *All types* to serialize everything."
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/admin.py:125
+#, fuzzy
+msgid "Serialize Items"
+msgstr "Доступные товары"
+
+#: src/bungeni.main/bungeni/ui/admin.py:129
+msgid "Sent ${item_count} items for serialization"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/assignment.py:112
+#, fuzzy
+msgid "user name"
+msgstr "Имя пользователя"
+
+#: src/bungeni.main/bungeni/ui/assignment.py:116
+msgid "assigned"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/assignment.py:143
+#, fuzzy
+msgid "No users available for this role."
+msgstr "Нет истории для данного пункта"
+
+#: src/bungeni.main/bungeni/ui/attendance.py:52
+msgid "full names"
+msgstr "полные имена"
+
+#: src/bungeni.main/bungeni/ui/attendance.py:136
+#: src/bungeni.main/bungeni/ui/forms/common.py:407
+#: src/bungeni.main/bungeni/ui/forms/common.py:567
+msgid "Save and view"
+msgstr "Сохранить и просматривать"
+
+#: src/bungeni.main/bungeni/ui/attendance.py:207
+msgid "Updated attendance record"
+msgstr "Обновлен рекорд посещаемости"
+
+#: src/bungeni.main/bungeni/ui/audit.py:305
+#: src/bungeni.main/bungeni/ui/workflow.py:70
+msgid "user"
+msgstr "пользователь"
+
+#. Default: "date active"
+#: src/bungeni.main/bungeni/ui/audit.py:307
+msgid "audit_column_date_active"
+msgstr ""
+
+#. Default: "object"
+#: src/bungeni.main/bungeni/ui/audit.py:310
+msgid "audit_column_object"
+msgstr ""
+
+#. Default: "description"
+#: src/bungeni.main/bungeni/ui/audit.py:313
+#, fuzzy
+msgid "audit_column_description"
+msgstr "описание"
+
+#. Default: "note"
+#: src/bungeni.main/bungeni/ui/audit.py:316
+#, fuzzy
+msgid "audit_column_note"
+msgstr "Перемещение планирования до"
+
+#. Default: "date audit"
+#: src/bungeni.main/bungeni/ui/audit.py:319
+msgid "audit_column_date_audit"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/audit.py:351
+msgid "No Change Data"
+msgstr "Нет изменений в данных"
+
+#: src/bungeni.main/bungeni/ui/audit.py:410
+#, fuzzy
+msgid "Change Log"
+msgstr "Изменение сообщение"
+
+#. Default: "Venues"
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:79
+msgid "scheduler_title_venues_view"
+msgstr ""
+
+#. Default: "Group"
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:80
+#, fuzzy
+msgid "scheduler_field_group"
+msgstr "запланировано"
+
+#. Default: "Start Date"
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:81
+msgid "scheduler_field_start_date"
+msgstr ""
+
+#. Default: "End Date"
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:82
+msgid "scheduler_field_end_date"
+msgstr ""
+
+#. Default: "Venue"
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:83
+#, fuzzy
+msgid "scheduler_field_venue"
+msgstr "запланировано"
+
+#. Default: "Sitting"
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:84
+#, fuzzy
+msgid "scheduler_title_sitting"
+msgstr "Удаление сидя"
+
+#. Default: "View"
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:85
+msgid "scheduler_action_view_sitting"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:108
+msgid "Daily"
+msgstr "Ежедневно"
+
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:109
+msgid "Weekly"
+msgstr "Еженедельно"
+
+#. Default: "choose ${event_field_title}"
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:132
+msgid "event_form_field_default"
+msgstr "выбрать ${event_field_title}"
+
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:296
+msgid "Scheduling"
+msgstr "Планирование"
+
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:384
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:19
+msgid "Activity Type"
+msgstr "Вид деятельности"
+
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:385
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:266
+msgid "Meeting Type"
+msgstr "Совещание типа"
+
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:386
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:117
+msgid "Convocation Type"
+msgstr "Тип созыва"
+
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:390
+msgid "Please check the highlighted sittings. Failed to apply changes"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:392
+msgid "Please review the highlighted sittings. Could not apply changes."
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:394
+msgid "Please review the highlighted events. Could not be deleted."
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:501
+msgid "${localized_start_date} to ${localized_end_date}"
+msgstr "${localized_start_date} в ${localized_end_date}"
+
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:672
+msgid "Unable to add a sitting. Please make corrections."
+msgstr "Не удается добавить заседании. Пожалуйста, внести коррективы."
+
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:784
+msgid "Error Updating Sitting"
+msgstr "Ошибка при обновлении заседание"
+
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:905
+#, fuzzy
+msgid "Error Deleting Sitting"
+msgstr "Ошибка при обновлении заседание"
+
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:1241
+msgid "Sitting Votes and Proceedings"
+msgstr "Сидя голосов и материалы"
+
+#: src/bungeni.main/bungeni/ui/calendar/browser.py:1243
+msgid "Sitting Agenda"
+msgstr "Сидя повестки дня"
+
+#: src/bungeni.main/bungeni/ui/calendar/data.py:87
+msgid "choose status"
+msgstr "выбрать статус"
+
+#: src/bungeni.main/bungeni/ui/calendar/interfaces.py:29
+msgid "Start date and time of sitting"
+msgstr "Дата и время сидения"
+
+#: src/bungeni.main/bungeni/ui/calendar/interfaces.py:30
+msgid "Choose sitting's start date and time"
+msgstr "Выберите заседание дата и время начала"
+
+#: src/bungeni.main/bungeni/ui/calendar/interfaces.py:33
+msgid "End date and time of sitting"
+msgstr "Конечные дата и время сидения"
+
+#: src/bungeni.main/bungeni/ui/calendar/interfaces.py:34
+msgid "Choose sitting's end date and time"
+msgstr "Выберите заседание дата и время окончания"
+
+#: src/bungeni.main/bungeni/ui/calendar/interfaces.py:37
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:489
+msgid "Venue"
+msgstr "Место встречи"
+
+#: src/bungeni.main/bungeni/ui/calendar/interfaces.py:38
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:490
+msgid "Venues"
+msgstr "Места"
+
+#: src/bungeni.main/bungeni/ui/calendar/interfaces.py:42
+#: src/bungeni.main/bungeni/ui/calendar/interfaces.py:43
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:254
+#: src/bungeni.main/bungeni/ui/search.py:120
+#: src/bungeni.main/bungeni/ui/templates/bungeni-content.pt:26
+msgid "Language"
+msgstr "Язык"
+
+#: src/bungeni.main/bungeni/ui/calendar/templates/dhtmlxcalendar.pt:197
+msgid "Calendar of"
+msgstr "Календарь"
+
+#. Default: "Sitting"
+#: src/bungeni.main/bungeni/ui/calendar/templates/dhtmlxcalendarxml.pt:20
+msgid "scheduler_label_sitting"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/calendar/templates/scheduler.pt:8
+msgid "Agenda"
+msgstr "Повестка дня"
+
+#: src/bungeni.main/bungeni/ui/debaterecord.py:84
+#, fuzzy
+msgid "Take start time"
+msgstr "дата начала"
+
+#: src/bungeni.main/bungeni/ui/debaterecord.py:88
+msgid "Take end time"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/debaterecord.py:92
+#, fuzzy
+msgid "Take name"
+msgstr "Имя пользователя"
+
+#: src/bungeni.main/bungeni/ui/debaterecord.py:96
+msgid "Take transcriber"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/debaterecord.py:141
+msgid "Generate takes"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:5
+#, fuzzy
+msgid "A Motion"
+msgstr "Движение"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:6
+#, fuzzy
+msgid "A bill"
+msgstr "Добавить счет ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:7
+#, fuzzy
+msgid "A question"
+msgstr "Добавить вопрос ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:8
+#, fuzzy
+msgid "A report"
+msgstr "Сообщить"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:9
+#, fuzzy
+msgid "A sittings debate record"
+msgstr "Сидя рекорд посещаемости"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:10
+#, fuzzy
+msgid "A tabled document"
+msgstr "Представленный документ"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:11
+msgid "Abstained"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:12
+msgid "Acronym"
+msgstr "Акроним"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:13
+msgid "Activate"
+msgstr "Активировать"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:14
+msgid "Active"
+msgstr "Активный"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:15
+msgid "Active Committee"
+msgstr "Активное комитета"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:16
+msgid "Active Group"
+msgstr "Активная группа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:17
+msgid "Active Parliament"
+msgstr "Активное парламента"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:18
+msgid "Active User"
+msgstr "Активный пользователь"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:20
+#, fuzzy
+msgid "Add Agenda Item..."
+msgstr "Добавить пункт повестки дня ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:21
+#, fuzzy
+msgid "Add Bill Event"
+msgstr "Добавить событие ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:22
+#, fuzzy
+msgid "Add Bill..."
+msgstr "Добавить счет ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:23
+#, fuzzy
+msgid "Add Committee Address"
+msgstr "Добавить комитет сотрудников ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:24
+#, fuzzy
+msgid "Add Committee Member..."
+msgstr "Добавить член комитета ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:25
+#, fuzzy
+msgid "Add Committee Staff..."
+msgstr "Добавить комитет сотрудников ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:26
+#, fuzzy
+msgid "Add Committee..."
+msgstr "Добавить комитета ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:27
+#, fuzzy
+msgid "Add Government Address"
+msgstr "Правительства"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:28
+#, fuzzy
+msgid "Add Government..."
+msgstr "Добавить правительства ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:29
+#, fuzzy
+msgid "Add Member Of Parliament..."
+msgstr "Член парламента"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:30
+#, fuzzy
+msgid "Add Minister..."
+msgstr "Добавить министр ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:31
+#, fuzzy
+msgid "Add Ministry Address"
+msgstr "Добавить адрес пользователя ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:32
+#, fuzzy
+msgid "Add Ministry..."
+msgstr "Добавить министерства ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:33
+#, fuzzy
+msgid "Add Motion Event"
+msgstr "Добавить движение ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:34
+#, fuzzy
+msgid "Add Motion..."
+msgstr "Добавить движение ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:35
+#, fuzzy
+msgid "Add Office Address"
+msgstr "Добавить адрес пользователя ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:36
+#, fuzzy
+msgid "Add Office Member..."
+msgstr "Добавить офис члена ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:37
+#, fuzzy
+msgid "Add Office..."
+msgstr "Добавить офис ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:38
+#, fuzzy
+msgid "Add Parliament Address"
+msgstr "Парламенты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:39
+#, fuzzy
+msgid "Add Parliament..."
+msgstr "Добавить парламента ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:40
+#, fuzzy
+msgid "Add Political Group Address"
+msgstr "Политические группы"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:41
+#, fuzzy
+msgid "Add Political Group Member..."
+msgstr "Добавить политической члена группы ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:42
+#, fuzzy
+msgid "Add Political Group..."
+msgstr "Добавить политических групп ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:43
+#, fuzzy
+msgid "Add Question Event"
+msgstr "Добавить вопрос ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:44
+#, fuzzy
+msgid "Add Question..."
+msgstr "Добавить вопрос ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:45
+#, fuzzy
+msgid "Add Report..."
+msgstr "Добавить пользователя ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:46
+#, fuzzy
+msgid "Add Tabled Document Event"
+msgstr "Представленные документы"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:47
+#, fuzzy
+msgid "Add Tabled Document..."
+msgstr "Добавить представленных документов ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:49
+msgid "Address Type"
+msgstr "Адрес типа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:50
+#, fuzzy
+msgid "Address Workflow"
+msgstr "Workflow"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:51
+msgid "Addresses"
+msgstr "Адреса"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:52
+msgid "Adjourn"
+msgstr "Отсрочивать"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:53
+msgid "Adjourn First Reading"
+msgstr "Окончание первом чтении"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:54
+msgid "Adjourn First Report Reading"
+msgstr "Окончание первого чтения доклада"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:55
+msgid "Adjourn Second Reading"
+msgstr "Откладывает втором чтении"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:56
+msgid "Adjourn Third Reading"
+msgstr "Откладывает в третьем чтении"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:57
+msgid "Adjourn Whole House Committee"
+msgstr "Окончание полного комитета палаты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:58
+msgid "Adjourn debate"
+msgstr "Перерыве в прениях"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:59
+msgid "Admissible"
+msgstr "Допустимый"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:60
+msgid "Admissible Date"
+msgstr "Допустимые Дата"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:61
+msgid "Adopt"
+msgstr "Принимать"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:62
+msgid "Adopt with amendments"
+msgstr "Принять с поправками"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:63
+msgid "Adopted"
+msgstr "Принятые"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:64
+msgid "Adopted with amendments"
+msgstr "Документ принят с поправками"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:65
+#, fuzzy
+msgid "Agenda Item"
+msgstr "Пункты повестки дня"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:66
+#, fuzzy
+msgid "Agenda Item Workflow"
+msgstr "Пункты повестки дня"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:67
+msgid "Agenda Items"
+msgstr "Пункты повестки дня"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:68
+#, fuzzy
+msgid "Agenda Text Record"
+msgstr "добавить текст записи"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:69
+#, fuzzy
+msgid "Agenda Text Records"
+msgstr "добавить текст записи"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:70
+msgid "Allow scheduling"
+msgstr "Разрешить планирование"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:71
+msgid "Allow scheduling of First Reading"
+msgstr "Разрешить планирование первом чтении"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:72
+msgid "Allow scheduling of First Report Reading"
+msgstr "Разрешить планирование первом чтении отчета"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:73
+msgid "Allow scheduling of Second Reading"
+msgstr "Разрешить планирование втором чтении"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:74
+msgid "Allow scheduling of Third Reading"
+msgstr "Разрешить планирование третьем чтении"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:75
+msgid "Allow scheduling of Whole House Committee"
+msgstr "Разрешить планирование Всего комитета палаты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:76
+msgid "Allow scheduling/rescheduling of Whole House Committee"
+msgstr "Разрешить планирование / реструктуризация Всего комитета палаты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:77
+msgid "Approve"
+msgstr "Утвердить"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:78
+msgid "Approved Bill"
+msgstr "Утвержден законопроект"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:79
+#: src/bungeni.main/bungeni/ui/templates/archive.pt:5
+msgid "Archive"
+msgstr "Архив"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:80
+msgid "Attachment"
+msgstr "Привязанность"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:81
+#, fuzzy
+msgid "Attachment Review"
+msgstr "Приложения типа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:82
+#, fuzzy
+msgid "Attachment Review Complete"
+msgstr "Переоформление"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:83
+msgid "Attachment Type"
+msgstr "Приложения типа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:84
+#, fuzzy
+msgid "Attachment Version"
+msgstr "Вложения"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:85
+#, fuzzy
+msgid "Attachment Versions"
+msgstr "Вложения"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:86
+#, fuzzy
+msgid "Attachment Workflow"
+msgstr "Вложения"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:87
+msgid "Attachments"
+msgstr "Вложения"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:88
+msgid "Attendance"
+msgstr "Посещаемость"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:89
+#, fuzzy
+msgid "Auto Archive"
+msgstr "Архив"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:90
+msgid "Awaiting Consent"
+msgstr "Ожидается согласия"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:91
+msgid "Bill"
+msgstr "Билл"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:92
+msgid "Bill Published in Gazette"
+msgstr "Билл опубликованное в бюллетене"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:93
+msgid "Bill Type"
+msgstr "Билл типа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:94
+msgid "Bill Withdrawn"
+msgstr "Билл Изъятые"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:95
+#, fuzzy
+msgid "Bill Workflow"
+msgstr "Workflow"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:96
+msgid "Bills"
+msgstr "Векселя"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:97
+#: src/bungeni.main/bungeni/ui/login.py:254
+msgid "Biographical notes"
+msgstr "Биографическая справка"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:98
+msgid "Body"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:99
+#, fuzzy
+msgid "Change"
+msgstr "Изменение сообщение"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:100
+#, fuzzy
+msgid "Changes"
+msgstr "Изменение сообщение"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:101
+msgid "Choose the type of question"
+msgstr "Выберите тип вопроса"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:102
+msgid "Choose the type of response expected for this question"
+msgstr "Выберите тип ответа ожидается на этот вопрос"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:103
+msgid "City"
+msgstr "Сити"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:104
+#, fuzzy
+msgid "Committee"
+msgstr "Комитеты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:105
+msgid "Committee Identifier"
+msgstr "Комитет идентификатор"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:106
+#, fuzzy
+msgid "Committee Member"
+msgstr "Редактировать член комитета"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:107
+#, fuzzy
+msgid "Committee Members"
+msgstr "Комитеты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:108
+#, fuzzy
+msgid "Committee Staff"
+msgstr "Edit-штабного комитета"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:109
+#, fuzzy
+msgid "Committee Staffs"
+msgstr "Комитеты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:110
+msgid "Committee Status Type"
+msgstr "Комитет по Статусу типа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:111
+msgid "Committee Type"
+msgstr "Комитет типа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:112
+#, fuzzy
+msgid "Committee Workflow"
+msgstr "Edit-штабного комитета"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:113
+msgid "Committee is Dissolved"
+msgstr "Комитет растворенного"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:114
+msgid "Committees"
+msgstr "Комитеты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:115
+msgid "Complete"
+msgstr "Полный"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:116
+msgid "Complete Response"
+msgstr "Полный ответ"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:118
+msgid "Countries"
+msgstr "Страны"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:119
+msgid "Country"
+msgstr "Страна"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:120
+msgid "Country Code"
+msgstr "Код страны"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:121
+#: src/bungeni.main/bungeni/ui/login.py:261
+msgid "Country of Birth"
+msgstr "Страна рождения"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:122
+#, fuzzy
+msgid "Coverage"
+msgstr "Обложки"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:123
+msgid "Create"
+msgstr "Создавать"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:124
+msgid "Create Agenda Item"
+msgstr "Создать пункт повестки дня"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:125
+msgid "Create Agenda Item (On behalf of)"
+msgstr "Создать пункт повестки дня (от имени)"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:126
+msgid "Create Bill"
+msgstr "Создать Билл"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:127
+#, fuzzy
+msgid "Create Debate Record"
+msgstr "Создать отчет"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:128
+msgid "Create Motion"
+msgstr "Создание движения"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:129
+msgid "Create Motion (On behalf of)"
+msgstr "Создать Motion (от имени)"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:130
+msgid "Create Question"
+msgstr "Создать вопрос"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:131
+msgid "Create Question (On behalf of)"
+msgstr "Создать Вопрос (от имени)"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:132
+msgid "Create Report"
+msgstr "Создать отчет"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:133
+msgid "Create Sitting"
+msgstr "Создать Сидя"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:134
+msgid "Create Tabled Document"
+msgstr "Создать представленных документов"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:135
+msgid "Create Tabled Document (On behalf of)"
+msgstr "Создать представленных документов (по имени)"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:136
+msgid "Create and Sign"
+msgstr "Создание и Регистрация"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:137
+#: src/bungeni.main/bungeni/ui/login.py:264
+msgid "Current Nationality"
+msgstr "Текущий Национальность"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:138
+msgid "Date"
+msgstr "Дата"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:139
+#, fuzzy
+msgid "Date Active"
+msgstr "Активный"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:140
+#, fuzzy
+msgid "Date Audit"
+msgstr "Дата рождения"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:141
+#: src/bungeni.main/bungeni/ui/login.py:256
+msgid "Date of Birth"
+msgstr "Дата рождения"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:142
+msgid "Date of Death"
+msgstr "Дата смерти"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:143
+msgid "Date of the dissolution"
+msgstr "Дата роспуска"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:144
+msgid "Date of the election"
+msgstr "Дата выборов"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:145
+msgid "Date of the swearing in"
+msgstr "Дата приведения к присяге"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:146
+#, fuzzy
+msgid "Date submitted to ministry"
+msgstr "Опубликовано в министерстве"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:147
+msgid "Deactivate"
+msgstr "Дезактивировать"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:148
+msgid "Debate"
+msgstr "Дебаты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:149
+#, fuzzy
+msgid "Debate Media"
+msgstr "Обсуждены"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:150
+#, fuzzy
+msgid "Debate Medias"
+msgstr "Обсуждены"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:151
+msgid "Debate Record Workflow"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:152
+msgid "Debate adjourned"
+msgstr "Дебаты отложены"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:153
+msgid "Debated"
+msgstr "Обсуждены"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:154
+msgid "Deceased User"
+msgstr "Умерших пользователей"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:155
+msgid "Defer"
+msgstr "Откладывать"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:156
+msgid "Deferred"
+msgstr "Отложенный"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:157
+#, fuzzy
+msgid "Delete Agenda Item"
+msgstr "Удаление пункта повестки дня"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:158
+#, fuzzy
+msgid "Delete Bill"
+msgstr "Удаление законопроект"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:159
+#, fuzzy
+msgid "Delete Motion"
+msgstr "Удаление движения"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:160
+#, fuzzy
+msgid "Delete Question"
+msgstr "Удалите вопрос"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:161
+#, fuzzy
+msgid "Delete Tabled Document"
+msgstr "Удалить представленных документов"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:162
+msgid "Description"
+msgstr "Описание"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:163
+msgid "Disapprove"
+msgstr "Не одобрять"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:164
+msgid "Dissolve"
+msgstr "Растворять"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:165
+msgid "Doc"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:166
+#, fuzzy
+msgid "Doc Version"
+msgstr "Версия"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:167
+#, fuzzy
+msgid "Doc Versions"
+msgstr "Версии"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:168
+msgid "Docs"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:169
+msgid "Document Type"
+msgstr "Тип документа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:170
+#, fuzzy
+msgid "Document URI"
+msgstr "Документация"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:171
+msgid "Draft"
+msgstr "Проект"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:172
+msgid "Draft - Committee not yet Active"
+msgstr "Проект - Комитет еще не активность"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:173
+msgid "Draft - Group not yet Active"
+msgstr "Проект - группа еще не активность"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:174
+msgid "Draft - Parliament not yet Active"
+msgstr "Проект - парламент еще не активность"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:175
+msgid "Draft Address"
+msgstr "Проект адрес"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:176
+msgid "Draft Agenda"
+msgstr "Проект повестки дня"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:177
+msgid "Draft Bill"
+msgstr "Законопроект"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:178
+msgid "Draft Event"
+msgstr "Проект событий"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:179
+msgid "Draft Minutes"
+msgstr "Проект протокола"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:180
+msgid "Drop"
+msgstr "Падение"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:181
+msgid "Dropped"
+msgstr "Добыча"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:182
+#, fuzzy
+msgid "Edit Agenda Item"
+msgstr "Изменить пункт повестки дня"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:183
+#, fuzzy
+msgid "Edit Bill"
+msgstr "Изменить законопроект"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:184
+#, fuzzy
+msgid "Edit Motion"
+msgstr "Редактировать движения"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:185
+#, fuzzy
+msgid "Edit Question"
+msgstr "Редактировать вопрос"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:186
+#, fuzzy
+msgid "Edit Tabled Document"
+msgstr "Редактирование представленных документов"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:187
+msgid "Editorial Note"
+msgstr "От редакции"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:188
+#, fuzzy
+msgid "Editorial Notes"
+msgstr "От редакции"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:189
+msgid "Elapse"
+msgstr "Проходить"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:190
+msgid "Elapsed"
+msgstr "Прошедшее"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:191
+msgid "Election Date"
+msgstr "Даты выборов"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:192
+msgid "Election Type"
+msgstr "Выборы типа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:193
+msgid "Election/Nomination Date"
+msgstr "Выборы / Номинация дате"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:194
+msgid "Email"
+msgstr "E-mail"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:195
+msgid "Email address"
+msgstr "Адрес электронной почты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:196
+msgid "End"
+msgstr "Конец"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:197
+msgid "End Date"
+msgstr "Дата окончания"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:198
+msgid "Enter one fax number per line"
+msgstr "Введите один номер факса в строке"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:199
+msgid "Enter one phone number per line"
+msgstr "Введите один телефонный номер в строке"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:200
+msgid "Event"
+msgstr "Событие"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:201
+#, fuzzy
+msgid "Event Date"
+msgstr "Дата окончания"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:202
+msgid "Event Type"
+msgstr "Тип события"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:203
+#, fuzzy
+msgid "Event Workflow"
+msgstr "Workflow"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:204
+msgid "Events"
+msgstr "События"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:205
+msgid "Fax Number(s)"
+msgstr "Номер факса (с)"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:206
+msgid "File"
+msgstr "Файл"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:207
+msgid "Finalize Agenda"
+msgstr "Завершение повестки дня"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:208
+msgid "First Name"
+msgstr "Имя"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:209
+msgid "First Reading"
+msgstr "Первое чтение"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:210
+msgid "First Reading Adjourned"
+msgstr "Первое чтение Незавершенных"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:211
+msgid "First Reading Pending"
+msgstr "Первое чтение ожидании"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:212
+msgid "First Report Reading"
+msgstr "Первое чтение отчета"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:213
+msgid "First Report Reading Adjourned"
+msgstr "Первое чтение доклада Незавершенных"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:214
+msgid "First Report Reading Pending"
+msgstr "Первое чтение доклада до"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:215
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:442
+msgid "Full Name"
+msgstr "Полное имя"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:216
+#, fuzzy
+msgid "Full Name [Short Name]"
+msgstr "Краткое название"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:217
+#: src/bungeni.main/bungeni/ui/login.py:255
+msgid "Gender"
+msgstr "Пол"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:218
+#, fuzzy
+msgid "Geolocation"
+msgstr "Население"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:219
+msgid "Government"
+msgstr "Правительство"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:220
+msgid "Government Identifier"
+msgstr "Правительство идентификатор"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:221
+msgid "Governments"
+msgstr "Правительства"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:222
+msgid "Group"
+msgstr "Группа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:223
+#, fuzzy
+msgid "Group Doc Assignment"
+msgstr "Документация"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:224
+#, fuzzy
+msgid "Group Membership"
+msgstr "Пользователи"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:225
+msgid "Group Memberships"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:226
+#, fuzzy
+msgid "Group Workflow"
+msgstr "Workflow"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:227
+#, fuzzy
+msgid "Group document assignment"
+msgstr "Изменить правительство"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:228
+msgid "Group is Dissolved"
+msgstr "Группа растворенного"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:229
+msgid "Group sitting workflow"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:230
+msgid "Groups"
+msgstr "Группы"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:231
+msgid "Heading"
+msgstr "Заголовок"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:232
+#, fuzzy
+msgid "Heading Workflow"
+msgstr "Workflow"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:233
+msgid "Headings"
+msgstr "Заголовки"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:234
+msgid "Identifier"
+msgstr "Идентификатор"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:235
+#: src/bungeni.main/bungeni/ui/login.py:266
+msgid "Image"
+msgstr "Изображение"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:236
+msgid "In power from"
+msgstr "В мощностью от"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:237
+msgid "In power till"
+msgstr "В мощностью до"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:238
+msgid "Inactive User"
+msgstr "Неактивных пользователей"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:239
+msgid "Inactive address"
+msgstr "Неактивные адрес"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:240
+msgid "Inactive event"
+msgstr "Неактивные события"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:241
+msgid "Inactive file"
+msgstr "Неактивных файлов"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:242
+msgid "Inactive heading obsolete"
+msgstr "Неактивный заголовок устаревшего"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:243
+msgid "Inadmissible"
+msgstr "Недопустимый"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:244
+msgid "Initial password"
+msgstr "Первоначальный пароль"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:245
+#, fuzzy
+msgid "Issue item"
+msgstr "Расписание пункт"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:246
+#, fuzzy
+msgid "Issue sub item"
+msgstr "Ответ представленных"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:247
+msgid "Item"
+msgstr "Пункт"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:248
+#, fuzzy
+msgid "Item Schedule"
+msgstr "Расписание"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:249
+#, fuzzy
+msgid "Item Schedule Discussion"
+msgstr "Редактировать обсуждения"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:250
+#, fuzzy
+msgid "Item Schedule Discussions"
+msgstr "Обсуждения"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:251
+#, fuzzy
+msgid "Item Schedules"
+msgstr "Расписание"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:252
+#: src/bungeni.main/bungeni/ui/forms/forms.py:189
+msgid "Item Type"
+msgstr "Тип элемента"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:253
+msgid "Item URI"
+msgstr "Пункт URI"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:255
+msgid "Last Name"
+msgstr "Фамилия"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:256
+msgid "Leave Reason"
+msgstr "Оставьте разума"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:257
+msgid "Limits persons with this title to one"
+msgstr "Ограничения лиц с таким названием одной"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:258
+#: src/bungeni.main/bungeni/ui/menu.py:89
+msgid "Login"
+msgstr "Войти"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:259
+msgid "Logo"
+msgstr "Логотип"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:260
+#, fuzzy
+msgid "MIME Type"
+msgstr "Тип элемента"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:261
+#, fuzzy
+msgid "Majority type"
+msgstr "тип элемента"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:262
+msgid "Make available for scheduling"
+msgstr "Сделать доступным для планирования"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:263
+#, fuzzy
+msgid "Marital Status"
+msgstr "Статус"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:264
+msgid "Media Path"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:265
+#, fuzzy
+msgid "Media Type"
+msgstr "Совещание типа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:267
+#: src/bungeni.main/bungeni/ui/forms/viewlets.py:362
+msgid "Member"
+msgstr "Член"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:268
+#, fuzzy
+msgid "Member Of Parliament"
+msgstr "Член парламента"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:269
+msgid "Member of Parliament"
+msgstr "Член парламента"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:270
+#, fuzzy
+msgid "Members Of Parliament"
+msgstr "Член парламента"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:271
+msgid "Membership Workflow"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:272
+msgid "Middle Name"
+msgstr "Отчество"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:273
+#, fuzzy
+msgid "Minimum Number of members"
+msgstr "Минимальное количество членов"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:274
+msgid "Minister"
+msgstr "Министр"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:275
+msgid "Ministers"
+msgstr "Министры"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:276
+msgid "Ministries"
+msgstr "Министерствам"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:277
+msgid "Ministry"
+msgstr "Министерство"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:278
+msgid "Ministry Identifier"
+msgstr "Министерство идентификатор"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:279
+#: src/bungeni.main/bungeni/ui/forms/templates/doc-minutes.pt:1
+msgid "Minutes"
+msgstr "Минут"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:280
+msgid "Model"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:281
+msgid "Models"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:282
+msgid "Motion"
+msgstr "Движение"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:283
+#, fuzzy
+msgid "Motion Workflow"
+msgstr "Workflow"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:284
+msgid "Motions"
+msgstr "Движения"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:285
+msgid "Move from Deceased"
+msgstr "Переход от умерших"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:286
+msgid "Move to Deceased"
+msgstr "Переход к умершим"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:287
+msgid "Moved by"
+msgstr "Движимый"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:288
+msgid "Mover"
+msgstr "Двигатель"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:289
+#, fuzzy
+msgid ""
+"Must contain only letters, numbers, a period (.) and underscore (_). Should "
+"start with a letter and be between 3 and 20 characters long"
+msgstr ""
+"Должен содержать только буквы, цифры, точка (.) И подчеркивание (_). Должны "
+"начинаться с буквы и составлять от 3 до 20 символов"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:290
+msgid "Name"
+msgstr "Имя"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:291
+msgid "Name of activity"
+msgstr "Имя деятельности"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:292
+msgid "Name of the Country"
+msgstr "Название страны"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:293
+msgid "National Id"
+msgstr "Национальный Id"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:294
+#: src/bungeni.main/bungeni/ui/login.py:258
+msgid "Nationality at Birth"
+msgstr "Гражданство при рождении"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:295
+msgid "Needs Recomplete to Approve"
+msgstr "Потребности Переоформление Утвердить"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:296
+msgid "Notes"
+msgstr "Примечания"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:297
+msgid "Notice Date"
+msgstr "Обратите внимание на даты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:298
+msgid "Number"
+msgstr "Номер"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:299
+msgid "Number of clerks"
+msgstr "Количество служащих"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:300
+msgid "Number of members"
+msgstr "Количество членов"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:301
+msgid "Number of researchers"
+msgstr "Численность исследователей"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:302
+msgid "Office"
+msgstr "Офис"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:303
+msgid "Office Identifier"
+msgstr "Офис идентификатор"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:304
+msgid "Office Member"
+msgstr "Член бюро"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:305
+msgid "Office Members"
+msgstr "Офис пользователей"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:306
+msgid "Offices"
+msgstr "Офисы"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:307
+msgid "Only one user may have this title"
+msgstr "Только один пользователь может иметь это звание"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:308
+#: src/bungeni.main/bungeni/ui/search.py:522
+msgid "Owner"
+msgstr "Владелец"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:309
+msgid "Parliament"
+msgstr "Парламент"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:310
+msgid "Parliament Identifier"
+msgstr "Парламент идентификатор"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:311
+#, fuzzy
+msgid "Parliament Member"
+msgstr "Парламент имя"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:312
+#, fuzzy
+msgid "Parliament Members"
+msgstr "Парламент имя"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:313
+#, fuzzy
+msgid "Parliament Name"
+msgstr "Парламент имя"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:314
+#, fuzzy
+msgid "Parliament Type"
+msgstr "Парламент имя"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:315
+#, fuzzy
+msgid "Parliament Workflow"
+msgstr "Парламент"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:316
+msgid "Parliament is Dissolved"
+msgstr "Парламент растворенного"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:317
+msgid "Parliamentary session"
+msgstr "Парламентская сессия"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:318
+msgid "Parliamentary sessions"
+msgstr "Парламентские сессии"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:319
+msgid "Parliaments"
+msgstr "Парламенты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:320
+msgid "Pending response"
+msgstr "В ожидании ответа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:321
+msgid "Phone Number(s)"
+msgstr "Телефон (ы)"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:322
+msgid "Picture of the person"
+msgstr "Изображение человека"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:323
+#, fuzzy
+msgid "Political Group"
+msgstr "Политические группы"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:324
+#, fuzzy
+msgid "Political Group Member"
+msgstr "Добавить политической члена группы ..."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:325
+#, fuzzy
+msgid "Political Group Members"
+msgstr "Политические группы"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:326
+#, fuzzy
+msgid "Political Groups"
+msgstr "Политические группы"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:327
+msgid "Political Party"
+msgstr "Политическая партия"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:328
+msgid "Postal Address Type"
+msgstr "Почтовый адрес типа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:329
+msgid "Proportional representation"
+msgstr "Пропорциональное представительство"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:330
+msgid "Public"
+msgstr "Общественность"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:331
+msgid "Publication Date"
+msgstr "Дата публикации"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:332
+msgid "Publications type"
+msgstr "Публикации типа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:333
+msgid "Publish"
+msgstr "Публиковать"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:334
+msgid "Publish Internal"
+msgstr "Публикация внутренних"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:335
+msgid "Publish Internal Agenda"
+msgstr "Публикация внутренней повестки дня"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:336
+msgid "Publish Minutes"
+msgstr "Публикация минут"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:337
+msgid "Publish Minutes Internal"
+msgstr "Публикация минут Внутренние"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:338
+#, fuzzy
+msgid "Publish debate"
+msgstr "Дата публикации"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:339
+msgid "Publish in Gazette"
+msgstr "Публикация в Бюллетене"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:340
+msgid "Published"
+msgstr "Опубликованный"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:341
+msgid "Published Agenda"
+msgstr "Опубликовано повестки дня"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:342
+msgid "Published Agenda Internal"
+msgstr "Опубликовано повестки дня Внутренняя"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:343
+msgid "Published Date"
+msgstr "Дата публикации"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:344
+msgid "Published Internal"
+msgstr "Опубликовано внутренних"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:345
+msgid "Published Minutes"
+msgstr "Опубликовано минут"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:346
+msgid "Published Minutes Internal"
+msgstr "Опубликовано минуты внутренних"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:347
+msgid "Question"
+msgstr "Вопрос"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:348
+msgid "Question Type"
+msgstr "Вопрос типа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:349
+#, fuzzy
+msgid "Question Workflow"
+msgstr "Вопрос"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:350
+msgid "Questions"
+msgstr "Вопросы"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:351
+msgid "Quorum"
+msgstr "Кворум"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:352
+msgid "Re-publish"
+msgstr "Повторная публикация"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:353
+msgid "Re-schedule"
+msgstr "Re-графика"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:354
+msgid "Reactivate"
+msgstr "Реактивировать"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:355
+msgid "Receive"
+msgstr "Получать"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:356
+msgid "Received by Clerks Office"
+msgstr "Поступила в конторских служащих"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:357
+msgid "Received by clerk"
+msgstr "Поступила клерк"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:358
+msgid "Recomplete"
+msgstr "Переоформление"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:359
+msgid "Redraft"
+msgstr "Новая формулировка"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:360
+msgid "Redraft (Automatic)"
+msgstr "Переформулировать (автоматический)"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:361
+msgid "Redraft Agenda"
+msgstr "Изменить формулировку повестки дня"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:362
+msgid "Redraft Minutes"
+msgstr "Переформулировать минут"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:363
+msgid "Redraft Response"
+msgstr "Изменить формулировку ответа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:364
+#: src/bungeni.main/bungeni/ui/templates/bungeni-content.pt:22
+msgid "Registry Number"
+msgstr "Регистрационный номер"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:365
+msgid "Reinstatement Date"
+msgstr "Восстановление дате"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:366
+msgid "Reject"
+msgstr "Отвергать"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:367
+msgid "Reject a scheduled motion"
+msgstr "Отклонение запланированных движения"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:368
+msgid "Rejected"
+msgstr "Отклоненные"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:369
+msgid "Rejected Bill"
+msgstr "Отклонен законопроект"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:370
+msgid "Remarks"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:371
+#: src/bungeni.main/bungeni/ui/reporting/generators.py:102
+msgid "Report"
+msgstr "Сообщить"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:372
+#, fuzzy
+msgid "Report Workflow"
+msgstr "Workflow"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:373
+msgid "Reports"
+msgstr "Отчеты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:374
+#, fuzzy
+msgid "Representation"
+msgstr "Пропорциональное представительство"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:375
+msgid "Require Clarification to Approve"
+msgstr "Требуют уточнения, чтобы утвердить"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:376
+msgid "Require Clarification to Receive"
+msgstr "Требуют уточнения, чтобы получить"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:377
+msgid "Require Recomplete to Approve"
+msgstr "Требовать Переоформление Утвердить"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:378
+msgid "Requires Clarification to Approve"
+msgstr "Требуется разъяснение, чтобы утвердить"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:379
+msgid "Requires Clarification to Receive"
+msgstr "Требуется разъяснение, чтобы получить"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:380
+msgid "Reschedule"
+msgstr "Перенос"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:381
+msgid "Reschedule First Reading"
+msgstr "Перенос первом чтении"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:382
+msgid "Reschedule First Report Reading"
+msgstr "Перенос первом чтении отчета"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:383
+msgid "Reschedule Second Reading"
+msgstr "Перенос втором чтении"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:384
+msgid "Reschedule Third Reading"
+msgstr "Перенос третьем чтении"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:385
+msgid "Reschedule Whole House Committee"
+msgstr "Перенос Всего комитета палаты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:386
+#: src/bungeni.main/bungeni/ui/forms/templates/written-question-response.pt:2
+#: src/bungeni.main/bungeni/ui/forms/viewlets.py:320
+msgid "Response"
+msgstr "Ответ"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:387
+msgid "Response Type"
+msgstr "Время отклика"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:388
+msgid "Response completed"
+msgstr "Ответ завершен"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:389
+msgid "Response submitted"
+msgstr "Ответ представленных"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:390
+msgid "Resubmit"
+msgstr "Повторите"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:391
+msgid "Revert to admissible"
+msgstr "Вернуться к допустимым"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:392
+#, fuzzy
+msgid "Review"
+msgstr "обзор"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:393
+#, fuzzy
+msgid "Review Complete"
+msgstr "Переоформление"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:394
+msgid "Role"
+msgstr "Роль"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:395
+msgid "Role given to members of this office"
+msgstr "Роль данного членов этой должности"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:396
+msgid "Salutation"
+msgstr "Приветствие"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:398
+msgid "Schedule First Reading"
+msgstr "Расписание первом чтении"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:399
+msgid "Schedule First Report Reading"
+msgstr "Расписание первом чтении отчета"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:400
+msgid "Schedule Second Reading"
+msgstr "Расписание втором чтении"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:401
+msgid "Schedule Third Reading"
+msgstr "Расписание третьем чтении"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:402
+msgid "Schedule Whole House Committee"
+msgstr "Расписание Всего комитета палаты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:403
+msgid "Schedule pending"
+msgstr "Расписание до"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:404
+msgid "Scheduled"
+msgstr "Запланированные"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:405
+msgid "Second Reading"
+msgstr "Второе чтение"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:406
+msgid "Second Reading Adjourned"
+msgstr "Второе чтение Незавершенных"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:407
+msgid "Second Reading Pending"
+msgstr "До втором чтении"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:408
+msgid "Select Coverage"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:409
+#, fuzzy
+msgid "Select Geolocation"
+msgstr "Удалить пользователя делегации"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:410
+#, fuzzy
+msgid "Select Representation"
+msgstr "Удалить пользователя делегации"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:411
+msgid "Select Subjects"
+msgstr "Выберите субъектов"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:412
+msgid "Select the user who moved the document"
+msgstr "Выберите пользователя, который переехал документ"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:413
+msgid "Send to Ministry"
+msgstr "Отправить министерства"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:414
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:442
+msgid "Short Name"
+msgstr "Краткое название"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:415
+#, fuzzy
+msgid "Short summary"
+msgstr "Резюме"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:416
+msgid "Shorter name for the parliament"
+msgstr "Короткие названия для парламента"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:417
+#: src/bungeni.main/bungeni/ui/viewlets/templates/signatories-status.pt:7
+msgid "Signatories"
+msgstr "Подписавшим"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:418
+msgid "Signatory"
+msgstr "Подписавший"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:419
+#, fuzzy
+msgid "Signatory Workflow"
+msgstr "Подписавший"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:420
+msgid "Signature Consented"
+msgstr "Подпись согласие"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:421
+msgid "Signature Rejected"
+msgstr "Подпись отклонен"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:422
+#, fuzzy
+msgid "Signature Status"
+msgstr "Подпись статус"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:423
+msgid "Signature Withdrawn"
+msgstr "Подпись Изъятые"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:424
+msgid "Sitting"
+msgstr "Сидящий"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:425
+msgid "Sitting Activity Type"
+msgstr "Сидя Вид деятельности"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:426
+#, fuzzy
+msgid "Sitting Attendance"
+msgstr "Сидя посещаемости"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:427
+#, fuzzy
+msgid "Sitting Attendances"
+msgstr "Сидя посещений"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:428
+msgid "Sitting Convocation Type"
+msgstr "Сидя созыва типа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:429
+msgid "Sitting Meeting Type"
+msgstr "Сидя совещании типа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:430
+#, fuzzy
+msgid "Sitting Report"
+msgstr "Заседания включены в этот доклад"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:431
+#, fuzzy
+msgid "Sitting Reports"
+msgstr "Заседания включены в этот доклад"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:432
+msgid "Sittings"
+msgstr "Заседания"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:433
+msgid "Sort Order"
+msgstr "Сортировку"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:434
+msgid "Start Date"
+msgstr "Дата начала"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:435
+msgid "Statement of Purpose"
+msgstr "Заявление о целях"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:436
+#: src/bungeni.main/bungeni/ui/search.py:524
+msgid "Status"
+msgstr "Статус"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:437
+msgid "Status Date"
+msgstr "Статус Дата"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:438
+msgid "Street"
+msgstr "Улица"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:439
+msgid "Subject Terms"
+msgstr "Тема условия"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:440
+msgid "Submission Date"
+msgstr "Представление даты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:441
+msgid "Submit"
+msgstr "Представлять"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:442
+msgid "Submit Bill to Select Committee (I)"
+msgstr "Отправить законопроект Выберите комитета (I)"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:443
+msgid "Submit Bill to Select Committee (II)"
+msgstr "Отправить законопроект Выберите комитета (II)"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:444
+msgid "Submit Response"
+msgstr "Отправить ответ"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:445
+msgid "Submit to Signatories"
+msgstr "Отправить на подписавшие"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:446
+msgid "Submit/Resubmit Bill to Select Committee (II)"
+msgstr "Отправить / Повторите Билла Выберите комитета (II)"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:447
+msgid "Submitted"
+msgstr "Представленный"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:448
+msgid "Submitted to Clerk"
+msgstr "Представлен Клерк"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:449
+msgid "Submitted to Select Committee (after 1st reading)"
+msgstr "Представлен Выберите комитет (после 1-го чтения)"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:450
+msgid "Submitted to Select Committee (after 2nd reading)"
+msgstr "Представлен Выберите комитет (после 2-го чтения)"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:451
+msgid "Submitted to Signatories"
+msgstr "Представлен подписавшие"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:452
+msgid "Submitted to clerk"
+msgstr "Представлен клерк"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:453
+msgid "Submitted to the Speaker"
+msgstr "Представлен к спикеру"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:454
+msgid "Substituted by"
+msgstr "Заменить"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:455
+msgid "Table"
+msgstr "Стол"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:456
+msgid "Tabled"
+msgstr "Представленный"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:457
+#, fuzzy
+msgid "Tabled Document"
+msgstr "Представленные документы"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:458
+#, fuzzy
+msgid "Tabled Document Workflow"
+msgstr "Представленные документы"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:459
+msgid "Tabled Documents"
+msgstr "Представленные документы"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:460
+msgid "Text"
+msgstr "Текст"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:461
+#, fuzzy
+msgid "Text Record Type"
+msgstr "Тип отчета"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:462
+msgid ""
+"The order in which members with this title will appear relative to other "
+"members"
+msgstr ""
+"Порядок, в котором участники с таким названием появится в сравнении с "
+"другими членами"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:463
+msgid "Third Reading"
+msgstr "Третье чтение"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:464
+msgid "Third Reading Adjourned"
+msgstr "Третье чтение Незавершенных"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:465
+msgid "Third Reading Pending"
+msgstr "Третье чтение В ожидании"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:466
+#: src/bungeni.main/bungeni/ui/search.py:152
+msgid "Title"
+msgstr "Название"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:467
+#, fuzzy
+msgid "Title type"
+msgstr "Название типа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:468
+msgid "Title types"
+msgstr "Название типа"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:469
+#, fuzzy
+msgid "Title/Description"
+msgstr "Описание"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:470
+msgid "Titles"
+msgstr "Заголовки"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:471
+msgid "Total Eligible Votes"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:472
+msgid "Total votes cast"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:473
+msgid "Two letter ISO Code for this country e.g. DZ for Algeria"
+msgstr "Два письма ISO код для этой страны, например, DZ для Алжира"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:474
+msgid "Type of Substitution"
+msgstr "Тип замещения"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:475
+msgid "URI"
+msgstr "URI"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:476
+msgid "Unique identifier or number for this Committee"
+msgstr "Уникальный идентификатор или номер для этого Комитета"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:477
+msgid "Unique identifier or number for this Government"
+msgstr "Уникальный идентификатор или номер для этого правительство"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:478
+msgid "Unique identifier or number for this Ministry"
+msgstr "Уникальный идентификатор или номер для этого министерства"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:479
+msgid "Unique identifier or number for this Office"
+msgstr "Уникальный идентификатор или номер для этого офиса"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:480
+msgid "Unique identifier or number for this Parliament"
+msgstr "Уникальный идентификатор или номер для этого парламент"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:481
+msgid "Unique identifier or number for this political group"
+msgstr "Уникальный идентификатор или номер для этой политической группы"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:482
+msgid "Upload Vote Record File (XML)"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:483
+msgid "Upload a file"
+msgstr "Загрузить файл"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:484
+msgid "User"
+msgstr "Пользователь"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:485
+#, fuzzy
+msgid "User Delegation"
+msgstr "Делегации"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:486
+#, fuzzy
+msgid "User Delegations"
+msgstr "Делегации"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:487
+#, fuzzy
+msgid "User Workflow"
+msgstr "Workflow"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:488
+msgid "Users"
+msgstr "Пользователи"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:492
+#: src/bungeni.main/bungeni/ui/menu.zcml:956
+#: src/bungeni.main/bungeni/ui/templates/version.pt:5
+msgid "Versions"
+msgstr "Версии"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:493
+#, fuzzy
+msgid "Vote Notes"
+msgstr "Обратите внимание на даты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:494
+msgid "Vote Record File"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:495
+#, fuzzy
+msgid "Vote Time"
+msgstr "Название доклада"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:496
+#, fuzzy
+msgid "Vote result"
+msgstr "Результаты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:497
+#, fuzzy
+msgid "Vote type"
+msgstr "Обратите внимание на даты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:498
+msgid "Votes cast against"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:499
+#, fuzzy
+msgid "Votes cast for"
+msgstr "Обратите внимание на даты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:500
+msgid "Whole House"
+msgstr "Всего дом"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:501
+msgid "Whole House Adjourned"
+msgstr "Всего Дома Незавершенных"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:502
+msgid "Whole House Pending"
+msgstr "Всего Дома В ожидании"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:503
+msgid "Withdraw"
+msgstr "Выводить"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:504
+msgid "Withdrawn"
+msgstr "Изъятые"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:505
+#, fuzzy
+msgid "Workflow for Committees"
+msgstr "Комитеты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:506
+msgid "Workflow for Parliamentary Groups"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:507
+msgid "Workflow for Signatory documents"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:508
+msgid "Workflow for a group sitting."
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:509
+msgid "Workflow for addresses"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:510
+#, fuzzy
+msgid "Workflow for attachments"
+msgstr "вложения"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:511
+msgid "Workflow for base Event"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:512
+#, fuzzy
+msgid "Workflow for group doc assignment"
+msgstr "Изменить правительство"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:513
+#, fuzzy
+msgid "Workflow for group membership"
+msgstr "Пользователи"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:514
+#, fuzzy
+msgid "Workflow for headings"
+msgstr "Workflow истории"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:515
+#, fuzzy
+msgid "Workflow for parliaments"
+msgstr "Член парламента"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:516
+msgid "Working Draft"
+msgstr "Рабочий проект"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:517
+msgid "Zip Code"
+msgstr "Почтовый индекс"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:518
+msgid "consent"
+msgstr "согласие"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:519
+msgid "e.g. Chief Advisor, etc."
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:520
+msgid "e.g. Mr. Mrs, Prof. etc."
+msgstr "например, г-н Г-жа профессор и т.д."
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:521
+msgid "is global"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:522
+msgid "received by clerk"
+msgstr "полученные клерк"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:523
+msgid "reject"
+msgstr "отвергать"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:524
+msgid "sub role"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:525
+msgid "sub roles"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:526
+msgid "the sub role this member will get"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:527
+msgid "unsign document - automatic"
+msgstr "unsign документа - автоматическое"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:528
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1608
+#, fuzzy
+msgid "vote record"
+msgstr "минуты записи"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:529
+#: src/bungeni.main/bungeni/ui/descriptor/descriptor.py:1609
+#: src/bungeni.main/bungeni/ui/forms/viewlets.py:531
+#, fuzzy
+msgid "vote records"
+msgstr "Нет минуты записи"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:530
+msgid "whether or not this role is granted globally"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:531
+msgid "withdraw signature"
+msgstr "отозвать подпись"
+
+#: src/bungeni.main/bungeni/ui/descriptor/_dumped_msgids.py:532
+msgid "withdraw signature - automatic"
+msgstr "отозвать подпись - автоматическое"
+
+#: src/bungeni.main/bungeni/ui/descriptor/constraints.py:32
+msgid "Invalid value"
+msgstr "Неверное значение"
+
+#: src/bungeni.main/bungeni/ui/descriptor/constraints.py:53
+msgid "This is not a valid email address"
+msgstr "Это не является действительным адресом электронной почты"
+
+#: src/bungeni.main/bungeni/ui/descriptor/constraints.py:54
+msgid "Invalid login name"
+msgstr "Неверное имя пользователя"
+
+#: src/bungeni.main/bungeni/ui/descriptor/constraints.py:58
+#: src/bungeni.main/bungeni/ui/descriptor/constraints.py:65
+msgid "End Date must be after Start Date"
+msgstr "Дата окончания должна быть после даты начала"
+
+#: src/bungeni.main/bungeni/ui/descriptor/constraints.py:96
+#, fuzzy
+msgid "Person: a person cannot be active and also substituted at the same time"
+msgstr "Человек не может быть активным и заменить в то же время"
+
+#: src/bungeni.main/bungeni/ui/descriptor/constraints.py:101
+msgid "A person cannot be active and substituted at the same time"
+msgstr "Человек не может быть активным и заменить в то же время"
+
+#: src/bungeni.main/bungeni/ui/descriptor/constraints.py:105
+#, fuzzy
+msgid ""
+"Person: when a person is substituted, an end date for the substitution must "
+"be set"
+msgstr "Если человек заменяется Дата окончания должна быть установлена"
+
+#: src/bungeni.main/bungeni/ui/descriptor/constraints.py:110
+msgid "If a person is substituted End Date must be set"
+msgstr "Если человек заменяется Дата окончания должна быть установлена"
+
+#: src/bungeni.main/bungeni/ui/descriptor/constraints.py:115
+#, fuzzy
+msgid ""
+"Person: when a person is set to inactive, an end date for the inactive "
+"period must be set"
+msgstr "Если человек неактивных Конечная дата должна быть установлена"
+
+#: src/bungeni.main/bungeni/ui/descriptor/constraints.py:121
+msgid "If a person is inactive End Date must be set"
+msgstr "Если человек неактивных Конечная дата должна быть установлена"
+
+#: src/bungeni.main/bungeni/ui/descriptor/constraints.py:125
+msgid "Member: the start date for a member must be after the election date"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/constraints.py:131
+msgid ""
+"A parliament member has to be elected/nominated before she/he can be sworn in"
+msgstr ""
+"Депутат парламента должен быть избран / назначен прежде, чем она / он может "
+"быть приведен к присяге"
+
+#: src/bungeni.main/bungeni/ui/descriptor/constraints.py:136
+msgid "Person: the date of death must be after the date of birth"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/descriptor/constraints.py:142
+msgid "Check dates: death must follow birth"
+msgstr "Проверка дат: смерть должна следовать рождения"
+
+#: src/bungeni.main/bungeni/ui/downloaddocument.py:154
+msgid "No template for document of type: ${dtype}. Contact admin."
+msgstr ""
+"Нет шаблонов для документов типа: ${dtype}. Связаться с администратором."
+
+#: src/bungeni.main/bungeni/ui/errors.py:24
+msgid "An error occurred in Bungeni."
+msgstr "Произошла ошибка в Bungeni."
+
+#: src/bungeni.main/bungeni/ui/errors.py:28
+msgid "Bungeni - [Error]"
+msgstr "Bungeni - [Ошибка]"
+
+#: src/bungeni.main/bungeni/ui/errors.py:43
+msgid "A system error occurred."
+msgstr "Произошла системная ошибка."
+
+#: src/bungeni.main/bungeni/ui/errors.py:56
+msgid "Your account is not authorized to view this item."
+msgstr "Ваша учетная запись нет прав для просмотра этого элемента."
+
+#: src/bungeni.main/bungeni/ui/fields.py:20
+msgid "Choose items from provided vocabulary"
+msgstr "Выберите элементы при условии словарь"
+
+#. Default: "file"
+#: src/bungeni.main/bungeni/ui/file.py:106
+msgid "file_column_file_link"
+msgstr ""
+
+#. Default: "status"
+#: src/bungeni.main/bungeni/ui/file.py:111
+msgid "file_column_status"
+msgstr ""
+
+#. Default: "modified"
+#: src/bungeni.main/bungeni/ui/file.py:114
+msgid "file_column_last_modified"
+msgstr ""
+
+#. Default: "file"
+#: src/bungeni.main/bungeni/ui/file.py:212
+#, fuzzy
+msgid "file_version_filename"
+msgstr "Редактирование &quot;$title&quot; (версия $version)"
+
+#. Default: "status"
+#: src/bungeni.main/bungeni/ui/file.py:217
+msgid "file_version_status"
+msgstr ""
+
+#. Default: "modified"
+#: src/bungeni.main/bungeni/ui/file.py:220
+msgid "file_version_last_modified"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/forms/common.py:117
+#: src/bungeni.main/bungeni/ui/menu.zcml:733
+#: src/bungeni.main/bungeni/ui/menu.zcml:905
+#: src/bungeni.main/bungeni/ui/menu.zcml:1183
+#: src/bungeni.main/bungeni/ui/menu.zcml:1222
+#: src/bungeni.main/bungeni/ui/viewlets/templates/portlet-contentactions.pt:6
+msgid "View"
+msgstr "Смотреть"
+
+#: src/bungeni.main/bungeni/ui/forms/common.py:345
+msgid "A record with this value already exists"
+msgstr "Запись с таким значением уже существует"
+
+#. Default: "choose ${title} ..."
+#: src/bungeni.main/bungeni/ui/forms/common.py:362
+msgid "bungeni_widget_no_value"
+msgstr "выбрать ${title} ..."
+
+#. Default: "Add $name"
+#: src/bungeni.main/bungeni/ui/forms/common.py:381
+msgid "add_item_legend"
+msgstr "Добавить $name"
+
+#. Default: "Adding $name"
+#: src/bungeni.main/bungeni/ui/forms/common.py:386
+msgid "add_item_title"
+msgstr "Добавление $name"
+
+#. Default: "Editing $language translation of '$title'"
+#: src/bungeni.main/bungeni/ui/forms/common.py:489
+#: src/bungeni.main/bungeni/ui/forms/common.py:634
+msgid "edit_translation_legend"
+msgstr "Редактирование $language перевод &quot;$title&quot;"
+
+#. Default: "Editing \"$title\" (version $version)"
+#: src/bungeni.main/bungeni/ui/forms/common.py:495
+msgid "edit_version_legend"
+msgstr "Редактирование &quot;$title&quot; (версия $version)"
+
+#. Default: "Editing \"$title\""
+#: src/bungeni.main/bungeni/ui/forms/common.py:499
+msgid "edit_item_legend"
+msgstr "Редактирование &quot;$title&quot;"
+
+#. Default: "The original $language version is shown on the left"
+#: src/bungeni.main/bungeni/ui/forms/common.py:507
+msgid "edit_translation_help"
+msgstr "Оригинальная версия $language показан слева"
+
+#. Default: "Add $language translation"
+#: src/bungeni.main/bungeni/ui/forms/common.py:620
+msgid "translate_item_legend"
+msgstr "Добавить $language перевод"
+
+#. Default: "The document \"$title\" has not yet been translated into $language. Use this form to add the translation"
+#: src/bungeni.main/bungeni/ui/forms/common.py:642
+msgid "translate_item_help"
+msgstr ""
+"В документе &quot;$title&quot; еще не были переведены на $language. "
+"Используйте эту форму, чтобы добавить перевод"
+
+#. Default: "Adding $language translation"
+#: src/bungeni.main/bungeni/ui/forms/common.py:654
+msgid "translate_item_title"
+msgstr "Добавление $language перевод"
+
+#: src/bungeni.main/bungeni/ui/forms/common.py:721
+msgid "Save translation"
+msgstr "Сохранить перевод"
+
+#: src/bungeni.main/bungeni/ui/forms/common.py:792
+msgid "Item reordering"
+msgstr "Пункт переупорядочивания"
+
+#: src/bungeni.main/bungeni/ui/forms/common.py:859
+#: src/bungeni.main/bungeni/ui/forms/forms.py:194
+#: src/bungeni.main/bungeni/ui/menu.zcml:1075
+msgid "Delete"
+msgstr "Удалять"
+
+#: src/bungeni.main/bungeni/ui/forms/common.py:877
+msgid ""
+"Could not delete item due to database integrity error. You may wish to try "
+"deleting any related sub-records first?"
+msgstr ""
+"Не удается удалить пункт из-за ошибки базы данных целостность. Вы можете "
+"попробовать удалить любые связанные с суб-отчетов в первую очередь?"
+
+#: src/bungeni.main/bungeni/ui/forms/common.py:918
+msgid "Please confirm that you wish to sign this document"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/forms/common.py:921
+msgid "You have already signed this document"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/forms/common.py:923
+#, fuzzy
+msgid "You may not sign this document"
+msgstr "Кроме того, редактирование документа:"
+
+#: src/bungeni.main/bungeni/ui/forms/common.py:939
+#: src/bungeni.main/bungeni/ui/forms/templates/sign-open-document.pt:5
+#: src/bungeni.main/bungeni/ui/menu.zcml:921
+#: src/bungeni.main/bungeni/ui/menu.zcml:939
+#, fuzzy
+msgid "Sign Document"
+msgstr "Документация"
+
+#: src/bungeni.main/bungeni/ui/forms/common.py:947
+#, fuzzy
+msgid "Review Signature"
+msgstr "Обзор подпись"
+
+#: src/bungeni.main/bungeni/ui/forms/fields.py:73
+msgid "General"
+msgstr "Общий"
+
+#: src/bungeni.main/bungeni/ui/forms/fields.py:121
+msgid "This content is not yet translated into $language"
+msgstr "Эта информация пока не переведены на $language"
+
+#: src/bungeni.main/bungeni/ui/forms/forms.py:130
+msgid "Direction"
+msgstr "Направление"
+
+#: src/bungeni.main/bungeni/ui/forms/forms.py:134
+msgid "AM"
+msgstr "М."
+
+#: src/bungeni.main/bungeni/ui/forms/forms.py:139
+msgid "Move"
+msgstr "Двигаться"
+
+#: src/bungeni.main/bungeni/ui/forms/forms.py:185
+msgid "Item ID"
+msgstr "Пункт ID"
+
+#: src/bungeni.main/bungeni/ui/forms/templates/content-view.pt:8
+msgid "${DYNAMIC_CONTENT} ${DYNAMIC_CONTENT}"
+msgstr "${DYNAMIC_CONTENT} ${DYNAMIC_CONTENT}"
+
+#: src/bungeni.main/bungeni/ui/forms/templates/content-view.pt:21
+#: src/bungeni.main/bungeni/ui/forms/templates/sign-open-document.pt:13
+#: src/bungeni.main/bungeni/ui/viewlets/templates/schedulable-items.pt:1
+#: src/bungeni.main/bungeni/ui/viewlets/templates/signatories-status.pt:8
+msgid "${DYNAMIC_CONTENT}"
+msgstr "${DYNAMIC_CONTENT}"
+
+#: src/bungeni.main/bungeni/ui/forms/templates/delete.pt:5
+msgid "Delete item confirmation"
+msgstr "Исключить пункт подтверждение"
+
+#: src/bungeni.main/bungeni/ui/forms/templates/delete.pt:13
+msgid "Please confirm that you wish to delete this item."
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/forms/templates/delete.pt:18
+msgid "The following item will be deleted."
+msgstr ""
+
+#. Default: "(Required)"
+#: src/bungeni.main/bungeni/ui/forms/templates/diff-form.pt:14
+msgid "label_required"
+msgstr "(Обязательно)"
+
+#. Default: "Required"
+#: src/bungeni.main/bungeni/ui/forms/templates/diff-form.pt:14
+msgid "title_required"
+msgstr "Требуется"
+
+#: src/bungeni.main/bungeni/ui/forms/templates/diff-form.pt:30
+msgid "Also editing the document:"
+msgstr "Кроме того, редактирование документа:"
+
+#: src/bungeni.main/bungeni/ui/forms/templates/doc-minutes.pt:26
+#, fuzzy
+msgid "This sitting has no minutes."
+msgstr "На заседании была не запланирована пунктов"
+
+#: src/bungeni.main/bungeni/ui/forms/templates/doc-minutes.pt:31
+#, fuzzy
+msgid "This item has no schedule records"
+msgstr "На заседании была не запланирована пунктов"
+
+#: src/bungeni.main/bungeni/ui/forms/templates/mp-item-viewlet.pt:1
+msgid "Parliamentary activities"
+msgstr "Парламентская деятельность"
+
+#: src/bungeni.main/bungeni/ui/forms/templates/offices-held-viewlet.pt:1
+msgid "Offices held"
+msgstr "Занимаемые должности"
+
+#. Default: "Office"
+#: src/bungeni.main/bungeni/ui/forms/templates/offices-held-viewlet.pt:9
+msgid "office_held"
+msgstr "Офис"
+
+#. Default: "Type"
+#: src/bungeni.main/bungeni/ui/forms/templates/offices-held-viewlet.pt:10
+msgid "office_type"
+msgstr "Тип"
+
+#. Default: "Title"
+#: src/bungeni.main/bungeni/ui/forms/templates/offices-held-viewlet.pt:11
+msgid "office_title"
+msgstr "Название"
+
+#. Default: "From"
+#: src/bungeni.main/bungeni/ui/forms/templates/offices-held-viewlet.pt:12
+msgid "office_from"
+msgstr "От"
+
+#. Default: "To"
+#: src/bungeni.main/bungeni/ui/forms/templates/offices-held-viewlet.pt:13
+msgid "office_to"
+msgstr "К"
+
+#: src/bungeni.main/bungeni/ui/forms/templates/rss-link.pt:4
+msgid "Subscribe"
+msgstr "Подписать"
+
+#: src/bungeni.main/bungeni/ui/forms/templates/rss-link.pt:12
+msgid "Unsubscribe"
+msgstr "Отказаться от подписки"
+
+#: src/bungeni.main/bungeni/ui/forms/templates/sign-open-document.pt:16
+#, fuzzy
+msgid "Document Details."
+msgstr "Документация"
+
+#: src/bungeni.main/bungeni/ui/forms/templates/written-question-response.pt:7
+msgid "Written response to question by ${respondent}"
+msgstr "Письменный ответ на вопрос ${respondent}"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:53
+msgid "invalid date. choose or type correct date"
+msgstr "неверную дату. выбрать или ввести правильную дату"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:57
+msgid "Check if email address is already in use"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:63
+#: src/bungeni.main/bungeni/ui/forms/validations.py:66
+#: src/bungeni.main/bungeni/ui/forms/validations.py:68
+msgid "Email already taken!"
+msgstr "Отправить уже занят!"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:83
+msgid "Start date must be after (%s)"
+msgstr "Дата начала должна быть после (%s)"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:89
+msgid "Start date must be prior to (%s)"
+msgstr "Дата начала должна быть до (%s)"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:104
+msgid "End date must be equal to start date"
+msgstr "Дата окончания должна быть равна дате начала"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:123
+msgid "End date must be after (%s)"
+msgstr "Дата окончания должна быть после (%s)"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:129
+msgid "End date must be prior to (%s)"
+msgstr "Дата окончания должна быть до (%s)"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:133
+msgid ""
+"Check if the date range of the item is within the date range of the parent "
+"document containing it"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:181
+#: src/bungeni.main/bungeni/ui/forms/validations.py:192
+#: src/bungeni.main/bungeni/ui/forms/validations.py:201
+#: src/bungeni.main/bungeni/ui/forms/validations.py:337
+#: src/bungeni.main/bungeni/ui/forms/validations.py:346
+#: src/bungeni.main/bungeni/ui/forms/validations.py:352
+msgid "The person is a member in (%s) at that date"
+msgstr "Лицо является членом в (%s) на эту дату"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:206
+msgid ""
+"Check if the start - end date range of a parliament does not overlap with "
+"another parliament"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:232
+#, fuzzy
+msgid "Start date overlaps with (%s)"
+msgstr "Дата начала совпадает с (%s)"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:236
+#, fuzzy
+msgid "Start date preceeds legislature start (%s)"
+msgstr "Дата начала должна быть после (%s)"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:243
+#, fuzzy
+msgid "End date overlaps with (%s)"
+msgstr "Конечная дата совпадает с (%s)"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:248
+#, fuzzy
+msgid "End date later legislature end (%s)"
+msgstr "Дата окончания должна быть после (%s)"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:257
+#, fuzzy
+msgid "Another chamber is not yet dissolved (%s)"
+msgstr "Другой парламент пока не растворится (%s)"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:265
+msgid ""
+"Checks if the government start/end dates fall within the start/end dates of "
+"the parliament"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:277
+msgid "Start date cannot be after the parliaments dissolution"
+msgstr "Дата начала не может быть после роспуска парламента"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:283
+msgid "Start date must start after the swearing in of the parliament"
+msgstr "Дата начала должна начинаться после приведения к присяге в парламенте"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:292
+msgid "The start date overlaps with (%s)"
+msgstr "Дата начала совпадает с (%s)"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:300
+msgid "The end date overlaps with (%s)"
+msgstr "Конечная дата совпадает с (%s)"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:307
+msgid "Another government is not yet dissolved (%s)"
+msgstr "Другое правительство пока не растворится (%s)"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:313
+msgid ""
+"Checks if a user is already a member of the group in a particular date range"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:386
+msgid ""
+"Checks if a title has been assigned to another user, and if the title can be "
+"assigned only once within the group"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:441
+#: src/bungeni.main/bungeni/ui/forms/validations.py:446
+#: src/bungeni.main/bungeni/ui/forms/validations.py:459
+#: src/bungeni.main/bungeni/ui/forms/validations.py:464
+msgid "This persons already has the title %s"
+msgstr "Это лица, уже имеет звание %s"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:477
+#: src/bungeni.main/bungeni/ui/forms/validations.py:482
+#: src/bungeni.main/bungeni/ui/forms/validations.py:495
+#: src/bungeni.main/bungeni/ui/forms/validations.py:500
+msgid "A person with the title %s already exists"
+msgstr "Человек с названием уже существует %s"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:505
+msgid ""
+"Checks if a venue is already booked for sitting in a particular date range"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:528
+msgid "Venue \"$venue\" already booked in this time slot"
+msgstr ""
+"Место проведения &quot;$venue&quot; уже забронированы в этом временном "
+"интервале"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:560
+msgid "If recurrence is limited by date, it must lie after the starting date"
+msgstr ""
+"Если рецидив ограничен по времени, она должна находиться после даты начала"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:569
+msgid ""
+"One or more events would be scheduled for $F, which is after the scheduling "
+"group's end date"
+msgstr ""
+"Один или несколько мероприятий запланировано на $F, которая после даты "
+"окончания расписания группы"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:605
+msgid ""
+"One or more events would be scheduled for $F, which overlaps with an "
+"existing sitting"
+msgstr ""
+"Один или несколько мероприятий запланировано на $F, которая пересекается с "
+"существующими заседание"
+
+#: src/bungeni.main/bungeni/ui/forms/validations.py:644
+msgid "A title with %s sub role already exists"
+msgstr "Титул %s суб роль уже существует"
+
+#: src/bungeni.main/bungeni/ui/forms/viewlets.py:170
+#, fuzzy
+msgid "items scheduled"
+msgstr "Нет элементов запланированного"
+
+#: src/bungeni.main/bungeni/ui/forms/viewlets.py:217
+msgid "Contacts"
+msgstr "Связи"
+
+#: src/bungeni.main/bungeni/ui/forms/viewlets.py:246
+msgid "Personal Info"
+msgstr "Личная информация"
+
+#: src/bungeni.main/bungeni/ui/forms/viewlets.py:302
+#, fuzzy
+msgid "Unknown venue"
+msgstr "Неизвестный"
+
+#: src/bungeni.main/bungeni/ui/forms/viewlets.py:478
+msgid "No item has been set"
+msgstr "Ни один пункт был установлен"
+
+#: src/bungeni.main/bungeni/ui/interfaces.py:138
+#, fuzzy
+msgid "Object type"
+msgstr "Тип содержимого"
+
+#: src/bungeni.main/bungeni/ui/interfaces.py:139
+#, fuzzy
+msgid "Choose the type of object to be serialized."
+msgstr "Выберите тип вопроса"
+
+#. Default: "Username"
+#: src/bungeni.main/bungeni/ui/login.py:36
+msgid "label_login_form_username"
+msgstr ""
+
+#. Default: "Password"
+#: src/bungeni.main/bungeni/ui/login.py:38
+#, fuzzy
+msgid "label_login_form_password"
+msgstr "Подтвердите пароль"
+
+#. Default: "Login"
+#: src/bungeni.main/bungeni/ui/login.py:45
+msgid "login_form_title"
+msgstr ""
+
+#. Default: "Login"
+#: src/bungeni.main/bungeni/ui/login.py:56
+msgid "label_login_form_login"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/login.py:60
+msgid "Invalid account credentials"
+msgstr "Недопустимые параметры учетной записи"
+
+#: src/bungeni.main/bungeni/ui/login.py:64
+msgid "You are now logged in"
+msgstr "Теперь вы вошли в систему"
+
+#. Default: "Email"
+#: src/bungeni.main/bungeni/ui/login.py:77
+msgid "label_restore_login_email"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/login.py:82
+msgid "Restore Login"
+msgstr "Восстановление Войти"
+
+#: src/bungeni.main/bungeni/ui/login.py:95
+#: src/bungeni.main/bungeni/ui/login.py:145
+msgid "Restore"
+msgstr "Восстановление"
+
+#: src/bungeni.main/bungeni/ui/login.py:106
+msgid "Your login is: "
+msgstr "Ваш логин:"
+
+#: src/bungeni.main/bungeni/ui/login.py:111
+msgid "Bungeni login restoration"
+msgstr "Bungeni входа восстановление"
+
+#: src/bungeni.main/bungeni/ui/login.py:114
+msgid "Your login was sent to you email."
+msgstr "Ваш логин был послан к вам письмо."
+
+#: src/bungeni.main/bungeni/ui/login.py:116
+msgid "Wrong email address."
+msgstr "Неправильный адрес электронной почты."
+
+#. Default: "Username"
+#: src/bungeni.main/bungeni/ui/login.py:121
+msgid "label_restore_password_username"
+msgstr ""
+
+#. Default: "Email"
+#: src/bungeni.main/bungeni/ui/login.py:125
+msgid "label_restore_password_email"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/login.py:132
+msgid "Restore Password"
+msgstr "Восстановление пароля"
+
+#: src/bungeni.main/bungeni/ui/login.py:169
+msgid "This user's link is still active!"
+msgstr "Ссылка Пользователь по-прежнему активен!"
+
+#: src/bungeni.main/bungeni/ui/login.py:184
+msgid "Restore password link: "
+msgstr "Восстановление пароля ссылке:"
+
+#: src/bungeni.main/bungeni/ui/login.py:187
+msgid "This link will expire in 24 hours."
+msgstr "Эта ссылка будет истекает в 24 часа."
+
+#: src/bungeni.main/bungeni/ui/login.py:192
+msgid "Bungeni password restoration"
+msgstr "Bungeni восстановления пароля"
+
+#: src/bungeni.main/bungeni/ui/login.py:195
+msgid "Email was sent!"
+msgstr "Электронная почта была отправлена!"
+
+#: src/bungeni.main/bungeni/ui/login.py:197
+msgid "User not found!"
+msgstr "Пользователь не найден!"
+
+#: src/bungeni.main/bungeni/ui/login.py:201
+msgid "Password"
+msgstr "Пароль"
+
+#: src/bungeni.main/bungeni/ui/login.py:202
+msgid "Confirm Password"
+msgstr "Подтвердите пароль"
+
+#: src/bungeni.main/bungeni/ui/login.py:209
+msgid "Reset Password"
+msgstr "Сброс пароля"
+
+#: src/bungeni.main/bungeni/ui/login.py:222
+msgid "Wrong key!"
+msgstr "Неправильный ключ!"
+
+#: src/bungeni.main/bungeni/ui/login.py:224
+msgid "Key expired!"
+msgstr "Основные истек!"
+
+#: src/bungeni.main/bungeni/ui/login.py:227
+msgid "Reset"
+msgstr "Сброс"
+
+#: src/bungeni.main/bungeni/ui/login.py:235
+msgid "Password confirmation failed!"
+msgstr "Подтверждение пароля не удалась!"
+
+#: src/bungeni.main/bungeni/ui/login.py:243
+msgid "Password successfully reset!"
+msgstr "Пароль успешно сбросить!"
+
+#: src/bungeni.main/bungeni/ui/login.py:247
+msgid "First name"
+msgstr "Имя"
+
+#: src/bungeni.main/bungeni/ui/login.py:248
+msgid "Last name"
+msgstr "Фамилия"
+
+#: src/bungeni.main/bungeni/ui/login.py:249
+msgid "Middle name"
+msgstr "Отчество"
+
+#. Default: "Email"
+#: src/bungeni.main/bungeni/ui/login.py:251
+msgid "label_profile_email"
+msgstr ""
+
+#. Default: "Email already taken!"
+#: src/bungeni.main/bungeni/ui/login.py:272
+msgid "error_profile_email_taken"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/login.py:288
+msgid "Profile"
+msgstr "Профиль"
+
+#: src/bungeni.main/bungeni/ui/login.py:366
+msgid "Profile data updated"
+msgstr "Профиль обновление данных"
+
+#: src/bungeni.main/bungeni/ui/login.py:368
+#, fuzzy
+msgid "Save Profile"
+msgstr "Профиль"
+
+#: src/bungeni.main/bungeni/ui/login.py:373
+#, fuzzy
+msgid "Save profile and view"
+msgstr "Сохранить и просматривать"
+
+#: src/bungeni.main/bungeni/ui/login.py:391
+msgid "Old password"
+msgstr "Старый пароль"
+
+#: src/bungeni.main/bungeni/ui/login.py:392
+#, fuzzy
+msgid "New password"
+msgstr "Старый пароль"
+
+#: src/bungeni.main/bungeni/ui/login.py:393
+#, fuzzy
+msgid "Confirm new password"
+msgstr "Подтвердите пароль"
+
+#: src/bungeni.main/bungeni/ui/login.py:399
+msgid "Old password incorrect"
+msgstr "Старый пароль неверный"
+
+#. Default: "Change password"
+#: src/bungeni.main/bungeni/ui/login.py:406
+#, fuzzy
+msgid "change_password_form_title"
+msgstr "Изменить пароль"
+
+#. Default: "Change password"
+#: src/bungeni.main/bungeni/ui/login.py:425
+#, fuzzy
+msgid "label_change_password"
+msgstr "Изменить пароль"
+
+#: src/bungeni.main/bungeni/ui/login.py:433
+msgid "Password confirmation failed"
+msgstr "Подтверждение пароля не удалось"
+
+#: src/bungeni.main/bungeni/ui/login.py:437
+msgid "Password changed"
+msgstr "Пароль изменен"
+
+#: src/bungeni.main/bungeni/ui/menu.py:102
+msgid "Logout"
+msgstr "Выход"
+
+#. Default: "Language:"
+#: src/bungeni.main/bungeni/ui/menu.py:165
+msgid "label_translate"
+msgstr "Язык:"
+
+#. Default: "State:"
+#: src/bungeni.main/bungeni/ui/menu.py:235
+msgid "label_state"
+msgstr "Государство:"
+
+#. Default: "Calendar:"
+#: src/bungeni.main/bungeni/ui/menu.py:326
+msgid "label_calendar_context"
+msgstr "Календарь:"
+
+#. Default: "download document"
+#: src/bungeni.main/bungeni/ui/menu.py:457
+msgid "label_document_download"
+msgstr "скачать документ"
+
+#: src/bungeni.main/bungeni/ui/menu.py:479
+msgid "Download PDF"
+msgstr "Скачать PDF"
+
+#: src/bungeni.main/bungeni/ui/menu.py:480
+msgid "Download ODT"
+msgstr "Скачать ODT"
+
+#: src/bungeni.main/bungeni/ui/menu.py:481
+msgid "Akoma Ntoso"
+msgstr "Akoma Ntoso"
+
+#: src/bungeni.main/bungeni/ui/menu.py:482
+msgid "RSS"
+msgstr "RSS"
+
+#: src/bungeni.main/bungeni/ui/menu.py:595
+msgid "Manage Scheduling Content"
+msgstr "Управление планирования Содержимое"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:33
+msgid "Actions Workspace"
+msgstr "Действия Workspace"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:35
+msgid "Actions Admin"
+msgstr "Действия администратора"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:42
+msgid "Actions for Calendar Sittings"
+msgstr "Действия в календарь заседаний"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:45
+msgid "Discussions in scheduling"
+msgstr "Обсуждения в планировании"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:48
+msgid "Actions for Calendar Schedulings"
+msgstr "Действия для календаря Schedulings"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:51
+msgid "The 'workflow' menu - allows user to execute workflow transitions"
+msgstr ""
+"&quot;Рабочий процесс&quot; меню - позволяет пользователю выполнять рабочий "
+"процесс перехода"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:55
+#, fuzzy
+msgid "The 'download' menu - provides options/formats to download a document"
+msgstr "Загрузка меню - предоставляет различные форматы загрузки документа"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:63
+msgid "The 'Calendar' menu - allows user to select a scheduling context"
+msgstr ""
+"&quot;Календарь&quot; меню - позволяет пользователю выбрать планирование "
+"контексте"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:67
+msgid "The 'Calendar' menu - for management of content used in calendars"
+msgstr ""
+"&quot;Календарь&quot; меню - для управления содержанием, используемые в "
+"календарь"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:71
+#, fuzzy
+msgid "The 'Add' menu - allows user to add content !+ for ADMIN only?"
+msgstr ""
+"&quot;Добавить&quot; меню - позволяет пользователю добавлять содержание"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:75
+msgid "The 'Translate' menu - allows user to translate content"
+msgstr ""
+"&quot;Перевести&quot; меню - позволяет пользователю переводить содержание"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:79
+msgid "The 'Add' menu - allows user to add content while in workspace"
+msgstr ""
+"&quot;Добавить&quot; меню - позволяет пользователю добавлять содержание в то "
+"время как в рабочей области"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:101
+msgid "The 'Actions' menu - provides context-specific actions (views)"
+msgstr ""
+"Меню &quot;Действия&quot; - предоставляет контекстно-специфические действия "
+"(просмотров)"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:107
+#: src/bungeni.main/bungeni/ui/menu.zcml:116
+msgid "Add parliamentary content..."
+msgstr "Добавить парламентских содержание ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:126
+msgid "The 'Add...' menu"
+msgstr "&quot;Добавить ...&quot; меню"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:130
+msgid "Add..."
+msgstr "Добавить ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:139
+#, fuzzy
+msgid "Edit political group member"
+msgstr "Добавить политической члена группы ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:147
+#, fuzzy
+msgid "Delete political group member"
+msgstr "Удаление политической группы"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:155
+msgid "Add political group member..."
+msgstr "Добавить политической члена группы ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:163
+msgid "Add committee member..."
+msgstr "Добавить член комитета ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:171
+msgid "Add staff..."
+msgstr "Добавить сотрудников ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:179
+msgid "Edit committee staff"
+msgstr "Edit-штабного комитета"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:187
+msgid "Delete committee staff"
+msgstr "Удаление комитет сотрудников"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:195
+#: src/bungeni.main/bungeni/ui/menu.zcml:680
+#: src/bungeni.main/bungeni/ui/menu.zcml:829
+msgid "Add agenda item..."
+msgstr "Добавить пункт повестки дня ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:203
+#: src/bungeni.main/bungeni/ui/menu.zcml:211
+#: src/bungeni.main/bungeni/ui/menu.zcml:219
+msgid "Add sitting..."
+msgstr "Добавить сидит ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:227
+msgid "Add ministry..."
+msgstr "Добавить министерства ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:235
+msgid "Add minister..."
+msgstr "Добавить министр ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:243
+msgid "Edit minister"
+msgstr "Edit-министр"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:251
+msgid "Delete minister"
+msgstr "Удалить министр"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:260
+#: src/bungeni.main/bungeni/ui/menu.zcml:391
+msgid "Add title..."
+msgstr "Добавить название ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:268
+#, fuzzy
+msgid "Add subrole..."
+msgstr "Добавить Статус"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:276
+#, fuzzy
+msgid "Add member role..."
+msgstr "Добавить Статус"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:284
+#: src/bungeni.main/bungeni/ui/menu.zcml:597
+msgid "Add signatory..."
+msgstr "Добавить подписавшие ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:293
+msgid "Respond to question"
+msgstr "Ответ на вопрос"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:301
+#, fuzzy
+msgid "Edit Event"
+msgstr "Изменить событие"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:309
+#, fuzzy
+msgid "Delete Event"
+msgstr "Удалить событие"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:318
+#, fuzzy
+msgid "Edit editorial note"
+msgstr "ред"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:326
+msgid "Delete heading"
+msgstr "Удаление заголовка"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:334
+#, fuzzy
+msgid "Delete editorial note"
+msgstr "ред"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:342
+#, fuzzy
+msgid "Edit venue"
+msgstr "Изменить событие"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:350
+#, fuzzy
+msgid "Delete venue"
+msgstr "Удалить событие"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:358
+msgid "Edit member title"
+msgstr "Редактировать Статус"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:366
+msgid "Delete member title"
+msgstr "Удаление Статус"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:376
+msgid "Add title type..."
+msgstr "Добавить название типа ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:383
+msgid "Add office member..."
+msgstr "Добавить офис члена ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:400
+msgid "Edit office member"
+msgstr "Редактировать офис члена"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:408
+msgid "Delete office member"
+msgstr "Удаление члена бюро"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:425
+msgid "Settings"
+msgstr "Настройки"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:432
+msgid "Email settings"
+msgstr "Параметры электронной почты"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:440
+msgid "Edit sitting"
+msgstr "Редактировать сидя"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:448
+msgid "Edit attendance"
+msgstr "Редактировать посещаемости"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:456
+msgid "Delete sitting"
+msgstr "Удаление сидя"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:465
+msgid "Add session..."
+msgstr "Добавить сессии ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:472
+msgid "Edit MP"
+msgstr "Редактировать MP"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:480
+msgid "Delete MP"
+msgstr "Удалить МП"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:489
+msgid "Add user..."
+msgstr "Добавить пользователя ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:496
+msgid "Edit committee member"
+msgstr "Редактировать член комитета"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:504
+msgid "Delete committee member"
+msgstr "Удаление члена комитета"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:523
+#, fuzzy
+msgid "Add Group Address..."
+msgstr "Добавить адрес пользователя ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:531
+#: src/bungeni.main/bungeni/ui/menu.zcml:538
+msgid "Add user address..."
+msgstr "Добавить адрес пользователя ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:547
+#: src/bungeni.main/bungeni/ui/menu.zcml:973
+msgid "Edit user"
+msgstr "Редактировать пользователя"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:556
+msgid "Change password"
+msgstr "Изменить пароль"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:565
+msgid "Edit user address"
+msgstr "Изменить адрес пользователя"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:574
+msgid "Delete user address"
+msgstr "Удалить пользователя адрес"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:583
+msgid "Add user delegation..."
+msgstr "Добавить пользователя делегации ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:590
+msgid "Add member title"
+msgstr "Добавить Статус"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:604
+msgid "Delete signatory"
+msgstr "Удаление подписавшие"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:622
+msgid "Edit session"
+msgstr "Редактировать сессии"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:630
+msgid "Delete session"
+msgstr "Удаление сессии"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:642
+msgid "Add heading..."
+msgstr "Добавить заголовок ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:649
+#, fuzzy
+msgid "Add editorial note..."
+msgstr "ред"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:656
+#, fuzzy
+msgid "Add venue..."
+msgstr "Добавить событие ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:663
+#: src/bungeni.main/bungeni/ui/menu.zcml:671
+msgid "Add file..."
+msgstr "Добавить файл ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:741
+msgid "Edit discussion"
+msgstr "Редактировать обсуждения"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:749
+#, fuzzy
+msgid "Edit vote"
+msgstr "Изменить событие"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:757
+msgid "Schedule item"
+msgstr "Расписание пункт"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:765
+#: src/bungeni.main/bungeni/ui/menu.zcml:774
+#, fuzzy
+msgid "Add vote record"
+msgstr "добавить текст записи"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:781
+#, fuzzy
+msgid "schedule"
+msgstr "запланировано"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:789
+#, fuzzy
+msgid "scheduling"
+msgstr "Планирование"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:797
+#, fuzzy
+msgid "edit agenda"
+msgstr "Предварительный просмотр повестки дня"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:805
+msgid "edit minutes and votes"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:813
+msgid "Delete scheduling"
+msgstr "Удаление расписания"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:820
+#, fuzzy
+msgid "Delete vote record"
+msgstr "Удалить событие"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:852
+msgid "Workspace"
+msgstr "Workspace"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:859
+msgid "Home"
+msgstr "Домой"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:876
+#: src/bungeni.main/bungeni/ui/menu.zcml:884
+msgid "Actions..."
+msgstr "Действия ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:911
+#: src/bungeni.main/bungeni/ui/templates/workflow.pt:5
+msgid "Workflow"
+msgstr "Workflow"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:913
+msgid "attachments"
+msgstr "вложения"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:930
+#, fuzzy
+msgid "Withdraw signature"
+msgstr "отозвать подпись"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:948
+msgid "Audit log"
+msgstr "Журнал аудита"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:965
+msgid "Delete user"
+msgstr "Удалить пользователя"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:984
+msgid "Edit attached file"
+msgstr "Редактировать прикрепленного файла"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:987
+msgid "Delete attached file"
+msgstr "Удаление вложенного файла"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:990
+msgid "Download attached file"
+msgstr "Скачать прикрепленный файл"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:995
+msgid "Edit parliament"
+msgstr "Редактировать парламент"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1003
+msgid "Edit office"
+msgstr "Редактировать офис"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1011
+msgid "Edit committee"
+msgstr "Редактировать комитет"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1019
+msgid "Edit political group"
+msgstr "Изменить политическую группу"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1027
+msgid "Delete parliament"
+msgstr "Удалить парламент"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1035
+msgid "Delete office"
+msgstr "Удаление офиса"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1043
+msgid "Delete committee"
+msgstr "Удалить комитет"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1051
+msgid "Delete political group"
+msgstr "Удаление политической группы"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1059
+msgid "Edit government"
+msgstr "Изменить правительство"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1067
+msgid "Edit ministry"
+msgstr "Редактировать министерства"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1083
+msgid "Delete ministry"
+msgstr "Удалить министерства"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1091
+msgid "Edit group address"
+msgstr "Изменить адрес группы"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1099
+msgid "Delete group address"
+msgstr "Удалить группу адрес"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1107
+msgid "Edit title type"
+msgstr "Изменить название типа"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1115
+msgid "Delete title type"
+msgstr "Очистить название типа"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1123
+msgid "Delete user delegation"
+msgstr "Удалить пользователя делегации"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1131
+msgid "Edit user delegation"
+msgstr "Редактировать пользователя делегации"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1139
+msgid "Committee schedule"
+msgstr "Комитет по графику"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1147
+#, fuzzy
+msgid "Create reports"
+msgstr "Создать отчет"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1165
+#, fuzzy
+msgid "User Assignment"
+msgstr "Посмотреть в Bungeni"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1174
+#, fuzzy
+msgid "Group Assignment"
+msgstr "Документация"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1191
+#, fuzzy
+msgid "Edit group assignment"
+msgstr "Изменить правительство"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1199
+#, fuzzy
+msgid "Delete group assignment"
+msgstr "Удалить группу адрес"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1207
+#, fuzzy
+msgid "Add group assignment..."
+msgstr "Добавить правительства ..."
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1214
+#, fuzzy
+msgid "Debate Record"
+msgstr "Удалить событие"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1230
+#, fuzzy
+msgid "Media"
+msgstr "Совещание типа"
+
+#: src/bungeni.main/bungeni/ui/menu.zcml:1238
+msgid "Takes"
+msgstr ""
+
+#. Default: "Report template file does not exist at ${path}"
+#: src/bungeni.main/bungeni/ui/reporting/generators.py:149
+msgid "report-template-missing"
+msgstr "Файл шаблона отчета не существует ${path}"
+
+#: src/bungeni.main/bungeni/ui/reporting/generators.py:238
+msgid "No items found"
+msgstr "Товаров нет"
+
+#: src/bungeni.main/bungeni/ui/reports.py:59
+msgid "Report Type"
+msgstr "Тип отчета"
+
+#: src/bungeni.main/bungeni/ui/reports.py:60
+msgid "Choose template to use in generating Report"
+msgstr "Выберите шаблон для использования в создании отчета"
+
+#. Default: "Start Date"
+#: src/bungeni.main/bungeni/ui/reports.py:64
+msgid "report_builder_start_date"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/reports.py:65
+msgid "Start date for this Report"
+msgstr "Дата начала этого отчета"
+
+#: src/bungeni.main/bungeni/ui/reports.py:67
+msgid "Publication Number"
+msgstr "Номер публикации"
+
+#: src/bungeni.main/bungeni/ui/reports.py:68
+msgid "Optional publication number for this Report"
+msgstr "Дополнительный номер публикации настоящего отчета"
+
+#: src/bungeni.main/bungeni/ui/reports.py:79
+msgid "Report Title"
+msgstr "Название доклада"
+
+#: src/bungeni.main/bungeni/ui/reports.py:125
+msgid "Preview"
+msgstr "Предварительный просмотр"
+
+#: src/bungeni.main/bungeni/ui/reports.py:131
+msgid "See the preview of the report below"
+msgstr "См. предварительный доклад под"
+
+#. Default: "Publish"
+#: src/bungeni.main/bungeni/ui/reports.py:134
+#, fuzzy
+msgid "publish_report"
+msgstr "Публикация отчетов"
+
+#: src/bungeni.main/bungeni/ui/reports.py:156
+msgid "Report has been processed and saved"
+msgstr "Доклад был обработан и сохранен"
+
+#. Default: "Date"
+#: src/bungeni.main/bungeni/ui/reports.py:167
+#, fuzzy
+msgid "report_start_date"
+msgstr "Дата окончания"
+
+#: src/bungeni.main/bungeni/ui/reports.py:168
+msgid "Choose a starting date for this report"
+msgstr "Выберите дату начала этого доклада"
+
+#. Default: "Date"
+#: src/bungeni.main/bungeni/ui/reports.py:171
+#, fuzzy
+msgid "report_end_date"
+msgstr "Дата окончания"
+
+#: src/bungeni.main/bungeni/ui/reports.py:172
+msgid "Choose an end date for this report"
+msgstr "Выберите дату окончания данного отчета"
+
+#: src/bungeni.main/bungeni/ui/reports.py:183
+#, fuzzy
+msgid "Sittings in Report"
+msgstr "Заседания включены в этот доклад"
+
+#: src/bungeni.main/bungeni/ui/reports.py:184
+#, fuzzy
+msgid "List of sittings included in this report"
+msgstr "Заседания включены в этот доклад"
+
+#: src/bungeni.main/bungeni/ui/reports.py:207
+#, fuzzy
+msgid "Save Report"
+msgstr "Создать отчет"
+
+#. Default: "Sitting Agenda"
+#: src/bungeni.main/bungeni/ui/reports.py:257
+msgid "report_title_sitting_agenda"
+msgstr ""
+
+#. Default: "Sitting Votes and Proceedings"
+#: src/bungeni.main/bungeni/ui/reports.py:261
+#, fuzzy
+msgid "report_title_votes_and_proceedings"
+msgstr "Сидя голосов и материалы"
+
+#. Default: "Yes"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:35
+#, fuzzy
+msgid "scheduling_message_yes"
+msgstr "Schedulings"
+
+#. Default: "No"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:36
+#, fuzzy
+msgid "scheduling_message_no"
+msgstr "Schedulings"
+
+#. Default: "Okay"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:37
+msgid "scheduling_message_okay"
+msgstr ""
+
+#. Default: "Done"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:38
+#, fuzzy
+msgid "scheduling_message_done"
+msgstr "Перемещение планирование вниз"
+
+#. Default: "Notice"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:39
+msgid "scheduling_message_notice"
+msgstr ""
+
+#. Default: "Working"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:40
+msgid "scheduling_message_working"
+msgstr ""
+
+#. Default: "Cancel"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:41
+msgid "scheduling_message_cancel"
+msgstr ""
+
+#. Default: "View"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:42
+msgid "scheduling_message_view"
+msgstr ""
+
+#. Default: "Edit"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:43
+msgid "scheduling_message_edit"
+msgstr ""
+
+#. Default: "Delete"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:44
+msgid "scheduling_message_delete"
+msgstr ""
+
+#. Default: "Warning"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:45
+msgid "scheduling_message_warning"
+msgstr ""
+
+#. Default: "Minutes"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:46
+#, fuzzy
+msgid "scheduling_text_minutes"
+msgstr "Разделы"
+
+#. Default: "Start Date"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:47
+msgid "scheduling_filters_start_date"
+msgstr ""
+
+#. Default: "End Date"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:48
+msgid "scheduling_filters_end_date"
+msgstr ""
+
+#. Default: "Type"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:51
+#, fuzzy
+msgid "scheduling_column_type"
+msgstr "Перемещение планирования до"
+
+#. Default: "Moved by"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:52
+msgid "scheduling_column_mover"
+msgstr ""
+
+#. Default: "Status"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:53
+msgid "scheduling_column_status"
+msgstr ""
+
+#. Default: "Date"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:54
+msgid "scheduling_column_status_date"
+msgstr ""
+
+#. Default: "No."
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:55
+msgid "scheduling_column_registry_no"
+msgstr ""
+
+#. Default: "Description"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:56
+msgid "scheduling_column_description"
+msgstr ""
+
+#. Default: "Minute Text"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:58
+msgid "scheduling_column_minute_text"
+msgstr ""
+
+#. Default: "Agenda"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:62
+#, fuzzy
+msgid "scheduling_title_agenda"
+msgstr "Редактирование &quot;$title&quot;"
+
+#. Default: "Agenda Minutes and Votes"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:63
+#, fuzzy
+msgid "scheduling_title_agenda_minutes"
+msgstr "Редактирование &quot;$title&quot;"
+
+#. Default: "Scheduled Items"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:65
+msgid "scheduling_title_scheduled_items"
+msgstr ""
+
+#. Default: "Available Items"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:67
+msgid "scheduling_title_available_items"
+msgstr ""
+
+#. Default: "Agenda and Minutes"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:69
+#, fuzzy
+msgid "scheduling_title_discussions"
+msgstr "Обсуждения"
+
+#. Default: "Heading"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:73
+#, fuzzy
+msgid "scheduling_type_heading"
+msgstr "Перенос первом чтении"
+
+#. Default: "Minute Record"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:74
+msgid "scheduling_type_minute"
+msgstr ""
+
+#. Default: "Editorial Note"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:75
+msgid "scheduling_type_editorial_note"
+msgstr ""
+
+#. Default: "Remove Item"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:79
+msgid "scheduling_action_remove_item"
+msgstr ""
+
+#. Default: "Add Minute"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:80
+msgid "scheduling_action_add_minute"
+msgstr ""
+
+#. Default: "Save and preview"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:81
+msgid "scheduling_action_save_preview"
+msgstr ""
+
+#. Default: "Save Changes"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:83
+#, fuzzy
+msgid "scheduling_action_save_changes"
+msgstr "Расписание есть несохраненные изменения"
+
+#. Default: "Discard Changes"
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:85
+msgid "scheduling_action_discard_changes"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:91
+msgid "heading"
+msgstr "заголовок"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:93
+msgid "minute record"
+msgstr "минуты записи"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:120
+msgid "Modify Item"
+msgstr "Изменить пункт"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:132
+msgid "NO TEXT RECORD FOUND"
+msgstr "NO TEXT найденной записи"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:137
+msgid "Select existing heading"
+msgstr "Выберите существующий заголовок"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:145
+msgid ""
+"the agenda is empty. add items from below from from the available documents "
+"to the right"
+msgstr ""
+"Повестка дня пуст. добавлять элементы снизу от от имеющихся документов на "
+"право"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:152
+msgid "add text records"
+msgstr "добавить текст записи"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:155
+msgid "custom heading"
+msgstr "пользовательский заголовок"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:165
+msgid "change this text"
+msgstr "изменить текст"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:167
+msgid "Remove item from schedule"
+msgstr "Удаление элемента из графика"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:169
+msgid "Are you sure you want to remove this item from schedule ?"
+msgstr "Вы действительно хотите удалить этот пункт из графика?"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:176
+msgid "No items have been scheduled. Add something then save."
+msgstr "Нет элементов были запланированы. Добавить что-то сохранить."
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:181
+msgid "saving changes to schedule..."
+msgstr "сохранения изменений в график ..."
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:185
+msgid "saving changes to minutes..."
+msgstr "сохранения изменений минут ..."
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:189
+msgid "reloading schedule..."
+msgstr "перегрузка график ..."
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:192
+msgid "there was an error while saving the schedule"
+msgstr "произошла ошибка при сохранении графика"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:194
+msgid "no filters selected"
+msgstr "не выбрано"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:198
+msgid "you did not choose any filters.select some filters then hit apply"
+msgstr ""
+"Вы не выбрать любой filters.select некоторые фильтры применяются затем "
+"нажмите"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:205
+msgid "clear filters"
+msgstr "ясно фильтры"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:207
+msgid "apply filters"
+msgstr "применять фильтры"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:208
+msgid "this schedule is read only"
+msgstr "этот график только для чтения"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:212
+msgid "add text to schedule"
+msgstr "добавить текст для планирования"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:218
+msgid "Schedule has unsaved changes"
+msgstr "Расписание есть несохраненные изменения"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:222
+msgid "Do you want to delete unsaved minute?"
+msgstr "Вы действительно хотите удалить несохраненные минуту?"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:224
+msgid "Confirmation Required"
+msgstr "Требуется подтверждение"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:226
+msgid "Really remove this minute record?"
+msgstr "Действительно удалить эту минуту записи?"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:229
+msgid ""
+"You need to save the schedule before adding minutes for it.to this item."
+msgstr ""
+"Вы должны сохранить график, прежде чем добавлять минут it.to этому вопросу."
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:235
+msgid "*Unsaved item. No minute records."
+msgstr "* Несохраненные пункта. Нет минуты записи."
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:238
+msgid "No minute records"
+msgstr "Нет минуты записи"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:241
+#, fuzzy
+msgid "add minutes record"
+msgstr "минуты записи"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:244
+msgid "Edit"
+msgstr "Редактировать"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:245
+msgid "Loading minutes..."
+msgstr "Загрузка минут ..."
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:248
+msgid "unable to load minutes..."
+msgstr "не удалось загрузить минут ..."
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:251
+msgid "agenda preview"
+msgstr "Повестка дня просмотра"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:252
+msgid "generating agenda preview..."
+msgstr "Повестка дня создания предварительного просмотра ..."
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:255
+msgid "ERROR: Could to generate preview"
+msgstr "ОШИБКА: Не могли бы генерировать предварительный просмотр"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:260
+msgid "This event is unsaved. Edit to make any corrections and then save it"
+msgstr ""
+"Это событие не был сохранен. Изменить, чтобы внести какие-то корректировки, "
+"а затем сохранить его"
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:263
+msgid "Please make corrections. The highlighted fields are required."
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/resources/dynamic.py:265
+#, fuzzy
+msgid ""
+"This timeslot already has another event.\n"
+" Do you want still want to add it?"
+msgstr "Этот временной интервал уже другой случай. Вы хотите продолжить?"
+
+#: src/bungeni.main/bungeni/ui/rss.py:226
+#: src/bungeni.main/bungeni/ui/search.py:333
+msgid "changes from"
+msgstr "изменений"
+
+#: src/bungeni.main/bungeni/ui/search.py:114
+msgid "Query"
+msgstr "Запрос"
+
+#: src/bungeni.main/bungeni/ui/search.py:124
+msgid "Content type"
+msgstr "Тип содержимого"
+
+#: src/bungeni.main/bungeni/ui/search.py:141
+msgid "Status date"
+msgstr "Статус дате"
+
+#: src/bungeni.main/bungeni/ui/search.py:146
+msgid "Highlight words"
+msgstr "Выделите слова"
+
+#: src/bungeni.main/bungeni/ui/search.py:153
+msgid "Annotation"
+msgstr "Аннотация"
+
+#: src/bungeni.main/bungeni/ui/search.py:236
+msgid "rank"
+msgstr "ранжировать"
+
+#: src/bungeni.main/bungeni/ui/search.py:238
+msgid "type"
+msgstr "тип"
+
+#: src/bungeni.main/bungeni/ui/search.py:240
+msgid "title"
+msgstr "название"
+
+#: src/bungeni.main/bungeni/ui/search.py:242
+msgid "status"
+msgstr "статус"
+
+#: src/bungeni.main/bungeni/ui/search.py:244
+msgid "weight"
+msgstr "вес"
+
+#: src/bungeni.main/bungeni/ui/search.py:246
+msgid "percent"
+msgstr "процент"
+
+#: src/bungeni.main/bungeni/ui/search.py:307
+msgid "Found ${total} results in ${search_time} Seconds"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/search.py:389
+#: src/bungeni.main/bungeni/ui/search.py:535
+#: src/bungeni.main/bungeni/ui/templates/paged-search.pt:7
+#: src/bungeni.main/bungeni/ui/templates/search.pt:7
+#: src/bungeni.main/bungeni/ui/viewlets/templates/search.pt:8
+msgid "Search"
+msgstr "Поиск"
+
+#: src/bungeni.main/bungeni/ui/search.py:395
+#: src/bungeni.main/bungeni/ui/search.py:550
+msgid "Invalid Query"
+msgstr "Неверный запрос"
+
+#: src/bungeni.main/bungeni/ui/search.py:464
+msgid ""
+"Showing ${page_start} to ${page_end} of ${total} results. Search done in "
+"${search_time} seconds."
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/search.py:526
+msgid "Field"
+msgstr "Поле"
+
+#. Default: "Upload file"
+#: src/bungeni.main/bungeni/ui/templates/add-file-widget.pt:2
+msgid "upload-file"
+msgstr "Загрузить файл"
+
+#: src/bungeni.main/bungeni/ui/templates/advanced-paged-search.pt:5
+msgid "Advanced Search"
+msgstr "Расширенный поиск"
+
+#: src/bungeni.main/bungeni/ui/templates/advanced-paged-search.pt:13
+#: src/bungeni.main/bungeni/ui/templates/paged-search.pt:21
+#: src/bungeni.main/bungeni/ui/templates/search.pt:19
+msgid "Results"
+msgstr "Результаты"
+
+#: src/bungeni.main/bungeni/ui/templates/app-index.pt:6
+msgid "Welcome to Bungeni"
+msgstr "Добро пожаловать в Bungeni"
+
+#: src/bungeni.main/bungeni/ui/templates/archive.pt:6
+msgid "Access to current and historical records"
+msgstr "Доступ к текущим и историческим данным"
+
+#: src/bungeni.main/bungeni/ui/templates/assignment.pt:5
+#, fuzzy
+msgid "Assignment"
+msgstr "Документация"
+
+#: src/bungeni.main/bungeni/ui/templates/assignment.pt:15
+#, fuzzy
+msgid "No users available for assignment"
+msgstr "Нет истории для данного пункта"
+
+#: src/bungeni.main/bungeni/ui/templates/attendance.pt:5
+msgid "Sitting attendance record"
+msgstr "Сидя рекорд посещаемости"
+
+#: src/bungeni.main/bungeni/ui/templates/attendance.pt:9
+msgid "Update member attendance for the sitting"
+msgstr "Обновление член посещаемости заседаний"
+
+#: src/bungeni.main/bungeni/ui/templates/bungeni-content.pt:14
+msgid "View in Bungeni"
+msgstr "Посмотреть в Bungeni"
+
+#: src/bungeni.main/bungeni/ui/templates/debate-takes.pt:5
+#, fuzzy
+msgid "Debate takes"
+msgstr "Обсуждены"
+
+#: src/bungeni.main/bungeni/ui/templates/diff.pt:3
+msgid "Diff <b>x</b>"
+msgstr "Разница <b>х</b>"
+
+#: src/bungeni.main/bungeni/ui/templates/diff.pt:3
+msgid "unchanged"
+msgstr "без изменений"
+
+#. Default: "Keep existing file"
+#: src/bungeni.main/bungeni/ui/templates/edit-file-widget.pt:21
+msgid "keep-file"
+msgstr "Сохранить существующий файл"
+
+#. Default: "Replace with new file:"
+#: src/bungeni.main/bungeni/ui/templates/edit-file-widget.pt:30
+msgid "replace-file"
+msgstr "Заменить на новый файл:"
+
+#. Default: "download"
+#: src/bungeni.main/bungeni/ui/templates/edit-file-widget.pt:37
+msgid "download-file"
+msgstr "скачать"
+
+#. Default: "Keep existing image"
+#: src/bungeni.main/bungeni/ui/templates/image-widget.pt:23
+msgid "keep-image"
+msgstr "Имейте существующее изображение"
+
+#. Default: "Delete current image"
+#: src/bungeni.main/bungeni/ui/templates/image-widget.pt:32
+msgid "delete-image"
+msgstr "Удалить текущее изображение"
+
+#. Default: "Replace with new image:"
+#: src/bungeni.main/bungeni/ui/templates/image-widget.pt:41
+msgid "replace-image"
+msgstr "Заменить на новую картинку:"
+
+#. Default: "Upload image"
+#: src/bungeni.main/bungeni/ui/templates/image-widget.pt:44
+msgid "upload-image"
+msgstr "Загрузить изображение"
+
+#: src/bungeni.main/bungeni/ui/templates/report-error.pt:6
+msgid "An error occurred during generation of the document"
+msgstr "Произошла ошибка во время создания документа"
+
+#: src/bungeni.main/bungeni/ui/templates/retract-docs.pt:37
+#, fuzzy
+msgid "Transitions"
+msgstr "перевод"
+
+#: src/bungeni.main/bungeni/ui/templates/similar.pt:7
+msgid "Similar Content"
+msgstr "Подобные Содержимое"
+
+#: src/bungeni.main/bungeni/ui/templates/version.pt:9
+msgid ""
+"Select a version to compare to the current working copy, or make two "
+"selections to compare historic versions"
+msgstr ""
+"Выберите версию для сравнения с текущей рабочей копии, или сделать два "
+"выбора сравнивать исторические версии"
+
+#: src/bungeni.main/bungeni/ui/templates/workflow-ajax.pt:5
+msgid "Change state..."
+msgstr "Изменение состояния ..."
+
+#: src/bungeni.main/bungeni/ui/templates/workflow.pt:8
+msgid "Current state: ${state}."
+msgstr "Текущее состояние: ${state}."
+
+#: src/bungeni.main/bungeni/ui/templates/workflow.pt:12
+msgid "History"
+msgstr "История"
+
+#: src/bungeni.main/bungeni/ui/templates/workflow.pt:13
+msgid "No history available for this item"
+msgstr "Нет истории для данного пункта"
+
+#: src/bungeni.main/bungeni/ui/templates/xapian-settings.pt:5
+msgid "Rebuild search index"
+msgstr "Перестроить поисковый индекс"
+
+#: src/bungeni.main/bungeni/ui/utils/misc.py:63
+msgid "Form values must be of type string or list"
+msgstr "Форма значения должны быть строкой или список"
+
+#: src/bungeni.main/bungeni/ui/utils/misc.py:144
+msgid "No Text"
+msgstr "Нет текста"
+
+#: src/bungeni.main/bungeni/ui/versions.py:96
+msgid "version"
+msgstr "версия"
+
+#: src/bungeni.main/bungeni/ui/versions.py:100
+msgid "procedure"
+msgstr "процедура"
+
+#: src/bungeni.main/bungeni/ui/versions.py:102
+msgid "modified"
+msgstr "модифицированный"
+
+#: src/bungeni.main/bungeni/ui/versions.py:104
+msgid "by"
+msgstr "по"
+
+#: src/bungeni.main/bungeni/ui/versions.py:106
+msgid "message"
+msgstr "сообщение"
+
+#: src/bungeni.main/bungeni/ui/versions.py:116
+msgid "No Version Data"
+msgstr "Нет данных Версия"
+
+#: src/bungeni.main/bungeni/ui/versions.py:175
+msgid "Change Message"
+msgstr "Изменение сообщение"
+
+#: src/bungeni.main/bungeni/ui/versions.py:181
+msgid "Version Log"
+msgstr "Версия Войти"
+
+#: src/bungeni.main/bungeni/ui/versions.py:234
+msgid "New Version"
+msgstr "Новая версия"
+
+#: src/bungeni.main/bungeni/ui/versions.py:242
+msgid "New Version Created"
+msgstr "Новая версия, созданная"
+
+#: src/bungeni.main/bungeni/ui/versions.py:244
+msgid "Revert To"
+msgstr "Вернуться к"
+
+#: src/bungeni.main/bungeni/ui/versions.py:250
+msgid "Select one item to revert to"
+msgstr "Выберите один пункт, чтобы вернуться к"
+
+#: src/bungeni.main/bungeni/ui/versions.py:261
+msgid "Reverted to Previous Version %s"
+msgstr "Возврат к предыдущей версии %s"
+
+#: src/bungeni.main/bungeni/ui/versions.py:264
+msgid "Show Differences"
+msgstr "Показать Различия"
+
+#: src/bungeni.main/bungeni/ui/versions.py:267
+msgid "Displaying differences"
+msgstr "Показаны различия"
+
+#: src/bungeni.main/bungeni/ui/versions.py:270
+msgid "Select one or two items to show differences"
+msgstr "Выберите один или два пункта, чтобы показать различия"
+
+#: src/bungeni.main/bungeni/ui/viewlets/archive.py:23
+#: src/bungeni.main/bungeni/ui/widgets.py:1313
+msgid "From"
+msgstr "От"
+
+#: src/bungeni.main/bungeni/ui/viewlets/archive.py:24
+#: src/bungeni.main/bungeni/ui/widgets.py:1314
+msgid "Leave blank or set lower limit"
+msgstr "Оставьте пустым или установить нижний предел"
+
+#: src/bungeni.main/bungeni/ui/viewlets/archive.py:28
+#: src/bungeni.main/bungeni/ui/widgets.py:1318
+msgid "To"
+msgstr "К"
+
+#: src/bungeni.main/bungeni/ui/viewlets/archive.py:29
+#: src/bungeni.main/bungeni/ui/widgets.py:1319
+msgid "Leave blank or set upper limit"
+msgstr "Оставьте пустым или установить верхний предел"
+
+#: src/bungeni.main/bungeni/ui/viewlets/archive.py:33
+msgid "Or select"
+msgstr "Или выберите"
+
+#: src/bungeni.main/bungeni/ui/viewlets/archive.py:34
+msgid "Set date range to that of a given particular parliament"
+msgstr "Установите диапазон дат, которые в данный конкретный парламент"
+
+#: src/bungeni.main/bungeni/ui/viewlets/archive.py:42
+msgid "Filter the archive by date range"
+msgstr "Фильтр архива по дате"
+
+#: src/bungeni.main/bungeni/ui/viewlets/archive.py:81
+msgid "parliament..."
+msgstr "парламент ..."
+
+#: src/bungeni.main/bungeni/ui/viewlets/archive.py:91
+msgid "Filter"
+msgstr "Фильтр"
+
+#: src/bungeni.main/bungeni/ui/viewlets/archive.py:99
+msgid "Invalid Date Range"
+msgstr "Неверный диапазон дат"
+
+#: src/bungeni.main/bungeni/ui/viewlets/archive.py:105
+msgid "Start date must be before %s"
+msgstr "Дата начала должна быть, прежде чем %s"
+
+#: src/bungeni.main/bungeni/ui/viewlets/archive.py:111
+msgid "End date must be after %s"
+msgstr "Дата окончания должна быть после %s"
+
+#: src/bungeni.main/bungeni/ui/viewlets/archive.py:119
+msgid "Date range set"
+msgstr "Набор диапазона дат"
+
+#: src/bungeni.main/bungeni/ui/viewlets/archive.py:121
+#: src/bungeni.main/bungeni/ui/widgets.py:1344
+msgid "Clear"
+msgstr "Очистить"
+
+#: src/bungeni.main/bungeni/ui/viewlets/archive.py:127
+msgid "Date range cleared"
+msgstr "Диапазон дат очищается"
+
+#: src/bungeni.main/bungeni/ui/viewlets/templates/archive-dates.pt:7
+msgid "Filter by date or parliament"
+msgstr "Фильтр по дате или парламент"
+
+#. Default: "You are here:"
+#: src/bungeni.main/bungeni/ui/viewlets/templates/bread-crumbs.pt:2
+msgid "you_are_here"
+msgstr "Вы находитесь здесь:"
+
+#. Default: "Home"
+#: src/bungeni.main/bungeni/ui/viewlets/templates/bread-crumbs.pt:3
+msgid "tabs_home"
+msgstr "Домой"
+
+#: src/bungeni.main/bungeni/ui/viewlets/templates/scheduling.pt:8
+msgid "Add items to schedule by clicking on the checkbox"
+msgstr "Добавление элементов в расписание, нажав на флажок"
+
+#. Default: "Sections"
+#: src/bungeni.main/bungeni/ui/viewlets/templates/sections.pt:2
+msgid "heading_sections"
+msgstr "Разделы"
+
+#: src/bungeni.main/bungeni/ui/viewlets/templates/workspace-under-consideration.pt:4
+#: src/bungeni.main/bungeni/ui/viewlets/templates/workspace.pt:4
+msgid "documents"
+msgstr "документация"
+
+#. Default: "This document has the required number of signatories. ${signed_members} member(s) have signed. ${required_members} signature(s) required."
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:78
+msgid "signature_requirement_met"
+msgstr ""
+"Этот документ имеет необходимое количество участников. ${signed_members} "
+"пользователь (ей) подписали. ${required_members} подпись (и) требуется."
+
+#. Default: "This document does not have the required number of signatories. Requires ${required_members} signature(s). ${signed_members} member(s) have signed."
+#: src/bungeni.main/bungeni/ui/viewlets/workspace.py:90
+msgid "signature_requirements_not_met"
+msgstr ""
+"Этот документ не имеет необходимого количества участников. Требуется "
+"${required_members} подпись (и). ${signed_members} пользователь (ей) "
+"подписали."
+
+#: src/bungeni.main/bungeni/ui/views.zcml:420
+msgid "Listing"
+msgstr "Список"
+
+#: src/bungeni.main/bungeni/ui/vocabulary.py:74
+msgid "day_%d"
+msgstr "day_%d"
+
+#: src/bungeni.main/bungeni/ui/vocabulary.py:1427
+msgid "* All types *"
+msgstr ""
+
+#: src/bungeni.main/bungeni/ui/widgets.py:75
+msgid "Unknown"
+msgstr "Неизвестный"
+
+#: src/bungeni.main/bungeni/ui/widgets.py:96
+msgid "Invalid date: $value"
+msgstr "Неверная дата: $value"
+
+#: src/bungeni.main/bungeni/ui/widgets.py:157
+#: src/bungeni.main/bungeni/ui/widgets.py:163
+#: src/bungeni.main/bungeni/ui/widgets.py:182
+msgid "Form upload is not a file object"
+msgstr "Форма загрузки не является файлом объекта"
+
+#: src/bungeni.main/bungeni/ui/widgets.py:238
+msgid "download"
+msgstr "скачать"
+
+#: src/bungeni.main/bungeni/ui/widgets.py:377
+msgid "Choose Month"
+msgstr "Выберите месяц"
+
+#: src/bungeni.main/bungeni/ui/widgets.py:378
+msgid "Enter Year"
+msgstr "Введите год"
+
+#: src/bungeni.main/bungeni/ui/widgets.py:379
+msgid "OK"
+msgstr "ОК"
+
+#: src/bungeni.main/bungeni/ui/widgets.py:381
+msgid "Please enter a valid year"
+msgstr "Пожалуйста, введите год"
+
+#: src/bungeni.main/bungeni/ui/widgets.py:504
+#: src/bungeni.main/bungeni/ui/widgets.py:568
+msgid "Incorrect string data for date"
+msgstr "Неправильные данные строки для даты"
+
+#: src/bungeni.main/bungeni/ui/widgets.py:668
+#: src/bungeni.main/bungeni/ui/widgets.py:745
+msgid "Incorrect string data for date and time"
+msgstr "Неправильные данные строки даты и времени"
+
+#: src/bungeni.main/bungeni/ui/widgets.py:991
+msgid "start typing to chose $fname..."
+msgstr "начните вводить выбрать $fname ..."
+
+#: src/bungeni.main/bungeni/ui/widgets.py:1264
+msgid "selected subject terms"
+msgstr "выбранных условий теме"
+
+#: src/bungeni.main/bungeni/ui/widgets.py:1274
+msgid "no subjects"
+msgstr "никакие предметы"
+
+#: src/bungeni.main/bungeni/ui/widgets.py:1339
+#, fuzzy
+msgid "Ok"
+msgstr "Хорошо"
+
+#: src/bungeni.main/bungeni/ui/workflow.py:52
+msgid "Workflow history"
+msgstr "Workflow истории"
+
+#: src/bungeni.main/bungeni/ui/workflow.py:68
+msgid "date"
+msgstr "дата"
+
+#: src/bungeni.main/bungeni/ui/workflow.py:72
+msgid "description"
+msgstr "описание"
+
+#: src/bungeni.main/bungeni/ui/workflow.py:121
+msgid "Comment on workflow change"
+msgstr "Комментарий на рабочий процесс изменения"
+
+#: src/bungeni.main/bungeni/ui/workflow.py:123
+msgid "Active Date"
+msgstr "Активное Дата"
+
+#: src/bungeni.main/bungeni/ui/workflow.py:125
+msgid "Registry number"
+msgstr "Номер в реестре"
+
+#: src/bungeni.main/bungeni/ui/workflow.py:188
+msgid "Active Date is in the past."
+msgstr "Активное Дата в прошлом."
+
+#: src/bungeni.main/bungeni/ui/workflow.py:191
+msgid "Active Date is in the future."
+msgstr "Активное Дата в будущем."
+
+#: src/bungeni.main/bungeni/ui/workflow.py:224
+msgid "Confirmation required for workflow transition: '${title}'"
+msgstr "Подтверждение, необходимое для перехода потока: &quot;${title}&quot;"
+
+#. Default: "title"
+#: src/bungeni.main/bungeni/ui/workspace.py:51
+msgid "workspace_column_title"
+msgstr ""
+
+#. Default: "item type"
+#: src/bungeni.main/bungeni/ui/workspace.py:53
+msgid "workspace_column_type"
+msgstr ""
+
+#. Default: "status"
+#: src/bungeni.main/bungeni/ui/workspace.py:55
+msgid "workspace_column_status"
+msgstr ""
+
+#. Default: "status date"
+#: src/bungeni.main/bungeni/ui/workspace.py:57
+msgid "workspace_column_status_date"
+msgstr ""
+
+#. Default: "title"
+#: src/bungeni.main/bungeni/ui/workspace.py:63
+msgid "workspace_column_group_title"
+msgstr ""
+
+#. Default: "group type"
+#: src/bungeni.main/bungeni/ui/workspace.py:65
+msgid "workspace_column_group_type"
+msgstr ""
+
+#. Default: "status"
+#: src/bungeni.main/bungeni/ui/workspace.py:67
+msgid "workspace_column_group_status"
+msgstr ""
+
+#. Default: "status date"
+#: src/bungeni.main/bungeni/ui/workspace.py:69
+msgid "workspace_column_group_status_date"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Parliament : Start Date for a parliament must be after Election Date"
+#~ msgstr "Жизнь парламента должна начаться после выборов"
+
+#~ msgid "The life of a parliament must start after its election"
+#~ msgstr "Жизнь парламента должна начаться после выборов"
+
+#, fuzzy
+#~ msgid "session_sittings_calendar_title"
+#~ msgstr "Заседание ${group_name} @ ${sitting_venue}"
+
+#~ msgid "The election date overlaps with (%s)"
+#~ msgstr "Дата выборов совпадает с (%s)"
+
+#, fuzzy
+#~ msgid "Add MP address..."
+#~ msgstr "Добавить адрес ..."
+
+#~ msgid "Edit heading"
+#~ msgstr "Изменить заголовок"
+
+#~ msgid "Make Corrections"
+#~ msgstr "Сделать исправления"
+
+#~ msgid "Venue : Select a venue"
+#~ msgstr "Место проведения: Выберите место"
+
+#~ msgid "Language : Select a language"
+#~ msgstr "Язык: Выберите язык"
+
+#~ msgid "settings"
+#~ msgstr "настройки"
+
+#~ msgid "Number of sittings to include in what's business section"
+#~ msgstr "Количество заседаний, чтобы включить в то, что бизнес-секции"
+
+#~ msgid "Business"
+#~ msgstr "Бизнес"
+
+#~ msgid "Daily operations of the parliament"
+#~ msgstr "Ежедневная деятельность парламента"
+
+#~ msgid "Members"
+#~ msgstr "Пользователи"
+
+#~ msgid "Records of members of parliament"
+#~ msgstr "Отчеты членов парламента"
+
+#~ msgid "Parliament records and documents"
+#~ msgstr "Парламент записей и документов"
+
+#~ msgid "What's on"
+#~ msgstr "Что на"
+
+#~ msgid "View committees created by the current parliament"
+#~ msgstr "Просмотр комитетов, созданных в нынешнем парламенте"
+
+#~ msgid "View bills introduced in the current parliament"
+#~ msgstr "Просмотр счетов введен в нынешнем парламенте"
+
+#~ msgid "View questions tabled in the current parliament"
+#~ msgstr "Просмотр вопросов представленные в нынешнем парламенте"
+
+#~ msgid "View motions moved in the current parliament"
+#~ msgstr "Вид движения переехали в нынешнем парламенте"
+
+#~ msgid "Tabled documents"
+#~ msgstr "Представленные документы"
+
+#~ msgid "View the documents tabled in the current parliament"
+#~ msgstr "Просмотр документов, представленных в нынешнем парламенте"
+
+#~ msgid "Agenda items"
+#~ msgstr "Пункты повестки дня"
+
+#~ msgid "View the agenda items of the current parliament"
+#~ msgstr "Просмотр пунктов повестки дня нынешнего парламента"
+
+#~ msgid "View the sittings of the current parliament"
+#~ msgstr "Посмотреть на заседаниях нынешнего парламента"
+
+#~ msgid "Publications"
+#~ msgstr "Публикации"
+
+#~ msgid "browse and download parliamentary publications"
+#~ msgstr "просматривать и загружать парламентских публикаций"
+
+#~ msgid "Current"
+#~ msgstr "Текущий"
+
+#~ msgid "View current parliament members (MPs)"
+#~ msgstr "Просмотр текущих членов парламента (депутатов)"
+
+#~ msgid "Political groups"
+#~ msgstr "Политические группы"
+
+#~ msgid "View current political groups"
+#~ msgstr "Просмотр текущих политических групп"
+
+#~ msgid "Browse archives"
+#~ msgstr "Просмотр архивов"
+
+#~ msgid "Browse records from the archive"
+#~ msgstr "Просмотр записей из архива"
+
+#~ msgid "Browse documents in the archive"
+#~ msgstr "Обзор документов в архиве"
+
+#~ msgid "Allow Question Submission"
+#~ msgstr "Разрешить вопрос представления"
+
+#~ msgid "Days to Defer Question"
+#~ msgstr "Дней отложить вопрос"
+
+#~ msgid ""
+#~ "number of days after which admissible questions are automatically deferred"
+#~ msgstr ""
+#~ "количество дней, после чего допустимый вопросы автоматически отложенного"
+
+#~ msgid "Days before question scheduled"
+#~ msgstr "За несколько дней до запланированного вопрос"
+
+#~ msgid "Days before bill scheduled"
+#~ msgstr "За несколько дней до запланированного законопроекта"
+
+#~ msgid "Maximum Questions Per Sitting"
+#~ msgstr "Максимальная Вопросы На заседание"
+
+#~ msgid "Maximum Questions Per Sitting Per MP"
+#~ msgstr "Максимальная вопросы Пер Сидя На депутат"
+
+#~ msgid "An overview of the daily operations of the parliament"
+#~ msgstr "Обзор текущей деятельности парламента"
+
+#~ msgid "From: ${whats_on_start_date} to: ${whats_on_end_date}"
+#~ msgstr "Из: ${whats_on_start_date} на: ${whats_on_end_date}"
+
+#~ msgid "Period selected has no Sittings"
+#~ msgstr "Период выбран не Заседания"
+
+#~ msgid "Period selected has no Bills"
+#~ msgstr "Период выбран не Векселя"
+
+#~ msgid "Period selected has no Motions"
+#~ msgstr "Период выбран не имеет движений"
+
+#~ msgid "Period selected has no Questions"
+#~ msgstr "Период выбран не имеет вопросы"
+
+#~ msgid "Period selected has no Tabled Documents"
+#~ msgstr "Период выбран не имеет представленных документов"
+
+#~ msgid "Period selected has no Agenda Items"
+#~ msgstr "Период выбран не имеет пунктам повестки дня"
+
+#~ msgid "N/A"
+#~ msgstr "N / A"
+
+#, fuzzy
+#~ msgid "section_workspace_draft"
+#~ msgstr "Действия Workspace"
+
+#~ msgid "draft documents"
+#~ msgstr "проекты документов"
+
+#, fuzzy
+#~ msgid "section_workspace_inbox"
+#~ msgstr "Действия Workspace"
+
+#~ msgid "incoming documents"
+#~ msgstr "входящих документов"
+
+#, fuzzy
+#~ msgid "section_workspace_pending"
+#~ msgstr "Действия Workspace"
+
+#, fuzzy
+#~ msgid "pending documents"
+#~ msgstr "входящих документов"
+
+#~ msgid "archive"
+#~ msgstr "архив"
+
+#~ msgid "archived documents"
+#~ msgstr "архивных документов"
+
+#~ msgid "Members of parliament"
+#~ msgstr "Члены парламента"
+
+#~ msgid "label_calendar_content_manager"
+#~ msgstr "Управление:"
+
+#~ msgid "Add MP..."
+#~ msgstr "МР ..."
+
+#~ msgid "Edit agenda and minutes"
+#~ msgstr "Редактировать повестки дня и протоколы"
+
+#~ msgid "Agenda item"
+#~ msgstr "Пункт повестки дня"
+
+#~ msgid "Review signature"
+#~ msgstr "Обзор подпись"
+
+#, fuzzy
+#~ msgid "Edit Assignment"
+#~ msgstr "Изменить правительство"
+
+#, fuzzy
+#~ msgid "Report4 Sitting"
+#~ msgstr "Создать Сидя"
+
+#, fuzzy
+#~ msgid "Report4 Sittings"
+#~ msgstr "Пленарные заседания"
+
+#~ msgid "Reorder scheduling"
+#~ msgstr "Изменить порядок планирования"
+
+#~ msgid "Move scheduling up"
+#~ msgstr "Перемещение планирования до"
+
+#~ msgid "Move scheduling down"
+#~ msgstr "Перемещение планирование вниз"
+
+#~ msgid "Value was changed!"
+#~ msgstr "Значение было изменено!"
+
+#, fuzzy
+#~ msgid "my documents"
+#~ msgstr "документация"
+
+#~ msgid "draft"
+#~ msgstr "проект"
+
+#~ msgid "inbox"
+#~ msgstr "входящие"
+
+#~ msgid "Items scheduled for this meeting"
+#~ msgstr "Товары запланирован на эту встречу"
+
+#~ msgid "Refresh"
+#~ msgstr "Обновление"
+
+#~ msgid "State"
+#~ msgstr "Состояние"
+
+#~ msgid "Week ${week_no}"
+#~ msgstr "Неделя ${week_no}"
+
+#~ msgid "${count} item(s) scheduled"
+#~ msgstr "${count} пункт (ы) запланировано"
+
+#~ msgid "file"
+#~ msgstr "файл"
+
+#~ msgid "Username"
+#~ msgstr "Имя пользователя"
+
+#~ msgid "Yes"
+#~ msgstr "Да"
+
+#~ msgid "No"
+#~ msgstr "Нет"
+
+#~ msgid "Okay"
+#~ msgstr "Хорошо"
+
+#~ msgid "Done"
+#~ msgstr "Сделанный"
+
+#~ msgid "Notice"
+#~ msgstr "Замечать"
+
+#~ msgid "Working"
+#~ msgstr "Рабочий"
+
+#~ msgid "Warning"
+#~ msgstr "Предупреждение"
+
+#~ msgid "Scheduled Items"
+#~ msgstr "Запланированные товаров"
+
+#~ msgid "Agenda and minutes"
+#~ msgstr "Повестки дня и протоколы"
+
+#~ msgid "minute text"
+#~ msgstr "минута текст"
+
+#~ msgid "Type"
+#~ msgstr "Тип"
+
+#~ msgid "No."
+#~ msgstr "Нет."
+
+#~ msgid "Moved By"
+#~ msgstr "Движимый"
+
+#~ msgid "remove item"
+#~ msgstr "удалить элемент"
+
+#~ msgid "save changes"
+#~ msgstr "Сохранить изменения"
+
+#, fuzzy
+#~ msgid "save and preview"
+#~ msgstr "Сохранить и просматривать"
+
+#~ msgid "discard changes"
+#~ msgstr "отменить изменения"
+
+#~ msgid "add minute"
+#~ msgstr "добавить минуту"
+
+#~ msgid "Minutes:"
+#~ msgstr "Минуты:"
+
+#~ msgid "status date"
+#~ msgstr "дату отчета о состоянии"
+
+#~ msgid "sent"
+#~ msgstr "посланный"
+
+#~ msgid "sent documents"
+#~ msgstr "направлены документы"
+
+#, fuzzy
+#~ msgid "Documents under consideration"
+#~ msgstr "Исключить пункт подтверждение"
+
+#~ msgid "view"
+#~ msgstr "смотреть"
+
+#~ msgid "A committee must be disolved before it can be reinstated"
+#~ msgstr "Комитет должен быть disolved прежде чем он может быть восстановлен"
+
+#~ msgid "Delegate to user"
+#~ msgstr "Делегирование пользователю"
+
+#~ msgid "member"
+#~ msgstr "член"
+
+#~ msgid "members"
+#~ msgstr "членов"
+
+#~ msgid "Role associated with title"
+#~ msgstr "Роль связана с названием"
+
+#~ msgid "Role associated with this title"
+#~ msgstr "Роль, связанные с этим названием"
+
+#~ msgid "Staff"
+#~ msgstr "Персонал"
+
+#~ msgid "political group"
+#~ msgstr "политической группы"
+
+#~ msgid "political groups"
+#~ msgstr "политических групп"
+
+#~ msgid "Response to the Question"
+#~ msgstr "Ответ на вопрос"
+
+#~ msgid "Start"
+#~ msgstr "Начало"
+
+#~ msgid "political party"
+#~ msgstr "Политическая партия"
+
+#~ msgid "no party"
+#~ msgstr "ни одна из сторон"
+
+#~ msgid "uri"
+#~ msgstr "URI"
+
+#~ msgid "Timeline"
+#~ msgstr "сроки"
+
+#~ msgid "Speaker's Office Email"
+#~ msgstr "Офис спикера Email"
+
+#~ msgid "Speaker's Office Notification"
+#~ msgstr "Офис спикера уведомления"
+
+#~ msgid "Alert the speaker's office when a document is submitted"
+#~ msgstr "Оповещение офис говорящего, когда документ представляется"
+
+#~ msgid "Clerk's Office Notification"
+#~ msgstr "Офис Клерка уведомления"
+
+#~ msgid "Alert the clerk's office by e-mail when a document is submitted"
+#~ msgstr ""
+#~ "Оповещение офис клерка по электронной почте, когда документ представляется"
+
+#~ msgid "Clerks's Office Email"
+#~ msgstr "Конторские служащие по Email"
+
+#~ msgid "Ministries Notification"
+#~ msgstr "Министерство уведомления"
+
+#~ msgid "Notify concerned ministries by e-mail when a document is submitted"
+#~ msgstr ""
+#~ "Сообщите заинтересованными министерствами по электронной почте, когда "
+#~ "документ представляется"
+
+#~ msgid "Administrator's Email"
+#~ msgstr "Администратора электронной почты"
+
+#~ msgid "Days to Notify Ministry of Pending Response"
+#~ msgstr "Дней до Сообщите Министерства ожидании ответа"
+
+#~ msgid ""
+#~ "Days after which to notify concerned ministry and  clerk's office of "
+#~ "questions with pending responses"
+#~ msgstr ""
+#~ "Дней, после чего уведомить соответствующие министерства и офис клерка "
+#~ "вопросов с до получения ответов"
+
+#~ msgid "Maximum consented signatories for a bill"
+#~ msgstr "Максимальная согласие подписали по векселю"
+
+#~ msgid "Minimum consented signatories for a question"
+#~ msgstr "Минимальное согласие подписали на вопрос"
+
+#~ msgid "Maximum consented signatories for a question"
+#~ msgstr "Максимальная согласие подписали на вопрос"
+
+#~ msgid "Minimum consented signatories for a motion"
+#~ msgstr "Минимальное согласие подписавшие для движения"
+
+#~ msgid "Maximum consented signatories for a motion"
+#~ msgstr "Максимальная согласился подписавших для движения"
+
+#~ msgid "Minimum consented signatories for an agenda item"
+#~ msgstr "Минимальное согласие подписавшие для повестки дня"
+
+#~ msgid "Maximum consented signatories for an agenda item"
+#~ msgstr "Максимальная согласился подписавших для повестки дня"
+
+#~ msgid "Minimum consented signatories for a tabled document"
+#~ msgstr "Минимальное согласие подписали в представленном документе"
+
+#~ msgid "Maximum consented signatories for a tabled document"
+#~ msgstr "Максимальная согласие подписали в представленном документе"
+
+#~ msgid "Constituency"
+#~ msgstr "Избирательный округ"
+
+#~ msgid "Province"
+#~ msgstr "Область"
+
+#~ msgid "region"
+#~ msgstr "регион"
+
+#~ msgid "political parties"
+#~ msgstr "политических партий"
+
+#~ msgid "Unique identifier or number for this political party"
+#~ msgstr "Уникальный идентификатор или номер для этой политической партии"
+
+#~ msgid "Sequential Number"
+#~ msgstr "Порядковый номер"
+
+#~ msgid "Constituencies"
+#~ msgstr "Избирательные округа"
+
+#~ msgid "Name of the constituency"
+#~ msgstr "Название округа"
+
+#~ msgid "Provinces"
+#~ msgstr "Провинция"
+
+#~ msgid "Name of the Province"
+#~ msgstr "Название провинции"
+
+#~ msgid "Region"
+#~ msgstr "Регион"
+
+#~ msgid "Regions"
+#~ msgstr "Регионы"
+
+#~ msgid "Name of the Region"
+#~ msgstr "Имя области"
+
+#~ msgid "Constituency details"
+#~ msgstr "Округа подробности"
+
+#~ msgid "Details"
+#~ msgstr "Детали"
+
+#~ msgid "Date the data was submitted from the Constituency"
+#~ msgstr "Дата была передана из округов"
+
+#~ msgid "Total Number of People living in this Constituency"
+#~ msgstr "Общее число людей, живущих в этом округе"
+
+#~ msgid "Registered Voters"
+#~ msgstr "Зарегистрированные избиратели"
+
+#~ msgid "Number of Voters registered in this Constituency"
+#~ msgstr "Число избирателей, зарегистрированных в этом округе"
+
+#~ msgid "Add party member..."
+#~ msgstr "Добавить член партии ..."
+
+#~ msgid "Edit party member"
+#~ msgstr "Редактировать член партии"
+
+#~ msgid "Delete party member"
+#~ msgstr "Удаление члена партии"
+
+#~ msgid "Add political party..."
+#~ msgstr "Добавить политической партии ..."
+
+#~ msgid "Add constituency..."
+#~ msgstr "Добавить округу ..."
+
+#~ msgid "Add province..."
+#~ msgstr "Добавить провинции ..."
+
+#~ msgid "Add region..."
+#~ msgstr "Добавить регионе ..."
+
+#~ msgid "Edit political party"
+#~ msgstr "Изменить политическую партию"
+
+#~ msgid "Delete political party"
+#~ msgstr "Удаление политической партии"
+
+#~ msgid "Delete province"
+#~ msgstr "Очистить область"
+
+#~ msgid "Edit province"
+#~ msgstr "Редактировать область"
+
+#~ msgid "Delete region"
+#~ msgstr "Удаление области"
+
+#~ msgid "Edit region"
+#~ msgstr "Изменить регион"
+
+#~ msgid "Edit constituency"
+#~ msgstr "Редактировать округе"
+
+#~ msgid "Delete constituency"
+#~ msgstr "Удаление округе"
+
+#~ msgid "Attached file"
+#~ msgstr "Прикрепленный файл"
+
+#~ msgid "active"
+#~ msgstr "активный"
+
+#~ msgid "inactive"
+#~ msgstr "неактивный"
+
+#~ msgid "deceased"
+#~ msgstr "покойник"
+
+#~ msgid "The 'Reports' menu - provides reporting actions"
+#~ msgstr "Меню &quot;Отчеты&quot; - предоставляет отчетность действия"
+
+#~ msgid "Agenda..."
+#~ msgstr "Повестка дня ..."
+
+#~ msgid "Votes and proceedings..."
+#~ msgstr "Голосов и процедуры ..."
+
+#~ msgid "Download"
+#~ msgstr "Скачать"
+
+#~ msgid "Type of report to be produced"
+#~ msgstr "Тип доклада, который будет производится"
+
+#~ msgid "Order of the day"
+#~ msgstr "Повестка дня"
+
+#~ msgid "Sitting Votes and  Proceedings"
+#~ msgstr "Сидя голосов и материалы"
+
+#~ msgid "This document has no signatories."
+#~ msgstr "Этот документ не подписали."
+
+#~ msgid "Day $number of every month"
+#~ msgstr "День $number каждого месяца"
+
+#~ msgid "First $day of every month"
+#~ msgstr "Первый $day каждого месяца"
+
+#~ msgid "Male"
+#~ msgstr "Мужчина"
+
+#~ msgid "Female"
+#~ msgstr "Женщина"
+
+#~ msgid "initial"
+#~ msgstr "начальный"
+
+#~ msgid "subsequent"
+#~ msgstr "последующий"

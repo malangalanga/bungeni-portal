@@ -1,0 +1,341 @@
+<?xml version="1.0"?>
+<workflow title="Motion Workflow" 
+    description="A Motion"
+    permission_actions=".View .Edit .Add .Delete"
+    >
+    
+    <!-- global grants -->
+    <allow permission=".Add" roles="ClerkSenate MemberSenate" />
+    <!-- !+test_event: uncomment below when enabling! Without this you will 
+        not get the "add test event" menu option...
+        
+        resolve... either by test_event having own workflow, or .Add being a 
+        global grant in reusable "event" base workflow, or ?
+    <allow permission="test_event.Add" roles="ClerkSenate" />
+    -->
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="true" />
+    <feature name="attachment" enabled="true" />
+    <feature name="event" enabled="true">
+        <parameter name="types" value="event test_event" 
+            note="!+test_event: enable test_event type + uncomment global permission above"
+        />
+    </feature>
+    <feature name="signatory" enabled="true">
+        <parameter name="min_signatories" value="1" />
+        <parameter name="open_states" value="admissible" />
+    </feature>
+    <feature name="schedule" enabled="true">
+        <parameter name="schedulable_states" value="admissible deferred adjourned" />
+        <parameter name="scheduled_states" value="scheduled" />
+    </feature>
+    <feature name="workspace" enabled="true" />
+    <feature name="notification" enabled="true" />
+    <feature name="email" enabled="true" />
+    <feature name="download" enabled="true" />
+    <feature name="group_assignment" enabled="true" />
+    
+    <!-- workflow facets -->
+    <facet name="draft">
+        <allow permission=".View" roles="Drafter" />
+        <allow permission=".Edit" roles="Drafter" />
+        <allow permission=".Delete" roles="Drafter" />
+    </facet>
+    <facet name="internal_Signatory">
+        <allow permission=".View" roles="Drafter Owner Signatory" />
+    </facet>
+    <facet name="view_internal" default="true">
+        <allow permission=".View" roles="
+                Drafter
+                ClerkSenate
+                SpeakerSenate
+                Owner
+                Signatory
+            " />
+    </facet>
+    <facet name="redraft" note="By original drafter (doc still private)">
+        <allow permission=".View" roles="Drafter Owner" />
+        <allow permission=".Edit" roles="Drafter" />
+    </facet>
+    <facet name="review" note="By conceptual owner (doc is internal)">
+        <allow permission=".View" roles="
+                Drafter
+                ClerkSenate
+                SpeakerSenate
+                Owner
+                Signatory
+            " />
+        <allow permission=".Edit" roles="Owner" />
+    </facet>
+    <facet name="internal_Clerk">
+        <allow permission=".View" roles="
+                ClerkSenate
+                SpeakerSenate
+                Owner
+                Signatory
+                MemberCommitteeSenate
+            " />
+        <allow permission=".Edit" roles="
+                ClerkSenate
+                MemberCommitteeSenate
+            " />
+    </facet>
+    <facet name="internal_Speaker">
+        <allow permission=".View" roles="
+                ClerkSenate
+                SpeakerSenate
+                Owner
+                Signatory
+            " />
+        <allow permission=".Edit" roles="SpeakerSenate" />
+    </facet>
+    <facet name="public">
+        <allow permission=".View" roles="Anonymous" />
+    </facet>
+    
+    <!-- workflow states -->
+    <state id="draft" title="Draft">
+        <facet ref=".draft" />
+        <facet ref="attachment.add_drafter" />
+        <facet ref="event.add_clerk" />
+        <facet ref="signatory.draft_Drafter" />
+    </state>
+    <state id="submitted_signatories" title="Submitted to Signatories" actions="version">
+        <facet ref=".internal_Signatory" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+        <facet ref="signatory.internal" />
+    </state>
+    <state id="redraft" title="Redraft" actions="version" 
+            note="document under review before resubmission">
+        <facet ref=".redraft" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+        <facet ref="signatory.internal_Owner" />
+    </state>
+    <state id="withdrawn_signatory" title="Dropped" 
+            note="motion has been withdrawn before submission to house">
+        <facet ref=".internal_Signatory" />
+        <facet ref="attachment.add_clerk" /><!-- !+private_frozen? -->
+        <facet ref="event.add_clerk" />
+        <facet ref="signatory.internal_frozen" />
+    </state>
+    <state id="withdrawn_internal" title="Withdrawn">
+        <facet ref=".internal_Signatory" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+        <facet ref="signatory.internal_frozen" />
+    </state>
+    <state id="submitted" title="Submitted" actions="version set_doc_registry_number">
+        <facet ref=".internal_Clerk" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+        <facet ref="signatory.internal_frozen" />
+        <facet ref="group_assignment.add_internal" />
+    </state>
+    <state id="clarification_required" title="Requires Clarification to Receive"
+            actions="version">
+        <facet ref=".review" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+        <facet ref="signatory.internal" />
+    </state>
+    <state id="reviewed" title="Submitted to the Speaker" actions="version">
+        <facet ref=".internal_Speaker" />
+        <facet ref="attachment.add_speaker" />
+        <facet ref="event.add_speaker" />
+        <facet ref="signatory.internal_frozen" />
+    </state>
+    <state id="inadmissible" title="Inadmissible" 
+        permissions_from_state="withdrawn_internal" />
+    <state id="admissible" title="Admissible"
+            actions="version set_doc_type_number" >
+        <facet ref=".public" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+        <facet ref="signatory.public_frozen" />
+        <facet ref="group_assignment.add_internal" />
+    </state>
+    <state id="scheduled" title="Scheduled" permissions_from_state="admissible" />
+    <state id="adjourned" title="Debate adjourned" permissions_from_state="admissible"
+        note="a motion was debated and the debate adjourned" />
+    <state id="deferred" title="Deferred" permissions_from_state="admissible"
+        note="An admissable motion that cannot be debated." />
+    <state id="adopted" title="Adopted" actions="version">
+        <facet ref=".public" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+        <facet ref="signatory.public_frozen" />
+    </state>
+    <state id="adopted_amendments" title="Adopted with amendments" 
+        permissions_from_state="adopted"
+        actions="version"
+    />
+    <state id="elapsed" title="Elapsed" permissions_from_state="adopted"
+        note="A defered motion that was not debated" 
+    />
+    <state id="dropped" title="Dropped" permissions_from_state="adopted"
+        note="A motion was, but dropped e.g. becuase no show of Member."
+    />
+    <state id="rejected" title="Rejected" permissions_from_state="adopted" />
+    <state id="withdrawn" title="Withdrawn" permissions_from_state="adopted" />
+    
+    
+    <transition title="Create Motion"
+        source=""
+        destination="draft"
+        trigger="automatic"
+    />
+    <transition title="Submit"
+        source="draft submitted_signatories redraft"
+        destination="submitted"
+        condition="pi_signatories_check"
+        roles="Drafter"
+        trigger="manual"
+    />
+    <transition title="Submit to Signatories"
+        source="draft redraft"
+        destination="submitted_signatories"
+        condition="pi_has_signatories"
+        roles="Drafter"
+        trigger="manual"
+    />
+    <transition title="Redraft"
+        source="submitted_signatories"
+        destination="redraft"
+        roles="Drafter"
+        trigger="manual"
+    />
+    <transition title="Drop"
+        source="redraft submitted_signatories"
+        destination="withdrawn_signatory"
+        grouping_unique_sources="withdrawn"
+        roles="Owner"
+        trigger="manual"
+    />
+    <transition title="Require Clarification"
+        source="submitted reviewed" 
+        destination="clarification_required"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+        require_confirmation="true"
+    />
+    <transition title="Redraft (Automatic)"
+        source="clarification_required"
+        destination="redraft"
+        condition="pi_has_signatories"
+        trigger="automatic"
+        note="incomplete document needs to be resubmitted to signatories"
+    />
+    <transition title="Reviewed"
+        source="submitted" 
+        destination="reviewed" 
+        condition=""
+        roles="ClerkSenate"
+        trigger="manual"
+    />
+    <transition title="Admissible" 
+        source="reviewed"
+        destination="admissible" 
+        condition=""
+        trigger="manual"
+        roles="SpeakerSenate"
+    />
+    <transition title="Inadmissible"
+        source="reviewed"
+        destination="inadmissible"
+        condition=""
+        trigger="manual"
+        roles="SpeakerSenate"
+        require_confirmation="true"
+    />
+    <transition title="Scheduled for Debate" 
+        source="admissible deferred adjourned"
+        destination="scheduled"
+        condition="is_scheduled"
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+    <transition title="Resubmit"
+        source="clarification_required"
+        destination="submitted"
+        condition=""
+        trigger="manual"
+        roles="Owner"
+    />
+    <transition title="Defer"
+        source="admissible"
+        destination="deferred"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+    <transition title="Elapse"
+        source="deferred"
+        destination="elapsed"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+        require_confirmation="true"
+    />
+    <transition title="Drop" 
+        source="scheduled"
+        destination="dropped"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+    <transition title="Adjourn debate"
+        source="scheduled"
+        destination="adjourned"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+    <transition title="Adopt"
+        source="scheduled" 
+        destination="adopted"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+        require_confirmation="true"
+    />
+    <transition title="Adopt with amendments"
+        source="scheduled"
+        destination="adopted_amendments"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+        require_confirmation="true"
+    />
+    <transition title="Reject a scheduled motion"
+        source="scheduled"
+        destination="rejected"
+        condition=""
+        trigger="manual"
+        roles="SpeakerSenate"
+        require_confirmation="true"
+    />
+    <transition title="Withdraw" 
+        source="submitted reviewed clarification_required"
+        destination="withdrawn_internal"
+        grouping_unique_sources="withdrawn"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate Owner"
+        require_confirmation="true" 
+    />
+    <transition title="Withdraw"
+        source="admissible scheduled deferred adjourned"
+        destination="withdrawn"
+        grouping_unique_sources="withdrawn"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate Owner"
+        require_confirmation="true"
+    />
+
+</workflow>

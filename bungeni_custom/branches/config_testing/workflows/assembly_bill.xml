@@ -1,0 +1,421 @@
+<?xml version="1.0"?>
+<workflow title="Bill Workflow"
+    description="A bill"
+    permission_actions=".View .Edit .Add .Delete"
+    >
+    
+    <!-- global grants -->
+    <allow permission=".Add" roles="
+            ClerkAssembly
+            MemberAssembly
+        " />
+    
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="true" />
+    <feature name="attachment" enabled="true" />
+    <feature name="event" enabled="true" />
+    <feature name="signatory" enabled="true">
+        <parameter name="open_states" value="gazetted" />
+    </feature>
+    <feature name="schedule" enabled="true">
+        <parameter name="schedulable_states" value="gazetted first_reading_adjourned 
+            first_reading referred_committee_first_reading 
+            second_reading second_reading_adjourned 
+            whole_house whole_house_adjourned 
+            third_reading third_reading_adjourned" />
+        <parameter name="scheduled_states" value="first_reading_scheduled
+            second_reading_scheduled 
+            whole_house_scheduled third_reading_scheduled" />
+    </feature>
+    <feature name="workspace" enabled="true" />
+    <feature name="notification" enabled="true" />
+    <feature name="email" enabled="true" />
+    <feature name="download" enabled="true" />
+    <feature name="group_assignment" enabled="true" />    
+    
+    <!-- workflow facets -->
+    <facet name="draft">
+        <allow permission=".View" roles="Drafter" />
+        <allow permission=".Edit" roles="Drafter" />
+        <allow permission=".Delete" roles="Drafter" />
+    </facet>
+    <facet name="internal_Signatory">
+        <allow permission=".View" roles="Drafter Owner Signatory" />
+    </facet>
+    <facet name="redraft">
+        <allow permission=".View" roles="Drafter Owner" />
+        <allow permission=".Edit" roles="Drafter" />
+    </facet>
+    <facet name="view_Clerk">
+        <allow permission=".View" roles="Owner ClerkAssembly Signatory" />
+    </facet>
+    <facet name="edit_Clerk">
+        <allow permission=".View" roles="Owner ClerkAssembly SpeakerAssembly Signatory" />
+        <allow permission=".Edit" roles="ClerkAssembly" />
+    </facet>
+    <facet name="edit_Speaker">
+        <allow permission=".View" roles="Owner ClerkAssembly SpeakerAssembly Signatory" />
+        <allow permission=".Edit" roles="SpeakerAssembly" />
+    </facet>
+    <facet name="public_edit_Clerk">
+        <allow permission=".View" roles="Anonymous" />
+        <allow permission=".Edit" roles="ClerkAssembly" />
+    </facet>
+    <facet name="public">
+        <allow permission=".View" roles="Anonymous" />
+    </facet>
+    
+    
+    <state id="draft" title="Legislative Proposal">
+        <facet ref=".draft" />
+        <facet ref="attachment.add_drafter" />
+        <facet ref="event.add_clerk" />
+        <facet ref="signatory.draft_Drafter" />
+    </state>
+    <state id="submitted_signatories" title="Submitted to Signatories" actions="version">
+        <facet ref=".internal_Signatory" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+        <facet ref="signatory.internal" />
+    </state>
+    <state id="redraft" title="Redraft" actions="version" note="document under review before resubmission">
+        <facet ref=".redraft" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+        <facet ref="signatory.internal_Owner" />
+    </state>
+    <state id="withdrawn_signatory" title="Dropped">
+        <facet ref=".internal_Signatory" />
+        <facet ref="attachment.add_clerk" /><!-- !+private_frozen? -->
+        <facet ref="event.add_clerk" />
+        <facet ref="signatory.internal_frozen" />
+    </state>
+    <state id="withdrawn_internal" title="Withdrawn">
+        <facet ref=".internal_Signatory" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+        <facet ref="signatory.internal_frozen" />
+    </state>
+    <state id="submitted" title="Submitted to Clerk" 
+            actions="set_doc_registry_number version" >
+        <facet ref=".edit_Clerk" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+        <facet ref="signatory.internal_frozen" />
+        <facet ref="group_assignment.add_internal" />
+    </state>
+    <state id="reviewed" title="Reviewed by Clerk" 
+            actions="set_doc_registry_number" >
+        <facet ref=".edit_Speaker" />
+        <facet ref="attachment.add_speaker" />
+        <facet ref="event.add_speaker" />
+        <facet ref="signatory.internal_frozen" />
+        <facet ref="group_assignment.add_internal" />
+    </state> 
+    <state id="referred_committee" 
+        title="Referred to Committee for pre-publication scrutiny" 
+        actions="version"
+        permissions_from_state="submitted" 
+    />
+    <state id="recommendations_committee" 
+        title="Recommendations of the Committee"
+        actions="version"
+        permissions_from_state="reviewed"
+    />
+    <state id="rejected_proposal" 
+        title="Legislative Proposal Rejected" 
+        actions="version"
+        permissions_from_state="reviewed"
+    />
+    <state id="accepted_proposal" 
+        title="Legislative Proposal Approved" 
+        actions="version set_doc_type_number"
+        permissions_from_state="reviewed"
+    />
+    <state id="gazetted" title="Bill Published in Gazette" actions="version">
+        <facet ref=".public_edit_Clerk" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+        <facet ref="signatory.public_frozen" />
+        <facet ref="group_assignment.add_internal" />
+    </state>
+    <state id="first_reading_scheduled" title="First Reading Scheduled" permissions_from_state="gazetted" />
+    <state id="first_reading" title="First Reading" permissions_from_state="gazetted" />
+    <state id="referred_committee_first_reading" title="Committed to Committees" permissions_from_state="gazetted" />
+    <state id="first_reading_adjourned" title="First Reading Adjourned" permissions_from_state="gazetted" />
+    <state id="second_reading_adjourned" title="Second Reading Adjourned" permissions_from_state="gazetted" />
+    <state id="second_reading_scheduled" title="Second Reading Scheduled" permissions_from_state="first_reading" />
+    <state id="second_reading" title="Second Reading" actions="version" permissions_from_state="first_reading" />
+    <state id="whole_house_scheduled" title="Whole House Scheduled" permissions_from_state="first_reading" />
+    <state id="whole_house_adjourned" title="Whole House Adjourned" permissions_from_state="first_reading" />
+    <state id="whole_house" title="Whole House" permissions_from_state="first_reading" />
+    <state id="third_reading_scheduled" title="Third Reading Scheduled" permissions_from_state="first_reading" />
+    <state id="third_reading" title="Third Reading" permissions_from_state="first_reading" />
+    <state id="third_reading_adjourned" title="Third Reading" permissions_from_state="first_reading" />
+    <state id="approved" title="Approved Bill">
+        <facet ref=".public" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+        <facet ref="signatory.public_frozen" />
+    </state>
+    <state id="rejected" title="Rejected Bill" permissions_from_state="approved" />
+    <state id="withdrawn" title="Bill Withdrawn" permissions_from_state="approved" />
+    <state id="pending_presidential_assent" title="Pending Presidential Assent" permissions_from_state="approved" />
+    <state id="assented" title="Assented" permissions_from_state="approved" />
+    <state id="reconsideration" title="Referred Reconsideration" permissions_from_state="approved" />
+    <state id="approved_with_amendments" title="Approved with Amendments" permissions_from_state="approved" />
+    <state id="approved_without_amendments" title="Approved without Amendments" permissions_from_state="approved" />
+    <state id="come_into_force" title="Come into Force" permissions_from_state="approved" />
+
+    
+    <!-- workflow transitions -->
+    <transition title="Create Legislative Proposal"
+        source=""
+        destination="draft"
+        trigger="automatic"
+    />
+    <transition title="Submit Legislative Proposal"
+        source="draft redraft submitted_signatories"
+        destination="submitted"
+        condition="pi_signatories_check"
+        trigger="manual"
+        roles="Drafter"
+    />
+    <transition title="Submit to Signatories"
+        source="draft redraft"
+        destination="submitted_signatories"
+        condition="pi_has_signatories"
+        trigger="manual"
+        roles="Drafter"
+    />
+    <transition title="Recall to Redraft"
+        source="submitted_signatories"
+        destination="redraft"
+        roles="Drafter"
+        trigger="manual"
+    />
+    <transition title="Drop"
+        source="redraft submitted_signatories"
+        destination="withdrawn_signatory"
+        grouping_unique_sources="withdrawn"
+        roles="Owner"
+        trigger="manual"
+    />
+    <transition title="Clerk reviewed Legislative Proposal"
+        source="submitted"
+        destination="reviewed"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Speaker refers to Committee for scrutiny"
+        source="reviewed"
+        destination="referred_committee"
+        condition=""
+        trigger="manual"
+        roles="SpeakerAssembly"
+    />
+    <transition title="Committee Submits recommendations"
+        source="referred_committee"
+        destination="recommendations_committee"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Accept Legislative Proposal"
+        source="recommendations_committee"
+        destination="accepted_proposal"
+        condition=""
+        trigger="manual"
+        roles="SpeakerAssembly"
+    />
+    <transition title="Reject Legislative Proposal"
+        source="recommendations_committee"
+        destination="rejected_proposal"
+        condition=""
+        trigger="manual"
+        roles="SpeakerAssembly"
+    />
+    <transition title="Publish Bill in Gazette"
+        source="accepted_proposal"
+        destination="gazetted"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="First Reading Scheduled"
+        source="gazetted first_reading_adjourned"
+        destination="first_reading_scheduled"
+        condition="is_scheduled"
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="First Reading"
+        source="first_reading_scheduled"
+        destination="first_reading"
+        condition=""
+        trigger="system"
+        roles="ClerkAssembly"
+    />
+    <transition title="Adjourn First Reading"
+        source="first_reading_scheduled"
+        destination="first_reading_adjourned"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Committal of Bill to Committees"
+        source="first_reading"
+        destination="referred_committee_first_reading"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Second Reading Scheduled"
+        source="first_reading referred_committee_first_reading second_reading_adjourned "
+        destination="second_reading_scheduled"
+        condition="is_scheduled"
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Second Reading"
+        source="second_reading_scheduled"
+        destination="second_reading"
+        condition=""
+        trigger="system"
+        roles="ClerkAssembly"
+    />
+    <transition title="Adjourn Second Reading"
+        source="second_reading_scheduled"
+        destination="second_reading_adjourned"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Committee of the Whole House Scheduled"
+        source="second_reading whole_house_adjourned"
+        destination="whole_house_scheduled"
+        condition="is_scheduled"
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Committee of the Whole House"
+        source="whole_house_scheduled"
+        destination="whole_house"
+        condition=""
+        trigger="system"
+        roles="ClerkAssembly"
+    />
+    <transition title="Committee of the Whole House Adjouorned"
+        source="whole_house"
+        destination="whole_house_adjourned"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Third Reading Scheduled"
+        source="whole_house third_reading_adjourned"
+        destination="third_reading_scheduled"
+        condition="is_scheduled"
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Third Reading"
+        source="third_reading_scheduled"
+        destination="third_reading"
+        condition=""
+        trigger="system"
+        roles="ClerkAssembly"
+    />
+    <transition title="Adjourn Third Reading"
+        source="third_reading"
+        destination="third_reading_adjourned"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Reject"
+        source="first_reading second_reading third_reading whole_house"
+        destination="rejected"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Approve"
+        source="third_reading"
+        destination="approved"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Withdraw" 
+        source="submitted"
+        destination="withdrawn_internal"
+        grouping_unique_sources="withdrawn"
+        condition=""
+        trigger="manual"
+        roles="Owner"
+        require_confirmation="true" 
+    />
+    <transition title="Withdraw"
+        source="
+            gazetted
+            first_reading first_reading_scheduled first_reading_adjourned
+            second_reading second_reading_scheduled second_reading_adjourned
+            whole_house whole_house_scheduled
+            third_reading third_reading_scheduled
+        "
+        destination="withdrawn"
+        grouping_unique_sources="withdrawn"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+        require_confirmation="true"
+    />
+    <transition title="Forward for Presidential Assent"
+        source="approved"
+        destination="pending_presidential_assent"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="President Assent"
+        source="pending_presidential_assent approved_with_amendments approved_without_amendments"
+        destination="assented"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="President Refered Back for Reconsideration"
+        source="pending_presidential_assent"
+        destination="reconsideration"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Approve with Amendments"
+        source="reconsideration"
+        destination="approved_with_amendments"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Approve without Amendments"
+        source="reconsideration"
+        destination="approved_without_amendments"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Comes into Force"
+        source="assented"
+        destination="come_into_force"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+ 
+</workflow>
+

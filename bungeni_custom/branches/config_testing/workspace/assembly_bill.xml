@@ -1,0 +1,127 @@
+<workspace id="bicameral_document">
+
+    <state id="draft">
+        <tab id="draft" roles="Drafter" />
+    </state>
+    <state id="submitted_signatories">
+        <tab id="inbox" roles="Signatory"/>
+        <tab id="pending" roles="Drafter Owner" />
+    </state>
+    <state id="redraft">
+        <tab id="draft" roles="Drafter" />
+    </state>
+    <state id="withdrawn_signatory">
+        <tab id="archive" 
+         roles="Owner ClerkAssembly Signatory"/>
+    </state>
+    <state id="submitted">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory"/>
+    </state>
+    <state id="reviewed">
+        <tab id="inbox" roles="SpeakerAssembly"/>
+        <tab id="pending" roles="Owner ClerkAssembly"/>
+    </state>
+    <state id="referred_committee">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner SpeakerAssembly "/>
+    </state>
+    <state id="recommendations_committee">
+        <tab id="inbox" roles="SpeakerAssembly"/>
+        <tab id="pending" roles="Owner ClerkAssembly"/>
+    </state>
+    <state id="rejected_proposal">
+      <tab id="archive"
+       roles="ClerkAssembly Owner Signatory SpeakerAssembly"/>
+    </state>
+    <state id="accepted_proposal">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner   SpeakerAssembly "/>
+    </state>
+    <state id="gazetted">
+        <tab id="schedule" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly"/>
+    </state>
+    <state id="first_reading_scheduled">
+        <tab id="schedule" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly"/>
+    </state>
+    <state id="first_reading">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly"/>
+    </state>
+    <state id="first_reading_adjourned">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly"/>
+    </state>
+    <state id="second_reading_adjourned">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly"/>
+    </state>
+    <state id="referred_committee_first_reading">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly"/>
+    </state>
+    <state id="second_reading_scheduled">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory"/>
+    </state>
+    <state id="second_reading">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory"/>
+    </state>
+    <state id="whole_house">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly"/>
+    </state>
+    <state id="whole_house_adjourned">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory"/>
+    </state>
+    <state id="third_reading">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory"/>
+    </state>
+    <state id="third_reading_adjourned">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory"/>
+    </state>
+    <state id="approved">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly"/>
+    </state>
+    <state id="pending_presidential_assent">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly"/>
+    </state>
+    <state id="assented">
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly ClerkAssembly"/>
+    </state>
+    <state id="rejected">
+        <tab id="archive" 
+             roles="ClerkAssembly Owner Signatory SpeakerAssembly"/>
+    </state>
+    <state id="withdrawn">
+        <tab id="archive" 
+         roles="ClerkAssembly Owner Signatory SpeakerAssembly"/>
+    </state>
+    <state id="withdrawn_internal">
+      <tab id="archive"
+       roles="ClerkAssembly Owner Signatory SpeakerAssembly"/>
+    </state>
+    <state id="reconsideration">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly"/>
+    </state>
+    <state id="approved_with_amendments">
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly ClerkAssembly"/>
+    </state>
+    <state id="approved_without_amendments">
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly ClerkAssembly"/>
+    </state>
+    <state id="come_into_force">
+        <tab id="archive" 
+             roles="ClerkAssembly Owner Signatory SpeakerAssembly"/>
+    </state>
+
+</workspace>

@@ -1,0 +1,34 @@
+<html xml:lang="en" xmlns:br="http://bungeni.org/reports">
+    <br:config>
+        <title>Sitting Agenda</title>
+        <length>1w</length>
+        <language>en</language>
+    </br:config>
+    <head>
+        <title>Sitting Agenda</title>
+    </head>
+    <body> 
+        <div id="report-content">
+            <h1 class="heading" br:type="text" br:source="title"/>
+            <div id="listing-body" class="body" background="color:green">
+                <div br:type="listing" br:source="sittings">
+                    <div class="agendaitems">
+                        <ul br:type="listing" br:source="item_schedule">
+                                <h3 class="sub-heading" br:type="text" br:source="planned_order"/>
+                            <li br:condition="type_heading">
+                                <h2 class="sub-heading" br:type="text" br:source="dc:title"/>
+                            </li>
+                            <li class="items" br:condition="type_document">
+                                <span br:type="text" br:source="dc:title"/> - 
+                                <span class="itemtype" br:type="text" br:condition="dc:mover" br:source="item_type"/>
+                                <span class="mover" br:condition="dc:mover">
+                                    <i>by:</i> <span br:type="text" br:source="dc:mover"/>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

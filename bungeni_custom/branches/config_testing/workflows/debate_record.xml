@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<workflow title="Debate Record Workflow"
+    description="A sittings debate record"
+    permission_actions=".View .Edit .Add .Delete"
+    >
+    
+    <!-- global grants -->
+    <allow permission="debate_media.Add" roles="Transcriber.Editor" />
+    <allow permission="debate_media.View" roles="Transcriber.Editor" />
+    <allow permission="debate_media.Delete" roles="Transcriber.Editor" />
+
+    <allow permission="debate_takes.Edit" roles="Transcriber.Editor" />
+    <allow permission="debate_takes.View" roles="Transcriber.Editor" />
+
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="true" />
+    <feature name="user_assignment" enabled="true">
+        <parameter name="assigner_roles" value="Transcriber.Editor" />
+        <parameter name="assignable_roles" value="Transcriber.Reporter" />
+    </feature>
+    <feature name="workspace" enabled="true" />
+    <facet name="draft">
+      <allow permission=".View" roles="Transcriber.Editor Transcriber.Reporter" />
+      <allow permission="user_assignment.View" roles="Transcriber.Editor Transcriber.Reporter" />
+      <allow permission="user_assignment.Edit" roles="Transcriber.Editor" />
+      <allow permission="debate_media.Edit" roles="Transcriber.Editor" />
+    </facet>
+    <facet name="in_progress">
+      <allow permission=".View" roles="Transcriber.Editor Transcriber.Reporter" />
+      <allow permission="user_assignment.View" roles="Transcriber.Editor Transcriber.Reporter" />
+    </facet>
+    <facet name="published">
+      <allow permission=".View" roles="Transcriber.Editor Transcriber.Reporter" />
+      <allow permission="user_assignment.View" roles="Transcriber.Editor Transcriber.Reporter" />
+      <allow permission="debate_media.Edit" roles="Transcriber.Editor" />
+    </facet>
+
+    <state id="draft" title="Draft">
+      <facet ref=".draft" />
+    </state>
+    <state id="in_progress" title="In Progress">
+      <facet ref=".in_progress" />
+    </state>
+    <state id="published" title="Published">
+      <facet ref=".published" />
+    </state>
+    
+    
+    <transition title="Create Debate Record"
+        source=""
+        destination="draft"
+        trigger="automatic"
+        order="0"
+    />
+    <transition title="Distribute for transcription"
+        source="draft"
+        destination="in_progress"
+        trigger="manual"
+        order="0"
+        roles="Transcriber.Editor"
+    />
+    <transition title="Publish debate"
+	      source="in_progress"
+	      destination="published"
+	      trigger="manual"
+	      order="0"
+	      roles="Transcriber.Editor"
+     />
+
+</workflow>

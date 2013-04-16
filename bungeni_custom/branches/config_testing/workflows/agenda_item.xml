@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<workflow title="Agenda Item Workflow"
+    description="Agenda Item"
+    permission_actions=".View .Edit .Add .Delete"
+    >
+    
+    <!-- global grants -->
+    <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="true" />
+    <feature name="attachment" enabled="true" />
+    <feature name="schedule" enabled="true">
+        <parameter name="schedulable_states" value="admissible adjourned" />
+        <parameter name="scheduled_states" value="scheduled" />
+    </feature>
+    <feature name="workspace" enabled="true" />
+    <feature name="notification" enabled="true" />
+    <feature name="download" enabled="true" />
+    
+    <!-- workflow facets -->
+    <facet name="draft">
+        <allow permission=".View" roles="Drafter" />
+        <allow permission=".Edit" roles="Drafter" />
+        <allow permission=".Delete" roles="Drafter" />
+    </facet>
+    <facet name="redraft">
+        <allow permission=".View" roles="Drafter Owner" />
+        <allow permission=".Edit" roles="Drafter" />
+    </facet>
+    <facet name="view_internal">
+        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+    </facet>
+    <facet name="edit_Clerk">
+        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
+    </facet>
+    <facet name="edit_Owner">
+        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+        <allow permission=".Edit" roles="Owner" />
+    </facet>
+    <facet name="edit_Speaker">
+        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+        <allow permission=".Edit" roles="SpeakerSenate SpeakerAssembly" />
+    </facet>
+    <facet name="public">
+        <allow permission=".View" roles="Anonymous" />
+    </facet>
+    
+    <!-- workflow states -->    
+    <state id="draft" title="Draft">
+        <facet ref=".draft" />
+        <facet ref="attachment.add_drafter" />
+    </state>
+    <state id="submitted" title="Submitted" actions="version">
+        <facet ref=".edit_Clerk" />
+        <facet ref="attachment.add_clerk" />
+    </state>
+    <state id="clarification_required" title="Requires Clarification to Receive" 
+            actions="version"   >
+        <facet ref=".edit_Owner" />
+        <facet ref="attachment.add_clerk" />
+    </state>
+    <state id="review_pending" title="Submitted to the Speaker" actions="version">
+        <facet ref=".edit_Speaker" />
+        <facet ref="attachment.add_speaker" />
+    </state>
+    <state id="inadmissible" title="Inadmissible">
+        <facet ref=".view_internal" />
+        <facet ref="attachment.add_clerk" />
+    </state>
+    <state id="withdrawn_internal" title="Withdrawn" permissions_from_state="inadmissible" />
+    <state id="admissible" title="Admissible" actions="version">
+        <facet ref=".public" />
+        <facet ref="attachment.add_clerk" />
+    </state>
+    <state id="scheduled" title="Scheduled" permissions_from_state="admissible" />
+    <state id="adjourned" title="Debate adjourned" permissions_from_state="admissible" />
+    <state id="debated" title="Debated">
+        <facet ref=".public" />
+        <facet ref="attachment.add_clerk" />
+    </state>
+    <state id="dropped" title="Dropped" permissions_from_state="debated" />
+    <state id="withdrawn" title="Withdrawn" permissions_from_state="debated" />
+    
+    <!-- workflow transition -->    
+    <transition title="Create Agenda Item"
+        source=""
+        destination="draft"
+        trigger="automatic"
+    />
+    <transition title="Submit"
+        source="draft"
+        destination="submitted"
+        condition=""
+        trigger="manual"
+        roles="Drafter"
+    />
+    <transition title="Submit for Review"
+        source="submitted"
+        destination="review_pending"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly"
+    />
+    <transition title="Admissible"
+        source="review_pending"
+        destination="admissible"
+        condition=""
+        trigger="manual"
+        roles="SpeakerSenate SpeakerAssembly"
+    />
+    <transition title="Inadmissible"
+        source="review_pending"
+        destination="inadmissible"
+        condition=""
+        trigger="manual"
+        roles="SpeakerSenate SpeakerAssembly"
+        require_confirmation="true"
+    />
+    <transition title="Scheduled for Debate"
+        source="admissible adjourned"
+        destination="scheduled"
+        condition="is_scheduled"
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly"
+    />
+    <transition title="Require Clarifications"
+        source="submitted"
+        destination="clarification_required"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly"
+        require_confirmation="true"
+    />
+    <transition title="Resubmit"
+        source="clarification_required"
+        destination="submitted"
+        condition=""
+        trigger="manual"
+        roles="Owner"
+    />
+    <transition title="Drop"
+        source="scheduled"
+        destination="dropped"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly"
+        note="For reasons such as absence of the MemberSenate MemberAssembly, the item cannot be be 
+            debated in a sitting, so it is dropped."
+    />
+    <transition title="Debate"
+        source="scheduled"
+        destination="debated"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly"
+    />
+    <transition title="Adjourn debate"
+        source="scheduled"
+        destination="adjourned"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly"
+    />
+    <transition title="Withdraw"
+        source="submitted review_pending clarification_required"
+        destination="withdrawn_internal"
+        grouping_unique_sources="withdrawn"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly Owner"
+        require_confirmation="true"
+    />
+    <transition title="Withdraw"
+        source="admissible scheduled adjourned"
+        destination="withdrawn"
+        grouping_unique_sources="withdrawn"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly Owner"
+        require_confirmation="true"
+    />
+
+</workflow>
+

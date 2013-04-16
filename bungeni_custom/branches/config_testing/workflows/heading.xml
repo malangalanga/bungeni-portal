@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<workflow title="Heading Workflow"
+    description="Workflow for headings"
+    permission_actions=".View .Edit .Add .Delete"
+    >
+
+    <!-- global grants -->
+    <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+    <allow permission=".Add" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+    <allow permission=".Delete" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+    
+    
+    <!-- workflow facets -->
+    <facet name="view_Clerk">
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+    </facet>
+    <facet name="view">
+        <allow permission=".View" roles="Authenticated Anonymous" />
+    </facet>
+    
+    
+    <state id="inactive" title="Inactive heading obsolete">
+        <facet ref=".view_Clerk" />
+    </state>
+    
+    <state id="public" title="Public">
+        <facet ref=".view" />
+    </state>
+    
+    
+    <transition title="Create"
+        source=""
+        destination="public"
+        trigger="automatic"
+    />
+    
+    <transition title="Deactivate"
+        source="public"
+        destination="inactive"
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
+        require_confirmation="true"
+    />
+    
+    <transition title="Reactivate"
+        source="inactive"
+        destination="public"
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
+        require_confirmation="true"
+    />
+
+</workflow>

@@ -1,0 +1,379 @@
+<?xml version="1.0"?>
+<workflow title="Question Workflow"
+    description="A question"
+    permission_actions=".View .Edit .Add .Delete"
+    >
+    
+    <!-- global grants -->
+    <allow permission=".Add" roles="
+            ClerkQuestionAssembly.ClerkHead
+            MemberAssembly
+        " />
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="true" />
+    <feature name="attachment" enabled="true" />
+    <feature name="event" enabled="true">
+        <parameter name="types" value="event event_response" />
+    </feature>
+    <!-- !+QUALIFIED_FEATURES(mr, apr-2013)
+    A possible extension of feature syntax to allow for:
+        a) a same feature to support multiple types
+        b) settings specific to each type e.g. cardinality constraints
+    
+    E.g. above "event" multi-type feature config could be elaborated
+    into something like:
+    
+    <feature name="event" qualifier="event" enabled="true">
+        <parameter name="min_allowed" value="0" />  # parent may have from none
+        <parameter name="max_allowed" value="*" />  # to many
+    </feature>
+    <feature name="event" qualifier="event_response" enabled="true">
+        <parameter name="min_allowed" value="1" />  # parent must have exactly one 
+        <parameter name="max_allowed" value="1" />  # (when parent.response_type=written)
+    </feature>
+    -->
+    <feature name="signatory" enabled="false">
+        <parameter name="open_states" value="admissible" />
+    </feature>
+    <feature name="schedule" enabled="true">
+        <parameter name="schedulable_states" value="admissible adjourned" />
+        <parameter name="scheduled_states" value="scheduled" />
+    </feature>
+    <feature name="workspace" enabled="true" />
+    <feature name="notification" enabled="true" />
+    <feature name="email" enabled="true" />
+    <feature name="download" enabled="true" />
+    <feature name="user_assignment" enabled="true">
+        <parameter name="assigner_roles" value="ClerkQuestionAssembly.ClerkHead" />
+        <parameter name="assignable_roles" value="ClerkQuestionAssembly.ClerkQuestion" />
+    </feature>
+    <feature name="group_assignment" enabled="true" />
+    <!-- !+QUALIFIED_FEATURES(mr, apr-2013)
+    this additional info is needed to formally state which assigned group
+    is precisely the one participating in / responsible for the event_response:
+    
+    <feature name="group_assignment" qualifier="event_response" enabled="true">
+        <parameter name="group_type" value="ministry" />
+    </feature>
+    -->
+    
+    <!-- workflow facets -->
+    <facet name="draft">
+        <allow permission=".View" roles="Drafter" />
+        <allow permission=".Edit" roles="Drafter" />
+        <allow permission=".Delete" roles="Drafter" />
+    </facet>
+    <facet name="internal">
+        <allow permission=".View" roles="Drafter Owner" />
+    </facet>
+    <facet name="view_Clerk">
+        <allow permission=".View" roles="
+                ClerkQuestionAssembly.ClerkHead
+                ClerkQuestionAssembly.ClerkQuestion
+                SpeakerAssembly 
+                Owner
+            " />
+    </facet>
+    <facet name="edit_Clerk">
+        <allow permission="assembly_question.View" roles="
+                ClerkQuestionAssembly.ClerkHead
+                ClerkQuestionAssembly.ClerkQuestion
+                SpeakerAssembly 
+                Owner
+            " />
+        <allow permission=".Edit" roles="
+                ClerkQuestionAssembly.ClerkHead
+                ClerkQuestionAssembly.ClerkQuestion
+            " />
+        <allow permission="user_assignment.View" roles="
+                ClerkQuestionAssembly.ClerkHead
+                ClerkQuestionAssembly.ClerkQuestion
+            " />
+        <allow permission="user_assignment.Edit" roles="ClerkQuestionAssembly.ClerkHead" />
+    </facet>
+    <facet name="edit_Speaker">
+        <allow permission=".View" roles="
+                ClerkQuestionAssembly.ClerkHead
+                ClerkQuestionAssembly.ClerkQuestion
+                SpeakerAssembly Owner
+            " />
+        <allow permission=".Edit" roles="SpeakerAssembly" />
+    </facet>
+    <facet name="edit_Owner">
+        <allow permission=".View" roles="
+                ClerkQuestionAssembly.ClerkHead
+                ClerkQuestionAssembly.ClerkQuestion
+                SpeakerAssembly
+                Owner
+            " />
+        <allow permission=".Edit" roles="Owner" />
+    </facet>
+    <facet name="public">
+        <allow permission=".View" roles="Anonymous" />
+    </facet>
+    
+    
+    <!-- NOTE on Feature Facet Permissions:
+    
+    Feature "sub-type" permissions specified in workflow states of a head type:
+    - ALWAYS apply to the *head instance*
+    
+    In addition note that the Add permission is somewhat special, as it is 
+    only pertinent to the "container" i.e. it is, by definition, unbound to 
+    any *yet-to-exist* item.
+    -->
+    <state id="draft" title="Draft" actions="assign_role_group">
+        <facet ref=".draft" />
+        <facet ref="attachment.add_drafter" />
+        <facet ref="event.add_clerk" />
+    </state>
+    <state id="withdrawn_internal" title="Withdrawn" 
+            actions="unschedule_doc"
+            note="A question can be withdrawn by the owner, visible as pre-withdrawn, cannot be edited by anyone."
+        >
+        <facet ref=".internal" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+    </state>
+    <state id="submitted" title="Submitted to Clerk" actions="version">
+        <facet ref=".edit_Clerk" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+        <facet ref="group_assignment.add_internal" />
+    </state>
+    <state id="reviewed" title="Submitted to the Speaker" actions="version">
+        <facet ref=".edit_Speaker" />
+        <facet ref="attachment.add_speaker" />
+        <facet ref="event.add_speaker" />
+    </state>
+    <state id="admissible" title="Admissible" actions="version set_doc_type_number">
+        <facet ref=".public" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+    </state>
+    <state id="inadmissible" title="Inadmissible">
+        <facet ref=".view_Clerk" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+    </state>
+    <state id="clarification_required" title="Requires Clarification to Receive" actions="version">
+        <facet ref=".edit_Owner" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+    </state>
+    <state id="scheduled" title="Scheduled for Debate" permissions_from_state="admissible" />
+    <state id="adjourned" title="Debate adjourned" permissions_from_state="admissible" />
+    <state id="response_pending" title="Pending response">
+        <facet ref=".public" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+        <facet ref="event#event_response.add_ministry" />
+    </state>
+    <state id="response_submitted" title="Response submitted">
+        <facet ref=".public" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+    </state>
+    <state id="response_reviewed" title="Response reviewed">
+        <facet ref=".public" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+    </state>
+    <state id="deferred" title="Deferred" permissions_from_state="admissible" />
+    <state id="debated" title="Debated">
+        <facet ref=".public" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+    </state>
+    <state id="elapsed" title="Elapsed" permissions_from_state="debated" />
+    <state id="dropped" title="Dropped" permissions_from_state="debated" />
+    <state id="withdrawn" title="Withdrawn" permissions_from_state="debated" 
+        actions="unschedule_doc"
+        note="A question can be withdrawn by the owner, visible as pre-withdrawn, cannot be edited by anyone."
+    />
+    
+    
+    <transition title="Create Question"
+        source=""
+        destination="draft"
+        trigger="automatic"
+        order="0"
+    />
+    <transition title="Submit"
+        source="draft"
+        destination="submitted"
+        condition=""
+        trigger="manual"
+        roles="Drafter"
+        order="1"
+    />
+    <transition title="Reviewed"
+        source="submitted"
+        destination="reviewed"
+        condition=""
+        trigger="manual"
+        roles="ClerkQuestionAssembly.ClerkQuestion"
+        order="4"
+        note="The Question has all the formal requirements; forwarded to the
+            Speaker's Office for approval)."
+    />
+    <transition title="Request clarifications"
+        source="submitted"
+        destination="clarification_required"
+        condition=""
+        trigger="manual"
+        roles="ClerkQuestionAssembly.ClerkQuestion"
+        order="4"
+        note="The Question need to be clarieid by the Member"
+    />
+    <transition title="Admissible"
+        source="reviewed"
+        destination="admissible"
+        condition=""
+        trigger="manual"
+        roles="SpeakerAssembly"
+        order="6"
+    />
+    <transition title="Inadmissible"
+        source="reviewed"
+        destination="inadmissible"
+        condition=""
+        trigger="manual"
+        roles="SpeakerAssembly"
+        order="7"
+        require_confirmation="true"
+    />
+    <transition title="Request clarifications"
+        source="reviewed"
+        destination="clarification_required"
+        condition=""
+        trigger="manual"
+        roles="SpeakerAssembly"
+        order="7"
+        require_confirmation="true"
+    />
+    <transition title="Resubmit"
+        source="clarification_required"
+        destination="submitted"
+        condition=""
+        trigger="manual"
+        roles="Owner"
+        order="10"
+    />
+    <transition title="Scheduled for Debate"
+        source="admissible adjourned deferred"
+        destination="scheduled"
+        condition="is_scheduled"
+        trigger="system"
+        roles="ClerkQuestionAssembly.ClerkQuestion"
+        order="12"
+    />
+    <transition title="Send to Ministry"
+        source="admissible"
+        destination="response_pending"
+        condition=""
+        trigger="manual"
+        roles="ClerkQuestionAssembly.ClerkQuestion"
+        order="13"
+        note="Written-response questions are never scheduled."
+    />
+    <transition title="Send to Ministry for Written Response"
+        source="deferred"
+        destination="response_pending"
+        condition=""
+        trigger="manual"
+        roles="ClerkQuestionAssembly.ClerkQuestion"
+        order="13"
+        note="Oral-response questions if not discussed may be answered in writing by the Ministry."
+    />
+    <transition title="Submit Response"
+        source="response_pending"
+        destination="response_submitted"
+        condition=""
+        trigger="manual"
+        roles="MinistryMember"
+        order="15"
+    />
+    <transition title="Redraft Response"
+        source="response_submitted"
+        destination="response_pending"
+        condition=""
+        trigger="manual"
+        roles="ClerkQuestionAssembly.ClerkQuestion"
+        order="16"
+    />
+    <transition title="Complete Response"
+        source="response_submitted"
+        destination="response_reviewed"
+        trigger="manual"
+        roles="ClerkQuestionAssembly.ClerkQuestion"
+        order="17"
+    />
+    <transition title="Elapse"
+        source="response_pending deferred"
+        destination="elapsed"
+        condition=""
+        trigger="manual"
+        roles="ClerkQuestionAssembly.ClerkQuestion"
+        order="18"
+        require_confirmation="true"
+    />
+    <transition title="Defer"
+        source="admissible scheduled adjourned"
+        destination="deferred"
+        condition=""
+        trigger="manual"
+        roles="ClerkQuestionAssembly.ClerkQuestion"
+        order="19"
+        note="Oral question, postpone scheduling."
+    />
+    <transition title="Drop"
+        source="scheduled"
+        destination="dropped"
+        condition=""
+        trigger="manual"
+        roles="ClerkQuestionAssembly.ClerkQuestion"
+        order="22"
+    />
+    <transition title="Debate adjourned"
+        source="scheduled"
+        destination="adjourned"
+        condition=""
+        trigger="manual"
+        roles="ClerkQuestionAssembly.ClerkQuestion"
+        order="23"
+    />
+    <transition title="Debated"
+        source="scheduled"
+        destination="debated"
+        trigger="manual"
+        roles="ClerkQuestionAssembly.ClerkQuestion"
+        order="25"
+    />
+    <transition title="Withdraw"
+        source="submitted reviewed clarification_required"
+        destination="withdrawn_internal"
+        grouping_unique_sources="withdrawn"
+        condition=""
+        trigger="manual"
+        roles="ClerkQuestionAssembly.ClerkQuestion Owner"
+        order="26"
+        require_confirmation="true"
+        note="The Member can withdraw his question at any stage where it can 
+            still be presented to the ministry/house."
+    />
+    <transition title="Withdraw"
+        source="admissible scheduled deferred adjourned"
+        destination="withdrawn"
+        grouping_unique_sources="withdrawn"
+        condition=""
+        trigger="manual"
+        roles="ClerkQuestionAssembly.ClerkQuestion Owner"
+        order="27"
+        require_confirmation="true"
+    />
+
+</workflow>
+

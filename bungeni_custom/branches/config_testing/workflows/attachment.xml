@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<workflow title="Attachment Workflow"
+    description="Workflow for attachments"
+    permission_actions=".View .Edit .Add .Delete"
+    >
+    
+    <!-- sub-item: NO global grants -->
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="true" />
+    
+    <!-- FACETS -->
+    <!-- fz: a recommendation for simple management of attachments facets. 
+    
+    We have "parent facets" (facets intended only for use by parent type) where 
+    you just handle who has the right to "add" a "child-document" and we have 
+    "workflow facets" (for this workflow AND for parent) where you handle 
+    (as in any document) the permission of the "child document".
+    In these facets you should not use the ".Add" action.
+    -->
+    
+    <!-- parent facets -->
+    <facet name="add_drafter">
+        <allow permission=".Add" roles="Drafter" />
+    </facet>  
+    <facet name="add_clerk">
+        <allow permission=".Add" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate" />
+    </facet>
+    <facet name="add_speaker">
+        <allow permission=".Add" roles="SpeakerSenate SpeakerAssembly" />
+    </facet>
+  
+    
+    <!-- workflow states -->
+    <state id="draft" title="Draft">
+        <facet>
+            <allow permission=".View" roles="Drafter" />
+            <allow permission=".Edit" roles="Drafter" />
+            <allow permission=".Delete" roles="Drafter" />
+        </facet>
+    </state>
+    <state id="attached" title="Attached">
+        <facet>
+            <allow permission=".View" roles="Anonymous" />
+            <allow permission=".Edit" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate" />
+        </facet>
+    </state>
+    <state id="internal" title="Internal">
+        <facet>
+            <allow permission=".View" roles="Authenticated" />
+            <allow permission=".Edit" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate" />
+        </facet>
+    </state>
+    <state id="withdrawn" title="Withdrawn">
+        <facet>
+            <allow permission=".View" roles="
+                    ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
+                    SpeakerSenate SpeakerAssembly" />
+        </facet>   
+    </state>
+    
+    
+    <!-- workflow transision -->    
+    <transition title="Create"
+        source=""
+        destination="draft"
+        trigger="automatic"
+    />
+    <transition title="Attach"
+        source="draft internal"
+        destination="attached"
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly Drafter"
+        require_confirmation="false"
+    />
+    <transition title="Visible Internally"
+        source="draft attached"
+        destination="internal"
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly"
+        require_confirmation="false"
+    />
+    <transition title="Withdraw"
+        source="internal attached"
+        destination="withdrawn"
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly"
+        require_confirmation="false"
+    />
+
+</workflow>
+

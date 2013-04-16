@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<notifications>
+  <notify roles="ClerkSenate ClerkAssembly " onstate="submitted"/>
+  <notify roles="Owner" onstate="admissible"/>
+  <notify roles="Owner" onstate="inadmissible clarification_required"/>
+  <notify roles="Owner" onstate="debated scheduled deferred adjourned"/>
+</notifications>

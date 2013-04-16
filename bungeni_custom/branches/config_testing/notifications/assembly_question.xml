@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<notifications>
+  <notify roles="  ClerkAssembly " onstate="submitted"/>
+  <notify roles="Owner" onstate="reviewed clarification_required"/>
+  <notify roles="Owner" afterstate="clarification_required"
+          time="59d"/>
+  <notify roles="Owner" onstate="inadmissible debated scheduled deferred"/>
+  <notify roles="Owner" onstate="response_pending response_submitted"/>
+</notifications>

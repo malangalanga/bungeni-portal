@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<workflow title="Event Workflow"
+    description="Workflow for base Event"
+    permission_actions=".View .Edit .Add .Delete"
+    >
+    
+    <!-- sub-item: NO global grants mmmmmm public> attached -->
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="true" />
+    <feature name="attachment" enabled="true" />
+    
+    <!-- FACETS (see explanation in event workflow) -->
+    
+    <!-- parent facets -->
+    <facet name="add_ministry">
+        <allow permission=".Add" roles="MinistryMember" />
+    </facet>
+    
+    <!-- workflow states -->    
+    <state id="draft" title="Draft" actions="propagate_parent_assigned_group_role"> 
+        <facet>
+            <allow permission=".View" roles="Drafter" />
+            <allow permission=".Edit" roles="Drafter" />
+            <allow permission=".Delete" roles="Drafter" />
+        </facet>
+    </state>
+    <state id="internal" title="Internal Review">
+        <facet>
+	    <allow permission=".View" roles="MinistryMember" />
+	    <allow permission=".Edit" roles="MinistryMember" />
+        </facet>
+    </state>
+    <state id="completed" title="Response Completed">
+        <facet>
+            <allow permission=".View" roles="
+		MinistryMember ClerkQuestionAssembly ClerkQuestionSenate" />
+        </facet>
+    </state>
+    <state id="reviewed" title="Written Response">
+        <facet>
+            <allow permission=".View" roles="Anonymous" />
+        </facet>
+    </state>
+    <state id="incomplete" title="Response Incomplete">
+        <facet>
+	    <allow permission=".View" roles="MinistryMember ClerkQuestionAssembly ClerkQuestionSenate" />
+	    <allow permission=".Edit" roles="MinistryMember" />
+        </facet>
+    </state>
+    
+    <!-- workflow transision -->    
+    <transition title="Create"
+        source=""
+        destination="draft"
+        trigger="automatic"
+    />
+    <transition title="Internal Review"
+        source="draft"
+        destination="internal"
+        trigger="manual"
+        roles="MinistryMember"
+        require_confirmation="true"
+    />
+    <transition title="Response Completed"
+        source="draft internal incomplete"
+        destination="completed"
+        trigger="manual"
+        roles="MinistryMember"
+        require_confirmation="true"
+    />
+    <transition title="Publish Written Response"
+        source="completed"
+        destination="reviewed"
+        trigger="manual"
+        roles="ClerkQuestionAssembly ClerkQuestionSenate"
+        require_confirmation="true"
+    />
+    <transition title="Response Incomplete"
+        source="completed"
+        destination="incomplete"
+        trigger="manual"
+        roles="ClerkQuestionAssembly ClerkQuestionSenate"
+        require_confirmation="true"
+    />
+
+</workflow>
+

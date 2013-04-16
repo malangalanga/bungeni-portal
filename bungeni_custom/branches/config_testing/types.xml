@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<types>
+    <!-- Bungeni Custom Types
+    
+    All custom types must be declared, enabled/disabled, here.
+    
+    The system "archetype" of a custom type is indicated by a dedicated tag 
+    name. [Having a dedicated tag name per system archetype allows for the 
+    possibility that different types could have different attributes e.g. a
+    group and/or a membership could specify an associated role (even if such 
+    info could well be specified elsewhere). Note that as yet the XML attrs
+    for all sys archetype tags are the *same*.]
+    
+    Furthermore, a custom type may refine which "archetype" by specifying 
+    another custom type as its "archetype", via the @archetype attribute.
+    
+    Some custom types are dependent on another custom type e.g. a membership
+    on a group, hence the nesting of these declarations. 
+    
+    All custom types must specify a name, that is the "type key".
+    
+    All custom types are workflowed. When not explicitly specified, the 
+    workflow name is the same as the type name.
+    
+    Disabling a type means the type will not be registered, and all associated 
+    configuration e.g. workflow, descriptor, workspace, etc, will not be loaded.
+    
+    Type element attributes:
+        @name: the type name used throughout the system as the type key, REQUIRED
+        @workflow: the worklow key (the name of the workflow definition file, 
+            in `workflows/` folder), if not set then value of @name is used.
+        @archetype: the "custom" archetype key (a custom sub-type of the system
+            archetype specified via the element tag name).
+        @enabled: "true" | "false", default is "true"
+            note that if parent is disabled, then all nested elements are also 
+            disabled (even if they set enabled="true")
+    -->
+    
+    <doc name="agenda_item" enabled="true" />
+    
+    <doc name="assembly_bill" enabled="true" />
+    <doc name="assembly_motion" enabled="true" />
+    <doc name="assembly_question" enabled="true" />
+    <doc name="assembly_tabled_document" enabled="true" />
+    
+    <doc name="senate_bill" enabled="true" />
+    <doc name="senate_motion" enabled="true" />
+    <doc name="senate_question" enabled="true" />
+    <doc name="senate_tabled_document" enabled="true" />
+    
+    <doc name="report" enabled="true" />
+    <doc name="bicameral_document" enabled="true" />
+    
+    <event name="event_response" workflow="event_response" archetype="event" enabled="true" />
+    
+    
+    <group name="office" workflow="group" enabled="true">
+        <member name="office_member" workflow="group_membership" enabled="true" />
+    </group>
+    <group name="political_group" workflow="group" enabled="true">
+        <member name="political_group_member" workflow="group_membership" enabled="true" />
+    </group>
+    <group name="committee" enabled="true">
+        <member name="committee_member" workflow="group_membership" enabled="true" />
+        <member name="committee_staff" workflow="group_membership" enabled="true" />
+    </group>
+    <group name="joint_committee" workflow="committee" enabled="true" />
+    <group name="government" workflow="group" enabled="true" />
+    <group name="ministry" workflow="group" enabled="true">
+        <member name="minister" workflow="group_membership" enabled="true" />
+    </group>
+    <group name="parliament" enabled="true">
+        <member name="member_of_parliament" workflow="group_membership" enabled="true" />
+    </group>
+
+</types>
+

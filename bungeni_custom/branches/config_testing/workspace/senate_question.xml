@@ -1,0 +1,123 @@
+<workspace id="question">
+    <state id="draft">
+        <tab id="draft" roles="
+			Drafter" />
+    </state>
+    <state id="submitted">
+        <tab id="inbox" roles="
+			ClerkQuestionSenate.ClerkHead
+          		ClerkQuestionSenate.ClerkQuestion" />
+        <tab id="pending" roles="Owner" />
+    </state>
+    <state id="reviewed">
+        <tab id="inbox" roles="
+			SpeakerSenate" />
+        <tab id="pending" roles="
+			ClerkQuestionSenate.ClerkHead ClerkQuestionSenate.ClerkQuestion Owner" />
+    </state>
+    <state id="admissible">
+        <tab id="schedule" roles="
+			ClerkQuestionSenate.ClerkQuestion MinistryMember" />
+	<tab id="pending" roles="
+			ClerkQuestionSenate.ClerkHead SpeakerSenate Owner" />
+    </state>
+    <state id="inadmissible">
+        <tab id="archive" roles="
+		      Owner 
+		      ClerkQuestionSenate.ClerkHead
+                      ClerkQuestionSenate.ClerkQuestion
+                      SpeakerSenate"/>
+    </state>
+     <state id="clarification_required">
+        <tab id="inbox" roles="Owner"/>
+	      <tab id="pending" roles="
+			ClerkQuestionSenate.ClerkHead ClerkQuestionSenate.ClerkQuestion" />
+    </state>
+    <state id="scheduled">
+        <tab id="schedule" roles="
+		    Owner
+		    SpeakerSenate
+		    ClerkQuestionSenate.ClerkHead
+                    ClerkQuestionSenate.ClerkQuestion
+		    MinistryMember"/>
+    </state>
+    <state id="adjourned">
+        <tab id="schedule" roles="  ClerkQuestionSenate.ClerkQuestion" />
+	<tab id="pending" roles="
+		    Owner
+		    SpeakerSenate
+		    ClerkQuestionSenate.ClerkHead
+                    ClerkQuestionSenate.ClerkQuestion
+		    MinistryMember"/>
+   </state>
+   <state id="response_pending">
+        <tab id="inbox" roles="MinistryMember"/>
+	<tab id="pending" roles="
+		    Owner
+		    SpeakerSenate
+		    ClerkQuestionSenate.ClerkHead
+                    ClerkQuestionSenate.ClerkQuestion" />
+   </state>
+   <state id="response_submitted">
+        <tab id="inbox" roles="ClerkQuestionSenate.ClerkHead" />
+	<tab id="pending" roles="
+		    Owner
+		    SpeakerSenate
+                    ClerkQuestionSenate.ClerkQuestion
+		    MinistryMember"/>
+   </state>
+   <state id="response_reviewed">
+        <tab id="archive" roles="
+		    Owner
+		    SpeakerSenate
+		    ClerkQuestionSenate.ClerkHead
+                    ClerkQuestionSenate.ClerkQuestion
+		    MinistryMember" />
+    </state>
+    <state id="deferred">
+        <tab id="schedule" roles="
+		    Owner
+		    SpeakerSenate
+		    ClerkQuestionSenate.ClerkHead
+                    ClerkQuestionSenate.ClerkQuestion
+		    MinistryMember" />
+    </state>
+    <state id="debated">
+        <tab id="archive" roles="
+		    Owner
+		    SpeakerSenate
+		    ClerkQuestionSenate.ClerkHead
+                    ClerkQuestionSenate.ClerkQuestion
+		    MinistryMember" />
+    </state>
+    <state id="elapsed">
+        <tab id="archive" roles="
+		    Owner
+		    SpeakerSenate
+		    ClerkQuestionSenate.ClerkHead
+                    ClerkQuestionSenate.ClerkQuestion
+		    MinistryMember" />
+    </state>
+    <state id="dropped">
+        <tab id="archive" 
+	     roles="Owner
+		      ClerkQuestionSenate.ClerkHead
+              ClerkQuestionSenate.ClerkQuestion
+                      SpeakerSenate" />
+    </state>
+    <state id="withdrawn">
+        <tab id="archive" roles="
+		    Owner
+		    SpeakerSenate
+		    ClerkQuestionSenate.ClerkHead
+                    ClerkQuestionSenate.ClerkQuestion
+		    MinistryMember" />
+    </state>
+    <state id="withdrawn_internal">
+        <tab id="archive" roles="
+		    Owner
+		    SpeakerSenate
+		    ClerkQuestionSenate.ClerkHead
+                    ClerkQuestionSenate.ClerkQuestion" />
+    </state>
+</workspace>

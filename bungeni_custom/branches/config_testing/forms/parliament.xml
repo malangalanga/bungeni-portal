@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<descriptor name="parliament" order="2" sort_on="start_date" label="parliament" container_label="parliament">
+    <field name="full_name" label="Parliament Name" required="false" value_type="text" render_type="text_line">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="short_name" label="Short Name" description="Shorter name for the parliament" required="true" value_type="text" render_type="text_line">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="principal_name" label="Chamber/Legislature Identifier" description="Unique identifier for this Chamber/Legislature" required="true" value_type="text" render_type="text_line"
+        note="
+            Should contain only letters, numbers, a period (.) and underscore (_). 
+            Should start with a letter and be between 3 and 20 characters long"
+        >
+        <show modes="view edit add listing" />
+    </field>
+    <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+        <show modes="view edit add" />
+        <hide modes="listing" />
+    </field>
+    <field name="parliament_type" label="Parliament Type" required="true" value_type="text" render_type="single_select" vocabulary="chamber_type">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="election_date" label="Election Date" description="Date of the election" required="true" value_type="date" render_type="date" 
+        note="!+legislature - this one is UNUSED - we leave it for as required in the db">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="start_date" label="In power from" description="Date of the swearing in" required="true" value_type="date" render_type="date"
+        note="!+ update label/description!"
+        >
+        <show modes="view edit add listing" />
+    </field>
+    <field name="end_date" label="In power till" description="Date of the dissolution" required="false" value_type="date" render_type="date"
+        note="!+ update label/description!"
+        >
+        <show modes="view edit add listing" />
+    </field>
+    <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
+        <show modes="view edit add" />
+    </field>
+    <field name="group_role" label="Role" description="Role given to members of this office" required="true" value_type="text" render_type="single_select" vocabulary="group_role">
+        <show modes="view edit add listing" />
+    </field>
+    
+    <container match="agenda_item.group_id" name="agendaitems" note="not parliament_id?" />
+    <!--
+    <container match="assembly_agenda_item.group_id" name="assemblyagendaitems" 
+        note="!+naming !+why not parliament_id?" />
+    -->
+    <container match="assembly_bill.parliament_id" />
+    <container match="assembly_motion.parliament_id" />
+    <container match="assembly_question.parliament_id" />
+    <container match="assembly_tabled_document.parliament_id" name="assemblytableddocuments" note="!+naming" />
+    <container match="assembly_test_doc.parliament_id" />
+    <!--
+    <container match="senate_agenda_item.group_id" name="senateagendaitems" 
+        note="!+naming !+why not parliament_id?" />
+    -->
+    <container match="senate_bill.parliament_id" />
+    <container match="senate_motion.parliament_id" />
+    <container match="senate_question.parliament_id" />
+    <container match="senate_tabled_document.parliament_id" name="senatetableddocuments" note="!+naming" />
+    <container match="senate_test_doc.parliament_id" />
+
+    <container match="bicameral_document.parliament_id" />
+    
+    <container match="session.parliament_id" />
+    <container match="committee.parent_group_id" />
+    <container match="office.parent_group_id" />
+    <container match="member_of_parliament.group_id" name="parliamentmembers" />
+    <container match="political_group.parent_group_id" name="politicalgroups" note="!+naming" />
+    <container match="sitting.group_id" />
+    <container match="title_type.group_id" />
+    <container match="venue.group_id" />
+
+    
+<!-- FLAVIO: to have run TWO CHAMBERS 
+   <integrity 
+        constraints="end_after_start"
+        validations="validate_chamber_dates" /> -->
+    
+</descriptor>
+

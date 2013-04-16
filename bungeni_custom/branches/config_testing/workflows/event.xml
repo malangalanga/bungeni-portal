@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<workflow title="Event Workflow"
+    description="Workflow for base Event"
+    permission_actions=".View .Edit .Add .Delete"
+    >
+    
+    <!-- sub-item: NO global grants -->
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="true" />
+    <feature name="attachment" enabled="true" />
+    
+    <!-- FACETS -->
+    <!-- fz: a recommendation for simple management of "child-documents" 
+    (events) facets. 
+    
+    We have "parent facets" (facets intended only for use by parent type) where 
+    you just handle who has the right to "add" a "child-document" and we have 
+    "workflow facets" (for this workflow) where you handle 
+    (as in any document) the permission of the "child document".
+    In these facets you should not use the ".Add" action.
+    
+    Please also note that for the "event" feature we may specify a facet per 
+    event type we specify, in the following manner:
+        <facet ref="event#{event_type_key}.{facet_name}" />
+    That, for the default "event" type, the above would therefore become:
+        <facet ref="event#event.{facet_name}" />
+    Or, simply (as this is the default case):
+        <facet ref="event.{facet_name}" />
+        
+    NOTE: Drafter role only, as no Owner role on events! 
+    -->
+    
+    <!-- parent facets -->
+    <facet name="add_clerk">
+        <allow permission=".Add" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate" />
+    </facet>
+    <facet name="add_speaker">
+        <allow permission=".Add" roles="SpeakerSenate SpeakerAssembly" />
+    </facet>
+    
+    <!-- workflow states -->
+    <state id="draft" title="Draft"> 
+        <facet>
+            <allow permission=".View" roles="Drafter" />
+            <allow permission=".Edit" roles="Drafter" />
+            <allow permission=".Delete" roles="Drafter" />
+        </facet>
+    </state>
+    <state id="bound_to_parent" title="Bound to Main Document">
+        <facet>
+        <allow permission=".View" roles="Anonymous" />
+        <allow permission=".Edit" roles="
+                ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
+                SpeakerSenate SpeakerAssembly" />
+        </facet>
+    </state>
+    <state id="internal" title="Internal">
+        <facet>
+	    <allow permission=".View" roles="Authenticated" />
+	    <allow permission=".Edit" roles="
+		ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
+                SpeakerSenate SpeakerAssembly" />
+        </facet>
+    </state>
+    <state id="withdrawn" title="Withdrawn">
+        <facet>
+            <allow permission=".View" roles="
+		ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
+		SpeakerSenate SpeakerAssembly" />
+        </facet>
+    </state>
+    
+    <!-- workflow transision -->    
+    <transition title="Create"
+        source=""
+        destination="draft"
+        trigger="automatic"
+    />
+    <transition title="Bind to main document"
+        source="draft internal"
+        destination="bound_to_parent"
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly"
+        require_confirmation="false"
+    />
+    <transition title="Visible Internally"
+        source="draft bound_to_parent"
+        destination="internal"
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly"
+        require_confirmation="false"
+    />
+    <transition title="Withdraw"
+        source="internal bound_to_parent"
+        destination="withdrawn"
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly"
+        require_confirmation="false"
+    />
+
+</workflow>
+

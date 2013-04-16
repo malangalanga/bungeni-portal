@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<descriptor name="event_response" order="3" label="response" container_label="responses">
+    <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+        <show modes="view edit add" />
+        <hide modes="listing" />
+    </field>
+    <field name="doc_type" label="Event Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="event_type">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="parliament_id" label="Parliament" required="true" value_type="text" render_type="single_select" vocabulary="parliament">
+        <hide modes="view listing" />
+    </field>
+    <field name="owner_id" label="Owner" required="true" value_type="user" render_type="single_select" vocabulary="owner_or_login">
+        <show modes="edit add" />
+        <hide modes="view listing" roles="Anonymous" />
+    </field>
+    <field name="group_id" label="Group" required="false" value_type="text" render_type="single_select" vocabulary="group">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
+        <show modes="view listing" />
+    </field>
+    <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
+        <show modes="view listing" />
+    </field>
+        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
+            <show modes="view edit add" />
+        </field>
+    <field name="body" label="Text" required="true" value_type="text" render_type="rich_text">
+        <show modes="view edit add" />
+    </field>
+<!-- FLAVIO had to comment because "AssertionError("May not add 'event_date' as extended field, already defined in archetype 'event'",)" in UI.XML "event_date is already an "extended fied. It seems that we should not use extended fields in the archetypes.
+    <field name="event_date" label="Event Date" required="false" value_type="datetime" render_type="datetime" extended="datetime">
+        <show modes="view edit add listing" />
+    </field>
+-->
+</descriptor>
+

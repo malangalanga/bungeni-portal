@@ -1,0 +1,68 @@
+<workspace id="test_document">
+    <state id="working_draft">
+        <tab id="draft" roles="ClerkSenate ClerkAssembly"/>
+    </state>
+    <state id="draft">
+        <tab id="draft" roles="Owner"/>
+    </state>
+    <state id="redraft">
+        <tab id="draft" roles="Owner"/>
+    </state>
+    <state id="withdrawn_signatory">
+        <tab id="archive"
+	     roles="Owner
+		    ClerkSenate ClerkAssembly
+                    Signatory"/>
+    </state>
+    <state id="submitted">
+        <tab id="inbox" roles="ClerkSenate ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory"/>
+    </state>
+    <state id="submitted_signatories">
+        <tab id="inbox" roles="Signatory"/>
+        <tab id="pending" roles="Owner"/>
+    </state>
+    <state id="reviewed">
+        <tab id="inbox" roles="SpeakerSenate SpeakerAssembly"/>
+        <tab id="pending"
+	     roles="Owner
+		    ClerkSenate ClerkAssembly
+		    Signatory"/>
+    </state>
+    <state id="admissible">
+        <tab id="schedule"
+	     roles="SpeakerSenate SpeakerAssembly
+		    ClerkSenate ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory"/>
+    </state>
+    <state id="clarification_required">
+        <tab id="inbox" roles="Owner"/>
+        <tab id="pending" roles="ClerkSenate ClerkAssembly Signatory"/>
+    </state>
+    <state id="scheduled">
+        <tab id="schedule"
+	     roles="SpeakerSenate SpeakerAssembly
+		    ClerkSenate ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory"/>
+    </state>
+    <state id="adjourned">
+        <tab id="schedule"
+	     roles="SpeakerSenate SpeakerAssembly
+		    ClerkSenate ClerkAssembly"/>
+        <tab id="pending" roles="Owner Signatory"/>
+    </state>
+    <state id="tabled">
+        <tab id="archive" 
+	     roles="Signatory
+		    Owner
+		    ClerkSenate ClerkAssembly
+                    SpeakerSenate SpeakerAssembly"/>
+    </state>
+    <state id="withdrawn">
+        <tab id="archive"
+	     roles="Signatory
+		    Owner
+		    ClerkSenate ClerkAssembly
+                    SpeakerSenate SpeakerAssembly"/>
+    </state>
+</workspace>

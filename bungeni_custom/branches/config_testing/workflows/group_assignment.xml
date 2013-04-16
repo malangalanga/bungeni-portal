@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<workflow title="Group Doc Assignment"
+        description="Workflow for group doc assignment"
+        note="placeholder workflow"
+        permission_actions=".View .Edit .Add .Delete"
+    >
+    
+    <facet name="add_internal">
+        <allow permission=".Add" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly 
+		ClerkQuestionSenate ClerkQuestionAssembly.ClerkHead" />
+        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly 
+		ClerkQuestionSenate ClerkQuestionAssembly.ClerkHead" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly 
+		ClerkQuestionSenate ClerkQuestionAssembly" />
+        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly 
+		ClerkQuestionSenate ClerkQuestionAssembly" />
+    </facet>
+    
+    <!-- !+ONE_STATE_TRANSITION placeholder state, transation -->
+    <state id="_" title="" note="!+ONE_STATE_TRANSITION placeholder state" />
+    <transition title="" source="" destination="_" trigger="automatic" 
+        note="!+ONE_STATE_TRANSITION placeholder state" />
+
+</workflow>
+

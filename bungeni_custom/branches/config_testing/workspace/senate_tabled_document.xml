@@ -1,0 +1,49 @@
+<workspace id="tabled_document">
+    <state id="draft">
+        <tab id="draft" roles="Drafter" />
+    </state>
+    <state id="submitted">
+        <tab id="inbox" roles="  ClerkSenate"/>
+        <tab id="pending" roles="Owner"/>
+    </state>
+    <state id="reviewed">
+        <tab id="inbox" roles="  SpeakerSenate"/>
+        <tab id="pending"
+	     roles="Owner
+		      ClerkSenate"/>
+    </state>
+    <state id="admissible">
+        <tab id="schedule"
+	     roles="  SpeakerSenate
+		      ClerkSenate"/>
+        <tab id="pending" roles="Owner"/>
+    </state>
+    <state id="clarification_required">
+        <tab id="inbox" roles="Owner"/>
+        <tab id="pending" roles="  ClerkSenate"/>
+    </state>
+    <state id="scheduled">
+        <tab id="schedule"
+	     roles="  SpeakerSenate
+		      ClerkSenate"/>
+        <tab id="pending" roles="Owner"/>
+    </state>
+    <state id="adjourned">
+        <tab id="schedule"
+	     roles="  SpeakerSenate
+		      ClerkSenate"/>
+        <tab id="pending" roles="Owner"/>
+    </state>
+    <state id="tabled">
+        <tab id="archive" 
+	     roles="Owner
+		      ClerkSenate
+                      SpeakerSenate"/>
+    </state>
+    <state id="withdrawn">
+        <tab id="archive"
+	     roles="Owner
+		      ClerkSenate
+                      SpeakerSenate"/>
+    </state>
+</workspace>

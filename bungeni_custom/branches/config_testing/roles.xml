@@ -1,0 +1,52 @@
+<roles>
+    <!-- Bungeni Custom Roles -->
+    
+    <!--
+    Note that Bungeni system DEFINES the following System Roles (which may 
+    also be used throughout this customization):
+    
+    <role id="Admin" title="Bungeni Admin" />
+    <role id="Authenticated" title="All authenticated users" />
+    <role id="Anonymous" title="Bungeni Visitor" />
+    
+    <role id="Drafter" title="Document Drafter (Editorial Owner)" 
+        note="applies to all types (the user who actually creates an item)" />
+    <role id="Owner" title="Document Owner (Legal Owner)" 
+        note="applies only to legal documents (other types should NEVER have this role assigned on them)" />
+    <role id="Signatory" title="Document Signatory" />
+    -->
+    
+    <!-- LEGISLATURE roles -->
+    <role id="ClerkLegislature" title="Legislature - Clerk Office" />
+    <role id="GovernmentMember" title="Government Member" />
+    <role id="MinistryMember" title="Government Ministry Member" />
+    <role id="Translator" title="Translation Office" />
+    <role id="Transcriber" title="Transcription Office">
+        <subrole id="Transcriber.Editor" title="Transcription Editor" />
+        <subrole id="Transcriber.Reporter" title="Transcription Reporter" />
+    </role>
+    
+    <!-- SENATE roles -->
+    <role id="MemberSenate" title="Senate - Member" />
+    <role id="MemberCommitteeSenate" title="Senate - Committee Member" />
+    <role id="MemberPoliticalGroupSenate" title="Senate - Political Group Member" />
+    <role id="ClerkSenate" title="Senate - Clerk Office" />
+    <role id="ClerkQuestionSenate" title="Senate - Clerk Questions Office">
+        <subrole id="ClerkQuestionSenate.ClerkHead" title="Assembly - Head Clerk" />
+        <subrole id="ClerkQuestionSenate.ClerkQuestion" title="Assembly - Questions' Clerk" />
+    </role>
+    <role id="SpeakerSenate" title="Speaker Office - Senate" />
+    
+    <!-- ASSEMBLY roles -->
+    <role id="MemberAssembly" title="Assembly - Member" />
+    <role id="MemberCommitteeAssembly" title="Assembly - Committee Member" />
+    <role id="MemberPoliticalGroupAssembly" title="Assembly - Political Group Member" />
+    <role id="ClerkAssembly" title="Assembly - Clerk Office" />
+    <role id="ClerkQuestionAssembly" title="Assembly - Clerk Questions Office">
+        <subrole id="ClerkQuestionAssembly.ClerkHead" title="Assembly - Head Clerk" />
+        <subrole id="ClerkQuestionAssembly.ClerkQuestion" title="Assembly - Questions' Clerk" />
+    </role>
+    <role id="SpeakerAssembly" title="Assembly - Speaker Office" />
+    <role id="ClerkLegalAssembly" title="Assembly - Legal Office"/>
+</roles>
+
