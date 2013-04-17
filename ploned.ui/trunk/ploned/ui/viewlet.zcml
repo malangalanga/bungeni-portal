@@ -39,6 +39,7 @@
      name="plone.abovecontent"
      provides=".interfaces.IAboveContentManager"
      layer=".interfaces.IPlonedSkin"
+     class="zope.viewlet.manager.ConditionalViewletManager"
      permission="zope.Public"
      />
 
@@ -46,6 +47,7 @@
      name="plone.belowcontent"
      provides=".interfaces.IBelowContentManager"
      layer=".interfaces.IPlonedSkin"
+     class="zope.viewlet.manager.ConditionalViewletManager"
      permission="zope.Public"
      />
 
