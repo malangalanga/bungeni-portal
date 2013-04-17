@@ -702,8 +702,12 @@ class Presetup:
         run("echo $PATH")
         
         # [2.] Install docsplit
-        print "Installing docsplit"
-        cmd = sudo("gem install docsplit")
+        # NOTE: As of docsplit 0.7.0 and above, a preference is made for 
+        # LibreOffice over OpenOffice. We set the version explicitly to 0.6.4 as 
+        # it supports both OpenOffice and LibreOffice. This is subject to 
+        # change in the future.
+        print "Installing docsplit 0.6.4 (Not the latest version)"
+        cmd = sudo("gem install --version '0.6.4' docsplit")
         
         if 'gem installed' in cmd:
             print "Docsplit gem installed successfully."
