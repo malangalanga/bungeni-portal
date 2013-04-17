@@ -46,3 +46,17 @@ function subject_tree_toggle() {
 		text.innerHTML = "[-] Hide Subject Tree";
 	}
 } 
+
+/* Change the height and width of element */
+function autoResizeElement(id){
+    var newheight;
+    var newwidth;
+
+    if(document.getElementById){
+        newheight = document.getElementById(id).contentWindow.document.body.scrollHeight;
+        newwidth = document.getElementById(id).contentWindow.document.body.scrollWidth;
+    }
+
+    document.getElementById(id).height = (newheight) + "px";
+    document.getElementById(id).width = (newwidth) + "px";
+}
