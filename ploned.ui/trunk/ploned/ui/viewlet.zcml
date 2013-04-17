@@ -7,7 +7,7 @@
      name="plone.portalheader"
      provides=".interfaces.IPortalHeaderManager"
      layer=".interfaces.IPlonedSkin"
-     class="zope.viewlet.manager.WeightOrderedViewletManager"
+     class="zope.viewlet.manager.ConditionalViewletManager"
      permission="zope.Public"
      />
 
@@ -15,7 +15,7 @@
      name="plone.portaltools"
      provides=".interfaces.IPortalToolsManager"
      layer=".interfaces.IPlonedSkin"
-     class="zope.viewlet.manager.WeightOrderedViewletManager"
+     class="zope.viewlet.manager.ConditionalViewletManager"
      permission="zope.Public"
      />
 
@@ -53,7 +53,7 @@
      name="plone.leftcolumn"
      provides=".interfaces.ILeftColumnManager"
      layer=".interfaces.IPlonedSkin"
-     class="zope.viewlet.manager.WeightOrderedViewletManager"
+     class="zope.viewlet.manager.ConditionalViewletManager"
      permission="zope.Public"
      />
 
