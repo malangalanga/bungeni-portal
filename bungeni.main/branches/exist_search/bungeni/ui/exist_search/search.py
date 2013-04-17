@@ -16,6 +16,7 @@ import zope.interface
 import zope.component
 from zope.formlib import form, namedtemplate
 from zope.app.pagetemplate import ViewPageTemplateFile
+from zc.resourcelibrary import need
 from ploned.ui.interfaces import IBelowContentManager
 
 from bungeni.alchemist.utils import get_managed_containers
@@ -23,17 +24,17 @@ from bungeni.core.interfaces import IWorkspaceTabsUtility, ISearchableSection
 
 from bungeni.ui import interfaces as ui_ifaces, browser
 from bungeni.ui.widgets import MultiCheckBoxWidget
-import interfaces
 from bungeni.ui.utils import common, date
 from bungeni.ui.utils.url import absoluteURL
 from bungeni.ui.i18n import _
+
+import interfaces
 
 from bungeni.models import interfaces as model_ifaces
 
 from bungeni.utils import register
 from bungeni.utils.common import getattr_ancestry
 from bungeni.capi import capi
-
 
 def container_obj_key(key):
     return "obj-%s" % key
@@ -187,7 +188,8 @@ def execute_search(data, prefix, request, context):
         (",".join(value) if isinstance(value, list) else value))
         for key,value in data.iteritems() if value])
     if data.get("page"):
-        data["offset"] = (int(data["page"])-1)*int(data.get("limit"))+1
+        limit = data.get("limit", interfaces.DEFAULT_LIMIT)
+        data["offset"] = (int(data["page"])-1)*int(limit)+1
         del data["page"]
     # we are only interested in documents
     data["group"]  = "document"
@@ -214,8 +216,21 @@ def execute_search(data, prefix, request, context):
             results["items"] = get_results_meta(_results, context)
     return results
 
+str_all_types = _("all types")
+def get_search_types(types):
+    """string of all searched types (for display)"""
+    _types = str_all_types
+    if types and not ("," in types[0]):
+        type_names = []
+        for typ in types:
+            info = capi.get_type_info(typ)
+            type_names.append(info.descriptor_model.container_name)
+        _types = ", ".join(type_names)
+    return _types
+
+SEARCH_VIEW = "search.exist"
 @register.view(ISearchableSection, ui_ifaces.IBungeniSkin, 
-    name="search.exist", protect={ "zope.Public": register.VIEW_DEFAULT_ATTRS })
+    name=SEARCH_VIEW, protect={ "zope.Public": register.VIEW_DEFAULT_ATTRS })
 class Search(form.PageForm, browser.BungeniBrowserView):
     zope.interface.implements(interfaces.ISearchResults)
     action_method="get"
@@ -227,10 +242,11 @@ class Search(form.PageForm, browser.BungeniBrowserView):
     form_description = _(u"Search Documents in Bungeni")
     show_results = False
 
-    def __init__(self, context, request):
-        zope.interface.declarations.alsoProvides(
-            context, interfaces.ISearchResults
-        )
+    def __init__(self, context, request, show_results=True):
+        if show_results:
+            zope.interface.declarations.alsoProvides(
+                context, interfaces.ISearchResults
+            )
         super(Search, self).__init__(context, request)
 
     def setUpWidgets(self, ignore_request=False):
@@ -249,15 +265,20 @@ class Search(form.PageForm, browser.BungeniBrowserView):
         self.search_results = execute_search(data, self.prefix, 
             self.request, self.context)
         self.status = _("Searched for '${search_string}' and found ${count} "
-            "items", 
+            "items. Searched in ${search_types}", 
             mapping={ 
-                "search_string" : data.get("search") or _("everything"), 
-                "count": self.search_results.get("total")
+                "search_string": data.get("search") or _("everything"), 
+                "count": self.search_results.get("total"),
+                "search_types": get_search_types(data.get("type")),  
             }
         )
 
     def validate(self, action, data):
         return form.getWidgetsData(self.widgets, self.prefix, data)
+    
+    def __call__(self):
+        need("search-css")
+        return super(Search, self).__call__()
 
 @register.viewlet(interfaces.ISearchResults, layer=ui_ifaces.IBungeniSkin,
     manager=IBelowContentManager, name="bungeni.exist-search",
@@ -275,3 +296,22 @@ class SearchResults(browser.BungeniViewlet):
     def available(self):
         return self._parent.show_results
     for_display = available
+
+class SearchBox(browser.BungeniViewlet):
+    """Search box Viewlet"""
+
+    render = ViewPageTemplateFile("search-box.pt")
+
+
+    @property
+    def search_section(self):
+        return getattr_ancestry(self.context, None,
+            acceptable=ISearchableSection.providedBy)
+
+    @property
+    def available(self):
+        return self.search_section is not None
+
+    def update(self):
+        self.action_url =  "/".join([
+            absoluteURL(self.search_section, self.request), SEARCH_VIEW])

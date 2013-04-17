@@ -10,6 +10,8 @@ class ISearchResults(Interface):
     """
     pass
 
+DEFAULT_LIMIT = 10
+
 GROUP_TYPES = [ ("*", _(u"documents and people")), 
     ("document", _(u"documents")), 
     ("membership", _(u"people")) ]
@@ -72,11 +74,10 @@ class ISearchRequest(Interface):
     #    required=False
     #)
     limit = schema.Choice(title=_("items per page"),
-        values=(10, 20, 50, 100),
-        default=10,
+        values=(DEFAULT_LIMIT, 20, 50, 100),
+        default=DEFAULT_LIMIT,
         required=False
     )
-    
     #status
     #offset
     #role (captured auto)
