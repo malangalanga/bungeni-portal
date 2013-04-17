@@ -38,7 +38,8 @@
         <parameter name="open_states" value="admissible" />
     </feature>
     <feature name="schedule" enabled="true">
-        <parameter name="schedulable_states" value="admissible adjourned" />
+        <parameter name="schedulable_states" value="admissible adjourned" 
+            note="!+associated (is oral) condition on transitions to schedulable_states?" />
         <parameter name="scheduled_states" value="scheduled" />
     </feature>
     <feature name="workspace" enabled="true" />
@@ -231,7 +232,7 @@
     <transition title="Admissible"
         source="reviewed"
         destination="admissible"
-        condition=""
+        condition="is_oral_response"
         trigger="manual"
         roles="SpeakerSenate"
         order="6"
@@ -273,7 +274,7 @@
     <transition title="Send to Ministry"
         source="admissible"
         destination="response_pending"
-        condition=""
+        condition="is_written_response"
         trigger="manual"
         roles="ClerkQuestionSenate.ClerkQuestion"
         order="13"
@@ -291,7 +292,7 @@
     <transition title="Submit Response"
         source="response_pending"
         destination="response_submitted"
-        condition=""
+        condition="response_allow_submit"
         trigger="manual"
         roles="MinistryMember"
         order="15"
