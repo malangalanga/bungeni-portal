@@ -25,6 +25,7 @@
     </feature>
     <feature name="signatory" enabled="true">
         <parameter name="min_signatories" value="1" />
+        <parameter name="max_signatories" value="5" />
         <parameter name="open_states" value="admissible" />
     </feature>
     <feature name="schedule" enabled="true">
@@ -106,33 +107,29 @@
         <facet ref=".internal_Signatory" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
-        <facet ref="signatory.internal" />
     </state>
     <state id="redraft" title="Redraft" actions="version" 
             note="document under review before resubmission">
         <facet ref=".redraft" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
-        <facet ref="signatory.internal_Owner" />
+        <facet ref="signatory.draft_Drafter" />
     </state>
     <state id="withdrawn_signatory" title="Dropped" 
             note="motion has been withdrawn before submission to house">
         <facet ref=".internal_Signatory" />
         <facet ref="attachment.add_clerk" /><!-- !+private_frozen? -->
         <facet ref="event.add_clerk" />
-        <facet ref="signatory.internal_frozen" />
     </state>
     <state id="withdrawn_internal" title="Withdrawn">
         <facet ref=".internal_Signatory" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
-        <facet ref="signatory.internal_frozen" />
     </state>
     <state id="submitted" title="Submitted" actions="version set_doc_registry_number">
         <facet ref=".internal_Clerk" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
-        <facet ref="signatory.internal_frozen" />
         <facet ref="group_assignment.add_internal" />
     </state>
     <state id="clarification_required" title="Requires Clarification to Receive"
@@ -140,13 +137,11 @@
         <facet ref=".review" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
-        <facet ref="signatory.internal" />
     </state>
     <state id="reviewed" title="Submitted to the Speaker" actions="version">
         <facet ref=".internal_Speaker" />
         <facet ref="attachment.add_speaker" />
         <facet ref="event.add_speaker" />
-        <facet ref="signatory.internal_frozen" />
     </state>
     <state id="inadmissible" title="Inadmissible" 
         permissions_from_state="withdrawn_internal" />
@@ -155,7 +150,6 @@
         <facet ref=".public" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
-        <facet ref="signatory.public_frozen" />
         <facet ref="group_assignment.add_internal" />
     </state>
     <state id="scheduled" title="Scheduled" permissions_from_state="admissible" />
@@ -167,7 +161,6 @@
         <facet ref=".public" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
-        <facet ref="signatory.public_frozen" />
     </state>
     <state id="adopted_amendments" title="Adopted with amendments" 
         permissions_from_state="adopted"
