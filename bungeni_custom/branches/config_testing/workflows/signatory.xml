@@ -16,51 +16,35 @@
     <!-- features -->
     <feature name="audit" enabled="true" />
   
-   
-    <!-- facets -->
-    <facet name="draft_Clerk">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
-    </facet>
+
+    <!-- parent facets -->
     <facet name="draft_Drafter">
-        <allow permission=".View" roles="Drafter" />
-        <allow permission=".Edit" roles="Drafter" />
         <allow permission=".Add" roles="Drafter" />
-        <allow permission=".Delete" roles="Drafter" />
     </facet>
 
-    <facet name="internal" default="true">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly Owner Signatory MemberSenate MemberAssembly" /><!-- !+Authenticated? -->
-    </facet>
-    <facet name="internal_Owner">
-        <allow permission=".View" roles="Authenticated" />
-        <allow permission=".Edit" roles="Owner" />
-        <allow permission=".Add" roles="Owner" />
-    </facet>
-    <facet name="internal_frozen">
-        <allow permission=".View" roles="Owner" />
-    </facet>
-    <facet name="public_frozen">
-        <allow permission=".View" roles="Anonymous" />
-    </facet>
     
     <!-- workflow states -->       
     <state id="awaiting_consent" title="Awaiting Consent">
-        <facet ref=".draft_Drafter" />
+        <facet>
+            <allow permission=".View" roles="Drafter Signatory" />
+            <allow permission=".Edit" roles="Drafter Signatory" />
+            <allow permission=".Delete" roles="Drafter Signatory" />
+        </facet>
     </state>
-    
     <state id="consented" title="Signature Consented">
-        <facet ref=".public_frozen" />
+        <facet>
+            <allow permission=".View" roles="Anonymous" />
+        </facet>
     </state>
-    
     <state id="rejected" title="Signature Rejected">
-        <facet ref=".internal_frozen" />
+        <facet>
+            <allow permission=".View" roles="Owner" />
+        </facet>
     </state>
-    
     <state id="withdrawn" title="Signature Withdrawn">
-        <facet ref=".internal_frozen" />
+        <facet>
+            <allow permission=".View" roles="Owner" />
+        </facet>
     </state>
     
 

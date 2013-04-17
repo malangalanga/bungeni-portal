@@ -86,32 +86,28 @@
         <facet ref=".internal_Signatory" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
-        <facet ref="signatory.internal" />
     </state>
     <state id="redraft" title="Redraft" actions="version" note="document under review before resubmission">
         <facet ref=".redraft" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
-        <facet ref="signatory.internal_Owner" />
+        <facet ref="signatory.draft_Drafter" />
     </state>
     <state id="withdrawn_signatory" title="Dropped">
         <facet ref=".internal_Signatory" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
-        <facet ref="signatory.internal_frozen" />
     </state>
     <state id="withdrawn_internal" title="Withdrawn">
         <facet ref=".internal_Signatory" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
-        <facet ref="signatory.internal_frozen" />
     </state>
     <state id="submitted" title="Submitted to Clerk" 
             actions="set_doc_registry_number version" >
         <facet ref=".edit_Clerk" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
-        <facet ref="signatory.internal_frozen" />
         <facet ref="group_assignment.add_internal" />
     </state>
     <state id="reviewed" title="Reviewed by Clerk" 
@@ -119,7 +115,6 @@
         <facet ref=".edit_Speaker" />
         <facet ref="attachment.add_speaker" />
         <facet ref="event.add_speaker" />
-        <facet ref="signatory.internal_frozen" />
         <facet ref="group_assignment.add_internal" />
     </state> 
     <state id="referred_committee" 
@@ -146,7 +141,6 @@
         <facet ref=".public_edit_Clerk" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
-        <facet ref="signatory.public_frozen" />
         <facet ref="group_assignment.add_internal" />
     </state>
     <state id="first_reading_scheduled" title="First Reading Scheduled" permissions_from_state="gazetted" />
@@ -166,7 +160,6 @@
         <facet ref=".public" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
-        <facet ref="signatory.public_frozen" />
     </state>
     <state id="rejected" title="Rejected Bill" permissions_from_state="approved" />
     <state id="withdrawn" title="Bill Withdrawn" permissions_from_state="approved" />
