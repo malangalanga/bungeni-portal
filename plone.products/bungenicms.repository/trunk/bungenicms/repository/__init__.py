@@ -1,5 +1,8 @@
 """Main product initializer
 """
+# Creating alias for backward compatibility with apkn.repository
+import sys
+sys.modules['apkn.repository'] = sys.modules[__name__]
 
 from zope.i18nmessageid import MessageFactory
 from bungenicms.repository import config
