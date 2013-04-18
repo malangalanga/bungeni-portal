@@ -13,6 +13,10 @@
   
   $Id$
 -->
+<!--
+  the local namespace is an empty string 
+  namespace local=""
+-->
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <include href="common.rng"/>
   <start>
@@ -38,13 +42,14 @@
           <ref name="SPACE_SEPARATED_TOKENS"/>
         </attribute>
       </optional>
+      <!--
+        type-relative permission actions
+        i.e. each included action allowed to be in the form [type_key].{Action}, 
+        with the optional type_key defaulting to the type_key of the type 
+        "owning" this workflow.
+      -->
+      <ref name="FOREIGN_NS_ATTRS"/>
       <zeroOrMore>
-        <!--
-          type-relative permission actions
-          i.e. each included action allowed to be in the form [type_key].{Action}, 
-          with the optional type_key defaulting to the type_key of the type 
-          "owning" this workflow.
-        -->
         <ref name="ALLOW"/>
       </zeroOrMore>
       <zeroOrMore>
@@ -83,6 +88,7 @@
       <optional>
         <attribute name="note"/>
       </optional>
+      <ref name="FOREIGN_NS_ATTRS"/>
       <zeroOrMore>
         <element name="parameter">
           <!-- !+ name by feature -->
@@ -112,6 +118,7 @@
         <!-- default:false, may be true only once -->
         <attribute name="note"/>
       </optional>
+      <ref name="FOREIGN_NS_ATTRS"/>
       <zeroOrMore>
         <ref name="ALLOW"/>
       </zeroOrMore>
@@ -130,11 +137,6 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="tags">
-          <ref name="SPACE_SEPARATED_SYMBOLS"/>
-        </attribute>
-      </optional>
-      <optional>
         <attribute name="note"/>
       </optional>
       <optional>
@@ -143,29 +145,61 @@
         </attribute>
       </optional>
       <!-- default:false -->
-      <!-- if (permissions_from state | permissions_from_parent) -> then NO facets -->
+      <!-- if (permissions_from_state | parent_permissions) -> then NO facets -->
       <choice>
         <optional>
-          <!-- may have EITHER permissions_from_state OR permissions_from_parent -->
+          <!-- may have EITHER permissions_from_state OR parent_permissions -->
           <choice>
+            <!-- use exact permissions as specified by the name state -->
             <attribute name="permissions_from_state">
               <ref name="SYMBOL_NAME"/>
             </attribute>
             <!-- state.id -->
-            <attribute name="permissions_from_parent">
+            <!--
+              use the exact permissions as explicitly specified by the parent 
+              (in its current state) for this child document type
+            -->
+            <attribute name="parent_permissions">
               <data type="boolean"/>
             </attribute>
           </choice>
           <!-- default:false -->
         </optional>
-        <zeroOrMore>
-          <element name="facet">
-            <attribute name="ref">
-              <data type="token" datatypeLibrary=""/>
-            </attribute>
-            <!-- [ {workflow_feature.@name} ].{facet.@name} -->
-          </element>
-        </zeroOrMore>
+        <group>
+          <optional>
+            <!--
+              anonymous same-workflow facet:
+              - there may be only one anonymous facet per state 
+                (that would be instead of referring to one from same workflow)
+              - an anonymous state facet is NOT available for re-use from any 
+                other state (in same or other workflow)
+              - an anonymous facet may (of course) NOT be set as the default
+                facet for the workflow
+            -->
+            <element name="facet">
+              <optional>
+                <attribute name="note"/>
+              </optional>
+              <zeroOrMore>
+                <ref name="ALLOW"/>
+              </zeroOrMore>
+            </element>
+          </optional>
+          <zeroOrMore>
+            <!--
+              one ref to a workflow facet (if an anonymous facet is NOT present),
+              plus up to one facet ref per feature
+            -->
+            <element name="facet">
+              <attribute name="ref">
+                <ref name="FACET_REFERENCE"/>
+              </attribute>
+              <optional>
+                <attribute name="note"/>
+              </optional>
+            </element>
+          </zeroOrMore>
+        </group>
       </choice>
     </element>
   </define>
@@ -233,5 +267,25 @@
         <attribute name="note"/>
       </optional>
     </element>
+  </define>
+  <!--
+    A valid facet reference may be composed of
+    - (optional) a workflow feature name : SYMBOL_NAME
+    - (optional) IF a feature name is specified, this may be also qualified 
+      further with:
+      - a literal "#" char
+      - followed by a type_key : SYMBOL_NAME
+    - a single literal "." char
+    - a facet name : SYMBOL_NAME
+    where SYMBOL_NAME is a valid programming language symbol 
+    (see common.rnc). Leading/trailing white-space is allowed.
+    
+    [ {workflow_feature.@name} [ #{qualifier type_key} ] ].{facet.@name}
+    
+  -->
+  <define name="FACET_REFERENCE">
+    <data type="string">
+      <param name="pattern">\s*([a-zA-Z_][\w_]*([#][a-zA-Z_][\w_]*)?)?\.[a-zA-Z_][\w_]*\s*</param>
+    </data>
   </define>
 </grammar>

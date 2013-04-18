@@ -130,10 +130,17 @@ def get_context_roles(context, principal):
                 ctx, IPrincipalRoleMap, default=None)
             if prm:
                 prms.append(prm)
+            group_assignment = getattr(ctx, "group_assignment", list())
+            trusted_ga = proxy.removeSecurityProxy(group_assignment)
+            for ga in trusted_ga:
+                gprm = zope.component.queryAdapter(
+                    ga.group, IPrincipalRoleMap, default=None)
+                if gprm:
+                    prms.append(gprm)
             _build_principal_role_maps(getattr(ctx, '__parent__', None))
     _build_principal_role_maps(context)
     prms.reverse()
-    
+
     roles, message = [], []
     Allow = zope.securitypolicy.settings.Allow
     Deny = zope.securitypolicy.settings.Deny
@@ -178,7 +185,7 @@ def get_workspace_roles():
     roles = set()
     user = bungeni.models.utils.get_login_user()
     groups = session.query(bungeni.models.domain.Group).filter(
-        bungeni.models.domain.Group.group_principal_id.in_(
+        bungeni.models.domain.Group.principal_name.in_(
             principal.groups.keys())).all()
     principal_groups = [
         delegate.login for delegate in
@@ -190,7 +197,7 @@ def get_workspace_roles():
         prm = zope.component.queryAdapter(
             context, IPrincipalRoleMap, default=None)
         if prm:
-            pg = principal_groups + [group.group_principal_id]
+            pg = principal_groups + [group.principal_name]
             for principal_id in pg:
                 l_roles = prm.getRolesForPrincipal(principal_id)
                 for role in l_roles:
@@ -233,6 +240,7 @@ def get_request_context_roles(request):
         roles = ["bungeni.Anonymous"]
     else: 
         roles = get_context_roles(context, principal)
+        roles.append("bungeni.Authenticated")
         if is_admin(context):
             roles.append("bungeni.Admin")
     log.debug(""" [get_request_context_roles]

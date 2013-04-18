@@ -89,6 +89,7 @@ def AdmissibleDateField(name="admissible_date"):
 # of the value itself or of any label that may be associated with it).
 
 
+# !+ should derive from PrincipalDescriptor
 class UserDescriptor(ModelDescriptor):
     order = 4 # top
     localizable = True
@@ -436,6 +437,7 @@ class GroupMembershipDescriptor(ModelDescriptor):
         return naming.plural(display_name) # !+unicode
 
 
+# !+ should derive from PrincipalDescriptor 
 class GroupDescriptor(ModelDescriptor):
     localizable = True # !+ARCHETYPE_LOCALIZATION
     scope = "archetype"
@@ -781,7 +783,7 @@ class AttachmentDescriptor(ModelDescriptor):
         F(name="name",
             label="Name",
             localizable=[
-                show("view add"),
+                show("view edit add"),
             ],
             value_type="text",
             render_type="no_input",
@@ -789,7 +791,7 @@ class AttachmentDescriptor(ModelDescriptor):
         F(name="mimetype",
             label="MIME Type",
             localizable=[
-                show("view add"),
+                show("view edit add"),
             ],
             value_type="text",
             render_type="no_input",
@@ -815,8 +817,7 @@ class AttachmentDescriptor(ModelDescriptor):
         ),
         LanguageField("language"), # [user-req]
     ]
-
-
+    
 ''' !+VERSION_CLASS_PER_TYPE
 class AttachedFileVersionDescriptor(ModelDescriptor):
     localizable = True
@@ -1166,7 +1167,17 @@ class DocVersionDescriptor(VersionDescriptor):
     fields = \
         deepcopy(VersionDescriptor.fields) + \
         deepcopy(DocDescriptor.fields)
-
+    replace_field(fields,
+        F(name="doc_type",
+            label="Document Type",
+            required=True,
+            localizable=[
+                show("view listing"), 
+            ],
+            value_type="vocabulary",
+            render_type="single_select",
+            vocabulary="doc_version_tmp_aggregated_type",
+        ))
 
 class AttachmentVersionDescriptor(VersionDescriptor):
     """UI Descriptor for Attachment archetype."""
@@ -1783,3 +1794,4 @@ class OAuthApplicationDescriptor(ModelDescriptor):
           render_type="text_line"
         ),
     ]
+

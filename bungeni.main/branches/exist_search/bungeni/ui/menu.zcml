@@ -290,14 +290,8 @@
         order="22"
     />
     
-    <browser:menuItem menu="context_actions"		
-        for="bungeni.models.interfaces.IQuestion"		
-	layer=".interfaces.IWorkspaceOrAdminSectionLayer"
-        action="respond" 
-        title="Respond to question"
-        order="11"		
-        permission="bungeni.response.Edit"		
-    />		
+    
+    <!-- event archetype -->
     <browser:menuItem menu="context_actions" 
         for="bungeni.models.interfaces.IEvent"
         action="edit"
@@ -314,6 +308,7 @@
         permission="bungeni.event.Delete"
         layer="bungeni.ui.interfaces.IBungeniSkin"
     />
+    
     
     <browser:menuItem menu="context_actions"
         for="bungeni.models.interfaces.IEditorialNote"
@@ -732,20 +727,6 @@
      factory=".menu.TranslationSubMenuItem"
      provides="ploned.ui.interfaces.IContentMenuItem" /-->
 
-  <!-- calendar actions -->
-
-    <browser:defaultView name="view"
-        for="bungeni.core.interfaces.IDailySchedulingContext"
-    />
-    
-    <browser:menuItem menu="context_actions"
-        for="bungeni.core.interfaces.IDailySchedulingContext"
-        action="view"
-        title="View"
-        order="0"
-        permission="bungeni.sitting.View"
-    />
-
   <browser:menuItem
      menu="discussion_actions"
      for="bungeni.models.interfaces.IItemScheduleDiscussion"
@@ -835,7 +816,7 @@
 
     <!-- scheduling agenda items -->
     <browser:menuItem menu="plone_contentmenu"
-        for="bungeni.core.schedule.PrincipalGroupSchedulingContext"
+        for="bungeni.core.schedule.WorkspaceSchedulingContext"
         title="Add agenda item..."
         action="./agendaitems/add"
         permission="bungeni.agenda_item.Add"
@@ -924,7 +905,7 @@
         for="bungeni.alchemist.interfaces.IAlchemistContent"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         >
-        <browser:menuItem action="view" title="View" order="0" />
+        <browser:menuItem action="index" title="View" order="0" />
     </browser:menuItems>
     <browser:menuItems menu="context_actions"
         for="bungeni.core.workflow.interfaces.IWorkflowed"
@@ -1174,6 +1155,14 @@
         layer=".interfaces.IWorkspaceSchedulingSectionLayer"
         order="40"
     />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.core.interfaces.IWorkspaceUnderConsiderationContainer"
+        layer=".interfaces.IWorkspaceUnderConsiderationSectionLayer"
+        action="../../create-report"
+        title="Create reports"
+        permission="bungeni.ui.workspace.View"
+        order="40"
+    />
     
    <!--browser:menuItem
      menu="context_actions"
@@ -1204,7 +1193,7 @@
     <!-- group assignment -->
     <browser:menuItem menu="context_actions"
         for="bungeni.models.interfaces.IGroupDocumentAssignment"
-        action="view"
+        action="index"
         title="View"
         order="0"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
@@ -1243,7 +1232,7 @@
     />
     <browser:menuItem menu="context_actions"
         for="bungeni.models.interfaces.IDebateRecord"
-        action="view"
+        action="index"
         title="View"
         order="1"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
@@ -1256,6 +1245,30 @@
         order="2"
         layer=".interfaces.IWorkspaceOrAdminSectionLayer"
         permission="bungeni.debate_media.View"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IDebateMedia"
+        action="add"
+        title="Add"
+        order="0"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.debate_media.Add"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IDebateMedia"
+        action="edit"
+        title="Edit"
+        order="1"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.debate_media.Edit"
+    />
+    <browser:menuItem menu="context_actions"
+        for="bungeni.models.interfaces.IDebateMedia"
+        action="delete"
+        title="Delete"
+        order="2"
+        layer=".interfaces.IWorkspaceOrAdminSectionLayer"
+        permission="bungeni.debate_media.Delete"
     />
     <browser:menuItem menu="context_actions"
         for="bungeni.models.interfaces.IDebateRecord"

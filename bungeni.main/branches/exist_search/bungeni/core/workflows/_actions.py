@@ -46,9 +46,6 @@ from bungeni.core.workflows.utils import (
     # when a doc is withdrawn
     unschedule_doc,
     
-    # question !+CUSTOM
-    assign_role_minister_question,
-    
     # when a sitting's agenda is published
     schedule_sitting_items,
     
@@ -83,9 +80,36 @@ def dissolve(group):
     utils.unset_group_local_role(group)
 
 
-# user
-@describe(_(u"Assign owner role to the user"))
-def assign_owner_role(user):
-    utils.assign_role("bungeni.Owner", user.login, user)
-    user.date_of_death = None
+# doc
+@describe(_(u"Assign the group role to the doc"))
+def assign_role_group(doc):
+    """Assign the role of the doc's group, to the group itself, onto doc.
+    """
+    # !+PrincipalRoleMapContextData infer role from context data
+    from bungeni.models.interfaces import IDoc
+    assert IDoc.providedBy(doc), "Not a Doc: %s" % (doc)
+    if doc.group is not None:
+        utils.assign_role(doc.group.group_role, doc.group.principal_name, doc)
+
+def propagate_parent_assigned_group_role(child_doc):
+    """Propagate the role of the group that is assigned to the parent doc of 
+    this child doc.
+    """
+    from bungeni.models.interfaces import IDoc
+    assert IDoc.providedBy(child_doc), "Not a Doc: %s" % (child_doc)
+    assert child_doc.group is None, "!+GROUP_ID must be unset! %s" % (child_doc)
+    def get_parent_doc_assigned_group(child_doc):
+        parent_group_assignments = child_doc.head.group_assignment
+        for ag in parent_group_assignments:
+            # !+QUALIFIED_FEATURES(mr, apr-2013) may need to "qualify" each assignment!
+            # !+MULTI_ASSIGNMENTS_MULTI_MEMBERSHIPS(mr, apr-2013) for now we just
+            # take the first assigned group we find, but this is obvioulsy 
+            # incorrect! Need to determine: in case doc has been assigned to 
+            # more than one group, within which is the current user acting
+            # (keeping in mind, also that the current user may be member of more
+            # than one group that the doc is assigned to!).
+            return ag.group
+    pag = parent_assigned_group = get_parent_doc_assigned_group(child_doc)
+    assert pag is not None, child_doc
+    utils.assign_role(pag.group_role, pag.principal_name, child_doc)
 

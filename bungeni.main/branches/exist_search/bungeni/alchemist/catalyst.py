@@ -12,11 +12,7 @@ log = __import__("logging").getLogger("bungeni.alchemist")
 # List everything from this module intended for package-external use.
 __all__ = [
     "catalyse_system_descriptors"
-    #"SQLAlchemySchemaTranslator", # alias -> ore.alchemist.sa2zs
-    #"transmute",        # alias -> ore.alchemist.sa2zs !+ALCHEMIST_INTERNAL
 ]
-from ore.alchemist.sa2zs import SQLAlchemySchemaTranslator
-from ore.alchemist.sa2zs import transmute
 
 # from bungeni.alchemist, used only here
 
@@ -28,6 +24,7 @@ from bungeni.alchemist.interfaces import (
 )
 from bungeni.alchemist.container import AlchemistContainer
 from bungeni.alchemist.traversal import CollectionTraverser, ManagedContainerDescriptor
+from bungeni.alchemist.sa2zs import transmute
 from bungeni.alchemist import utils
 
 #
@@ -50,20 +47,23 @@ import bungeni.models.domain as MODEL_MODULE
 import bungeni.models.domain as CONTAINER_MODULE
 #import bungeni.ui.content as UI_MODULE
 
+
 def validate_required_fields(ti):
-    """Raise an exception if a field is not required in ui but required in db"""
+    """Raise a ValueError if a field is not required in ui but required in db.
+    """
     mapper = orm.class_mapper(ti.domain_model)
-    if not mapper: return
+    if not mapper: 
+        return
     type_name = ti.workflow_key or naming.polymorphic_identity(ti.domain_model)
     for field_name, field in ti.descriptor_model.fields_by_name.iteritems():
         if field.property and not field.property.required:
             column = mapper.columns.get(field_name)
             if column is not None:
                 if column.nullable == False:
-                    raise Exception("Descriptor Error - %s: Field %s is "
-                        "required in the db. You must set required='true'." %
-                        (type_name, field_name)
-                    )
+                    raise ValueError("Descriptor %r field %r is required in "
+                        "the db. Must set to be required." % (
+                            type_name, field_name))
+
 
 def catalyse_system_descriptors(module):
     """Catalyze system descriptor classes (with by-name-convention associated 
@@ -79,7 +79,6 @@ def catalyse_system_descriptors(module):
     import sys
     import inspect
     from bungeni.alchemist.descriptor import IModelDescriptor
-    from bungeni.models import domain
     from bungeni.capi import capi
     from bungeni.ui.utils import debug
     
@@ -107,16 +106,16 @@ def catalyse_system_descriptors(module):
             orm.class_mapper(domain_model)
             return True
         except orm.exc.UnmappedClassError:
-            # unmapped class e.g. Address, Version
+            # unmapped class e.g. Version
             return False
     
     for descriptor_model in descriptor_classes():
         descriptor_name = descriptor_model.__name__
         type_key = naming.type_key("descriptor_class_name", descriptor_name)
         # Associate each descriptor to the dedicated domain type via naming 
-        # convention, and only catalysze (descriptor, model) pairs 
+        # convention, and only catalyse (descriptor, model) pairs 
         # for which the domain type is mapped. Otherwise, ignore.
-        domain_model = getattr(domain, naming.model_name(type_key), None)
+        domain_model = getattr(MODEL_MODULE, naming.model_name(type_key), None)
         if not (domain_model and is_model_mapped(domain_model)):
             log.warn("Not catalysing: %s", descriptor_name)
             continue

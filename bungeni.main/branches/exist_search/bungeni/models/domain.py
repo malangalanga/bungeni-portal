@@ -144,10 +144,12 @@ class Entity(object):
 class Principal(Entity):
     """Base model for a Principal, that is a User or a Group.
     """
+    principal_type = None
 
 class User(Principal):
     """Domain Object For A User. General representation of a person.
     """
+    principal_type = "user"
     available_dynamic_features = ["address"]
     
     interface.implements(
@@ -157,23 +159,26 @@ class User(Principal):
     )
     
     def __init__(self, login=None, **kw):
-        # !+PRINCIPAL_TYPE for some reason this always ends up being set up 
-        # correctly for User, but not for Group.
-        #assert not self.principal_type, "principal_type"
-        #self.principal_type = "user"
         if login:
             self.login = login
         super(User, self).__init__(**kw)
         self.salt = self._makeSalt()
     
+    def on_create(self):
+        from bungeni.core.workflows import utils
+        utils.assign_ownership(self)
+    
     def _makeSalt(self):
         return "".join(random.sample(string.letters[:52], 12))
     
-    def setPassword(self, password):
-        self.password = self.encode(password)
-    def getPassword(self):
-        return None
-    _password = property(getPassword, setPassword)
+    def _password():
+        doc = "Set the password, encrypting it. Cannot retrieve."
+        def fget(self):
+            return None
+        def fset(self, password):
+            self.password = self.encode(password)
+        return locals()
+    _password = property(**_password())
     
     def encode(self, password):
         return md5.md5(password + self.salt).hexdigest()
@@ -182,11 +187,14 @@ class User(Principal):
         attempt = self.encode(password_attempt)
         return attempt == self.password
     
-    def _get_status(self):
-        return self.active_p
-    def _set_status(self, value):
-        self.active_p = value
-    status = property(_get_status, _set_status)
+    def status():
+        doc = """A "status" attribute as alias onto "active_p" attribute."""
+        def fget(self):
+            return self.active_p
+        def fset(self, value):
+            self.active_p = value
+        return locals()
+    status = property(**status())
     
     delegations = one2many("delegations",
         "bungeni.models.domain.UserDelegationContainer", "user_id")
@@ -219,6 +227,7 @@ class UserSubscription(Entity):
 class Group(Principal):
     """An abstract collection of users.
     """
+    principal_type = "group"
     available_dynamic_features = ["address"]
     interface.implements(
         interfaces.IBungeniGroup, 
@@ -231,19 +240,13 @@ class Group(Principal):
     
     def __init__(self, **kw):
         super(Group, self).__init__(**kw)
-        # !+PRINCIPAL_TYPE
-        assert not self.principal_type, "principal_type"
-        self.principal_type = "group"
-        # !+GROUP_PRINCIPAL_ID set it here, derive it from identifier?
-        assert not self.group_principal_id, "group_principal_id"
-        self.group_principal_id = "_TMP_INIT_GROUP_PRINCIPAL_ID_"
     
     def on_create(self):
         """Application-internal creation logic i.e. logic NOT subject to config.
         """
         # requires self db id to have been updated
         from bungeni.core.workflows import utils
-        utils.assign_role_owner_to_login(self)
+        utils.assign_ownership(self)
         utils.unset_group_local_role(self)
     
     def active_membership(self, user_id):
@@ -278,6 +281,9 @@ class GroupMembership(HeadParentedMixin, Entity):
     @property
     def image(self):
         return self.user.image
+
+# !+ alias, as "mapping" of archetype key 
+Member = GroupMembership
 
 
 class OfficesHeld(Entity):
@@ -371,13 +377,11 @@ class Legislature(object):
 
 #
 
+# !+RENAME chamber
 class Parliament(Group):
     """A parliament.
     """
     interface.implements(interfaces.IParliament)
-    
-    venues = one2many("venues",
-        "bungeni.models.domain.VenueContainer", "group_id")
 
 class MemberOfParliament(GroupMembership):
     """Defined by groupmembership and additional data.
@@ -461,7 +465,7 @@ class Address(HeadParentedMixin, Entity):
         """
         # requires self db id to have been updated
         from bungeni.core.workflows import utils
-        utils.assign_role_owner_to_login(self)
+        utils.assign_ownership(self)
 
 # !+ADDRESS get rid of these two classes, just use Address?
 class UserAddress(Address):
@@ -512,6 +516,7 @@ class vp(object):
         """VerticalProperty of type datetime.
         """
 
+
 class Doc(Entity):
     """Base class for a workflowed parliamentary document.
     """
@@ -531,12 +536,12 @@ class Doc(Entity):
         """
         # requires self db id to have been updated
         from bungeni.core.workflows import utils
-        utils.assign_role_owner_to_login(self)
+        utils.assign_ownership(self)
         # !+utils.setParliamentId(self)
     
     # !+AlchemistManagedContainer these attribute names are part of public URLs!
     # !+item_id->head_id
-        
+    
     def _get_workflow_date(self, *states):
         """ (states:seq(str) -> date
         Get the date of the most RECENT workflow transition to any one of 
@@ -609,63 +614,81 @@ class ChangeTree(Entity):
 # aspects via the self.audit instance (and its type)?
 class Version(Change):
     """A specialized change type, with the information of a version (a special 
-    kind of change action) of an object.
+    kind of change action) of an object. 
     
-    Behaves somewhat like a combined Change and Audit record, as this will 
-    automatically try to resolve additional attrs off self.audit before failing.
+    Behaves somewhat like a combined Change and Audit record--attributes not 
+    found on self (Change) will only fail if a further attempt to resolve them
+    off self.audit fails. 
+    
+    This is an "abstract" class, it is not catalysed, and only sub-classes 
+    are ever instantiated.
     """
     interface.implements(
         interfaces.IVersion,
     )
     
-    @property
-    def __name__(self):
-        return "ver-%s" % (self.seq)
+    '''!+
+    def __init__(self, **kw):
+        # !+SA_INCORRECT_TYPE_DEBUG strangely, sometimes the type of 
+        # (this change's) self.audit that sqlalchemy returns does not 
+        # correspond to self.head...
+        super(Version, self).__init__(**kw)
+        audit_id = self.audit_id
+        def get_correctly_typed_change(change):
+            for v in self.head.versions:
+                if v.audit_id == audit_id:
+                    return v
+        correctly_typed_change = get_correctly_typed_change(self)
+        if correctly_typed_change and correctly_typed_change is not self:
+            print ("!+SA_INCORRECT_TYPE_DEBUG \n"
+                "       %s.%s head/id=%s/%s, audit/id=%s/%s \n"
+                "           SA INCORRECT TYPE:%s \n"
+                "           SHOULD HAVE BEEN:%s" % (
+                    type(self).__name__, name, 
+                    self.head, self.head_id, 
+                    self.audit, audit_id, 
+                    self, correctly_typed_change))
+            import pdb; pdb.set_trace()
+        # !+/SA_INCORRECT_TYPE_DEBUG
+    '''
     
-    # !+version_feature_attachment should only be when type(self.head) is 
-    # attachmentable, would need a version class per type
-    # !+version_feature_event some for other features with sub-types?
-    files = one2many("files",
-        "bungeni.models.domain.AttachmentContainer", "head_id")
+    #@property
+    #def __name__(self):
+    #    return "ver-%s" % (self.seq)
+    def __name__():
+        doc = "dynamically set __name__ property, with a DEBUG setter"
+        def fget(self):
+            return "ver-%s" % (self.seq)
+        def fset(self, name):
+            # !+CONTAINED can't set attribute - alchemist/container.py contained()
+            # -> obj.__name__ = name
+            if not name == self.__name__:
+                print "**RESETTING** domain.Version.name:", self, self.__name__, name
+                import pdb; pdb.set_trace()
+        return locals()
+    __name__ = property(**__name__())    
     
     def __getattr__(self, name):
         """Try to pick any attribute (not found on this change record--this 
-        method only gets called when a nonexistent attribute is accessed) off 
+        method only gets called when a non-existent attribute is accessed) off 
         the related audit snapshot record (as every change record is related 
         to a type-dedicated audit record).
 
         !+ should this be on Change i.e. for all change actions?
-        !+ possible issue with attribute hiding, if an type has a 
-           same-named property as one in in Change type/table, then that one
-           will always be retrieved first (and so the one on the related
-           Audit type/table will be unreachable in this way).
         """
+        audit = self.audit
         try:
-            audit = object.__getattribute__(self, "audit")
-            return object.__getattribute__(audit, name)
+            return getattr(audit, name)
         except AttributeError:
-            pass #try to lookup from version instance
-        try:
-            return object.__getattribute__(self, name)
-        except AttributeError:
-            # !+SA_INCORRECT_TYPE_DEBUG strangely, sometimes the type of 
-            # (this change's) self.audit that sqlalchemy returns does not 
-            # correspond to self.head...
-            audit_id = self.audit_id
-            def get_correctly_typed_change(change):
-                for v in change.head.versions:
-                    if v.audit_id == audit_id:
-                        return v
-            correctly_typed_change = get_correctly_typed_change(self)
-            if correctly_typed_change and correctly_typed_change is not self:
-                print ("*** %s.%s head/id=%s/%s, audit/id=%s/%s \n"
-                    "    SA INCORRECT TYPE:%s \n"
-                    "    SHOULD HAVE BEEN:%s" % (
-                        type(self).__name__, name, 
-                        self.head, self.head_id, 
-                        self.audit, audit_id, 
-                        self, correctly_typed_change))
-            # !+/SA_INCORRECT_TYPE_DEBUG
+            # !+DocVersion.filevers
+            try:
+                from bungeni.alchemist import utils
+                return utils.FILES_VERSION_CONTAINER_ATTRIBUTE_ERROR_HACK(self, name)
+            except:
+                import sys
+                from bungeni.ui.utils import debug
+                debug.log_exc(sys.exc_info(), log_handler=log.error)
+            
             raise AttributeError(
                 "%r [audit_id=%r, audit_type=%r] object has no attribute %r" % (
                     self, self.audit_id, self.audit_type, name))
@@ -727,119 +750,35 @@ class DocAudit(Audit):
     ]
 
 class DocVersion(Version):
-    """A version of a document.
+    """A version-change of a document.
     """
+    interface.implements(
+        interfaces.IDocVersion,
+    )
     # !+version_feature_attachment
-    files = one2many("files",
-        "bungeni.models.domain.AttachmentVersionContainer", "head_id")
-    #!+!+version_feature_event
+    # !+FILES_VERSION_CONTAINER_ATTRIBUTE_ERROR_HACK note, "declaring" the 
+    # container with bungeni.alchemist.model.add_container_property_to_model
+    # gives same errors!
+    filevers = one2manyindirect("filevers",
+        "bungeni.models.domain.AttachmentVersionContainer", "head_id", "doc_id")
+    
+    # !+attachment_version.head (->Attachment) and attachment_version.head_id (->Doc) 
+    # discrepancy!
+    
+    # !+version_feature_event
     #events = one2many("events",
     #    "bungeni.models.domain.DocVersionContainer", "head_id")
-    
+
+
 #!+CUSTOM
 class AgendaItem(Doc):
     """Generic Agenda Item that can be scheduled on a sitting.
     """
     interface.implements(
-        interfaces.IBungeniParliamentaryContent,
+        interfaces.IBungeniParliamentaryContent, # !+only used by AgendaItem?! Get rid of it, or rename accordingly
         interfaces.IAgendaItem,
     )
 #AgendaItemAudit
-
-#!+CUSTOM
-class Bill(Doc):
-    """Bill domain type.
-    """
-    interface.implements(
-        interfaces.IBungeniParliamentaryContent,
-        interfaces.IBill,
-    )
-    
-    #!+doc_type: default="government", nullable=False,
-    
-    # !+BILL_MINISTRY(fz, oct-2011) the ministry field here logically means the 
-    # bill is presented by the Ministry and so... Ministry should be the author,
-    # not a "field" 
-    # !+MINISTRY_ID should be removed or made simply an alias to the
-    # sqlalchemy.orm.attributes.InstrumentedAttribute Bill.group_id
-    def ministry_id():
-        doc = "Related group must be a ministry."
-        def fget(self):
-            return self.group_id
-        def fset(self, ministry_id):
-            # !+validate ministry group constraint
-            self.group_id = ministry_id
-        def fdel(self):
-            self.group_id = None
-        return locals()
-    ministry_id = property(**ministry_id())
-    
-    extended_properties = [
-        #("short_title", vp.TranslatedText),
-    ]
-#BillAudit
-
-class Motion(Doc):
-    """Motion domain type.
-    """
-    interface.implements(
-        interfaces.IBungeniParliamentaryContent,
-        interfaces.IMotion,
-    )
-#MotionAudit
-
-
-class Question(Doc):
-    """Question domain type.
-    """
-    interface.implements(
-        interfaces.IBungeniParliamentaryContent,
-        interfaces.IQuestion,
-    )
-    
-    #!+doc_type: default="ordinary", nullable=False,
-    #!+response_type: default="oral", nullable=False,
-    
-    # !+MINISTRY_ID same as for Bill!
-    def ministry_id():
-        doc = "Related group must be a ministry."
-        def fget(self):
-            return self.group_id
-        def fset(self, ministry_id):
-            # !+validate ministry group constraint
-            self.group_id = ministry_id
-        def fdel(self):
-            self.group_id = None
-        return locals()
-    ministry_id = property(**ministry_id())
-    
-    extended_properties = [
-        #("response_type", vp.Text),
-        #("response_text", vp.TranslatedText),
-    ]
-#QuestionAudit
-
-class TabledDocument(Doc):
-    """Tabled document: captures metadata about the document (owner, date, 
-    title, description) and can have multiple physical documents attached.
-    
-    The tabled documents form should have the following:
-    - Document title
-    - Document link
-    - Upload field (s)
-    - Document source  / author agency (who is providing the document)
-      (=> new table agencies)
-    
-    - Document submitter (who is submitting the document)
-      (a person -> normally mp can be other user)
-    
-    It must be possible to schedule a tabled document for a sitting.
-    """
-    interface.implements(
-        interfaces.IBungeniParliamentaryContent,
-        interfaces.ITabledDocument,
-    )
-#TabledDocumentAudit
 
 
 class Event(HeadParentedMixin, Doc):
@@ -876,7 +815,7 @@ class Attachment(HeadParentedMixin, Entity):
         """
         # requires self db id to have been updated
         from bungeni.core.workflows import utils
-        utils.assign_role_owner_to_login(self)
+        utils.assign_ownership(self)
 
 class AttachmentAudit(Audit):
     """An audit record for an attachment.
@@ -886,6 +825,14 @@ class AttachmentAudit(Audit):
 class AttachmentVersion(Version):
     """A version of an attachment.
     """
+    #!+STRING_KEY
+    def string_key(self):
+        """A more useful string key for version instances, independent of db 
+        PK identity but still uniquely identifies the attachment version 
+        instance; for use in container listings (bubbles up to public URL).
+        """
+        return "obj-%s-%s" % (self.audit.attachment_id, self.seq)
+
 
 class Heading(Entity):
     """A heading in a report.
@@ -917,7 +864,10 @@ class Signatory(Entity):
     @property
     def owner(self):
         return self.user
-        
+    
+    # !+OWNER_TO_DRAFTER(mr, apr-2013) switch current Owner role to 
+    # Drafter for (editorial owner only) signatories
+    
     @property
     def party(self):
         return self.member.party
@@ -948,12 +898,9 @@ class Session(Entity):
 
     sittings = one2many("sittings",
         "bungeni.models.domain.SittingContainer", "session_id",
-        [("group_id","parliament_id")]
+        [("group_id", "parliament_id")]
     )
-    agendaitems = one2manyindirect("agendaitems",
-        "bungeni.models.domain.AgendaItemContainer", "parliament_id", 
-        "parliament_id")
-    
+
     @property
     def group_id(self):
         return self.parliament_id
@@ -1151,6 +1098,8 @@ class SittingReport(Entity):
     """
     interface.implements(
         interfaces.ISittingReport,
+        interfaces.IBungeniContent,
+        interfaces.IFeatureDownload,
     )
     
     def __getattr__(self, name):
@@ -1159,9 +1108,9 @@ class SittingReport(Entity):
             return super(SittingReport, self).__getattr__(name)
         except AttributeError:
             try:
-                return getattr(self.report, name)
+                return object.__getattribute__(self.report, name)
             except AttributeError:
-                return getattr(self.sitting, name)
+                return object.__getattribute__(self.sitting, name)
 
 # !+ this should really be called "FieldTranslation", and docstring should be pertinent!!
 class ObjectTranslation(object):
@@ -1181,6 +1130,8 @@ class DebateRecord(Entity):
     interface.implements(interfaces.IDebateRecord)
     media = one2many("media",
         "bungeni.models.domain.DebateMediaContainer", "debate_record_id")
+
+    type = "debate_record"
 
 class DebateRecordItem(Entity):
     """Items that may be included in a debate record
@@ -1219,6 +1170,11 @@ class OAuthAuthorization(Entity):
     """OAuth authorization records
     """
     interface.implements(interfaces.IOAuthAuthorization)
+
+class OAuthAuthorizationToken(Entity):
+    """OAuth authorization tokens
+    """
+    interface.implements(interfaces.IOAuthAuthorizationToken)
 
 class OAuthAccessToken(Entity):
     """OAuth access token

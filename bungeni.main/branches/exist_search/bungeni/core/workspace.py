@@ -437,12 +437,11 @@ component.provideUtility(WorkspaceTabsUtility())
 
 def load_workspaces():
     for type_key, ti in capi.iter_type_info():
-        workflow = ti.workflow
-        if workflow and workflow.has_feature("workspace"):
-            load_workspace("%s.xml" % type_key, ti.domain_model)
+        if ti.workflow and ti.workflow.has_feature("workspace"):
+            load_workspace("%s.xml" % type_key, ti.domain_model, ti.workflow)
 
 @capi.bungeni_custom_errors
-def load_workspace(file_name, domain_class):
+def load_workspace(file_name, domain_class, workflow):
     """Loads the workspace configuration for each documemnt.
     """
     workspace_utility = component.getUtility(IWorkspaceTabsUtility)
@@ -452,6 +451,9 @@ def load_workspace(file_name, domain_class):
     item_type = file_name.split(".")[0]
     workspace_utility.register_item_type(domain_class, item_type)
     for state in workspace.iterchildren(tag="state"):
+        # Raises invalid state error if there is no such state defined in the
+        # workflow
+        workflow.get_state(state.get("id"))
         for tab in state.iterchildren(tag="tab"):
             assert tab.get("id") in capi.workspace_tabs, \
                 "Workspace configuration error : " \
@@ -483,9 +485,11 @@ class WorkspaceUnderConsiderationContainer(WorkspaceBaseContainer):
 
     def domain_status(self):
         domain_status_map = {}
+        workspace_roles = set(get_workspace_roles())
         for type_key, ti in capi.iter_type_info():
             workflow = ti.workflow
-            if workflow and workflow.has_feature("workspace"):
+            if (workflow and workflow.has_feature("workspace") and
+                (not workspace_roles.isdisjoint(set(workflow.roles_used)))):
                 states = workflow.get_state_ids(
                     tagged=["public"], not_tagged=["terminal"],
                     conjunction="AND")
@@ -583,8 +587,8 @@ class WorkspaceGroupsContainer(WorkspaceBaseContainer):
     @staticmethod
     def string_key(instance):
         unproxied = removeSecurityProxy(instance)
-        group_principal_id = unproxied.group_principal_id
-        url_id = str(group_principal_id).replace(".", "-")
+        principal_name = unproxied.principal_name
+        url_id = str(principal_name).replace(".", "-")
         return url_id
 
     @staticmethod
@@ -594,8 +598,8 @@ class WorkspaceGroupsContainer(WorkspaceBaseContainer):
         properties = identity_key.split("-")
         if len(properties) != 3:
             raise ValueError
-        group_principal_id = identity_key.replace("-", ".")
-        return domain.Group, group_principal_id
+        principal_name = identity_key.replace("-", ".")
+        return domain.Group, principal_name
 
     def title_column(self, domain_class):
         table = orm.class_mapper(domain_class).mapped_table
@@ -603,20 +607,20 @@ class WorkspaceGroupsContainer(WorkspaceBaseContainer):
         # TODO : update to support other fields
         column = table.columns[utk["full_name"]]
         return column
-
+    
     def get(self, name, default=None):
         try:
-            domain_class, group_principal_id = self.value_key(name)
+            domain_class, principal_name = self.value_key(name)
         except ValueError:
             return default
         session = Session()
         try:
             value = session.query(domain_class).filter(
-                domain_class.group_principal_id == group_principal_id).one()
+                domain_class.principal_name == principal_name).one()
         except orm.exc.NoResultFound:
             return default
         return contained(value, self, name)
-
+    
     def filter_type(self, query, domain_class, kw):
         if kw.get("filter_type", None):
             query = query.filter(domain_class.type == kw.get("filter_type"))
@@ -656,3 +660,4 @@ class WorkspaceSchedulableContainer(WorkspaceUnderConsiderationContainer):
                 states = workflow.get_state_ids(tagged=["public"])
                 domain_status_map[ti.domain_model] = states
         return domain_status_map
+

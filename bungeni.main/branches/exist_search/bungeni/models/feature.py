@@ -36,9 +36,7 @@ def configurable_domain(kls, workflow):
     Executed on adapters.load_workflow().
     """
     for feature in workflow.features:
-        assert feature.name in kls.available_dynamic_features, \
-            "Feature %r not one that is available %s for this type %s" % (
-                feature.name, kls.available_dynamic_features, kls)
+        feature.assert_available_for_type(kls)
         if feature.enabled:
             # !+ break decorators up also by archetype?
             feature_decorator = globals()["feature_%s" % (feature.name)]
@@ -92,24 +90,25 @@ def feature_audit(kls, feature):
 def feature_version(kls, feature):
     """Decorator for domain types to support "version" feature.
     """
-    # domain.Version itself may NOT support versions
+    # domain.{Type}Version itself may NOT support versions
     assert not interfaces.IVersion.implementedBy(kls)
     # !+ @version requires @audit
     assert interfaces.IFeatureAudit.implementedBy(kls)
     interface.classImplements(kls, interfaces.IFeatureVersion)
+    # !+VERSION_CLASS_PER_TYPE
 
 
 def feature_attachment(kls, feature):
     """Decorator for domain types to support "attachment" feature.
     !+ currently assumes that kls is versionable.
     """
-    # !+ domain.Attachment is versionable
     # domain.Attachment itself may NOT support attachments
     assert not interfaces.IAttachment.implementedBy(kls)
     interface.classImplements(kls, interfaces.IFeatureAttachment)
     add_container_property_to_model(kls, "files", 
         "bungeni.models.domain.AttachmentContainer", "head_id")
-
+    # !+ domain.Attachment is versionable
+    
 
 def feature_event(kls, feature):
     """Decorator for domain types to support "event" feature.
@@ -199,9 +198,8 @@ def feature_schedule(kls, feature):
     if manager is not None:
         interface.classImplements(kls, interfaces.IFeatureSchedule)
     else:
-        log.warning("Scheduling manager was not created for class %s."
-            "Check your logs for details",
-            kls)
+        log.warning("Scheduling manager was not created for class %s. "
+            "Check your logs for details", kls)
 
 # /schedule
 
@@ -247,12 +245,16 @@ def feature_download(kls, feature):
 def feature_user_assignment(kls, feature):
     """Decorator for domain types that support "user_assignment" feature.
     """
+    # !+params: "assigner_roles", "assignable_roles"
     interface.classImplements(kls, interfaces.IFeatureUserAssignment)
 
 
 def feature_group_assignment(kls, feature):
     """Decorator for domain types that support "group_assignment" feature.
     """
+    # !+QUALIFIED_FEATURES(mr, apr-2013) may need to "qualify" each assignment!
+    # Or, alternatively, each "group_assignment" enabling needs to be "part of" 
+    # a qualified "event" feature.
     interface.classImplements(kls, interfaces.IFeatureGroupAssignment)
     add_container_property_to_model(kls, "group_assignments",
         "bungeni.models.domain.GroupDocumentAssignmentContainer", "doc_id")
@@ -318,7 +320,7 @@ def configurable_mappings(kls):
             
             # versionable
             if interfaces.IFeatureVersion.implementedBy(kls):
-                pass
+                pass # !+VERSION_CLASS_PER_TYPE
             return mapper_properties
         
         for key, prop in configurable_properties(kls, {}).items():

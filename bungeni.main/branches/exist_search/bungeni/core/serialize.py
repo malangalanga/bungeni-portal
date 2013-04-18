@@ -15,7 +15,7 @@ import string
 import random
 from StringIO import StringIO
 from zipfile import ZipFile
-from threading import Thread, Timer
+from threading import Thread, Timer, RLock
 
 from xml.etree.cElementTree import Element, ElementTree
 from tempfile import NamedTemporaryFile as tmp
@@ -30,8 +30,7 @@ from bungeni.core.testing import create_participation
 
 from sqlalchemy.orm import class_mapper, object_mapper
 
-from ore.alchemist.container import valueKey
-from bungeni.alchemist.container import stringKey
+from ore.alchemist.container import stringKey, valueKey
 from bungeni.alchemist import Session
 from bungeni.alchemist.interfaces import IAlchemistContent
 from bungeni.core.workflow.states import get_object_state_rpm
@@ -61,9 +60,10 @@ TIMER_DELAYS = {
     "serialize_setup": INITIAL_DELAY
 }
 
-def make_key(length=10):
+def make_key(length=64):
     """generate random key using letters"""
-    return "".join([ random.choice(string.letters) for i in xrange(length) ])
+    return "".join(
+        [ random.choice(string.letters) for i in xrange(length) ])
 
 def setupStorageDirectory(part_target="xml_db"):
     """ Returns path to store xml files.
@@ -88,19 +88,19 @@ def setupStorageDirectory(part_target="xml_db"):
 def get_origin_parliament(context):
     """get the parliament applicable to this object
     """
-    chamber_id = None
-    group_id = getattr(context, "group_id", None)
-    if group_id:
-        group = Session().query(domain.Group).get(group_id)
-        while group.parent_group_id is not None:
-            group = Session().query(domain.Group).get(group.parent_group_id)
-        if isinstance(group, domain.Parliament):
-            chamber_id = group.group_id
-    else:
-        chamber_id = getattr(context, "parliament_id", None)
+    chamber_id = getattr(context, "parliament_id", None)
     if not chamber_id:
-        if hasattr(context, "head_id"):
-            return get_origin_parliament(context.head)
+        group_id = getattr(context, "group_id", None)
+        if group_id:
+            group = Session().query(domain.Group).get(group_id)
+            while group.parent_group_id is not None:
+                group = Session().query(
+                    domain.Group).get(group.parent_group_id)
+            if isinstance(group, domain.Parliament):
+                chamber_id = group.group_id
+        if not chamber_id:
+            if hasattr(context, "head_id") and context.head_id:
+                return get_origin_parliament(context.head)
     return chamber_id
 
 #!+REFACTORING(mb, Mar-2013) This can be made more general to work in
@@ -157,133 +157,153 @@ class _PersistFiles(object):
             return file_name
 PersistFiles = _PersistFiles()
 
+getter_lock = RLock()
+class _LockStore(object):
+    """instance of this stores all locks if module is loaded"""
+    locks = {}
+    
+    def get_lock(self, lock_name):
+        with getter_lock:
+            if not self.locks.has_key(lock_name):
+                self.locks[lock_name] = RLock()
+            return self.locks.get(lock_name)
+LockStore = _LockStore()
+
+def remove_files(paths):
+    """delete files generated/left over after serialization"""
+    rm_files = [ path for path in paths if os.path.exists(path) ]
+    map(os.remove, rm_files)
+
 def publish_to_xml(context):
     """Generates XML for object and saves it to the file. If object contains
     attachments - XML is saved in zip archive with all attached files. 
     """
 
-    #create a fake interaction to ensure items requiring a participation
-    #are serialized 
-    #!+SERIALIZATION(mb, Jan-2013) review this approach
-    try:
-        zope.security.management.getInteraction()
-    except zope.security.interfaces.NoInteraction:
-        principal = zope.security.testing.Principal('user', 'manager', ())
-        zope.security.management.newInteraction(create_participation(principal))
-    include = []
-    # data dict to be published
-    data = {}
-    
+
     context = zope.security.proxy.removeSecurityProxy(context)
-    #root key (used to cache files to zip)
-    root_key = make_key()
+    obj_type = IWorkflow(context).name
+    
+    #locking
+    lock_name = "%s-%s" %(obj_type, stringKey(context))
+    with LockStore.get_lock(lock_name):
+        #root key (used to cache files to zip)
+        root_key = make_key()
 
-    if interfaces.IFeatureVersion.providedBy(context):
-        include.append("versions")
-    if interfaces.IFeatureAudit.providedBy(context):
-        include.append("event")
-    
-    exclude = ["data", "event", "attachments"]
-    
-    data.update(
-        obj2dict(context, 1, 
-            parent=None,
-            include=include,
-            exclude=exclude,
-            root_key=root_key
+        #create a fake interaction to ensure items requiring a participation
+        #are serialized 
+        #!+SERIALIZATION(mb, Jan-2013) review this approach
+        try:
+            zope.security.management.getInteraction()
+        except zope.security.interfaces.NoInteraction:
+            principal = zope.security.testing.Principal('user', 'manager', ())
+            zope.security.management.newInteraction(create_participation(principal))
+        include = []
+        # data dict to be published
+        data = {}
+
+        if interfaces.IFeatureVersion.providedBy(context):
+            include.append("versions")
+        if interfaces.IFeatureAudit.providedBy(context):
+            include.append("event")
+        
+        exclude = ["data", "event", "attachments"]
+        
+        data.update(
+            obj2dict(context, 1, 
+                parent=None,
+                include=include,
+                exclude=exclude,
+                root_key=root_key
+            )
         )
-    )
-    obj_type = IWorkflow(context).name    
-    tags = IStateController(context).get_state().tags
-    if tags:
-        data["tags"] = tags
-    permissions = get_object_state_rpm(context).permissions
-    data["permissions"] = get_permissions_dict(permissions)
-    
-    # setup path to save serialized data 
-    path = os.path.join(setupStorageDirectory(), obj_type)
-    if not os.path.exists(path):
-        os.makedirs(path)
-    
-    # xml file path
-    file_path = os.path.join(path, stringKey(context)) 
-    
-    #files to zip
-    files = []
-    
-    if interfaces.IFeatureAttachment.providedBy(context):
-        attachments = getattr(context, "attachments", None)
-        if attachments:
-            data["attachments"] = []
-            for attachment in attachments:
-                # serializing attachment
-                attachment_dict = obj2dict(attachment, 1,
-                    parent=context,
-                    exclude=["data", "event", "versions"])
-                # saving attachment to tmp
-                attached_file = tmp(delete=False)
-                attached_file.write(attachment.data)
-                attached_file.flush()
-                attached_file.close()
-                files.append(attached_file.name)
-                attachment_dict["saved_file"] = os.path.basename(
-                    attached_file.name
-                )
-                data["attachments"].append(attachment_dict)
+        tags = IStateController(context).get_state().tags
+        if tags:
+            data["tags"] = tags
+        permissions = get_object_state_rpm(context).permissions
+        data["permissions"] = get_permissions_dict(permissions)
+        
+        # setup path to save serialized data 
+        path = os.path.join(setupStorageDirectory(), obj_type)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        
+        # xml file path
+        file_path = os.path.join(path, stringKey(context)) 
+        
+        #files to zip
+        files = []
+        
+        if interfaces.IFeatureAttachment.providedBy(context):
+            attachments = getattr(context, "attachments", None)
+            if attachments:
+                data["attachments"] = []
+                for attachment in attachments:
+                    # serializing attachment
+                    attachment_dict = obj2dict(attachment, 1,
+                        parent=context,
+                        exclude=["data", "event", "versions"])
+                    # saving attachment to tmp
+                    attached_file = tmp(delete=False)
+                    attached_file.write(attachment.data)
+                    attached_file.flush()
+                    attached_file.close()
+                    files.append(attached_file.name)
+                    attachment_dict["saved_file"] = os.path.basename(
+                        attached_file.name
+                    )
+                    data["attachments"].append(attachment_dict)
 
-    #add explicit origin chamber for this object (used to partition data in
-    #if more than one parliament exists)
-    data["origin_parliament"] = get_origin_parliament(context)
-    
-    #add any additional files to file list
-    files = files + PersistFiles.get_files(root_key)
-    # zipping xml, attached files plus any binary fields
-    # also remove the temporary files
-    if files:
-        #generate temporary xml file
-        temp_xml = tmp(delete=False)
-        temp_xml.write(serialize(data, name=obj_type))
-        temp_xml.close()
-        #write attachments/binary fields to zip
-        zip_file = ZipFile("%s.zip" % (file_path), "w")
-        for f in files:
-            zip_file.write(f, os.path.basename(f))
-        # write the xml
-        zip_file.write(temp_xml.name, "%s.xml" % os.path.basename(file_path))
-        zip_file.close()
-        #placed remove after zip_file.close !+ZIP_FILE_CRC_FAILURE
-        files.append(temp_xml.name)
+        #add explicit origin chamber for this object (used to partition data in
+        #if more than one parliament exists)
+        data["origin_parliament"] = get_origin_parliament(context)
+        
+        #add any additional files to file list
+        files = files + PersistFiles.get_files(root_key)
+        # zipping xml, attached files plus any binary fields
+        # also remove the temporary files
+        if files:
+            #generate temporary xml file
+            temp_xml = tmp(delete=False)
+            temp_xml.write(serialize(data, name=obj_type))
+            temp_xml.close()
+            #write attachments/binary fields to zip
+            with  ZipFile("%s.zip" % (file_path), "w") as zip_file:
+                for f in files:
+                    zip_file.write(f, os.path.basename(f))
+                # write the xml
+                zip_file.write(temp_xml.name, "%s.xml" % os.path.basename(file_path))
+            files.append(temp_xml.name)
 
-    else:
-        # save serialized xml to file
-        with open("%s.xml" % (file_path), "w") as xml_file:
-            xml_file.write(serialize(data, name=obj_type))
-            xml_file.close()
+        else:
+            # save serialized xml to file
+            with open("%s.xml" % (file_path), "w") as xml_file:
+                xml_file.write(serialize(data, name=obj_type))
+                xml_file.close()
 
-    # publish to rabbitmq outputs queue
-    connection = bungeni.core.notifications.get_mq_connection()
-    if not connection:
-        return
-    channel = connection.channel()
-    publish_file_path = "%s.%s" %(file_path, ("zip" if files else "xml"))
-    channel.basic_publish(
-        exchange=SERIALIZE_OUTPUT_EXCHANGE,
-        routing_key=SERIALIZE_OUTPUT_ROUTING_KEY,
-        body=simplejson.dumps({"type": "file", "location": publish_file_path }),
-        properties=pika.BasicProperties(content_type="text/plain",
-            delivery_mode=2
+        # publish to rabbitmq outputs queue
+        connection = bungeni.core.notifications.get_mq_connection()
+        if not connection:
+            return
+        channel = connection.channel()
+        publish_file_path = "%s.%s" %(file_path, ("zip" if files else "xml"))
+        channel.basic_publish(
+            exchange=SERIALIZE_OUTPUT_EXCHANGE,
+            routing_key=SERIALIZE_OUTPUT_ROUTING_KEY,
+            body=simplejson.dumps({"type": "file", "location": publish_file_path }),
+            properties=pika.BasicProperties(content_type="text/plain",
+                delivery_mode=2
+            )
         )
-    )
-    
-    #clean up - remove any files if zip was created
-    if files:
-        map(os.remove, files)
-        prev_xml_file = "%s.%s" %(file_path, "xml")
-        if os.path.exists(prev_xml_file):
-            os.remove(prev_xml_file)
+        
+        #clean up - remove any files if zip was/was not created
+        if files:
+            files.append("%s.%s" %(file_path, "xml"))
+        else:
+            files.append("%s.%s" %(file_path, "zip"))
+        remove_files(files)
 
-    #clear the cache
-    PersistFiles.clear_files(root_key)
+        #clear the cache
+        PersistFiles.clear_files(root_key)
 
 
 def serialize(data, name="object"):
@@ -482,7 +502,23 @@ def batch_serialize(type_key="*"):
         map(queue_object_serialization, objects)
         serialized_count += len(objects)
     return serialized_count
-    
+
+def get_serializable_parent(obj):
+    """Get serializable parent object
+    """
+    serializable_obj = None
+    if not interfaces.ISerializable.providedBy(obj):
+        parent = obj
+        while not interfaces.ISerializable.providedBy(parent):
+            parent = (parent.__parent__ 
+                if hasattr(parent, "__parent__") else None)
+            if not parent:
+                break
+        if parent:
+            serializable_obj = parent
+    else:
+        serializable_obj = obj
+    return serializable_obj
 
 @register.handler(adapts=(IVersionCreatedEvent,))
 def serialization_version_event_handler(event):
@@ -490,7 +526,9 @@ def serialization_version_event_handler(event):
     """
     # we only want to serialize manually created versions
     if event.object.procedure == "m":
-        queue_object_serialization(event.object.head)
+        serializable_obj = get_serializable_parent(event.object.head)
+        if serializable_obj:
+            queue_object_serialization(serializable_obj)
 
 @register.handler(adapts=(interfaces.ISerializable, IObjectCreatedEvent))
 @register.handler(adapts=(interfaces.ISerializable, IObjectModifiedEvent))
@@ -500,19 +538,11 @@ def serialization_event_handler(obj, event):
 
 @register.handler(adapts=(IAlchemistContent, IObjectCreatedEvent))
 @register.handler(adapts=(IAlchemistContent, IObjectModifiedEvent))
-def serialization_event_handler_non_wf(obj, event):
+def serialization_event_handler_parent(obj, event):
     """queues serialization of serializable parent (if any)"""
-    #!+SERIALIZATION(mb, Jan-2013) Might change how changes are bubbled up
-    if not interfaces.ISerializable.providedBy(obj):
-        # workflowed types will be handled by serialize_event_handler
-        wf_parent = obj
-        while not interfaces.ISerializable.providedBy(wf_parent):
-            wf_parent = (wf_parent.__parent__ 
-                if hasattr(wf_parent, "__parent__") else None)
-            if not wf_parent:
-                break
-        if wf_parent:
-            queue_object_serialization(wf_parent)
+    serializable_obj = get_serializable_parent(obj)
+    if serializable_obj is not None:
+        queue_object_serialization(serializable_obj)
 
 def queue_object_serialization(obj):
     """Send a message to the serialization queue for non-draft documents
@@ -634,6 +664,8 @@ def get_permissions_dict(permissions):
             "setting": x[0] and "Allow" or "Deny"})
     return results
 
+
+INNER_EXCLUDES = ["changes", "image"]
 @memoized
 def obj2dict(obj, depth, parent=None, include=[], exclude=[], lang=None, root_key=None):
     """ Returns dictionary representation of a domain object.
@@ -691,7 +723,7 @@ def obj2dict(obj, depth, parent=None, include=[], exclude=[], lang=None, root_ke
                     result[property.key].append(obj2dict(item, 1, 
                             parent=obj,
                             include=[],
-                            exclude=exclude + ["changes", "image"],
+                            exclude=exclude + INNER_EXCLUDES,
                             lang=lang,
                             root_key=root_key
                     ))
@@ -699,7 +731,7 @@ def obj2dict(obj, depth, parent=None, include=[], exclude=[], lang=None, root_ke
                 result[property.key] = obj2dict(value, depth-1, 
                     parent=obj,
                     include=[],
-                    exclude=exclude + ["changes", "image"],
+                    exclude=exclude + INNER_EXCLUDES,
                     lang=lang,
                     root_key=root_key
                 )
@@ -710,6 +742,11 @@ def obj2dict(obj, depth, parent=None, include=[], exclude=[], lang=None, root_ke
                 columns = property.columns
                 if len(columns) == 1:
                     if is_column_binary(columns[0]):
+                        if (parent and 
+                            interfaces.ISerializable.providedBy(obj)):
+                            #skip serialization of binary fields
+                            #that have already been serialized elsewhere
+                            continue
                         #save files
                         result[columns[0].key] = dict(
                             saved_file=PersistFiles.store_file(

@@ -22,7 +22,12 @@ from bungeni.core.workflow.interfaces import IWorkflowController, MANUAL, \
 from bungeni.core.workflow.states import Transition
 
 import bungeni.models.interfaces as interfaces
-from bungeni.models.utils import get_chamber_for_group
+from bungeni.models.utils import (
+    get_chamber_for_group, 
+    is_current_or_delegated_user, 
+    get_user,
+)
+
 from bungeni.models import domain
 from bungeni.utils import common
 from bungeni.ui.utils import debug
@@ -42,7 +47,6 @@ import os
 def formatted_user_email(user):
     return '"%s %s" <%s>' % (user.first_name, user.last_name, user.email)
 
-# parliamentary item
 
 def assign_role(role_id, principal_id, context):
     """Add or activate implied role on this context, for implied principal.
@@ -61,6 +65,7 @@ def unset_role(role_id, principal_id, context):
     IPrincipalRoleMap(context).unsetRoleForPrincipal(role_id, principal_id)
 
 
+''' !+OBSOLETED replaced with more generic assign_ownership
 def assign_role_owner_to_login(context):
     """Assign bungeni.Owner role on context to the currently logged in user.
     """
@@ -73,6 +78,63 @@ def assign_role_owner_to_login(context):
     #    owner = session.query(domain.User).get(context.owner_id)
     #    if owner and (owner.login != current_user_login):
     #        assign_role("bungeni.Owner", owner.login, context)
+'''
+
+def assign_ownership(context):
+    """Assign editorial (all context types) and legal (only legal types)
+    "ownership" roles.
+    
+    The actual (current) user creating the context is always granted the 
+    "editorial ownership" for the item i.e. "bungeni.Drafter".
+    
+    If context is a "legal doc", then the user who would be the legal owner of
+    the doc is determined and granted "legal ownership" i.e. "bungeni.Owner".
+    """
+    
+    # bungeni.Drafter - all types
+    current_user_login = common.get_request_login()
+    log.debug("assign_ownership: role %r to user %r on [%s]" % (
+        "bungeni.Drafter", current_user_login, context))
+    assign_role("bungeni.Drafter", current_user_login, context)
+    
+    # bungeni.Owner - legal documents only
+    def is_legal_doc(context):
+        # doc (but not event) types are legal documents
+        return (interfaces.IDoc.providedBy(context) and 
+            not interfaces.IEvent.providedBy(context))
+    if is_legal_doc(context):
+        owner_login = _determine_related_user(context).login
+        log.debug("assign_ownership: role %r to user %r on [%s]" % (
+            "bungeni.Owner", owner_login, context))
+        assign_role("bungeni.Owner", owner_login, context)
+
+
+def user_is_context_owner(context):
+    """Test if current user is the context owner e.g. to check if someone 
+    manipulating the context object is other than the owner of the object.
+    
+    Assumption: context is IOwned.
+    
+    A delegate is considered to be an owner of the object.
+    """
+    user = _determine_related_user(context, user_attr_name="owner")
+    return is_current_or_delegated_user(user)
+
+def _determine_related_user(context, user_attr_name="owner"):
+    """Get the user instance that is the value of the {user_attr_name} attribute.
+    
+    The context may be newly created, not yet flushed to db (so may have 
+    "owner_id" set but "owner" not yet updated).
+    """
+    user = getattr(context, user_attr_name)
+    # context not yet flushed may have "X_id" set but "X" not yet updated
+    if user is None:
+        # !+ some contexts define an "X" but not an "X_id"!
+        user_id_attr_name = "%s_id" % (user_attr_name)
+        if hasattr(context, user_id_attr_name):
+            user = get_user(getattr(context, user_id_attr_name))
+    assert user, "User (as %r on %s) may not be None" % (user_attr_name, context)
+    return user
 
 
 @capi.bungeni_custom_errors
@@ -146,18 +208,6 @@ def set_doc_type_number(doc):
 is_pi_scheduled = dbutils.is_pi_scheduled
 
 
-# question
-# !+PrincipalRoleMapDynamic(mr, may-2012) infer role from context data
-# !+CUSTOM
-@describe(_(u"Grant the ministry access to a question"))
-def assign_role_minister_question(question):
-    assert interfaces.IQuestion.providedBy(question), \
-        "Not a Question: %s" % (question)
-    if question.ministry is not None:
-        ministry_login_id = question.ministry.group_principal_id
-        if ministry_login_id:
-            assign_role(question.ministry.group_role, ministry_login_id, question)
-
 unschedule_doc = dbutils.unschedule_doc
 
 
@@ -170,6 +220,7 @@ def get_group_context(context):
     if interfaces.IOffice.providedBy(context):
         return get_chamber_for_group(context)
     elif interfaces.IGovernment.providedBy(context):
+        # !+LEGISLATURE, GLOBAL? 
         return common.get_application()
     else:
         return context
@@ -181,9 +232,9 @@ def _set_group_local_role(context, unset=False):
     role = get_group_local_role(group)
     prm = IPrincipalRoleMap(get_group_context(group))
     if not unset:
-        prm.assignRoleToPrincipal(role, group.group_principal_id)
+        prm.assignRoleToPrincipal(role, group.principal_name)
     else:
-        prm.unsetRoleForPrincipal(role, group.group_principal_id)
+        prm.unsetRoleForPrincipal(role, group.principal_name)
 
 def set_group_local_role(context):
     _set_group_local_role(context, unset=False)
@@ -317,17 +368,20 @@ def setup_retract_transitions():
                         "title": translate(transition.title, domain="bungeni")
                     }
                 )
-                title = "Undo - %s" % transition.title 
+                title = "Undo - %s" % transition.title
+                tid = "%s.%s" % (transition.destination, 
+                    transition.source)
+                pid = "bungeni.%s.wf.%s" % (wf.name, tid)
                 ntransition = Transition(title, transition.destination,
                     transition.source, 
                     trigger=MANUAL,
                     condition=allow_retract,
+                    permission=pid,
                     condition_args=True,
                     roles=roles)
                 if ntransition.id in wf._transitions_by_id:
                     continue
                 log.debug("adding transition %s", ntransition.id)
-                pid = "bungeni.%s.wf.%s" % (wf.name, ntransition.id)
                 provideUtility(Permission(pid), IPermission, pid)
                 for role in roles:
                     role_perm_mgr.grantPermissionToRole(pid, role, check=False)

@@ -283,11 +283,16 @@ class CalendarView(BungeniBrowserView):
             if model_interfaces.ICommittee.providedBy(group):
                 group_container = group.parent_group.committees
             else:
-                group_container = self.context.get_group().committees
-            group_list = [ {"key": comm.committee_id, 
+                group = self.context.get_group()
+                group_container = group.committees
+                group_list.append({
+                    "key": self.context.group_id,
+                    "label": IDCDescriptiveProperties(group).title,
+                })
+            group_list += [ {"key": comm.committee_id, 
                 "label": IDCDescriptiveProperties(comm).title}
                 for comm in group_container.values()
-                if comm.committee_id is not self.context.group_id
+                if checkPermission("bungeni.committee_member.Add", comm)
             ]
         except AttributeError:
             log.warn("Context %s has no committees", self.context)
@@ -332,7 +337,7 @@ class CalendarView(BungeniBrowserView):
             )
         )
         return """var cal_globals = %s;
-            var timeline_data = { venues: %s, committees: %s };
+            var timeline_data = { venues: %s, combined: %s };
             var group_urls= %s;""" %(
             json.dumps(cal_globals), 
             json.dumps(self.venues_data),
@@ -907,6 +912,7 @@ class DhtmlxCalendarSittings(BrowserView):
             self.context.get_group().sessions.items()
             if checkPermission("bungeni.session.View", session)
         ]
+        sessions.sort(key=lambda sess:sess.start_date)
         return sessions
     
     def get_colour(self, event):
@@ -995,7 +1001,7 @@ class DhtmlxCalendarSittingsIcal(DhtmlxCalendarSittings):
                 event_start=sitting.start_date.strftime("%Y%m%dT%H%M%S"),
                 event_end=sitting.end_date.strftime("%Y%m%dT%H%M%S"),
                 event_venue=(IDCDescriptiveProperties(sitting.venue).title if
-                    hasattr(sitting, "venue") else u""
+                    hasattr(sitting, "venue") and sitting.venue else u""
                 ),
                 event_summary=IDCDescriptiveProperties(sitting).verbose_title,
             )
@@ -1101,10 +1107,11 @@ class ScheduleAddView(BrowserView):
                     schedule_record = domain.ItemSchedule(
                         item_id=data_item_id,
                         item_type=data_item_type,
-                        planned_order=real_index,
+                        real_order=real_index,
                         sitting_id=sitting_id
                     )
-                    add_planned_index(schedule_record, planned_index)
+                    planned_index = add_planned_index(schedule_record, 
+                        planned_index)
                     session.add(schedule_record)
                     session.flush()
                     notify(ObjectCreatedEvent(schedule_record))

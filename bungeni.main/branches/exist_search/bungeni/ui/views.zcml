@@ -76,12 +76,6 @@
      class=".file.FileDownload"
      />
 
-    <browser:view for="bungeni.models.interfaces.IAttachment"
-        permission="bungeni.attachment.wf.attached.inactive"
-        name="deactivate"
-        class=".file.FileDeactivate"
-    /><!-- !+WORKFLOW_TRANSITION(mr, feb-2011) -->
-
   <browser:view
      for="bungeni.models.interfaces.IItemScheduleVote"
      permission="bungeni.item_schedule_vote.View"
@@ -193,26 +187,15 @@
   <!-- Reporting -->
      <!-- !+Reports(mb, 09-2011) To use one interface for registration. -->
      <browser:page name="create-report"
-        for="*"
+        for="bungeni.core.interfaces.ISchedulingContext"
         permission="bungeni.report.Edit"
         class=".reports.ReportBuilder"
     />
-  <!-- Calendar -->
-
-  <browser:page
-     name="view"
-     for="bungeni.core.interfaces.IDailySchedulingContext"
-     permission="zope.Public"
-     class=".calendar.browser.DailyCalendarView"
-     />
-
-    <!--
-    <browser:page
-     for="bungeni.models.interfaces.IBungeniApplication"
-     permission="zope.Public"
-     name="calendar"
-     class=".calendar.browser.DhtmlxCalendarScheduleView"
-    /> -->
+     <browser:page name="create-report"
+        for="bungeni.core.interfaces.IWorkspaceUnderConsideration"
+        permission="bungeni.ui.workspace.View"
+        class=".reports.ReportBuilder"
+    />
     
     <browser:page
      for="bungeni.models.interfaces.IBungeniContent"
@@ -388,16 +371,11 @@
         template="templates/generic-container.pt"
         class="bungeni.alchemist.container.ContainerListing"
     />
-    <browser:page name="json"
-        for="bungeni.alchemist.interfaces.IAlchemistContainer"
-        permission="zope.Public"
-        class=".container.ContainerJSONListing"
-    />
     <browser:defaultView name="index"
         for="bungeni.alchemist.interfaces.IAlchemistContainer"
     />
     <!-- Default Content View -->
-    <browser:defaultView name="view"
+    <browser:defaultView name="index"
         for="bungeni.alchemist.interfaces.IAlchemistContent"
     />
     
@@ -575,59 +553,21 @@
    <!-- Debate Record -->
    <browser:page
       for="bungeni.models.interfaces.IDebateRecord"
-      name="index.html"
+      name="index"
       class="bungeni.ui.debaterecord.DebateRecordView"
       permission="bungeni.debate_record.View"
    />
-   <browser:page
-      for="bungeni.models.interfaces.IDebateRecord"
-      name="view"
-      class="bungeni.ui.debaterecord.DebateRecordView"
-      permission="bungeni.debate_record.View"
-   />
-   
-   <browser:page
-      for="bungeni.models.interfaces.IDebateRecord"
-      name="takes"
-      class="bungeni.ui.debaterecord.DebateRecordTakes"
-      permission="bungeni.debate_takes.View"
-   />
-   
-   <!-- OAuth -->
+   <!-- Bungeni API -->
    <browser:page
       for="bungeni.core.content.APISection"
       name="index"
       class="bungeni.ui.api.APIDefaultView"
-      permission="bungeni.oauth.View"
-   />
-   <browser:page
-      for="bungeni.models.domain.OAuthApplicationContainer"
-      name="add"
-      class="bungeni.ui.api.AddOAuthApplication"
-      permission="zope.ManageContent"
+      permission="bungeni.api.View"
    />
    <browser:page
       for="bungeni.core.content.OAuthSection"
-      name="index.html"
+      name="index"
       class="bungeni.ui.api.APIDefaultView"
-      permission="zope.Public"
-   />
-   <browser:page
-      for="bungeni.core.content.OAuthSection"
-      name="authorize"
-      class="bungeni.ui.api.OAuthAuthorization"
-      permission="zope.Public"
-   />
-   <browser:page
-      for="bungeni.core.content.OAuthSection"
-      name="authorize-form"
-      class="bungeni.ui.api.OAuthAuthorizeForm"
-      permission="zope.Public"
-   />
-   <browser:page
-      for="bungeni.core.content.OAuthSection"
-      name="access-token"
-      class="bungeni.ui.api.OAuthAccessToken"
       permission="zope.Public"
    />
    <browser:page
@@ -643,5 +583,44 @@
       class="bungeni.ui.workspace.WorkspaceContainerJSONListing"
       permission="bungeni.ui.workspace.View"
       layer="bungeni.ui.interfaces.IBungeniAPILayer"
+   />
+   <browser:page
+      for="bungeni.alchemist.interfaces.IAlchemistContainer"
+      name="index"
+      class="bungeni.ui.container.ContainerJSONListingRaw"
+      permission="bungeni.api.View"
+      layer="bungeni.ui.interfaces.IBungeniAPILayer"
+   />
+   <browser:page
+      for="bungeni.models.interfaces.IUser"
+      name="index" 
+      class="bungeni.ui.api.APIUserView"
+      permission="bungeni.user.View"
+      layer="bungeni.ui.interfaces.IBungeniAPILayer"
+   />
+   <!-- OAuth -->
+   <browser:page
+      for="bungeni.models.domain.OAuthApplicationContainer"
+      name="add"
+      class="bungeni.ui.oauth.AddOAuthApplication"
+      permission="zope.ManageContent"
+   />
+   <browser:page
+      for="bungeni.core.content.OAuthSection"
+      name="authorize"
+      class="bungeni.ui.oauth.OAuthAuthorization"
+      permission="zope.Public"
+   />
+   <browser:page
+      for="bungeni.core.content.OAuthSection"
+      name="authorize-form"
+      class="bungeni.ui.oauth.OAuthAuthorizeForm"
+      permission="zope.Public"
+   />
+   <browser:page
+      for="bungeni.core.content.OAuthSection"
+      name="access-token"
+      class="bungeni.ui.oauth.OAuthAccessToken"
+      permission="zope.Public"
    />
 </configure>

@@ -4,11 +4,6 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="bungeni">
     
-    <!-- questions -->
-    <browser:page name="respond" for="bungeni.models.interfaces.IQuestion"
-        class=".common.EditForm"
-        permission="bungeni.response.Edit"
-    />
     
     <!-- Group Memberships -->
     <browser:page name="add"
@@ -31,12 +26,12 @@
     />
     
     <!-- Session -->
-    <browser:page name="view" for="bungeni.models.interfaces.ISession"
+    <browser:page name="index" for="bungeni.models.interfaces.ISession"
         class=".common.DisplayForm"
         permission="bungeni.session.View"
         layer="bungeni.ui.interfaces.IBungeniSkin"
     />
-    <!--browser:page name="view" for="bungeni.models.interfaces.IReport"
+    <!--browser:page name="index" for="bungeni.models.interfaces.IReport"
         class=".viewlets.SittingReportDisplay"
         permission="bungeni.report.View"
         layer="bungeni.ui.interfaces.IBungeniSkin"
@@ -75,7 +70,7 @@
         permission="bungeni.address.Delete"
         layer="bungeni.ui.interfaces.IBungeniSkin"
     />
-    <browser:page name="view" for="bungeni.models.interfaces.IUserAddress"
+    <browser:page name="index" for="bungeni.models.interfaces.IUserAddress"
         class=".forms.UserAddressDisplayForm"
         permission="bungeni.address.View"
         layer="bungeni.ui.interfaces.IBungeniSkin"
@@ -94,7 +89,7 @@
     />
     
     <!-- UserDelegations -->
-    <browser:page name="view"
+    <browser:page name="index"
         for="bungeni.models.interfaces.IUserDelegation"
         class=".common.DisplayForm"
         permission="bungeni.user_delegation.View"
@@ -118,7 +113,7 @@
     />
     
     <!-- sitting attendance -->
-    <browser:page name="view" for="bungeni.models.interfaces.ISittingAttendance"
+    <browser:page name="index" for="bungeni.models.interfaces.ISittingAttendance"
         class=".common.DisplayForm"
         permission="bungeni.sitting_attendance.View"
         layer="bungeni.ui.interfaces.IBungeniSkin"
@@ -177,7 +172,7 @@
     <!-- group assignment-->
     <browser:page name="add" for="bungeni.models.interfaces.IGroupDocumentAssignmentContainer"
         class=".common.AddForm"
-        permission="bungeni.government.Add"
+        permission="bungeni.group_assignment.Add"
         layer="bungeni.ui.interfaces.IBungeniSkin"
     />
     <browser:page name="edit" for="bungeni.models.interfaces.IGroupDocumentAssignment"
@@ -190,7 +185,7 @@
         permission="bungeni.group_assignment.Delete"
         layer="bungeni.ui.interfaces.IBungeniSkin"
     />
-    <browser:page name="view" for="bungeni.models.interfaces.IGroupDocumentAssignment"
+    <browser:page name="index" for="bungeni.models.interfaces.IGroupDocumentAssignment"
         class=".common.DisplayForm"
         permission="bungeni.group_assignment.View"
         layer="bungeni.ui.interfaces.IBungeniSkin"

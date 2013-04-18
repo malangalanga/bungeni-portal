@@ -21,7 +21,7 @@ from bungeni.utils.naming import polymorphic_identity
 mapper(domain.Principal, schema.principal,
     # principal should only be created as user or group
     #polymorphic_identity=polymorphic_identity(domain.Principal),
-    polymorphic_on=schema.principal.c.principal_type, # polymorphic discriminator
+    polymorphic_on=schema.principal.c.type, # polymorphic discriminator
     properties={}
 )
 
@@ -47,7 +47,7 @@ mapper(domain.UserSubscription, schema.user_doc)
 
 mapper(domain.AdminUser, schema.admin_user,
     properties={
-        "user":relation(domain.User)
+        "user": relation(domain.User)
     }
 )
 
@@ -69,19 +69,10 @@ mapper(domain.PasswordRestoreLink, schema.password_restore_link,
 # Groups
 
 mapper(domain.Group, schema.group,
-    primary_key=[schema.group.c.group_id],
     inherits=domain.Principal,
     polymorphic_identity=polymorphic_identity(domain.Group),
-    polymorphic_on=schema.group.c.type, # polymorphic discriminator
     properties={
         "members": relation(domain.GroupMembership),
-        # !+GROUP_PRINCIPAL_ID(ah,sep-2011) - removing group_principal_id as 
-        # orm property, this is now on the schema.
-        #"group_principal_id": column_property(
-        #    ("group." + schema.groups.c.type + "." +
-        #     rdb.cast(schema.group.c.group_id, rdb.String)
-        #    ).label("group_principal_id")
-        #),
         "titletypes": relation(domain.TitleType),
         "contained_groups": relation(domain.Group,
             primaryjoin=rdb.and_(
@@ -127,6 +118,16 @@ mapper(domain.UserDelegation, schema.user_delegation,
             uselist=False,
             lazy=True
         ),
+    }
+)
+
+mapper(domain.GroupDocumentAssignment, schema.group_document_assignment,
+    properties={
+        "group": relation(domain.Group,
+            primaryjoin=schema.group_document_assignment.c.group_id ==
+                schema.group.c.group_id,
+            uselist=False,
+            lazy=False),
     }
 )
 
@@ -291,13 +292,15 @@ mapper(domain.ResourceBooking, schema.resourcebookings)
 
 mapper(domain.Venue, schema.venue)
 
-##############################
-# Document
 
+# vertical properties
 
 mapper(domain.vp.Text, schema.vp_text)
 mapper(domain.vp.TranslatedText, schema.vp_translated_text)
 mapper(domain.vp.Datetime, schema.vp_datetime)
+
+
+# doc 
 
 mapper(domain.Doc, schema.doc,
     polymorphic_on=schema.doc.c.type, # polymorphic discriminator
@@ -364,21 +367,15 @@ mapper(domain.Doc, schema.doc,
     }
 )
 
-mapper(domain.GroupDocumentAssignment, schema.group_document_assignment,
-    properties={
-        "group": relation(domain.Group,
-            primaryjoin=schema.group_document_assignment.c.group_id ==
-                schema.group.c.group_id,
-            uselist=False,
-            lazy=False),
-    }
-)
+
+# audit
 
 mapper(domain.Audit, schema.audit,
     polymorphic_on=schema.audit.c.audit_type, # polymorphic discriminator
     polymorphic_identity=polymorphic_identity(domain.Audit)
 )
 mapper(domain.Change, schema.change,
+    # !+ always created with a concrete {type}_audit record
     #polymorphic_on=schema.change.c.action, # polymorphic discriminator
     #polymorphic_identity="*" !+
     properties={
@@ -419,7 +416,7 @@ mapper(domain.ChangeTree, schema.change_tree)
 mapper(domain.Version,
     inherits=domain.Change,
     polymorphic_on=schema.change.c.action, # polymorphic discriminator
-    polymorphic_identity=polymorphic_identity(domain.Version),
+    polymorphic_identity=polymorphic_identity(domain.Version), #!+only concrete {type}_audit record are created
 )
 # !+polymorphic_identity_multi only allows a single value... e.g. if needed to 
 # add a 2nd value such as "reversion" would not be able to -- but seems we 
@@ -439,8 +436,11 @@ mapper(domain.DocVersion,
     # !+NO_INHERIT_VERSION(mr, apr-2012) inheriting from domain.Version will 
     # always give an empty doc.versions / attachment.versions / ... lists !
     inherits=domain.Change,
+    # !+ messes up DocVersions... will be typed as AttachmentVersion!
+    #polymorphic_identity="version", #!+polymorphic_identity(domain.Version),
     properties={
         # !+ only for versionable doc sub-types that also support "attachment"
+        # !+ rename: attachment_versions
         "attachments": relation(domain.AttachmentVersion, # !+ARCHETYPE_MAPPER
             primaryjoin=rdb.and_(
                 schema.change.c.audit_id == schema.change_tree.c.parent_id,
@@ -464,32 +464,10 @@ mapper(domain.DocVersion,
     },
 )
 
+
 mapper(domain.AgendaItem,
     inherits=domain.Doc,
     polymorphic_identity=polymorphic_identity(domain.AgendaItem),
-)
-
-mapper(domain.Bill,
-    inherits=domain.Doc,
-    polymorphic_identity=polymorphic_identity(domain.Bill),
-)
-
-mapper(domain.Motion, 
-    inherits=domain.Doc,
-    polymorphic_identity=polymorphic_identity(domain.Motion),
-)
-
-mapper(domain.Question,
-    inherits=domain.Doc,
-    polymorphic_identity=polymorphic_identity(domain.Question),
-    properties={ #!+
-        "ministry": relation(domain.Ministry, lazy=False, join_depth=2),
-    }
-)
-
-mapper(domain.TabledDocument,
-    inherits=domain.Doc,
-    polymorphic_identity=polymorphic_identity(domain.TabledDocument),
 )
 
 
@@ -559,9 +537,28 @@ mapper(domain.AttachmentAudit, schema.attachment_audit,
 )
 mapper(domain.AttachmentVersion,
     inherits=domain.Change, # !+NO_INHERIT_VERSION
-    polymorphic_on=schema.change.c.action,
-    polymorphic_identity=polymorphic_identity(domain.Version),
+    #polymorphic_on=schema.change.c.action,
+    #polymorphic_identity="version", #!+polymorphic_identity(domain.Version),
     properties={
+        # the reverse of DocVersion.attachment_versions
+        # note: this works because when a new doc version is created, there is 
+        # a dedicated entry in change_tree to link the head doc to a version of
+        # each of its attachments
+        # version
+        "doc_versions": relation(domain.DocVersion,
+            primaryjoin=rdb.and_(
+                schema.change.c.audit_id == schema.change_tree.c.child_id,
+            ),
+            secondary=schema.change_tree,
+            secondaryjoin=rdb.and_(
+                schema.change_tree.c.parent_id == schema.change.c.audit_id,
+                schema.change.c.audit_id == schema.doc_audit.c.audit_id,
+            ),
+            uselist=True,
+            lazy=True,
+            order_by=schema.change.c.audit_id.desc(),
+            viewonly=True,
+        ),
         #!+eventable items supporting feature "event":
         #"sa_events": relation(domain.Event, uselist=True),
     },
@@ -578,8 +575,7 @@ mapper(domain.Heading, schema.heading,
 )
 
 
-#Items scheduled for a sitting expressed as a relation
-# to their item schedule
+# items scheduled for a sitting expressed as a relation to their item schedule
 
 mapper(domain.ItemSchedule, schema.item_schedule,
     properties={
@@ -636,9 +632,6 @@ mapper(domain.SignatoryAudit, schema.signatory_audit,
 )
 
 mapper(domain.Holiday, schema.holiday)
-
-######################
-#
 
 mapper(domain.Country, schema.country)
 
@@ -749,18 +742,22 @@ mapper(domain.DebateTake, schema.debate_take,
 mapper(domain.OAuthApplication, schema.oauth_application)
 mapper(domain.OAuthAuthorization, schema.oauth_authorization,
     properties={
-        "user": relation(domain.User, lazy=True)
+        "user": relation(domain.User, uselist=False, lazy=False),
+        "application": relation(domain.OAuthApplication, uselist=False,
+            lazy=False)
     }
 )
+mapper(domain.OAuthAuthorizationToken, schema.oauth_authorization_token,
+    properties={
+        "authorization": relation(domain.OAuthAuthorization, uselist=False,
+            lazy=False),
+    }
+)
+
 mapper(domain.OAuthAccessToken, schema.oauth_access_token,
     properties={
-       "user": relation(domain.User,
-            primaryjoin=schema.oauth_access_token.c.authorization_id ==
-                schema.oauth_authorization.c.authorization_id,
-            secondary=schema.oauth_authorization,
-            lazy=True
-        ),
-        "authorization":relation(domain.OAuthAuthorization),
+        "authorization_token": relation(domain.OAuthAuthorizationToken,
+            uselist=False, lazy=False),
     }
 )
 

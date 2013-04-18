@@ -144,6 +144,7 @@ class DocDescriptiveProperties(DescriptiveProperties):
         return self.translate(doc, "description")
 
 
+''' !+CUSTOM
 @register.adapter()
 class QuestionDescriptiveProperties(DocDescriptiveProperties):
     component.adapts(interfaces.IQuestion)
@@ -186,6 +187,7 @@ class MotionDescriptiveProperties(DocDescriptiveProperties):
             text += " (%s %s)" % (translate_i18n(_(u"notice given on")),
                                   self.formatDate(context.notice_date))
         return text + "."
+'''
 
 # AgendaItem
 # TabledDocument
@@ -221,10 +223,35 @@ class SittingDescriptiveProperties(DescriptiveProperties):
             default=u"Sitting of ${group_name} @ ${sitting_venue}",
             mapping = {
                 "group_name": IDCDescriptiveProperties(context.group).title,
-                "sitting_venue": IDCDescriptiveProperties(context.venue).title
+                "sitting_venue": (
+                    IDCDescriptiveProperties(context.venue).title 
+                    if context.venue else translate_i18n(_(u"no venue"))
+                )
             }
         )
         return translate_i18n(sitting_title)
+
+@register.adapter()
+class DebateRecordDescriptiveProperties(DescriptiveProperties):
+    component.adapts(interfaces.IDebateRecord)
+
+    @property
+    def title(self):
+        context = _merged(self.context)
+        return "%s %s, %s %s %s" % (translate_i18n(_(u"Debate Record:")), 
+                self.translate(context.sitting, "short_name"), 
+                context.sitting.start_date.strftime('%Y-%m-%d, %H:%M'), 
+                _(u"to"), 
+                context.sitting.end_date.strftime('%H:%M'))
+    
+    @property
+    def description(self):
+        context = _merged(self.context)
+        return "%s %s (%s %s %s)" % (translate_i18n(_(u"Debate record of ")),
+                self.translate(context.sitting, "short_name"),
+                context.sitting.start_date.strftime('%Y-%m-%d %H:%M'), 
+                _(u"to"),
+                context.sitting.end_date.strftime('%H:%M'))
 
 
 @register.adapter()
@@ -497,6 +524,9 @@ class ReportDescriptiveProperties(DescriptiveProperties):
     def description(self):
         return self.title
 
+@register.adapter()
+class SittingReportDescriptiveProperties(ReportDescriptiveProperties):
+    component.adapts(interfaces.ISittingReport)
 
 @register.adapter()
 class UserDelegationDescriptiveProperties(DescriptiveProperties):

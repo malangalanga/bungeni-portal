@@ -9,6 +9,7 @@ $Id$
 log = __import__("logging").getLogger("bungeni.ui.forms.viewlets")
 
 from zope import interface
+from zope.i18n import translate
 from zope.viewlet import manager, viewlet
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.formlib import form
@@ -23,8 +24,6 @@ from bungeni.alchemist import utils
 from bungeni.alchemist.interfaces import IContentViewManager
 
 from bungeni.models import domain, interfaces
-from bungeni.models.utils import get_groups_held_for_user_in_parliament
-from bungeni.models.utils import get_chamber_for_group
 
 from bungeni.ui.i18n import _
 from bungeni.ui import browser
@@ -97,13 +96,12 @@ class SubformRssSubscriptionViewletManager(manager.WeightOrderedViewletManager):
     """Displays rss subscription data."""
     interface.implements(ISubformRssSubscriptionViewletManager)
 
-# IBill, IQuestion, ITabledDocument, IAgendaItem, IMotion, ...
+# !+ IDoc but not IEvent
 @register.viewlet(interfaces.IBungeniParliamentaryContent, 
     layer=IBungeniAuthenticatedSkin, 
     manager=ISubformRssSubscriptionViewletManager,
     name="keep-zca-happy-rsslink",
-    protect=register.PROTECT_VIEWLET_PUBLIC
-    )
+    protect=register.PROTECT_VIEWLET_PUBLIC)
 class RssLinkViewlet(viewlet.ViewletBase):
     """Simply renders link for users to subscribe to current paliamentary item.
     """
@@ -170,11 +168,13 @@ class SittingScheduleViewlet(SubformViewlet):
 class MinistersViewlet(SubformViewlet):
     sub_attr_name = "ministers"
 
+''' !+MINISTRY_DOCS(mr, apr-2013)
 class BillsViewlet(SubformViewlet):
     sub_attr_name = "bills"
 
 class QuestionsViewlet(SubformViewlet):
     sub_attr_name = "questions"
+'''
 
 class AgendaItemsViewlet(SubformViewlet):
     sub_attr_name = "agendaitems"
@@ -305,25 +305,6 @@ class DocMinutesViewlet(browser.BungeniItemsViewlet):
         self.items = self._get_items()
         super(DocMinutesViewlet, self).update()
 
-class WrittenQuestionResponseViewlet(browser.BungeniViewlet):
-
-    mode = "view"
-    for_display = True
-    form_name = _(u"Response")
-    render = ViewPageTemplateFile("templates/written-question-response.pt")
-
-    def __init__(self, context, request, view, manager):
-        self.request = request
-        self.context = context
-        self.manager = manager
-        self.question = removeSecurityProxy(context)
-        # Check type of question. Only written questions get this viewlet
-        if self.question.response_type == "oral":
-            self.for_display = False
-        else:
-            if self.question.response_text in (None, ""):
-                self.for_display = False
-
 
 class OfficesHeldViewlet(browser.BungeniItemsViewlet):
 
@@ -332,38 +313,41 @@ class OfficesHeldViewlet(browser.BungeniItemsViewlet):
     def _get_items(self):
         formatter = self.get_date_formatter("date", "long")
         trusted = removeSecurityProxy(self.context)
-        user_id = trusted.user_id
-        office_list = []
-        if interfaces.IMemberOfParliament.providedBy(self.context):
-            parliament_id = trusted.group_id
-        else:
-            chamber = get_chamber_for_group(trusted.group)
-            if chamber:
-                parliament_id = chamber.parliament_id
+        session = Session()
+        memberships = session.query(domain.GroupMembership
+            ).join(domain.User
+            ).filter(domain.User.user_id == trusted.user_id).all()
+        items = []
+
+        def get_relevant_date(date_type, title=None):
+            if title and getattr(title, date_type, None):
+                return formatter.format(getattr(title, date_type))
+            elif getattr(mb, date_type, None):
+                return formatter.format(getattr(mb, date_type))
+            elif getattr(mb.group, date_type, None):
+                return formatter.format(getattr(mb.group, date_type))
             else:
-                return office_list
-        for oh in get_groups_held_for_user_in_parliament(user_id, parliament_id):
-            title = {}
-            # !+FULL_NAME(mr, oct-2010) this should probably make use of 
-            # the GroupDescriptor (combined) listing Field full_name
-            title["group"] = "%s - %s" % (_(oh[0]), oh[1] and _(oh[1]) or "")
-            title["group_type"] = _(oh[2])
-            if oh[3]:
-                title["member_title"] = _(oh[3])
+                return ""
+
+        for mb in memberships:
+            item = {}
+            item["group"] = IDCDescriptiveProperties(mb.group).title
+            item["group_type"] = translate(mb.group.type, context=self.request)
+            if mb.member_titles:
+                for title in mb.member_titles:
+                    final_item = dict(item)
+                    final_item["member_title"] = _(title.title_type.title_name)
+                    final_item["start_date"] = get_relevant_date(
+                        "start_date", title)
+                    final_item["end_date"] = get_relevant_date(
+                        "end_date", title)
+                    items.append(final_item)
             else:
-                title["member_title"] = _(u"Member")
-            title["start_date"] = None
-            if oh[4]:
-                title["start_date"] = formatter.format(oh[4])
-            elif oh[6]:
-                title["start_date"] = formatter.format(oh[6])
-            title["end_date"] = None
-            if oh[5]:
-                title["end_date"] = formatter.format(oh[5])
-            elif oh[7]:
-                title["end_date"] = formatter.format(oh[7])
-            office_list.append(title)
-        return office_list
+                item["member_title"] = _(u"Member")
+                item["start_date"] = get_relevant_date("start_date")
+                item["end_date"] = get_relevant_date("end_date")
+                items.append(item)
+        return items
 
     def update(self):
         self.items = self._get_items()
@@ -525,7 +509,7 @@ class SchedulingVotesViewlet(SubformViewlet):
     @property
     def for_display(self):
         """Only display viewlet for doc types"""
-        if not interfaces.IDoc.providedBy(self.context.__parent__):
+        if not interfaces.IDoc.providedBy(self.context.__parent__.item):
             return False
         return super(SchedulingVotesViewlet, self).for_display
 

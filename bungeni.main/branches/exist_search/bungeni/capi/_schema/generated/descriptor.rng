@@ -32,12 +32,8 @@
         <optional>
           <attribute name="note"/>
         </optional>
-        <!-- Attrs only in custom descriptors: -->
-        <attribute name="archetype">
-          <ref name="SYMBOL_NAME"/>
-        </attribute>
         <optional>
-          <!-- an archetype key, custom types MUST specify this -->
+          <!-- Attrs only in custom descriptors: !+ mv all these to types? -->
           <!--
             Note: if label/container_label present, the mechanism to 
             auto-derive the display_name/container_name from name->type_key 
@@ -80,11 +76,8 @@
   </start>
   <define name="UI">
     <element name="ui">
-      <attribute name="roles">
-        <ref name="SPACE_SEPARATED_TOKENS"/>
-      </attribute>
       <oneOrMore>
-        <!-- (un/qualified) roles -->
+        <!-- !+ROLES attribute roles { SPACE_SEPARATED_TOKENS }, # (un/qualified) roles -->
         <ref name="DESCRIPTOR"/>
       </oneOrMore>
     </element>

@@ -68,7 +68,6 @@ def setup_customization_ui():
             />"""
 
     def register_api_view(type_key, for_):
-        print register_api_view.TMPL.format(**locals())
         UI_ZC_DECLS.append(register_api_view.TMPL.format(**locals()))
     register_api_view.TMPL = """
             <browser:page name="index"
@@ -99,13 +98,10 @@ def setup_customization_ui():
         register_form_view(type_key, "Add", "add", container_interface_qualname,
             "bungeni.ui.forms.common.AddForm")
         # view
-        register_form_view(type_key, "View", "view", model_interface_qualname,
+        register_form_view(type_key, "View", "index", model_interface_qualname,
             "bungeni.ui.forms.common.DisplayForm")
         
         register_api_view(type_key, model_interface_qualname)
-        print "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-        print type_key, model_interface_qualname
-        print "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx"
         # edit !+DiffEditForm prior to r10032, doc-archetyped types were being
         # *declared* to use bungeni.ui.forms.forms.DiffEditForm, but this
         # is not the edit view tht was actually being used!
@@ -180,8 +176,9 @@ def setup_customization_ui():
             for event_type_key in ti.workflow.get_feature("event").params["types"]:
                 if capi.has_type_info(event_type_key):
                     container_property_name = naming.plural(event_type_key)
-                    title = "Add {t} {e}".format(t=type_title, e=model_title(event_type_key))
-                    register_menu_item(event_type_key, "Add", title, 
+                    # add menu item
+                    title = "{t} {e}".format(t=type_title, e=model_title(event_type_key))
+                    register_menu_item(event_type_key, "Add", "Add %s" %(title),
                         model_interface_qualname, 
                         "./%s/add" % (container_property_name), 
                         menu="additems", 
@@ -190,6 +187,24 @@ def setup_customization_ui():
                 else:
                     log.warn('IGNORING feature "event" ref to disabled type %r', 
                         event_type_key)
+        
+        # register other non-workspace menu items for custom types (only once)
+        # custom events !+GET_ARCHETYPE
+        if issubclass(ti.domain_model, domain.Event):
+            # edit menu item
+            register_menu_item(type_key, "Edit", "Edit {t}".format(t=type_title),
+                model_interface_qualname,
+                "edit",
+                menu="context_actions",
+                order=10,
+                layer="bungeni.ui.interfaces.IWorkspaceOrAdminSectionLayer")
+            # delete menu item
+            register_menu_item(type_key, "Delete", "Delete {t}".format(t=type_title),
+                model_interface_qualname,
+                "delete",
+                menu="context_actions",
+                order=99,
+                layer="bungeni.ui.interfaces.IWorkspaceOrAdminSectionLayer")
         
         # address
         if ti.workflow.has_feature("address"):

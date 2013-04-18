@@ -22,10 +22,12 @@ import zope.lifecycleevent
 from bungeni.alchemist import Session
 from bungeni.core.workflow import interfaces
 from bungeni.utils import error
+from bungeni.ui.interfaces import IFormEditLayer
+from bungeni.ui.utils import common
 
 
 GRANT, DENY = 1, 0
-TAG_DRAFT, TAG_PUBLIC, TAG_TERMINAL = TAGS = ["draft", "public", "terminal"]
+TAG_DRAFT, TAG_PUBLIC, TAG_TERMINAL = "draft", "public", "terminal"
 
 # we only have 1 or 0 i.e. only Allow or Deny, no Unset.
 IntAsSetting = { 
@@ -36,6 +38,15 @@ IntAsSetting = {
 def named__str__(self, name):
     return "<%s.%s '%s' object at %s>" % (
         self.__module__, type(self).__name__, name, hex(id(self)))
+
+def in_edit_mode():
+    """Is current UI view in mode "edit" i.e. are we modifying bungeni content?
+    
+    As general practice, to avoid user surprises, we do not allow a workflow 
+    transition when UI is displaying the doc in "edit" mode (and possibly with
+    unsaved modifications).
+    """
+    return IFormEditLayer.providedBy(common.get_request())
 
 
 class Facet(object):
@@ -60,11 +71,16 @@ class Feature(object):
         self.enabled = enabled
         self.note = note
         self.params = kws
+    
+    def assert_available_for_type(self, cls):
+        assert self.name in cls.available_dynamic_features, \
+            "Feature %r not one that is available %s for this type %s" % (
+                self.name, cls.available_dynamic_features, cls)
+    
     def __str__(self):
         return named__str__(self, self.name)
     __repr__ = __str__
-
-
+    
     
 class State(object):
     """A workflow state instance. 
@@ -75,14 +91,14 @@ class State(object):
     zope.interface.implements(IRolePermissionMap)
     
     def __init__(self, id, title, note, actions, permissions,
-            permissions_from_parent=False, obsolete=False
+            parent_permissions=False, obsolete=False
         ):
         self.id = id # status
         self.title = title
         self.note = note
         self.actions = actions # [callable]
         self.permissions = permissions
-        self.permissions_from_parent = permissions_from_parent # bool
+        self.parent_permissions = parent_permissions # bool
         self.obsolete = obsolete # bool
         self.tags = []
             
@@ -170,7 +186,7 @@ class Transition(object):
         self.order = order
         self.require_confirmation = require_confirmation
         self.note = note
-        self.condition_args=condition_args #send all local args to condition
+        self.condition_args=condition_args # send all local args to condition
         self.user_data = user_data
     
     @property
@@ -272,7 +288,7 @@ def get_object_state_rpm(context):
         log.error(""" ***get_object_state_rpm/%s:%s [%s] %s """ % (
             type(context).__name__, context.pk, cls.__name__, exc))
         return NONE_STATE_RPM
-    if state.permissions_from_parent:
+    if state.parent_permissions:
         # this state delegates permissions to parent, 
         # so just recurse passing parent item instead
         head = context.head
@@ -347,7 +363,7 @@ class Workflow(object):
     initial_state = None
     
     def __init__(self, name, features, facets, states, transitions,
-            title=None, description=None, note=None
+            global_grants, title=None, description=None, note=None
         ):
         assert not name in self.__class__.singletons, \
             "A workflow singleton %r exists already." % (name)
@@ -368,8 +384,10 @@ class Workflow(object):
         self._transitions_by_destination = {} # {destination: [Transition]}
         self._transitions_by_grouping_unique_sources = {} # {grouping: [Transition]}
         self.refresh(states, transitions)
-        self.tags = TAGS
-        self.setup_tags()
+        self.global_grants = global_grants
+        self.tags = TAG_DRAFT, TAG_PUBLIC, TAG_TERMINAL
+        self.setup_state_tags()
+        self.roles_used = self.get_roles_used()
     
     def refresh(self, states, transitions):
         sbyid = self._states_by_id
@@ -410,9 +428,9 @@ class Workflow(object):
         # at least one state
         assert len(states), "Workflow [%s] defines no states" % (self.name) #!+RNC
         for s in states:
-            if s.permissions_from_parent:
+            if s.parent_permissions:
                 assert not len(s.permissions), "Workflow state [%s -> %s] " \
-                    "with permissions_from_parent may not specify any own " \
+                    "with parent_permissions may not specify any own " \
                     "permissions" % (self.name, s.id) #!+RNC
                 continue
             _permission_role_mixes = {}
@@ -464,8 +482,23 @@ class Workflow(object):
                     "sources in grouped transitions [%s] in workflow [%s]" % (
                         grouping, self.name)
     
-    def setup_tags(self):
-        """Set up state tags used in the system
+    def get_roles_used(self):
+        """Get the list of all the roles used in this workflow
+        Sample use case -> determining if a document moves from one
+        chamber to another
+        """
+        roles = set()
+        for state_id in self._states_by_id.keys():
+            state = self.get_state(state_id)
+            for setting, perm, role in state.permissions:
+                if perm.startswith("bungeni.%s." % self.name):
+                    roles.add(role)
+        for setting, perm, role in self.global_grants:
+            roles.add(role)
+        return list(roles)
+    
+    def setup_state_tags(self):
+        """Determine and set the system-inferred tags on each state.
         """
         for state_id in self._states_by_id.keys():
             state = self.get_state(state_id)
@@ -473,16 +506,14 @@ class Workflow(object):
             from_transitions = self.get_transitions_from(state_id)
             if not from_transitions:
                 tags.add(TAG_TERMINAL)
-            draft_transitions = [transition for transition in 
-                self.get_transitions_to(state_id) if not transition.source
-            ]
+            draft_transitions = [ transition for transition in 
+                self.get_transitions_to(state_id) if not transition.source ]
             if draft_transitions:
                 tags.add(TAG_DRAFT)
             view_permission = "bungeni.%s.View" % self.name
-            anon_perms = [ bool(setting) for setting, perm, role in 
-                state.permissions if role=="bungeni.Anonymous" and
-                perm==view_permission
-            ]
+            anon_perms = [ bool(setting)
+                for setting, perm, role in state.permissions 
+                if role == "bungeni.Anonymous" and perm == view_permission ]
             if True in anon_perms:
                 tags.add(TAG_PUBLIC)
             state.tags = list(tags)
@@ -494,10 +525,10 @@ class Workflow(object):
         """
         permission_ids, role_ids = set(), set()
         for s in self._states_by_id.values():
-            # presumably every state (not with permissions_from_parent="true") 
+            # presumably every state (not with parent_permissions="true") 
             # defines exactly the same set of all (permission, role) pairs, so
             # we just need to verify a first such state.
-            if s.permissions_from_parent:
+            if s.parent_permissions:
                 continue
             for setting, permission_id, role_id in s.permissions:
                 permission_ids.add(permission_id)
@@ -519,7 +550,7 @@ class Workflow(object):
             if f.name == name:
                 return f.enabled
         return False
-
+    
     def get_feature(self, name):
         """Get the named feature instance, or None.
         """
@@ -735,17 +766,21 @@ class WorkflowController(object):
     def _get_transitions(self, trigger_ifilter=None, conditional=False):
         """Retrieve all possible transitions from current status.
         If trigger_ifilter is not None, filter on trigger interface.
-        If conditional, then only transitions that pass the condition.
+        If conditional, then only if not in edit mode, and only transitions 
+        that pass the condition.
         """
         transitions = self.workflow.get_transitions_from(
             self.state_controller.get_status())
         # now filter these transitions to retrieve all possible
         # transitions in this context, and return their ids
         filtered_transitions = []
+        IN_EDIT_MODE = in_edit_mode()
         for transition in transitions:
-            if trigger_ifilter != None and transition.trigger != trigger_ifilter:
-                    continue
+            if trigger_ifilter is not None and transition.trigger != trigger_ifilter:
+                continue
             if conditional:
+                if IN_EDIT_MODE:
+                    continue
                 if transition.condition is not None:
                     if transition.condition_args:
                         if not transition.condition(self.context, 

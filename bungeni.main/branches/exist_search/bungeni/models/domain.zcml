@@ -203,17 +203,6 @@
         />
     </class>
     
-    <!-- !+DECL tmp special case -->
-    <class class=".domain.Question">
-        <require like_class=".domain.Doc" />
-        <require permission="bungeni.response.View"
-            attributes="response_text"
-        />
-        <require permission="bungeni.response.Edit"
-            set_attributes="response_text" 
-        />
-    </class>
-    
     
     <class class=".domain.Heading">
         <require permission="bungeni.heading.Edit"
@@ -237,7 +226,6 @@
                 addresses
                 
                 members
-                group_principal_id
                 contained_groups
                 group_addresses
                 
@@ -245,7 +233,7 @@
                 short_name
                 full_name
                 acronym
-                identifier
+                principal_name
                 description
                 status
                 status_date
@@ -269,7 +257,6 @@
                 addresses
                 
                 members
-                group_principal_id
                 contained_groups
                 group_addresses
                 
@@ -277,7 +264,7 @@
                 short_name
                 full_name
                 acronym
-                identifier
+                principal_name
                 description
                 status
                 status_date
@@ -315,7 +302,7 @@
                 short_name
                 full_name
                 acronym
-                identifier
+                principal_name
                 sub_type
                 description
                 start_date
@@ -331,7 +318,6 @@
                 addresses
                 
                 members
-                group_principal_id
                 contained_groups
                 group_addresses
                 
@@ -339,7 +325,7 @@
                 short_name
                 full_name
                 acronym
-                identifier
+                principal_name
                 description
                 status
                 status_date
@@ -363,7 +349,6 @@
                 addresses
                 
                 members
-                group_principal_id
                 contained_groups
                 group_addresses
                 
@@ -371,7 +356,7 @@
                 short_name
                 full_name
                 acronym
-                identifier
+                principal_name
                 description
                 status
                 status_date
@@ -397,7 +382,7 @@
                 short_name
                 full_name
                 acronym
-                identifier
+                principal_name
                 sub_type
                 description
                 start_date
@@ -412,7 +397,6 @@
                 addresses
                 
                 members
-                group_principal_id
                 contained_groups
                 group_addresses
                 
@@ -420,7 +404,7 @@
                 short_name
                 full_name
                 acronym
-                identifier
+                principal_name
                 description
                 status
                 status_date
@@ -446,7 +430,7 @@
                 short_name
                 full_name
                 acronym
-                identifier
+                principal_name
                 sub_type
                 description
                 start_date
@@ -461,7 +445,6 @@
                 addresses
                 
                 members
-                group_principal_id
                 contained_groups
                 group_addresses
                 
@@ -469,7 +452,7 @@
                 short_name
                 full_name
                 acronym
-                identifier
+                principal_name
                 description
                 status
                 status_date
@@ -509,7 +492,7 @@
                 short_name
                 full_name
                 acronym
-                identifier
+                principal_name
                 description
                 start_date
                 end_date
@@ -535,7 +518,6 @@
                 addresses
                 
                 members
-                group_principal_id
                 contained_groups
                 group_addresses
                 
@@ -543,7 +525,7 @@
                 short_name
                 full_name
                 acronym
-                identifier
+                principal_name
                 description
                 status
                 status_date
@@ -568,7 +550,7 @@
                 short_name
                 full_name
                 acronym
-                identifier
+                principal_name
                 sub_type
                 description
                 start_date
@@ -896,7 +878,7 @@
                 user_id
                 status
                 login
-                titles
+                title
                 first_name
                 last_name
                 middle_name
@@ -918,7 +900,7 @@
         />
         <require permission="bungeni.user.Edit"
             set_attributes="
-                titles
+                title
                 first_name
                 last_name
                 middle_name

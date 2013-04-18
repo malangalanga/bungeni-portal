@@ -14,7 +14,7 @@
     
     <include package="bungeni.core" file="auth.zcml"/>
     <include package="bungeni.models" file="roles.zcml" />
-    <utility factory="bungeni.models.roles.load_roles"
+    <utility factory="bungeni.models.roles.load_custom_roles"
              provides="bungeni.models.roles.IDummyRoleConfig"/>
     <include package="bungeni.models" file="permissions.zcml" />
     <!-- !+permissions.zcml bungeni_custom/worfklows/.auto/permissions.zcml 
@@ -33,7 +33,7 @@
     <grant permission="bungeni.ui.audit.View" role="bungeni.Authenticated" />
     <grant permission="bungeni.ui.version.View" role="bungeni.Authenticated" />
     <grant permission="bungeni.ui.workspace.View" role="bungeni.Authenticated"/>
-    <grant permission="bungeni.oauth.View" role="bungeni.Authenticated" />
+    <grant permission="bungeni.api.View" role="bungeni.Authenticated" />
 
     <!-- manager grants -->
     <grantAll role="zope.Manager" />

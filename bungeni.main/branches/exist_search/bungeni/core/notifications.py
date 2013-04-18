@@ -14,8 +14,6 @@ import os
 import pika
 import simplejson
 import datetime
-import socket
-from lxml import etree
 from threading import Thread
 from sqlalchemy import orm
 from zope.interface import implements
@@ -120,7 +118,7 @@ def get_mq_parameters():
         credentials=credentials,
         channel_max=mq_utility.get_channel_max(),
         frame_max=mq_utility.get_frame_max(),
-        heartbeat=mq_utility.get_heartbeat()
+        heartbeat_interval=mq_utility.get_heartbeat()
     )
     return connection_parameters
 
@@ -128,7 +126,7 @@ def get_mq_parameters():
 def get_mq_connection():
     try:
         return pika.BlockingConnection(parameters=get_mq_parameters())
-    except socket.error:
+    except pika.exceptions.AMQPConnectionError:
         log.error(
             "Unable to connect to AMQP server. Notifications will not be sent")
 
@@ -199,11 +197,11 @@ def get_principal_ids(document, roles):
     return principal_ids
 
 
-def get_group_member_ids(group_id):
+def get_group_member_ids(group_principal_name):
     session = Session()
     group = session.query(
         domain.Group).filter(
-        domain.Group.group_principal_id == group_id).one()
+        domain.Group.principal_name == group_principal_name).one()
     if group:
         return [member.user.login for member in group.members]
     return []

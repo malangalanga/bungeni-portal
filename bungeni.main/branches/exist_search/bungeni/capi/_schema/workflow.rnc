@@ -11,10 +11,10 @@
 # 
 # $Id$
 
-
+# the local namespace is an empty string 
+#namespace local=""
 grammar {
     include "common.rnc"
-    
     start = WORKFLOW
     
     WORKFLOW = element workflow {
@@ -26,7 +26,7 @@ grammar {
         # i.e. each included action allowed to be in the form [type_key].{Action}, 
         # with the optional type_key defaulting to the type_key of the type 
         # "owning" this workflow.
-        
+        FOREIGN_NS_ATTRS,
         ALLOW*,
         FEATURE*,
         FACET*,
@@ -39,12 +39,12 @@ grammar {
         attribute roles { SPACE_SEPARATED_TOKENS },
         attribute note { text }?
     }
-    
+
     FEATURE = element feature {
         attribute name { SYMBOL_NAME },
         attribute enabled { xsd:boolean },
         attribute note { text }?,
-        
+        FOREIGN_NS_ATTRS,
         element parameter { # !+ name by feature
             attribute name { SYMBOL_NAME }, # !+ unique name per feature
             attribute value { text },
@@ -56,6 +56,7 @@ grammar {
         attribute name { SYMBOL_NAME },
         attribute default { xsd:boolean }?, # default:false, may be true only once
         attribute note { text }?,
+        FOREIGN_NS_ATTRS,
         ALLOW*
     }
     
@@ -63,20 +64,39 @@ grammar {
         attribute id { SYMBOL_NAME },
         attribute title { text }, # i18n msgid
         attribute actions { SPACE_SEPARATED_SYMBOLS }?,
-        attribute tags { SPACE_SEPARATED_SYMBOLS }?,
         attribute note { text }?,
         attribute obsolete { xsd:boolean }?, # default:false
         
-        # if (permissions_from state | permissions_from_parent) -> then NO facets
+        # if (permissions_from_state | parent_permissions) -> then NO facets
         (
-            # may have EITHER permissions_from_state OR permissions_from_parent
+            # may have EITHER permissions_from_state OR parent_permissions
             (
+                # use exact permissions as specified by the name state
                 attribute permissions_from_state { SYMBOL_NAME }  # state.id
-                    | attribute permissions_from_parent { xsd:boolean }  # default:false
+                    |   # use the exact permissions as explicitly specified by the parent 
+                        # (in its current state) for this child document type
+                    attribute parent_permissions { xsd:boolean }  # default:false
             )?
-            | element facet {
-                attribute ref { token } # [ {workflow_feature.@name} ].{facet.@name}
-            }*
+            |
+            (
+                # anonymous same-workflow facet:
+                # - there may be only one anonymous facet per state 
+                #   (that would be instead of referring to one from same workflow)
+                # - an anonymous state facet is NOT available for re-use from any 
+                #   other state (in same or other workflow)
+                # - an anonymous facet may (of course) NOT be set as the default
+                #   facet for the workflow
+                element facet { 
+                    attribute note { text }?,
+                    ALLOW*
+                }?,
+                # one ref to a workflow facet (if an anonymous facet is NOT present),
+                # plus up to one facet ref per feature
+                element facet {
+                    attribute ref { FACET_REFERENCE },
+                    attribute note { text }?
+                }*
+            )
         )
     }
     
@@ -95,5 +115,24 @@ grammar {
         attribute note { text }?
     }
     
+    
+    # A valid facet reference may be composed of
+    # - (optional) a workflow feature name : SYMBOL_NAME
+    # - (optional) IF a feature name is specified, this may be also qualified 
+    #   further with:
+    #   - a literal "#" char
+    #   - followed by a type_key : SYMBOL_NAME
+    # - a single literal "." char
+    # - a facet name : SYMBOL_NAME
+    # where SYMBOL_NAME is a valid programming language symbol 
+    # (see common.rnc). Leading/trailing white-space is allowed.
+    #
+    # [ {workflow_feature.@name} [ #{qualifier type_key} ] ].{facet.@name}
+    #
+    FACET_REFERENCE = xsd:string { 
+        pattern="\s*([a-zA-Z_][\w_]*([#][a-zA-Z_][\w_]*)?)?\.[a-zA-Z_][\w_]*\s*"
+    }
+
+
 }
 

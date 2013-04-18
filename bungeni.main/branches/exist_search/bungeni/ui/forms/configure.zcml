@@ -41,7 +41,7 @@
         factory=".forms.SubFormTemplate"
     />
     <!-- VIEW_PERMISSION (miano, nov 2012) -->
-    <browser:page name="view"
+    <browser:page name="index"
         for="bungeni.alchemist.interfaces.IAlchemistContent"
         class=".common.DisplayForm"
         permission="zope.Public"
@@ -185,7 +185,7 @@ to e.g. "bungeni.{type}.Edit").
      permission="bungeni.sitting.Add"
      layer="..interfaces.IBungeniSkin"
      />
-    <browser:page name="view"
+    <browser:page name="index"
         for="bungeni.models.interfaces.ISitting"
         class=".common.DisplayForm"
         permission="bungeni.sitting.View"
@@ -341,14 +341,6 @@ to e.g. "bungeni.{type}.Edit").
         permission="zope.Public"
         weight="10"
     />
-    <browser:viewlet
-     name="bungeni.viewlet.writtenquestionresponse"
-     manager=".interfaces.ISubFormViewletManager"
-     class=".viewlets.WrittenQuestionResponseViewlet"
-     for="bungeni.models.interfaces.IQuestion"
-     permission="zope.Public"
-     weight="10"
-     />
   <browser:viewlet
      name="bungeni.viewlet.mp-personal-info"
      manager=".interfaces.ISubFormViewletManager"
@@ -478,6 +470,7 @@ to e.g. "bungeni.{type}.Edit").
      weight="20"
      />
 
+    <!-- !+MINISTRY_DOCS
   <browser:viewlet
      name="bungeni.viewlet.minstery-bills"
      manager=".interfaces.ISubFormViewletManager"
@@ -495,7 +488,8 @@ to e.g. "bungeni.{type}.Edit").
      permission="zope.Public"
      weight="40"
      />
-
+    -->
+    
     <browser:viewlet name="bungeni.viewlet.minister-titles"
         manager="bungeni.alchemist.interfaces.IContentViewManager"
         class=".viewlets.OfficesHeldViewlet"

@@ -17,6 +17,7 @@ from bungeni.alchemist.descriptor import (
     show, hide,
     #norm_sorted,
 )
+from bungeni.models import roles
 from bungeni.ui.descriptor import field
 from bungeni.capi import capi
 from bungeni.utils import naming, misc
@@ -114,7 +115,8 @@ def localize_descriptors(file_path, is_init):
     descriptor_doc = capi.schema.validate_file_rng("descriptor", file_path)
     # make the value of <ui.@roles> as *the* bungeni default list of roles
     global ROLES_DEFAULT
-    Field._roles[:] = capi.schema.qualified_roles(descriptor_doc.get("roles", ROLES_DEFAULT))
+    #!+ROLES Field._roles[:] = capi.schema.qualified_roles(descriptor_doc.get("roles", ROLES_DEFAULT))
+    Field._roles[:] = roles.SYSTEM_ROLES + roles.CUSTOM_ROLES
     # and reset global "constant" !+DECL ui.@roles must be set only once!
     ROLES_DEFAULT = " ".join(Field._roles)
     for edescriptor in descriptor_doc.findall("descriptor"):
@@ -153,7 +155,7 @@ def localize_descriptor(descriptor_elem, is_init, scope="system"):
                 fields, info_containers, constraints, validations)
         except AttributeError:
             # first time around, no such descriptor - so create a new custom descriptor
-            archetype_key = xas(descriptor_elem, "archetype")
+            archetype_key = naming.polymorphic_identity(ti.archetype)
             cls = new_descriptor_cls(type_key, archetype_key, order, 
                 fields, info_containers, constraints, validations)
             # only "push" onto cls (hiding same-named properties or overriding 
@@ -165,7 +167,7 @@ def localize_descriptor(descriptor_elem, is_init, scope="system"):
             if xas(descriptor_elem, "sort_on"):
                 cls.sort_on = xas(descriptor_elem, "sort_on").split()
                 # !+ assert each name is a field in the descriptor
-            if xas(descriptor_elem, "sort_dir"):
+            if xas(descriptor_elem, "sort_dir"): # default cls.sort_dir: "desc"
                 cls.sort_dir = xas(descriptor_elem, "sort_dir")
             naming.MSGIDS.add(cls.display_name)
             naming.MSGIDS.add(cls.container_name)
@@ -296,12 +298,12 @@ def reset_zope_schema_properties_on_model_interface(descriptor_cls):
     type_key = naming.type_key("descriptor_class_name", descriptor_cls.__name__)
     ti = capi.get_type_info(type_key)
     domain_model = ti.domain_model
-    sast = alchemist.catalyst.SQLAlchemySchemaTranslator()
+    sast = alchemist.sa2zs.SQLAlchemySchemaTranslator()
     domain_table = alchemist.utils.get_local_table(domain_model)
     # zope.schema field property map
-    zsfp_map = sast.generateFields(domain_table, descriptor_cls)
+    zsfp_map = sast.generate_fields(domain_table, descriptor_cls)
     # apply manually overridden field properties
-    sast.applyProperties(zsfp_map, descriptor_cls)
+    sast.apply_properties(zsfp_map, descriptor_cls)
     # stuff back onto derived_table_schema
     derived_table_schema = ti.derived_table_schema
     assert set(derived_table_schema.names(all=False)) == set(zsfp_map), \

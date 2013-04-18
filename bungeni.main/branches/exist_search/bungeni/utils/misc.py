@@ -11,7 +11,9 @@ $Id$
 """
 log = __import__("logging").getLogger("bungeni.utils.misc")
 
+import sys
 import os
+
 
 # xml attr values
 
@@ -105,6 +107,19 @@ def check_overwrite_file(file_path, content):
         open(file_path, "w").write(content.encode("utf-8"))
 
 
+# introspection
+
+def get_caller_module_name(depth=1):
+    """Get the global __name__ value at the given caller depth, by default
+    the immediate caller's module.
+    
+    Calling with depth=0 is equivalent to __name__ (current module name).
+    Calling with a depth greater than call stack will throw ValueError.
+    """ 
+    return sys._getframe(depth).f_globals["__name__"]
+
+
+#
 
 def describe(funcdesc):
     """
@@ -146,4 +161,14 @@ def put_env(key, value):
             # ensure that the original object value defines a __repr__ 
             # that can correctly re-instantiate the original object
             assert eval(os.environ[key]) == value
+            
+            
+def get_bungeni_installation_dir():
+    """Get the path to the bungeni installation directory.
+    """
+    current_dir = __file__
+    trailing_file_name = ""
+    while trailing_file_name != "src":
+        current_dir, trailing_file_name = os.path.split(current_dir)
+    return current_dir
 

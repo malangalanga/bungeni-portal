@@ -38,7 +38,7 @@ var timeline_mapping = {
 
 var Y_PROPERTY_MAPPING = {
     venues: "venue",
-    committees: "group_id"
+    combined: "group_id"
 }
 
 /**
@@ -67,15 +67,17 @@ var show_notification = function(message){
  * @function handle_before_change_view
  * @description Handler for scheduler's onBeforeViewChange event
  *  Determines the scope and render mode of timeline views whenever
- *  there is a switch to a timeline view. Switching to the committees timeline 
- *  view also loads committee events.
+ *  there is a switch to a timeline view. Switching to the combined 
+ *  timeline loads events from all committees.
  */
 function handle_before_change_view(old_mode, old_date, new_mode , new_date){
-    if (((new_mode == "venues") && (old_mode != "venues"))
+    var VENUES_MODE = "venues";
+    var COMBINED_MODE = "combined";
+    if (((new_mode == VENUES_MODE) && (old_mode != VENUES_MODE))
         || 
-        ((new_mode == "committees") && (old_mode != "committees"))
+        ((new_mode == COMBINED_MODE) && (old_mode != COMBINED_MODE))
     ){
-        if (new_mode == "committees"){
+        if (new_mode == COMBINED_MODE){
             //load group events to current scheduler instance
             load_groups_events();
         }
@@ -277,4 +279,72 @@ function scheduler_resized(){
         dom_el.style.zIndex="";
     }
     return true;
+}
+
+
+session_events = new Array();
+/**
+ * @method event_loading
+ * @description fires when loading an event (store all sessions)
+ **/
+function event_loading(event){
+    if (event.event_type=="session"){
+        session_events.push(event);
+    }
+    return true;
+}
+
+/**
+ * @function reset_sessions
+ * @description reset sessions array
+ **/
+function reset_sessions(){
+    session_events = new Array();
+}
+
+
+/**
+ * @function block_span
+ * @description block timespan on scheduler
+ **/
+ function block_span(start_date, end_date){
+    scheduler.addMarkedTimespan({
+        start_date: start_date,
+        end_date: end_date,
+        css: "gray_section",
+        type: "dhx_time_block",
+        zones: "fullday"
+    });
+}
+ 
+/**
+ * @function block_times
+ * @description limit event adding to sessions
+ **/
+function block_times(){
+    scheduler.deleteMarkedTimespan();
+    end_date = null;
+    last_index = session_events.length-1;
+    prev_end_date = null;
+    for (index in session_events){
+        session = session_events[index];
+        start_date = null;
+        if(index == 0){
+            start_date = scheduler.date.add(scheduler._date, -1, "year");
+            end_date = session.start_date;
+            scheduler.config.limit_start = session.start_date;
+        } else {
+            start_date = scheduler.date.add(prev_end_date, 1, "day");
+            end_date = session.start_date;
+        }
+        prev_end_date = session.end_date;
+        block_span(start_date, end_date);
+        if (index == last_index){
+            start_date = scheduler.date.add(session.end_date, 1, "day");
+            end_date = scheduler.date.add(scheduler._date, 1, "year");
+            scheduler.config.limit_end = session.end_date;
+            block_span(start_date, end_date);
+        }
+    }
+    scheduler.updateView();
 }

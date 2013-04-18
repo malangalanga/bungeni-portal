@@ -169,7 +169,7 @@ principal = sa.Table("principal", metadata,
     # and replace principal_id altogether!
     # !+principal_name sa.Column("principal_name", sa.Unicode(50), unique=True, nullable=False),
     # for polymorphic_identity
-    sa.Column("principal_type", sa.String(30), nullable=False),
+    sa.Column("type", sa.String(30), nullable=False),
 )
 
 
@@ -184,7 +184,6 @@ user = sa.Table("user", metadata,
         nullable=False),
     sa.Column("salutation", sa.Unicode(128)), # !+vocabulary?
     sa.Column("title", sa.Unicode(128)), # !+vocabulary?
-    sa.Column("titles", sa.Unicode(32)), # !+TMP to work with preceding demo data 
     sa.Column("first_name", sa.Unicode(256), nullable=False),
     sa.Column("last_name", sa.Unicode(256), nullable=False),
     sa.Column("middle_name", sa.Unicode(256)),
@@ -338,7 +337,11 @@ group = sa.Table("group", metadata,
     sa.Column("short_name", sa.Unicode(512), nullable=False),
     sa.Column("full_name", sa.Unicode(1024)),
     sa.Column("acronym", sa.Unicode(32), nullable=True),
-    sa.Column("identifier", sa.Unicode(32), nullable=True),
+    sa.Column("principal_name", sa.Unicode(32), 
+        # !+login_regex - principal_name should also be a valid login name
+        # !+principal_name sa.ForeignKey("principal.principal_name"),
+        unique=True,
+        nullable=False),
     sa.Column("description", sa.UnicodeText),
     # Workflow State
     sa.Column("status", sa.Unicode(32)),
@@ -348,14 +351,7 @@ group = sa.Table("group", metadata,
     ),
     sa.Column("start_date", sa.Date, nullable=False),
     sa.Column("end_date", sa.Date),
-    sa.Column("type", sa.String(30), nullable=False),
     sa.Column("sub_type", sa.Unicode(128), nullable=True),
-    # !+principal(mr, feb-2013) "group_principal_id" should really be "principal_name"
-    # !+GROUP_PRINCIPAL_ID(ah,sep-2011) adding group principal id to schema
-    sa.Column("group_principal_id", sa.Unicode(50),
-        # !+principal_name sa.ForeignKey("principal.principal_name"),
-        unique=True,
-        nullable=False),
     sa.Column("parent_group_id", sa.Integer,
         sa.ForeignKey("group.group_id")
      ),
@@ -367,10 +363,6 @@ group = sa.Table("group", metadata,
     sa.Column("custom2", sa.UnicodeText, nullable=True),
     sa.Column("custom3", sa.UnicodeText, nullable=True),
     sa.Column("custom4", sa.UnicodeText, nullable=True),
-)
-# !+GROUP_PRINCIPAL_ID(ah,sep-2011) adding index on group_principal_id column
-group_principal_id_index = sa.Index("grp_grpprincipalid_idx", 
-    group.c["group_principal_id"]
 )
 
 parliament = sa.Table("parliament", metadata,
@@ -440,6 +432,11 @@ group_membership_role = sa.Table("group_membership_role", metadata,
     sa.Column("is_global", sa.Boolean, default=False),
 )
 
+# !+QUALIFIED_FEATURES(mr, apr-2013) may need to "qualify" each assignment, to 
+# be able to guarantee/constrain the intended action of the assignment to the
+# appropriate group e.g. imagine a doc is assigned to one group for a 
+# "2nd opinion" and again to another (or same!) for a "response"... and a user 
+# to carry out the implied actions, who may be a member of both assigned groups
 group_document_assignment = sa.Table("group_document_assignment", metadata,
     sa.Column("group_id", sa.Integer,
         sa.ForeignKey("group.group_id"),
@@ -679,9 +676,6 @@ resourcebookings = sa.Table("resourcebookings", metadata,
 )
 '''
 
-#######################
-# Parliament
-#######################
 
 item_vote = sa.Table("item_vote", metadata,
     sa.Column("vote_id", sa.Integer, primary_key=True),
@@ -736,7 +730,7 @@ editorial_note = sa.Table("editorial_note", metadata,
     sa.Column("language", sa.String(5), nullable=False)
 )
 
-#store text record for a sitting or 
+# store text record for a sitting or 
 agenda_text_record = sa.Table("agenda_text_record", metadata,
     sa.Column("text_record_id", sa.Integer, primary_key=True),
     sa.Column("text", sa.UnicodeText, nullable=False),
@@ -823,7 +817,7 @@ attachment = sa.Table("attachment", metadata,
     ),
     # attachment_type #!+attached_file_type
     sa.Column("type", sa.Unicode(128),
-        default=u'document',
+        default=u"document",
         nullable=False,
     ),
     sa.Column("title", sa.Unicode(255), nullable=False), #!+file
@@ -859,7 +853,7 @@ doc = sa.Table("doc", metadata,
     # conceptually distinct while still being related:
     # - the general sense of parliament_id seems to be that of the 
     # "root_container" group (currently this may only be a parliament) in 
-    # which the doc "exists" in
+    # which the doc "exists"
     # - while the general sense of group_id seems to be that of a kind of
     # "custodian" group, to which the doc is "assigned to" for handling.
     # !+PARLIAMENT_ID should be nullable=False, but fails on creating an Event...
@@ -1183,7 +1177,8 @@ debate_take = sa.Table("debate_take", metadata,
 )
 
 
-#OAuth
+# OAuth
+
 oauth_application = sa.Table("oauth_application", metadata,
     sa.Column("application_id", sa.Integer, primary_key=True),
     sa.Column("identifier", sa.UnicodeText, nullable=False, 
@@ -1199,17 +1194,25 @@ oauth_authorization = sa.Table("oauth_authorization", metadata,
         nullable=False),
     sa.Column("application_id", sa.Integer,
         sa.ForeignKey("oauth_application.application_id"), nullable=False),
+    sa.Column("active", sa.Boolean(), nullable=False)
+)
+
+oauth_authorization_token = sa.Table("oauth_authorization_token", metadata,
+    sa.Column("authorization_token_id", sa.Integer, primary_key=True),
+    sa.Column("authorization_id", sa.Integer, sa.ForeignKey(
+        "oauth_authorization.authorization_id"), nullable=False),
     sa.Column("authorization_code", sa.String(100), nullable=False),
     sa.Column("expiry", sa.DateTime(timezone=False), nullable=False),
-    sa.Column("active", sa.Boolean(), nullable=False)
+    sa.Column("refresh_token", sa.String(100), nullable=False),
 )
 
 oauth_access_token = sa.Table("oauth_access_token", metadata,
     sa.Column("access_token_id", sa.Integer, primary_key=True),
-    sa.Column("authorization_id", sa.Integer,
-             sa.ForeignKey("oauth_authorization.authorization_id")),
-    sa.Column("access_token", sa.String(100)),
-    sa.Column("refresh_token", sa.String(100)),
+    sa.Column("authorization_token_id", sa.Integer,
+        sa.ForeignKey("oauth_authorization_token.authorization_token_id"),
+        nullable=False
+    ),
+    sa.Column("access_token", sa.String(100), nullable=False),
     sa.Column("expiry", sa.DateTime(timezone=False), nullable=False),
 )
 
@@ -1239,3 +1242,4 @@ if __name__ == "__main__":
         import pdb, traceback, sys
         traceback.print_exc()
         pdb.post_mortem(sys.exc_info()[-1])
+

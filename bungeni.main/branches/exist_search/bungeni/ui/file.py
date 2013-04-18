@@ -78,18 +78,6 @@ class FileDownload(BrowserView):
             raise NotFound(context, "", self.request)
 
 
-class FileDeactivate(BrowserView):
-    """ Changes attached file state to "inactive"
-    """
-
-    def __call__(self):
-        trusted = removeSecurityProxy(self.context)
-        sc = IStateController(trusted)
-        sc.set_status("inactive")
-        redirect_url = self.request.getURL().replace("/deactivate", "")
-        return self.request.response.redirect(redirect_url)
-
-
 # listing view, viewlet
 
 from bungeni.ui.audit import TableFormatter
@@ -190,7 +178,7 @@ class FileListingViewlet(FileListingMixin, browser.BungeniItemsViewlet):
     name="keep-zca-happy-attachments",
     protect=register.PROTECT_VIEWLET_PUBLIC)
 class VersionFileListingViewlet(FileListingViewlet):
-    """Viewlet to list attachments of a given version of a document.
+    """Viewlet to list **attachment versions** of a given **doc version**.
     """
     # Version attachments are records in the change + attachment_audit tables
     
@@ -204,8 +192,14 @@ class VersionFileListingViewlet(FileListingViewlet):
     
     @property
     def columns(self):
+        from bungeni.models import domain
         def attachment_version_uri(i):
             # !+ bungeni.models.domain.Version
+            print "VersionFileListingViewlet", i
+            assert isinstance(i, domain.AttachmentVersion), \
+                "Not a domain.AttachmentVersion: %s"  % (i)
+            # !+STRING_KEY_FILE_VERSION the "obj-%d" context below is an 
+            # AttachmentVersion and does NOT have a "version-log" view!
             return "obj-%d/version-log/%s" % (i.attachment_id, i.__name__)            
         return [
             column.GetterColumn(

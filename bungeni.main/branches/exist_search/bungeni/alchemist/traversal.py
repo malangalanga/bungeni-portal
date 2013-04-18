@@ -17,16 +17,15 @@ __all__ = [
     #!+ALCHEMIST_INTERNAL "One2Many", # redefn -> alchemist.traversal.managed
     #!+ALCHEMIST_INTERNAL "CollectionTraverser", # redefn -> alchemist.traversal.collection
     #"one2manyindirect",             # redefn -> alchemist.traversal.managed
-    "PartialContainer",             # alias -> ore.alchemist.container
 ]
 
-from ore.alchemist.container import PartialContainer
 
 # alchemist.traversal
 
 from bungeni.alchemist.interfaces import (
     IManagedContainer,
 )
+from bungeni.alchemist.container import PartialContainer
 
 #
 
@@ -73,10 +72,10 @@ class One2Many(ConstraintManager):
         #column = target.__class__.c[ self.fk ]
         #table = orm.class_mapper(target.__class__).mapped_table
         #column = table.c[ self.fk ]
-        #setattr( target, column.name, primary_key )
+        #setattr(target, column.name, primary_key)
         setattr(target, self.fk, primary_key)
         
-        #set extra properties
+        # set extra properties
         for target_key, source_key in self.extra:
             setattr(target, target_key, getattr(trusted, source_key))
 
@@ -90,11 +89,11 @@ class One2ManyIndirect(One2Many):
     def __init__(self, child_key, parent_key):
         self.child_key = child_key
         self.parent_key = parent_key
-
+    
     def getQueryModifier(self, instance, container):
         attr_value = getattr(instance, self.parent_key)
         return getattr(container.domain_model, self.child_key) == attr_value
-        
+    
     def setConstrainedValues(self, instance, target):
         #trusted = removeSecurityProxy(instance)
         attr_value = getattr(instance, self.parent_key) 
@@ -115,7 +114,7 @@ def one2many(name, container, fk, extra=[]):
 
 def one2manyindirect(name, container, child_key, parent_key):
     """create a container bound to domain model
-        name : name of of the container(traversable)
+        name: name of of the container(traversable)
         container: a dotted name string of the target container class
         child_key: the key of child items which is set from `parent_key`
         parent_key: this is the parent property to which `child_key` is set
@@ -184,10 +183,10 @@ class _ManagedContainer(PartialContainer):
 # alchemist.traversal.collection
 
 class CollectionTraverserTemplate(object):
-    """A traverser that knows how to look up objects by sqlalchemy collections """
-
+    """A traverser that knows how to look up objects by sqlalchemy collections.
+    """
     interface.implements(ITraverserPlugin)
-
+    
     collection_attributes = ()
     
     def __init__(self, container, request):
@@ -195,7 +194,8 @@ class CollectionTraverserTemplate(object):
         self.request = request
     
     def publishTraverse(self, request, name):
-        """See zope.publisher.interfaces.IPublishTraverse"""
+        """See zope.publisher.interfaces.IPublishTraverse.
+        """
         if name in self.collection_attributes:
             container = getattr(self.context, name)
             if ILocation.providedBy(container):
