@@ -31,6 +31,7 @@ from bungeni.ui.i18n import _
 import interfaces
 
 from bungeni.models import interfaces as model_ifaces
+from bungeni.models.settings import SearchSettings
 
 from bungeni.utils import register
 from bungeni.utils.common import getattr_ancestry
@@ -183,6 +184,9 @@ def make_pages(item_count, offset, next_offset, limit):
     num_pages = item_count/limit + int(bool(item_count%limit))
     return list(xrange(1, num_pages+1))
 
+def get_search_url():
+    return SearchSettings(common.get_application()).search_uri
+
 def execute_search(data, prefix, request, context):
     data = dict([(key, 
         (",".join(value) if isinstance(value, list) else value))
@@ -228,7 +232,7 @@ def get_search_types(types):
         _types = ", ".join(type_names)
     return _types
 
-SEARCH_VIEW = "search.exist"
+SEARCH_VIEW = "search"
 @register.view(ISearchableSection, ui_ifaces.IBungeniSkin, 
     name=SEARCH_VIEW, protect={ "zope.Public": register.VIEW_DEFAULT_ATTRS })
 class Search(form.PageForm, browser.BungeniBrowserView):
