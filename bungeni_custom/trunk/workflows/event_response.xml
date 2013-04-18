@@ -19,7 +19,7 @@
     </facet>
     
     <!-- workflow states -->    
-    <state id="draft" title="Draft" actions="propagate_parent_assigned_group_role"> 
+    <state id="draft" title="Draft" actions="propagate_parent_assigned_group_role" note="!+ action should be application logic"> 
         <facet>
             <allow permission=".View" roles="Drafter" />
             <allow permission=".Edit" roles="Drafter" />

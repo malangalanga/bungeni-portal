@@ -125,7 +125,7 @@
     only pertinent to the "container" i.e. it is, by definition, unbound to 
     any *yet-to-exist* item.
     -->
-    <state id="draft" title="Draft" actions="assign_role_group">
+    <state id="draft" title="Draft">
         <facet ref=".draft" />
         <facet ref="attachment.add_drafter" />
         <facet ref="event.add_clerk" />
@@ -232,7 +232,7 @@
     <transition title="Admissible"
         source="reviewed"
         destination="admissible"
-        condition="is_oral_response"
+        condition=""
         trigger="manual"
         roles="SpeakerSenate"
         order="6"
