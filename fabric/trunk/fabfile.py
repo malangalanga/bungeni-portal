@@ -737,6 +737,14 @@ def glue_install():
     tasks.setup_glue()
     tasks.glue_setup_config()
 
+def glue_update():
+    """
+    Updates the glue source-code only - ignores jython and other libs.
+    """
+    tasks = bungeni.GlueScriptTasks()
+    tasks.setup_glue()
+    tasks.glue_setup_config()
+
 def config_glue():
     """
     Generates glue_script configuration
