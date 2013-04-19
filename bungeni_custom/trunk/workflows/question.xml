@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<workflow title="Base Question Workflow" description="A base question"
+    permission_actions=".View .Edit .Add .Delete">
+
+    <state id="draft" title="Draft" />
+    <transition title="Create Question" source="" destination="draft" trigger="automatic" />
+
+</workflow>
+
