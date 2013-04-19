@@ -433,11 +433,7 @@ input.inputLabelActive {
 .actionmenu .actionMenuHeader ul#contentActionMenus li.context_translate a {
 	background-image:none !important;
 	background:none !important;
-}
-dl#context_actions.actionMenu .actionMenuContent ul {
-    border: 0 none;
-}
-/*
+}/*
  * portal-globalnav
  */
 div#portal-globalnav {
@@ -447,14 +443,17 @@ div#portal-globalnav {
 div#portal-globalnav ul.level0 {
     border: 0 none;
 	list-style-type: none;
-    background: transparent;
+    background: #7E7E7E;
 }
 div#portal-globalnav ul.level0 li {
     border-radius: 0;
     display:inline;
 }
+div#portal-globalnav ul.level0 li { 
+    padding: -2px 1px;
+}
 div#portal-globalnav ul.level0 li a { 
-    color: #fff;
+    color: #000;
     background: #eee;
     border: 1px solid #aaa;
     border-bottom:1px solid #7E7E7E;
@@ -469,7 +468,7 @@ div#portal-globalnav ul.level0 li a:hover {
 } 
 div#portal-globalnav ul.level0 {
     bottom: -3px !important;
-}
+} 
 div#portal-globalnav ul.level0 li#upper-hse,
 div#portal-globalnav ul.level0 li#upper-hse a {    
     background: #b22b14 !important; 
@@ -484,7 +483,7 @@ div#portal-globalnav ul.level0 li#lower-hse a{
 div#portal-globalnav ul li#lower-hse a,
 div#portal-globalnav ul li#upper-hse a {
     font-weight:bold;
-    color:#eeeeee;               
+    color:#eeeeee;                 
 }
 
 div#portal-globalnav-bottom {
@@ -517,85 +516,7 @@ div#portal-globalnav ul.level1 li.selected a {
 .template-portal div#portal-globalnav ul.level1 li.selected a {
 	color:#F9C675 !important;
 }
-/*
- * Notes:
- * this tag is not used for any data or structure.
- * it is used to assist in the page layout. The element(and css) 
- * could be removed from this use by fixing the <ul> element
- * as mentioned in the previous Note.
- *
- *
- * To remove the bar completely - remove the ".section-bungeni-business"
- * part from below
- *
- * To restore it to every page, remove this next style and leave the last one.
- *
- */
 
-/*
- * portletArchiveDates
- */
-#portletArchiveDates .portletHeader {
-    text-align: right;
-    background: #fff;
-    color: #444;
-    border: 0 none;
-}
-#portletArchiveDates .portletHeader span.tile {
-    text-align: right;
-}
-#portletArchiveDates .portletItem {
-    border: 0 none;
-    background: none;
-}
-#portletArchiveDates .portletItem form {
-    border: 1px solid #ccc;
-    background: #eee;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    text-shadow: 0 0 0 #fff;
-    border-bottom: 1px solid #aaa;
-}
-#portletArchiveDates .portletItem form .field input {
-    border: 1px solid #aaa;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    font-size: 95%;
-    background: #fff;
-}
-#portletArchiveDates .portletItem form label {
-    font-size: 95%;
-}
-#portletArchiveDates .portletItem form #actionsView {
-    border-left: 1px solid #ccc;
-}
-#portletArchiveDates .portletItem form #actionsView .actionButtons input {
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    text-align: left;
-    background-position: 5px center;
-    background-color: #fff;
-}
-#portletArchiveDates .portletItem form #actionsView .actionButtons input:hover {
-    background-color: #eef;
-}
-#portletArchiveDates .portletItem form #actionsView .actionButtons input:active {
-    background-color: #eef;
-}
-#portletArchiveDates .portletItem.dates-filtered {
-    background: #fff !important;
-    background: #FFF68F;
-    border-color: #EEE685;
-    border-bottom-color: #BDB76B;
-}
-#portletArchiveDates .portletItem.dates-filtered form {
-    background: #FFF68F;
-    border-color: #EEE685;
-    border-bottom-color: #BDB76B;
-}
 /* table
 -------------------------------------------------------------- */
  
@@ -668,6 +589,7 @@ table.listingdescription td,
     color: #222;
     text-shadow: 0 0 0 #fff;
 }
+
 /* formTabs
 -------------------------------------------------------------- */
  dd#items-to-be-scheduled-dl ul.formTabs,
@@ -819,7 +741,6 @@ dl.portalMessage dd {
 .formPanel, dd#items-to-be-scheduled-dl .formPanel div:last-child {
     text-align: justify !important;
 }
-
 /* Calendar
 -------------------------------------------------------------- */
 div.calendar th.description a,
@@ -879,8 +800,7 @@ span.yui-button.yui-link-button span a {
 #field\.form\.item_types {
     border-bottom: 1px dotted #ccc;
 }
-
-/* frontpage
+* frontpage
 -------------------------------------------------------------- */
 .template-document_view #content h1.documentFirstHeading {
     font-size:160% !important;
@@ -919,7 +839,6 @@ span.yui-button.yui-link-button span a {
 .section-bungeni-business .dhx_scale_holder_now .dhx_cal_event .dhx_body[style] {
     cursor: pointer !important;
 }
-
 /* search result
 -------------------------------------------------------------- */
 .search-result-item div.title {
@@ -944,7 +863,6 @@ span.yui-button.yui-link-button span a {
     border-top: 1px solid #ccc;
     background: #fff !important;
 }
-
 /* =============================================================================
    TEMPLATE PORTAL - Styling applied on portal
    ========================================================================== */
@@ -1128,6 +1046,14 @@ span.yui-button.yui-link-button span a {
     border-bottom:1px solid #d4e2ef;
 } 
 
+.template-workspace  div#portal-globalnav ul.level0,
+.template-workspace  div#portal-globalnav ul.level1 {
+    width: 100%;
+}
+
+.template-workspace  div#portal-globalnav ul.level0 {
+    bottom: 0 !important
+}
 /*
  * portal-searchbox
  */
@@ -1669,6 +1595,11 @@ span.yui-button.yui-link-button span a {
    .section-bungeni-admin
    ========================================================================== */
 
+
+dl#context_actions.actionMenu .actionMenuContent ul {
+    border: 0 none;
+}
+
 /* =============================================================================
    Plone - Plone CMS content styling
    .site-plone
@@ -1678,10 +1609,6 @@ span.yui-button.yui-link-button span a {
 }
 .template-portal.site-plone div#portal-globalnav ul.level1 {
     margin-top: 0.25em;
-}
-.site-plone div#portal-globalnav ul.level0 li#upper-hse a,
-.site-plone div#portal-globalnav ul.level0 li#lower-hse a {
-    float: left;
 }
 .template-portal.site-plone #content h1.documentFirstHeading {
     margin-top: 0.5em !important;
@@ -1767,10 +1694,33 @@ span.yui-button.yui-link-button span a {
 margin-right: 2px;
 color: black;
 }
+.template-portal-eXist div#portal-globalnav ul.level1 li a {
+    font-size: 86% !important;
+}
+.template-portal-eXist div#portal-globalnav ul.level0 {
+    line-height: 25px !important;
+}
+
+.template-portal-eXist div#portal-globalnav ul.level1 {
+    margin-top: -0.2em !important;
+}
 .template-portal-eXist .big-dbl-arrow {
     text-decoration:none;
     color:#D50005;
 }
+
+.template-portal-eXist div#portal-globalnav ul.level0 li {
+    padding: 4px 10px;  
+}   
+
+.template-portal-eXist div#portal-globalnav ul.level0 li a {
+    padding: 6px 10px;
+}
+
+.template-portal-eXist div#portal-globalnav ul.level0 li ul li a {
+    padding: 0px !important;
+}
+
 
 /* Listing - version
 -------------------------------------------------------------- */

@@ -130,11 +130,12 @@
         <append content="children:#portal-column-one"
             theme="children:#portal-column-one"
         />        
-        <!-- navigation -->
-        <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
-            theme="children:#portal-globalnav > ul" />      
+        <!-- navigation -->    
         <prepend href="/exist" content="#portal-globalnav > li"
-            theme="children:#portal-globalnav > ul" />                        
+            theme="children:#portal-globalnav > ul" />        
+        <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
+            theme="children:#portal-globalnav ul.level0" />       
+                                  
     </rule>    
     
     <rule class="frontpage">

@@ -1144,6 +1144,25 @@ h4.tabberHeading {
     margin: 0 1.5em 0 0;
     height: 20px;
 }
+}
+.template-workspace #portal-globalnav ul ul {
+    display: inline-block !important;
+}
+
+.template-workspace div#portal-globalnav ul.level0 a, 
+.template-workspace div#portal-globalnav ul.level0 span, 
+.template-workspace div#portal-globalnav ul.level0 a.current {
+    float:none !important;
+}
+
+.template-workspace #portal-globalnav ul li#lower-hse, 
+.template-workspace #portal-globalnav ul li#upper-hse {
+    padding: 6px 10px !important;
+}
+
+.site-plone.template-workspace #portal-globalnav ul li a {
+    padding:0 0.15em 0.55em 1em !important;
+}
 
 /* portal-searchbox
 -------------------------------------------------------------- */
@@ -1710,7 +1729,7 @@ div#region-content {
     padding:2.5em 1.4em 0 0 !important;
 }
 .template-portal-eXist div#portal-globalnav ul.level1 {
-    margin-top: 0.35em !important;
+    margin-top: 0.30em !important;
 }
 .lower_house.template-portal-eXist #header-wrapper {
     border-bottom: 18px solid #F79F10 !important;
