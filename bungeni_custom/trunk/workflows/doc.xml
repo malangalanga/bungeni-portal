@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<workflow title="Base Doc Workflow" description="A doc placeholder workflow"
+    permission_actions=".View .Edit .Add .Delete">
+    
+    <state id="draft" title="Draft" />
+    <transition title="Create Doc" source="" destination="draft" trigger="automatic" />
+
+</workflow>
+
