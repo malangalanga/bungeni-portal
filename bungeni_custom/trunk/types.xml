@@ -4,14 +4,8 @@
     
     All custom types must be declared, enabled/disabled, here.
     
-    The system "archetype" of a custom type is indicated by a dedicated tag 
-    name. [Having a dedicated tag name per system archetype allows for the 
-    possibility that different types could have different attributes e.g. a
-    group and/or a membership could specify an associated role (even if such 
-    info could well be specified elsewhere). Note that as yet the XML attrs
-    for all sys archetype tags are the *same*.]
-    
-    Furthermore, a custom type may refine which "archetype" by specifying 
+    The (base) system "archetype" of a custom type is indicated by a dedicated
+    tag name. A custom type may further refine which "archetype" by specifying 
     another custom type as its "archetype", via the @archetype attribute.
     
     Some custom types are dependent on another custom type e.g. a membership
@@ -27,10 +21,10 @@
     
     Type element attributes:
         @name: the type name used throughout the system as the type key, REQUIRED
-        @workflow: the worklow key (the name of the workflow definition file, 
-            in `workflows/` folder). If not set, defaults to @name.
         @archetype: the "custom" archetype key (a custom sub-type of the system
             archetype specified via the element tag name).
+        @workflow: the worklow key (the name of the workflow definition file, 
+            in `workflows/` folder). If not set, defaults to @name.
         @descriptor: the descriptor key (either the name of the descriptor 
             definition file in the `forms/` folder, or the descriptor name of 
             a system archetype). If not set, defaults to @name.
@@ -39,7 +33,6 @@
             disabled (even if they set enabled="true")
     -->
     
-    <doc name="agenda_item" enabled="true" />
     
     <!-- custom "archetypes" -->
     <doc name="bill" workflow="doc" descriptor="doc" enabled="true" />
@@ -47,39 +40,64 @@
     <doc name="question" workflow="doc" descriptor="doc" enabled="true" />
     <doc name="tabled_document" workflow="doc" descriptor="doc" enabled="true" />
     
-    <doc name="assembly_bill" archetype="bill" enabled="true" />
-    <doc name="assembly_motion" archetype="motion" enabled="true" />
-    <doc name="assembly_question" archetype="question" enabled="true" />
-    <doc name="assembly_tabled_document" archetype="tabled_document" enabled="true" />
     
-    <doc name="senate_bill" archetype="bill" enabled="true" />
-    <doc name="senate_motion" archetype="motion" enabled="true" />
-    <doc name="senate_question" archetype="question" enabled="true" />
-    <doc name="senate_tabled_document" archetype="tabled_document" enabled="true" />
+    <!-- custom types -->
+    <doc name="agenda_item" enabled="true"
+        label="agenda item" container_label="agenda items" />
     
-    <doc name="report" enabled="true" />
-    <doc name="bicameral_document" enabled="true" />
+    <doc name="assembly_bill" archetype="bill" enabled="true" 
+         label="bill" container_label="bills" />
+    <doc name="assembly_motion" archetype="motion" enabled="true" 
+         label="motion" container_label="motions" />
+    <doc name="assembly_question" archetype="question" enabled="true" 
+         label="question" container_label="questions" />
+    <doc name="assembly_tabled_document" archetype="tabled_document" enabled="true" 
+         label="tabled_document" container_label="tabled_documents" />
     
-    <event name="event_response" workflow="event_response" archetype="event" enabled="true" />
+    <!-- sample usage of @descriptor, as senate bill/motion/tabled descriptors 
+        are identical to equivalents in assembly, so re-use them -->
+    <doc name="senate_bill" archetype="bill" descriptor="assembly_bill" enabled="true" 
+         label="senate bill" container_label="senate bills" />
+    <doc name="senate_motion" archetype="motion" descriptor="assembly_motion" enabled="true" 
+         label="senate motion" container_label="senate motions" />
+    <doc name="senate_question" archetype="question" enabled="true" 
+         label="senate question" container_label="senate questions" />
+    <doc name="senate_tabled_document" archetype="tabled_document" descriptor="assembly_tabled_document" enabled="true" 
+         label="senate tabled document" container_label="senate tabled documents" />
     
+    <doc name="report" enabled="true" label="report" container_label="reports" />
+    <doc name="bicameral_document" enabled="true" 
+        label="bicameral document" container_label="bicameral documents" />
     
-    <group name="office" workflow="group" enabled="true">
-        <member name="office_member" workflow="group_membership" enabled="true" />
+    <event name="event_response" archetype="event" workflow="event_response" enabled="true" 
+         label="response" container_label="responses" />
+    
+    <group name="office" workflow="group" enabled="true" label="role" container_label="roles">
+        <member name="office_member" workflow="group_membership" enabled="true"
+            label="member" container_label="members" />
     </group>
-    <group name="political_group" workflow="group" enabled="true">
-        <member name="political_group_member" workflow="group_membership" enabled="true" />
+    <group name="political_group" workflow="group" enabled="true" 
+        label="political group" container_label="political groups">
+        <member name="political_group_member" workflow="group_membership" enabled="true"
+            label="member" container_label="members" />
     </group>
-    <group name="committee" enabled="true">
-        <member name="committee_member" workflow="group_membership" enabled="true" />
-        <member name="committee_staff" workflow="group_membership" enabled="true" />
+    <group name="committee" enabled="true" label="committee" container_label="committees">
+        <member name="committee_member" workflow="group_membership" enabled="true" 
+            label="member" container_label="members" />
+        <member name="committee_staff" workflow="group_membership" enabled="true"
+            label="staff" container_label="staff members" />
     </group>
-    <group name="joint_committee" workflow="committee" enabled="true" />
-    <group name="government" workflow="group" enabled="true" />
-    <group name="ministry" workflow="group" enabled="true">
-        <member name="minister" workflow="group_membership" enabled="true" />
+    <group name="joint_committee" workflow="committee" enabled="true" 
+        label="joint committee" container_label="joint committees" />
+    <group name="government" workflow="group" enabled="true"
+        label="government" container_label="governments" />
+    <group name="ministry" workflow="group" enabled="true" label="member" container_label="members">
+        <member name="minister" workflow="group_membership" enabled="true" 
+            label="ministry" container_label="ministries" />
     </group>
-    <group name="parliament" enabled="true">
-        <member name="member_of_parliament" workflow="group_membership" enabled="true" />
+    <group name="parliament" enabled="true" label="chamber" container_label="chambers">
+        <member name="member_of_parliament" workflow="group_membership" enabled="true" 
+            label="member" container_label="members" />
     </group>
 
 </types>
