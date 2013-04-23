@@ -19,7 +19,7 @@
     </facet>
     
     <!-- workflow states -->    
-    <state id="draft" title="Draft" actions="propagate_parent_assigned_group_role"> 
+    <state id="draft" title="Draft" actions="propagate_parent_assigned_group_role" note="!+ action should be application logic"> 
         <facet>
             <allow permission=".View" roles="Drafter" />
             <allow permission=".Edit" roles="Drafter" />
@@ -34,8 +34,7 @@
     </state>
     <state id="completed" title="Response Completed">
         <facet>
-            <allow permission=".View" roles="
-		MinistryMember ClerkQuestionAssembly ClerkQuestionSenate" />
+            <allow permission=".View" roles="MinistryMember ClerkQuestionAssembly ClerkQuestionSenate" />
         </facet>
     </state>
     <state id="reviewed" title="Written Response">
@@ -50,7 +49,7 @@
         </facet>
     </state>
     
-    <!-- workflow transision -->    
+    <!-- workflow transision -->
     <transition title="Create"
         source=""
         destination="draft"

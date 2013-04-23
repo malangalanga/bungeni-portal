@@ -38,7 +38,8 @@
         <parameter name="open_states" value="admissible" />
     </feature>
     <feature name="schedule" enabled="true">
-        <parameter name="schedulable_states" value="admissible adjourned" />
+        <parameter name="schedulable_states" value="admissible adjourned" 
+            note="!+associated (is oral) condition on transitions to schedulable_states?" />
         <parameter name="scheduled_states" value="scheduled" />
     </feature>
     <feature name="workspace" enabled="true" />
@@ -124,7 +125,7 @@
     only pertinent to the "container" i.e. it is, by definition, unbound to 
     any *yet-to-exist* item.
     -->
-    <state id="draft" title="Draft" actions="assign_role_group">
+    <state id="draft" title="Draft">
         <facet ref=".draft" />
         <facet ref="attachment.add_drafter" />
         <facet ref="event.add_clerk" />
@@ -273,7 +274,7 @@
     <transition title="Send to Ministry"
         source="admissible"
         destination="response_pending"
-        condition=""
+        condition="is_written_response"
         trigger="manual"
         roles="ClerkQuestionAssembly.ClerkQuestion"
         order="13"
@@ -291,7 +292,7 @@
     <transition title="Submit Response"
         source="response_pending"
         destination="response_submitted"
-        condition=""
+        condition="response_allow_submit"
         trigger="manual"
         roles="MinistryMember"
         order="15"

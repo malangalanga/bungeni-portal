@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<types xmlns:ce="http://bungeni.org/config_editor">
+<types>
     <!-- Bungeni Custom Types
     
     All custom types must be declared, enabled/disabled, here.
@@ -28,9 +28,12 @@
     Type element attributes:
         @name: the type name used throughout the system as the type key, REQUIRED
         @workflow: the worklow key (the name of the workflow definition file, 
-            in `workflows/` folder), if not set then value of @name is used.
+            in `workflows/` folder). If not set, defaults to @name.
         @archetype: the "custom" archetype key (a custom sub-type of the system
             archetype specified via the element tag name).
+        @descriptor: the descriptor key (either the name of the descriptor 
+            definition file in the `forms/` folder, or the descriptor name of 
+            a system archetype). If not set, defaults to @name.
         @enabled: "true" | "false", default is "true"
             note that if parent is disabled, then all nested elements are also 
             disabled (even if they set enabled="true")
@@ -38,15 +41,21 @@
     
     <doc name="agenda_item" enabled="true" />
     
-    <doc name="assembly_bill" enabled="true" ce:type="bill" />
-    <doc name="assembly_motion" enabled="true" ce:type="motion" />
-    <doc name="assembly_question" enabled="true" ce:type="question" />
-    <doc name="assembly_tabled_document" enabled="true" ce:type="tabled_document" />
+    <!-- custom "archetypes" -->
+    <doc name="bill" workflow="doc" descriptor="doc" enabled="true" />
+    <doc name="motion" workflow="doc" descriptor="doc" enabled="true" />
+    <doc name="question" workflow="doc" descriptor="doc" enabled="true" />
+    <doc name="tabled_document" workflow="doc" descriptor="doc" enabled="true" />
     
-    <doc name="senate_bill" enabled="true" ce:type="bill" />
-    <doc name="senate_motion" enabled="true" ce:type="motion" />
-    <doc name="senate_question" enabled="true" ce:type="question" />
-    <doc name="senate_tabled_document" enabled="true" ce:type="tabled_document" />
+    <doc name="assembly_bill" archetype="bill" enabled="true" />
+    <doc name="assembly_motion" archetype="motion" enabled="true" />
+    <doc name="assembly_question" archetype="question" enabled="true" />
+    <doc name="assembly_tabled_document" archetype="tabled_document" enabled="true" />
+    
+    <doc name="senate_bill" archetype="bill" enabled="true" />
+    <doc name="senate_motion" archetype="motion" enabled="true" />
+    <doc name="senate_question" archetype="question" enabled="true" />
+    <doc name="senate_tabled_document" archetype="tabled_document" enabled="true" />
     
     <doc name="report" enabled="true" />
     <doc name="bicameral_document" enabled="true" />

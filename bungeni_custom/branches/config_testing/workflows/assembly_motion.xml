@@ -35,7 +35,9 @@
     <feature name="workspace" enabled="true" />
     <feature name="notification" enabled="true" />
     <feature name="email" enabled="true" />
-    <feature name="download" enabled="true" />
+    <feature name="download" enabled="true">
+        <parameter name="allowed_types" value="pdf doc"/>
+    </feature>
     <feature name="group_assignment" enabled="true" />
     
     <!-- workflow facets -->

@@ -30,11 +30,10 @@ from bungeni.core.workflows._actions import (
     version, # context must be version-enabled
     
     # doc
-    set_doc_registry_number, # when a doc is received
-    set_doc_type_number, # when a doc is admitted
-    unschedule_doc, # when a doc is withdrawn
-    assign_role_group,
-    propagate_parent_assigned_group_role,
+    set_doc_registry_number, 
+    set_doc_type_number,
+    unschedule_doc, # !+ should be application logic
+    propagate_parent_assigned_group_role,  # !+ should be application logic 
     
     # group
     activate,

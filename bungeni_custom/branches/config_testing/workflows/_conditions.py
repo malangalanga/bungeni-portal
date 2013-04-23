@@ -32,13 +32,6 @@ from bungeni.core.workflows._conditions import (
     agenda_finalized,
     sitting_dummy,
     
-    # question
-    is_written_response,
-    is_oral_response,  
-    response_allow_submit, # The "submit_response" workflow transition should 
-    # NOT be displayed when the UI is displaying the question in "edit" mode 
-    # (this transition will deny bungeni.Question.Edit to the Minister).
-    
     # user
     has_date_of_death,
     not_has_date_of_death,
@@ -63,6 +56,35 @@ from bungeni.core.workflows._conditions import (
     pi_allow_signature_actions,
     pi_unsign_signature,
 )
+
+
+# condition building-block utilities
+from bungeni.core.workflows._conditions import (
+
+    # get child document of specified type
+    child, # (context, type_key) -> child
+    
+    # is context status one of the ones in state_ids?
+    in_state # (context, state_id, state_id, ...) -> bool
+)
+
+
+# question
+
+def is_written_response(question):
+    """question: Require a written response."""
+    return question.response_type == "written"
+
+def is_oral_response(question):
+    """question: Require an oral response."""
+    return question.response_type == "oral"
+
+def response_allow_submit(question):
+    """question: Require that the event response has been completed."""
+    return in_state(child(question, "event_response"), "completed")
+
+
+
 
 
 ''' !+composite_condition(mr, may-2012) ability to do this in xml directly?
