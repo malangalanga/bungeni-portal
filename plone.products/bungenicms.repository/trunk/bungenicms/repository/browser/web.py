@@ -27,14 +27,14 @@ def docViewerInstalled():
 class Html(BrowserView):
 
     def __call__(self):
-        if 'form.action.convert' in self.request:
+        if "form.action.convert" in self.request:
             self.process_document()
         return self.index()
         
 
     def format_date(self, date_string):
         """
-        Format the date i.e. from '1982/09/15 00:00:00 GMT+3' to '15-Sep-1982'
+        Format the date i.e. from "1982/09/15 00:00:00 GMT+3" to "15-Sep-1982"
         """
         if len( str(date_string) ) == 0:
             new_day = None
@@ -70,15 +70,16 @@ class Html(BrowserView):
         
         items = []    
         query = {}        
-        portal_catalog = getToolByName(self, 'portal_catalog')
+        portal_catalog = getToolByName(self, "portal_catalog")
         
-        query['portal_type'] = "RepositoryItem"
-        query['path'] = {'query' : '/'.join(self.context.getPhysicalPath()), 'depth' : 2 }
+        query["portal_type"] = "RepositoryItem"
+        query["path"] = {"query" : "/".join(self.context.getPhysicalPath()),
+                            "depth" : 2 }
         
         brains = portal_catalog.searchResults(query)
         
         for item in brains:
-            year = str(item['item_publication_year']).strip()
+            year = str(item["item_publication_year"]).strip()
             if year not in items:
                 items.append( year )
                 
@@ -115,16 +116,16 @@ class Html(BrowserView):
         
         if (year is not None) and (int(year or 0) is not 0):
             full_date = str(year)
-            final_date = datetime.datetime.strptime(full_date,'%Y')
+            final_date = datetime.datetime.strptime(full_date,"%Y")
             final_date = final_date.strftime("%Y")
             if (month is not None) and (int(month or 0) is not 0):
-                full_date += '-' + str(month)
-                final_date = datetime.datetime.strptime(full_date, '%Y-%m')
+                full_date += "-" + str(month)
+                final_date = datetime.datetime.strptime(full_date, "%Y-%m")
                 final_date = final_date.strftime("%B, %Y")
                 if (day is not None) and (int(day or 0) is not 0):
-                    full_date += '-' + str(day)
+                    full_date += "-" + str(day)
                     try:
-                        final_date = datetime.datetime.strptime(full_date, '%Y-%m-%d')
+                        final_date = datetime.datetime.strptime(full_date,"%Y-%m-%d")
                         final_date = final_date.strftime("%B %d, %Y")
                     except ValueError:
                         final_date = full_date
@@ -138,7 +139,7 @@ class Html(BrowserView):
         """
     
         legislative_types = []        
-        legislative_vocab = NamedVocabulary('org.bungeni.metadata.vocabularies.parliamentarytypes')
+        legislative_vocab = NamedVocabulary("org.bungeni.metadata.vocabularies.parliamentarytypes")
         legislative_terms = legislative_vocab.getDisplayList(self).items()
         
         for term in legislative_terms:
@@ -150,7 +151,7 @@ class Html(BrowserView):
         """
         Return legislative type label for a given value
         """     
-        vocabulary = NamedVocabulary('org.bungeni.metadata.vocabularies.parliamentarytypes')
+        vocabulary = NamedVocabulary("org.bungeni.metadata.vocabularies.parliamentarytypes")
         return vocabulary.getVocabularyDict(self)[val][0]    
         
     def get_groups(self): 
@@ -160,7 +161,7 @@ class Html(BrowserView):
 
         items = []
         
-        gtool = getToolByName(self, 'portal_groups')
+        gtool = getToolByName(self, "portal_groups")
         for group in gtool.listGroups():
             items.append((group.getId(), group.title_or_id()))
 
@@ -180,10 +181,15 @@ class Html(BrowserView):
         Generate result items.
         """     
         results = self.generateQuery()
-        results = sorted(results, key=lambda b: ( int(self.get_curr_str(b['item_publication_year'])), int(self.get_curr_str(b['item_publication_month'])), int(self.get_curr_str(b['item_publication_day'])) ), reverse=True)       
+        results = sorted(results, 
+                        key=lambda b:(
+                            int(self.get_curr_str(b["item_publication_year"])),
+                            int(self.get_curr_str(b["item_publication_month"])), 
+                            int(self.get_curr_str(b["item_publication_day"])), 
+                            b["created"] ), reverse=True)       
         # Do this to exclude the root folder
         for match in results:
-            if match.getPath() == '/'.join(self.aq_parent.getPhysicalPath()):
+            if match.getPath() == "/".join(self.aq_parent.getPhysicalPath()):
                 continue
             yield match  
             
@@ -193,16 +199,16 @@ class Html(BrowserView):
         """
         
         query = {}        
-        portal_catalog = getToolByName(self, 'portal_catalog')
-        folder_path = '/'.join( self.context.getPhysicalPath() )
+        portal_catalog = getToolByName(self, "portal_catalog")
+        folder_path = "/".join( self.context.getPhysicalPath() )
         
-        query['portal_type'] = ['RepositoryItem', 'RepositoryCollection'] #"RepositoryItem"
-        query['path'] = {'query' : folder_path, 'depth' : 2 }
-        #query['sort_on'] = "item_publication_year"
-        #query['sort_order'] = "descending"
+        query["portal_type"] = ["RepositoryItem", "RepositoryCollection"]
+        query["path"] = {"query" : folder_path, "depth" : 2 }
+        #query["sort_on"] = "item_publication_year"
+        #query["sort_order"] = "descending"
       
         for key, value in self.request.form.iteritems():
-            if value is not '' and key != 'Search':
+            if value is not "" and key != "Search":
                query[key] = value
         
         results = portal_catalog.searchResults(query)
@@ -213,7 +219,7 @@ class Html(BrowserView):
         """
         Crude hack to ensure we always have a non-empty string.
         """   
-        curr_string = ''
+        curr_string = ""
         if the_str:
             curr_string = str(the_str)
         else:
@@ -238,7 +244,7 @@ class Html(BrowserView):
         Return the URL of the file attached to the RepositoryItem as JSON object
         """
         results = self.process_document()
-        self.request.response.setHeader('Content-Type', 'application/json; charset=utf-8')
+        self.request.response.setHeader("Content-Type", "application/json; charset=utf-8")
         return json.dumps(results)
     
     
@@ -246,13 +252,13 @@ class Html(BrowserView):
         """
         Convert the file to PDF using collective.documentviewer then return the URL
         """             
-        filename = self.request.form['filename']
+        filename = self.request.form["filename"]
         fileURL = None
         
         # Get the item_files for this RepositoryItem 
         repoItem_files = self.context.getItem_files()
         for rawfile in repoItem_files:
-            if rawfile['filename'] == filename:
+            if rawfile["filename"] == filename:
                 fileURL = self.convertFileToPdf(self.context, rawfile)
         
         return fileURL
@@ -272,8 +278,8 @@ class Html(BrowserView):
             from bungenicms.repository.browser.interfaces import IEnhancedDocumentViewerSchema
             
             context = repositoryitem
-            filename = fileobj['filename'] 
-            portal_url = getToolByName(context, 'portal_url')() 
+            filename = fileobj["filename"] 
+            portal_url = getToolByName(context, "portal_url")() 
             isFileConverted = False
             
             # Where to put in the newly created objects
@@ -294,9 +300,9 @@ class Html(BrowserView):
             
             # Make sure the folder is public/published
             try:
-                folder_review_state = container.portal_workflow.getInfoFor(container, 'review_state')
-                if not folder_review_state == 'published':
-                    container.portal_workflow.doActionFor(container, 'publish', comment='published')
+                folder_review_state = container.portal_workflow.getInfoFor(container, "review_state")
+                if not folder_review_state == "published":
+                    container.portal_workflow.doActionFor(container, "publish", comment="published")
             except:
                 print "Could not publish: " + str(container.getId) + " already published?"            
             
@@ -304,7 +310,7 @@ class Html(BrowserView):
             # Confirm whether the file has been converted using object UID
             uid = None
             for id, item in container.objectItems():
-                if context.UID() == "FILE".join( item.UID().split( 'FILE' )[0:1] ):
+                if context.UID() == "FILE".join( item.UID().split( "FILE" )[0:1] ):
                     if filename.translate(None, " ?.!/\;:-{}[]()|~^`") == item.UID().split("FNIX",1)[1]:
                         print "A file with the same name already exists. No need to re-convert."
                         isFileConverted = True
@@ -316,7 +322,7 @@ class Html(BrowserView):
                 sm = getSecurityManager()
                 if "Manager" not in sm.getUser().getRoles():
                     tmp_user = BaseUnrestrictedUser(
-                        sm.getUser().getId(),'', ['Manager'],'')
+                        sm.getUser().getId(),"", ["Manager"],"")
                     newSecurityManager(None, tmp_user)                                  
                 
                                 
@@ -331,13 +337,13 @@ class Html(BrowserView):
                 uid = context.UID() + "FILE" + str(DateTime().millis()) + "FNIX" + new_fname
                 
                 # Try to create the file object
-                container.invokeFactory("File", uid, icon=fileobj['icon'])
+                container.invokeFactory("File", uid, icon=fileobj["icon"])
                 obj_newObject = container[uid]
                 obj_newObject._setUID( uid )
-                obj_newObject.setTitle( fileobj['filename'] )
-                obj_newObject.setDescription( "Description of file " + fileobj['filename'] )
-                obj_newObject.setFile( fileobj['file'] )
-                obj_newObject.setContentType( fileobj['content_type'] )
+                obj_newObject.setTitle( fileobj["filename"])
+                obj_newObject.setDescription("Description of file " + fileobj["filename"])
+                obj_newObject.setFile( fileobj["file"])
+                obj_newObject.setContentType( fileobj["content_type"])
                 obj_newObject.reindexObject()
                 
                 # Convert the file
