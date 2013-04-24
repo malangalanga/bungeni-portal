@@ -30,6 +30,9 @@
         <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
+        <field name="body" label="Body" required="false" value_type="text" render_type="rich_text">
+            <show modes="view edit add" />
+        </field>
     </descriptor>
     
     <descriptor name="attachment_version">
@@ -43,7 +46,7 @@
             <show modes="view listing" />
         </field>
         <field name="procedure" required="true" value_type="text" render_type="text_line">
-            <show modes="view listing" />
+            <show modes="view edit add listing" />
         </field>
         <field name="date_audit" label="Date Audit" required="true" value_type="datetime" render_type="datetime">
             <hide modes="view listing" />
@@ -82,6 +85,9 @@
         <field name="audit_id" required="true" value_type="text" render_type="text_line">
             <hide modes="view listing" />
         </field>
+        <field name="body" label="Body" required="false" value_type="text" render_type="rich_text">
+            <show modes="view edit add" />
+        </field>
     </descriptor>
     
     <descriptor name="country">
@@ -101,6 +107,9 @@
         <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
         </field>
+        <field name="sub_title" label="Sub Title" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
         <field name="type_number" label="Number" required="false" value_type="number" render_type="number">
             <show modes="view listing" />
         </field>
@@ -109,6 +118,10 @@
             <hide modes="listing" />
         </field>
         <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="summary" label="Summary" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
@@ -140,16 +153,67 @@
         <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
+        <field name="doc_date" label="Doc Date" required="false" value_type="date" render_type="date">
+            <show modes="view edit add" />
+        </field>
         <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
         <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" render_type="text_line">
-            <hide modes="view edit add listing" />
+            <show modes="view edit add" />
+        </field>
+        <field name="doc_urgency" label="Document Urgency" required="false" value_type="text" render_type="text_line">
+            <show modes="view edit add" />
         </field>
         <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
-            <hide modes="view edit add listing" />
+            <show modes="view edit add" />
         </field>
         <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_title" label="Source Title" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_creator" label="Creator" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_subject" label="Source Subject" required="false" value_type="text" render_type="tree_text" vocabulary="subject_terms">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_description" label="Source Description" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_publisher" label="Publisher" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_publisher_address" label="Publisher Address" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_contributors" label="Contributors" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_date" label="Doc Date" required="false" value_type="date" render_type="date">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_type" label="Source Type" required="false" value_type="text" render_type="text_line">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_format" label="Format" required="false" value_type="text" render_type="text_line">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_doc_source" label="Document Source" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_language" label="Souce Document Language" required="false" value_type="language" render_type="single_select" vocabulary="language">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_relation" label="Related Documents" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_coverage" label="Source Document Coverage" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_rights" label="Source Document Rights" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
         </field>
     </descriptor>
@@ -165,7 +229,7 @@
             <show modes="view listing" />
         </field>
         <field name="procedure" required="true" value_type="text" render_type="text_line">
-            <show modes="view listing" />
+            <show modes="view edit add listing" />
         </field>
         <field name="date_audit" label="Date Audit" required="true" value_type="datetime" render_type="datetime">
             <hide modes="view listing" />
@@ -176,6 +240,9 @@
         <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
         </field>
+        <field name="sub_title" label="Sub Title" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
         <field name="type_number" label="Number" required="false" value_type="number" render_type="number">
             <show modes="view listing" />
         </field>
@@ -184,6 +251,10 @@
             <hide modes="listing" />
         </field>
         <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="summary" label="Summary" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
@@ -215,16 +286,67 @@
         <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
+        <field name="doc_date" label="Doc Date" required="false" value_type="date" render_type="date">
+            <show modes="view edit add" />
+        </field>
         <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
         <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" render_type="text_line">
-            <hide modes="view edit add listing" />
+            <show modes="view edit add" />
+        </field>
+        <field name="doc_urgency" label="Document Urgency" required="false" value_type="text" render_type="text_line">
+            <show modes="view edit add" />
         </field>
         <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
-            <hide modes="view edit add listing" />
+            <show modes="view edit add" />
         </field>
         <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_title" label="Source Title" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_creator" label="Creator" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_subject" label="Source Subject" required="false" value_type="text" render_type="tree_text" vocabulary="subject_terms">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_description" label="Source Description" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_publisher" label="Publisher" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_publisher_address" label="Publisher Address" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_contributors" label="Contributors" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_date" label="Doc Date" required="false" value_type="date" render_type="date">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_type" label="Source Type" required="false" value_type="text" render_type="text_line">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_format" label="Format" required="false" value_type="text" render_type="text_line">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_doc_source" label="Document Source" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_language" label="Souce Document Language" required="false" value_type="language" render_type="single_select" vocabulary="language">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_relation" label="Related Documents" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_coverage" label="Source Document Coverage" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_rights" label="Source Document Rights" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
         </field>
         <field name="audit_id" required="true" value_type="text" render_type="text_line">
@@ -246,6 +368,9 @@
         <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
         </field>
+        <field name="sub_title" label="Sub Title" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
         <field name="type_number" label="Number" required="false" value_type="number" render_type="number">
             <show modes="view listing" />
         </field>
@@ -254,6 +379,10 @@
             <hide modes="listing" />
         </field>
         <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="summary" label="Summary" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
@@ -288,20 +417,68 @@
         <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
+        <field name="doc_date" label="Doc Date" required="false" value_type="date" render_type="date">
+            <show modes="view edit add" />
+        </field>
         <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="text_line">
             <hide modes="view edit add listing" />
         </field>
         <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" render_type="text_line">
-            <hide modes="view edit add listing" />
+            <show modes="view edit add" />
+        </field>
+        <field name="doc_urgency" label="Document Urgency" required="false" value_type="text" render_type="text_line">
+            <show modes="view edit add" />
         </field>
         <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
-            <hide modes="view edit add listing" />
+            <show modes="view edit add" />
         </field>
         <field name="body" label="Body" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="event_date" label="Event Date" required="false" value_type="datetime" render_type="datetime" extended="datetime">
-            <show modes="view edit add listing" />
+        <field name="source_title" label="Source Title" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_creator" label="Creator" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_subject" label="Source Subject" required="false" value_type="text" render_type="tree_text" vocabulary="subject_terms">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_description" label="Source Description" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_publisher" label="Publisher" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_publisher_address" label="Publisher Address" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_contributors" label="Contributors" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_date" label="Doc Date" required="false" value_type="date" render_type="date">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_type" label="Source Type" required="false" value_type="text" render_type="text_line">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_format" label="Format" required="false" value_type="text" render_type="text_line">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_doc_source" label="Document Source" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_language" label="Souce Document Language" required="false" value_type="language" render_type="single_select" vocabulary="language">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_relation" label="Related Documents" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_coverage" label="Source Document Coverage" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
+        <field name="source_rights" label="Source Document Rights" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
         </field>
     </descriptor>
     
@@ -363,6 +540,9 @@
             <show modes="view listing" />
         </field>
         <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
+            <show modes="view edit add" />
+        </field>
+        <field name="body" label="Body" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
         <field name="group_role" label="Group Role" required="true" value_type="vocabulary" render_type="single_select" vocabulary="group_role">
@@ -737,6 +917,9 @@
             <show modes="view edit add" />
         </field>
         <field name="remarks" label="Remarks" required="false" value_type="text" render_type="rich_text">
+            <show modes="view edit add" />
+        </field>
+        <field name="home_language" label="Home Language" required="false" value_type="language" render_type="single_select" vocabulary="language">
             <show modes="view edit add" />
         </field>
         <integrity constraints="user_birth_death_dates" validations="validate_email_availability" />
