@@ -5,12 +5,14 @@
     >
     
     <!-- global grants -->
+    <allow permission=".View" roles="ClerkAssembly" />
     <allow permission="debate_media.Add" roles="Transcriber.Editor" />
     <allow permission="debate_media.View" roles="Transcriber.Editor" />
     <allow permission="debate_media.Delete" roles="Transcriber.Editor" />
 
-    <allow permission="debate_takes.Edit" roles="Transcriber.Editor" />
-    <allow permission="debate_takes.View" roles="Transcriber.Editor" />
+    <allow permission="debate_take.Add" roles="Transcriber.Editor" />
+    <allow permission="debate_take.Edit" roles="Transcriber.Editor" />
+    <allow permission="debate_take.View" roles="Transcriber.Editor Transcriber.Reporter" />
 
     <!-- features -->
     <feature name="audit" enabled="true" />
