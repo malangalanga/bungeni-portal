@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<descriptor order="1" label="senate tabled document" container_label="senate tabled documents">
+<descriptor order="1">
     <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
         <show modes="add view edit listing" />
     </field>
@@ -10,7 +10,11 @@
         <show modes="view edit add" />
         <hide modes="listing" />
     </field>
-    <field name="description" label="Summary" required="false" value_type="text" render_type="text_box">
+    <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
+        <show modes="view edit add" />
+        <hide modes="listing" />
+    </field>
+    <field name="summary" label="Summary" required="false" value_type="text" render_type="text_box">
         <show modes="view edit add" />
         <hide modes="listing" />
     </field>
@@ -63,6 +67,51 @@
         <hide modes="view edit add listing" />
     </field>
     <field name="body" label="Text" required="true" value_type="text" render_type="rich_text">
+        <show modes="view edit add" />
+    </field>
+    <field name="source_title" label="Source Title" required="false" value_type="text" render_type="text_box">
+        <show modes="view edit add" />
+    </field>
+    <field name="source_creator" label="Creator" required="false" value_type="text" render_type="text_box">
+        <show modes="view edit add" />
+    </field>
+    <field name="source_subject" label="Source Subject" required="false" value_type="text" render_type="tree_text" vocabulary="subject_terms">
+        <show modes="view edit add" />
+    </field>
+    <field name="source_description" label="Source Description" required="false" value_type="text" render_type="text_box">
+        <show modes="view edit add" />
+    </field>
+    <field name="source_publisher" label="Publisher" required="false" value_type="text" render_type="text_box">
+        <show modes="view edit add" />
+    </field>
+    <field name="source_publisher_address" label="Publisher Address" required="false" value_type="text" render_type="text_box">
+        <show modes="view edit add" />
+    </field>
+    <field name="source_contributors" label="Contributors" required="false" value_type="text" render_type="text_box">
+        <show modes="view edit add" />
+    </field>
+    <field name="source_date" label="Doc Date" required="false" value_type="date" render_type="date">
+        <show modes="view edit add" />
+    </field>
+    <field name="source_type" label="Source Type" required="false" value_type="text" render_type="text_line">
+        <show modes="view edit add" />
+    </field>
+    <field name="source_format" label="Format" required="false" value_type="text" render_type="text_line">
+        <show modes="view edit add" />
+    </field>
+    <field name="source_doc_source" label="Document Source" required="false" value_type="text" render_type="text_box">
+        <show modes="view edit add" />
+    </field>
+    <field name="source_language" label="Souce Document Language" required="false" value_type="language" render_type="single_select" vocabulary="language">
+        <show modes="view edit add" />
+    </field>
+    <field name="source_relation" label="Related Documents" required="false" value_type="text" render_type="text_box">
+        <show modes="view edit add" />
+    </field>
+    <field name="source_coverage" label="Source Document Coverage" required="false" value_type="text" render_type="text_box">
+        <show modes="view edit add" />
+    </field>
+    <field name="source_rights" label="Source Document Rights" required="false" value_type="text" render_type="text_box">
         <show modes="view edit add" />
     </field>
 </descriptor>
