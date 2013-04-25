@@ -66,52 +66,74 @@
         <allow permission=".Edit" roles="Drafter" />
         <allow permission=".Delete" roles="Drafter" />
     </facet>
-    <facet name="internal">
+
+    <facet name="withdrawn_internal">
         <allow permission=".View" roles="Drafter Owner" />
     </facet>
-    <facet name="view_Clerk">
+
+    <facet name="inadmissible">
         <allow permission=".View" roles="
-                ClerkQuestionAssembly.ClerkHead
-                ClerkQuestionAssembly.ClerkQuestion
-                SpeakerAssembly 
-                Owner
+            ClerkQuestionAssembly.ClerkHead
+            ClerkQuestionAssembly.ClerkQuestion
+            SpeakerAssembly 
+            Owner
             " />
     </facet>
-    <facet name="edit_Clerk">
+
+    <facet name="submitted">
         <allow permission=".View" roles="
-                ClerkQuestionAssembly.ClerkHead
-                ClerkQuestionAssembly.ClerkQuestion
-                SpeakerAssembly 
-                Owner
+            ClerkQuestionAssembly.ClerkHead
+            ClerkQuestionAssembly.ClerkQuestion
+            SpeakerAssembly 
+            Owner
             " />
         <allow permission=".Edit" roles="
-                ClerkQuestionAssembly.ClerkHead
-                ClerkQuestionAssembly.ClerkQuestion
+            ClerkQuestionAssembly.ClerkHead
+            ClerkQuestionAssembly.ClerkQuestion
             " />
         <allow permission="user_assignment.View" roles="
-                ClerkQuestionAssembly.ClerkHead
-                ClerkQuestionAssembly.ClerkQuestion
+            ClerkQuestionAssembly.ClerkHead
+            ClerkQuestionAssembly.ClerkQuestion
             " />
         <allow permission="user_assignment.Edit" roles="ClerkQuestionAssembly.ClerkHead" />
     </facet>
-    <facet name="edit_Speaker">
+    
+    <facet name="reviewed">
         <allow permission=".View" roles="
-                ClerkQuestionAssembly.ClerkHead
-                ClerkQuestionAssembly.ClerkQuestion
-                SpeakerAssembly Owner
+            ClerkQuestionAssembly.ClerkHead
+            ClerkQuestionAssembly.ClerkQuestion
+            SpeakerAssembly Owner
             " />
         <allow permission=".Edit" roles="SpeakerAssembly" />
     </facet>
-    <facet name="edit_Owner">
+
+    <facet name="clarification_required">
         <allow permission=".View" roles="
-                ClerkQuestionAssembly.ClerkHead
-                ClerkQuestionAssembly.ClerkQuestion
-                SpeakerAssembly
-                Owner
+            ClerkQuestionAssembly.ClerkHead
+            ClerkQuestionAssembly.ClerkQuestion
+            SpeakerAssembly
+            Owner
             " />
         <allow permission=".Edit" roles="Owner" />
     </facet>
-    <facet name="public">
+    
+    <facet name="debated">
+        <allow permission=".View" roles="Anonymous" />
+    </facet>
+    
+    <facet name="response_pending">
+        <allow permission=".View" roles="Anonymous" />
+    </facet>
+    
+    <facet name="response_submitted">
+        <allow permission=".View" roles="Anonymous" />
+    </facet>
+    
+    <facet name="response_reviewed">
+        <allow permission=".View" roles="Anonymous" />
+    </facet>
+    
+    <facet name="admissible">
         <allow permission=".View" roles="Anonymous" />
     </facet>
     
@@ -134,57 +156,57 @@
             actions="unschedule_doc"
             note="A question can be withdrawn by the owner, visible as pre-withdrawn, cannot be edited by anyone."
         >
-        <facet ref=".internal" />
+        <facet ref=".withdrawn_internal" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
     </state>
     <state id="submitted" title="Submitted to Clerk" actions="version">
-        <facet ref=".edit_Clerk" />
+        <facet ref=".submitted" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
         <facet ref="group_assignment.add_internal" />
     </state>
     <state id="reviewed" title="Submitted to the Speaker" actions="version">
-        <facet ref=".edit_Speaker" />
+        <facet ref=".reviewed" />
         <facet ref="attachment.add_speaker" />
         <facet ref="event.add_speaker" />
     </state>
     <state id="admissible" title="Admissible" actions="version set_doc_type_number">
-        <facet ref=".public" />
+        <facet ref=".admissible" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
     </state>
     <state id="inadmissible" title="Inadmissible">
-        <facet ref=".view_Clerk" />
+        <facet ref=".inadmissible" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
     </state>
     <state id="clarification_required" title="Requires Clarification to Receive" actions="version">
-        <facet ref=".edit_Owner" />
+        <facet ref=".clarification_required" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
     </state>
     <state id="scheduled" title="Scheduled for Debate" permissions_from_state="admissible" />
     <state id="adjourned" title="Debate adjourned" permissions_from_state="admissible" />
     <state id="response_pending" title="Pending response">
-        <facet ref=".public" />
+        <facet ref=".response_pending" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
         <facet ref="event#event_response.add_ministry" />
     </state>
     <state id="response_submitted" title="Response submitted">
-        <facet ref=".public" />
+        <facet ref=".response_submitted" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
     </state>
     <state id="response_reviewed" title="Response reviewed">
-        <facet ref=".public" />
+        <facet ref=".response_reviewed" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
     </state>
     <state id="deferred" title="Deferred" permissions_from_state="admissible" />
     <state id="debated" title="Debated">
-        <facet ref=".public" />
+        <facet ref=".debated" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
     </state>
