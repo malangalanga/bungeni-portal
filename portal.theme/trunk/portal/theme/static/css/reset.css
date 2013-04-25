@@ -228,7 +228,10 @@ div#portal-globalnav ul.level1 li a {
 div#portal-globalnav ul.level1 li a {
 	padding: 0 15px !important;
 	line-height:18px;
-}       
+} 
+#portal-globalnav li a {
+    display:inline !important;
+}      
 #portal-languageselector li {
     display: inline;
 }
@@ -1737,6 +1740,10 @@ div#region-content {
 
 .template-portal-eXist.higher_house #header-wrapper {
     border-bottom: 18px solid #B22B14 !important;
+}
+.template-workspace.template-portal-eXist.lower_house #header-wrapper,
+.template-workspace.template-portal-eXist.higher_house #header-wrapper {
+    border-bottom: 18px solid transparent !important;
 }
 .lower_house.template-portal-eXist div#portal-globalnav ul.level1 {
     background: none repeat scroll 0 0 #F79F10 !important;
