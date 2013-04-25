@@ -105,6 +105,7 @@ class AlchemistWhoPlugin(object):
                 'email': user.email,
                 'title': u"%s, %s" % (user.last_name, user.first_name),
                 'groups': groups,
+                'home_language': user.home_language,
                 })
 
 
