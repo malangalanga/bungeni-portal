@@ -28,7 +28,7 @@ from bungeni.ui.descriptor.constraints import (
     substituted_end_date,
     inactive_no_end_date,
     
-    # parliament membership
+    # chamber membership
     member_start_after_elected,
     
     # user
