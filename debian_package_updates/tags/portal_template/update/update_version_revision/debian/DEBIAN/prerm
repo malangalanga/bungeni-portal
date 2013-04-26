@@ -1,0 +1,37 @@
+#!/bin/sh
+#===============================================================================
+#
+#          FILE:  prerm
+#
+#   DESCRIPTION:  Update preremove script
+#
+#       OPTIONS:  remove,purge
+#          BUGS:  ---
+#         NOTES:  ---
+#  DEPENDENCIES:  	
+#        AUTHOR:  Samuel Weru, samweru@gmail.com
+#       COMPANY:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
+
+set -e
+
+case "$1" in
+upgrade)
+      
+    echo "**UPGRADE: You already have this package installed!"    
+    exit 0
+;;
+remove|purge)
+    echo "**REMOVE|PURGE"  
+    ;;
+*)
+
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
+
+exit 0

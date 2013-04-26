@@ -1,0 +1,35 @@
+#!/bin/sh
+#===============================================================================
+#
+#          FILE:  postrm
+#
+#   DESCRIPTION:  Update post remove script
+#
+#       OPTIONS:  remove
+#          BUGS:  ---
+#         NOTES:  ---
+#  DEPENDENCIES:  	
+#        AUTHOR:  Samuel Weru, samweru@gmail.com
+#       COMPANY:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
+
+set -e
+
+case "$1" in
+	
+abort-install|remove|upgrade|failed-upgrade|abort-upgrade)
+		
+		ACTION=`echo $1 | tr '[:lower:]' '[:upper:]'`
+		
+		echo "**"$ACTION": bungeni update successfully removed."
+    ;;
+*)
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
+
+exit 0
