@@ -1,0 +1,38 @@
+<?xml version='1.0'?>
+<project name="exist-update" default="update" xmlns:xdb="http://exist-db.org/ant">
+<description>make controller executable</description>
+
+<!-- edit these properties //-->
+<property name="exist.dir" value="/opt/bungeni/bungeni_apps/exist"/>
+<property name="exist.url" value="xmldb:exist://localhost:8088/exist/xmlrpc"/>
+<property name="exist.user" value="admin"/>
+<property name="exist.pass" value=""/>
+
+<!-- import eXist-db tasks -->
+<typedef resource="org/exist/ant/antlib.xml" uri="http://exist-db.org/ant">
+<classpath>
+<fileset dir="${exist.dir}/lib/core">
+    <include name="*.jar"/>
+</fileset>
+<fileset dir="${exist.dir}/lib/endorsed">
+    <include name="*.jar"/>
+</fileset>
+<fileset dir="${exist.dir}/lib/optional">
+    <include name="*.jar"/>
+</fileset>
+<pathelement location="${exist.dir}/exist.jar"/>
+<pathelement location="${exist.dir}/exist-optional.jar"/>
+</classpath>
+</typedef>
+
+<target name="update" description="store xml to target eXist instance">
+	<xdb:chmod xmlns:xdb="http://exist-db.org/ant"
+		user="${exist.user}"
+		password="${exist.pass}"
+		uri="${exist.url}/db/apps/framework/bungeni" 
+		resource="controller.xql" 
+		mode="user=+execute,group=+execute,other=+execute"/>
+</target>
+
+</project>
+        
