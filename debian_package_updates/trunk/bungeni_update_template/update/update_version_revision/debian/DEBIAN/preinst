@@ -20,14 +20,14 @@ set -e
 
 case "$1" in
 install)
-
+        
         echo "**INSTALL: Running installation"
         
         ##########################################################
         # Use For Service Stop - Postgresql & Exist Update & Plone
         ##########################################################
-         echo "**INSTALL: Stop bungeni services"
-         service bungeni_services stop
+         #echo "**INSTALL: Stop bungeni services"
+         #service bungeni_services stop
         
         ############################
         # Postgresql Update: Back Up 
