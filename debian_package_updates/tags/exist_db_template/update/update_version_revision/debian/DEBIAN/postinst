@@ -1,0 +1,205 @@
+#!/bin/sh
+#===============================================================================
+#
+#          FILE:  postinst
+#
+#   DESCRIPTION:  Update post install script
+#
+#       OPTIONS:  configure
+#          BUGS:  ---
+#         NOTES:  ---
+#  DEPENDENCIES:  	
+#        AUTHOR:  Samuel Weru, samweru@gmail.com
+#       COMPANY:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
+
+set -e
+
+case "$1" in
+configure)
+		
+		echo "**CONFIGURE: Running configuration"
+		EXIST_TAR=$(ls /opt/bungeni/updates/latest | grep exist_xmldb)
+		LATEST=$(ls /opt/bungeni/updates/latest | grep update | sed "s/.tar.gz//g")
+		PACKAGE_NAME=$(ls /opt/bungeni/updates/latest | grep update | grep -o ".*update")
+		
+		rm -rf /opt/bungeni/updates/$LATEST &
+		
+		########################################################
+		# Generic code: Use if diff is applied to create update
+		# Example: While updating bungeni source or glue scripts
+		########################################################
+		 #echo "**CONFIGURE: Extracting from update archive"	
+		 #tar -C / -zxf /opt/bungeni/updates/latest/$LATEST.tar.gz
+		
+		 #echo "**CONFIGURE: Creating latest update list"
+		 #cat /opt/bungeni/updates/latest/common.list /opt/bungeni/updates/latest/include.list > /var/lib/dpkg/info/$PACKAGE_NAME.list
+		 #find /opt/bungeni/updates/latest >> /var/lib/dpkg/info/$PACKAGE_NAME.list
+		
+		 #echo "**CONFIGURE: Creating latest update md5sums"
+		 #for i in `cat /var/lib/dpkg/info/$PACKAGE_NAME.list`
+		 #do 
+			#if [ ! -d "$i" ]
+			#then
+				#echo $i >> /opt/bungeni/updates/latest/files.list
+			#fi
+		 #done
+		 
+		 #cat /opt/bungeni/updates/latest/files.list | xargs md5sum > /var/lib/dpkg/info/$PACKAGE_NAME.md5sums
+		 
+		##############################
+		# Bungeni Update: Run buildout
+		##############################
+		 #echo "**CONFIGURE: Running bungeni buildout"
+		 #chown bungeni:bungeni -Rf /opt/bungeni
+		 #su bungeni -l -c "PATH=/opt/bungeni/bungeni_apps/postgres/bin:$PATH \ 
+			#PYTHON=/opt/bungeni/bungeni_apps/python27/bin/python \
+			#/opt/bungeni/bungeni_apps/bungeni/bin/buildout -t 3600 -Nvvv -c /opt/bungeni/bungeni_apps/bungeni/buildout.cfg"
+		 
+		##############################
+		# Plone Update: Run buildout
+		##############################
+		 #chown bungeni:bungeni -Rf /opt/bungeni/bungeni_apps/bungeni/plone
+		 #su bungeni -l -c "PATH=/opt/bungeni/bungeni_apps/postgres/bin:$PATH \ 
+			#PYTHON=/opt/bungeni/bungeni_apps/python27/bin/python \
+			#/opt/bungeni/bungeni_apps/bungeni/plone/bin/buildout -t 3600 -Nvvv -c /opt/bungeni/bungeni_apps/bungeni/plone/buildout.cfg"
+		
+		##############################
+		# Postgres-Data Udate: Upgrade
+		##############################
+		 #echo "Running db schema upgrade"
+		 #su bungeni -l -c "/opt/bungeni/bungeni_apps/postgres/bin/pg_ctl start -D /opt/bungeni/bungeni_apps/postgres-data/ -l /opt/bungeni/bungeni_apps/logs/postgres.log"
+		 #sleep 10
+		 #su bungeni -l -c "/opt/bungeni/bungeni_apps/bungeni/bin/alembic -c /opt/bungeni/bungeni_apps/bungeni/alembic.ini upgrade head"
+		 #su bungeni -l -c "/opt/bungeni/bungeni_apps/postgres/bin/pg_ctl stop -D /opt/bungeni/bungeni_apps/postgres-data/ -l /opt/bungeni/bungeni_apps/logs/postgres.log"
+		
+		############################
+		# Exist Update: New Exist DB
+		############################
+		 echo "**CONFIGURE: Extracting from update archive"	
+		 rm -rf /opt/bungeni/bungeni_apps/exist
+		 tar -C /opt/bungeni/bungeni_apps -zxf /opt/bungeni/updates/latest/$EXIST_TAR
+		 mv /opt/bungeni/bungeni_apps/exist* /opt/bungeni/bungeni_apps/exist
+		 chown bungeni:bungeni -Rf /opt/bungeni/bungeni_apps/exist
+		
+		 # #########################################
+		 # # Use For Restore: Exist Framework Update
+		 # #########################################
+		 echo "**CONFIGURE: Clean out any lock files"
+		 find /opt/bungeni/bungeni_apps/exist/webapp/WEB-INF/data -type f \( -name '*.lck' -o -name '*.lock' \) -exec rm -rf {} \;
+		
+		 echo "**CONFIGURE: Start new exist"	
+		 su bungeni -l -c "JAVA_HOME=$JAVA_HOME java -Xms128m -Xmx512m \
+		            -Dfile.encoding=UTF-8 \
+		            -Djava.endorsed.dirs=/opt/bungeni/bungeni_apps/exist/lib/endorse \
+		            -Dexist.home=/opt/bungeni/bungeni_apps/exist \
+		            -Djetty.port=8088 \
+		            -jar /opt/bungeni/bungeni_apps/exist/start.jar jetty" &
+		
+		echo "**CONFIGURE: Please wait..."
+		sleep 11
+		
+		if [ -f /opt/bungeni/updates/latest/db/bungeni-xml/__contents__.xml ]
+		then
+			
+			echo "**CONFIGURE: Restore bungeni-xml"
+			su bungeni -l -c "JAVA_HOME=$JAVA_HOME \ 
+				java -jar -Dexist.home=/opt/bungeni/bungeni_apps/exist/ /opt/bungeni/bungeni_apps/exist/start.jar \
+				backup -u admin -r /opt/bungeni/updates/latest/db/bungeni-xml/__contents__.xml \
+				-ouri=xmldb:exist://127.0.0.1:8088/exist/xmlrpc"
+		 fi	
+		 
+		
+		 if [ -f /opt/bungeni/updates/latest/db/bungeni-atts/__contents__.xml ]
+		 then	
+		 
+			echo "**CONFIGURE: Restore bungeni-atts"
+			su bungeni -l -c "JAVA_HOME=$JAVA_HOME \ 
+				java -jar -Dexist.home=/opt/bungeni/bungeni_apps/exist/ /opt/bungeni/bungeni_apps/exist/start.jar \
+				backup -u admin -r /opt/bungeni/updates/latest/db/bungeni-atts/__contents__.xml \
+				-ouri=xmldb:exist://127.0.0.1:8088/exist/xmlrpc"
+		 fi
+		
+		##############################################
+        # Exist Framework Update: Extract New Framework
+        ##############################################
+         #tar -C / -zxf /opt/bungeni/updates/$LATEST/exist_fw.tar.gz
+		
+		# #########################################################
+		# # Use Restore For - Exist Update & Exist Framework Update
+		# #########################################################
+		 if [ -f /opt/bungeni/updates/latest/db/apps/framework/__contents__.xml ]
+		 then	
+			
+			echo "**CONFIGURE: Restore framework"
+			su bungeni -l -c "JAVA_HOME=$JAVA_HOME \ 
+				java -jar -Dexist.home=/opt/bungeni/bungeni_apps/exist/ /opt/bungeni/bungeni_apps/exist/start.jar \
+				backup -u admin -r /opt/bungeni/updates/latest/db/apps/framework/__contents__.xml \
+				-ouri=xmldb:exist://127.0.0.1:8088/exist/xmlrpc"
+				
+			echo "**CONFIGURE: Make /db/apps/framework/bungeni/controller.xql executable"
+			su bungeni -l -c "ant -buildfile /opt/bungeni/updates/latest/build.xml"
+		
+		 fi
+			
+		  echo "**CONFIGURE: Kill bungeni processes"
+		  pkill -u bungeni
+		
+		#################################################
+		# RabbitMQ Update: Check if RabbitMQ has messages
+		#################################################	
+		 #su bungeni -l -c "/opt/bungeni/bungeni_apps/rabbitmq/sbin/rabbitmqctl list_queues -p /" > /opt/bungeni/updates/$LATEST/queues.list &
+		 
+		 #tq=$(cat /opt/bungeni/updates/$LATEST/queues.list | grep task_queue | sed 's/[a-z_]*\|[[:space:]]*//g')
+		 #bsq=$(cat /opt/bungeni/updates/$LATEST/queues.list | grep bungeni_serialization_queue | sed 's/[a-z_]*\|[[:space:]]*//g')
+		 #beq=$(cat /opt/bungeni/updates/$LATEST/queues.list | grep bungeni_email_queue | sed 's/[a-z_]*\|[[:space:]]*//g')
+		 #bsoq=$(cat /opt/bungeni/updates/$LATEST/queues.list | grep bungeni_serialization_output_queue | sed 's/[a-z_]*\|[[:space:]]*//g')
+		 
+		 #rq=$((0$tq+0$bsq+0$beq+0$bsoq))
+		 
+		 #if [ $rq -ge 1 ]
+		 #then
+			#echo "Queue is not empty. Aborting installation."
+		 	#exit 0
+		 #else
+			#echo "Stop RabbitMQ" 
+			#su bungeni -l -c "/opt/bungeni/bungeni_apps/rabbitmq/sbin/rabbitmqctl stop_app" &
+			#su bungeni -l -c "/opt/bungeni/bungeni_apps/rabbitmq/sbin/rabbitmqctl reset" &
+			
+			#echo "Replacing RabbitMQ"
+		 	#tar -C /opt/bungeni/bungeni_apps -zxf /opt/bungeni/updates/$LATEST/rabbitmq-2.8.4.tar.gz
+		 	#rm -rf /opt/bungeni/bungeni_apps/rabbitmq
+		 	#mv /opt/bungeni/bungeni_apps/rabbitmq* /opt/bungeni/bungeni_apps/rabbitmq
+			#chown bungeni:bungeni -Rf /opt/bungeni/bungeni_apps/rabbitmq
+			
+			#echo "Setting up new RabbitMQ"
+			#su bungeni -l -c "/opt/bungeni/bungeni_apps/rabbitmq/sbin/rabbitmq-plugins enable rabbitmq_management rabbitmq_management_visualiser"
+			
+			#echo "Restarting bungeni services"
+			#service bungeni_services stop
+		 #fi
+		 
+		 if [ ! -d /opt/bungeni/updates/$LATEST ] ; then
+			echo "**CONFIGURE: Changing latest folder update name"
+			mv /opt/bungeni/updates/latest /opt/bungeni/updates/$LATEST
+		 fi	
+		 
+		 ###################################################################################
+		 # Updates: Change filenames in /var/lib/dpkg/info/([update].list|[update].md5sums)
+		 ###################################################################################
+		 echo "**CONFIGURE: Editing (/var/lib/dpkg/info/"$PACKAGE_NAME".list & /var/lib/dpkg/info/"$PACKAGE_NAME".md5sums) files."
+		 sed -i "s|latest|"$LATEST"|g" /var/lib/dpkg/info/$PACKAGE_NAME.list
+		 sed -i "s|latest|"$LATEST"|g" /var/lib/dpkg/info/$PACKAGE_NAME.md5sums
+		 
+		 echo "**UPDATE FINISHED**"
+    ;;
+*)
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
+
+exit 0

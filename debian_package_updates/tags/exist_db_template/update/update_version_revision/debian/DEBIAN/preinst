@@ -1,0 +1,73 @@
+#!/bin/sh
+#===============================================================================
+#
+#          FILE:  preinst
+#
+#   DESCRIPTION:  Update preinstall script
+#
+#       OPTIONS:  install
+#          BUGS:  ---
+#         NOTES:  ---
+#  DEPENDENCIES:  	
+#        AUTHOR:  Samuel Weru, samweru@gmail.com
+#       COMPANY:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
+
+set -e
+
+case "$1" in
+install)
+        
+        echo "**INSTALL: Running installation"
+        
+        ##########################################################
+        # Use For Service Stop - Postgresql & Exist Update & Plone
+        ##########################################################
+         echo "**INSTALL: Stop bungeni services"
+         service bungeni_services stop
+        
+        ############################
+        # Postgresql Update: Back Up 
+        ############################
+        #echo "**INSTALL: Backing up postgresql data"
+         #tar -czf postgres-data.tar.gz /opt/bungeni/bungeni_apps/postgres-data
+         #mv postgres-data.tar.gz /opt/bungeni/updates/latest/
+        
+        ###################################
+        # Exist Update - Backup bungeni-xml
+        ###################################
+         echo "**INSTALL: Clean out any lock files"
+         find /opt/bungeni/bungeni_apps/exist/webapp/WEB-INF/data -type f \( -name '*.lck' -o -name '*.lock' \) -exec rm -rf {} \;
+        
+         echo "**INSTALL: Start exist"
+         mkdir -p /opt/bungeni/updates/latest
+         chown bungeni:bungeni -Rf /opt/bungeni/updates/latest
+         su bungeni -l -c "JAVA_HOME=$JAVA_HOME java -Xms128m -Xmx512m \
+                -Dfile.encoding=UTF-8 \
+                -Djava.endorsed.dirs=/opt/bungeni/bungeni_apps/exist/lib/endorse \
+                -Dexist.home=/opt/bungeni/bungeni_apps/exist \
+                -Djetty.port=8088 \
+                -jar /opt/bungeni/bungeni_apps/exist/start.jar jetty" &
+        
+		 sleep 11
+		 echo "**INSTALL: Back up bungeni data"	
+		 echo "**INSTALL: Please wait..."	
+		 su bungeni -l -c "JAVA_HOME=$JAVA_HOME \ 
+			java -jar -Dexist.home=/opt/bungeni/bungeni_apps/exist/ /opt/bungeni/bungeni_apps/exist/start.jar \
+			backup -u admin -b /db -d /opt/bungeni/updates/latest/ \
+			-ouri=xmldb:exist://127.0.0.1:8088/exist/xmlrpc"
+         
+         echo "**INSTALL: Kill bungeni processes"
+         pkill -u bungeni
+    ;;
+*)
+
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
+
+exit 0
