@@ -57,7 +57,7 @@ tar --transform 's,latest/data/opt/,opt/,' -czf $ZIP_FILE -T $RELEASE_NAME.inclu
 mv $ZIP_FILE $RELEASE_NAME/debian/opt/bungeni/updates/latest
 
 logger.printTask "Creating control file."
-sed -i "s/__PACKAGE_NAME__/${RELEASE_NAME}/g" ./$RELEASE_NAME/debian/DEBIAN/control
+sed -i "s/__PACKAGE_NAME__/${PACKAGE_NAME}/g" ./$RELEASE_NAME/debian/DEBIAN/control
 sed -i "s/__ARCH__/${ARCH_TYPE}/g" ./$RELEASE_NAME/debian/DEBIAN/control
 sed -i "s/__SIZE__/${SIZE}/g" ./$RELEASE_NAME/debian/DEBIAN/control
 sed -i "s/__VERSION__/${VERSION}-${DATE}/g" ./$RELEASE_NAME/debian/DEBIAN/control

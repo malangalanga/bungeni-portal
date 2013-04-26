@@ -19,7 +19,13 @@
 set -e
 
 case "$1" in
+upgrade)
+      
+    echo "**UPGRADE: You already have this package installed!"    
+    exit 0
+;;
 remove|purge)
+    echo "**REMOVE|PURGE"  
     ;;
 *)
 

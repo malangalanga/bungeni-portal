@@ -21,17 +21,18 @@ set -e
 case "$1" in
 install)
         
-        mkdir -p /opt/bungeni/updates/latest 
+        echo "**INSTALL: Running installation"
         
         ##########################################################
         # Use For Service Stop - Postgresql & Exist Update & Plone
         ##########################################################
-         echo "Stop bungeni services"
+         echo "**INSTALL: Stop bungeni services"
          service bungeni_services stop
         
         ############################
         # Postgresql Update: Back Up 
         ############################
+        #echo "**INSTALL: Backing up postgresql data"
          #tar -czf postgres-data.tar.gz /opt/bungeni/bungeni_apps/postgres-data
          #mv postgres-data.tar.gz /opt/bungeni/updates/latest/
         
