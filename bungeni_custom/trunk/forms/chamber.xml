@@ -3,7 +3,7 @@
     <field name="full_name" label="Parliament Chamber Name" required="false" value_type="text" render_type="text_line">
         <show modes="view edit add listing" />
     </field>
-    <field name="short_name" label="Short Name" description="Shorter name for the parliament" required="true" value_type="text" render_type="text_line">
+    <field name="short_name" label="Short Name" description="Shorter name for the chamber" required="true" value_type="text" render_type="text_line">
         <show modes="view edit add listing" />
     </field>
     <field name="principal_name" label="Chamber/Legislature Identifier" description="Unique identifier for this Chamber/Legislature" required="true" value_type="text" render_type="text_line"
@@ -17,13 +17,14 @@
         <show modes="view edit add" />
         <hide modes="listing" />
     </field>
-    <field name="parliament_type" label="Parliament Chamber Type" required="true" value_type="text" render_type="single_select" vocabulary="chamber_type">
+    <field name="sub_type" label="Parliament Chamber Type" required="true" value_type="text" render_type="single_select" vocabulary="chamber_type">
         <show modes="view edit add listing" />
     </field>
-    <field name="election_date" label="Election Date" description="Date of the election" required="true" value_type="date" render_type="date" 
-        note="!+legislature - this one is UNUSED - we leave it for as required in the db">
+    <!-- election_date is now logically on legislature
+    <field name="election_date" label="Election Date" required="true" value_type="datetime" render_type="datetime" extended="datetime">
         <show modes="view edit add listing" />
     </field>
+    -->
     <field name="start_date" label="In power from" description="Date of the swearing in" required="true" value_type="date" render_type="date"
         note="!+ update label/description!"
         >
@@ -41,29 +42,29 @@
         <show modes="view edit add listing" />
     </field>
     
-    <container match="agenda_item.group_id" name="agendaitems" note="not parliament_id?" />
+    <container match="agenda_item.group_id" name="agendaitems" note="not chamber_id?" />
     <!--
     <container match="assembly_agenda_item.group_id" name="assemblyagendaitems" 
-        note="!+naming !+why not parliament_id?" />
+        note="!+naming !+why not chamber_id?" />
     -->
-    <container match="assembly_bill.parliament_id" />
-    <container match="assembly_motion.parliament_id" />
-    <container match="assembly_question.parliament_id" />
-    <container match="assembly_tabled_document.parliament_id" name="assemblytableddocuments" note="!+naming" />
-    <container match="assembly_test_doc.parliament_id" />
+    <container match="assembly_bill.chamber_id" />
+    <container match="assembly_motion.chamber_id" />
+    <container match="assembly_question.chamber_id" />
+    <container match="assembly_tabled_document.chamber_id" name="assemblytableddocuments" note="!+naming" />
+    <container match="assembly_test_doc.chamber_id" />
     <!--
     <container match="senate_agenda_item.group_id" name="senateagendaitems" 
-        note="!+naming !+why not parliament_id?" />
+        note="!+naming !+why not chamber_id?" />
     -->
-    <container match="senate_bill.parliament_id" />
-    <container match="senate_motion.parliament_id" />
-    <container match="senate_question.parliament_id" />
-    <container match="senate_tabled_document.parliament_id" name="senatetableddocuments" note="!+naming" />
-    <container match="senate_test_doc.parliament_id" />
+    <container match="senate_bill.chamber_id" />
+    <container match="senate_motion.chamber_id" />
+    <container match="senate_question.chamber_id" />
+    <container match="senate_tabled_document.chamber_id" name="senatetableddocuments" note="!+naming" />
+    <container match="senate_test_doc.chamber_id" />
 
-    <container match="bicameral_document.parliament_id" />
+    <container match="bicameral_document.chamber_id" />
     
-    <container match="session.parliament_id" />
+    <container match="session.chamber_id" />
     <container match="committee.parent_group_id" />
     <container match="office.parent_group_id" />
     <container match="member_of_parliament.group_id" name="parliamentmembers" />

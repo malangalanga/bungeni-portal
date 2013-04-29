@@ -1,4 +1,4 @@
-"""Merge office table into group table.
+"""Merge office table into group table (declarative).
 
 Revision ID: 44568662a025
 Revises: 16d750a1ec4b
