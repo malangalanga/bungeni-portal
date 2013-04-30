@@ -19,15 +19,22 @@ def upgrade():
     
     # upgrade data for existing parliament groups
     connection = op.get_bind()
+    
     # principal.type, "parliament" -> "chamber"
     connection.execute(sa.sql.text(
             """update principal set type='chamber' where type='parliament';"""))
+    
+    # zope_principal_role_map.object_type, "parliament" -> "chamber"
+    connection.execute(sa.sql.text(
+            """update zope_principal_role_map set object_type='chamber' where object_type='parliament';"""))
+    
     # parliament_type -> group.sub_type
     for p in connection.execute(sa.sql.text("""select * from parliament;""")):
         print "Migrating up parliament group: parliament_id={p.parliament_id}".format(p=p)
         connection.execute(sa.sql.text(
             """update public.group set sub_type='{p.parliament_type}'"""
             """ where group_id={p.parliament_id};""".format(p=p) ))
+    
     
     # foreign key columns: parliament.parliament_id -> group.group_id
     # doc
@@ -37,6 +44,8 @@ def upgrade():
     op.alter_column("doc", "parliament_id", name="chamber_id")
     op.create_foreign_key("doc_chamber_id_fkey",
         "doc", "group", ["chamber_id"], ["group_id"])
+    # doc_audit
+    op.alter_column("doc_audit", "parliament_id", name="chamber_id")
     # session
     print 'Reworking "session" FOREIGN KEY (parliament_id) REFERENCES ' \
         'parliament.parliament_id -> (chamber_id) REFERENCES "group"(group_id)'
@@ -70,6 +79,10 @@ def downgrade():
     connection.execute(sa.sql.text(
             """update principal set type='parliament' where type='chamber';"""))
     
+    # zope_principal_role_map.object_type, "chamber" -> "parliament"
+    connection.execute(sa.sql.text(
+            """update zope_principal_role_map set object_type='parliament' where object_type='chamber';"""))
+    
     # group.sub_type -> parliament_type, capi.legislature.election_date -> parliament.election_date
     from bungeni.capi import capi
     for p in connection.execute(sa.sql.text(
@@ -93,6 +106,8 @@ def downgrade():
     op.alter_column("doc", "chamber_id", name="parliament_id")
     op.create_foreign_key("doc_parliament_id_fkey",
         "doc", "parliament", ["parliament_id"], ["parliament_id"])
+    # doc_audit
+    op.alter_column("doc_audit", "chamber_id", name="parliament_id")
     # session
     print 'Reversing... "session" FOREIGN KEY (parliament_id) REFERENCES ' \
         'parliament.parliament_id -> (chamber_id) REFERENCES "group"(group_id)'
