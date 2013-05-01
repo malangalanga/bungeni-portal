@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<workflow title="Parliament Workflow"
-    description="Workflow for parliaments"
+<workflow title="Parliament Chamber Workflow"
+    description="Workflow for parliament chambers"
     permission_actions=".View .Edit .Add .Delete"
     >
     
@@ -31,19 +31,19 @@
     </facet>
     
     
-    <state id="draft" title="Draft - Parliament not yet Active" actions="deactivate">
+    <state id="draft" title="Draft - Parliament Chamber not yet Active" actions="deactivate">
         <facet ref=".draft" />
         <facet ref="address.internal" />
     </state>
     
-    <state id="active" title="Active Parliament"
+    <state id="active" title="Active Parliament Chamber"
             actions="activate"
         >
         <facet ref=".public" />
         <facet ref="address.public" />
     </state>
     
-    <state id="dissolved" title="Parliament is Dissolved" 
+    <state id="dissolved" title="Parliament Chamber is Dissolved" 
             actions="dissolve"
         >
         <facet ref=".public_frozen" />

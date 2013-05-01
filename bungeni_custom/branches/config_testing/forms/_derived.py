@@ -6,16 +6,20 @@
 
 Signature of all utilities here: 
 
-    (context:Object) -> any
+    (context:domain.Entity) -> any
 
 $Id$
 """
-from bungeni.utils.misc import describe
-from bungeni.ui.i18n import _
 log = __import__("logging").getLogger("bungeni_custom.forms")
 
+from bungeni.utils.misc import describe
+from bungeni.ui.i18n import _
 
-# doc
+
+
+# derived fields based on doc workflow dates -- see:
+# models.domain.Doc._get_workflow_date
+
 
 @describe(_(u"Submission Date"))
 def submission_date(context):
@@ -37,18 +41,30 @@ def scheduled_date(context):
     return context._get_workflow_date("scheduled")
 
 
+
+# derived fields by combining values from other fields - recommendation 
+# is to use python's str.format functionalities, see:
+# http://docs.python.org/2/library/string.html#formatexamples
+# !+ from py 2.7, may do simply {} (without the number)
+
 # user
 
 @describe(_(u"Full Name : First name - middle name - last name"))
 def user_combined_name(user):
-    return " ".join([ name for name in 
-            (user.first_name, user.middle_name, user.last_name) if name ])
+    return "{0} {1} {2}".format(
+            user.first_name, 
+            user.middle_name or "", # may be None
+            user.last_name
+        ).replace("  ", " ")
 
 
 # group
 
 #!+i18n?
 def group_combined_name(group):
-    return "%s [%s]" % (group.full_name, group.acronym)
+    return "{0} [{1}]".format(
+            group.full_name, 
+            group.acronym
+        ).replace("  ", " ")
 
 

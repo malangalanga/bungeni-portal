@@ -9,7 +9,7 @@
     <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
         <show modes="view edit add listing" />
     </field>
-    <field name="combined_name" label="Full Name [acronym]" required="false" value_type="text" render_type="text_line">
+    <field name="combined_name" label="Full Name [acronym]" required="false" value_type="text" render_type="text_line" derived="group_combined_name">
         <show modes="listing" />
     </field>
     <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
@@ -33,7 +33,7 @@
     <field name="principal_name" label="Committee Identifier" description="Unique identifier for this Committee" required="true" value_type="text" render_type="single_select" vocabulary="committee_id"
         note="
             Should contain only letters, numbers, a period (.) and underscore (_). 
-            Should start with a letter and be between 3 and 20 characters long" 
+            Should start with a letter and be between 3 and 20 characters long"
         >
         <show modes="view edit add" />
     </field>
