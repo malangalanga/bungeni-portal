@@ -31,33 +31,40 @@
         <allow permission=".Add" roles="SpeakerSenate SpeakerAssembly" />
     </facet>
   
+    <facet name="draft">
+        <allow permission=".View" roles="Drafter" />
+        <allow permission=".Edit" roles="Drafter" />
+        <allow permission=".Delete" roles="Drafter" />
+    </facet>
+
+    <facet name="attached">
+        <allow permission=".View" roles="Anonymous" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate" />
+    </facet>
+
+    <facet name="internal">
+        <allow permission=".View" roles="Authenticated" />
+        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate" />
+    </facet>
+
+    <facet name="withdrawn">
+        <allow permission=".View" roles="
+                ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
+                SpeakerSenate SpeakerAssembly" />
+    </facet>   
     
     <!-- workflow states -->
     <state id="draft" title="Draft">
-        <facet>
-            <allow permission=".View" roles="Drafter" />
-            <allow permission=".Edit" roles="Drafter" />
-            <allow permission=".Delete" roles="Drafter" />
-        </facet>
+        <facet ref=".draft" />
     </state>
     <state id="attached" title="Attached">
-        <facet>
-            <allow permission=".View" roles="Anonymous" />
-            <allow permission=".Edit" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate" />
-        </facet>
+        <facet ref=".attached" />
     </state>
     <state id="internal" title="Internal">
-        <facet>
-            <allow permission=".View" roles="Authenticated" />
-            <allow permission=".Edit" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate" />
-        </facet>
+            <facet ref=".internal" />
     </state>
     <state id="withdrawn" title="Withdrawn">
-        <facet>
-            <allow permission=".View" roles="
-                    ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
-                    SpeakerSenate SpeakerAssembly" />
-        </facet>   
+            <facet ref=".withdrawn" />
     </state>
     
     
