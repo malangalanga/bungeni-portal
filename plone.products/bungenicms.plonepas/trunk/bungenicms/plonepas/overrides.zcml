@@ -11,4 +11,23 @@
       template="usergroups_groupsoverview.pt"
       />
       
+  <!-- Override Group Membership view on control panel-->
+  <browser:page
+      name="usergroup-usermembership"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".usergroups.UserMembershipControlPanel"
+      permission="plone.app.controlpanel.UsersAndGroups"
+      template="usergroups_usermembership.pt"
+      />  
+
+  <!-- Override User Group details view on control panel -->      
+  <browser:page
+      name="usergroup-groupdetails"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".usergroups.GroupDetailsControlPanel"
+      permission="plone.app.controlpanel.UsersAndGroups"
+      template="usergroups_groupdetails.pt"
+      />
+           
+      
 </configure>
