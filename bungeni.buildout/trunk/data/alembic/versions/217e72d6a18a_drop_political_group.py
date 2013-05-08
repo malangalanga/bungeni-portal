@@ -136,7 +136,7 @@ def downgrade():
             vp_text.c.object_type == VP_OBJECT_TYPE,
             vp_text.c.name in ("logo_name", "logo_mimetype")))
     
-    # create "vp_binary" table
+    # drop "vp_binary" table
     print "Dropping vertical property table: 'vp_binary'"
     op.drop_table("vp_binary")
     
