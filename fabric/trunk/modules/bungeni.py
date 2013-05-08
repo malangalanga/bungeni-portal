@@ -1286,6 +1286,14 @@ class PloneTasks:
             abort(red("The Plone buildout requires an existing bungeni buildout"
                   ))
 
+    def bootstrap_instance(self):
+	"""
+	Bootstrap the instance
+	"""
+
+	self.tasks.bootstrap(self.pycfg.python)
+
+
     def setup(self):
         """
         31-08-2011 - New setup API to handle pegged releases.
@@ -1438,6 +1446,13 @@ class PortalTasks:
         if not self.tasks.build_exists(self.exists_check):
             abort("Portal build requires a working bungeni buildout")
 
+    def bootstrap_instance(self):
+	"""
+	Boostrap instance
+	"""	
+
+	self.tasks.bootstrap(self.pycfg.python)	
+
 
     def setup(self, version = "default"):
         """
@@ -1567,6 +1582,11 @@ class BungeniTasks:
         if not self.tasks.build_exists(self.exists_check):
             abort("Bungeni build requires a working python " + self.pycfg.python_ver )
 
+    def bootstrap_instance(self):
+	"""
+	Bootstrap the buildout instance
+	"""
+	self.tasks.bootstrap(self.pycfg.python)
 
     def setup(self):
         """

@@ -93,6 +93,15 @@ def bungeni_setup():
     tasks.setup()
 
 
+def bungeni_bootstrap():
+    """
+    Bootstrap the installation
+    """
+
+    tasks = bungeni.BungeniTasks()
+    tasks.bootstrap_instance()
+
+
 def bungeni_install():
     """
     Checkout,bootstrap and build bungeni
@@ -236,6 +245,15 @@ def plone_import_site():
     tasks = bungeni.PloneTasks()
     tasks.import_site_content()
 
+
+def plone_bootstrap():
+    """
+    Bootstrap the installation
+    """
+
+    tasks = bungeni.PloneTasks()
+    tasks.bootstrap_instance()
+
             
 def plone_setup():
     """
@@ -335,6 +353,15 @@ def portal_build_opt():
 
     tasks = bungeni.PortalTasks()
     tasks.build_opt()
+
+
+def portal_bootstrap():
+    """
+    Bootstrap the installation
+    """
+
+    tasks = bungeni.PortalTasks()
+    tasks.bootstrap_instance()
 
 
 def portal_setup():
