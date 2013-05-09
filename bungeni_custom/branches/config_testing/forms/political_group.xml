@@ -28,9 +28,17 @@
     <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
         <show modes="view edit add" />
     </field>
-    <field name="logo_data" label="Logo" required="false" value_type="image" render_type="image">
+    <field name="logo_data" label="Logo" required="false" value_type="image" render_type="image" extended="binary">
         <show modes="view edit add" />
     </field>
+    <!-- !+ currently unused; collect "logo" fields into a separate type, such as a special "attachment"?
+    <field name="logo_name" label="Logo" required="false" value_type="image" render_type="image" extended="text">
+        <show modes="view edit add" />
+    </field>
+    <field name="logo_mimetype" label="Logo" required="false" value_type="image" render_type="image" extended="text">
+        <show modes="view edit add" />
+    </field>
+    -->
     <field name="principal_name" label="Political Group Identifier" description="Unique identifier for this Political Group" required="true" value_type="text" render_type="single_select" vocabulary="political_group_id"
         note="
             Should contain only letters, numbers, a period (.) and underscore (_). 
@@ -41,6 +49,7 @@
     <field name="group_role" label="Role" description="Role given to members of this office" required="true" value_type="text" render_type="single_select" vocabulary="group_role">
         <show modes="view edit add listing" />
     </field>
+    
     <container match="member_title.membership_id" name="titles" />
     <container match="political_group_member.group_id" name="group_members" />
     <container match="title_type.group_id" name="title_types" />
