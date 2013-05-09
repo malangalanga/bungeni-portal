@@ -67,7 +67,7 @@
     <container match="session.chamber_id" />
     <container match="committee.parent_group_id" />
     <container match="office.parent_group_id" />
-    <container match="member_of_parliament.group_id" name="parliamentmembers" />
+    <container match="member.group_id" />
     <container match="political_group.parent_group_id" name="politicalgroups" note="!+naming" />
     <container match="sitting.group_id" />
     <container match="title_type.group_id" />

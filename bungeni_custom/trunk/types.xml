@@ -75,18 +75,18 @@
          label="editorial event" container_label="editorial events" />
 
     <group name="office" workflow="group" enabled="true" label="role" container_label="roles">
-        <member name="office_member" workflow="group_membership" enabled="true"
+        <member name="office_member" workflow="group_member" enabled="true"
             label="member" container_label="members" />
     </group>
     <group name="political_group" workflow="group" enabled="true" 
         label="political group" container_label="political groups">
-        <member name="political_group_member" workflow="group_membership" enabled="true"
+        <member name="political_group_member" workflow="group_member" enabled="true"
             label="member" container_label="members" />
     </group>
     <group name="committee" enabled="true" label="committee" container_label="committees">
-        <member name="committee_member" workflow="group_membership" enabled="true" 
+        <member name="committee_member" workflow="group_member" enabled="true" 
             label="member" container_label="members" />
-        <member name="committee_staff" workflow="group_membership" enabled="true"
+        <member name="committee_staff" workflow="group_member" enabled="true"
             label="staff" container_label="staff members" />
     </group>
     <group name="joint_committee" workflow="committee" descriptor="committee" enabled="true" 
@@ -94,11 +94,11 @@
     <group name="government" workflow="group" enabled="true"
         label="government" container_label="governments" />
     <group name="ministry" workflow="group" enabled="true" label="member" container_label="members">
-        <member name="minister" workflow="group_membership" enabled="true" 
+        <member name="minister" workflow="group_member" enabled="true" 
             label="ministry" container_label="ministries" />
     </group>
     <group name="chamber" enabled="true" label="chamber" container_label="chambers">
-        <member name="member_of_parliament" workflow="group_membership" enabled="true" 
+        <member name="member" workflow="group_member" enabled="true" 
             label="member" container_label="members" />
     </group>
 

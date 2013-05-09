@@ -21,7 +21,7 @@ from bungeni.ui.forms.validations import (
     
     validate_date_range_within_parent,
     validate_government_dates,
-    validate_group_membership_dates,
+    validate_group_member_dates,
     validate_member_titles,
     validate_chamber_dates,
     validate_venues,

@@ -22,11 +22,11 @@
         <allow permission="committee_member.View" roles="Authenticated Anonymous" />
         <allow permission="committee_member.Edit" roles="ClerkSenate ClerkAssembly" />
         <allow permission="committee_member.Add" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="committee_member.Delete" roles="ClerkSenate ClerkAssembly" /><!-- !+GROUP_MEMBERSHIP_DELETE -->
+        <allow permission="committee_member.Delete" roles="ClerkSenate ClerkAssembly" /><!-- !+GROUP_MEMBER_DELETE -->
         <allow permission="committee_staff.View" roles="Authenticated Anonymous" />
         <allow permission="committee_staff.Edit" roles="ClerkSenate ClerkAssembly" />
         <allow permission="committee_staff.Add" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="committee_staff.Delete" roles="ClerkSenate ClerkAssembly" /><!-- !+GROUP_MEMBERSHIP_DELETE -->
+        <allow permission="committee_staff.Delete" roles="ClerkSenate ClerkAssembly" /><!-- !+GROUP_MEMBER_DELETE -->
         <allow permission="agenda_item.Add" roles="MemberCommitteeAssembly MemberCommitteeSenate" />
     </facet>
     <facet name="public_frozen">

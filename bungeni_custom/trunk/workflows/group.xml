@@ -19,13 +19,13 @@
     </facet>
     <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="group_membership.View" roles="Authenticated Anonymous" />
-        <allow permission="group_membership.Edit" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="group_membership.Add" roles="ClerkSenate ClerkAssembly" />
-        <!-- !+GROUP_MEMBERSHIP_DELETE(mr, dec-2012) in sub-item's workflow "draft" state -->
-        <allow permission="group_membership.Delete" roles="ClerkSenate ClerkAssembly" />
+        <allow permission="group_member.View" roles="Authenticated Anonymous" />
+        <allow permission="group_member.Edit" roles="ClerkSenate ClerkAssembly" />
+        <allow permission="group_member.Add" roles="ClerkSenate ClerkAssembly" />
+        <!-- !+GROUP_MEMBER_DELETE(mr, dec-2012) in sub-item's workflow "draft" state -->
+        <allow permission="group_member.Delete" roles="ClerkSenate ClerkAssembly" />
         <!-- !+NO_REDEFINE_PERMISSION redefine of political_group_member permissions 
-            to group_membership to fails here (and this is the workflow used by 
+            to group_member to fails here (and this is the workflow used by 
             political_group_member). Work around options for this is are:
             a) do NOT use redefinePermission, so to not get false confidence that 
                it might work, and know to then call each desired permission explicitly.
@@ -39,11 +39,11 @@
         <allow permission="political_group_member.View" roles="Authenticated Anonymous" />
         <allow permission="political_group_member.Edit" roles="ClerkSenate ClerkAssembly" />
         <allow permission="political_group_member.Add" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="political_group_member.Delete" roles="ClerkSenate ClerkAssembly" /><!-- !+GROUP_MEMBERSHIP_DELETE -->
+        <allow permission="political_group_member.Delete" roles="ClerkSenate ClerkAssembly" /><!-- !+GROUP_MEMBER_DELETE -->
     </facet>
     <facet name="public_frozen">
         <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="group_membership.View" roles="Authenticated Anonymous" />
+        <allow permission="group_member.View" roles="Authenticated Anonymous" />
         <!-- !+REDEFINE_FAIL -->
         <allow permission="political_group_member.View" roles="Authenticated Anonymous" />
     </facet>

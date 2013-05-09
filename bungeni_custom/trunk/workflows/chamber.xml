@@ -20,14 +20,14 @@
     </facet>
     <facet name="public">
         <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="member_of_parliament.View" roles="Authenticated Anonymous" />
-        <allow permission="member_of_parliament.Edit" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="member_of_parliament.Add" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="member_of_parliament.Delete" roles="ClerkSenate ClerkAssembly" /><!-- !+GROUP_MEMBERSHIP_DELETE -->
+        <allow permission="member.View" roles="Authenticated Anonymous" />
+        <allow permission="member.Edit" roles="ClerkSenate ClerkAssembly" />
+        <allow permission="member.Add" roles="ClerkSenate ClerkAssembly" />
+        <allow permission="member.Delete" roles="ClerkSenate ClerkAssembly" /><!-- !+GROUP_MEMBER_DELETE -->
     </facet>
     <facet name="public_frozen">
         <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="member_of_parliament.View" roles="Authenticated Anonymous" />
+        <allow permission="member.View" roles="Authenticated Anonymous" />
     </facet>
     
     

@@ -554,7 +554,7 @@
         <integrity constraints="end_after_start" validations="validate_date_range_within_parent" />
     </descriptor>
     
-    <descriptor name="group_membership">
+    <descriptor name="group_member">
         <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
             <show modes="view edit add listing" />
         </field>
@@ -580,7 +580,7 @@
         <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
             <show modes="view listing" />
         </field>
-        <integrity constraints="end_after_start active_and_substituted substituted_end_date inactive_no_end_date" validations="validate_date_range_within_parent validate_group_membership_dates" />
+        <integrity constraints="end_after_start active_and_substituted substituted_end_date inactive_no_end_date" validations="validate_date_range_within_parent validate_group_member_dates" />
     </descriptor>
     
     <descriptor name="heading" order="3">
