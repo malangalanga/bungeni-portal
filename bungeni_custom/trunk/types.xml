@@ -71,7 +71,9 @@
     
     <event name="event_response" archetype="event" workflow="event_response" enabled="true" 
          label="response" container_label="responses" />
-    
+    <event name="event_editor" archetype="event" workflow="event_editor" enabled="true" 
+         label="editorial event" container_label="editorial events" />
+
     <group name="office" workflow="group" enabled="true" label="role" container_label="roles">
         <member name="office_member" workflow="group_membership" enabled="true"
             label="member" container_label="members" />
