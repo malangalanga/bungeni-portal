@@ -44,19 +44,19 @@ def get_user(login_id):
 
 def get_user_groups(login_id):
     """Get group for users:
-    a) the groups defined by his user_group_memberships
+    a) the groups defined by its user_group_member
     b) the users who have him assigned as a delegation
     c) the groups of the delegation user.
     """
     def get_groups(user_id):
         principal_ids = []
         session = Session()
-        query = session.query(domain.GroupMembership).filter(rdb.and_(
-                    domain.GroupMembership.user_id == user_id,
-                    domain.GroupMembership.active_p == True)
+        query = session.query(domain.GroupMember).filter(rdb.and_(
+                    domain.GroupMember.user_id == user_id,
+                    domain.GroupMember.active_p == True)
             ).options(eagerload("group"), lazyload("user"))
-        for membership in query:
-            principal_ids.append(membership.group.principal_name)
+        for member in query:
+            principal_ids.append(member.group.principal_name)
         return principal_ids
     groups = set()
     user = get_user(login_id)  # user may be None
