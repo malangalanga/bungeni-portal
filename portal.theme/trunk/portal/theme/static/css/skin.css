@@ -12,7 +12,7 @@
 -------------------------------------------------------------- */
 #top-layer {
     text-align:center;
-    border: 1px solid transparent;
+    border: 0 none;
     background: #434343;
 }
 #top-layer div {
@@ -443,7 +443,8 @@ div#portal-globalnav {
 div#portal-globalnav ul.level0 {
     border: 0 none;
 	list-style-type: none;
-    background: #7E7E7E;
+    background:transparent;
+    background:rgba(255,255,255,0);
 }
 div#portal-globalnav ul.level0 li {
     border-radius: 0;
@@ -453,18 +454,19 @@ div#portal-globalnav ul.level0 li {
     padding: -2px 1px;
 }
 div#portal-globalnav ul.level0 li a { 
-    color: #000;
+    color: #fff;
     background: #eee;
-    border: 1px solid #aaa;
-    border-bottom:1px solid #7E7E7E;
+    border: 1px solid #2b92be;
+    border-bottom:1px solid #2b92be;
     font-size: 12px;
 }
 div#portal-globalnav ul.level0 li.selected a,
 div#portal-globalnav ul.level0 li a:hover {
-    font-weight: normal;
-    background:#7E7E7E;
+    font-weight: bold;
+    background:#2b92be;
     border-bottom-color: transparent;
-    border-color: #7E7E7E;
+    border-color: #2b92be;
+    color:#fff;
 } 
 div#portal-globalnav ul.level0 {
     bottom: -3px !important;
@@ -500,7 +502,7 @@ div#portal-globalnav ul.level1 li a {
     background: transparent;
     border: 0 none;
     text-shadow: none;
-    color: #fff;
+    color: #fff !important;
 }
 div#portal-globalnav ul.level1 li a:hover {
     color: #000;
@@ -511,7 +513,8 @@ div#portal-globalnav ul.level1 li.selected a {
     background: transparent;
     border: 0 none;
     font-weight: normal;
-    color: #d50005 !important;
+    color: #fff !important;
+    text-decoration:underline;
 }
 .template-portal div#portal-globalnav ul.level1 li.selected a {
 	color:#F9C675 !important;
@@ -872,7 +875,7 @@ span.yui-button.yui-link-button span a {
 }
 
 .template-portal #header-wrapper {
-    background: #434343;
+    background: #016d9a;
     border-bottom: 18px solid #7E7E7E;
 }
 
@@ -885,7 +888,7 @@ span.yui-button.yui-link-button span a {
 }
 
 .template-portal #top-layer div {
-    background-color:#434343;
+    background-color:#016d9a;
 }
 
 .template-portal #visual-table-wrapper {
@@ -893,10 +896,10 @@ span.yui-button.yui-link-button span a {
     border: 0 none;
 }
 .template-portal #portal-logo-wrapper {
-    background:#434343 url(/static/images/portal_img.png) no-repeat bottom right;
+    background:#016d9a url(/static/images/portal_img.png) no-repeat bottom right;
 }
 .template-portal #portal-logo {
-    background:#434343 url(/static/images/portal_banner.png) top left no-repeat;
+    background:#016d9a url(/static/images/portal_banner.png) top left no-repeat;
 }
 /* 
  * if display is set to block it will display the logo used on the workspace
@@ -1702,7 +1705,7 @@ color: black;
 }
 
 .template-portal-eXist div#portal-globalnav ul.level1 {
-    margin-top: -0.2em !important;
+
 }
 .template-portal-eXist .big-dbl-arrow {
     text-decoration:none;
@@ -1710,11 +1713,19 @@ color: black;
 }
 
 .template-portal-eXist div#portal-globalnav ul.level0 li {
-    padding: 4px 10px;  
+    padding: 5px 10px;  
 }   
+.template-portal-eXist div#portal-globalnav #portaltab- {
+    background-color: #7e7e7e;
+    display:inline-block;
+    padding:0;
+}
+.template-portal-eXist div#portal-globalnav #portaltab- > a {
+    font-weight: bold;
+}
 
 .template-portal-eXist div#portal-globalnav ul.level0 li a {
-    padding: 6px 10px;
+    padding: 5px 10px;
 }
 
 .template-portal-eXist div#portal-globalnav ul.level0 li ul li a {
@@ -1722,8 +1733,13 @@ color: black;
 }
 
 
-/* Listing - version
+/* Listing
 -------------------------------------------------------------- */
+.template-portal-eXist .list-inline,
+.template-portal-eXist ul.ls-timeline li {
+    text-align:left;
+}
+
 .template-portal-eXist table.listing th, 
 .template-portal-eXist table.timeline th, 
 .template-portal-eXist table.listingdescription th {
