@@ -9,13 +9,20 @@
             ClerkSenate
             MemberSenate
         " />
-    
+    <allow permission="event_editor.Add" roles="
+	    ClerkSenate
+        " /> 
     
     <!-- features -->
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
-    <feature name="event" enabled="true" />
+    <feature name="event" enabled="true">
+        <parameter name="types" value="
+                event 
+                event_editor
+           "  />
+    </feature>
     <feature name="signatory" enabled="true">
         <parameter name="open_states" value="gazetted" />
     </feature>
