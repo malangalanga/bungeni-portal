@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <descriptor order="3">
+    
     <field name="user_id" label="Name" required="true" value_type="member" render_type="single_select" vocabulary="chamber_member">
         <show modes="view add listing" />
     </field>
@@ -31,6 +32,8 @@
     <field name="notes" label="Notes" required="false" value_type="text" render_type="rich_text">
         <show modes="view edit add" />
     </field>
-    <container match="member_title.membership_id" name="titles" />
+    
+    <container match="member_title.member_id" name="titles" />
+    
 </descriptor>
 

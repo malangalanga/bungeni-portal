@@ -50,7 +50,7 @@
         <show modes="view edit add listing" />
     </field>
     
-    <container match="member_title.membership_id" name="titles" />
+    <container match="member_title.member_id" name="titles" />
     <container match="political_group_member.group_id" />
     <container match="title_type.group_id" name="title_types" />
     <container match="agenda_item.group_id" name="agendaitems" />

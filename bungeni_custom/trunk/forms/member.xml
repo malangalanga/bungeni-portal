@@ -4,10 +4,10 @@
     <field name="user_id" label="Name" required="true" value_type="user" render_type="single_select" vocabulary="member">
         <show modes="view add listing" />
     </field>
-    <field name="member_election_type" label="Election Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="member_election_type">
+    <field name="election_type" label="Election Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="member_election_type">
         <show modes="view edit add listing" />
     </field>
-    <field name="election_nomination_date" label="Election/Nomination Date" required="false" value_type="date" render_type="date">
+    <field name="election_date" label="Election Date" required="false" value_type="date" render_type="date">
         <show modes="view edit add listing" />
     </field>
     <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
@@ -35,11 +35,15 @@
     <field name="status_date" label="Status Date" required="true" value_type="date" render_type="date">
         <show modes="view listing" />
     </field>
-    <field name="representation" label="Representation" description="Select Representation" required="false" value_type="text" render_type="tree_text" vocabulary="representation">
+    <field name="representation_geo" label="Constituency Representation" description="Select Representation" required="false" value_type="text" render_type="tree_text" vocabulary="representation">
         <show modes="view edit add" />
         <hide modes="listing" />
     </field>
-    <field name="party" label="Political Party" required="false" value_type="vocabulary" render_type="single_select" vocabulary="party">
+    <field name="representation_sig" label="Special Interest Group Representation" description="Select Representation" required="false" value_type="text" render_type="tree_text" vocabulary="representation">
+        <show modes="view edit add" />
+        <hide modes="listing" />
+    </field>
+    <field name="party" label="Political Party" required="false" value_type="vocabulary" render_type="single_select" vocabulary="party" extended="translated_text">
         <show modes="view edit add listing" />
     </field>
     <field name="leave_reason" label="Leave Reason" required="false" value_type="text" render_type="text_line">
@@ -50,7 +54,7 @@
         <show modes="view edit add" />
     </field>
     
-    <container match="member_title.membership_id" name="titles" />
+    <container match="member_title.member_id" name="titles" />
     
     <container match="agenda_item.owner_id" indirect_key="user_id" />
     <container match="bill.owner_id" indirect_key="user_id" />

@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <descriptor order="2">
+    
     <field name="user_id" label="Name" required="true" value_type="user" render_type="single_select" vocabulary="user_not_mp">
         <show modes="view add listing" />
     </field>
@@ -32,9 +33,9 @@
         <show modes="view edit add" />
     </field>
     
-    <container match="member_title.membership_id" name="titles" />        
+    <container match="member_title.member_id" name="titles" />        
     <!--
-    <container match="group_member_role.membership_id" name="subroles" />        
+    <container match="group_member_role.member_id" name="subroles" />        
     -->
 
 </descriptor>
