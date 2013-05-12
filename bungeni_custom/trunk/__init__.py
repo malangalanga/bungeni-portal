@@ -58,7 +58,7 @@ zope_i18n_compile_mo_files = True
 default_language = "en"
 
 # pivot languages - zero or more of zope_i18n_allowed_languages
-pivot_languages = "en"
+pivot_languages = "en pt"
 
 # language ids for languages written right to left, as a space-separated string
 right_to_left_languages = "ar" 

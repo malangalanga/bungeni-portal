@@ -15,8 +15,7 @@
         <hide modes="listing" />
     </field>
     <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
-        <show modes="add view edit" />
-        <hide modes="listing" />
+        <show modes="add view edit listing" />
     </field>
     <field name="doc_type" label="Bill Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="bill_type">
         <show modes="view edit add listing" />
