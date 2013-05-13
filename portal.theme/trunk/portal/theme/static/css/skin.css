@@ -454,11 +454,11 @@ div#portal-globalnav ul.level0 li {
     padding: -2px 1px;
 }
 div#portal-globalnav ul.level0 li a { 
-    color: #fff;
-    background: #eee;
-    border: 1px solid #2b92be;
-    border-bottom:1px solid #2b92be;
-    font-size: 12px;
+    font-weight: bold;
+    background:#66a7c2;
+    border-bottom-color: transparent;
+    border-color: #2b92be;
+    color:#fff;
 }
 div#portal-globalnav ul.level0 li.selected a,
 div#portal-globalnav ul.level0 li a:hover {
@@ -1711,10 +1711,11 @@ color: black;
     text-decoration:none;
     color:#D50005;
 }
-
+.site-plone #portal-globalnav ul.level0 li,
 .template-portal-eXist div#portal-globalnav ul.level0 li {
     padding: 5px 10px;  
 }   
+
 .template-portal-eXist div#portal-globalnav #portaltab- {
     background-color: #7e7e7e;
     display:inline-block;
@@ -1724,6 +1725,7 @@ color: black;
     font-weight: bold;
 }
 
+.site-plone #portal-globalnav li a,
 .template-portal-eXist div#portal-globalnav ul.level0 li a {
     padding: 5px 10px;
 }
