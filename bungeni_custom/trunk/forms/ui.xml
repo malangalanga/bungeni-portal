@@ -2,11 +2,10 @@
 <ui>
     
     <descriptor name="attachment">
-        <field name="title" label="Title" required="true" value_type="text" render_type="text_line">
+        <field name="type" label="Attachment Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="attachment_type">
             <show modes="view edit add listing" />
         </field>
-        <field name="type" label="Attachment Type" required="true" value_type="vocabulary"
-        render_type="single_select" vocabulary="attachment_type">
+        <field name="title" label="Title" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
         <field name="data" label="File" description="Upload a file" required="false" value_type="file" render_type="file">
@@ -740,7 +739,7 @@
     </descriptor>
     
     <descriptor name="sitting" order="17">
-        <field name="short_name" label="Name of activity" required="false" value_type="text" render_type="text_line">
+        <field name="short_name" label="Name of activity" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
         <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<descriptor order="3" sort_on="last_name first_name middle_name user_id" note="!+SORT_ON_USER">
+<descriptor order="3" sort_on="user_id" note="!+SORT_ON_USER: last_name first_name middle_name user_id">
 
     <field name="user_id" label="Name" required="true" value_type="user" render_type="single_select" vocabulary="member">
         <show modes="view add listing" />
