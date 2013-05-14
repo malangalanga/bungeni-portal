@@ -78,8 +78,8 @@
         <show modes="view edit add listing" />
     </field>
     
-    <container match="committee_member.group_id" name="committeemembers" />
-    <container match="committee_staff.group_id" name="committeestaff" />
+    <container match="committee_member.group_id" />
+    <container match="committee_staff.group_id" />
     <container match="agenda_item.group_id" name="agendaitems" />
     <container match="sitting.group_id" />
     <container match="title_type.group_id" />
