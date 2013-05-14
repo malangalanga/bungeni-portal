@@ -141,6 +141,7 @@ div#portal-globalnav {
     padding:0; 
     height: 25px;
     width: 100%; 
+    margin:0;
 } 
  
 #portal-globalnav {
@@ -915,19 +916,17 @@ h4.tabberHeading {
     margin: 0 auto;
     width:100%;
     text-align:center;
-    height:125px;
+    height:122px;
     white-space:nowrap;
 }
 .template-portal #header-in-left {
     margin: 0;
     width:30%;
-    height:127px;
     float:left;
 }
 .template-portal #header-in-right {
     margin: 0;
     width:30%;
-    height:127px;
     float:right;
 }
 .template-portal #top-layer {
@@ -1092,6 +1091,7 @@ h4.tabberHeading {
 /* =============================================================================
    TEMPLATE WORKSPACE - Styling applied on workspace
    ========================================================================== */
+.template-portal-eXist #top-layer #demoWarning,
 .template-workspace #top-layer #demoWarning {
     clear:both;
     width: 150px;
@@ -1155,11 +1155,6 @@ h4.tabberHeading {
 .template-workspace div#portal-globalnav ul.level0 span, 
 .template-workspace div#portal-globalnav ul.level0 a.current {
     float:none !important;
-}
-
-.template-workspace #portal-globalnav ul li#lower-hse, 
-.template-workspace #portal-globalnav ul li#upper-hse {
-    padding: 6px 10px !important;
 }
 
 .site-plone.template-workspace #portal-globalnav ul li a {
@@ -1278,10 +1273,10 @@ h4.tabberHeading {
 }
 .template-workspace #visual-table-wrapper {
     position: relative;
-    padding: 0.8em 1.4em 0 0;
+    padding: 0 2em 0 0;
     text-align: left;
     margin: 0;
-    margin-left: 1.4em;
+    margin-left: 1.2em;
     /* 
      * Sticky Footer
      * more information: http://www.cssstickyfooter.com/
@@ -1580,7 +1575,7 @@ div.overlay #createGroup fieldset { border: none; }
 }
 
 .section-bungeni-admin .portletItem.lastItem {
-    width:190px;
+    width:180px;
 }
 .workspace-under-consideration {
     clear:both;
@@ -1724,32 +1719,21 @@ div#region-content {
 }
 .template-portal-eXist {
     text-align: center;
+    font-size:69%;
 }
 
-.template-workspace.template-portal-eXist #visual-table-wrapper {
-    margin-top:0px;
-    padding:2.5em 1.4em 0 0 !important;
-}
+
 .template-portal-eXist div#portal-globalnav ul.level1 {
-    
+    margin:0;
+    padding:0;
+    line-height:18px;
+    height:18px;
 }
-.lower_house.template-portal-eXist #header-wrapper {
-    border-bottom: 18px solid #F79F10 !important;
-}
-
-.template-portal-eXist.higher_house #header-wrapper {
-    border-bottom: 18px solid #B22B14 !important;
-}
-.template-workspace.template-portal-eXist.lower_house #header-wrapper,
-.template-workspace.template-portal-eXist.higher_house #header-wrapper {
-    border-bottom: 18px solid transparent !important;
-}
-.lower_house.template-portal-eXist div#portal-globalnav ul.level1 {
+.template-portal-eXist.lower_house div#portal-globalnav ul.level1 {
     background: none repeat scroll 0 0 #F79F10 !important;
 }
-
 .template-portal-eXist.higher_house div#portal-globalnav ul.level1 {
-    background: none repeat scroll 0 0 #B22B14 !important;
+    background: none repeat scroll 0 0 #B22B14 !important; 
 }
 
 .template-workspace.template-portal-eXist #portal-breadcrumbs {

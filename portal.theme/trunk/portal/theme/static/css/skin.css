@@ -370,7 +370,6 @@ input.inputLabelActive {
 }
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul a {
     font-weight: normal;
-    font-size: 95%;
     background: #fff;
     border: 0 none;
 }
@@ -448,29 +447,23 @@ div#portal-globalnav ul.level0 {
 }
 div#portal-globalnav ul.level0 li {
     border-radius: 0;
-    display:inline;
+    display:inline-block;
 }
-div#portal-globalnav ul.level0 li { 
-    padding: -2px 1px;
-}
+
 div#portal-globalnav ul.level0 li a { 
+    background:#2b92be;
+    border:0 none;
     font-weight: bold;
-    background:#66a7c2;
-    border-bottom-color: transparent;
-    border-color: #2b92be;
     color:#fff;
 }
-div#portal-globalnav ul.level0 li.selected a,
-div#portal-globalnav ul.level0 li a:hover {
+div#portal-globalnav ul.level0 li.selected a {
     font-weight: bold;
-    background:#2b92be;
     border-bottom-color: transparent;
     border-color: #2b92be;
+    background:#2b92be;
     color:#fff;
 } 
-div#portal-globalnav ul.level0 {
-    bottom: -3px !important;
-} 
+
 div#portal-globalnav ul.level0 li#upper-hse,
 div#portal-globalnav ul.level0 li#upper-hse a {    
     background: #b22b14 !important; 
@@ -556,8 +549,7 @@ table.listingdescription th,
 .yui-skin-sam .yui-dt-first th {
     background:#21a1ba !important;
     border: 0 none;
-    border-left: 1px solid #bbf;
-    border-right: 1px solid #88f;
+    border-right: 1px solid #c6c1c1;
     border-top: 0 none;
     text-shadow: 0 0 0 #fff;
     color: #000 !important;
@@ -588,7 +580,7 @@ table.listing td,
 table.listingdescription td,
 .stx table td,
 .yui-skin-sam .yui-dt table tr td {
-    border-right: 1px solid #aaf;
+    border-right: 1px solid #c6c1c1;
     color: #222;
     text-shadow: 0 0 0 #fff;
 }
@@ -647,6 +639,9 @@ dd#items-to-be-scheduled-dl ul.formTabs li.formTab a.selected {
 
 /* formPanel
 -------------------------------------------------------------- */
+.formPanel {
+    border: 0 none !important;
+}
 .section-bungeni-workspace .formPanel,
 dd#items-to-be-scheduled-dl .formPanel {
     text-align: center;
@@ -876,7 +871,7 @@ span.yui-button.yui-link-button span a {
 
 .template-portal #header-wrapper {
     background: #016d9a;
-    border-bottom: 18px solid #7E7E7E;
+    border-bottom: 17px solid #016D9A;
 }
 
 .template-portal #header-in-left {
@@ -1064,6 +1059,9 @@ span.yui-button.yui-link-button span a {
 .template-workspace #portal-search {
     text-align: right;
     text-transform: none;
+}
+.template-workspace #portal-search form p a {
+    display: block;
 }
 /*
  * main-columns
@@ -1694,14 +1692,8 @@ dl#context_actions.actionMenu .actionMenuContent ul {
 }
 
 .template-portal-eXist #portal-search a.header-links:visited, #portal-search a.header-links {
-margin-right: 2px;
-color: black;
-}
-.template-portal-eXist div#portal-globalnav ul.level1 li a {
-    font-size: 86% !important;
-}
-.template-portal-eXist div#portal-globalnav ul.level0 {
-    line-height: 25px !important;
+    margin-right: 2px;
+    color: black;
 }
 
 .template-portal-eXist div#portal-globalnav ul.level1 {
@@ -1711,13 +1703,9 @@ color: black;
     text-decoration:none;
     color:#D50005;
 }
-.site-plone #portal-globalnav ul.level0 li,
-.template-portal-eXist div#portal-globalnav ul.level0 li {
-    padding: 5px 10px;  
-}   
+  
 
 .template-portal-eXist div#portal-globalnav #portaltab- {
-    background-color: #7e7e7e;
     display:inline-block;
     padding:0;
 }
