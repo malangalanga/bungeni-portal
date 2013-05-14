@@ -62,6 +62,15 @@ MemberProfileSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
             description=u"Title of member i.e. Senator, Legislator, Governor etc.",
         ),
     ),
+    atapi.StringField('priority_number',
+            required=1,
+            searchable=1, 
+	    vocabulary = list(map(str,range(4,-1,-1))),
+            widget=atapi.SelectionWidget(
+                label=u"Priority Number",
+                description=u"used to determine ranking in listings; lowest rank is 0.",
+            )                
+        ),
     atapi.StringField('political_party',
         required = 1,
         searchable=1,

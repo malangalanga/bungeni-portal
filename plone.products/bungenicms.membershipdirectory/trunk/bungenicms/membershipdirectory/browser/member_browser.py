@@ -27,7 +27,7 @@ class Html(BrowserView):
         Generate result items.
         """     
         results = self.generateQuery()
-        results = sorted(results)       
+        results = sorted(results)
         # Do this to exclude the root folder
         for match in results:
             if match.getPath() == '/'.join(self.aq_parent.getPhysicalPath()):
@@ -44,16 +44,21 @@ class Html(BrowserView):
         portal_catalog = getToolByName(self, 'portal_catalog')
         folder_path = '/'.join( self.context.getPhysicalPath() )
         
-        query['portal_type'] = ['MemberProfile', 'MembershipDirectory'] #"MemberProfile"
+        query['portal_type'] = ['MemberProfile'] #"MemberProfile"
         query['path'] = {'query' : folder_path, 'depth' : 2 }
-        query['sort_on'] = "sortable_title" # 'sortable_title' # see indexers.py
-        query['sort_order'] = "descending"
+        #query['sort_on'] = "priority_number" # 'sortable_title' # see indexers.py
+        #query['sort_order'] = "descending"
       
         for key, value in self.request.form.iteritems():
             if value is not '' and key != 'Search':
                query[key] = value
         
         results = portal_catalog.searchResults(query)
+        results = sorted(results,
+                        key=lambda b:(
+			    -int(b["priority_number"]),
+                            b["Title"],),
+			    reverse=True)  
         return results  
         
         

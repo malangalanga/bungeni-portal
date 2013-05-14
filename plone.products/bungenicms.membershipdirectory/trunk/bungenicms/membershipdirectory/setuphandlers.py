@@ -36,6 +36,7 @@ def add_catalog_indexes(context, logger):
     # Specify the indexes you want, with ('index_name', 'index_type')
     wanted = (('county', 'FieldIndex'),
               ('constituency', 'FieldIndex'),
+              ('priority_number', 'FieldIndex'),              
               ('political_party', 'FieldIndex'),
               ('elected_nominated', 'FieldIndex'),
               ('member_status', 'FieldIndex'),
