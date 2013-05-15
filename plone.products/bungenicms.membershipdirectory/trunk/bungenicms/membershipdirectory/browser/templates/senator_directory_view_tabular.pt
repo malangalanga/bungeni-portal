@@ -1,0 +1,297 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+  <head><title></title></head>
+
+  <body>
+    <metal:content-core fill-slot="content-core">
+      <metal:block use-macro="context/folder_listing/macros/content-core">
+        <metal:entries fill-slot="entries">
+          
+          <div metal:use-macro="context/batch_macros/macros/navigation" />
+          
+          <!-- Member Search form -->
+          <a href="#" class="clickme">Show Search Options</a>
+          <div class="box">          
+              
+             <form method="get" tal:attributes="action request/getURL" >
+             
+                <table id="profile-search">
+                    <tr>
+                    
+                        <td>
+                            <label>
+                               <span>Full name :</span>
+                               <input type="text" class="input_text" name="SearchableText" id="SearchableText"/>
+                            </label>
+                        </td>
+                        
+                        <td >
+                            <label>
+                                <span>Type :</span>
+                                <select id="elected_nominated" name="elected_nominated">
+                                    <option value="">All</option>
+                                    <option 
+                                        tal:repeat="mtype view/getTypeList" 
+                                        tal:content="python: mtype[1]"
+                                        tal:attributes="value python: mtype[0]">
+                                    </option>
+                                </select>                                                      
+                            </label>
+                        </td>
+                        
+                        <td>
+                            <label>
+                                <span>Status :</span>
+                                <select id="member_status" name="member_status">
+                                    <option value="">All</option>
+                                    <option 
+                                        tal:repeat="status view/getStatusList" 
+                                        tal:content="python: status[1]"
+                                        tal:attributes="value python: status[0]">
+                                    </option>
+                                </select>                                                       
+                            </label>
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <label>
+                                <span>Special Interest :</span>
+                                <select id="special_interest" name="special_interest">
+                                    <option value="">All</option>
+                                    <option 
+                                        tal:repeat="status view/getSpecialInterestList" 
+                                        tal:content="python: status[1]"
+                                        tal:attributes="value python: status[0]">
+                                    </option>
+                                </select>                                                       
+                            </label>
+                        </td>
+                        
+                        <td>
+                            <label>
+                               <span>County :</span>
+                               <select id="county" name="county">
+                                    <option value="">All</option>
+                                    <option 
+                                        tal:repeat="county view/getCountyList" 
+                                        tal:content="python: county[1]"
+                                        tal:attributes="value python: county[0]">
+                                    </option>
+                                </select>  
+                            </label>
+                        </td>
+                        
+                        <td>
+                            <label id="constituencies-container">                               
+                            <!-- Constituencies dropdown list -->    
+                            </label> 
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr>
+                        <td colspan="2"></td>
+                        <td >
+                            <label>
+                                <input type="submit" name="Search" class="button" value="Go" />                          
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+              
+              </form>
+
+            </div>
+          <!-- End search form -->
+          
+          
+          <div tal:omit-tag=""
+                tal:define="st python:request.get('SearchableText', '');
+                            ct python:request.get('county', '');">
+                            
+              <h5 class="documentFirstHeading"
+                i18n:translate=""
+                tal:condition="python:st or ct">
+                Search results for:
+                <span tal:condition="st">
+                <strong tal:condition="st"
+                 tal:content="st">
+                    Search Term
+                </strong> 
+                </span>  
+                 
+                <span tal:condition="ct">
+                <span tal:condition="st">, </span>
+                County:
+                <strong tal:condition="ct"
+                 tal:content="ct">
+                    Search Term
+                </strong> 
+                </span>                                                                
+              </h5>
+                
+              <span>
+                  <strong id="search-results-number"
+                      tal:content="python:view.get_queryLength()">234</strong> 
+                      items matching your search terms.
+              </span>
+          </div>
+          
+          
+          <span style="float:right;">
+            <label>Show</label> 
+            <select name="listDisplayPerPgTop" 
+                    id="listDisplayPerPgTop" 
+                    onchange="mpager.init2(this);" >
+              <option value="10">10</option>
+              <option value="25" selected="selected">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select> <label>items</label>
+          </span>
+          
+                 
+          
+          <table class="listing nosort"
+                 summary="Content listing"
+                 i18n:attributes="summary summary_content_listing;"
+                 id="memberstable"
+                 tal:define="context_state context/@@plone_context_state;
+                             page_url context_state/view_url;">
+            <thead>
+              <tr>
+                <th colspan="6" class="nosort">
+                    <a href="#"
+                        tal:attributes="href python:page_url+'/@@membership_directory_view_standard'">
+                        List View
+                    </a>
+                </th>
+              </tr>
+              <tr>
+                <th>&nbsp;Photo&nbsp;</th>
+                <th>&nbsp;<a href="javascript:SortMemberTable(1,'T');">
+                    Senator 
+                    <span class="sortDown">&#x25bc;</span></a>&nbsp;</th>
+                <th>&nbsp;<a href="javascript:SortMemberTable(3,'T');">
+                    Constituency 
+                    <span class="sortDown">&#x25bc;</span></a>&nbsp;</th>
+                <th width="1" style="display:none;">&nbsp;
+                <a href="javascript:SortMemberTable(5,'T');"> 
+                <span class="sortDown"></span>
+                </a>&nbsp;
+                </th>
+              </tr>
+            </thead>
+          
+                                
+            <tbody>                                    
+                <div>
+                    <tal:entry tal:repeat="item view/queryMembers">
+                        <tal:block tal:define="normalizeString nocall:context/@@plone/normalizeString; 
+                            item_url item/getURL|item/absolute_url;
+                            item_id item/getId|item/id;
+                            item_title_or_id item/pretty_title_or_id;
+                            item_description item/Description;
+                            item_type item/portal_type;
+                            item_type_title item/Type;
+                            item_modified item/ModificationDate;
+                            item_created item/CreationDate;
+                            item_icon python:plone_view.getIcon(item);
+                            item_type_class python:'contenttype-' + normalizeString(item_type);
+                            item_wf_state item/review_state|python: wtool.getInfoFor(item, 'review_state', '');
+                            item_wf_state_class python:'state-' + normalizeString(item_wf_state);
+                            item_creator item/Creator;
+                            item_start item/start/ISO|item/StartDate|nothing;
+                            item_end item/end/ISO|item/EndDate|nothing;
+                            oddrow repeat/item/odd;
+                            object python:item.getObject();">			
+
+                        <tr tal:attributes="class python:oddrow and 'even' or 'odd'">
+                            <td>
+                                <div tal:condition="object/getMember_image|nothing">
+                                    <a href="#"
+                                       tal:define="here_url object/@@plone_context_state/object_url;"
+                                       tal:attributes="href string:$here_url/member_image/image_view_fullscreen"
+                                       id="parent-fieldname-image">
+                                       <img tal:replace="structure python: object.tag(scale='tile')" src="" alt="" />
+                                    </a>
+                                </div>
+                                
+                                <div tal:condition="not:object/getMember_image">
+                                    <img tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++resource++bungenicms.membershipdirectory.icons/empty_profile.jpg" width="50"/>
+                                </div>
+                            </td>
+                            <td>
+                                <a tal:attributes="href item_url">
+                                  <span tal:replace="item_title_or_id">[title]</span>, 
+                                  <span tal:omit-tag="" tal:content="object/other_names"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <span tal:condition="python:object.member_role" tal:content="python:object.member_role">
+                                  [role]
+                                </span>
+                                <span tal:content="python:object.getCounty().title()">
+                                  [county]
+                                </span>
+
+                                <span tal:condition="not:python:object.getCounty().title()"
+                                        tal:content="python:object.getElected_nominated().title()">
+                                  [elected/nominated]
+                                </span>
+                                <span tal:condition="python:not object.getCounty().title() and object.special_interest" tal:content="python:'(' + view.getInterestVocabValue(object.special_interest) +')'">
+
+                                  [special interest]
+                                </span>
+                            </td>
+                        </tr>
+                        </tal:block>
+                    </tal:entry>
+                </div>
+            </tbody>
+          </table>          
+          
+          
+          <span style="float:right;">
+            <label>Show</label> 
+            <select name="listDisplayPerPgBottom" 
+                    id="listDisplayPerPgBottom" 
+                    onchange="mpager.init2(this);" >
+              <option value="10">10</option>
+              <option value="25" selected="selected">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select> <label>items</label>
+          </span>
+            
+          <input type="hidden" name="itemsToShow" id="itemsToShow" value="25" />
+    		    		
+          <div id="pageNavPosition"></div>
+        
+          <script type="text/javascript">// <!--
+                var itemsPerPage = itemsToShow.value;
+                var mpager = new MemberPager('memberstable', itemsPerPage, 'mpager', 'pageNavPosition'); 
+                mpager.init(); 
+                mpager.showPageNav(); 
+                mpager.showPage(1);
+                //-->
+          </script>     
+                   
+          
+        </metal:entries>
+      </metal:block>
+
+      <metal:subtopics use-macro="context/atct_topic_view/macros/folderlisting_macro" />
+
+    </metal:content-core>
+  </body>
+</html>

@@ -9,6 +9,7 @@ SPECIAL_INTERESTS_LIST = atapi.DisplayList((
 
 COUNTY_LIST = atapi.DisplayList((
     ('', ''),
+    ('baringo', 'Baringo'),
     ('bungoma', 'Bungoma'),
     ('busia', 'Busia'),
     ('elgeyo_marakwet', 'Elgeyo/Marakwet'),
