@@ -1268,15 +1268,23 @@ h4.tabberHeading {
      */
     height: 100%;
 }
+.template-workspace div#portal-globalnav {
+    position: absolute;
+    padding: 0;
+    height: 25px;
+    width: 97.4%;
+    margin: 0;
+    margin-left:5px;
+}
 .template-workspace #portal-logo-wrapper {
     margin-top:4px;
 }
 .template-workspace #visual-table-wrapper {
     position: relative;
-    padding: 0 2em 0 0;
+    padding: 0;
     text-align: left;
-    margin: 0;
-    margin-left: 1.2em;
+    margin: 0 auto;
+    width:100%;
     /* 
      * Sticky Footer
      * more information: http://www.cssstickyfooter.com/
@@ -1299,7 +1307,8 @@ h4.tabberHeading {
     right: 0;
 }
 .template-workspace #main-body-table {
-    width:100% !important;
+    width:97%;
+    margin:0 auto;
     padding: 0;
     /* 
      * Sticky Footer
@@ -1709,6 +1718,7 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
    EXIST - eXist XML UI content styling
    .template-portal-eXist
    ========================================================================== */  
+template-workspace.template-portal-eXist #portal-column-content,
 div#region-content {
     width:960px;
     height:auto;
