@@ -90,9 +90,11 @@
             label="staff" container_label="staff members" />
     </group>
     <group name="joint_committee" workflow="committee" descriptor="committee" enabled="true" 
-        label="joint committee" container_label="joint committees" />
+        label="joint committee" container_label="joint committees">
+    </group>
     <group name="government" workflow="group" enabled="true"
-        label="government" container_label="governments" />
+        label="government" container_label="governments">
+    </group>
     <group name="ministry" workflow="group" enabled="true" label="member" container_label="members">
         <member name="minister" workflow="group_member" enabled="true" 
             label="ministry" container_label="ministries" />

@@ -44,7 +44,7 @@ def get_user(login_id):
 
 def get_user_groups(login_id):
     """Get group for users:
-    a) the groups defined by its user_group_member
+    a) the groups defined by member
     b) the users who have him assigned as a delegation
     c) the groups of the delegation user.
     """
