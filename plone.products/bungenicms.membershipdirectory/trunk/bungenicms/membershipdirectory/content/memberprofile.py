@@ -72,7 +72,7 @@ MemberProfileSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
             )                
         ),
     atapi.StringField('political_party',
-        required = 1,
+        required = 0,
         searchable=1,
         widget = atapi.StringWidget(
             label=u"Political Party",

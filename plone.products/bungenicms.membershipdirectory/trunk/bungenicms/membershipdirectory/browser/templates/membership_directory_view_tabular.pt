@@ -232,9 +232,9 @@
                                 </a>
                             </td>
                             <td>
-                                <span tal:content="python:object.getCounty().title()">
+                                <span tal:content="python:dict(view.getCountyList())[object.county]">
                                   [county]
-                                </span>
+                                </span>                             
                             </td>
                             <td>
                                 <span tal:content="object/constituency">

@@ -240,7 +240,7 @@
                                 <span tal:condition="python:object.member_role" tal:content="python:object.member_role">
                                   [role]
                                 </span>
-                                <span tal:content="python:object.getCounty().title()">
+                                <span tal:content="python:dict(view.getCountyList())[object.county]">
                                   [county]
                                 </span>
 
