@@ -448,12 +448,15 @@ div#portal-globalnav ul.level0 {
 div#portal-globalnav ul.level0 li {
     border-radius: 0;
     display:inline-block;
+    float:none;
+    line-height:inherit;
 }
 
 div#portal-globalnav ul.level0 li a { 
     background:#2b92be;
     border:0 none;
     font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;    
     color:#fff;
 }
 div#portal-globalnav ul.level0 li.selected a {
@@ -490,6 +493,10 @@ div#portal-globalnav-bottom:empty{
 div#portal-globalnav ul.level1 {
     border-top: 0 none;
     background: #7E7E7E;
+    bottom:inherit;
+}
+.template-portal div#portal-globalnav ul.level1 {
+    background: #2b92be;
 }
 div#portal-globalnav ul.level1 li a {
     background: transparent;
@@ -1696,9 +1703,6 @@ dl#context_actions.actionMenu .actionMenuContent ul {
     color: black;
 }
 
-.template-portal-eXist div#portal-globalnav ul.level1 {
-
-}
 .template-portal-eXist .big-dbl-arrow {
     text-decoration:none;
     color:#D50005;
@@ -1714,12 +1718,16 @@ dl#context_actions.actionMenu .actionMenuContent ul {
 }
 
 .site-plone #portal-globalnav li a,
+.template-portal div#portal-globalnav ul.level0 li a,
 .template-portal-eXist div#portal-globalnav ul.level0 li a {
     padding: 5px 10px;
+    float:none;
 }
 
+.template-portal div#portal-globalnav ul.level0 li ul li a,
 .template-portal-eXist div#portal-globalnav ul.level0 li ul li a {
     padding: 0px !important;
+    float:none;
 }
 
 
