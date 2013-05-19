@@ -8,6 +8,7 @@
     <allow permission=".Add" roles="
             ClerkQuestionAssembly.ClerkHead
             MemberAssembly
+	    ClerkAssembly
         " />
     
     <!-- features -->
@@ -47,8 +48,8 @@
     <feature name="email" enabled="true" />
     <feature name="download" enabled="true" />
     <feature name="user_assignment" enabled="true">
-        <parameter name="assigner_roles" value="ClerkQuestionAssembly.ClerkHead" />
-        <parameter name="assignable_roles" value="ClerkQuestionAssembly.ClerkQuestion" />
+        <parameter name="assigner_roles" value="ClerkQuestionAssembly.ClerkHead ClerkAssembly" />
+        <parameter name="assignable_roles" value="ClerkQuestionAssembly.ClerkQuestion ClerkAssembly" />
     </feature>
     <feature name="group_assignment" enabled="true" />
     <!-- !+QUALIFIED_FEATURES(mr, apr-2013)
@@ -75,6 +76,7 @@
         <allow permission=".View" roles="
             ClerkQuestionAssembly.ClerkHead
             ClerkQuestionAssembly.ClerkQuestion
+	    ClerkAssembly
             SpeakerAssembly 
             Owner
             " />
@@ -84,18 +86,24 @@
         <allow permission=".View" roles="
             ClerkQuestionAssembly.ClerkHead
             ClerkQuestionAssembly.ClerkQuestion
+	    ClerkAssembly
             SpeakerAssembly 
             Owner
             " />
         <allow permission=".Edit" roles="
             ClerkQuestionAssembly.ClerkHead
             ClerkQuestionAssembly.ClerkQuestion
+	    ClerkAssembly
             " />
         <allow permission="user_assignment.View" roles="
             ClerkQuestionAssembly.ClerkHead
             ClerkQuestionAssembly.ClerkQuestion
+	    ClerkAssembly
             " />
-        <allow permission="user_assignment.Edit" roles="ClerkQuestionAssembly.ClerkHead" />
+        <allow permission="user_assignment.Edit" roles="
+	    ClerkQuestionAssembly.ClerkHead
+	    ClerkAssembly
+	    " />
     </facet>
     
     <facet name="reviewed">
@@ -111,6 +119,7 @@
         <allow permission=".View" roles="
             ClerkQuestionAssembly.ClerkHead
             ClerkQuestionAssembly.ClerkQuestion
+	    ClerkAssembly
             SpeakerAssembly
             Owner
             " />
@@ -237,7 +246,7 @@
         destination="reviewed"
         condition=""
         trigger="manual"
-        roles="ClerkQuestionAssembly.ClerkQuestion"
+        roles="ClerkQuestionAssembly.ClerkQuestion ClerkAssembly"
         order="4"
         note="The Question has all the formal requirements; forwarded to the
             Speaker's Office for approval)."
@@ -247,7 +256,7 @@
         destination="clarification_required"
         condition=""
         trigger="manual"
-        roles="ClerkQuestionAssembly.ClerkQuestion"
+        roles="ClerkQuestionAssembly.ClerkQuestion  ClerkAssembly"
         order="4"
         note="The Question need to be clarieid by the Member"
     />
@@ -290,7 +299,7 @@
         destination="scheduled"
         condition="is_scheduled"
         trigger="system"
-        roles="ClerkQuestionAssembly.ClerkQuestion"
+        roles="ClerkQuestionAssembly.ClerkQuestion ClerkAssembly"
         order="12"
     />
     <transition title="Send to Ministry"
@@ -298,7 +307,7 @@
         destination="response_pending"
         condition="is_written_response"
         trigger="manual"
-        roles="ClerkQuestionAssembly.ClerkQuestion"
+        roles="ClerkQuestionAssembly.ClerkQuestion ClerkAssembly"
         order="13"
         note="Written-response questions are never scheduled."
     />
@@ -307,7 +316,7 @@
         destination="response_pending"
         condition=""
         trigger="manual"
-        roles="ClerkQuestionAssembly.ClerkQuestion"
+        roles="ClerkQuestionAssembly.ClerkQuestion ClerkAssembly"
         order="13"
         note="Oral-response questions if not discussed may be answered in writing by the Ministry."
     />
@@ -324,14 +333,14 @@
         destination="response_pending"
         condition=""
         trigger="manual"
-        roles="ClerkQuestionAssembly.ClerkQuestion"
+        roles="ClerkQuestionAssembly.ClerkQuestion ClerkAssembly"
         order="16"
     />
     <transition title="Complete Response"
         source="response_submitted"
         destination="response_reviewed"
         trigger="manual"
-        roles="ClerkQuestionAssembly.ClerkQuestion"
+        roles="ClerkQuestionAssembly.ClerkQuestion ClerkAssembly"
         order="17"
     />
     <transition title="Elapse"
@@ -339,7 +348,7 @@
         destination="elapsed"
         condition=""
         trigger="manual"
-        roles="ClerkQuestionAssembly.ClerkQuestion"
+        roles="ClerkQuestionAssembly.ClerkQuestion ClerkAssembly"
         order="18"
         require_confirmation="true"
     />
@@ -348,7 +357,7 @@
         destination="deferred"
         condition=""
         trigger="manual"
-        roles="ClerkQuestionAssembly.ClerkQuestion"
+        roles="ClerkQuestionAssembly.ClerkQuestion ClerkAssembly"
         order="19"
         note="Oral question, postpone scheduling."
     />
@@ -357,7 +366,7 @@
         destination="dropped"
         condition=""
         trigger="manual"
-        roles="ClerkQuestionAssembly.ClerkQuestion"
+        roles="ClerkQuestionAssembly.ClerkQuestion ClerkAssembly"
         order="22"
     />
     <transition title="Debate adjourned"
@@ -365,14 +374,14 @@
         destination="adjourned"
         condition=""
         trigger="manual"
-        roles="ClerkQuestionAssembly.ClerkQuestion"
+        roles="ClerkQuestionAssembly.ClerkQuestion ClerkAssembly"
         order="23"
     />
     <transition title="Debated"
         source="scheduled"
         destination="debated"
         trigger="manual"
-        roles="ClerkQuestionAssembly.ClerkQuestion"
+        roles="ClerkQuestionAssembly.ClerkQuestion ClerkAssembly"
         order="25"
     />
     <transition title="Withdraw"
@@ -381,7 +390,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="ClerkQuestionAssembly.ClerkQuestion Owner"
+        roles="ClerkQuestionAssembly.ClerkQuestion Owner ClerkAssembly"
         order="26"
         require_confirmation="true"
         note="The Member can withdraw his question at any stage where it can 
@@ -393,7 +402,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="ClerkQuestionAssembly.ClerkQuestion Owner"
+        roles="ClerkQuestionAssembly.ClerkQuestion Owner ClerkAssembly"
         order="27"
         require_confirmation="true"
     />

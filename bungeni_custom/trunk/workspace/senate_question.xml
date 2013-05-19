@@ -5,6 +5,7 @@
     </state>
     <state id="submitted">
         <tab id="inbox" roles="
+			ClerkSenate
 			ClerkQuestionSenate.ClerkHead
           		ClerkQuestionSenate.ClerkQuestion" />
         <tab id="pending" roles="Owner" />
@@ -13,25 +14,32 @@
         <tab id="inbox" roles="
 			SpeakerSenate" />
         <tab id="pending" roles="
-			ClerkQuestionSenate.ClerkHead ClerkQuestionSenate.ClerkQuestion Owner" />
+			ClerkQuestionSenate.ClerkHead ClerkQuestionSenate.ClerkQuestion Owner
+			ClerkSenate
+			" />
     </state>
     <state id="admissible">
         <tab id="schedule" roles="
 			ClerkQuestionSenate.ClerkQuestion MinistryMember" />
 	<tab id="pending" roles="
-			ClerkQuestionSenate.ClerkHead SpeakerSenate Owner" />
+			ClerkQuestionSenate.ClerkHead SpeakerSenate Owner
+			ClerkSenate
+			" />
     </state>
     <state id="inadmissible">
         <tab id="archive" roles="
 		      Owner 
 		      ClerkQuestionSenate.ClerkHead
                       ClerkQuestionSenate.ClerkQuestion
+			ClerkSenate
                       SpeakerSenate"/>
     </state>
      <state id="clarification_required">
         <tab id="inbox" roles="Owner"/>
 	      <tab id="pending" roles="
-			ClerkQuestionSenate.ClerkHead ClerkQuestionSenate.ClerkQuestion" />
+			ClerkQuestionSenate.ClerkHead ClerkQuestionSenate.ClerkQuestion
+			ClerkSenate
+			" />
     </state>
     <state id="scheduled">
         <tab id="schedule" roles="
@@ -39,6 +47,7 @@
 		    SpeakerSenate
 		    ClerkQuestionSenate.ClerkHead
                     ClerkQuestionSenate.ClerkQuestion
+		    ClerkSenate
 		    MinistryMember"/>
     </state>
     <state id="adjourned">
@@ -48,6 +57,7 @@
 		    SpeakerSenate
 		    ClerkQuestionSenate.ClerkHead
                     ClerkQuestionSenate.ClerkQuestion
+		    ClerkSenate
 		    MinistryMember"/>
    </state>
    <state id="response_pending">
@@ -55,6 +65,7 @@
 	<tab id="pending" roles="
 		    Owner
 		    SpeakerSenate
+		    ClerkSenate
 		    ClerkQuestionSenate.ClerkHead
                     ClerkQuestionSenate.ClerkQuestion" />
    </state>
@@ -64,6 +75,7 @@
 		    Owner
 		    SpeakerSenate
                     ClerkQuestionSenate.ClerkQuestion
+		    ClerkSenate
 		    MinistryMember"/>
    </state>
    <state id="response_reviewed">
@@ -72,6 +84,7 @@
 		    SpeakerSenate
 		    ClerkQuestionSenate.ClerkHead
                     ClerkQuestionSenate.ClerkQuestion
+		    ClerkSenate
 		    MinistryMember" />
     </state>
     <state id="deferred">
@@ -80,6 +93,7 @@
 		    SpeakerSenate
 		    ClerkQuestionSenate.ClerkHead
                     ClerkQuestionSenate.ClerkQuestion
+		    ClerkSenate
 		    MinistryMember" />
     </state>
     <state id="debated">
@@ -88,6 +102,7 @@
 		    SpeakerSenate
 		    ClerkQuestionSenate.ClerkHead
                     ClerkQuestionSenate.ClerkQuestion
+		    ClerkSenate
 		    MinistryMember" />
     </state>
     <state id="elapsed">
@@ -96,14 +111,16 @@
 		    SpeakerSenate
 		    ClerkQuestionSenate.ClerkHead
                     ClerkQuestionSenate.ClerkQuestion
+		    ClerkSenate
 		    MinistryMember" />
     </state>
     <state id="dropped">
         <tab id="archive" 
 	     roles="Owner
-		      ClerkQuestionSenate.ClerkHead
-              ClerkQuestionSenate.ClerkQuestion
-                      SpeakerSenate" />
+		    ClerkQuestionSenate.ClerkHead
+              	    ClerkQuestionSenate.ClerkQuestion
+		    ClerkSenate
+                    SpeakerSenate" />
     </state>
     <state id="withdrawn">
         <tab id="archive" roles="
@@ -111,12 +128,14 @@
 		    SpeakerSenate
 		    ClerkQuestionSenate.ClerkHead
                     ClerkQuestionSenate.ClerkQuestion
+		    ClerkSenate
 		    MinistryMember" />
     </state>
     <state id="withdrawn_internal">
         <tab id="archive" roles="
 		    Owner
 		    SpeakerSenate
+		    ClerkSenate
 		    ClerkQuestionSenate.ClerkHead
                     ClerkQuestionSenate.ClerkQuestion" />
     </state>
