@@ -131,11 +131,6 @@
                             </metal:title>
                             <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-
-
-                            <div tal:replace="structure provider:plone.abovecontentbody" />
-                            <div id="content-core" class="rounded-eigh">
-                            
                             <metal:description define-slot="content-description">
                                 <metal:comment tal:content="nothing">
                                     If you write a custom description always use
@@ -145,7 +140,9 @@
                                     Generic KSS Description. Is rendered with class="documentDescription".
                                 </div>
                             </metal:description>
-                                                        
+
+                            <div tal:replace="structure provider:plone.abovecontentbody" />
+                            <div id="content-core" class="rounded-eigh">
                                 <metal:text define-slot="content-core" tal:content="nothing">
                                     Page body text
                                 </metal:text>
@@ -202,7 +199,7 @@
 
       <div class="visualClear"><!-- --></div>
     </div>
-<div id="kss-spinner" tal:condition="not:ajax_load"><img tal:attributes="src string:${portal_url}/spinner.gif" alt="" /></div>
 </body>
 </html>
 </metal:page>
+
