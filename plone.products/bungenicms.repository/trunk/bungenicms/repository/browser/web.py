@@ -152,7 +152,13 @@ class Html(BrowserView):
         Return legislative type label for a given value
         """     
         vocabulary = NamedVocabulary("org.bungeni.metadata.vocabularies.parliamentarytypes")
-        return vocabulary.getVocabularyDict(self)[val][0]    
+        returnVal = None
+        try:
+            if vocabulary.getVocabularyDict(self)[val][0]:
+                returnVal = vocabulary.getVocabularyDict(self)[val][0]
+        except:
+            returnVal = None
+        return returnVal   
         
     def get_groups(self): 
         """
