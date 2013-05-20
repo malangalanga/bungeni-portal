@@ -354,7 +354,8 @@
            tal:attributes="href prev/getURL;"
            tabindex="1"
            href="">
-            <img tal:replace="structure here/arrowLeft.gif" />
+            <!--<img tal:replace="structure here/arrowLeft.gif" />-->
+            &laquo;
             <span tal:replace="python:here.castNav(tocList[prevIdx]['numbering'])" tal:condition="python:here.getNavType() == 'yes'"/>
             <span tal:content="python:here.trunc(prev.Title)" /><span tal:content="prev/Title" class="hovertooltip" tal:condition="python:len(prev.Title) > len(here.trunc(prev.Title))"/>
        </a>
@@ -373,7 +374,8 @@
            href="">
             <span tal:replace="python:here.castNav(tocList[nextIdx]['numbering'])" tal:condition="python:here.getNavType() == 'yes'"/>
             <span tal:content="python:here.trunc(next.Title)" /> <span tal:content="next/Title" class="hovertooltip" tal:condition="python:len(next.Title) > len(here.trunc(next.Title))"/> 
-           <img tal:replace="structure here/arrowRight.gif" />
+           &raquo;
+           <!--<img tal:replace="structure here/arrowRight.gif" />-->
        </a>   
 
     </tal:item>  
