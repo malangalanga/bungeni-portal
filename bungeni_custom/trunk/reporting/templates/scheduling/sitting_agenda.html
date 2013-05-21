@@ -13,19 +13,27 @@
             <div id="listing-body" class="body" background="color:green">
                 <div br:type="listing" br:source="sittings">
                     <div class="agendaitems">
-                        <ul br:type="listing" br:source="item_schedule">
-                                <h3 class="sub-heading" br:type="text" br:source="planned_order"/>
-                            <li br:condition="type_heading">
-                                <h2 class="sub-heading" br:type="text" br:source="dc:title"/>
-                            </li>
-                            <li class="items" br:condition="type_document">
-                                <span br:type="text" br:source="dc:title"/> - 
-                                <span class="itemtype" br:type="text" br:condition="dc:mover" br:source="item_type"/>
-                                <span class="mover" br:condition="dc:mover">
-                                    <i>by:</i> <span br:type="text" br:source="dc:mover"/>
-                                </span>
-                            </li>
-                        </ul>
+                        <div br:type="listing" br:source="item_schedule">                           
+                            <!-- heading -->                             
+                            <h2 br:condition="type_heading" br:type="text" br:source="dc:title" class="agendaheading"/>
+                                                   
+                            <!-- items -->
+                            <div br:condition="type_document" class="items">
+                                <!-- pseudo-item (editorial notes) -->
+                                <div br:condition="is_type_text_record">
+                                    <span class="editorialnote" br:type="html" br:source="dc:title"/>
+                                </div>                                 
+                                <!-- proper-item (document) -->
+                                <div br:condition="item_mover" class="agendaitem">
+                                    <!-- item order number -->
+                                    (<span class="item-order" br:condition="planned_order" br:type="text" br:source="planned_order"/>)&#160;&#160;<span br:type="text" br:source="dc:title"/> - 
+                                    <span class="itemtype" br:type="text" br:condition="dc:mover" br:source="item_type"/>
+                                    <span class="mover" br:condition="dc:mover">
+                                        <i>by:</i> <b><span class="agendamovername" br:type="text" br:source="dc:mover"/></b>
+                                    </span>
+                                </div>
+                            </div>                           
+                        </div>
                     </div>
                 </div>
             </div>
