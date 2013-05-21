@@ -619,7 +619,7 @@
     </descriptor>
     
     <descriptor name="item_schedule_vote">
-        <field name="time" label="Vote Time" required="false" value_type="text" render_type="text_line">
+        <field name="time" label="Vote Time" required="false" value_type="time" render_type="time">
             <show modes="view edit add listing" />
         </field>
         <field name="issue_item" label="Issue item" required="false" value_type="text" render_type="text_line">
