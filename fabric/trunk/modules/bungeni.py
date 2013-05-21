@@ -445,6 +445,8 @@ class BungeniConfigs:
         self.user_rabbitmq_build_path = self.user_build_root + "/rabbitmq"
         # Jython installation folder
         self.jython_install_url = self.cfg.get_config("glue-script", "download_url")
+        self.jython_startup_mem = self.cfg.get_config("glue-script", "startup_mem")
+        self.jython_max_mem = self.cfg.get_config("glue-script", "max_mem")
         self.jython_required_libs = filter(
             None, 
             self.cfg.get_config("glue-script", "required_libs").split("\n")
@@ -789,6 +791,8 @@ class Presetup:
         """
         glue_map = {
                     "java":self.cfg.java_home,
+                    "startup_mem": self.cfg.jython_startup_mem,
+                    "max_mem": self.cfg.jython_max_mem,
                     "user_jython_home":self.cfg.user_jython_home,
                     "user_glue":self.cfg.user_glue,
                 }        
