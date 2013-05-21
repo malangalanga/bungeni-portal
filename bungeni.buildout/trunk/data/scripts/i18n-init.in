@@ -2,7 +2,7 @@
 
 #create a locale messages directory for provided locale and initializes catalog
 
-LOCALE_REGEX="^([[:lower:]]{2}|[[:lower:]]{2}-[[:lower:]]{2})$"
+LOCALE_REGEX="^([[:lower:]]{2,3}|[[:lower:]]{2}-[[:lower:]]{2})$"
 locale=$1
 
 if [[ $locale =~ $LOCALE_REGEX ]]; 
@@ -29,4 +29,4 @@ then
 fi
 
 echo "USAGE: $0 {{LOCALE_CODE}}"
-echo "LOCALE_CODE may be a two letter language code e.g. en or code-REGION code e.g. en-ke or fr-rw (case sensitive)"
+echo "LOCALE_CODE may be a two/three letter language code e.g. en or code-REGION code e.g. en-ke or fr-rw or eng (case sensitive)"
