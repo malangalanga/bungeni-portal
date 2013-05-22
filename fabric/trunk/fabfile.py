@@ -772,6 +772,14 @@ def glue_update():
     tasks.setup_glue()
     tasks.glue_setup_config()
 
+def glue_reset():
+    """
+    Reset glue - to be run between fresh selenium runs 
+    """
+    tasks = bungeni.GlueScriptTasks()
+    tasks.reset()
+
+
 def config_glue():
     """
     Generates glue_script configuration
@@ -851,6 +859,7 @@ def reset_all():
         rabbitmq_reset()
         db_load_mindata()
         exist_reset()
+        glue_reset()
 
 
 def install_config_editor():

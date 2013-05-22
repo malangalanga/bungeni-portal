@@ -2189,8 +2189,18 @@ class RabbitMQTasks:
             with cd(self.cfg.user_rabbitmq + "/sbin"):
                 run("./rabbitmq-plugins enable rabbitmq_management rabbitmq_management_visualiser")
                 run(self.cfg.rabbitmq_download_admin_command)
-                run("chmod +x rabbitmq-admin")
-
+                print "Configuring rabbitmq, setting up admin and defaults"
+                run("chmod +x rabbitmq-admin rabbitmqctl")
+                run("HOME=`pwd` ERL_EPMD_RELAXED_COMMAND_CHECK=TRUE ./rabbitmq-server -detached")
+                run("sleep 3")
+                run("./rabbitmqctl add_user admin admin ")
+                run("./rabbitmqctl set_user_tags admin administrator ")
+                run('./rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"')
+                run("./rabbitmqctl delete_user guest")
+                run("./rabbitmqctl stop_app")
+                run("./rabbitmqctl stop")
+                
+                
     def rabbitmq_purge(self):
         """
         Reset the serialization queue
@@ -2288,6 +2298,15 @@ class GlueScriptTasks:
             template_map,
             self.cfg.user_config
             )
+
+    def reset(self):
+        cfg = SafeConfigParser()
+        cfg.read(os.path.join(self.cfg.user_config, "glue.ini"))
+        cache_folder = cfg.get("general", "cache_file_folder")
+        if os.path.exists(cache_folder):
+            import shutil
+            shutil.rmtree(cache_folder)
+
 
 class CustomTasks:
     
