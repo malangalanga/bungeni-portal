@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns:bungeni="http://namespaces.bungeni.org/zope"
+    i18n_domain="bungeni">
+        
+    <!-- Message queue settings -->
+    <bungeni:messagequeue
+      message_exchange="bungeni" 
+      task_exchange="bungeni_notification_tasks"
+    />
+    
+</configure>
