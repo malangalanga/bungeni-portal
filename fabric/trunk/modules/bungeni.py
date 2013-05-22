@@ -2191,14 +2191,14 @@ class RabbitMQTasks:
                 run(self.cfg.rabbitmq_download_admin_command)
                 print "Configuring rabbitmq, setting up admin and defaults"
                 run("chmod +x rabbitmq-admin rabbitmqctl")
-                run("HOME=`pwd` ERL_EPMD_RELAXED_COMMAND_CHECK=TRUE ./rabbitmq-server -detached")
+                run("HOME=`pwd` ERL_EPMD_RELAXED_COMMAND_CHECK=TRUE RABBITMQ_NODENAME=rabbit@localhost ./rabbitmq-server -detached")
                 run("sleep 3")
-                run("./rabbitmqctl add_user admin admin ")
-                run("./rabbitmqctl set_user_tags admin administrator ")
-                run('./rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"')
-                run("./rabbitmqctl delete_user guest")
-                run("./rabbitmqctl stop_app")
-                run("./rabbitmqctl stop")
+                run("./rabbitmqctl -n rabbit@localhost add_user admin admin ")
+                run("./rabbitmqctl -n rabbit@localhost set_user_tags admin administrator ")
+                run('./rabbitmqctl -n rabbit@localhost set_permissions -p / admin ".*" ".*" ".*"')
+                run("./rabbitmqctl -n rabbit@localhost delete_user guest")
+                run("./rabbitmqctl -n rabbit@localhost stop_app")
+                run("./rabbitmqctl -n rabbit@localhost stop")
                 
                 
     def rabbitmq_purge(self):
