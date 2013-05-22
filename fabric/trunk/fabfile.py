@@ -754,6 +754,11 @@ def rabbitmq_reset():
     tasks = bungeni.RabbitMQTasks()
     tasks.rabbitmq_purge()
 
+def rabbitmq_add_admin():
+    tasks = bungeni.RabbitMQTasks()
+    tasks.rabbitmq_add_admin()
+
+
 def glue_install():
     """
     Installs Jython, WARNING: Will overwrite any existing installation

@@ -2202,7 +2202,14 @@ class RabbitMQTasks:
                 run("./rabbitmqctl stop_app")
                 run("./rabbitmqctl stop")
                 
-                
+    
+    def rabbitmq_add_admin(self):
+        with cd(self.cfg.user_rabbitmq + "/sbin"):
+           run("./rabbitmqctl add_user admin admin ")
+           run("./rabbitmqctl set_user_tags admin administrator ")
+           run('./rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"')
+   
+
     def rabbitmq_purge(self):
         """
         Reset the serialization queue
