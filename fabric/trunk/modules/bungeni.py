@@ -441,6 +441,7 @@ class BungeniConfigs:
         self.user_rabbitmq = self.user_install_root + "/rabbitmq"
         self.rabbitmq_download_command = self.get_download_command(self.rabbitmq_install_url)
         self.rabbitmq_download_admin_command = self.get_download_command(self.rabbitmq_admin_url)
+        self.rabbitmq_download_admin_file = self.utils.get_basename(self.rabbitmq_admin_url)
         self.rabbitmq_download_file = self.utils.get_basename(self.rabbitmq_install_url)
         self.user_rabbitmq_build_path = self.user_build_root + "/rabbitmq"
         # Jython installation folder
@@ -2189,16 +2190,17 @@ class RabbitMQTasks:
             with cd(self.cfg.user_rabbitmq + "/sbin"):
                 run("./rabbitmq-plugins enable rabbitmq_management rabbitmq_management_visualiser")
                 run(self.cfg.rabbitmq_download_admin_command)
+                run("mv %s rabbitmq-admin" % self.cfg.rabbitmq_download_admin_file)
                 print "Configuring rabbitmq, setting up admin and defaults"
                 run("chmod +x rabbitmq-admin rabbitmqctl")
-                run("HOME=`pwd` ERL_EPMD_RELAXED_COMMAND_CHECK=TRUE RABBITMQ_NODENAME=rabbit@localhost ./rabbitmq-server -detached")
+                run("./rabbitmq-server -detached")
                 run("sleep 3")
-                run("./rabbitmqctl -n rabbit@localhost add_user admin admin ")
-                run("./rabbitmqctl -n rabbit@localhost set_user_tags admin administrator ")
-                run('./rabbitmqctl -n rabbit@localhost set_permissions -p / admin ".*" ".*" ".*"')
-                run("./rabbitmqctl -n rabbit@localhost delete_user guest")
-                run("./rabbitmqctl -n rabbit@localhost stop_app")
-                run("./rabbitmqctl -n rabbit@localhost stop")
+                run("./rabbitmqctl add_user admin admin ")
+                run("./rabbitmqctl set_user_tags admin administrator ")
+                run('./rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"')
+                run("./rabbitmqctl delete_user guest")
+                run("./rabbitmqctl stop_app")
+                run("./rabbitmqctl stop")
                 
                 
     def rabbitmq_purge(self):
