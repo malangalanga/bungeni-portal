@@ -27,11 +27,11 @@ po_files_folder = %(user_glue)s/tmp/po-files/
 i18n_catalogues_folder = %(user_glue)s/tmp/i18n/
 
 [rabbitmq]
-username=admin
-password=admin
-vhost=/
-hostname=localhost
-port=55672
+username=%(rabbitmq_user)s
+password=%(rabbitmq_password)s
+vhost=%(rabbitmq_vhost)s
+hostname=%(rabbitmq_hostname)s
+port=%(rabbitmq_port)s
 
 [webdav]
 # eXist XML DB for storing the transformed documents

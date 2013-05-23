@@ -444,6 +444,14 @@ class BungeniConfigs:
         self.rabbitmq_download_admin_file = self.utils.get_basename(self.rabbitmq_admin_url)
         self.rabbitmq_download_file = self.utils.get_basename(self.rabbitmq_install_url)
         self.user_rabbitmq_build_path = self.user_build_root + "/rabbitmq"
+
+	#rabbit mq users and ports
+        self.rabbitmq_user = self.cfg.get_config("rabbitmq", "username")
+        self.rabbitmq_password = self.cfg.get_config("rabbitmq", "password")
+        self.rabbitmq_vhost = self.cfg.get_config("rabbitmq", "vhost")
+        self.rabbitmq_hostname = self.cfg.get_config("rabbitmq", "hostname")
+        self.rabbitmq_port = self.cfg.get_config("rabbitmq", "port")
+
         # Jython installation folder
         self.jython_install_url = self.cfg.get_config("glue-script", "download_url")
         self.jython_startup_mem = self.cfg.get_config("glue-script", "startup_mem")
@@ -2299,7 +2307,12 @@ class GlueScriptTasks:
             "user_bungeni": self.cfg.user_bungeni,
             "user_jython": self.cfg.user_jython,
             "user_glue": self.cfg.user_glue,
-            "user_bungeni_custom": ct.current_bungeni_custom()
+            "user_bungeni_custom": ct.current_bungeni_custom(),
+            "rabbitmq_user": self.cfg.rabbitmq_user,
+            "rabbitmq_password": self.cfg.rabbitmq_password,
+            "rabbitmq_vhost": self.cfg.rabbitmq_vhost,
+            "rabbitmq_hostname": self.cfg.rabbitmq_hostname,
+            "rabbitmq_port": self.cfg.rabbitmq_port
             }
         templates = Templates(self.cfg)
         templates.new_file(
@@ -2307,6 +2320,7 @@ class GlueScriptTasks:
             template_map,
             self.cfg.user_config
             )
+
 
     def reset(self):
         cfg = SafeConfigParser()
