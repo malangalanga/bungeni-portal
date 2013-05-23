@@ -754,9 +754,12 @@ def rabbitmq_reset():
     tasks = bungeni.RabbitMQTasks()
     tasks.rabbitmq_purge()
 
-def rabbitmq_add_admin():
+def rabbitmq_switch_admin():
+    """
+    Run this only if your rabbitmq is using the default guest user as admin. This action will switch it to use the admin info specified in setup.ini
+    """
     tasks = bungeni.RabbitMQTasks()
-    tasks.rabbitmq_add_admin()
+    tasks.add_admin()
 
 
 def glue_install():
