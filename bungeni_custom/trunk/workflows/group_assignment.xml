@@ -5,6 +5,12 @@
         permission_actions=".View .Edit .Add .Delete"
     >
     
+    
+    <!-- features -->
+    <feature name="audit" enabled="true" />
+    <feature name="version" enabled="true" />
+    
+    
     <facet name="add_internal">
         <allow permission=".Add" roles="
                 ClerkSenate ClerkAssembly 
@@ -28,7 +34,7 @@
 		    " />
     </facet>
     
-    <!-- !+ONE_STATE_TRANSITION placeholder state, transation -->
+    <!-- !+ONE_STATE_TRANSITION placeholder state, transition -->
     <state id="_" title="" note="!+ONE_STATE_TRANSITION placeholder state" />
     <transition title="" source="" destination="_" trigger="automatic" 
         note="!+ONE_STATE_TRANSITION placeholder state" />
