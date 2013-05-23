@@ -17,7 +17,7 @@ jQuery(function($) {
             dataType: 'JSON',
             traditional: true,
             success : function( respData ) {
-                $('#fileframe').attr('src', $.parseJSON(respData)) // Set the iframe src atrribute
+                $('#fileframe').attr('src', respData) // Set the iframe src atrribute
                 $("#fileframe").css("display", "block"); // Make the iframe visible
                 
                 // Set focus on the iframe
