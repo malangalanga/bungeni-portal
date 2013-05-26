@@ -1,9 +1,13 @@
 <?xml version="1.0"?>
-<workflow title="Bill Workflow"
-    description="A bill"
+<workflow title="Bicameral Bill Workflow"
+    description="A bicameral bill"
     permission_actions=".View .Edit .Add .Delete"
     >
-    
+   <!-- PLEASE NOTE: this workflow assumes that the is first introduded in the Lower Chamber
+	and if it needs the concurrence of the Higher Chamber can be forwared to
+	that. To handle the workflow from Higher to Lower you need to create a workflow
+	that is specurlar to this  -->
+
     <!-- global grants -->
     <allow permission=".Add" roles="
             ClerkAssembly
@@ -20,14 +24,28 @@
         <parameter name="open_states" value="gazetted" />
     </feature>
     <feature name="schedule" enabled="true">
-        <parameter name="schedulable_states" value="gazetted first_reading_adjourned 
+        <parameter name="schedulable_states" value="
+	    gazetted first_reading_adjourned 
             first_reading referred_committee_first_reading 
             second_reading second_reading_adjourned 
             whole_house whole_house_adjourned 
-            third_reading third_reading_adjourned" />
-        <parameter name="scheduled_states" value="first_reading_scheduled
+            third_reading third_reading_adjourned
+	    ref_first_reading_adjourned 
+            ref_first_reading
+            ref_second_reading ref_second_reading_adjourned 
+            ref_whole_house ref_whole_house_adjourned 
+            ref_third_reading ref_third_reading_adjourned
+	" />
+        <parameter name="scheduled_states" value="
+	    first_reading_scheduled
             second_reading_scheduled 
-            whole_house_scheduled third_reading_scheduled" />
+            whole_house_scheduled 
+            third_reading_scheduled
+	    ref_first_reading_scheduled
+            ref_second_reading_scheduled 
+            ref_whole_house_scheduled
+	    ref_third_reading_scheduled
+	" />
     </feature>
     <feature name="workspace" enabled="true" />
     <feature name="notification" enabled="true" />
@@ -172,6 +190,12 @@
 
     <!-- States REFERRED HOUSE -->
  <state id="ref_request_concurrence" title="Request Concurrence" actions="version">
+        <facet ref=".ref_public_edit_Clerk" />
+        <facet ref="attachment.add_clerk" />
+        <facet ref="event.add_clerk" />
+        <facet ref="group_assignment.add_internal" />
+    </state>
+ <state id="ref_reviewed_concurrence" title="Reviewed Request of Concurrence" actions="version">
         <facet ref=".ref_public_edit_Clerk" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
@@ -456,8 +480,15 @@
         roles="ClerkAssembly"
     />
     <!-- workflow transitions REFERRED HOUSE-->
+    <transition title="Reviewed Request of Concurrence"
+        source="ref_request_concurrence"
+        destination="ref_reviewed_concurrence"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+    />
     <transition title="First Reading Scheduled"
-        source="ref_request_concurrence ref_first_reading_adjourned"
+        source="ref_reviewed_concurrence ref_first_reading_adjourned"
         destination="ref_first_reading_scheduled"
         condition="is_scheduled"
         trigger="manual"
