@@ -27,7 +27,7 @@
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
+        <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
         </field>
         <field name="body" label="Body" required="false" value_type="text" render_type="rich_text">
@@ -79,7 +79,7 @@
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
-        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
+        <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
         </field>
         <field name="audit_id" required="true" value_type="text" render_type="text_line">
