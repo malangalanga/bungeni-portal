@@ -16,8 +16,12 @@
     background: #434343;
 }
 #top-layer div {
-    background: transparent;
     border: 0 none;    
+    background: #7e7e7e !important;
+    background: linear-gradient(top, #EFEFEF 0%, #BBB 100%);
+    background: -moz-linear-gradient(top, #EFEFEF 0%, #BBB 100%);
+    background: -webkit-linear-gradient(top, #EFEFEF 0%,#BBB 100%);
+    box-shadow: 0px 0px 9px rgba(0,0,0,0.15);    
 }
 #top-layer ul#portal-personaltools {
     background: transparent;
@@ -398,7 +402,7 @@ input.inputLabelActive {
  * DocumentActions & contentActions
  */
 .contentActions {
-    background: url(/static/images/content-actions-bg.png) repeat-x top left;
+    background: #acacac;
     border: 0 none;
 }
 .contentActions a {
@@ -419,14 +423,15 @@ input.inputLabelActive {
 }
 .actionMenu .actionMenuContent ul li {
     border: 0 none;
-    border-bottom: 1px solid #aaf;
+    border-bottom: 1px solid #7e7e7e;
+    background:#acacac;
 }
 .actionMenu .actionMenuContent ul li a {
     background: none;
     color: #000;
 }
 .actionMenu .actionMenuContent ul li a:hover {
-    background-color: #cceaf3 !important;
+    background-color: #abdae4 !important;
     color: #000;
 }
 .actionmenu .actionMenuHeader ul#contentActionMenus li.context_translate a {
@@ -449,11 +454,17 @@ div#portal-globalnav ul.level0 li {
     border-radius: 0;
     display:inline-block;
     float:none;
-    line-height:inherit;
+    padding:5px 10px;
+    height:18px;
+}
+div#portal-globalnav li.plain,
+div#portal-globalnav li#portaltab-admin-content,
+div#portal-globalnav li#portaltab- {
+    background:#016d9a;
 }
 
 div#portal-globalnav ul.level0 li a { 
-    background:#2b92be;
+    background:#016d9a;
     border:0 none;
     font-weight: bold;
     font-family: Arial, Helvetica, sans-serif;    
@@ -462,10 +473,19 @@ div#portal-globalnav ul.level0 li a {
 div#portal-globalnav ul.level0 li.selected a {
     font-weight: bold;
     border-bottom-color: transparent;
-    border-color: #2b92be;
-    background:#2b92be;
+    border-color: #016d9a;
+    background:#016d9a;
     color:#fff;
 } 
+div#portal-globalnav ul.level0 a:hover {
+    color:#ffffff;
+    text-decoration:underline;
+    background: #016d9a !important;
+    background: linear-gradient(top, #EFEFEF 0%, #BBB 100%);
+    background: -moz-linear-gradient(top, #EFEFEF 0%, #BBB 100%);
+    background: -webkit-linear-gradient(top, #EFEFEF 0%,#BBB 100%);
+    box-shadow: 0px 0px 9px rgba(0,0,0,0.15);
+}
 
 div#portal-globalnav ul.level0 li#upper-hse,
 div#portal-globalnav ul.level0 li#upper-hse a {    
@@ -490,13 +510,13 @@ div#portal-globalnav-bottom {
 div#portal-globalnav-bottom:empty{
     display:none
 }
-div#portal-globalnav ul.level1 {
+.template-portal div#portal-globalnav ul.level1 {
     border-top: 0 none;
     background: #7E7E7E;
     bottom:inherit;
 }
 .template-portal div#portal-globalnav ul.level1 {
-    background: #2b92be;
+    background: #016d9a;
 }
 div#portal-globalnav ul.level1 li a {
     background: transparent;
@@ -554,7 +574,7 @@ table.listing th,
 table.listingdescription th,
 .stx table th,
 .yui-skin-sam .yui-dt-first th {
-    background:#21a1ba !important;
+    background:#acacac !important;
     border: 0 none;
     border-right: 1px solid #c6c1c1;
     border-top: 0 none;
@@ -565,7 +585,7 @@ table.listingdescription th,
     background: #fff !important;
 }
 .yui-skin-sam .yui-dt-first th:active {
-    background:#d8d8d9 url(/static/images/w-globalnav-level0-a.png) top left -2px !important;
+    background:#d8d8d9 !important;
 }
 .yui-skin-sam .yui-dt-last th input {
     background: #fff;
@@ -591,7 +611,9 @@ table.listingdescription td,
     color: #222;
     text-shadow: 0 0 0 #fff;
 }
-
+table.grid td {
+    border: 1px dotted #7e7e7e;
+}
 /* formTabs
 -------------------------------------------------------------- */
  dd#items-to-be-scheduled-dl ul.formTabs,
@@ -637,7 +659,7 @@ dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:active,
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a.selected {
     text-align: left;
     text-decoration: none;
-    background: #f9ac32 url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
+    background: #f9ac32;
     border: 1px solid #aaa;
     border-bottom-color: #f9ac32;
     border-top-color: #999;
@@ -686,7 +708,7 @@ dl.portalMessage dd {
     border: 0 none;
     color: #a00;
     font-style: italic;
-    font-size:1.2em;
+    font-size:1.1em;
     text-shadow: 0.1em #f79f10;
 }
 #display_form_spacer {
@@ -877,8 +899,8 @@ span.yui-button.yui-link-button span a {
 }
 
 .template-portal #header-wrapper {
-    background: #016d9a;
-    border-bottom: 17px solid #016D9A;
+    background: #434343;
+    border-bottom: 17px solid #434343;
 }
 
 .template-portal #header-in-left {
@@ -890,7 +912,11 @@ span.yui-button.yui-link-button span a {
 }
 
 .template-portal #top-layer div {
-    background-color:#016d9a;
+    background-color:#434343 !important;
+}
+
+.template-workspace #top-layer div {
+    background-color:transparent;
 }
 
 .template-portal #visual-table-wrapper {
@@ -898,10 +924,10 @@ span.yui-button.yui-link-button span a {
     border: 0 none;
 }
 .template-portal #portal-logo-wrapper {
-    background:#016d9a url(/static/images/portal_img.png) no-repeat bottom right;
+    background:#434343 url(/static/images/portal_img.png) no-repeat bottom right;
 }
 .template-portal #portal-logo {
-    background:#016d9a url(/static/images/portal_banner.png) top left no-repeat;
+    background:#434343 url(/static/images/portal_banner.png) top left no-repeat;
 }
 /* 
  * if display is set to block it will display the logo used on the workspace
@@ -1013,20 +1039,9 @@ span.yui-button.yui-link-button span a {
 /* =============================================================================
    TEMPLATE WORKSPACE - Styling applied on workspace
    ========================================================================== */
-
-.template-workspace #header-wrapper {
-    text-align:center;
-    background: #4d4d4d url(/static/images/workspace-border-right.png) top right repeat-y;
-}
-
-.template-workspace #top-layer {
-    border: 0 none;
-    border-bottom: 1px solid #4d4d4d;
-    background: #4d4d4d url(/static/images/workspace-border-top.png) top center repeat-x;
-}
 .template-workspace #portal-logo {
     display: block;
-    background:#4d4d4d url(/static/images/empowered.png) center right no-repeat;
+    background:transparent url(/static/images/empowered.png) center right no-repeat;
 }
 .template-workspace #portal-breadcrumbs {
     border-bottom:1px solid #d4e2ef;
@@ -1054,6 +1069,9 @@ span.yui-button.yui-link-button span a {
 .template-workspace  div#portal-globalnav ul.level0,
 .template-workspace  div#portal-globalnav ul.level1 {
     width: 100%;
+}
+.template-workspace div#portal-globalnav ul.level1 {
+    background: #016d9a;
 }
 
 .template-workspace  div#portal-globalnav ul.level0 {
@@ -1208,12 +1226,11 @@ span.yui-button.yui-link-button span a {
 }
 .section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li.selected a,
 .section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li a:hover {
-    background: #21a1ba;
+    background: #a2a2a2;
     color: #fff;
 }
 .template-workspace #portal-column-one .portlet .portletItem .navTreeCurrentItem a {
-    background-color:#21a1ba !important;
-    color:#ffffff !important;
+    background-color:#acacac !important;
 }
 /* hides the portlet header. */
 .section-bungeni-admin #portal-column-one .portlet .portletItem.even,
@@ -1222,16 +1239,15 @@ span.yui-button.yui-link-button span a {
 }
 .template-workspace.section-bungeni-admin #portal-column-one .portletItem a.navTreeCurrentItem,
 .template-workspace.section-bungeni-workspace #portal-column-one .portletItem a.navTreeCurrentItem {
-    background: #888888 !important;
-    color: white !important;
+    background: #7e7e7e !important;
+    color: #ffffff !important;
     border: 0 none !important;
 }
 /*
  * DocumentActions & contentActions
  */
 .template-workspace.section-bungeni-admin .contentActions {
-    border: 1px solid #86a26a !important;
-    background: #888888 url(wrong/static/images/w-bg-admin.png) repeat-x top center;
+    background: #acacac;
 }  
 .template-workspace.section-bungeni-archive .contentActions,
 .template-workspace.section-bungeni-business .contentActions,
@@ -1242,7 +1258,7 @@ span.yui-button.yui-link-button span a {
 .section-bungeni-workspace .actionMenu .actionMenuContent ul,
 .section-bungeni-admin .actionMenu .actionMenuContent ul {
     background: #bdd1d7;
-    border: 1px solid #aaf;
+    border: 1px solid #7e7e7e;
     border-bottom: 0 none;
     border-top: 0 none;
 }
@@ -1317,7 +1333,7 @@ span.yui-button.yui-link-button span a {
     background: #f9f9f9;
 }
 .template-workspace.section-bungeni-workspace li.formTab a.selected {
-    background: url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
+    background: #d8d8d9;
     border-bottom-color: #6ca6cd;
     text-decoration: none;
 }
@@ -1330,7 +1346,7 @@ span.yui-button.yui-link-button span a {
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a.selected {
     text-align: left;
     text-decoration: none;
-    background: #d8d8d9 url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
+    background: #d8d8d9;
     border: 1px solid #aaa;
     border-bottom-color: #bbb;
     border-top-color: #999;
@@ -1339,8 +1355,8 @@ span.yui-button.yui-link-button span a {
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:hover,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:active,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a.selected {
-    background: #21a1ba url(/static/images/w-globalnav-level0-a-first.png) top left repeat-x;
-    color: #fff;
+    background: #acacac;
+    color: #000000;
 	text-shadow:0 0 0 #fff;
 }
 .template-workspace.section-bungeni-workspace #content ul.formTabs li a.selected,
@@ -1355,7 +1371,7 @@ span.yui-button.yui-link-button span a {
 .template-workspace.section-bungeni-workspace .stx table th,
 .template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th,
 .section-bungeni-workspace tr.yui-dt-first th {
-    background:#21a1ba !important;
+    background:#acacac !important;
     text-shadow: 0 0 0  #fff;
     color: #000;
 }
@@ -1372,8 +1388,8 @@ span.yui-button.yui-link-button span a {
     margin-left:3px;
     margin-right:3px;
     border-bottom: 0 none;
-    background: #888888;
-    color:#ffffff !important;
+    background: #acacac;
+    color:#000000 !important;
 }
 /*
  * formPanel styles
@@ -1386,20 +1402,20 @@ span.yui-button.yui-link-button span a {
     background:#f9ac32 url(/static/images/globalnav-level1-bg.png) bottom left repeat-x !important;
 }
 .template-workspace.section-bungeni-admin .formPanel #display_form_spacer {
-    background: url(/static/images/w-globalnav-level1-bg.png) bottom left repeat-x;
+    background: #acacac;
 }
 .template-workspace.section-bungeni-workspace .formPanel #display_form_spacer {
-    background: url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x;
+    background: #acacac;
 }
 .template-workspace.section-bungeni-admin dd#fieldset-written-question-response div.documentDescription,
 .template-workspace.section-bungeni-admin .formPanel #display_form_spacer {
-    background:#888888 !important;
+    background:#acacac !important;
 }
 .template-workspace.section-bungeni-admin table.listing th,
 .template-workspace.section-bungeni-admin table.listingdescription th, 
 .template-workspace.section-bungeni-admin .stx table th, 
 .yui-skin-sam.section-bungeni-admin .yui-dt-first th {
-    background: #888888 !important;
+    background: #acacac !important;
     color:#ffffff !important;
 }
 .template-workspace.section-bungeni-workspace table.listing th a,
@@ -1410,28 +1426,36 @@ span.yui-button.yui-link-button span a {
 .template-workspace.section-bungeni-admin table.listingdescription th a, 
 .template-workspace.section-bungeni-admin .stx table th a, 
 .yui-skin-sam.section-bungeni-admin .yui-dt-first th a {
-    color:#ffffff !important;
+    color:#000000 !important;
 }
 
 .template-workspace {
-    background: url(/static/images/workspace-border-left.png) repeat-y top left;
+    background: url(/static/images/workspace-background.png) top left repeat;
 }
 .template-workspace #visual-table-wrapper {
     text-align: left;
-    background:url(/static/images/workspace-border-right.png) repeat-y top right;
+    background: #ffffff;
 }
 .template-workspace span#corner-a,
 .template-workspace span#corner-b {
     display: block;
 }
 .template-workspace span#corner-a {
-    background: #4d4d4d url(/static/images/workspace-border-left-corner.png) top left no-repeat;
+    background: transparent;
 }
 .template-workspace span#corner-b {
-    background: #4d4d4d url(/static/images/workspace-border-right-corner.png) top right no-repeat;
+    background: transparent;
 }
 .template-workspace #main-body-table {
     background: #fff;
+}
+.template-workspace #header-wrapper {
+    text-align:center;
+}
+.template-workspace #top-layer {
+    border: 0 none;
+    border-bottom: 1px solid #4d4d4d;
+    background: transparent;
 }
 /* modifies the dhx_cal object */
 .template-workspace.section-bungeni-business .dhx_cal_event[style] {
@@ -1463,12 +1487,12 @@ span.yui-button.yui-link-button span a {
 .template-workspace.section-bungeni-workspace .stx table th,
 .template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th,
 .section-bungeni-workspace tr.yui-dt-first th {
-    background:#21a1ba !important;
+    background:#acacac !important;
     text-shadow: 0 0 0  #fff;
-    color: #fff !important;
+    color: #000000 !important;
 }
 .template-workspace.section-bungeni-workspace #display_form_spacer {
-    background:#21a1ba !important;
+    background:#acacac !important;
 }
 
 /*MailBox*/
@@ -1487,7 +1511,7 @@ span.yui-button.yui-link-button span a {
 }
 .template-workspace .portlet ul.contentViewsLeftPort li.selected,
 .template-workspace .portlet ul.contentViewsLeftPort li a:hover {
-    background-color:#21a1ba !important;
+    background-color:#a2a2a2 !important;
     color:#fff !important;
 }
 
@@ -1591,11 +1615,12 @@ span.yui-button.yui-link-button span a {
 
 .yui-skin-sam .yui-button-focus,
 .yui-skin-sam .yui-button-hover { 
-    background:#abdae4;border-color:#21a1ba;
+    background:#abdae4;
+    border-color:#acacac;
  }
 .yui-skin-sam #scheduler-layout .yui-button-hover { 
     background:#abdae4;
-    border-color:#21a1ba;
+    border-color:#acacac;
 }
 /* =============================================================================
    Bungeni - Bungeni workspace and admin styling
@@ -1707,11 +1732,9 @@ dl#context_actions.actionMenu .actionMenuContent ul {
     text-decoration:none;
     color:#D50005;
 }
-  
 
 .template-portal-eXist div#portal-globalnav #portaltab- {
     display:inline-block;
-    padding:0;
 }
 .template-portal-eXist div#portal-globalnav #portaltab- > a {
     font-weight: bold;

@@ -20,7 +20,7 @@
 #top-layer div {
     padding: 0;
     margin: 0 auto;
-    height: 25px;
+    height: 20px;
     padding-right:0;
     margin-top:0px;
 }
@@ -175,7 +175,6 @@ div#portal-globalnav {
     width:280px !important;
 }
 div#portal-globalnav ul.level0 {
-    line-height: 20px !important; 
     margin: 0;
     padding: 0;
     bottom: 0; 
@@ -383,7 +382,7 @@ div#region-content div#content > div:first-child {
 }
 #portal-column-content .documentContent {
     float: left;
-    width: 99%;
+    width: 100%;
     padding: 0 !important;  
 }
 /* portal-column-one
@@ -623,7 +622,7 @@ dd#items-to-be-scheduled-dl .formPanel {
 .formPanel form { 
     margin: 0 auto;
     padding: 0 !important;
-    width: 95%;
+    width: 100%;
     clear:both;
 }
 /*.formPanel .field:after,
@@ -654,7 +653,6 @@ dl.portalMessage dt {
 }
 dl.portalMessage dd {
     padding: 0 !important;
-    display:inline;
     width:100% !important;
 }
 #display_form_spacer {
@@ -914,7 +912,7 @@ h4.tabberHeading {
     margin: 0 auto;
     width:100%;
     text-align:center;
-    height:122px;
+    height:129px;
     white-space:nowrap;
 }
 .template-portal #header-in-left {
@@ -1102,7 +1100,7 @@ h4.tabberHeading {
 .template-workspace #header-wrapper {
     margin: 0 auto;
     width:98.2%;
-    height:130px;
+    height:138px;
     padding-right:10px;
     margin-right:0px;
 }
@@ -1141,7 +1139,7 @@ h4.tabberHeading {
 	margin-right:6px;
 }
 .template-workspace #top-layer ul#portal-languageselector {
-    margin: 0 1.5em 0 0;
+    margin: 0 1.5em 0 .5em;
     height: 20px;
 }
 }
@@ -1179,7 +1177,7 @@ h4.tabberHeading {
 
 .template-workspace #portal-columns {
     overflow: visible;
-    padding: 0 .5em;
+    padding: 0;
 }
 /* documentContent
 -------------------------------------------------------------- */
@@ -1223,7 +1221,7 @@ h4.tabberHeading {
 .template-workspace table.listingdescription,
 .template-workspace.stx table,
 .template-workspace.yui-skin-sam .yui-dt table {
-    width: 95%;
+    width: 100%;
 }
 
 /* formTabs
@@ -1251,7 +1249,7 @@ h4.tabberHeading {
     width:99.5%;
 }
 .template-workspace .formPanel  #display_form_spacer {
-    width: 95%;
+    width: 100%;
     height:20px;
     margin: 0 auto;
 }
@@ -1270,10 +1268,12 @@ h4.tabberHeading {
     position: absolute;
     padding: 0;
     height: 25px;
-    width: 97.4%;
+    width: 98%;
     margin: 0;
-    margin-left:5px;
     white-space:nowrap;
+}
+.template-workspace div#portal-globalnav ul.level1 {
+    left:0;
 }
 .template-workspace #portal-logo-wrapper {
     margin-top:4px;
@@ -1283,7 +1283,7 @@ h4.tabberHeading {
     padding: 0;
     text-align: left;
     margin: 0 auto;
-    width:100%;
+    width:98%;
     /* 
      * Sticky Footer
      * more information: http://www.cssstickyfooter.com/
@@ -1663,7 +1663,7 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
     margin-bottom:25px !important;
     height:15px;
     clear:both;
-    width:85%;
+    width:100%;
 }
 .template-workspace.section-bungeni-workspace #popup-load dl.portalMessage {
     width:100%;
