@@ -2203,20 +2203,17 @@ class RabbitMQTasks:
                 run("chmod +x rabbitmq-admin rabbitmqctl")
                 run("./rabbitmq-server -detached")
                 run("sleep 3")
-                run("./rabbitmqctl add_user %s %s" % (self.cfg.rabbitmq_user, self.cfg.rabbitmq_password))
-                run("./rabbitmqctl set_user_tags %s administrator " % self.cfg.rabbitmq_user)
-                run('./rabbitmqctl set_permissions -p / %s ".*" ".*" ".*"' % self.cfg.rabbitmq_user)
-                run("./rabbitmqctl delete_user guest")
+            self.add_admin()
+            with cd(self.cfg.user_rabbitmq + "/sbin"):            
                 run("./rabbitmqctl stop_app")
                 run("./rabbitmqctl stop")
                 
     
     def add_admin(self):
         with cd(self.cfg.user_rabbitmq + "/sbin"):
-           run("./rabbitmqctl add_user admin admin ")
-           run("./rabbitmqctl set_user_tags admin administrator ")
-           run('./rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"')
-           # delete the guest user (the default admin)
+           run("./rabbitmqctl add_user %s %s" % (self.cfg.rabbitmq_user, self.cfg.rabbitmq_password))
+           run("./rabbitmqctl set_user_tags %s administrator " % self.cfg.rabbitmq_user)
+           run('./rabbitmqctl set_permissions -p / %s ".*" ".*" ".*"' % self.cfg.rabbitmq_user)
            run("./rabbitmqctl delete_user guest")
    
 
