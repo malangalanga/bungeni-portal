@@ -1,8 +1,8 @@
 #!/usr/bin/python
 import urllib
 
-username = 'admin'
-password = 'admin'
+username = 'ploneadmin'
+password = 'ploneadmin'
 url = 'localhost:8082/plone'
 
 ids_to_transfer = ['front-page','images', 'plone-bungeni-content-types']
