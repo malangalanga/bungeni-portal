@@ -72,9 +72,13 @@ printf "\n\n"
 	} >> /dev/null
 	
 logger.printTask "[Bungeni] Clean out development files.."
-printf "\n\n"
-{
-	find $BUNGENI_REL_FOLDER \( -name "*.svn" -or -name "*.tmp" -or -name "*.pyc" -or -name "*.pyo" -or -name "*.log" \) -exec rm -rf {} \;
+printf "\n\n"{
+        find  $BUNGENI_REL_FOLDER/debian/DEBIAN \( -name ".svn" \) -exec rm -rf {} \;
+        find  $BUNGENI_REL_FOLDER/debian/etc    \( -name ".svn" \) -exec rm -rf {} \;
+        rm -rf $BUNGENI_REL_FOLDER/opt/.svn $BUNGENI_REL_FOLDER/opt/bungeni/.svn || true
+        # remove .svn folders comment this out to build a dist package
+        find $BUNGENI_REL_FOLDER/opt/bungeni_apps -name ".svn" -exec rm -rf {} \;
+	find $BUNGENI_REL_FOLDER \( -name "*.tmp" -or -name "*.pyc" -or -name "*.pyo" -or -name "*.log" \) -exec rm -rf {} \;
 	} > /dev/null 2>&1 
 
 logger.printTask "[Bungeni] Now run will attempt to execute run.sh in the ${BUNGENI_REL_FOLDER}"
