@@ -64,10 +64,11 @@ printf "\n\n"
 	
 logger.printTask "[ExistDb] Clean out development files.."
 printf "\n\n"
-{
-	find $EXIST_REL_FOLDER \( -name "*.svn" -or -name "*.tmp" -or -name "*.lock" -or -name "*.lck" -or -name "*.log" \) -exec rm -rf {} \;
-	} > /dev/null 2>&1 
-
+find  $EXIST_REL_FOLDER/debian/DEBIAN \( -name ".svn" \) -exec rm -rf {} \; || true
+find  $EXIST_REL_FOLDER/debian/etc    \( -name ".svn" \) -exec rm -rf {} \; || true
+rm -rf $EXIST_REL_FOLDER/debian/opt/.svn $BUNGENI_REL_FOLDER/debian/opt/bungeni/.svn || true
+find $EXIST_REL_FOLDER/debian/opt/bungeni/bungeni_apps/exist \( -name "*.svn" -or -name "*.tmp" -or -name "*.lock" -or -name "*.lck" -or -name "*.log" \) -exec rm -rf {} \;
+find $EXIST_REL_FOLDER/debian/opt/bungeni/bungeni_apps/glue \( -name "*.tmp" -or -name "*.lock" -or -name "*.lck" -or -name "*.log" \) -exec rm -rf {} \;
 logger.printTask "[ExistDb] Now run will attempt to execute run.sh in the ${EXIST_REL_FOLDER}"
 printf "\n"
 

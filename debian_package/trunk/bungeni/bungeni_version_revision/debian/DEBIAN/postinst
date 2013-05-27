@@ -23,7 +23,15 @@ set -e
 
 case "$1" in
 configure)
-
+		echo " Adding rabbitmq user " 
+		/opt/bungeni/bungeni_apps/rabbitmq/sbin/rabbitmq-server -detached
+		sleep 3
+		/opt/bungeni/bungeni_apps/rabbitmq/sbin/rabbitmqctl add_user admin admin
+		/opt/bungeni/bungeni_apps/rabbitmq/sbin/rabbitmqctl set_user_tags admin administrator
+		/opt/bungeni/bungeni_apps/rabbitmq/sbin/rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
+		/opt/bungeni/bungeni_apps/rabbitmq/sbin/rabbitmqctl delete_user guest
+		/opt/bungeni/bungeni_apps/rabbitmq/sbin/rabbitmqctl stop_app
+		/opt/bungeni/bungeni_apps/rabbitmq/sbin/rabbitmqctl stop
 		echo "Adding bungeni group and user..."
 		useradd bungeni
 		echo "bungeni:bungeni" | chpasswd
