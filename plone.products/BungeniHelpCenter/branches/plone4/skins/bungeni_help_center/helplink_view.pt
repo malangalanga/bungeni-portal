@@ -59,7 +59,7 @@
                      tal:attributes="href prevsib/getURL"
                      tabindex="2"
                      href="">
-                    <img tal:replace="structure here/arrowLeft.gif" />
+                    <img tal:replace="structure here/arrowLeft.png" />
                     <!--<span i18n:translate="label_previous">Previous: </span>-->
                     <span tal:content="python:here.trunc(prevsib.Title)" /><span tal:content="prevsib/Title" class="hovertooltip" tal:condition="python:len(prevsib.Title) > len(here.trunc(prevsib.Title))"/> 
                   </a>
@@ -75,7 +75,7 @@
                    href="">
                   <!--<span i18n:translate="label_next">Next: </span>-->
                   <span tal:content="python:here.trunc(nextsib.Title)" /><span tal:content="nextsib/Title" class="hovertooltip" tal:condition="python:len(nextsib.Title) > len(here.trunc(nextsib.Title))"/>                   
-                  <img tal:replace="structure here/arrowRight.gif" /> 
+                  <img tal:replace="structure here/arrowRight.png" /> 
                    </a>
                </span>
 </td></tr></table>
@@ -139,7 +139,7 @@
                      tal:attributes="href prevsib/getURL"
                      tabindex="2"
                      href="">
-                    <img tal:replace="structure here/arrowLeft.gif" />
+                    <img tal:replace="structure here/arrowLeft.png" />
                     <!--<span i18n:translate="label_previous">Previous: </span>-->
                     <span tal:content="python:here.trunc(prevsib.Title)" /><span tal:content="prevsib/Title" class="hovertooltip" tal:condition="python:len(prevsib.Title) > len(here.trunc(prevsib.Title))"/> 
                   </a>
@@ -155,7 +155,7 @@
                    href="">
                   <!--<span i18n:translate="label_next">Next: </span>-->
                   <span tal:content="python:here.trunc(nextsib.Title)" /><span tal:content="nextsib/Title" class="hovertooltip" tal:condition="python:len(nextsib.Title) > len(here.trunc(nextsib.Title))"/> 
-                  <img tal:replace="structure here/arrowRight.gif" /> 
+                  <img tal:replace="structure here/arrowRight.png" /> 
                    </a>
                </span>
 </td></tr></table>
