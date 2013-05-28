@@ -15,7 +15,11 @@
     -->
     
     <!-- features -->
-    <feature name="audit" enabled="true" />
+    <feature name="audit" enabled="true">
+        <parameter name="audit_actions" value="add modify workflow remove version translate" />
+        <parameter name="include_subtypes" value="signatory attachment event group_assignment" />
+        <parameter name="display_columns" value="user date_active object description note date_audit" />
+    </feature>
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
     <feature name="event" enabled="true">

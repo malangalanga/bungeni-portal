@@ -14,7 +14,11 @@
     
     
     <!-- features -->
-    <feature name="audit" enabled="true" />
+    <feature name="audit" enabled="true">
+        <parameter name="audit_actions" value="add modify workflow remove version translate" />
+        <parameter name="display_columns" value="user date_active object description note" />
+    </feature>
+
   
 
     <!-- parent facets -->

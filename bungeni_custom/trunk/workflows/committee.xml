@@ -11,7 +11,11 @@
     
     
     <!-- features -->
-    <feature name="audit" enabled="true" />
+    <feature name="audit" enabled="true">
+        <parameter name="audit_actions" value="add modify workflow remove version translate" />
+        <parameter name="include_subtypes" value="member group_assignment" />
+        <parameter name="display_columns" value="user date_active object description note" />
+    </feature>
     <feature name="version" enabled="true" />
     <feature name="sitting" enabled="true" />
     <feature name="address" enabled="true" />
