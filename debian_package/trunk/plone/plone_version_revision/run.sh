@@ -31,22 +31,16 @@ else
 fi
 
 logger.printTask "[Plone] Generating md5sums..."
-{
-	printf "\n"
-	
-	cd ./debian && find .  -type f -not -path "*.svn*"  | grep -v 'DEBIAN'  | xargs md5sum > ../md5sums
-	} &>> $CURR_DEB_LOG
-	
+printf "\n"
+cd ./debian && find .  -type f -not -path "*.svn*"  | grep -v 'DEBIAN'  | xargs md5sum > ../md5sums
 cd ..
 sed -i 's|./opt|opt|g' md5sums
 mv md5sums debian/DEBIAN
 
 logger.printTask "[Plone] Building Debian Package..."
-{
-	printf "\n\n"
-	
-	dpkg-deb --build debian 
-	} &>> $CURR_DEB_LOG
+printf "\n\n"
+echo This folder : `pwd`
+dpkg-deb --build debian 
 	
 CURDIR=`pwd`
 mv debian.deb `basename $CURDIR`_$1.deb

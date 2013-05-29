@@ -64,6 +64,7 @@ printf "\n\n"
 	
 logger.printTask "[ExistDb] Clean out development files.."
 printf "\n\n"
+rm -rf $EXIST_REL_FOLDER/.svn $EXIST_REL_FOLDER/debian/.svn  || true
 find  $EXIST_REL_FOLDER/debian/DEBIAN \( -name ".svn" \) -exec rm -rf {} \; || true
 find  $EXIST_REL_FOLDER/debian/etc    \( -name ".svn" \) -exec rm -rf {} \; || true
 rm -rf $EXIST_REL_FOLDER/debian/opt/.svn $BUNGENI_REL_FOLDER/debian/opt/bungeni/.svn || true

@@ -72,6 +72,7 @@ printf "\n\n"
 	} >> /dev/null
 	
 logger.printTask "[Bungeni] Clean out development files.."
+ rm -rf $BUNGENI_REL_FOLDER/.svn $BUNGENI_REL_FOLDER/debian/.svn || true
  find  $BUNGENI_REL_FOLDER/debian/DEBIAN \( -name ".svn" \) -exec rm -rf {} \; || true
  find  $BUNGENI_REL_FOLDER/debian/etc    \( -name ".svn" \) -exec rm -rf {} \; || true
  rm -rf $BUNGENI_REL_FOLDER/debian/opt/.svn $BUNGENI_REL_FOLDER/debian/opt/bungeni/.svn || true
