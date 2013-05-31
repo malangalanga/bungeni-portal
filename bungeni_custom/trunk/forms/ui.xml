@@ -739,18 +739,18 @@
     </descriptor>
     
     <descriptor name="sitting" order="17">
-        <field name="short_name" label="Name of activity" required="true" value_type="text" render_type="text_line">
-            <show modes="view edit add listing" />
+        <field name="duration" label="Duration" required="false" value_type="text" render_type="text_line">
+            <show modes="listing" />
         </field>
         <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
             <show modes="view edit add" />
             <hide modes="listing" />
         </field>
         <field name="start_date" label="Date" required="true" value_type="duration" render_type="datetime">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
         </field>
         <field name="end_date" label="End" required="true" value_type="datetime" render_type="datetime">
-            <show modes="view edit add listing" />
+            <show modes="view edit add" />
         </field>
         <field name="session_id" label="Session" required="false" value_type="vocabulary" render_type="single_select" vocabulary="session">
             <show modes="view listing" />
@@ -766,6 +766,9 @@
         </field>
         <field name="convocation_type" label="Convocation Type" description="Sitting Convocation Type" required="false" value_type="vocabulary" render_type="single_select" vocabulary="sitting_convocation_types">
             <show modes="view edit add" />
+        </field>
+        <field name="short_name" label="Notes" required="false" value_type="text" render_type="text_line">
+            <show modes="view edit add listing" />
         </field>
         <integrity constraints="end_after_start" validations="validate_date_range_within_parent validate_venues" />
     </descriptor>
