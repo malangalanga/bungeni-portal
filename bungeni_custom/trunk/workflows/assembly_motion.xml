@@ -163,13 +163,13 @@
         <facet ref="group_assignment.add_internal" />
     </state>
 
-    <state id="clarification_required" title="Requires Clarification to Receive"
+    <state id="clarification_required" title="Requires Clarification"
             actions="version">
         <facet ref=".clarification_required" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
     </state>
-    <state id="reviewed" title="Submitted to the Speaker" actions="version">
+    <state id="reviewed" title="Reviewed by Clerk Office" actions="version">
         <facet ref=".reviewed" />
         <facet ref="attachment.add_speaker" />
         <facet ref="event.add_speaker" />
@@ -342,7 +342,7 @@
         roles="ClerkAssembly"
         require_confirmation="true"
     />
-    <transition title="Reject a scheduled motion"
+    <transition title="Reject"
         source="scheduled"
         destination="rejected"
         condition=""

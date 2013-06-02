@@ -2,27 +2,37 @@
 <vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0" 
     orderSignificant="true" profileType="flatTokenTerms">
     <vocabName>
-        <langstring language="en">bill type</langstring>
+        <langstring language="en">bill types</langstring>
     </vocabName>
     <vocabIdentifier>org.bungeni.metadata.vocabularies.bill_type</vocabIdentifier>
     <term>
-        <termIdentifier>government</termIdentifier>
+        <termIdentifier>public_bill</termIdentifier>
         <caption>
-            <langstring language="en">Government Initiative</langstring>
-            <langstring language="es">Gobierno</langstring>
-            <langstring language="fr">Gouvernement</langstring>
-            <langstring language="pt">Governo</langstring>
-            <langstring language="sw">Serikali</langstring>
+            <langstring language="ar">مشروع قانون العامة</langstring>
+            <langstring language="en">Public Bill</langstring>
+            <langstring language="fr">Projet de loi public</langstring>
+            <langstring language="pt">Projeto de lei</langstring>
+            <langstring language="sw">Umma muswada</langstring>
         </caption>
     </term>
     <term>
-        <termIdentifier>member</termIdentifier>
+        <termIdentifier>private_bill</termIdentifier>
         <caption>
-            <langstring language="en">Member Initiative</langstring>
-            <langstring language="es">Miembro</langstring>
-            <langstring language="fr">Membre</langstring>
-            <langstring language="pt">Membro</langstring>
-            <langstring language="sw">Mwanachama</langstring>
+            <langstring language="ar">مشروع قانون خاص</langstring>
+            <langstring language="en">Private Bill</langstring>
+            <langstring language="fr">Projet de loi privé</langstring>
+            <langstring language="pt">Proposta de lei</langstring>
+            <langstring language="sw">binafsi muswada</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>constitutional_bill</termIdentifier>
+        <caption>
+            <langstring language="ar">مشروع قانون دستوري</langstring>
+            <langstring language="en">Constitutional Bill</langstring>
+            <langstring language="fr">Projet de loi constitutionnelle</langstring>
+            <langstring language="pt">Projeto de lei constitucional</langstring>
+            <langstring language="sw">Kikatiba muswada</langstring>
         </caption>
     </term>
 </vdex>

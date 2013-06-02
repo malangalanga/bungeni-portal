@@ -3,31 +3,34 @@
     <field name="title" label="Title" required="true" value_type="text" render_type="text_box">
         <show modes="add view edit listing" />
     </field>
-        <field name="sub_title" label="Sub Title" required="false" value_type="text" render_type="text_box">
+        <field name="sub_title" label="Short Title" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
         </field>
     <field name="type_number" label="Number" required="false" value_type="number" render_type="number">
         <show modes="view listing" />
     </field>
-    <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
+    <field name="acronym" label="Symbol" required="false" value_type="text" render_type="text_line">
         <show modes="view edit add" />
         <hide modes="listing" />
     </field>
-    <field name="description" label="Summary" required="false" value_type="text" render_type="text_box">
-        <show modes="view edit add" />
-        <hide modes="listing" />
+     <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
+         <show modes="edit add" />
+         <hide modes="listing view" />
+     </field>
+    <field name="language" label="Language" required="true" value_type="language" 
+	render_type="single_select" vocabulary="language">
+        <show modes="add view edit listing" />
     </field>
-    <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
-        <show modes="add view edit" />
-        <hide modes="listing" />
-    </field>
-    <field name="doc_type" label="Bill Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="bill_type">
+    <field name="doc_type" label="Bill Type" required="true" value_type="vocabulary" 
+	render_type="single_select" vocabulary="bill_type">
         <show modes="view edit add listing" />
     </field>
-    <field name="chamber_id" label="Chamber" required="true" value_type="text" render_type="single_select" vocabulary="chamber">
+    <field name="chamber_id" label="Chamber" required="true" value_type="text" 
+	render_type="single_select" vocabulary="chamber">
         <hide modes="view listing" />
     </field>
-    <field name="owner_id" label="Moved by" description="Select the user who moved the document" required="true" value_type="member" render_type="single_select" vocabulary="chamber_member_delegation">
+    <field name="owner_id" label="Moved by" description="Select Mover" required="true" 
+	value_type="member" render_type="single_select" vocabulary="chamber_member_delegation">
         <show modes="add edit" />
         <hide modes="view listing" roles="Anonymous" />
     </field>
@@ -56,20 +59,35 @@
         >
         <show modes="view listing" />
     </field>
-    <field name="group_id" label="Ministry" required="false" value_type="group" render_type="single_select" vocabulary="ministry" note="!+validate ministry group constraint, or value_type=ministry?">
+    <field name="group_id" label="Ministry" required="false" value_type="group" 
+	render_type="single_select" vocabulary="ministry" 
+	note="!+validate ministry group constraint, or value_type=ministry?">
         <show modes="view edit add listing" />
     </field>
-    <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="text_line">
-        <hide modes="view edit add listing" />
-    </field>
-    <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" render_type="text_line">
-        <hide modes="view edit add listing" />
-    </field>
-    <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
-        <hide modes="view edit add listing" />
-    </field>
+     <field name="summary" label="Summary" required="false" value_type="text" render_type="rich_text">
+         <show modes="view edit add" />
+         <hide modes="listing" />
+     </field>
     <field name="body" label="Text" required="false" value_type="text" render_type="rich_text">
         <show modes="view edit add" />
+    </field>
+    <field name="subject" label="subject terms" required="false" 
+	value_type="text" render_type="tree_text" vocabulary="subject_terms">
+        <show modes="view " />
+        <show modes="edit add" roles="ClerkSenate" />
+        <hide modes="listing" />
+    </field>
+    <field name="coverage" label="Coverage" description="Select Coverage"
+	required="false" value_type="text" render_type="text_line">
+        <show modes="view " />
+        <show modes="edit add" roles="ClerkSenate" />
+        <hide modes="listing" />
+    </field>
+    <field name="geolocation" label="Geolocation" description="Select Geolocation" 
+	required="false" value_type="text" render_type="text_line">
+        <show modes="view " />
+        <show modes="edit add" roles="ClerkSenate" />
+        <hide modes="listing" />
     </field>
 </descriptor>
 

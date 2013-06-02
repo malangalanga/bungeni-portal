@@ -41,7 +41,11 @@
     <field name="group_role" label="Role" description="Role given to members of this office" required="true" value_type="text" render_type="single_select" vocabulary="group_role">
         <show modes="view edit add listing" />
     </field>
-    
+
+<!-- FLAVIO
+    <container match="document_sample_id" />
+-->    
+
     <container match="assembly_bill.chamber_id" />
     <container match="assembly_motion.chamber_id" />
     <container match="assembly_question.chamber_id" />
@@ -62,12 +66,7 @@
     <container match="political_group.parent_group_id" />
     <container match="title_type.group_id" />
     <container match="venue.group_id" />
-    
-    
-<!-- FLAVIO: to have run TWO CHAMBERS 
-   <integrity 
-        constraints="end_after_start"
-        validations="validate_chamber_dates" /> -->
+
     
 </descriptor>
 

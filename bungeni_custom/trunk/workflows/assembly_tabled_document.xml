@@ -69,7 +69,7 @@
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
     </state>
-    <state id="reviewed" title="Submitted to the Speaker" actions="version">
+    <state id="reviewed" title="Reviewed by Clerk Office" actions="version">
         <facet ref=".edit_Speaker" />
         <facet ref="attachment.add_speaker" />
         <facet ref="event.add_speaker" />
@@ -84,7 +84,7 @@
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
     </state>
-    <state id="clarification_required" title="Requires Clarification to Receive" actions="version">
+    <state id="clarification_required" title="Requires Clarification" actions="version">
         <facet ref=".edit_Owner" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
@@ -178,8 +178,7 @@
         roles="ClerkAssembly Owner"
         order="26"
         require_confirmation="true"
-        note="The Member can withdraw his question at any stage where it can 
-            still be presented to the ministry/house."
+        note="The Member can withdraw his question at any stage"
     />
     <transition title="Withdraw"
         source="admissible scheduled adjourned"

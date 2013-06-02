@@ -7,33 +7,31 @@
     <field name="type_number" label="Number" required="false" value_type="number" render_type="number">
         <show modes="view listing" />
     </field>
-    <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
+    <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
         <show modes="view edit add" />
         <hide modes="listing" />
-    </field>
-    <field name="description" label="Summary" required="false" value_type="text" render_type="text_box">
-        <show modes="view edit add" />
-        <hide modes="listing" />
-    </field>
-    <field name="response_type" label="Response Type" 
-            description="Choose the type of response expected for this question" 
-            required="false"
-            value_type="vocabulary" render_type="single_select" vocabulary="response_type"
-            extended="text"
-        >
-        <show modes="view edit add listing" />
     </field>
     <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
         <show modes="add view edit" />
         <hide modes="listing" />
     </field>
-    <field name="doc_type" label="Question Type" description="Choose the type of question" required="true" value_type="vocabulary" render_type="single_select" vocabulary="question_type">
+    <field name="doc_type" label="Question Type" description="Choose the type of question" 
+	required="true" value_type="vocabulary" render_type="single_select" vocabulary="question_type">
         <show modes="view edit add listing" />
     </field>
-    <field name="chamber_id" label="Chamber" required="true" value_type="text" render_type="single_select" vocabulary="chamber">
+    <field name="response_type" label="Response Type" 
+            description="Choose the type of response expected for this question" 
+            required="false"
+            value_type="vocabulary" render_type="single_select" vocabulary="response_type"
+            extended="text">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="chamber_id" label="Chamber" required="true" value_type="text" 
+	render_type="single_select" vocabulary="chamber">
         <hide modes="view listing" />
     </field>
-    <field name="owner_id" label="Moved by" description="Select the user who moved the document" required="true" value_type="member" render_type="single_select" vocabulary="chamber_member_delegation">
+    <field name="owner_id" label="Moved by" description="Select the user who moved the document" 
+	required="true" value_type="member" render_type="single_select" vocabulary="chamber_member_delegation">
         <show modes="add edit" />
         <hide modes="view listing" roles="Anonymous" />
     </field>
@@ -62,19 +60,26 @@
         >
         <show modes="view listing" />
     </field>
-    <field name="subject" label="Subject Terms" description="Select Subjects" required="false" value_type="text" render_type="tree_text" vocabulary="subject_terms">
-        <show modes="view" />
-        <show modes="edit add" roles="ClerkAssembly" />
-        <hide modes="listing" />
-    </field>
-    <field name="coverage" label="Coverage" description="Select Coverage" required="false" value_type="text" render_type="text_line">
-        <hide modes="view edit add listing" />
-    </field>
-    <field name="geolocation" label="Geolocation" description="Select Geolocation" required="false" value_type="text" render_type="text_line">
-        <hide modes="view edit add listing" />
-    </field>
     <field name="body" label="Text" required="true" value_type="text" render_type="rich_text">
         <show modes="view edit add" />
+    </field>
+    <field name="subject" label="subject terms" required="false" 
+	value_type="text" render_type="tree_text" vocabulary="subject_terms">
+        <show modes="view " />
+        <show modes="edit add" roles="ClerkAssembly ClerkQuestionAssembly" />
+        <hide modes="listing" />
+    </field>
+    <field name="coverage" label="Coverage" description="Select Coverage"
+	required="false" value_type="text" render_type="text_line">
+        <show modes="view " />
+        <show modes="edit add" roles="ClerkAssembly ClerkQuestionAssembly" />
+        <hide modes="listing" />
+    </field>
+    <field name="geolocation" label="Geolocation" description="Select Geolocation" 
+	required="false" value_type="text" render_type="text_line">
+        <show modes="view " />
+        <show modes="edit add" roles="ClerkAssembly ClerkQuestionAssembly" />
+        <hide modes="listing" />
     </field>
 </descriptor>
 
