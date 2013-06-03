@@ -39,7 +39,6 @@
     <doc name="motion" workflow="doc" descriptor="doc" enabled="true" />
     <doc name="question" workflow="doc" descriptor="doc" enabled="true" />
     <doc name="tabled_document" workflow="doc" descriptor="doc" enabled="true" />
-    <doc name="doc_sample" workflow="doc" descriptor="doc" enabled="true" />
     
     
     <!-- custom types -->
@@ -54,8 +53,6 @@
          label="question" container_label="questions" />
     <doc name="assembly_tabled_document" archetype="tabled_document" enabled="true" 
          label="tabled_document" container_label="tabled_documents" />
-    <doc name="document_sample" archetype="doc_sample" enabled="true" 
-         label="document_sample" container_label="document_sample" />
     
     <!-- sample usage of @descriptor, as senate bill/motion/tabled descriptors 
         are identical to equivalents in assembly, so re-use them -->
@@ -72,11 +69,15 @@
     <doc name="bicameral_document" enabled="true" 
         label="bicameral document" container_label="bicameral documents" />
     
+    <doc name="doc_sample" workflow="doc" descriptor="doc" enabled="true" />
+    
+    
     <event name="event_response" archetype="event" workflow="event_response" enabled="true" 
          label="response" container_label="responses" />
     <event name="event_editor" archetype="event" workflow="event_editor" enabled="true" 
          label="editorial event" container_label="editorial events" />
-
+    
+    
     <group name="office" workflow="group" enabled="true" label="role" container_label="roles">
         <member name="office_member" workflow="group_member" enabled="true"
             label="member" container_label="members" />

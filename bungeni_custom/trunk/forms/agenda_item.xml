@@ -23,7 +23,7 @@
         <show modes="add edit view listing" />
     </field>
     <field name="group_id" label="Committee" required="false" value_type="group" render_type="single_select" vocabulary="group">
-        <show modes="edit add" roles="Admin"/>
+        <show modes="edit add" roles="Admin" />
         <show modes="view listing" />
     </field>
     <field name="registry_number" label="Registry Number" required="false" value_type="text" render_type="text_line">
