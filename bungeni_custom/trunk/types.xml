@@ -78,7 +78,9 @@
          label="editorial event" container_label="editorial events" />
     
     
-    <group name="office" workflow="group" enabled="true" label="role" container_label="roles">
+    <group name="office" workflow="group" enabled="true" 
+        label="role" container_label="roles"
+        privilege_extent="chamber">
         <member name="office_member" workflow="group_member" enabled="true"
             label="member" container_label="members" />
     </group>
@@ -97,7 +99,8 @@
         label="joint committee" container_label="joint committees">
     </group>
     <group name="government" workflow="group" enabled="true"
-        label="government" container_label="governments">
+        label="government" container_label="governments"
+        privilege_extent="legislature">
     </group>
     <group name="ministry" workflow="group" enabled="true" label="member" container_label="members">
         <member name="minister" workflow="group_member" enabled="true" 
