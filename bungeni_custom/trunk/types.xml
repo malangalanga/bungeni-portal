@@ -80,7 +80,8 @@
     
     <group name="office" workflow="group" enabled="true" 
         label="role" container_label="roles"
-        privilege_extent="chamber">
+        privilege_extent="chamber"
+        note="Parliamentary Office like speakers office, clerks office, etc.">
         <member name="office_member" workflow="group_member" enabled="true"
             label="member" container_label="members" />
     </group>
@@ -89,7 +90,8 @@
         <member name="political_group_member" workflow="group_member" enabled="true"
             label="member" container_label="members" />
     </group>
-    <group name="committee" enabled="true" label="committee" container_label="committees">
+    <group name="committee" enabled="true" label="committee" container_label="committees"
+        note="A parliamentary committee of MPs.">
         <member name="committee_member" workflow="group_member" enabled="true" 
             label="member" container_label="members" />
         <member name="committee_staff" workflow="group_member" enabled="true"
@@ -102,13 +104,17 @@
         label="government" container_label="governments"
         privilege_extent="legislature">
     </group>
-    <group name="ministry" workflow="group" enabled="true" label="member" container_label="members">
+    <group name="ministry" workflow="group" enabled="true" label="member" container_label="members"
+        note="A government ministry.">
         <member name="minister" workflow="group_member" enabled="true" 
-            label="ministry" container_label="ministries" />
+            label="ministry" container_label="ministries"
+            note="A Minister, defined as member of a ministry group." />
     </group>
-    <group name="chamber" enabled="true" label="chamber" container_label="chambers">
+    <group name="chamber" enabled="true" label="chamber" container_label="chambers"
+        note="A parliament chamber.">
         <member name="member" workflow="group_member" enabled="true" 
-            label="member" container_label="members" />
+            label="member" container_label="members" 
+            note="Member of a Chamber i.e. of Parliament" />
     </group>
 
 </types>
