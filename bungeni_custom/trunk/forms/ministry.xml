@@ -38,12 +38,12 @@
     <field name="group_role" label="Role" description="Role given to members of this office" required="true" value_type="text" render_type="single_select" vocabulary="group_role">
         <show modes="view edit add listing" />
     </field>
-    <container match="minister.group_id" />
+    <container match="minister.group_id" viewlet="true" />
     <!-- !+MINISTRY_DOCS
     <container match="question.group_id" />
     <container match="bill.group_id" />
     -->
-    <container match="title_type.group_id" />
+    <container match="title_type.group_id" viewlet="true" />
     
     <integrity constraints="end_after_start" validations="validate_date_range_within_parent" />
 </descriptor>

@@ -54,7 +54,7 @@
         <show modes="view edit add" />
     </field>
     
-    <container match="member_title.member_id" name="titles" />
+    <container match="member_title.member_id" name="titles" note="!+name" viewlet="true" />
     
     <container match="agenda_item.owner_id" indirect_key="user_id" />
     <container match="bill.owner_id" indirect_key="user_id" />

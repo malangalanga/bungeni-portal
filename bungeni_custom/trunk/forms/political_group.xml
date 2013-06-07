@@ -50,8 +50,8 @@
         <show modes="view edit add listing" />
     </field>
     
-    <container match="member_title.member_id" name="titles" />
-    <container match="political_group_member.group_id" />
+    <container match="member_title.member_id" name="titles" viewlet="true" />
+    <container match="political_group_member.group_id" viewlet="true" />
     <container match="title_type.group_id" />
     
     <integrity constraints="end_after_start" validations="validate_date_range_within_parent" />

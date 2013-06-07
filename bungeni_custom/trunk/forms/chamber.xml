@@ -59,10 +59,10 @@
     
     <container match="bicameral_document.chamber_id" />
     
-    <container match="session.chamber_id" />
+    <container match="session.chamber_id" viewlet="true" />
     <container match="committee.parent_group_id" />
     <container match="office.parent_group_id" />
-    <container match="member.group_id" />
+    <container match="member.group_id" viewlet="true" />
     <container match="political_group.parent_group_id" />
     <container match="title_type.group_id" />
     <container match="venue.group_id" />
