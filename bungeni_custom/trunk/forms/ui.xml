@@ -872,7 +872,7 @@
         <field name="email" label="Email" description="Email address" required="true" value_type="email" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="login" label="Login" description="Must contain only letters, numbers, a period (.) and underscore (_). Should start with a letter and be between 3 and 20 characters long" required="true" value_type="login" render_type="text_line">
+        <field name="login" label="Login" description="Must contain only letters, numbers, a period (.) and underscore (_). Should start with a letter and be between 3 and 79 characters long" required="true" value_type="login" render_type="text_line">
             <show modes="view add" />
             <hide modes="listing" />
         </field>
