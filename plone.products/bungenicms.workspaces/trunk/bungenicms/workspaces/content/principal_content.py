@@ -64,9 +64,9 @@ def initializeAreas(pm_tool, acl_tool, request, member_folder_id=None):
     3. Populate the public space with custom content
     4. Create group home folder for any groups (except a parliament) this user 
         is a member of.
-        3.1 Create a private space for the group home folder.
-        3.2 Create a public space for the group home folder
-        3.3 Populate the public space with custom content.
+        4.1 Create a private space for the group home folder.
+        4.2 Create a public space for the group home folder
+        4.3 Populate the public space with custom content.
     """
     portal = getSite()
     sm = getSecurityManager()
@@ -88,16 +88,13 @@ def initializeAreas(pm_tool, acl_tool, request, member_folder_id=None):
 
     #All members get a private workspace area.
     create_space(folder, "private_space", "Private Space", "private", member_id,
-                    member, PRIVATE_FOLDER_ENTRY_NAME)   
+                    member, PRIVATE_FOLDER_ENTRY_NAME)
     member_groupIds = member.getGroupIds()
-    for member_groupId in member_groupIds:
-        group_membership_roles = doSearch(acl_tool, member_groupId)
-        if "bungeni.MP" in group_membership_roles:
-            create_space(folder, "web_space", "Web Space", "publish", member_id,
-                            member, PUBLIC_FOLDER_ENTRY_NAME)
-            parent_space = getattr(folder, "web_space")
-            mark(parent_space, IMemberSpace)    
-            create_content(parent_space, MEMBER_SPACE_CONTENT, member,
+    create_space(folder, "web_space", "Web Space", "publish", member_id,
+                    member, PUBLIC_FOLDER_ENTRY_NAME)
+    parent_space = getattr(folder, "web_space")
+    mark(parent_space, IMemberSpace)    
+    create_content(parent_space, MEMBER_SPACE_CONTENT, member,
                             "publish")
 
 
@@ -106,11 +103,10 @@ def initializeAreas(pm_tool, acl_tool, request, member_folder_id=None):
     for member_groupId in member_groupIds:
         group_membership_roles = doSearch(acl_tool, member_groupId)
         #if group home folder does not exist
-        #it is cheaper to check if the group home folder already exists, then exit if it does
+        #it is cheaper to check if the folder exists, then exit if it does
         for bungeni_group in acl_tool.bungeni_groups.enumerateGroups():
 
             if ((member_groupId == bungeni_group["id"])
-                and ("bungeni.MP" not in group_membership_roles)
                 and (bungeni_group["id"]not in groups_space.objectIds())):
                 group = acl_tool.bungeni_groups.getGroupById(bungeni_group["id"])                 
                 create_space(groups_space, bungeni_group["id"],
