@@ -39,8 +39,8 @@
         <show modes="view edit add listing" />
     </field>
     
-    <container match="office_member.group_id" />
-    <container match="title_type.group_id" />
+    <container match="office_member.group_id" viewlet="true" />
+    <container match="title_type.group_id" viewlet="true" />
     
     <integrity validations="validate_date_range_within_parent" />
 
