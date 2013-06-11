@@ -6,9 +6,9 @@
     
     <!-- global grants -->
     <allow permission=".Add" roles="
+            ClerkAssembly
             ClerkQuestionAssembly.ClerkHead
             MemberAssembly
-            ClerkAssembly
         " />
     
     <!-- features -->
@@ -78,54 +78,56 @@
 
     <facet name="inadmissible">
         <allow permission=".View" roles="
-            ClerkQuestionAssembly.ClerkHead
-            ClerkQuestionAssembly.ClerkQuestion
-	        ClerkAssembly
-            SpeakerAssembly 
-            Owner
+                ClerkAssembly
+                ClerkQuestionAssembly.ClerkHead
+                ClerkQuestionAssembly.ClerkQuestion
+                SpeakerAssembly 
+                Owner
             " />
     </facet>
 
     <facet name="submitted">
         <allow permission=".View" roles="
-            ClerkQuestionAssembly.ClerkHead
-            ClerkQuestionAssembly.ClerkQuestion
-	    ClerkAssembly
-            SpeakerAssembly 
-            Owner
+                ClerkQuestionAssembly.ClerkHead
+                ClerkQuestionAssembly.ClerkQuestion
+                ClerkAssembly
+                SpeakerAssembly 
+                Owner
             " />
         <allow permission=".Edit" roles="
-            ClerkQuestionAssembly.ClerkHead
-            ClerkQuestionAssembly.ClerkQuestion
-	    ClerkAssembly
+                ClerkAssembly
+                ClerkQuestionAssembly.ClerkHead
+                ClerkQuestionAssembly.ClerkQuestion
             " />
         <allow permission="user_assignment.View" roles="
-            ClerkQuestionAssembly.ClerkHead
-            ClerkQuestionAssembly.ClerkQuestion
-	    ClerkAssembly
+                ClerkAssembly
+                ClerkQuestionAssembly.ClerkHead
+                ClerkQuestionAssembly.ClerkQuestion
             " />
         <allow permission="user_assignment.Edit" roles="
-	        ClerkQuestionAssembly.ClerkHead
-	        ClerkAssembly
-	    " />
+                ClerkAssembly
+                ClerkQuestionAssembly.ClerkHead
+            " />
     </facet>
     
     <facet name="reviewed">
         <allow permission=".View" roles="
-            ClerkQuestionAssembly.ClerkHead
-            ClerkQuestionAssembly.ClerkQuestion
-            SpeakerAssembly Owner
+                ClerkAssembly
+                ClerkQuestionAssembly.ClerkHead
+                ClerkQuestionAssembly.ClerkQuestion 
+                SpeakerAssembly
+                Owner
             " />
         <allow permission=".Edit" roles="SpeakerAssembly" />
     </facet>
 
     <facet name="clarification_required">
         <allow permission=".View" roles="
-            ClerkQuestionAssembly.ClerkHead
-            ClerkQuestionAssembly.ClerkQuestion
-	    ClerkAssembly
-            SpeakerAssembly
-            Owner
+                ClerkAssembly
+                ClerkQuestionAssembly.ClerkHead
+                ClerkQuestionAssembly.ClerkQuestion 
+                SpeakerAssembly
+                Owner
             " />
         <allow permission=".Edit" roles="Owner" />
     </facet>

@@ -78,54 +78,56 @@
 
     <facet name="inadmissible">
         <allow permission=".View" roles="
-            ClerkQuestionSenate.ClerkHead
-            ClerkQuestionSenate.ClerkQuestion
-	    ClerkSenate
-            SpeakerSenate 
-            Owner
+                ClerkSenate
+                ClerkQuestionSenate.ClerkHead
+                ClerkQuestionSenate.ClerkQuestion
+                SpeakerSenate 
+                Owner
             " />
     </facet>
 
     <facet name="submitted">
         <allow permission=".View" roles="
-            ClerkQuestionSenate.ClerkHead
-            ClerkQuestionSenate.ClerkQuestion
-	    ClerkSenate
-            SpeakerSenate 
-            Owner
+                ClerkSenate
+                ClerkQuestionSenate.ClerkHead
+                ClerkQuestionSenate.ClerkQuestion
+                SpeakerSenate 
+                Owner
             " />
         <allow permission=".Edit" roles="
-            ClerkQuestionSenate.ClerkHead
-            ClerkQuestionSenate.ClerkQuestion
-	    ClerkSenate
+                ClerkSenate
+                ClerkQuestionSenate.ClerkHead
+                ClerkQuestionSenate.ClerkQuestion
             " />
         <allow permission="user_assignment.View" roles="
-            ClerkQuestionSenate.ClerkHead
-            ClerkQuestionSenate.ClerkQuestion
-	    ClerkSenate
+                ClerkSenate
+                ClerkQuestionSenate.ClerkHead
+                ClerkQuestionSenate.ClerkQuestion
             " />
         <allow permission="user_assignment.Edit" roles="
-	    ClerkQuestionSenate.ClerkHead
-	    ClerkSenate
-	    " />
+                ClerkSenate
+                ClerkQuestionSenate.ClerkHead
+    	    " />
     </facet>
     
     <facet name="reviewed">
         <allow permission=".View" roles="
-            ClerkQuestionSenate.ClerkHead
-            ClerkQuestionSenate.ClerkQuestion
-            SpeakerSenate Owner
+                ClerkSenate
+                ClerkQuestionSenate.ClerkHead
+                ClerkQuestionSenate.ClerkQuestion
+                SpeakerSenate 
+                Owner
             " />
         <allow permission=".Edit" roles="SpeakerSenate" />
     </facet>
 
     <facet name="clarification_required">
         <allow permission=".View" roles="
-            ClerkQuestionSenate.ClerkHead
-            ClerkQuestionSenate.ClerkQuestion
-	    ClerkSenate
-            SpeakerSenate
-            Owner
+                ClerkSenate
+                ClerkQuestionSenate.ClerkHead
+                ClerkQuestionSenate.ClerkQuestion
+                SpeakerSenate 
+                Owner
             " />
         <allow permission=".Edit" roles="Owner" />
     </facet>
