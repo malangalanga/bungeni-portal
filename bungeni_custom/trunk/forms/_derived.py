@@ -12,8 +12,10 @@ $Id$
 """
 log = __import__("logging").getLogger("bungeni_custom.forms")
 
+
+from bungeni.core.translation import translated
 from bungeni.utils.misc import describe
-from bungeni.ui.i18n import _
+from bungeni import _
 
 
 
@@ -60,10 +62,10 @@ def user_combined_name(user):
 
 # group
 
-#!+i18n?
 def group_combined_name(group):
+    group = translated(group)
     return "{0} [{1}]".format(
-            group.full_name, 
+            group.full_name,
             group.acronym
         ).replace("  ", " ")
 
