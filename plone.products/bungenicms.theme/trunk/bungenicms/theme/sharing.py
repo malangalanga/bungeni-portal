@@ -18,6 +18,8 @@ from Products.statusmessages.interfaces import IStatusMessage
 from plone.app.workflow import PloneMessageFactory as _
 from plone.app.workflow.interfaces import ISharingPageRole
 
+import json
+
 AUTH_GROUP = 'AuthenticatedUsers'
 STICKY = (AUTH_GROUP, )
 
@@ -45,13 +47,27 @@ class SharingView(BrowserView):
     # Actions
 
     template = ViewPageTemplateFile('sharing.pt')
+    macro_wrapper = ViewPageTemplateFile('macro_wrapper.pt')
 
     STICKY = STICKY
 
     def __call__(self):
         """Perform the update and redirect if necessary, or render the page
         """
+        postback = self.handle_form()
+        if postback:
+            return self.template()
+        else:
+            context_state = self.context.restrictedTraverse(
+                "@@plone_context_state")
+            url = context_state.view_url()
+            self.request.response.redirect(url)
 
+    def handle_form(self):
+        """
+        We split this out so we can reuse this for ajax.
+        Will return a boolean if it was a post or not
+        """
         postback = True
 
         form = self.request.form
@@ -62,13 +78,17 @@ class SharingView(BrowserView):
             if not self.request.get('REQUEST_METHOD', 'GET') == 'POST':
                 raise Forbidden
 
-            authenticator = self.context.restrictedTraverse('@@authenticator', None)
+            authenticator = self.context.restrictedTraverse('@@authenticator',
+                                                            None)
             if not authenticator.verify():
                 raise Forbidden
 
             # Update the acquire-roles setting
-            inherit = bool(form.get('inherit', False))
-            reindex = self.update_inherit(inherit, reindex=False)
+            if self.can_edit_inherit():
+                inherit = bool(form.get('inherit', False))
+                reindex = self.update_inherit(inherit, reindex=False)
+            else:
+                reindex = False
 
             # Update settings for users and groups
             entries = form.get('entries', [])
@@ -76,26 +96,23 @@ class SharingView(BrowserView):
             settings = []
             for entry in entries:
                 settings.append(
-                    dict(id = entry['id'],
-                         type = entry['type'],
-                         roles = [r for r in roles if entry.get('role_%s' % r, False)]))
+                    dict(id=entry['id'],
+                         type=entry['type'],
+                         roles=[r for r in roles
+                            if entry.get('role_%s' % r, False)]))
             if settings:
-                reindex = self.update_role_settings(settings, reindex=False) or reindex
-
+                reindex = self.update_role_settings(settings, reindex=False) \
+                            or reindex
             if reindex:
                 self.context.reindexObjectSecurity()
-            IStatusMessage(self.request).addStatusMessage(_(u"Changes saved."), type='info')
+            IStatusMessage(self.request).addStatusMessage(
+                _(u"Changes saved."), type='info')
 
         # Other buttons return to the sharing page
         if cancel_button:
             postback = False
 
-        if postback:
-            return self.template()
-        else:
-            context_state = self.context.restrictedTraverse("@@plone_context_state")
-            url = context_state.view_url()
-            self.request.response.redirect(url)
+        return postback
 
     # View
 
@@ -167,6 +184,12 @@ class SharingView(BrowserView):
         current_settings.sort(key=lambda x: safe_unicode(x["type"])+safe_unicode(x["title"]))
 
         return current_settings
+    
+    def can_edit_inherit(self):
+        """If this method returns True, user can change role role inheritance status
+        If it is False, inherit checkbox is not displayed on form
+        """
+        return True
 
     def inherited(self, context=None):
         """Return True if local roles are inherited here.
@@ -241,7 +264,7 @@ class SharingView(BrowserView):
         # Sort the list: first the authenticated users virtual group, then
         # all other groups and then all users, alphabetically
 
-        dec_users = [(a['id'] not in STICKY,
+        dec_users = [(a['id'] not in self.STICKY,
                        a['type'],
                        a['name'],
                        a) for a in items.values()]
@@ -290,7 +313,7 @@ class SharingView(BrowserView):
                 else:
                     info_item['roles'][r] = False
 
-            if have_roles or rid in STICKY:
+            if have_roles or rid in self.STICKY:
                 info.append(info_item)
 
         return info
@@ -359,7 +382,7 @@ class SharingView(BrowserView):
 
         def search_for_principal(hunter, search_term):
             return merge_search_results(chain(*[hunter.searchUsers(**{field: search_term})
-                for field in ['combined_name']]), 'userid')
+                for field in ['name', 'fullname', 'email']]), 'userid')
 
         def get_principal_by_id(user_id):
             acl_users = getToolByName(self.context, 'acl_users')
@@ -530,3 +553,15 @@ class SharingView(BrowserView):
             self.context.reindexObjectSecurity()
 
         return changed
+
+    def updateSharingInfo(self, search_term=''):
+        self.handle_form()
+        the_id = 'user-group-sharing'
+        macro = self.template.macros[the_id]
+        res = self.macro_wrapper(the_macro=macro, instance=self.context,
+                                 view=self)
+        messages = self.context.restrictedTraverse('global_statusmessage')()
+        return json.dumps({
+            'body': res,
+            'messages': messages
+        })
