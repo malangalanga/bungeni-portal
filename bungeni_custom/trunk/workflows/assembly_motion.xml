@@ -162,7 +162,12 @@
         <facet ref="event.add_clerk" />
         <facet ref="group_assignment.add_internal" />
     </state>
-
+    
+    <state id="transfer_senate" title="Transfer Senate" actions="version send_motion_to_senate"
+        note="Sample state to illustrate mechanism to transfer to other chamber">
+        <facet ref=".submitted" />
+    </state>
+    
     <state id="clarification_required" title="Requires Clarification"
             actions="version">
         <facet ref=".clarification_required" />
@@ -268,6 +273,15 @@
         roles="ClerkAssembly"
         trigger="manual"
     />
+    <transition title="Transfer Senate"
+        source="submitted"
+        destination="transfer_senate"
+        condition=""
+        roles="ClerkAssembly"
+        trigger="manual"
+        note="Sample transition to illustrate mechanism to transfer to other chamber"
+    />
+    
     <transition title="Admissible" 
         source="reviewed"
         destination="admissible" 

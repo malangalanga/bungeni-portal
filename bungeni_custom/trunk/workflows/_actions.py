@@ -42,6 +42,25 @@ from bungeni.core.workflows._actions import (
     
     # sitting
     schedule_sitting_items,
-
+    
+    # utility to help create parametrized "transfer to chamber" actions
+    # notes: 
+    # - sub-docs "signatories", "attachments", "events" are not carried over
+    # - the "owner" of the new doc is the original owner i.e. the member of the
+    #   originating chamber
+    # PARAMETERS: (from_doc, chamber_type, type_key, state_id)
+    spawn_doc, 
 )
+
+
+
+def send_motion_to_senate(motion):
+    """A sample action to "send" (spawn new) a document to other chamber.
+    """
+    # from {motion}, spawn a new doc of type "senate_motion", set its chamber
+    # to be the (expected singular) active "higher_house", and set the initial 
+    # workflow state of the new doc to be "submitted".
+    sm = spawn_doc(motion, "higher_house", "senate_motion", "submitted")
+    
+
 
