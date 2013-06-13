@@ -1079,6 +1079,18 @@ span.yui-button.yui-link-button span a {
 .template-workspace div#portal-globalnav ul.level1 {
     background: #016d9a;
 }
+.template-workspace.section-bungeni-workspace div#portal-globalnav ul.level1,
+.template-workspace.section-bungeni-admin div#portal-globalnav ul.level1 {
+    background: #9c9c9c;
+}
+.template-workspace div#portal-globalnav li#portaltab-admin-content,
+.template-workspace div#portal-globalnav li#portaltab-admin-content a,
+.template-workspace div#portal-globalnav li#portaltab-admin-content a:hover,
+.template-workspace div#portal-globalnav li#portaltab-,
+.template-workspace div#portal-globalnav li#portaltab- a,
+.template-workspace div#portal-globalnav li#portaltab- a:hover {
+    background: #9c9c9c !important;
+}
 
 .template-workspace  div#portal-globalnav ul.level0 {
     bottom: 0 !important
@@ -1433,7 +1445,7 @@ span.yui-button.yui-link-button span a {
 }
 
 .template-workspace {
-    background: url(/static/images/workspace-background.png) top left repeat;
+    background: #e5e3e3 url(/static/images/workspace-background.png) top left repeat;
 }
 .template-workspace #visual-table-wrapper {
     text-align: left;
