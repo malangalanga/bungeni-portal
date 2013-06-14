@@ -33,6 +33,9 @@
         <show modes="view" />
         <hide modes="edit listing" />
     </field>
+    <field name="head_id" label="Originating Document" required="false" value_type="uri" render_type="uri">
+        <show modes="view listing" />
+    </field>
     <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
         <show modes="view listing" />
     </field>
@@ -52,7 +55,7 @@
     </field>
 
 
-<!-- tabled document metadata -->
+    <!-- tabled document metadata -->
     <field name="source_title" label="document tabled" 
 	required="false" value_type="text" render_type="text_box">
         <show modes="view edit add" />

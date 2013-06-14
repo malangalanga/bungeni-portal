@@ -48,10 +48,9 @@ from bungeni.core.workflows._actions import (
     # - sub-docs "signatories", "attachments", "events" are not carried over
     # - the "owner" of the new doc is the original owner i.e. the member of the
     #   originating chamber
-    # PARAMETERS: (from_doc, chamber_type, type_key, state_id)
+    # PARAMETERS: (source_doc, target_chamber_type, target_type_key, target_state_id)
     spawn_doc, 
 )
-
 
 
 def send_motion_to_senate(motion):
@@ -61,6 +60,4 @@ def send_motion_to_senate(motion):
     # to be the (expected singular) active "higher_house", and set the initial 
     # workflow state of the new doc to be "submitted".
     sm = spawn_doc(motion, "higher_house", "senate_motion", "submitted")
-    
-
 
