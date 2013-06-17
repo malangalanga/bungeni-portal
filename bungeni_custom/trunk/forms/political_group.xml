@@ -25,7 +25,7 @@
     <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
         <show modes="view listing" />
     </field>
-    <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
+    <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
         <show modes="view edit add" />
     </field>
     <field name="logo_data" label="Logo" required="false" value_type="image" render_type="image" extended="binary">
@@ -48,6 +48,9 @@
     </field>
     <field name="group_role" label="Role" description="Role given to members of this office" required="true" value_type="text" render_type="single_select" vocabulary="group_role">
         <show modes="view edit add listing" />
+    </field>
+    <field name="body" label="Body" required="false" value_type="text" render_type="rich_text">
+         <show modes="view edit add" />
     </field>
     
     <container match="member_title.member_id" name="titles" viewlet="true" />

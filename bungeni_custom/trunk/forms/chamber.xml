@@ -35,16 +35,15 @@
         >
         <show modes="view edit add listing" />
     </field>
-    <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
+    <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
         <show modes="view edit add" />
     </field>
     <field name="group_role" label="Role" description="Role given to members of this office" required="true" value_type="text" render_type="single_select" vocabulary="group_role">
         <show modes="view edit add listing" />
     </field>
-
-<!-- FLAVIO
-    <container match="document_sample_id" />
--->    
+    <field name="body" label="Body" required="false" value_type="text" render_type="rich_text">
+         <show modes="view edit add" />
+    </field>
 
     <container match="assembly_bill.chamber_id" />
     <container match="assembly_motion.chamber_id" />
