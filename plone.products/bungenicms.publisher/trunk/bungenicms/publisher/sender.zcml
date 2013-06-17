@@ -1,0 +1,30 @@
+<configure
+      xmlns="http://namespaces.zope.org/zope"
+      xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+
+    <include package="ftw.publisher.sender" />
+
+    <!-- sender generic setup profile -->
+    <genericsetup:registerProfile
+          name="sender"
+          title="bungenicms.publisher : sender"
+          directory="profiles/sender"
+          description="Bungeni CMS Publisher GS profile for sender instance"
+          provides="Products.GenericSetup.interfaces.EXTENSION"
+          />
+
+
+    <!-- event handlers for publishing / deleting content -->
+    <subscriber
+          for="*
+               Products.DCWorkflow.interfaces.IAfterTransitionEvent"
+          handler=".eventhandlers.publish_after_transition"
+          />
+
+    <subscriber
+          for="Products.Archetypes.interfaces.IBaseContent
+               OFS.interfaces.IObjectWillBeRemovedEvent"
+          handler=".eventhandlers.handle_remove_event"
+          />
+
+</configure>
