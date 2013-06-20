@@ -50,6 +50,11 @@
             <allow permission=".View" roles="Owner" />
         </facet>
     </state>
+    <state id="elapsed" title="Signature Elapsed">
+        <facet>
+            <allow permission=".View" roles="Owner" />
+        </facet>
+    </state>
     
 
     <!-- workflow transision -->      
@@ -89,9 +94,9 @@
         require_confirmation="true"
         condition="pi_allow_signature_actions"
     />
-    <transition title="withdraw signature - automatic"
+    <transition title="elapse signature - automatic"
         source="awaiting_consent"
-        destination="withdrawn"
+        destination="elapsed"
         trigger="automatic"
         condition="pi_signature_period_expired"
     />
@@ -103,3 +108,4 @@
     />
 
 </workflow>
+
