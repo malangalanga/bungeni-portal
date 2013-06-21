@@ -1,3 +1,12 @@
+# part of Bungeni Parliamentary Information System copyright(c) 2013 UN/DESA Africa i-Parliaments Action Plan 
+# licensed under GNU GPLv3
+#
+
+"""Serializer Process - this serializes Bungeni objects to XML. Objects are published to the Queue,
+and this script reads from the Queue and published Objects to xml 
+Has to be executed using the Bungeni Python - this script also sets up the Queues for Bungeni
+"""
+
 import sys
 import bungeni
 import logging
@@ -8,81 +17,48 @@ from bungeni.core.interfaces import IMessageQueueConfig
 from zope.component import getUtility
 from bungeni.core.app import BungeniApp
 
-logging.basicConfig(level=logging.INFO)
 
+# setup logging
+logging.basicConfig(level=logging.INFO)
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 logging.getLogger('').addHandler(console)
 
-### Test by including all zcml imports from site.zcml ####
-
-zcml_slug = """<configure
-      	 xmlns="http://namespaces.zope.org/meta"
-	 xmlns:i18n="http://namespaces.zope.org/i18n"
-         xmlns:bungeni="http://namespaces.bungeni.org/zope"
-         xmlns:db="http://namespaces.objectrealms.net/rdb"
-         i18n_domain="bungeni"
-       >
-         <directive
-      name="messagequeue"
-      namespace="http://namespaces.bungeni.org/zope"
-      schema="bungeni.core.interfaces.IMessageQueueConfigSchema"
-      handler="bungeni.core.notifications.registerMessageQueueConfig"
-      />
-    <!-- Message queue settings -->
-    <bungeni:messagequeue
-      message_exchange="bungeni" 
-      task_exchange="bungeni_notification_tasks"
-      username="admin"
-      password="admin"
-    />
-
-
-   <!-- App Security -->
-    <include package="bungeni" file="security.zcml" />
-
-    <!-- Application Configuration -->
-    <include package="ploned.ui" file="meta.zcml" />
-
-
-
-    <include package="bungeni.alchemist" file="meta.zcml" />
-    <db:engine name="bungeni-db" 
-        url="postgres://localhost/bungeni"
-        echo="false"
-    />
-
-
-    <include package="bungeni.core" />
-    <includeOverrides file="overrides.zcml" package="bungeni.core" />
-</configure>
-"""
 # load zcml configuration
+zcml = open("site.zcml")
+zcml_slug = zcml.read()
 xmlconfig.string(zcml_slug)
 
 # initalize the app 
 app = BungeniApp()
 
-
-#mq = getUtility(IMessageQueueConfig)
-#print mq
-
-
-# import schema metadata
-import bungeni.models.schema.metadata
-import bungeni.alchemist.security.metadata
-
-# load workflow and register adapters
+# load workflows
 from bungeni.core.workflows import adapters
 adapters.register_generic_workflow_adapters()
 
+# load descriptors
+import bungeni.ui.workflow
+# ensure register version views
+import bungeni.ui.versions
+# load and apply-back UI descriptor customizations
+from bungeni.ui.descriptor import localization
+localization.forms_localization_init()
+import bungeni.feature.ui
+bungeni.feature.ui.setup_customization_ui()
+bungeni.feature.ui.apply_customization_ui()
+
+# setup serialization threads
 worker_threads = serialization_notifications()
 
-for thread in worker_threads:
-   try:
-     thread.join()
-   except (KeyboardInterrupt, SystemExit):
-     raise SystemExit
+# keep the process alive by blocking the process
+# until threads have finished (or have been interrupted)
+try:
+    for thread in worker_threads:
+      while thread.isAlive():
+          thread.join(5)
+except (KeyboardInterrupt, SystemExit):
+    print "ctrl -c pressed ! will exit"
+    raise SystemExit
 
 print "Threads finished executing ! exiting in 3 seconds !!"
 
