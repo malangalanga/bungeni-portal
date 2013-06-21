@@ -10,6 +10,7 @@ Has to be executed using the Bungeni Python - this script also sets up the Queue
 import sys
 import bungeni
 import logging
+import os
 
 from zope.configuration import xmlconfig
 from bungeni.core.serialize import serialization_notifications
@@ -25,7 +26,10 @@ console.setLevel(logging.INFO)
 logging.getLogger('').addHandler(console)
 
 # load zcml configuration
-zcml = open("site.zcml")
+# get script folder 
+current_folder = os.path.dirname(os.path.realpath(__file__))
+site_zcml_path = os.path.join(current_folder, "..","..","src","bungeni.main","bungeni","site.zcml")
+zcml = open(site_zcml_path)
 zcml_slug = zcml.read()
 xmlconfig.string(zcml_slug)
 
