@@ -33,6 +33,16 @@ priority = 20
 redirect_stderr = true
 autostart = false
 
+[program:serializer]
+command = %(user_bungeni)s/bin/python %(user_bungeni)s/data/scripts/serializer_daemon.py
+process_name = serializer
+stdout_logfile = %(user_logs)s/serializer.log
+directory = %(user_bungeni)s/data/scripts
+priority = 40
+redirect_stderr = true
+autostart = false
+
+
 [program:plone]
 command = %(user_plone)s/bin/paster serve %(plone_ini)s --pid-file=%(user_pid)s/plone.pid
 process_name = plone
