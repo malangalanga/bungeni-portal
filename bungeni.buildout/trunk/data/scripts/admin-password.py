@@ -2,7 +2,7 @@ import  sqlalchemy as rdb
 from zope import component
 from zope.configuration import xmlconfig
 
-from bungeni.core.i18n import _
+from bungeni import _
 from bungeni.alchemist import Session
 from bungeni.models import domain
 from bungeni.alchemist.interfaces import IDatabaseEngine
