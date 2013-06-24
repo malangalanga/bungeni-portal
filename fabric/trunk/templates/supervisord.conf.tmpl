@@ -29,7 +29,7 @@ command = %(user_bungeni)s/bin/paster serve %(bungeni_ini)s  --pid-file=%(user_p
 process_name = bungeni
 stdout_logfile = %(user_logs)s/bungeni.log
 directory = %(user_bungeni)s/bin
-priority = 20
+priority = 40
 redirect_stderr = true
 autostart = false
 
@@ -38,7 +38,7 @@ command = %(user_bungeni)s/bin/python %(user_bungeni)s/data/scripts/serializer_d
 process_name = serializer
 stdout_logfile = %(user_logs)s/serializer.log
 directory = %(user_bungeni)s/data/scripts
-priority = 40
+priority = 20
 redirect_stderr = true
 autostart = false
 
@@ -48,7 +48,7 @@ command = %(user_plone)s/bin/paster serve %(plone_ini)s --pid-file=%(user_pid)s/
 process_name = plone
 stdout_logfile= %(user_logs)s/plone.log
 directory = %(user_plone)s/bin
-priority = 30
+priority = 60
 redirect_stderr = true
 autostart = false
 
@@ -57,7 +57,7 @@ command = %(user_portal)s/bin/deliverance-proxy %(user_portal)s/proxy.xml
 process_name = portal
 stdout_logfile = %(user_logs)s/portal.log
 directory = %(user_portal)s/bin
-priority = 50
+priority = 60
 redirect_stderr = true
 autostart = false
 
@@ -82,7 +82,7 @@ autostart = false
 [program:openoffice]
 command = soffice -headless -nologo -env:UserInstallation=file://%(user_config)s/.openoffice -accept="socket,port=2002;urp;"
 stdout_logfile= %(user_logs)s/openoffice.log
-priority = 70
+priority = 10
 redirect_stderr = true
 autostart = false
 
@@ -108,7 +108,7 @@ autorestart=false
 [program:exist-sync]
 command = %(jython_config)s %(user_glue)s/src/consumer.py -c %(user_config)s/glue.ini -i %(glue_interval)s
 stdout_logfile = %(user_logs)s/exist_sync.log
-priority = 60
+priority = 90
 environment = JAVA_HOME="%(java)s"
 redirect_stderr = true
 stopsignal = INT
@@ -118,7 +118,7 @@ directory = %(user_glue)s
 [program:varnish]
 command = %(user_varnish)s/sbin/varnishd -f "%(varnish_vcl_file_path)s" -a %(varnish_bind_host)s:%(varnish_bind_port)s -F -s malloc,%(varnish_cache_size)s
 stdout_logfile = %(user_logs)s/varnish.log
-priority = 10
+priority = 150
 redirect_stderr = true
 stopsignal = INT
 autostart = false
