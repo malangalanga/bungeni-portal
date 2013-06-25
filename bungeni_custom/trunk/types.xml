@@ -62,8 +62,9 @@
          label="senate motion" container_label="senate motions" />
     <doc name="senate_question" archetype="question" enabled="true" 
          label="senate question" container_label="senate questions" />
-    <doc name="senate_tabled_document" archetype="tabled_document" descriptor="assembly_tabled_document" enabled="true" 
-         label="senate tabled document" container_label="senate tabled documents" />
+    <doc name="senate_tabled_document" archetype="tabled_document" 
+        descriptor="assembly_tabled_document" enabled="true" 
+        label="senate tabled document" container_label="senate tabled documents" />
     
     <doc name="report" enabled="true" label="report" container_label="reports" />
     <doc name="bicameral_document" enabled="true" 
@@ -104,10 +105,11 @@
         label="government" container_label="governments"
         privilege_extent="legislature">
     </group>
-    <group name="ministry" workflow="group" enabled="true" label="member" container_label="members"
+    <group name="ministry" workflow="group" enabled="true" 
+        label="ministry" container_label="ministries"
         note="A government ministry.">
         <member name="minister" workflow="group_member" enabled="true" 
-            label="ministry" container_label="ministries"
+            label="member" container_label="members"
             note="A Minister, defined as member of a ministry group." />
     </group>
     <group name="chamber" enabled="true" label="chamber" container_label="chambers"
