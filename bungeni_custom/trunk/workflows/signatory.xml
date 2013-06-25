@@ -60,9 +60,9 @@
     <!-- workflow transision -->      
     <transition title="Create"
         source=""
-        condition="signatory_manual_sign"
         destination="awaiting_consent"
         trigger="automatic"
+        condition="signatory_manual_sign"
     />
     <transition title="Create and Sign"
         source=""
