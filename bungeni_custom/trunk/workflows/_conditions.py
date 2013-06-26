@@ -36,8 +36,6 @@ from bungeni.core.workflows._conditions import (
     has_date_of_death,
     not_has_date_of_death,
     
-    # auditables
-    
     # child items
     # A doc is a draft iff its current current state is tagged with "draft".
     context_parent_is_draft, 
@@ -46,15 +44,16 @@ from bungeni.core.workflows._conditions import (
     context_parent_is_not_public,
     user_may_edit_context_parent,
     
-    # signatories
-    pi_has_signatories,
-    pi_signatories_check,
-    pi_allow_signature,
+    # signatory
     signatory_auto_sign,
     signatory_manual_sign,
-    pi_signature_period_expired,
-    pi_allow_signature_actions,
-    pi_unsign_signature,
+    signatory_allowed_sign,
+    signatory_allowed_actions,
+    signatory_period_elapsed,
+    signatory_allows_unsign,
+    doc_has_signatories,
+    doc_valid_num_consented_signatories,
+    
 )
 
 

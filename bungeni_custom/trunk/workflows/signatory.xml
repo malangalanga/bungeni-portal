@@ -76,7 +76,7 @@
         trigger="manual"
         roles="Owner"
         require_confirmation="true"
-        condition="pi_allow_signature"
+        condition="signatory_allowed_sign"
     />
     <transition title="reject"
         source="awaiting_consent"
@@ -84,7 +84,7 @@
         trigger="manual"
         roles="Owner"
         require_confirmation="true"
-        condition="pi_allow_signature_actions"
+        condition="signatory_allowed_actions"
     />
     <transition title="withdraw signature"
         source="consented"
@@ -92,19 +92,19 @@
         trigger="manual"
         roles="Owner"
         require_confirmation="true"
-        condition="pi_allow_signature_actions"
+        condition="signatory_allowed_actions"
     />
     <transition title="elapse signature - automatic"
         source="awaiting_consent"
         destination="elapsed"
         trigger="automatic"
-        condition="pi_signature_period_expired"
+        condition="signatory_period_elapsed"
     />
     <transition title="unsign document - automatic"
         source="consented rejected withdrawn"
         destination="awaiting_consent"
         trigger="automatic"
-        condition="pi_unsign_signature"
+        condition="signatory_allows_unsign"
     />
 
 </workflow>

@@ -222,14 +222,14 @@
     <transition title="Submit"
         source="draft submitted_signatories redraft"
         destination="submitted"
-        condition="pi_signatories_check"
+        condition="doc_valid_num_consented_signatories"
         roles="Drafter"
         trigger="manual"
     />
     <transition title="Submit to Signatories"
         source="draft redraft"
         destination="submitted_signatories"
-        condition="pi_has_signatories"
+        condition="doc_has_signatories"
         roles="Drafter"
         trigger="manual"
     />
@@ -257,7 +257,7 @@
     <transition title="Redraft (Automatic)"
         source="clarification_required"
         destination="redraft"
-        condition="pi_has_signatories"
+        condition="doc_has_signatories"
         trigger="automatic"
         note="incomplete document needs to be resubmitted to signatories"
     />

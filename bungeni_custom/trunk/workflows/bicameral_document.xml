@@ -237,14 +237,14 @@
     <transition title="Submit Legislative Proposal"
         source="draft redraft submitted_signatories"
         destination="submitted"
-        condition="pi_signatories_check"
+        condition="doc_valid_num_consented_signatories"
         trigger="manual"
         roles="Drafter"
     />
     <transition title="Submit to Signatories"
         source="draft redraft"
         destination="submitted_signatories"
-        condition="pi_has_signatories"
+        condition="doc_has_signatories"
         trigger="manual"
         roles="Drafter"
     />
