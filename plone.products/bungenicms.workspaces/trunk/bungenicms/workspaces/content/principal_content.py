@@ -18,6 +18,7 @@ from bungenicms.workspaces.config import MEMBER_SPACE_CONTENT
 from bungenicms.workspaces.config import GROUP_SPACE_CONTENT
 from bungenicms.workspaces.config import PUBLIC_FOLDER_ENTRY_NAME
 from bungenicms.workspaces.config import PRIVATE_FOLDER_ENTRY_NAME
+from bungenicms.workspaces.config import ROLES_FOR_WEB_SPACE
 
 def doSearch(acl_tool, groupId):
     """ Search for a group by id or title"""
@@ -90,11 +91,15 @@ def initializeAreas(pm_tool, acl_tool, request, member_folder_id=None):
     create_space(folder, "private_space", "Private Space", "private", member_id,
                     member, PRIVATE_FOLDER_ENTRY_NAME)
     member_groupIds = member.getGroupIds()
-    create_space(folder, "web_space", "Web Space", "publish", member_id,
-                    member, PUBLIC_FOLDER_ENTRY_NAME)
-    parent_space = getattr(folder, "web_space")
-    mark(parent_space, IMemberSpace)    
-    create_content(parent_space, MEMBER_SPACE_CONTENT, member,
+    for member_groupId in member_groupIds:
+        group_membership_roles = doSearch(acl_tool, member_groupId)
+        
+        if bool(set(ROLES_FOR_WEB_SPACE) & set(group_membership_roles)):
+            create_space(folder, "web_space", "Web Space", "publish", member_id,
+                            member, PUBLIC_FOLDER_ENTRY_NAME)
+            parent_space = getattr(folder, "web_space")
+            mark(parent_space, IMemberSpace)    
+            create_content(parent_space, MEMBER_SPACE_CONTENT, member,
                             "publish")
 
 
@@ -107,6 +112,7 @@ def initializeAreas(pm_tool, acl_tool, request, member_folder_id=None):
         for bungeni_group in acl_tool.bungeni_groups.enumerateGroups():
 
             if ((member_groupId == bungeni_group["id"])
+                and (not bool(set(ROLES_FOR_WEB_SPACE) & set(group_membership_roles)))
                 and (bungeni_group["id"]not in groups_space.objectIds())):
                 group = acl_tool.bungeni_groups.getGroupById(bungeni_group["id"])                 
                 create_space(groups_space, bungeni_group["id"],

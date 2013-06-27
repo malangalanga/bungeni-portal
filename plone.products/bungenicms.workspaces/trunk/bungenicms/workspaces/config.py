@@ -24,4 +24,6 @@ GROUP_SPACE_CONTENT = [{"id": "members_blog", "title": "Members Blog",
                           {"id": "events", "title": "Events", 
                             "type":"Folder", "addable_types":["Event"]}                            
                         ]
+                        
+ROLES_FOR_WEB_SPACE = ["bungeni.MemberAssembly","bungeni.MemberSenate"]                                                
 
