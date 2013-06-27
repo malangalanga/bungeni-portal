@@ -71,16 +71,20 @@ from bungeni.core.workflows._conditions import (
 # question
 
 def is_written_response(question):
-    """question: Require a written response."""
+    """question: Require a written response.
+    """
     return question.response_type == "written"
 
 def is_oral_response(question):
-    """question: Require an oral response."""
+    """question: Require an oral response.
+    """
     return question.response_type == "oral"
 
 def response_allow_submit(question):
-    """question: Require that the event response has been completed."""
-    return in_state(child(question, "event_response"), "completed")
+    """question: Require that the event response has been completed.
+    """
+    event_response = child(question, "event_response")
+    return in_state(event_response, "completed")
 
 
 
