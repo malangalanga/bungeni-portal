@@ -2,26 +2,32 @@
    GENERAL - Styles are applied site-wide
    ========================================================================== */
 /*
- * These are the general styles applied to both portal and workspace 
- * you can overwrite this section in the specific sections of (template-portal, template-workspace and template-portal-exist) 
- *
+ * These are the general styles applied to both portal (.template-portal)and the
+ * workspace (.template-workspace). Within both portal and workspace further
+ * customizations can be made for bungeni (.section-bungeni-workspace),  
+ * plone (.site-plone) and eXist (.template-portal-eXist) 
  */
- 
+
 /* Top-layer
 -------------------------------------------------------------- */
 #top-layer {
     text-align:center;
-    border: 1px solid transparent;
-    background: #434343;
+    border: 0 none;
+    background: transparent;
 }
 #top-layer div {
-    background: transparent;
     border: 0 none;    
+    background: #7e7e7e !important;
+    background: linear-gradient(top, #EFEFEF 0%, #BBB 100%);
+    background: -moz-linear-gradient(top, #EFEFEF 0%, #BBB 100%);
+    background: -webkit-linear-gradient(top, #EFEFEF 0%,#BBB 100%);
+    box-shadow: 0px 0px 9px rgba(0,0,0,0.15);    
 }
 #top-layer ul#portal-personaltools {
     background: transparent;
     border: 0 none;
     line-height: 0.7em;
+    margin-right: 5px;
 }
 #top-layer ul#portal-personaltools li {
     border: 0 none;
@@ -33,7 +39,7 @@
     color: #fff;
 }
 #top-layer ul#portal-personaltools li a:hover {
-    color: #888;
+    color: #fffd6e !important;
 }
 #top-layer ul#portal-languageselector {
     font-size: 100%;
@@ -42,10 +48,11 @@
     color: #fff;
 }
 #top-layer ul#portal-languageselector li a:hover {
-    color: #888;
+    color: #fffd6e !important;
+    background:transparent !important;
 }
 #top-layer ul#portal-languageselector li.selected a {
-    color: #000000;
+    color: #000000 !important;
 }
 /*#top-layer ul#portal-personaltools li a.link-overlay {
     margin-right:-60px;
@@ -78,20 +85,21 @@
     border-bottom-right-radius: 5px;
     border-top: 0 none;
     font-size:.9em !important;
-    display:none;
+}
+
+/* Loading...
+-------------------------------------------------------------- */
+div.processing_indicatron {
+    background: url("/static/images/progressbar.gif") no-repeat scroll center center #FFFFFF;
 }
 
 /* Breadcrumbs
 -------------------------------------------------------------- */
 #portal-breadcrumbs {
     font-size: 95%;
-    color: #000;
+    color: #555;
     background: #fff;
     text-align: left;
-}
-#portal-breadcrumbs a {
-    color:#cc6637;
-    font-weight:bold;
 }
 #portal-breadcrumbs a:hover {
     text-decoration: underline;
@@ -122,28 +130,28 @@
 -------------------------------------------------------------- */
 div.main-column h1 {
     font-weight: bold;
-    line-height: 20px;
-    color: #86a26a !important;
+    line-height: 30px;
+    color: #313131 !important;
     text-shadow: 0 0 1px #fff;
-    text-align:center;
+    text-align:left;
 }
 div.main-column h1.title {
     border: 0 none;
     font-size: 150%;
     font-weight: bold;
     line-height: 20px;
-    text-shadow: 0 0 1px #fff;
+    text-shadow: 0 0 .5px #fff;
     text-align: center;
-    color:#86a26a !important;
+    color:#cfc !important;
 }
 div.main-column h1.reportmaintitle,
 div.main-column h1.reportdoctype {
     font-size: 180%;
-    color:#86a26a !important;
+    color:#828282 !important;
 }
 div.main-column h2.reportdate {
     font-size: 180%;
-    color:#86a26a !important;
+    color:#828282 !important;
     font-weight: bold !important;
 }
 
@@ -153,25 +161,23 @@ div.main-column h1.reportheading {
     border-radius: 6px;
     font-size: 130%;
     font-weight: bold !important;
-    border:1px solid #f79f10;
-    color:#000 !important;
+    border:1px solid #ccc;
+    color:#828282 !important;
 }
 .documentContent div h2:first-child {
-    font-size:1.1em;
+    font-size:1.4em;
     font-weight:normal !important;
-    color:#86a26a !important;
+    color:#c8631b !important;
 }
 div.main-column h2.reporttitle {
     text-align:left;
-    color:#86a26a !important;
+    color:#f79f10 !important;
     font-size:1.1em;    
-    font-weight:normal !important;
+    font-weight:bold !important;
 }
 div.main-column h2 {
     text-shadow: 0px 0px 1px #fff;
-    font-size: 120%;
-    font-weight: normal !important;
-    color: #86a26a !important;
+    color: #C8631B !important;
     text-align: center;
 }
 div.main-column h2 span {
@@ -181,8 +187,6 @@ div.main-column h2 span {
 }
 div.main-column h3 {
     text-shadow: 0px 0px 1px #fff;
-    font-size: 100%;
-    font-weight: normal !important;
 }
 
 /* portal-columns-*
@@ -199,15 +203,15 @@ div.main-column h3 {
     font-weight:bold;
     line-height:20px;
 }
-/* portal-column-one */
+
 #portal-column-one {
     border-color: #aaf;
 }
 .section-bungeni-workspace #portal-column-one {
-    border-color: #86a26a;  
+    border-color: #FB9C14;  
 }
 .section-bungeni-archive #portal-column-one {
-    border-color: #86a26a;
+    border-color: #FB9C14;
 }
 
 /* documentContent
@@ -227,7 +231,7 @@ input.inputLabelActive {
 }
 #whats-on-overview h1 a {
     text-decoration: none;
-    color: #86a26a !important;
+    color: #C8631B !important;
 }
 #whats-on-overview p {
     color: #222;
@@ -244,8 +248,8 @@ input.inputLabelActive {
 }
 #portal-column-content #whats-on-overview .whats-on-viewlet dd {
     border: 0 none;
-    border-top: 4px solid #c5dab2;
-    border-bottom: 1px solid #86a26a;
+    border-top: 4px solid #f9ac32;
+    border-bottom: 1px solid #fcc373;
 }
 #portal-column-content #whats-on-overview .whats-on-viewlet dd ul {
     background: #fff;
@@ -314,8 +318,8 @@ input.inputLabelActive {
 /*
  * Portlets
  */
-.portlet, .portletHeader, .portletFooter { border: 0 none;z-index:99998 !important; } 
-.portletItem { border: 1px solid #86a26a; border-top: 0 none; }
+.portlet, .portletHeader, .portletFooter { border: 0 none; }
+.portletItem { border: 1px solid #FAAD5F; border-top: 0 none; }
 #portal-column-one .portletHeader,
 #portal-column-content .portletHeader,
 #portal-column-two .portletHeader,
@@ -332,28 +336,27 @@ input.inputLabelActive {
 #portal-column-content .portletItem,
 #portal-column-content .portletNews .portletItem,
 #portal-column-two .portletItem {
-    border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
 }
 #portal-column-one .portletFooter,
 #portal-column-content .portletFooter,
 #whats-on-overview .portletFooter {
-    border: 1px solid #86a26a;
+    border: 1px solid #FAAD5F;
 }
 /* hides the portlet header. */
 #portal-column-one .portlet .portletItem.even,
 #portal-column-one .portlet .portletItem {
     background: #fff;
-    border: 1px solid #86a26a;
+    border: 1px solid #FB9C14;
 }
 #portal-column-one .portlet .portletItem a {
     background: #fff;
     border: 0 none;
 }
 #portal-column-one .portlet .portletItem a.navTreeCurrentItem {
-    background: #86a26a;
-    border-bottom-color: #86a26a !important;
+    background: #fcc373;
+    border-bottom-color: #FB9C14 !important;
     border-top: 0 none !important;
     line-height: 20px;
 }
@@ -369,12 +372,8 @@ input.inputLabelActive {
 #portal-column-one .portlet .portletItem .navTreeCurrentItem {
     border:0 none !important;
 }
-#portal-column-one .portlet .portletItem .navTreeCurrentItem a {
-    background-color:#21a1ba !important;
-    color:#ffffff !important;
-}
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode a {
-    font-weight: normal;
+    font-weight: bold;
     background: #eee;
 }
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul {
@@ -382,19 +381,12 @@ input.inputLabelActive {
 }
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul a {
     font-weight: normal;
-    font-size: 95%;
     background: #fff;
     border: 0 none;
-    color:#000 !important;
 }
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul a:hover,
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul a.navTreeCurrentItem {
-    background: #c5dab2 !important;
-    
-}
-#portal-column-one .portlet .portletItem ul li.navTreeCurrentNode ul a:hover,
-#portal-column-one .portlet .portletItem ul li.navTreeCurrentNode a.navTreeCurrentItem {
-    background: #c5dab2 !important;
+    background: #eee;
 }
 #portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul ul {
     border: 0 none;
@@ -405,23 +397,23 @@ input.inputLabelActive {
     font-weight: normal;
 }
 #whats-on-overview .portlet dd {
-    border: 1px solid #86a26a;
+    border: 1px solid #FAAD5F;
     border-top: 0 none;
 }
 /* portal-column-two portlets */
 #portal-column-two .portlet dd {
-    border: 1px solid #86a26a;
+    border: 1px solid #FAAD5F;
     border-top: 0 none;
 }
 /*
  * DocumentActions & contentActions
  */
 .contentActions {
-    background: url(/static/images/content-actions-bg.png) repeat-x top left;
+    background: #acacac;
     border: 0 none;
 }
 .contentActions a {
-    color: #000;
+    color: #000 !important;
     text-decoration: none;
 }
 .contentActions li {
@@ -431,196 +423,132 @@ input.inputLabelActive {
     border: 0 none;
 }
 .actionMenu .actionMenuContent ul {
-    border: 1px solid #86a26a;
+    border: 1px solid #FB9C14;
     border-bottom: 0 none;
     border-top: 0 none;
-    background:#c5dab2;
+    background:#f39e39;
 }
 .actionMenu .actionMenuContent ul li {
     border: 0 none;
-    border-bottom: 1px solid #aaf;
+    border-bottom: 1px solid #7e7e7e;
+    background:#acacac;
 }
 .actionMenu .actionMenuContent ul li a {
+    background: none;
     color: #000;
 }
 .actionMenu .actionMenuContent ul li a:hover {
-    background-color: #cceaf3 !important;
+    background-color: #abdae4 !important;
     color: #000;
 }
 .actionmenu .actionMenuHeader ul#contentActionMenus li.context_translate a {
 	background-image:none !important;
 	background:none !important;
-}
-dl#context_actions.actionMenu .actionMenuContent ul {
-    border: 0 none;
-}
-dl#context_actions.actionMenu .actionMenuContent ul li {
-    border-bottom: 0 none;
-}
-/*
+}/*
  * portal-globalnav
  */
 div#portal-globalnav {
-    background: #fff;
+    background: transparent;
+    text-align: left;
 }
 div#portal-globalnav ul.level0 {
     border: 0 none;
 	list-style-type: none;
-    background: #fff;
+    background:transparent;
 }
 div#portal-globalnav ul.level0 li {
     border-radius: 0;
+    display:inline-block;
+    float:none;
+    padding:5px 10px;
+    height:18px;
 }
+div#portal-globalnav li.plain,
+div#portal-globalnav li#portaltab-admin-content,
+div#portal-globalnav li#portaltab- {
+    background:#333333;
+}
+
 div#portal-globalnav ul.level0 li a { 
-    text-shadow: 0 0 0 #fff;
-    color: #fff;
-    background: #86a26a;
-    border: 1px solid #aaa;
-    border-bottom: 1px solid #86a26a;
-    -webkit-border-top-left-radius: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-topright: 5px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    font-family: tahoma,verdana,sans-serif;
-    font-size: 12px;
+    background:#333333;
+    border:0 none;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;    
+    color:#fff;
 }
-div#portal-globalnav ul.level0 li.selected a,
-div#portal-globalnav ul.level0 li a:hover {
-    font-weight: normal;
-    color: #fff;
-    border-right: 1px solid #c5dab2;
-    border-left: 1px solid #c5dab2;
-    border-top: 1px solid #c5dab2;
-    border-bottom: 1px solid #c5dab2;
-    background:#c5dab2;
+.site-plone div#portal-globalnav .selected {
+    background-color:#333333;
 }
-/*
- * Notes:
- * - this has been positioned absolutely because of it's location in the
- *   html structure, the current layout is:
- *   <ul class="level0">
- *       <ul class="level1">
- *           <li>...</li>
- *        </ul>
- *        <li>...</li>
- *   </ul>
- *   a suggested structure would be to have the <ul> elements separately:
- *   !+IMPLEMENTED (9th July, 2012 - this is current layout) 
- *   <ul class="level0">...</ul>
- *   <ul class="level1">...</ul>
- */
- div#portal-globalnav-bottom {
+.site-plone div#portal-globalnav .selected a {
+    text-decoration:underline;
+}
+div#portal-globalnav ul.level0 li.selected a {
+    font-weight: bold;
+    border-bottom-color: transparent;
+    border-color: #333333;
+    background:#333333;
+    color:#fff;
+} 
+div#portal-globalnav ul.level0 a:hover {
+    color:#ffffff;
+    text-decoration:underline;
+    background: #333333 !important;
+    background: linear-gradient(top, #EFEFEF 0%, #BBB 100%);
+    background: -moz-linear-gradient(top, #EFEFEF 0%, #BBB 100%);
+    background: -webkit-linear-gradient(top, #EFEFEF 0%,#BBB 100%);
+    box-shadow: 0px 0px 9px rgba(0,0,0,0.15);
+}
+
+div#portal-globalnav ul.level0 li#upper-hse,
+div#portal-globalnav ul.level0 li#upper-hse a {    
+    background: #b22b14 !important; 
+    border: 0px;	
+} 
+div#portal-globalnav ul.level0 li#lower-hse,
+div#portal-globalnav ul.level0 li#lower-hse a{    
+    background: #333333 !important;	
+    border: 0px; 
+}
+
+div#portal-globalnav ul li#lower-hse a,
+div#portal-globalnav ul li#upper-hse a {
+    font-weight:bold;
+    color:#eeeeee;                 
+}
+
+div#portal-globalnav-bottom {
  	border:0;
 }
 div#portal-globalnav-bottom:empty{
     display:none
 }
-div#portal-globalnav ul.level1 {
+.template-portal div#portal-globalnav ul.level1 {
     border-top: 0 none;
-    background: #c5dab2;
+    background: #7E7E7E;
+    bottom:inherit;
 }
-div#portal-globalnav ul.level1 a {
+div#portal-globalnav ul.level1 li a {
     background: transparent;
     border: 0 none;
     text-shadow: none;
-    color:#000000;
+    color: #fff !important;
 }
 div#portal-globalnav ul.level1 li a:hover {
     color: #000;
     text-decoration: underline;
     border: 0 none;
 }
-div#portal-globalnav li.selected a {
+div#portal-globalnav ul.level1 li.selected a {
     background: transparent;
     border: 0 none;
     font-weight: normal;
-    color: #d50005 !important;
+    color: #fff !important;
+    text-decoration:underline;
 }
 .template-portal div#portal-globalnav ul.level1 li.selected a {
-	color:#CC6637 !important;
+	color:#F9C675 !important;
 }
 
-/*
- * Notes:
- * this tag is not used for any data or structure.
- * it is used to assist in the page layout. The element(and css) 
- * could be removed from this use by fixing the <ul> element
- * as mentioned in the previous Note.
- *
- *
- * To remove the bar completely - remove the ".section-bungeni-business"
- * part from below
- *
- * To restore it to every page, remove this next style and leave the last one.
- *
- */
-
-/*
- * portletArchiveDates
- */
-#portletArchiveDates .portletHeader {
-    text-align: right;
-    background: #fff;
-    color: #444;
-    border: 0 none;
-}
-#portletArchiveDates .portletHeader span.tile {
-    text-align: right;
-}
-#portletArchiveDates .portletItem {
-    border: 0 none;
-    background: none;
-}
-#portletArchiveDates .portletItem form {
-    border: 1px solid #ccc;
-    background: #eee;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    text-shadow: 0 0 0 #fff;
-    border-bottom: 1px solid #aaa;
-}
-#portletArchiveDates .portletItem form .field input {
-    border: 1px solid #aaa;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    font-size: 95%;
-    background: #fff;
-}
-#portletArchiveDates .portletItem form label {
-    font-size: 95%;
-}
-#portletArchiveDates .portletItem form #actionsView {
-    border-left: 1px solid #ccc;
-}
-#portletArchiveDates .portletItem form #actionsView .actionButtons input {
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    text-align: left;
-    background-position: 5px center;
-    background-color: #fff;
-}
-#portletArchiveDates .portletItem form #actionsView .actionButtons input:hover {
-    background-color: #eef;
-}
-#portletArchiveDates .portletItem form #actionsView .actionButtons input:active {
-    background-color: #eef;
-}
-#portletArchiveDates .portletItem.dates-filtered {
-    background: #fff !important;
-    background: #FFF68F;
-    border-color: #EEE685;
-    border-bottom-color: #BDB76B;
-}
-#portletArchiveDates .portletItem.dates-filtered form {
-    background: #FFF68F;
-    border-color: #EEE685;
-    border-bottom-color: #BDB76B;
-}
 /* table
 -------------------------------------------------------------- */
  
@@ -643,7 +571,7 @@ table.listingdescription tr:hover,
 .stx table tr:hover,
 .yui-skin-sam .yui-dt table tr.yui-dt-odd:hover,
 .yui-skin-sam .yui-dt table tr:hover {
-    background:#e3f3d5;
+    background:#F5C276;
 }
 .yui-skin-sam .yui-dt table tr.yui-dt-odd {
     background: #e6e6e6;
@@ -655,19 +583,18 @@ table.listing th,
 table.listingdescription th,
 .stx table th,
 .yui-skin-sam .yui-dt-first th {
-    background:#d8d8d9 url(../images/w-globalnav-level1-bg.png) bottom left repeat-x !important;
+    background:#acacac !important;
     border: 0 none;
-    border-left: 1px solid #bbf;
-    border-right: 1px solid #88f;
+    border-right: 1px solid #c6c1c1;
     border-top: 0 none;
     text-shadow: 0 0 0 #fff;
-    color: #444;
+    color: #000 !important;
 }
 .yui-skin-sam .yui-dt-last th {
     background: #fff !important;
 }
 .yui-skin-sam .yui-dt-first th:active {
-    background:#d8d8d9 url(/static/images/w-globalnav-level0-a.png) top left -2px !important;
+    background:#d8d8d9 !important;
 }
 .yui-skin-sam .yui-dt-last th input {
     background: #fff;
@@ -682,23 +609,19 @@ table.listing th a,
 table.listingdescription th a,
 .stx table th a,
 .yui-skin-sam .yui-dt-first th a {
-    color: #222;
-    border: 0 none;
-}
-table.listing td a,
-table.listingdescription td a,
-.stx table th a,
-.yui-skin-sam td a {
-    color: #cc6646;
+    color: #000;
     border: 0 none;
 }
 table.listing td,
 table.listingdescription td,
 .stx table td,
 .yui-skin-sam .yui-dt table tr td {
-    border-right: 1px solid #aaf;
+    border-right: 1px solid #c6c1c1;
     color: #222;
     text-shadow: 0 0 0 #fff;
+}
+table.grid td {
+    border: 1px dotted #7e7e7e;
 }
 /* formTabs
 -------------------------------------------------------------- */
@@ -732,29 +655,32 @@ li.formTab a:hover,
 li.formTab a:active,
 li.formTab a.selected {
     color: #222;
-    border-top: 2px solid #86a26a;
-    border-top-color: #86a26a;
+    border-top: 2px solid #FAAD5F;
+    border-top-color: #FB9C14;
     border-right: 1px solid #999;
     border-left: 1px solid #999;
-    border-bottom: 2px solid #c5dab2;
+    border-bottom: 2px solid #f9ac32;
     text-decoration: none;
-    background:#c5dab2 url(../images/globalnav-level0-a.png) top left repeat-x;
+    background:#f9ac32 url(/static/images/globalnav-level0-a.png) top left repeat-x;
 }
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:hover,
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:active,
 dd#items-to-be-scheduled-dl ul.formTabs li.formTab a.selected {
     text-align: left;
     text-decoration: none;
-    background: #86a26a url(../images/w-globalnav-level0-a.png) top left repeat-x;
+    background: #f9ac32;
     border: 1px solid #aaa;
-    border-bottom-color: #c5dab2;
+    border-bottom-color: #f9ac32;
     border-top-color: #999;
     color: #222;
 }
 
 /* formPanel
 -------------------------------------------------------------- */
- .formPanel,
+.formPanel {
+    border: 0 none !important;
+}
+.section-bungeni-workspace .formPanel,
 dd#items-to-be-scheduled-dl .formPanel {
     text-align: center;
     border: 1px solid #aaa;
@@ -791,14 +717,15 @@ dl.portalMessage dd {
     border: 0 none;
     color: #a00;
     font-style: italic;
-    font-size:1.2em;
+    font-size:1.1em;
     text-shadow: 0.1em #f79f10;
 }
 #display_form_spacer {
-    background: #c5dab2 url(../images/globalnav-level1-bg.png) bottom left repeat-x;
+    background: #f9ac32 url(/static/images/globalnav-level1-bg.png) bottom left repeat-x;
 }
 .template-portal dd#fieldset-written-question-response div.documentDescription {
-    background:#c5dab2 !important;
+    background: #f9ac32 url(/static/images/globalnav-level1-bg.png) bottom left repeat-x;
+    color:#000;
     font-weight:normal;
 }
 .formPanel .field .content-left-column,
@@ -810,6 +737,7 @@ dl.portalMessage dd {
     border: 0 none;
     background: #eee;
 }
+
 .formPanel .field .content-right-column {
     text-shadow: 0 0 0 #fff;
     color: #333;
@@ -846,7 +774,9 @@ dl.portalMessage dd {
 .formPanel.Report4Sitting .field .content-right-column h2 {
     text-align: left;
 }
-
+.formPanel, dd#items-to-be-scheduled-dl .formPanel div:last-child {
+    text-align: justify !important;
+}
 /* Calendar
 -------------------------------------------------------------- */
 div.calendar th.description a,
@@ -906,72 +836,8 @@ span.yui-button.yui-link-button span a {
 #field\.form\.item_types {
     border-bottom: 1px dotted #ccc;
 }
-
-/* cynin customizations
+* frontpage
 -------------------------------------------------------------- */
-#portal-titlebar {
-    background:#fff !important;
-    border-bottom: 1px solid #ccc;
-}
-#col1_content {
-    background: #E5E5E5;
-    border-right: 1px solid #afafaf;
-}
-#col1_content #sidenavigationlogoholder {
-    border: 0 none;
-    border-radius: 0;
-    -moz-border-radius: 0;
-    border-bottom: 1px solid #ccc;
-    background: transparent;
-}
-#col1_content .verticalnavigationholder {
-    border-top: 1px solid #ccc !important;
-}
-#col1_content dd.portletItem {
-    border: 0 none;
-}
-#col1_content #portal-languageselector select {
-    font-size: 90%;
-    border: 1px solid #ccc;
-}
-div.navTreeCurrentNode, .portletNavigationTree div.navTreeCurrentNode.hover, .navTreeHome.navTreeCurrentNode, .navTreeHome.navTreeCurrentNode.hover {
-    border: 1px solid #fff;
-}
-#col3 {
-    border:0 none;
-    background: transparent;
-}
-/* frontpage
--------------------------------------------------------------- */
-div.main-column #collage h2 {
-    text-align: justify;
-    text-shadow:  0 0 0 #fff;
-    font-size: 120%;
-    font-weight: bold !important;
-    color: #86a26a !important;
-}
-#collage .three-columns-equal .block_1 ul {
-    list-style-type:none; 
-}
-#collage .three-columns-equal .block_1 ul {
-#    list-style-image:none;  
-#    list-style-type:square;
-}
-#collage .three-columns-equal .block_1 ul li.navigation,
-#collage .three-columns-equal .block_1 ul li.plain{
-    list-style-image:none;  
-    list-style-type:none;
-}
-#collage .three-columns-equal .block_1 ul li a{
-    border-bottom: 0px;
-    text-align: left;  
-}
-#collage .three-columns-equal .block_1 ul li a:visited {
-    color:#436976;
-}
-#collage .tileImage {
-    border:1px solid black;
-}
 .template-document_view #content h1.documentFirstHeading {
     font-size:160% !important;
 }
@@ -979,7 +845,7 @@ div.main-column #collage h2 {
     font-size:115% !important;
 }
 .template-document_view #content h2 {
-    font-size: 125% !important;
+    font-size: 140% !important;
     font-weight: bold !important;  
 }
 .template-document_view #content h3,
@@ -1026,37 +892,43 @@ div.main-column #collage h2 {
     text-align: center;
     border: 0 none;
     border-top: 1px solid #D4E2EF;
-    background: #fff;
+    background: #fff !important;
 }
 
 #portal-footer div {
     border-top: 1px solid #ccc;
-    background: #fff;
+    background: #fff !important;
 }
-
 /* =============================================================================
    TEMPLATE PORTAL - Styling applied on portal
    ========================================================================== */
 
 .template-portal {
-    background: #c5dab2 !important;
+    background: #dcdcdc url('../images/greenBannerUpdated.png') no-repeat center top !important;
 }
 
 .template-portal #header-wrapper {
-    background: #86a26a;
-    border-bottom: 15px solid #c1c1c0;
+    background: transparent;
+    border-bottom: 17px solid transparent;
 }
 
 .template-portal #header-in-left {
-    background: #86a26a;
+    background: transparent;
 }
 
 .template-portal #header-in-right {
-    background: #86a26a;
+    background: transparent;
 }
 
 .template-portal #top-layer div {
-    background-color:#434343;
+    padding-left:5px;
+    background-color:#333333 !important;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.template-workspace #top-layer div {
+    background-color:transparent;
 }
 
 .template-portal #visual-table-wrapper {
@@ -1064,10 +936,10 @@ div.main-column #collage h2 {
     border: 0 none;
 }
 .template-portal #portal-logo-wrapper {
-    background:#fff url(/static/images/portal_img.png) no-repeat bottom right;
+    background:transparent url(../images/portal_img.png) no-repeat bottom right;
 }
 .template-portal #portal-logo {
-    background: url(../images/portal_banner.png) top left no-repeat;
+    background:transparent url(../images/Armoirie.png) top left no-repeat;
 }
 /* 
  * if display is set to block it will display the logo used on the workspace
@@ -1084,19 +956,18 @@ div.main-column #collage h2 {
 .template-portal #top-layer ul#portal-languageselector li a {
     color: #fff;
 }
-.template-portal #top-layer ul#portal-languageselector li.selected a {
-    color: #000000;
-}
+
 .template-portal #portal-breadcrumbs {
-    border-bottom:1px solid #86a26a;
+    border-bottom:1px solid #dcdcdc;
 }
 
 /*
  * main-columns
  */
 
+.template-portal #visual-table-wrapper, 
 .template-portal div.main-column {
-    background: #fff;
+    background:#fff;
 }
 
 .template-portal #portal-footer {
@@ -1126,14 +997,13 @@ div.main-column #collage h2 {
  * DocumentActions & contentActions
  */
  
- /*
- * portal-globalnav
- */
 
-
-/* Login */
-.template-login_form div#portal-globalnav {
-    display: none;
+#login-forgotten-password .discreet {
+    color: #76797C !important;
+}
+#login_form .formControls .context{
+    background: transparent url(http://localhost:8082/plone/linkTransparent.png) 9px 1px no-repeat;
+    color: Black;
 }
 /*
  * Table styles
@@ -1145,8 +1015,8 @@ div.main-column #collage h2 {
     border-left: 0 none;
     border-top: 0 none;
     border-right: 1px solid #aaa;
-    border-bottom:1px solid #c5dab2;
-    background: url(../images/globalnav-level1-bg.png) bottom left repeat-x !important;
+    border-bottom:1px solid #f9ac32;
+    background: url(/static/images/globalnav-level1-bg.png) bottom left repeat-x !important;
 }
 /*
  * formTabs
@@ -1156,6 +1026,9 @@ div.main-column #collage h2 {
  /*
  * formPanel styles
  */
+ .template-portal .formPanel {
+    border: none;
+}
 .template-portal dl.portalMessage {
     border: 1px solid #800;
     color: #333;
@@ -1172,30 +1045,30 @@ div.main-column #collage h2 {
 .section-bungeni-login form#alchemist-form.bungeniapp-form {
     border-top: 1px solid #ddd;
 }
-
+.formPanel div:last-child {
+    text-align: justify !important;
+}
 /* =============================================================================
    TEMPLATE WORKSPACE - Styling applied on workspace
    ========================================================================== */
-
-.template-workspace #header-wrapper {
-    text-align:center;
-    background: #4d4d4d url(/static/images/workspace-border-right.png) top right repeat-y;
-}
-
-.template-workspace #top-layer {
-    border: 0 none;
-    border-bottom: 1px solid #4d4d4d;
-    background: #4d4d4d url(/static/images/workspace-border-top.png) top center repeat-x;
-}
 .template-workspace #portal-logo {
     display: block;
-    background:#4d4d4d url(/static/images/empowered.png) center right no-repeat;
+    background:transparent url(/static/images/empowered.png) center right no-repeat;
 }
 .template-workspace #portal-breadcrumbs {
     border-bottom:1px solid #d4e2ef;
 }
 .template-workspace #portal-logo img {
     border: 0 none;
+}
+.template-workspace #top-layer ul#portal-personaltools li a:hover {
+    color: #fffd6e !important;
+}
+.template-workspace #top-layer ul#portal-languageselector li a:hover {
+    color: #fffd6e !important;
+}
+.template-workspace #top-layer ul#portal-languageselector li.selected a:hover {
+    color: #000000;
 }
 
 /*
@@ -1204,11 +1077,41 @@ div.main-column #collage h2 {
 .template-workspace #portal-breadcrumbs {
     border-bottom:1px solid #d4e2ef;
 } 
-.template-workspace.section-bungeni-workspace #portal-breadcrumbs a {
-    color:#21a1ba;
-    font-weight:bold;
+
+.template-workspace  div#portal-globalnav ul.level0,
+.template-workspace  div#portal-globalnav ul.level1 {
+    width: 100%;
+}
+.template-workspace div#portal-globalnav ul.level1 {
+    background: #016d9a;
+}
+.site-plone.template-workspace div#portal-globalnav ul.level1 {
+    background: #acacac;
+}
+.site-plone.template-workspace div#portal-globalnav .level1 .selected {
+    background-color: #acacac;
+}
+.site-plone.template-workspace div#portal-globalnav .level1 .selected a {
+    color:#313131 !important;
+}
+.template-workspace.section-bungeni-workspace div#portal-globalnav ul.level1,
+.template-workspace.section-bungeni-admin div#portal-globalnav ul.level1 {
+    background: #acacac;
+}
+.template-workspace div#portal-globalnav li#portaltab-admin-content,
+.template-workspace div#portal-globalnav li#portaltab-admin-content a,
+.template-workspace div#portal-globalnav li#portaltab-admin-content a:hover,
+.template-workspace div#portal-globalnav li#portaltab-,
+.template-workspace div#portal-globalnav li#portaltab- a,
+.template-workspace div#portal-globalnav li#portaltab- a:hover,
+.section-bungeni-workspace div#portal-globalnav ul.level1 li a {
+    background: #acacac !important;
+    color:#000000 !important;
 }
 
+.template-workspace  div#portal-globalnav ul.level0 {
+    bottom: 0 !important
+}
 /*
  * portal-searchbox
  */
@@ -1216,6 +1119,9 @@ div.main-column #collage h2 {
 .template-workspace #portal-search {
     text-align: right;
     text-transform: none;
+}
+.template-workspace #portal-search form p a {
+    display: block;
 }
 /*
  * main-columns
@@ -1235,6 +1141,10 @@ div.main-column #collage h2 {
     font-weight: bold !important;
     color: #222 !important;
 }
+.template-workspace.section-bungeni-workspace div.main-column .yui-layout-hd h2 {
+    color: #ffffff !important;
+    text-shadow:none;
+}
 
 .template-workspace.section-bungeni-admin div.main-column h2,
 .template-workspace.section-bungeni-admin div.main-column h1 {
@@ -1249,7 +1159,7 @@ div.main-column #collage h2 {
     text-align: left;
 }
 .template-workspace div.main-column p {
-    text-shadow: 0 0  0 #fff;
+    text-shadow: 0 0 0 #fff;
 }
 /*
  * portal-columns-* styles
@@ -1276,14 +1186,8 @@ div.main-column #collage h2 {
 .template-portal .dhtmlx_calendar_main .dhx_cal_container,
 .template-portal .dhtmlx_calendar_main .dhx_scale_bar,
 .template-portal .dhtmlx_calendar_main .dhx_scale_hour {
-    background: #C5DAB2;
-    border-color: #C5DAB2;
-}
-div.dhx_cal_navline {
-    color:#000 !important;
-}
-div.dhx_cal_navline div.active {
-    background:#86A26A !important;
+    background: #F8BA61;
+    border-color: #FB9C14;
 }
 .template-workspace.section-bungeni-archive .dhx_cal_header,
 .template-workspace.section-bungeni-archive .dhx_cal_data,
@@ -1293,7 +1197,7 @@ div.dhx_cal_navline div.active {
 .template-workspace.section-bungeni-members .dhx_cal_data,
 .template-portal .dhtmlx_calendar_main .dhx_cal_header,
 .template-portal .dhtmlx_calendar_main .dhx_cal_data{
-    border-color: #86a26a;
+    border-color: #FB9C14;
 }
 .template-workspace.section-bungeni-archive .dhx_cal_tab,
 .template-workspace.section-bungeni-business .dhx_cal_tab,
@@ -1324,7 +1228,7 @@ div.dhx_cal_navline div.active {
 .template-workspace.section-bungeni-archive .dhx_scale_holder_now,
 .template-workspace.section-bungeni-business .dhx_scale_holder_now,
 .template-workspace.section-bungeni-members .dhx_scale_holder_now,
-.template-portal .dhx_scale_holder_now {
+.template-portal .dhtmlx_calendar_main .dhx_scale_holder_now {
     background-image:url(../images/databg_now3.png);
 }
 .template-workspace.section-bungeni-archive .dhx_now .dhx_month_head,
@@ -1351,6 +1255,9 @@ div.dhx_cal_navline div.active {
     border: 0 none;
     color: #222;
 }
+.section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li a {
+    /*border-right: 1px solid #aaa;*/
+}
 .template-workspace.section-bungeni-archive #portal-column-one .portlet .portletItem ul li a,
 .template-workspace.section-bungeni-business #portal-column-one .portlet .portletItem ul li a,
 .template-workspace.section-bungeni-members #portal-column-one .portlet .portletItem ul li a {
@@ -1358,8 +1265,11 @@ div.dhx_cal_navline div.active {
 }
 .section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li.selected a,
 .section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li a:hover {
-    background: #21a1ba;
+    background: #a2a2a2;
     color: #fff;
+}
+.template-workspace #portal-column-one .portlet .portletItem .navTreeCurrentItem a {
+    background-color:#acacac !important;
 }
 /* hides the portlet header. */
 .section-bungeni-admin #portal-column-one .portlet .portletItem.even,
@@ -1368,125 +1278,49 @@ div.dhx_cal_navline div.active {
 }
 .template-workspace.section-bungeni-admin #portal-column-one .portletItem a.navTreeCurrentItem,
 .template-workspace.section-bungeni-workspace #portal-column-one .portletItem a.navTreeCurrentItem {
-    background: #eee;
+    background: #7e7e7e !important;
+    color: #ffffff !important;
     border: 0 none !important;
 }
 /*
  * DocumentActions & contentActions
  */
 .template-workspace.section-bungeni-admin .contentActions {
-    border: 1px solid #86a26a !important;
-    background: #888888 url(wrong/static/images/w-bg-admin.png) repeat-x top center;
-} 
+    background: #acacac;
+}  
 .template-workspace.section-bungeni-archive .contentActions,
 .template-workspace.section-bungeni-business .contentActions,
 .template-workspace.section-bungeni-members .contentActions {
-    border: 1px solid #86a26a !important;
+    border: 1px solid #fb9c14 !important;
     background: #fff;
 }
 .section-bungeni-workspace .actionMenu .actionMenuContent ul,
 .section-bungeni-admin .actionMenu .actionMenuContent ul {
     background: #bdd1d7;
-    border: 1px solid #aaf;
+    border: 1px solid #7e7e7e;
     border-bottom: 0 none;
     border-top: 0 none;
 }
 .template-workspace dl#context_actions.actionMenu .actionMenuContent ul li a.selected,
 .template-workspace dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
-    border-right: 1px solid #aaf;
-    background-color: #888888 !important;
+    background-color: #abdae4 !important;
 }
-.template-workspace div.contentActions dt.label-state-first_reading_pending a,
-.template-workspace div.contentActions dt.label-state-active a,
-.template-workspace div.contentActions dt.label-state-admissible a,
-.template-workspace div.contentActions dt.label-state-public a {
+.template-workspace div.contentActions dt.label-state-active a {
     color:#000 !important;
 }
-/*
- * portal-globalnav
- */
- .template-workspace div#portal-globalnav {
-    background: #4d4d4d;
-}
-.template-workspace div#portal-globalnav ul.level0 {
-    background: transparent;
-}
-.template-workspace div#portal-globalnav ul.level0 li.selected a {
-    border-bottom-color: #d8d8d9;
-    border-bottom-color: #222;
-    background:#d8d8d9  url(../images/w-globalnav-level0-a.png) top left repeat-x;
-}
-.template-workspace div#portal-globalnav ul.level0 li.selected a,
-.template-workspace div#portal-globalnav ul.level0 li a:hover {
-    border-top: 2px solid #86a26a;
-    border-bottom: 1px solid #d8d8d9;
-    background: #d8d8d9 url(../images/w-globalnav-level0-a.png) top left repeat-x;
-}
-.template-workspace.section-bungeni-business div#portal-globalnav ul.level0 li#portaltab-business-whats-on a {
-    border-top: 2px solid #86a26a;
-    border-bottom: 1px solid #d8d8d9;
-    background: #c5dab2 url(../images/w-globalnav-level0-a.png) top left repeat-x;
-}
-.template-workspace div#portal-globalnav ul.level0 li#portaltab-:first-child a,
-.template-workspace div#portal-globalnav ul.level0 li#portaltab-:first-child a:hover {
-	border-top:2px solid #1763aa;
-    background: url(/static/images/w-globalnav-level0-a-first.png) top left repeat-x !important;
-	color:#fff !important;
-	text-shadow:0 0 0 #fff;
+.template-workspace div.contentActions dd.actionMenuContent ul li > a:hover span {
+    color:#000 !important;
 }
 
-.template-workspace div#portal-globalnav ul.level0 li#portaltab-admin-content a:hover,
-.section-bungeni-admin div#portal-globalnav ul.level0 li#portaltab-admin-content a,
-.section-bungeni-admin div#portal-globalnav ul.level0 li#portaltab-admin-content a:hover {
-	border-top:2px solid #666;
-    background: url(/static/images/w-globalnav-level0-a-last.png) top left repeat-x !important;
-	color:#fff !important;
-	text-shadow:0 0 0 #fff;
-}
-.template-workspace div#portal-globalnav ul.level1 a:hover {
-    background:transparent;
-    border:0px;
-    -webkit-border-radius: 0px;
-    -moz-border-radius: 0px;
-    border-radius: 0px;
-}
-.template-workspace div#portal-globalnav ul.level1 {
-    border: 1px solid #aaf;
-    border-right: 0 !important;
-    border-top: 0 none !important;
-    border-bottom:1px solid #d8d8d9;
-    background:#c5dab2 !important;
-    display: block;
-}
-.section-bungeni-workspace div#portal-globalnav ul.level1 {
-    border: 1px solid #aaf;
-    border-right: 0 none;
-    border-top: 0 none !important;
-    border-bottom:1px solid #1763aa;
-    background:#21a1ba url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x !important;
-    display: block;
-}
-.section-bungeni-admin div#portal-globalnav ul.level1 {
-    border: 1px solid #aaf;
-    border-right: 0 none;
-    border-top: 0 none !important;
-    border-bottom:1px solid #1763aa;
-    background:#888888 url(/static/images/w-globalnav-level1-bg-last.png) bottom left repeat-x !important;
-    display: block;
-    color:#000;
-}
-.section-bungeni-admin div#portal-globalnav ul.level1 a {
-    color:#000 !important;
-}
-.template-workspace div#portal-globalnav ul.level1 li.selected a {
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a {
     color: #000 !important;
 }
-.template-workspace.section-bungeni-admin div#portal-globalnav ul.level1 li.selected a {
-    color: #fff !important;
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a.selected, 
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
+    border-right: 1px solid #090;
+    color: white !important;
 }
-.section-bungeni-workspace div#portal-globalnav ul.level1 li.selected a {
-    color:#333 !important;
-}
+
 /*
  * Table styles
  */
@@ -1512,8 +1346,8 @@ div.dhx_cal_navline div.active {
     border-left: 0 none;
     border-top: 0 none;
     border-right: 1px solid #aaa;
-    border-bottom:1px solid #c5dab2;
-    background: url(../images/globalnav-level1-bg.png) bottom left repeat-x !important;
+    border-bottom:1px solid #f9ac32;
+    background: url(/static/images/globalnav-level1-bg.png) bottom left repeat-x !important;
 }
 /*
  * formTabs
@@ -1536,7 +1370,7 @@ div.dhx_cal_navline div.active {
     background: #f9f9f9;
 }
 .template-workspace.section-bungeni-workspace li.formTab a.selected {
-    background: url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
+    background: #d8d8d9;
     border-bottom-color: #6ca6cd;
     text-decoration: none;
 }
@@ -1544,15 +1378,12 @@ div.dhx_cal_navline div.active {
     border-radius: 2px;
     -moz-border-radius: 2px;
 }
-.template-workspace.section-bungeni-admin ul.formTabs li.formTab a:hover,
-.template-workspace.section-bungeni-admin ul.formTabs li.formTab a:active,
-.template-workspace.section-bungeni-admin ul.formTabs li.formTab a.selected,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:hover,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:active,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a.selected {
     text-align: left;
     text-decoration: none;
-    background: #d8d8d9 url(../images/w-globalnav-level0-a.png) top left repeat-x;
+    background: #d8d8d9;
     border: 1px solid #aaa;
     border-bottom-color: #bbb;
     border-top-color: #999;
@@ -1561,28 +1392,40 @@ div.dhx_cal_navline div.active {
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:hover,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:active,
 .template-workspace.section-bungeni-workspace ul.formTabs li.formTab a.selected {
-    background: #21a1ba url(/static/images/w-globalnav-level0-a-first.png) top left repeat-x;
-    color: #fff;
+    background: #acacac;
+    color: #000000;
 	text-shadow:0 0 0 #fff;
+}
+.template-workspace.section-bungeni-workspace #content ul.formTabs li a.selected,
+.template-workspace.section-bungeni-workspace #content ul.formTabs li a:hover,
+.template-workspace.section-bungeni-workspace #content ul.formTabs li a:target {
+    background:#aaa !important;
+    color:#000 !important;
 }
 
 .template-workspace.section-bungeni-workspace table.listing th,
 .template-workspace.section-bungeni-workspace table.listingdescription th,
 .template-workspace.section-bungeni-workspace .stx table th,
-.template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th {
-    background:#21a1ba url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x !important;
+.template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th,
+.section-bungeni-workspace tr.yui-dt-first th {
+    background:#acacac !important;
     text-shadow: 0 0 0  #fff;
     color: #000;
+}
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a.selected, 
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
+    border-right: 1px solid #090;
+    color: #000 !important;
 }
 .template-workspace.section-bungeni-admin ul.formTabs li.formTab a:hover,
 .template-workspace.section-bungeni-admin ul.formTabs li.formTab a:active,
 .template-workspace.section-bungeni-admin ul.formTabs li.formTab a.selected {
-    border: 1px solid #aaa;
+    border: 1px solid #b19766;
+    margin-left:3px;
+    margin-right:3px;
     border-bottom: 0 none;
-    line-height: 17px;
-}
-.template-workspace.section-bungeni-admin ul li.context_workflow dt a {
-    color:#000 !important;
+    background: #acacac;
+    color:#000000 !important;
 }
 /*
  * formPanel styles
@@ -1592,36 +1435,62 @@ div.dhx_cal_navline div.active {
     color: #333;
 }
 .template-workspace dd#fieldset-written-question-response div.documentDescription {
-    background:#c5dab2 !important;
-}
-.template-workspace div.documentContent p.documentDescription {
-    margin-top:15px !important;
+    background:#f9ac32 url(/static/images/globalnav-level1-bg.png) bottom left repeat-x !important;
 }
 .template-workspace.section-bungeni-admin .formPanel #display_form_spacer {
-    background: url(../images/w-globalnav-level1-bg.png) bottom left repeat-x;
+    background: #acacac;
 }
 .template-workspace.section-bungeni-workspace .formPanel #display_form_spacer {
-    background: url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x;
+    background: #acacac;
 }
+.template-workspace.section-bungeni-admin dd#fieldset-written-question-response div.documentDescription,
+.template-workspace.section-bungeni-admin .formPanel #display_form_spacer {
+    background:#acacac !important;
+}
+.template-workspace.section-bungeni-admin table.listing th,
+.template-workspace.section-bungeni-admin table.listingdescription th, 
+.template-workspace.section-bungeni-admin .stx table th, 
+.yui-skin-sam.section-bungeni-admin .yui-dt-first th {
+    background: #acacac !important;
+    color:#ffffff !important;
+}
+.template-workspace.section-bungeni-workspace table.listing th a,
+.template-workspace.section-bungeni-workspace table.listingdescription th a, 
+.template-workspace.section-bungeni-workspace .stx table th a, 
+.yui-skin-sam.section-bungeni-workspace .yui-dt-first th a,
+.template-workspace.section-bungeni-admin table.listing th a,
+.template-workspace.section-bungeni-admin table.listingdescription th a, 
+.template-workspace.section-bungeni-admin .stx table th a, 
+.yui-skin-sam.section-bungeni-admin .yui-dt-first th a {
+    color:#000000 !important;
+}
+
 .template-workspace {
-    background: #4d4d4d url(/static/images/workspace-border-left.png) repeat-y top left;
+    background: #e5e3e3 url(/static/images/workspace-background.png) top left repeat;
 }
 .template-workspace #visual-table-wrapper {
     text-align: left;
-    background: #fff url(/static/images/workspace-border-right.png) top right repeat-y;
+    background: #ffffff;
 }
 .template-workspace span#corner-a,
 .template-workspace span#corner-b {
     display: block;
 }
 .template-workspace span#corner-a {
-    background: #4d4d4d url(/static/images/workspace-border-left-corner.png) top left no-repeat;
+    background: transparent;
 }
 .template-workspace span#corner-b {
-    background: #4d4d4d url(/static/images/workspace-border-right-corner.png) top right no-repeat;
+    background: transparent;
 }
 .template-workspace #main-body-table {
     background: #fff;
+}
+.template-workspace #header-wrapper {
+    text-align:center;
+}
+.template-workspace #top-layer {
+    border: 0 none;
+    background: transparent;
 }
 /* modifies the dhx_cal object */
 .template-workspace.section-bungeni-business .dhx_cal_event[style] {
@@ -1631,21 +1500,20 @@ div.dhx_cal_navline div.active {
 .template-workspace.section-bungeni-business .dhx_scale_holder_now .dhx_cal_event[style] {
     display: block;
 }
-.template-workspace table.listing td a,
-.template-workspace table.listing td a:visited,
-.template-workspace table.listing td a:active {
-    color:#436976 !important;
-} 
-/*
- * yui paginator
- */
-.template-workspace.section-bungeni-admin div#container_contents_sessions div#yui-dt5-paginator0 {
-    display:none;
-} 
 /* footer  */
 .template-workspace #portal-footer div {
 
     border: 0 none;
+}
+.template-workspace div {
+    border: 0 none;
+}
+.template-portal div#content div dl.enableFormTabbing form div.widget {
+    text-align:justify;
+    color:#000;
+}
+.template-portal div#content div dl.enableFormTabbing form div.widget h3.reportmover:first-child span {
+    font-weight:bold;
 }
 
 /*Workspace overrides*/
@@ -1654,12 +1522,12 @@ div.dhx_cal_navline div.active {
 .template-workspace.section-bungeni-workspace .stx table th,
 .template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th,
 .section-bungeni-workspace tr.yui-dt-first th {
-    background:#aaa !important;
+    background:#acacac !important;
     text-shadow: 0 0 0  #fff;
-    color: #000 !important;
+    color: #000000 !important;
 }
 .template-workspace.section-bungeni-workspace #display_form_spacer {
-    background:#aaa !important;
+    background:#acacac !important;
 }
 
 /*MailBox*/
@@ -1678,7 +1546,7 @@ div.dhx_cal_navline div.active {
 }
 .template-workspace .portlet ul.contentViewsLeftPort li.selected,
 .template-workspace .portlet ul.contentViewsLeftPort li a:hover {
-    background-color:#21a1ba !important;
+    background-color:#a2a2a2 !important;
     color:#fff !important;
 }
 
@@ -1688,6 +1556,11 @@ div.dhx_cal_navline div.active {
     background: #147b92 url(/static/images/content-actions-bg.png) repeat-x top left;
     border: 1px solid gray;
     color: white !important;
+}
+
+.yui-skin-sam #yui-gen1 .yui-dt table tr.yui-dt-even,
+.yui-skin-sam #yui-gen1 .yui-dt table tr.yui-dt-odd {
+    background: #fff;
 }
 
 .yui-skin-sam #scheduler-layout .yui-layout-unit .yui-resize-handle-r {
@@ -1737,8 +1610,18 @@ div.dhx_cal_navline div.active {
 .yui-skin-sam #scheduler-layout tr.yui-dt-selected td, 
 .yui-skin-sam #scheduler-layout tr.yui-dt-selected td.yui-dt-asc, 
 .yui-skin-sam #scheduler-layout tr.yui-dt-selected td.yui-dt-desc {
-    background-color: #21a1ba !important;
-    color: white;
+    background-color: transparent !important;
+    border: 2px solid #ee1c25;    
+    color: #000000;
+}
+.yui-skin-sam #text-records-dialog tr.yui-dt-selected td.yui-dt-first,
+.yui-skin-sam #scheduler-layout tr.yui-dt-selected td.yui-dt-first {
+    border-left: 1px solid #ee1c25;
+    border-right: 1px solid #ee1c25;
+}
+.yui-skin-sam #text-records-dialog tr.yui-dt-selected td.yui-dt-last,
+.yui-skin-sam #scheduler-layout tr.yui-dt-selected td.yui-dt-last {
+    border-left: 1px solid #ee1c25;
 }
 .yui-skin-sam #scheduler-layout th.yui-dt-highlighted,
 .yui-skin-sam #scheduler-layout th.yui-dt-highlighted a {
@@ -1767,11 +1650,81 @@ div.dhx_cal_navline div.active {
 
 .yui-skin-sam .yui-button-focus,
 .yui-skin-sam .yui-button-hover { 
-    background:#abdae4;border-color:#21a1ba;
+    background:#abdae4;
+    border-color:#acacac;
  }
 .yui-skin-sam #scheduler-layout .yui-button-hover { 
     background:#abdae4;
-    border-color:#21a1ba;
+    border-color:#acacac;
+}
+/* =============================================================================
+   Bungeni - Bungeni workspace and admin styling
+   .section-bungeni-workspace
+   .section-bungeni-admin
+   ========================================================================== */
+
+
+.template-workspace dl#context_actions.actionMenu .actionMenuContent ul {
+    border: 1px solid #7E7E7E;
+    border-top:0 none;
+}
+
+/* =============================================================================
+   Plone - Plone CMS content styling
+   .site-plone
+   ========================================================================== */
+.template-portal.site-plone #portal-breadcrumbs{
+    padding-top: 1em !important;
+}
+.template-portal.site-plone div#portal-globalnav ul.level1 {
+    margin-top: 0.25em;
+}
+.template-portal.site-plone #content h1.documentFirstHeading {
+    margin-top: 0.5em !important;
+    margin-bottom: 1.5em !important;
+    border:0px !important;
+}
+.section-bungeni- #content-core,
+.site-plone .rounded-eigh {
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+}
+
+.site-plone #content-core .documentDescription {
+    margin-top: 0.25em !important;
+}
+
+.site-plone #search-results {
+    opacity: 1 !important;
+}
+
+.site-plone .listingBar {
+    margin: 1em 0 0 !important;
+    clear: both !important;
+}
+.section-bungeni- h1,
+.section-bungeni- h2 {
+    border-bottom: 0 none;
+}
+.site-plone .tileItem,
+.section-bungeni- .tileItem {
+    border-top: 1px dashed #dcdcdc;
+}
+.site-plone .tileItem:first-child,
+.section-bungeni- .tileItem:first-child {
+    border-top: 0 none;
+}
+.site-plone #portal-columns a,
+.section-bungeni- #content a {
+    color: teal !important;
+    border: 0 none !important;
+}
+.site-plone input.searchButton,
+.site-plone #searchGadget,
+.section-bungeni- input.searchButton,
+.section-bungeni- #searchGadget {
+    border: 1px solid #81c027;
 }
 
 /* =============================================================================
@@ -1780,9 +1733,6 @@ div.dhx_cal_navline div.active {
 .template-portal-eXist div#region-content {
     background-color:#fff;
     border:1px solid #c1c1c0;
-}
-.template-portal-eXist div#region-content a {
-    color: #CC6646;
 }
 .template-portal-eXist  .rounded-eigh {
     -moz-border-radius: 8px;
@@ -1794,10 +1744,28 @@ div.dhx_cal_navline div.active {
     -webkit-border-radius:5px; 
     border-radius:5px;
 } 
+.template-portal-eXist a.link-external, 
+.template-portal-eXist div#region-content a {
+    color:teal;
+    font-weight:bold;
+}
+.template-portal-eXist div#region-content .datepicker a {
+    color:#ffffff;
+    font-weight:normal;
+}
+
+.template-portal-eXist.lower_house div#portal-globalnav ul.level1 {
+    background: none repeat scroll 0 0 #909090 !important;
+}
+.template-portal-eXist.higher_house div#portal-globalnav ul.level1 {
+    background: none repeat scroll 0 0 #B22B14 !important; 
+}
+
 .template-portal-eXist  .tab_container {
 	border: 1px solid #999;
 	border-top: none;
 	background: #fff;
+	margin-left:15px;
 }
 .template-portal-eXist  .black-full {
     color:#000000;
@@ -1809,7 +1777,7 @@ div.dhx_cal_navline div.active {
  
 .template-portal-eXist  h1.title {
     text-shadow: 0px 1px 0px #c1c1c0;
-    color:#2b92be;
+    color:#cfc;
     font-weight:normal;
     font-size:1.5em;
 }
@@ -1825,41 +1793,63 @@ div.dhx_cal_navline div.active {
 }
 
 .template-portal-eXist #top-layer ul#portal-personaltools li a {
-    font-family:Verdana, sans-serif;
     font-size:12px;
 }
 .template-portal-eXist #top-layer ul#portal-languageselector li a {
-    font-family:Verdana, sans-serif;
-    font-size:12px;
-}
-.template-portal-eXist div#main-wrapper {
-    font-size:110%;  
-}
-.template-portal-eXist a.big-dbl-arrow {
-    text-decoration:none;
-    color:#D50005;
-}
-.template-portal-eXist a.big-dbl-arrow:hover {
-    color:#CC6637;
-}
-.template-portal-eXist .hanging-menu {
-    width:80px !important;
-    left: 10px;
-}
-.template-portal-eXist .documentDescription, 
-.template-portal-eXist .description {
-    font-size:100% !important;
-}
-.template-portal-eXist div#portal-globalnav ul.level1 li a {
-    font-family:Verdana, sans-serif;
     font-size:12px;
 }
 
-/* Listing - version
+.template-portal-eXist #portal-search a.header-links:visited, #portal-search a.header-links {
+    margin-right: 2px;
+    color: black;
+}
+
+.template-portal-eXist .big-dbl-arrow {
+    text-decoration:none;
+    color:#D50005;
+}
+
+.template-portal-eXist div#portal-globalnav #portaltab- {
+    display:inline-block;
+}
+.template-portal-eXist div#portal-globalnav #portaltab- > a {
+    font-weight: bold;
+}
+
+.site-plone #portal-globalnav li a,
+.template-portal div#portal-globalnav ul.level0 li a,
+.template-portal-eXist div#portal-globalnav ul.level0 li a {
+    padding: 5px 10px;
+    float:none;
+}
+
+.template-portal div#portal-globalnav ul.level0 li ul li a,
+.template-portal-eXist div#portal-globalnav ul.level0 li ul li a {
+    padding: 0px !important;
+    float:none;
+}
+
+
+/* Listing
 -------------------------------------------------------------- */
+.template-portal-eXist .list-inline,
+.template-portal-eXist ul.ls-timeline li {
+    text-align:left;
+}
+
+.template-portal-eXist table.listing th, 
+.template-portal-eXist table.timeline th, 
+.template-portal-eXist table.listingdescription th {
+    background:#ccc !important;
+}
+.template-portal-eXist table.listing td, 
+.template-portal-eXist table.listingdescription td {
+    border-right: 1px solid #ccc;
+}
 .template-portal-eXist  ul.doc-versions {
     display:block;
     list-style-type:none;
+    padding:0;
     width:96% !important;
 }
 .template-portal-eXist  ul.doc-versions li {
@@ -1882,6 +1872,15 @@ div.dhx_cal_navline div.active {
 
 /* Tabs
 -------------------------------------------------------------- */
+.template-portal-eXist #login-form label,
+.template-portal-eXist #login-forgotten-password {
+    font-size: 0.7em !important;
+}
+
+.template-portal-eXist #login-form .formControls {
+    font-size: 0.8em !important;
+}
+
 .template-portal-eXist  ul.tabbernav {
 	margin: 0;
 	margin-left:25px;
@@ -1963,14 +1962,14 @@ div.dhx_cal_navline div.active {
 }
 .template-portal-eXist  .paginate .page-state {
     float:left;
-    color:#000;
+    color:#000000;
     display:inline;
     padding:1px 5px 0 0;
     height:18px;    
 }
 .template-portal-eXist  .paginate a 
 {
-	color:#CC6646 !important;
+	color:#f9ac32 !important;
 	font-size:12px;
 	font-weight:bold;
 	background:#fff;
@@ -1984,13 +1983,13 @@ div.dhx_cal_navline div.active {
 }
 .template-portal-eXist  .paginate a:hover
 {
-	color: #ffffff !important;
-	background-color: #CC6646;
-	border:1px solid #CC6646;
+	color: #000000 !important;
+	background-color: #f9ac32;
+	border:1px solid #f9ac32;
 }
 
 .template-portal-eXist  .paginate a.disabled {
-	color: #f79f0e !important;
+	color: #81c027 !important;
 	font-size:12px;
 	padding:2px 6px 2px 6px;
 	border:1px solid #e3d3ff;
@@ -1999,10 +1998,10 @@ div.dhx_cal_navline div.active {
 	text-decoration:none;
 }
 
-.template-portal-eXist  .paginate a.curr-no {
-	color: #ffffff !important;
-	background-color: #CC6646;
-	border:1px solid #CC6646;
+.template-portal-eXist .paginate a.curr-no {
+	color: #000000 !important;
+	background-color: #81c027;
+	border:1px solid #81c027;
 }
 
 /* Form elements
@@ -2047,6 +2046,21 @@ div.dhx_cal_navline div.active {
     padding-left:3px;
     padding-right:3px;
 }
+.template-portal-eXist h1.title {
+    background-color:#323232;
+    background-repeat:repeat;
+    border-color: #343434;
+    border-radius: 4px 4px 4px 4px;
+    border-style: solid;
+}
+.template-portal-eXist.lower_house #utility-nav li a {
+    color: #307C18;
+}
+.template-portal-eXist.lower_house #utility-nav li.selected a, 
+.template-portal-eXist.lower_house #utility-nav li a:hover {
+    border-bottom-color: #307C18;
+}
+
 
 /* DHTMLX Calendar
 -------------------------------------------------------------- */
