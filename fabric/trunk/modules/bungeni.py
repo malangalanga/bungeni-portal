@@ -427,7 +427,7 @@ class BungeniConfigs:
         self.exist_docs = self.user_build_root + "/exist-docs"
         self.exist_config_editor = self.user_build_root + "/config_editor"
         self.exist_demo_data = self.exist_docs + "/db"
-        self.java_home = self.jre_home()
+        #self.java_home = self.jre_home()
         self.exist_port = self.cfg.get_config("exist", "http_port")
         self.exist_startup_mem = self.cfg.get_config("exist", "startup_mem")
         self.exist_max_mem = self.cfg.get_config("exist", "max_mem")
@@ -799,7 +799,7 @@ class Presetup:
         Generate a supervisord config file  using the installation template
         """
         glue_map = {
-                    "java":self.cfg.java_home,
+                    "java":self.cfg.jre_home(),
                     "startup_mem": self.cfg.jython_startup_mem,
                     "max_mem": self.cfg.jython_max_mem,
                     "user_jython_home":self.cfg.user_jython_home,
@@ -825,7 +825,7 @@ class Presetup:
             "bungeni_ini": self.cfg.bungeni_deploy_ini,
             "plone_ini": self.cfg.plone_deploy_ini,
             "static_ini": self.cfg.portal_static_ini,
-            "java": self.cfg.java_home,
+            "java": self.cfg.jre_home(),
             "user_exist": self.cfg.user_exist,
             "exist_port": self.cfg.exist_port,
             "exist_max_mem": self.cfg.exist_max_mem,
@@ -1936,7 +1936,7 @@ class XmldbTasks:
         ## use the ant in the exist installation
         self.ant_jars = ["ant.jar", "ant-launcher.jar"]
         self.ant_home = self.cfg.user_exist + "/tools/ant/lib"
-        self.jre_home= self.cfg.java_home
+        self.jre_home= self.cfg.jre_home()
         ant_jar_paths = []        
         for jar in self.ant_jars:
             ant_jar_paths.append(self.ant_home + "/" +  jar)          
@@ -1992,7 +1992,7 @@ class XmldbTasks:
         Dumps the eXist-db data (both XML and Attachments) as a tar.gz archive
         """
         exist_map = {
-                    "java":self.cfg.java_home,
+                    "java":self.cfg.jre_home(),
                     "user_exist":self.cfg.user_exist,
                     "exist_port":self.cfg.exist_port,
                     "exist_build_path":self.cfg.user_exist_build_path,
@@ -2277,7 +2277,7 @@ class GlueScriptTasks:
         #self.cfg.jython_config has the full run path
         run(( self.cfg.jython_config + " %(user_glue)s/src/glue.py -c %(user_config)s/glue.ini -p") %
              {
-                "java":self.cfg.java_home,
+                "java":self.cfg.jre_home(),
                 "startup_mem": self.cfg.jython_startup_mem,
                 "max_mem": self.cfg.jython_max_mem,
                 "user_jython_home":self.cfg.user_jython_home,
