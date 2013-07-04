@@ -941,7 +941,7 @@ class SCM:
           self.svn_perm()
       else:
           print "Checkout out anonymously"
-          cmd = "svn co http://%s -r%s %s" % (self.address, revision, 
+          cmd = "svn co https://%s -r%s %s" % (self.address, revision, 
                   self.working_copy)
           self.svn_perm()
       run(cmd)
@@ -2251,7 +2251,7 @@ class GlueScriptTasks:
             # RUN java -jar jython_installer-2.5.2.jar --help
             # to learn more about the options
             run("%(java)s/bin/java -jar %(jython_download_file)s -s -d %(user_jython_home)s -t all -i src -j %(java)s" %
-                         {"java" : self.cfg.java_home,
+                         {"java" : self.cfg.jre_home(),
                           "user_jython_home":self.cfg.user_jython_home,
                           "jython_download_file":self.cfg.jython_download_file})
 
