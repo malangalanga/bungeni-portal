@@ -735,11 +735,21 @@ class Presetup:
         else:
             print "Docsplit is fully functional on this system."
     
+   
+    def clear_ezsetup(self):
+        self.__clear_ezsetup(self.cfg.user_python27_home)
+        self.__clear_ezsetup(self.cfg.user_python26_home)
+       
+    def __clear_ezsetup(self, pyhome):
+        if os.path.isdir(pyhome):
+            with cd(pyhome):
+               run("rm -rf ./ez_setup.py || true")
     
+
     def install_setuptools(self, pybin, pyhome):
         if os.path.isfile(pybin):
             with cd(pyhome):
-                run("[ -f ./ez_setup.py ] && echo 'ez_setup.py exists' || wget http://peak.telecommunity.com/dist/ez_setup.py")
+                run("[ -f ./ez_setup.py ] && echo 'ez_setup.py exists' || wget https://bitbucket.org/pypa/setuptools/raw/0.7.2/ez_setup.py")
                 run(pybin + " ./ez_setup.py")
                 # install pip
                 # WARNING pip throws ssl related issues with some versions of Python

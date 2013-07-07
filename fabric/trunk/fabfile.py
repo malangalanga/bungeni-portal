@@ -50,6 +50,15 @@ def setup_pylibs():
     bungenipre.required_pylibs()
     #bungenipre.install_appy()
 
+def setup_setuptools():
+    """
+    Installs / Upgrades setuptools in the python installation
+    """
+
+    bungenipre = bungeni.Presetup()
+    bungenipre.clear_ezsetup()
+    bungenipre.setuptools()
+
 
 def setup_docsplit():
     """
