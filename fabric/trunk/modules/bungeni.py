@@ -1257,19 +1257,30 @@ class Tasks:
         return checkVer.checkVersion()
         """
 
-    def bootstrap(self, pythonexec):
+    def bootstrap(self, pythonexec, instance_folder):
         """
         Bootstraps a buildout
         Checks if bootstrap.py exists in the current folder, if not, uses the one from the parent folder
         """
-
+        bo_version = None
+        versions_file = instance_folder + "/versions.cfg"
+        if os.path.isfile(versions_file):
+            # check for zc.buildout version
+            bo_cfg = SafeConfigParser()
+            bo_cfg.read(instance_folder + "/versions.cfg")
+            bo_version = bo_cfg.get("versions", "zc.buildout")
+            
         path_prefix = ""
         if os.path.isfile(self.scm.working_copy + "/bootstrap.py"):
             path_prefix = "./"
         else:
             path_prefix = "../"
+
         with cd(self.scm.working_copy):
-            run("%s %sbootstrap.py" % (pythonexec, path_prefix))
+            if bo_version is None:
+                run("%s %sbootstrap.py" % (pythonexec, path_prefix))
+            else:
+                run("%s %sbootstrap.py -v %s" % (pythonexec, path_prefix, bo_version))
 
     def local_config(
         self,
@@ -1314,7 +1325,7 @@ class PloneTasks:
 	Bootstrap the instance
 	"""
 
-	self.tasks.bootstrap(self.pycfg.python)
+	self.tasks.bootstrap(self.pycfg.python, self.cfg.user_plone)
 
 
     def setup(self):
@@ -1339,7 +1350,7 @@ class PloneTasks:
                         run("svn up -rHEAD ./BungeniHelpCenter")            
         else:
             self.tasks.src_checkout(current_release["plone"])  
-        self.tasks.bootstrap(self.pycfg.python)
+        self.tasks.bootstrap(self.pycfg.python, self.cfg.user_plone)
         self.deploy_ini()
 
 
@@ -1474,7 +1485,7 @@ class PortalTasks:
 	Boostrap instance
 	"""	
 
-	self.tasks.bootstrap(self.pycfg.python)	
+	self.tasks.bootstrap(self.pycfg.python, self.cfg.user_portal)	
 
 
     def setup(self, version = "default"):
@@ -1494,7 +1505,7 @@ class PortalTasks:
                     run("svn up -rHEAD ./portal.theme")            
         else:
             self.tasks.src_checkout(current_release["portal"])
-        self.tasks.bootstrap(self.pycfg.python)
+        self.tasks.bootstrap(self.pycfg.python, self.cfg.user_portal)
         self.deploy_ini()
 
 
@@ -1609,7 +1620,8 @@ class BungeniTasks:
 	"""
 	Bootstrap the buildout instance
 	"""
-	self.tasks.bootstrap(self.pycfg.python)
+        
+	self.tasks.bootstrap(self.pycfg.python, self.cfg.user_bungeni)
 
     def setup(self):
         """
@@ -1631,7 +1643,7 @@ class BungeniTasks:
                     run("svn up -rHEAD ./bungeni.main ./bungeni_custom ./ploned.ui")
         else:
             self.tasks.src_checkout(current_release["bungeni"])
-        self.tasks.bootstrap(self.pycfg.python)
+        self.tasks.bootstrap(self.pycfg.python, self.cfg.user_bungeni)
         self.install_bungeni_custom()
         self.deploy_ini()
 
