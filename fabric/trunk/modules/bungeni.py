@@ -1640,7 +1640,7 @@ class BungeniTasks:
             # bungeni.main, bungeni_custom and ploned.ui are updated to HEAD
             with cd(self.cfg.user_bungeni):
                 with cd("src"):
-                    run("svn up -rHEAD ./bungeni.main ./bungeni_custom ./ploned.ui")
+                    run("svn up -rHEAD ./bungeni.main ./bungeni_custom ./ploned.ui ./portal.auth")
         else:
             self.tasks.src_checkout(current_release["bungeni"])
         self.tasks.bootstrap(self.pycfg.python, self.cfg.user_bungeni)
