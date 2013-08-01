@@ -63,10 +63,13 @@ printf "\n\n"
    } >> /dev/null
    
 logger.printTask "[Portal] Clean out development files.."
-printf "\n\n"
-{
-	find $PORTAL_REL_FOLDER -name "*.svn" -exec rm -rf {} \;
-	} > /dev/null 2>&1 
+ rm -rf $PORTAL_REL_FOLDER/.svn $PORTAL_REL_FOLDER/debian/.svn || true
+ find  $PORTAL_REL_FOLDER/debian/DEBIAN \( -name ".svn" \) -exec rm -rf {} \; || true
+ find  $PORTAL_REL_FOLDER/debian/etc    \( -name ".svn" \) -exec rm -rf {} \; || true
+ rm -rf $PORTAL_REL_FOLDER/debian/opt/.svn $PORTAL_REL_FOLDER/debian/opt/bungeni/.svn || true
+ # remove .svn folders comment this out to build a dist package
+ #find $BUNGENI_REL_FOLDER/debian/opt/bungeni/bungeni_apps -name ".svn" -exec rm -rf {} \; || true 
+ find $PORTAL_REL_FOLDER \( -name "*.tmp" -or -name "*.pyc" -or -name "*.pyo" -or -name "*.log" \) -exec rm -rf {} \;
 
 logger.printTask "[Portal] Now run will attempt to execute run.sh in the ${PORTAL_REL_FOLDER}"
 printf "\n"
