@@ -462,6 +462,24 @@ def stop_bungeni(mode="ABORT_ON_ERROR"):
     service.stop_service("bungeni", mode)
 
 
+def start_serializer(mode="ABORT_ON_ERROR"):
+    """
+    Start bungeni
+    """
+
+    service = bungeni.Services()
+    service.start_service("serializer", mode)
+
+
+def stop_serializer(mode="ABORT_ON_ERROR"):
+    """
+    Stop bungeni
+    """
+
+    service = bungeni.Services()
+    service.stop_service("serializer", mode)
+
+
 def start_portal(mode="ABORT_ON_ERROR"):
     """
     Start the portal
@@ -578,6 +596,7 @@ def __db_load_services_stop():
     Stop services - called before loading/resetting db
     """
     stop_bungeni("IGNORE_ERROR")
+    stop_serializer("IGNORE_ERROR")
     stop_portal("IGNORE_ERROR")
     stop_plone("IGNORE_ERROR")
 
@@ -587,6 +606,7 @@ def __db_load_services_start():
     Start services - called after loading/resetting db
     """
     start_bungeni("IGNORE_ERROR")
+    start_serializer("IGNORE_ERROR")
     start_portal("IGNORE_ERROR")
     start_plone("IGNORE_ERROR")
 
