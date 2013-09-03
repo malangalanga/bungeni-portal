@@ -908,3 +908,11 @@ def install_config_editor():
     tasks.ant_prop_config()
     tasks.ant_ce_setup_config()
     tasks.ant_ce_install()
+
+
+def clear_logs():
+    """
+    Clears log files in the logs folder
+    """
+    service = bungeni.Services()
+    service.clear_logs() 

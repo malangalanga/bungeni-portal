@@ -1140,6 +1140,10 @@ class Services:
         if "ERROR" in output:
             print("Unable to stop monitor")
 
+    def clear_logs(self):
+        with cd(self.cfg.user_logs):
+           run("for item in *.log; do cat /dev/null > $item ; done")
+
 
 
 
