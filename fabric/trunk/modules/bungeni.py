@@ -591,8 +591,14 @@ class Presetup:
              + " ".join(liLibs))
         if not self.ossent.is_gandi_server():
             print "Installing Linux Headers"
-            sudo(self.ossent.get_install_method(self.osinfo.release_id)
-                 + " " + self.cfg.linux_headers)
+            if os.path.exists("/proc/vz") or os.path.exists("/proc/xen"):
+                # this is a vps installation, headers are shared so just ininstall generic headers
+                #sudo(self.ossent.get_install_method(self.osinfo.release_id)
+                #     + " linux-headers-generic")
+                print "VPS Kernel, will skip installing headers from package repository !!!"
+            else:
+                sudo(self.ossent.get_install_method(self.osinfo.release_id)
+                     + " " + self.cfg.linux_headers)
         else:
             print "This server was identified as a Gandi virtual server"
 
