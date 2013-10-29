@@ -2251,10 +2251,11 @@ class RabbitMQTasks:
 
     def rabbitmq_purge(self):
         """
-        Reset the serialization queue
+        Reset both serialization queues
         """
         with cd(self.cfg.user_rabbitmq + "/sbin"):
             run("./rabbitmq-admin purge queue name='bungeni_serialization_output_queue'")
+            run("./rabbitmq-admin purge queue name='bungeni_serialization_queue'")
 
 class GlueScriptTasks:
     """
