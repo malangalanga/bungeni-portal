@@ -87,11 +87,14 @@
             label="member" container_label="members" />
     </group>
     <group name="political_group" workflow="group" enabled="true" 
-        label="political group" container_label="political groups">
+        label="political group" container_label="political groups"
+        privilege_extent="group"
+        >
         <member name="political_group_member" workflow="group_member" enabled="true"
             label="member" container_label="members" />
     </group>
     <group name="committee" enabled="true" label="committee" container_label="committees"
+        privilege_extent="group"
         note="A parliamentary committee of MPs.">
         <member name="committee_member" workflow="group_member" enabled="true" 
             label="member" container_label="members" />
@@ -100,7 +103,8 @@
     </group>
     <group name="joint_committee" archetype="committee" workflow="committee" 
         descriptor="committee" enabled="true" 
-        label="joint committee" container_label="joint committees">
+        label="joint committee" container_label="joint committees"
+        privilege_extent="group">
     </group>
     <group name="government" workflow="group" enabled="true"
         label="government" container_label="governments"
@@ -108,12 +112,14 @@
     </group>
     <group name="ministry" workflow="group" enabled="true" 
         label="ministry" container_label="ministries"
+        privilege_extent="group"
         note="A government ministry.">
         <member name="minister" workflow="group_member" enabled="true" 
             label="member" container_label="members"
             note="A Minister, defined as member of a ministry group." />
     </group>
     <group name="chamber" enabled="true" label="chamber" container_label="chambers"
+        privilege_extent="group"
         note="A parliament chamber.">
         <member name="member" workflow="group_member" enabled="true" 
             label="member" container_label="members" 
