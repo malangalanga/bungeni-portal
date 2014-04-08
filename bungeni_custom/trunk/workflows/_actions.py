@@ -61,3 +61,13 @@ def send_motion_to_senate(motion):
     # workflow state of the new doc to be "submitted".
     sm = spawn_doc(motion, "higher_house", "senate_motion", "submitted")
 
+
+def send_motion_to_assembly(motion):
+    """A sample action to "send" (spawn new) a document to other chamber.
+    """
+    # from {motion}, spawn a new doc of type "assemby_motion", set its chamber
+    # to be the (expected singular) active "lower_house", and set the initial 
+    # workflow state of the new doc to be "submitted".
+    sm = spawn_doc(motion, "lower_house", "assembly_motion", "submitted")
+
+

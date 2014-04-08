@@ -18,8 +18,9 @@
     
     <!-- LEGISLATURE roles -->
     <role id="ClerkLegislature" title="Legislature - Clerk Office" />
-    <role id="GovernmentMember" title="Government Member" />
-    <role id="MinistryMember" title="Government Ministry Member" />
+    <role id="GovernmentMember" title="Government Member" note="!+MemberGovernment" />
+    <role id="MinistryMember" title="Government Ministry Member" note="!+MemberMinistry" />
+    <role id="JointCommitteeMember" title="Joint Committee Member" note="!+MemberJointCommittee"/>
     <role id="Translator" title="Translation Office" />
     <role id="Transcriber" title="Transcription Office">
         <subrole id="Transcriber.Editor" title="Transcription Editor" />
