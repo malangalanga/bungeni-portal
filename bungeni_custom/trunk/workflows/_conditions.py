@@ -80,6 +80,21 @@ def is_oral_response(question):
     """
     return question.response_type == "oral"
 
+def is_group_assigned(question):
+    """question: Require that the question (normally with a written response) 
+    has been assigned to exactly one group.
+    """
+    if question.group_assignment_feature.enabled:
+        # must be assigned to exactly one group !+?
+        return len(question.group_assignments) == 1
+    return False
+
+def is_oral_response_or_is_group_assigned(question):
+    """question: ok if question is oral response, else require that 
+    it has been assigned to a group.
+    """
+    return is_oral_response(question) or is_group_assigned(question)
+
 def response_allow_submit(question):
     """question: Require that the event response has been completed.
     """

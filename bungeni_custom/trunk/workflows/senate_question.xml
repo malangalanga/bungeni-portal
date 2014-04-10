@@ -250,7 +250,7 @@
     <transition title="Reviewed"
         source="submitted"
         destination="reviewed"
-        condition=""
+        condition="is_oral_response_or_is_group_assigned"
         trigger="manual"
         roles="ClerkQuestionSenate.ClerkQuestion ClerkSenate"
         order="4"

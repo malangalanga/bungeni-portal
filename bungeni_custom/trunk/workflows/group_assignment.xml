@@ -5,7 +5,6 @@
         permission_actions=".View .Edit .Add .Delete"
     >
     
-    
     <!-- features -->
     <feature name="audit" enabled="true">
         <parameter name="audit_actions" value="add modify workflow remove version translate" />
@@ -14,28 +13,39 @@
     <feature name="version" enabled="true" />
     
     
-    <facet name="add_internal">
-        <allow permission=".Add" roles="
-                ClerkSenate ClerkAssembly 
-                SpeakerSenate SpeakerAssembly 
-		        ClerkQuestionSenate ClerkQuestionAssembly.ClerkHead
-		    " />
+    <facet name="view_internal" default="true">
         <allow permission=".View" roles="
+                MinistryMember
                 ClerkSenate ClerkAssembly 
                 SpeakerSenate SpeakerAssembly 
-		        ClerkQuestionSenate ClerkQuestionAssembly.ClerkHead
-		    " />
+                ClerkQuestionSenate ClerkQuestionAssembly        
+            " />
+    </facet>
+    
+    <facet name="add_internal">
+        <allow permission=".View" roles="
+                MinistryMember
+                ClerkSenate ClerkAssembly 
+                SpeakerSenate SpeakerAssembly 
+                ClerkQuestionSenate ClerkQuestionAssembly        
+            " />
         <allow permission=".Edit" roles="
                 ClerkSenate ClerkAssembly 
                 SpeakerSenate SpeakerAssembly 
-		        ClerkQuestionSenate ClerkQuestionAssembly
-		    " />
+                ClerkQuestionSenate ClerkQuestionAssembly
+            " />
+        <allow permission=".Add" roles="
+                ClerkSenate ClerkAssembly 
+                SpeakerSenate SpeakerAssembly 
+                ClerkQuestionSenate ClerkQuestionAssembly.ClerkHead
+            " />
         <allow permission=".Delete" roles="
                 ClerkSenate ClerkAssembly 
                 SpeakerSenate SpeakerAssembly 
-		        ClerkQuestionSenate ClerkQuestionAssembly
-		    " />
+                ClerkQuestionSenate ClerkQuestionAssembly
+            " />
     </facet>
+    
     
     <!-- !+ONE_STATE_TRANSITION placeholder state, transition -->
     <state id="_" title="" note="!+ONE_STATE_TRANSITION placeholder state" />

@@ -56,6 +56,10 @@
         <parameter name="assignable_roles" value="ClerkQuestionAssembly.ClerkQuestion ClerkAssembly" />
     </feature>
     <feature name="group_assignment" enabled="true" />
+    <!-- Note: to set up in what states a group_assignment may actually take 
+        place configure the desired state's permissions to allow adding 
+        a group_assignment e.g. see "submitted" state below. 
+    -->
     <!-- !+QUALIFIED_FEATURES(mr, apr-2013)
     this additional info is needed to formally state which assigned group
     is precisely the one participating in / responsible for the event_response:
@@ -169,7 +173,8 @@
     </state>
     <state id="withdrawn_internal" title="Withdrawn" 
             actions="unschedule_doc"
-            note="A question can be withdrawn by the owner, visible as pre-withdrawn, cannot be edited by anyone."
+            note="A question can be withdrawn by the owner, 
+                visible as pre-withdrawn, cannot be edited by anyone."
         >
         <facet ref=".withdrawn_internal" />
         <facet ref="attachment.add_clerk" />
@@ -196,7 +201,8 @@
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
     </state>
-    <state id="clarification_required" title="Requires Clarification to Receive" actions="version">
+    <state id="clarification_required" title="Requires Clarification to Receive" 
+        actions="version">
         <facet ref=".clarification_required" />
         <facet ref="attachment.add_clerk" />
         <facet ref="event.add_clerk" />
@@ -229,7 +235,8 @@
     <state id="dropped" title="Dropped" permissions_from_state="debated" />
     <state id="withdrawn" title="Withdrawn" permissions_from_state="debated" 
         actions="unschedule_doc"
-        note="A question can be withdrawn by the owner, visible as pre-withdrawn, cannot be edited by anyone."
+        note="A question can be withdrawn by the owner, 
+            visible as pre-withdrawn, cannot be edited by anyone."
     />
     
     
@@ -250,7 +257,7 @@
     <transition title="Reviewed"
         source="submitted"
         destination="reviewed"
-        condition=""
+        condition="is_oral_response_or_is_group_assigned"
         trigger="manual"
         roles="ClerkQuestionAssembly.ClerkQuestion ClerkAssembly"
         order="4"
@@ -324,7 +331,8 @@
         trigger="manual"
         roles="ClerkQuestionAssembly.ClerkQuestion ClerkAssembly"
         order="13"
-        note="Oral-response questions if not discussed may be answered in writing by the Ministry."
+        note="Oral-response questions if not discussed may be answered 
+            in writing by the Ministry."
     />
     <transition title="Submit Response"
         source="response_pending"
