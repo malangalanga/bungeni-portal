@@ -4,41 +4,40 @@
     permission_actions=".View .Edit .Add .Delete"
     >
     
-    
+
+    <!-- FEATURES -->
     <feature name="address" enabled="true" />
-   
-    
-    <!-- workflow facets -->
-    <facet name="internal">
-        <allow permission=".View" roles="Authenticated" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Drafter Owner" />
-        <allow permission="user_delegation.Edit" roles="Drafter" />
-        <allow permission="user_delegation.Add" roles="Drafter" />
-    </facet>
-    <facet name="internal_frozen">
-        <allow permission=".View" roles="Authenticated" />
-    </facet>
     
     
+    <!-- STATES -->
     <state id="A" title="Active User">
-        <facet ref=".internal" />
-        <facet ref="address.internal" />
+        <facet>
+            <allow permission=".View" roles="Authenticated" />
+            <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Drafter Owner" />
+            <allow permission="user_delegation.Edit" roles="Drafter" />
+            <allow permission="user_delegation.Add" roles="Drafter" />
+            <allow permission="address.Add" roles="ClerkSenate ClerkAssembly Drafter" />
+        </facet>
     </state>
-    
     <state id="I" title="Inactive User">
-        <facet ref=".internal_frozen" />
-        <facet ref="address.withdrawn" />
+        <facet>
+            <allow permission=".View" roles="Authenticated" />
+            <allow permission="address.Add" roles="ClerkSenate ClerkAssembly Drafter" />
+        </facet>
+    </state>
+    <state id="D" title="Deceased User">
+        <facet>
+            <allow permission=".View" roles="Authenticated" />
+        </facet>
     </state>
     
-    <state id="D" title="Deceased User" permissions_from_state="I" />
-    
-    
+
+    <!-- TRANSITIONS -->
     <transition title="Create"
         source=""
         destination="A"
         trigger="automatic"
     />
-    
     <transition title="Deactivate"
         source="A"
         destination="I"
@@ -47,7 +46,6 @@
         roles="SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
-    
     <transition title="Activate"
         source="I"
         destination="A"
@@ -55,7 +53,6 @@
         roles="SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
-    
     <transition title="Move to Deceased"
         source="A I"
         destination="D"
@@ -64,7 +61,6 @@
         roles="SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
-    
     <transition title="Move from Deceased"
         source="D"
         destination="A"
@@ -74,3 +70,4 @@
     />
 
 </workflow>
+

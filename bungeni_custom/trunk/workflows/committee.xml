@@ -4,13 +4,13 @@
     permission_actions=".View .Edit .Add .Delete"
     >
     
-    <!-- global grants -->
+    <!-- GLOBAL GRANTS -->
     <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
     <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
     <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
     
     
-    <!-- features -->
+    <!-- FEATURES -->
     <feature name="audit" enabled="true">
         <parameter name="audit_actions" value="add modify workflow remove version translate" />
         <parameter name="include_subtypes" value="member group_assignment" />
@@ -19,59 +19,46 @@
     <feature name="version" enabled="true" />
     <feature name="sitting" enabled="true" />
     <feature name="address" enabled="true" />
+      
     
-    
-    <!-- workflow facets -->
-    <facet name="draft">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
-    </facet>
-    <facet name="public">
-        <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="committee_member.View" roles="Authenticated Anonymous" />
-        <allow permission="committee_member.Edit" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="committee_member.Add" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="committee_member.Delete" roles="ClerkSenate ClerkAssembly" /><!-- !+GROUP_MEMBER_DELETE -->
-        <allow permission="committee_staff.View" roles="Authenticated Anonymous" />
-        <allow permission="committee_staff.Edit" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="committee_staff.Add" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="committee_staff.Delete" roles="ClerkSenate ClerkAssembly" /><!-- !+GROUP_MEMBER_DELETE -->
-        <allow permission="agenda_item.Add" roles="MemberCommitteeAssembly MemberCommitteeSenate" />
-    </facet>
-    <facet name="public_frozen">
-        <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="committee_member.View" roles="Authenticated Anonymous" />
-        <allow permission="committee_staff.View" roles="Authenticated Anonymous" />
-    </facet>
-    
-    
+    <!-- STATES -->
     <state id="draft" title="Draft - Committee not yet Active" actions="deactivate">
-        <facet ref=".draft" />
-        <facet ref="address.internal" />
+        <facet>
+            <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="address.Add" roles="ClerkSenate ClerkAssembly Drafter" />
+        </facet>
+    </state>
+    <state id="active" title="Active Committee" actions="activate">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="committee_member.View" roles="Authenticated Anonymous" />
+            <allow permission="committee_member.Edit" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="committee_member.Add" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="committee_member.Delete" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="committee_staff.View" roles="Authenticated Anonymous" />
+            <allow permission="committee_staff.Edit" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="committee_staff.Add" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="committee_staff.Delete" roles="ClerkSenate ClerkAssembly" />
+<!-- Flavio see types.xml <allow permission="assembly_agenda_item.Add" roles="MemberCommitteeAssembly MemberCommitteeSenate" />   -->
+            <allow permission="agenda_item.Add" roles="MemberCommitteeAssembly MemberCommitteeSenate" />
+            <allow permission="address.Add" roles="ClerkSenate ClerkAssembly Drafter" />
+        </facet>
+    </state>
+    <state id="dissolved" title="Committee is Dissolved" actions="dissolve">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="committee_member.View" roles="Authenticated Anonymous" />
+            <allow permission="committee_staff.View" roles="Authenticated Anonymous" />
+        </facet>
     </state>
     
-    <state id="active" title="Active Committee" 
-            actions="activate"
-           
-        >
-        <facet ref=".public" />
-        <facet ref="address.public" />
-    </state>
     
-    <state id="dissolved" title="Committee is Dissolved" 
-            actions="dissolve"
-           
-        >
-        <facet ref=".public_frozen" />
-        <facet ref="address.withdrawn" />
-    </state>
-    
-    
+    <!-- TRANSISTIONS -->
     <transition title="Create"
         source=""
         destination="draft"
         trigger="automatic"
     />
-    
     <transition title="Activate"
         source="draft dissolved"
         destination="active"
@@ -79,7 +66,6 @@
         roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
-    
     <transition title="Dissolve"
         source="active"
         destination="dissolved"
@@ -88,7 +74,6 @@
         roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
-    
     <transition title="Deactivate"
         source="active dissolved"
         destination="draft"
@@ -98,3 +83,4 @@
     />
 
 </workflow>
+

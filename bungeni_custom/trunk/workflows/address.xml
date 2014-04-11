@@ -5,46 +5,33 @@
     permission_actions=".View .Edit .Add .Delete"
     >
     
-    <!-- sub-item: NO global grants -->
+    <!-- GLOBAL GRANTS (none, sub-item) -->
     
     
-    <!-- workflow facets -->
-    <facet name="draft">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly Drafter" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Drafter" />
-        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Drafter" />
-    </facet>
-    <facet name="internal" default="true">
-        <allow permission=".View" roles="Authenticated" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Drafter" />
-        <allow permission=".Add" roles="ClerkSenate ClerkAssembly Drafter" />
-        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Drafter" />
-    </facet>
-    <facet name="public">
-        <allow permission=".View" roles="Authenticated" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Drafter" />
-        <allow permission=".Add" roles="ClerkSenate ClerkAssembly Drafter" />
-        <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Drafter" />
-    </facet>
-    <facet name="withdrawn">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly Drafter" />
-    </facet>
-    
-    
-    <!-- workflow states -->
+    <!-- STATES -->
     <state id="draft" title="Draft">
-        <facet ref=".draft" />
+        <facet>
+            <allow permission=".View" roles="ClerkSenate ClerkAssembly Drafter" />
+            <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Drafter" />
+            <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Drafter" />
+        </facet>
     </state>
     <state id="bound_to_parent" title="Address" parent_permissions="true" />
     <state id="internal" title="Published Internal" note="Visible to bungeni users">
-        <facet ref=".internal" />
+        <facet>
+            <allow permission=".View" roles="Authenticated" />
+            <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Drafter" />
+            <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Drafter" />
+        </facet>
     </state>
     <state id="withdrawn" title="Withdrawn" note="Visible to bungeni users">
-        <facet ref=".withdrawn" />
+        <facet>
+            <allow permission=".View" roles="ClerkSenate ClerkAssembly Drafter" />
+        </facet>
     </state>
     
     
-    <!-- workflow transition -->
+    <!-- TRANSITIONS -->
     <transition title="Create"
         source=""
         destination="draft"

@@ -4,13 +4,13 @@
     permission_actions=".View .Edit .Add .Delete"
     >
     
-    <!-- global grants -->
+    <!-- GLOBAL GRANTS -->
     <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
     <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
     <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
     
     
-    <!-- features -->
+    <!-- FEATURES -->
     <feature name="audit" enabled="true">
         <parameter name="audit_actions" value="add modify workflow remove version translate" />
         <parameter name="include_subtypes" value="member group_assignment" />
@@ -21,50 +21,38 @@
     <feature name="address" enabled="true" />
     
     
-    <!-- workflow facets -->
-    <facet name="draft">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
-        <allow permission=".Delete" roles="Drafter" />
-    </facet>
-    <facet name="public">
-        <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="member.View" roles="Authenticated Anonymous" />
-        <allow permission="member.Edit" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="member.Add" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="member.Delete" roles="ClerkSenate ClerkAssembly" /><!-- !+GROUP_MEMBER_DELETE -->
-    </facet>
-    <facet name="public_frozen">
-        <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="member.View" roles="Authenticated Anonymous" />
-    </facet>
-    
-    
+    <!-- STATES -->
     <state id="draft" title="Draft - Parliament Chamber not yet Active" actions="deactivate">
-        <facet ref=".draft" />
-        <facet ref="address.internal" />
+        <facet>
+	    <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
+            <allow permission=".Delete" roles="Drafter" />
+            <allow permission="address.Add" roles="ClerkSenate ClerkAssembly Drafter" />
+        </facet>
+    </state>
+    <state id="active" title="Active Parliament Chamber" actions="activate">
+        <facet>
+	    <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="member.View" roles="Authenticated Anonymous" />
+            <allow permission="member.Edit" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="member.Add" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="member.Delete" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="address.Add" roles="ClerkSenate ClerkAssembly Drafter" />
+        </facet>
+    </state>
+    <state id="dissolved" title="Parliament Chamber is Dissolved" actions="dissolve">
+        <facet>
+	    <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="member.View" roles="Authenticated Anonymous" />
+        </facet>
     </state>
     
-    <state id="active" title="Active Parliament Chamber"
-            actions="activate"
-        >
-        <facet ref=".public" />
-        <facet ref="address.public" />
-    </state>
-    
-    <state id="dissolved" title="Parliament Chamber is Dissolved" 
-            actions="dissolve"
-        >
-        <facet ref=".public_frozen" />
-        <facet ref="address.withdrawn" />
-    </state>
-    
-    
+
+    <!-- TRANSITIONS -->
     <transition title="Create"
         source=""
         destination="draft"
         trigger="automatic"
     />
-    
     <transition title="Activate"
         source="draft dissolved"
         destination="active"
@@ -72,22 +60,19 @@
         roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
-    
     <transition title="Dissolve"
         source="active"
         destination="dissolved"
         condition="has_end_date"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
-        require_confirmation="true"
+        roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" 
     />
-    
     <transition title="Deactivate"
         source="active dissolved"
         destination="draft"
         trigger="manual"
         roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
-        require_confirmation="true"
     />
 
 </workflow>
+

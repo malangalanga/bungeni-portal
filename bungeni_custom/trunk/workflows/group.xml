@@ -4,13 +4,13 @@
     permission_actions=".View .Edit .Add .Delete"
     >
     
-    <!-- global grants -->
+    <!-- GLOBAL GRANTS -->
     <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
     <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
     <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
+
     
-    
-    <!-- features -->
+    <!-- FEATURES -->
     <feature name="audit" enabled="true">
         <parameter name="audit_actions" value="add modify workflow remove version translate" />
         <parameter name="include_subtypes" value="member group_assignment" />
@@ -20,87 +20,74 @@
     <feature name="sitting" enabled="false" />
     <feature name="address" enabled="true" />
     
-    
-    <!-- workflow facets -->
-    <facet name="draft">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly Drafter" />
-    </facet>
-    <facet name="public">
-        <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="group_member.View" roles="Authenticated Anonymous" />
-        <allow permission="group_member.Edit" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="group_member.Add" roles="ClerkSenate ClerkAssembly" />
-        <!-- !+GROUP_MEMBER_DELETE(mr, dec-2012) in sub-item's workflow "draft" state -->
-        <allow permission="group_member.Delete" roles="ClerkSenate ClerkAssembly" />
-        <!-- !+NO_REDEFINE_PERMISSION redefine of political_group_member permissions 
-            to group_member fails here (and this is the workflow used by 
-            political_group_member). Work around options for this is are:
-            a) do NOT use redefinePermission, so to not get false confidence that 
-               it might work, and know to then call each desired permission explicitly.
-            b) give political_group_member its own workflow (an option if (a) is
-               adopted, with other option being to pile-up any political_group_member
-               permissions into the "shared" group workflow, as done below).
-            c) determine from with each workflow/state whether any given permission 
-               has been redefined to something else, and "add" the redefined version
-               to granted permissions for the state/role
-        
-        Need to manage here all permissions needed by any 
-        group type that does NOT define an own workflow 
-        i.e. political_group, office, government, ministry
-        -->
-        <allow permission="political_group_member.View" roles="Authenticated Anonymous" />
-        <allow permission="political_group_member.Edit" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="political_group_member.Add" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="political_group_member.Delete" roles="ClerkSenate ClerkAssembly" /><!-- !+GROUP_MEMBER_DELETE -->
-        <allow permission="office_member.View" roles="Authenticated Anonymous" />
-        <allow permission="office_member.Edit" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="office_member.Add" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="office_member.Delete" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="title_type.View" roles="Authenticated Anonymous" />
-        <!-- !+TITLE_TYPE_ADD fails on UI form for non-admin...
-        <allow permission="title_type.Edit" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="title_type.Add" roles="ClerkSenate ClerkAssembly" />
-        <allow permission="title_type.Delete" roles="ClerkSenate ClerkAssembly" />
-        -->
-        <!-- /!+NO_REDEFINE_PERMISSION -->
-    </facet>
-    <facet name="public_frozen">
-        <allow permission=".View" roles="Authenticated Anonymous" />
-        <allow permission="group_member.View" roles="Authenticated Anonymous" />
-        <!-- !+NO_REDEFINE_PERMISSION -->
-        <allow permission="political_group_member.View" roles="Authenticated Anonymous" />
-        <allow permission="office_member.View" roles="Authenticated Anonymous" />
-        <allow permission="title_type.View" roles="Authenticated Anonymous" />
-        <!-- /!+NO_REDEFINE_PERMISSION -->
-    </facet>
-    
-    
+
+    <!-- STATES -->
     <state id="draft" title="Draft - Group not yet Active" actions="deactivate">
-        <facet ref=".draft" />
-        <facet ref="address.internal" />
+        <facet>
+            <allow permission=".View" roles="ClerkSenate ClerkAssembly Drafter" />
+            <allow permission="address.Add" roles="ClerkSenate ClerkAssembly Drafter" />
+        </facet>
+    </state>
+    <state id="active" title="Active Group" actions="activate">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="group_member.View" roles="Authenticated Anonymous" />
+            <allow permission="group_member.Edit" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="group_member.Add" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="group_member.Delete" roles="ClerkSenate ClerkAssembly" />
+            <!-- !+NO_REDEFINE_PERMISSION redefine of political_group_member permissions 
+                to group_member fails here (and this is the workflow used by 
+                political_group_member). Work around options for this is are:
+                a) do NOT use redefinePermission, so to not get false confidence that 
+                   it might work, and know to then call each desired permission explicitly.
+                b) give political_group_member its own workflow (an option if (a) is
+                   adopted, with other option being to pile-up any political_group_member
+                   permissions into the "shared" group workflow, as done below).
+                c) determine from with each workflow/state whether any given permission 
+                   has been redefined to something else, and "add" the redefined version
+                   to granted permissions for the state/role
+            
+            Need to manage here all permissions needed by any 
+            group type that does NOT define an own workflow 
+            i.e. political_group, office, government, ministry
+            -->
+            <allow permission="political_group_member.View" roles="Authenticated Anonymous" />
+            <allow permission="political_group_member.Edit" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="political_group_member.Add" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="political_group_member.Delete" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="office_member.View" roles="Authenticated Anonymous" />
+            <allow permission="office_member.Edit" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="office_member.Add" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="office_member.Delete" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="title_type.View" roles="Authenticated Anonymous" />
+            <!-- !+TITLE_TYPE_ADD fails on UI form for non-admin...
+            <allow permission="title_type.Edit" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="title_type.Add" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="title_type.Delete" roles="ClerkSenate ClerkAssembly" />
+            -->
+            <!-- /!+NO_REDEFINE_PERMISSION -->
+            <allow permission="address.Add" roles="ClerkSenate ClerkAssembly Drafter" />
+        </facet>
+    </state>
+    <state id="dissolved" title="Group is Dissolved" actions="dissolve">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="group_member.View" roles="Authenticated Anonymous" />
+            <!-- !+NO_REDEFINE_PERMISSION -->
+            <allow permission="political_group_member.View" roles="Authenticated Anonymous" />
+            <allow permission="office_member.View" roles="Authenticated Anonymous" />
+            <allow permission="title_type.View" roles="Authenticated Anonymous" />
+            <!-- /!+NO_REDEFINE_PERMISSION -->
+        </facet>
     </state>
     
-    <state id="active" title="Active Group" 
-            actions="activate"
-        >
-        <facet ref=".public" />
-        <facet ref="address.public" />
-    </state>
     
-    <state id="dissolved" title="Group is Dissolved" 
-            actions="dissolve"
-        >
-        <facet ref=".public_frozen" />
-        <facet ref="address.withdrawn" />
-    </state>
-    
-    
+    <!-- TRANSITIONS -->
     <transition title="Create"
         source=""
         destination="draft"
         trigger="automatic"
     />
-    
     <transition title="Activate"
         source="draft dissolved"
         destination="active"
@@ -108,7 +95,6 @@
         roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
-    
     <transition title="Dissolve"
         source="active"
         destination="dissolved"
@@ -117,8 +103,6 @@
         roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly"
         require_confirmation="true"
     />
-    
-    <!-- !+ why back to "draft"? -->
     <transition title="Deactivate"
         source="active"
         destination="draft"
@@ -128,3 +112,4 @@
     />
 
 </workflow>
+
