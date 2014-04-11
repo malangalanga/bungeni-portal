@@ -4,10 +4,12 @@
     permission_actions=".View .Edit .Add .Delete"
     >
     
-    <!-- global grants -->
+    <!-- GLOBAL GRANTS -->
     <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
     
-    <!-- features -->
+
+    <!-- FEATURES -->
+
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
@@ -19,72 +21,90 @@
     <feature name="notification" enabled="true" />
     <feature name="download" enabled="true" />
     
-    <!-- workflow facets -->
-    <facet name="draft">
-        <allow permission=".View" roles="Drafter" />
-        <allow permission=".Edit" roles="Drafter" />
-        <allow permission=".Delete" roles="Drafter" />
-    </facet>
-    <facet name="redraft">
-        <allow permission=".View" roles="Drafter Owner" />
-        <allow permission=".Edit" roles="Drafter" />
-    </facet>
-    <facet name="view_internal">
-        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
-    </facet>
-    <facet name="edit_Clerk">
-        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
-        <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
-    </facet>
-    <facet name="edit_Owner">
-        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
-        <allow permission=".Edit" roles="Owner" />
-    </facet>
-    <facet name="edit_Speaker">
-        <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
-        <allow permission=".Edit" roles="SpeakerSenate SpeakerAssembly" />
-    </facet>
-    <facet name="public">
-        <allow permission=".View" roles="Anonymous" />
-    </facet>
     
-    <!-- workflow states -->    
+    <!-- STATES --> 
+   
     <state id="draft" title="Draft">
-        <facet ref=".draft" />
-        <facet ref="attachment.add_drafter" />
+        <facet>
+            <allow permission=".View" roles="Drafter" />
+            <allow permission=".Edit" roles="Drafter" />
+            <allow permission=".Delete" roles="Drafter" />
+            <allow permission="attachment.Add" roles="Drafter" />
+        </facet>
     </state>
     <state id="submitted" title="Submitted" actions="version">
-        <facet ref=".edit_Clerk" />
-        <facet ref="attachment.add_clerk" />
+        <facet>
+            <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+            <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly ClerkSenate ClerkQuestionSenate" />
+        </facet>
     </state>
-    <state id="clarification_required" title="Requires Clarification to Receive" 
-            actions="version"   >
-        <facet ref=".edit_Owner" />
-        <facet ref="attachment.add_clerk" />
+    <state id="clarification_required" title="Requires Clarification to Receive" actions="version"   >
+        <facet>
+            <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+            <allow permission=".Edit" roles="Owner" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly ClerkSenate ClerkQuestionSenate" />
+        </facet>
     </state>
     <state id="review_pending" title="Submitted to the Speaker" actions="version">
-        <facet ref=".edit_Speaker" />
-        <facet ref="attachment.add_speaker" />
+        <facet>
+            <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+            <allow permission=".Edit" roles="SpeakerSenate SpeakerAssembly" />
+            <allow permission="attachment.Add" roles="SpeakerAssembly  SpeakerSenate" />
+        </facet>
     </state>
     <state id="inadmissible" title="Inadmissible">
-        <facet ref=".view_internal" />
-        <facet ref="attachment.add_clerk" />
+        <facet>
+            <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
+        </facet>
     </state>
-    <state id="withdrawn_internal" title="Withdrawn" permissions_from_state="inadmissible" />
+    <state id="withdrawn_internal" title="Withdrawn">
+        <facet>
+            <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
+        </facet>
+    </state>
     <state id="admissible" title="Admissible" actions="version">
-        <facet ref=".public" />
-        <facet ref="attachment.add_clerk" />
+        <facet>
+            <allow permission=".View" roles="Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
+        </facet>
     </state>
-    <state id="scheduled" title="Scheduled" permissions_from_state="admissible" />
-    <state id="adjourned" title="Debate adjourned" permissions_from_state="admissible" />
+    <state id="scheduled" title="Scheduled">
+        <facet>
+            <allow permission=".View" roles="Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
+        </facet>
+    </state>
+    <state id="adjourned" title="Debate adjourned">
+        <facet>
+            <allow permission=".View" roles="Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
+        </facet>
+    </state>
     <state id="debated" title="Debated">
-        <facet ref=".public" />
-        <facet ref="attachment.add_clerk" />
+        <facet>
+            <allow permission=".View" roles="Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
+        </facet>
     </state>
-    <state id="dropped" title="Dropped" permissions_from_state="debated" />
-    <state id="withdrawn" title="Withdrawn" permissions_from_state="debated" />
+    <state id="dropped" title="Dropped">
+        <facet>
+            <allow permission=".View" roles="Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
+        </facet>
+    </state>
+    <state id="withdrawn" title="Withdrawn">
+        <facet>
+            <allow permission=".View" roles="Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
+        </facet>
+    </state>
     
-    <!-- workflow transition -->    
+
+    <!-- TRANSITIONS -->
+    
     <transition title="Create Agenda Item"
         source=""
         destination="draft"

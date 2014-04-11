@@ -4,17 +4,20 @@
     permission_actions=".View .Edit .Add .Delete"
     >
     
-    <!-- global grants -->
-    <allow permission=".View" roles="ClerkAssembly" />
-    <allow permission="debate_media.Add" roles="Transcriber.Editor" />
-    <allow permission="debate_media.View" roles="Transcriber.Editor" />
-    <allow permission="debate_media.Delete" roles="Transcriber.Editor" />
+    <!-- GLOBAL GRANTS -->
 
-    <allow permission="debate_take.Add" roles="Transcriber.Editor" />
-    <allow permission="debate_take.Edit" roles="Transcriber.Editor" />
-    <allow permission="debate_take.View" roles="Transcriber.Editor Transcriber.Reporter" />
+        <allow permission=".View" roles="ClerkAssembly" />
+        <allow permission="debate_media.Add" roles="Transcriber.Editor" />
+        <allow permission="debate_media.View" roles="Transcriber.Editor" />
+        <allow permission="debate_media.Delete" roles="Transcriber.Editor" />
 
-    <!-- features -->
+        <allow permission="debate_take.Add" roles="Transcriber.Editor" />
+        <allow permission="debate_take.Edit" roles="Transcriber.Editor" />
+        <allow permission="debate_take.View" roles="Transcriber.Editor Transcriber.Reporter" />
+
+
+    <!-- FEATURES -->
+
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
     <feature name="user_assignment" enabled="true">
@@ -22,36 +25,35 @@
         <parameter name="assignable_roles" value="Transcriber.Reporter" />
     </feature>
     <feature name="workspace" enabled="true" />
+       
     
-    
-    <facet name="draft">
-      <allow permission=".View" roles="Transcriber.Editor Transcriber.Reporter" />
-      <allow permission="user_assignment.View" roles="Transcriber.Editor Transcriber.Reporter" />
-      <allow permission="user_assignment.Edit" roles="Transcriber.Editor" />
-      <allow permission="debate_media.Edit" roles="Transcriber.Editor" />
-    </facet>
-    <facet name="in_progress">
-      <allow permission=".View" roles="Transcriber.Editor Transcriber.Reporter" />
-      <allow permission="user_assignment.View" roles="Transcriber.Editor Transcriber.Reporter" />
-    </facet>
-    <facet name="published">
-      <allow permission=".View" roles="Transcriber.Editor Transcriber.Reporter" />
-      <allow permission="user_assignment.View" roles="Transcriber.Editor Transcriber.Reporter" />
-      <allow permission="debate_media.Edit" roles="Transcriber.Editor" />
-    </facet>
-    
-    
+    <!-- STATES -->
+
     <state id="draft" title="Draft">
-      <facet ref=".draft" />
+      <facet>
+          <allow permission=".View" roles="Transcriber.Editor Transcriber.Reporter" />
+          <allow permission="user_assignment.View" roles="Transcriber.Editor Transcriber.Reporter" />
+          <allow permission="user_assignment.Edit" roles="Transcriber.Editor" />
+          <allow permission="debate_media.Edit" roles="Transcriber.Editor" />
+        </facet>
     </state>
     <state id="in_progress" title="In Progress">
-      <facet ref=".in_progress" />
+      <facet>
+          <allow permission=".View" roles="Transcriber.Editor Transcriber.Reporter" />
+          <allow permission="user_assignment.View" roles="Transcriber.Editor Transcriber.Reporter" />
+        </facet>
     </state>
     <state id="published" title="Published">
-      <facet ref=".published" />
+      <facet>
+          <allow permission=".View" roles="Transcriber.Editor Transcriber.Reporter" />
+          <allow permission="user_assignment.View" roles="Transcriber.Editor Transcriber.Reporter" />
+          <allow permission="debate_media.Edit" roles="Transcriber.Editor" />
+        </facet>
     </state>
     
     
+    <!-- TRANSITIONS -->
+
     <transition title="Create Debate Record"
         source=""
         destination="draft"

@@ -2,32 +2,29 @@
 <workflow title="Heading Workflow"
     description="Workflow for headings"
     permission_actions=".View .Edit .Add .Delete"
-    >
+    >  
+ 
+    <!-- GLOBAL GRANTS -->
+	    <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
+	    <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
+	    <allow permission=".Delete" roles="ClerkSenate ClerkAssembly" />
 
-    <!-- global grants -->
-    <allow permission=".Edit" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
-    <allow permission=".Add" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
-    <allow permission=".Delete" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
-    
-    
-    <!-- workflow facets -->
-    <facet name="view_Clerk">
-        <allow permission=".View" roles="ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
-    </facet>
-    <facet name="view">
-        <allow permission=".View" roles="Authenticated Anonymous" />
-    </facet>
-    
-    
+    <!-- STATES -->
+
     <state id="inactive" title="Inactive heading obsolete">
-        <facet ref=".view_Clerk" />
+        <facet>
+            <allow permission=".View" roles="ClerkSenate ClerkAssembly" />
+        </facet>
     </state>
-    
     <state id="public" title="Public">
-        <facet ref=".view" />
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+        </facet>
     </state>
     
     
+    <!-- TRANSITIONS -->
+
     <transition title="Create"
         source=""
         destination="public"

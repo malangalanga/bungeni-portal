@@ -6,33 +6,15 @@
     
     <!-- sub-item: NO global grants -->
     
-    <!-- features -->
+
+    <!-- FEATURES -->
+
     <feature name="audit" enabled="true">
         <parameter name="audit_actions" value="add modify workflow remove version translate" />
         <parameter name="display_columns" value="user date_active object description note" />
     </feature>
     <feature name="version" enabled="true" />
-    
-    <!-- FACETS -->
-    <!-- fz: a recommendation for simple management of attachments facets. 
-    
-    We have "parent facets" (facets intended only for use by parent type) where 
-    you just handle who has the right to "add" a "child-document" and we have 
-    "workflow facets" (for this workflow AND for parent) where you handle 
-    (as in any document) the permission of the "child document".
-    In these facets you should not use the ".Add" action.
-    -->
-    
-    <!-- parent facets -->
-    <facet name="add_drafter">
-        <allow permission=".Add" roles="Drafter" />
-    </facet>  
-    <facet name="add_clerk">
-        <allow permission=".Add" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate" />
-    </facet>
-    <facet name="add_speaker">
-        <allow permission=".Add" roles="SpeakerSenate SpeakerAssembly" />
-    </facet>
+  
   
     
     <!-- workflow states -->
@@ -46,25 +28,24 @@
     <state id="attached" title="Attached">
         <facet>
             <allow permission=".View" roles="Anonymous" />
-            <allow permission=".Edit" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate" />
+            <allow permission=".Edit" roles="SpeakerAssembly ClerkAssembly ClerkQuestionAssembly SpeakerSenate ClerkSenate ClerkQuestionSenate" />
         </facet>
     </state>
     <state id="internal" title="Internal">
         <facet>
             <allow permission=".View" roles="Authenticated" />
-            <allow permission=".Edit" roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate" />
+            <allow permission=".Edit" roles="SpeakerAssembly ClerkAssembly ClerkQuestionAssembly SpeakerSenate ClerkSenate ClerkQuestionSenate" />
         </facet>
     </state>
     <state id="withdrawn" title="Withdrawn">
         <facet>
-            <allow permission=".View" roles="
-                    ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
-                    SpeakerSenate SpeakerAssembly" />
+            <allow permission=".View" roles="SpeakerAssembly ClerkAssembly ClerkQuestionAssembly SpeakerSenate ClerkSenate ClerkQuestionSenate" />
         </facet>   
     </state>
     
     
-    <!-- workflow transision -->    
+    <!-- TRANSITIONS -->   
+ 
     <transition title="Create"
         source=""
         destination="draft"

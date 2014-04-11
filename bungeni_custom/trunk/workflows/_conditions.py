@@ -95,13 +95,30 @@ def is_oral_response_or_is_group_assigned(question):
     """
     return is_oral_response(question) or is_group_assigned(question)
 
-def response_allow_submit(question):
+
+def response_allow_submit_assembly(question):
     """question: Require that the event response has been completed.
     """
-    event_response = child(question, "event_response")
+    event_response = child(question, "assembly_response")
     return in_state(event_response, "completed")
 
+def response_allow_submit_senate(question):
+    """question: Require that the event response has been completed.
+    """
+    event_response = child(question, "senate_response")
+    return in_state(event_response, "completed")
 
+def response_allow_publish_assembly(question):
+    """question: Require that the event response has been reviewed.
+    """
+    event_response = child(question, "assembly_response")
+    return in_state(event_response, "reviewed")
+
+def response_allow_publish_senate(question):
+    """question: Require that the event response has been reviewed.
+    """
+    event_response = child(question, "senate_response")
+    return in_state(event_response, "reviewed")
 
 
 
