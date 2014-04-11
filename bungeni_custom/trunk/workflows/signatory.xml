@@ -8,26 +8,19 @@
         Append: Append signature to a document
     -->
     
-    <!-- global grants -->
+    <!-- GLOBAL GRANTS -->
     <allow permission=".Act" roles="Signatory" /><!-- !+ why is this global? -->
     <allow permission=".Append" roles="MemberSenate MemberAssembly" />
     
     
-    <!-- features -->
+    <!-- FEATURES -->
     <feature name="audit" enabled="true">
         <parameter name="audit_actions" value="add modify workflow remove version translate" />
         <parameter name="display_columns" value="user date_active object description note" />
     </feature>
 
-  
-
-    <!-- parent facets -->
-    <facet name="draft_Drafter">
-        <allow permission=".Add" roles="Drafter" />
-    </facet>
-
     
-    <!-- workflow states -->       
+    <!-- STATES -->
     <state id="awaiting_consent" title="Awaiting Consent">
         <facet>
             <allow permission=".View" roles="Drafter Signatory" />
@@ -57,7 +50,7 @@
     </state>
     
 
-    <!-- workflow transision -->      
+    <!-- TRANSITIONS --> 
     <transition title="Create"
         source=""
         destination="awaiting_consent"
