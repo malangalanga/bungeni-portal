@@ -7,40 +7,42 @@
     
     <!-- sub-item: NO global grants -->
     
-    <!-- features -->
+
+    <!-- FEATURES -->
+
     <feature name="audit" enabled="true">
         <parameter name="audit_actions" value="add modify workflow remove version translate" />
         <parameter name="display_columns" value="user date_active object description note" />
     </feature>
     <feature name="version" enabled="true" />
     
-    
-    <!-- FACETS (see explanation in attachment workflow) -->
-    
-    <!-- parent facets -->
-    
-    <!-- workflow facets -->
-    <facet name="view">
-        <allow permission=".View" roles="Authenticated" />
-    </facet>
-    
-    
-    <!-- !+MEMBERSHIP_DRAFT_STATE  there should be an initial draft state for 
-        membership, and this would also be the only time when delete will be 
-        possible.
+
+    <!-- STATES -->
+
     <state id="draft" title="Draft Membership">
-        <facet ref=".draft" />
+	<facet>
+            <allow permission=".View" roles="ClerkSenate ClerkAssembly Drafter" />
+            <allow permission=".Edit" roles="ClerkSenate ClerkAssembly Drafter" />
+            <allow permission=".Delete" roles="ClerkSenate ClerkAssembly Drafter" />
+	</facet>
     </state>
-    -->
     <state id="attached" title="Member" parent_permissions="true" />
     <state id="internal" title="Published Internal" note="Visible to bungeni users">
-        <facet ref=".view" />
+	<facet>
+            <allow permission=".View" roles="Authenticated" />
+	</facet>
     </state>
     
     
-    <!-- !+IDENTICAL_TRANSITIONS(mr, sep-2011) attachment, address, event -->
+    <!-- TRANSITIONS -->
+
     <transition title="Create"
         source=""
+        destination="draft"
+        trigger="automatic"
+    />
+    <transition title="attach"
+        source="draft"
         destination="attached"
         trigger="automatic"
     />
