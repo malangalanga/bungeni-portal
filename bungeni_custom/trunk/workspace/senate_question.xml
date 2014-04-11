@@ -30,9 +30,9 @@
         <tab id="archive" roles="
 		      Owner 
 		      ClerkQuestionSenate.ClerkHead
-                      ClerkQuestionSenate.ClerkQuestion
+              ClerkQuestionSenate.ClerkQuestion
 			ClerkSenate
-                      SpeakerSenate"/>
+              SpeakerSenate"/>
     </state>
      <state id="clarification_required">
         <tab id="inbox" roles="Owner"/>
@@ -46,7 +46,7 @@
 		    Owner
 		    SpeakerSenate
 		    ClerkQuestionSenate.ClerkHead
-                    ClerkQuestionSenate.ClerkQuestion
+            ClerkQuestionSenate.ClerkQuestion
 		    ClerkSenate
 		    MinistryMember"/>
     </state>
@@ -56,7 +56,7 @@
 		    Owner
 		    SpeakerSenate
 		    ClerkQuestionSenate.ClerkHead
-                    ClerkQuestionSenate.ClerkQuestion
+            ClerkQuestionSenate.ClerkQuestion
 		    ClerkSenate
 		    MinistryMember"/>
    </state>
@@ -67,15 +67,17 @@
 		    SpeakerSenate
 		    ClerkSenate
 		    ClerkQuestionSenate.ClerkHead
-                    ClerkQuestionSenate.ClerkQuestion" />
+            ClerkQuestionSenate.ClerkQuestion" />
    </state>
    <state id="response_submitted">
-        <tab id="inbox" roles="ClerkQuestionSenate.ClerkHead ClerkQuestionSenate.ClerkQuestion" />
+        <tab id="inbox" roles="
+            ClerkQuestionSenate.ClerkHead
+            ClerkQuestionSenate.ClerkQuestion
+            ClerkSenate" />
 	<tab id="pending" roles="
 		    Owner
 		    SpeakerSenate
-                    ClerkQuestionSenate.ClerkQuestion
-		    ClerkSenate
+            ClerkQuestionSenate.ClerkQuestion
 		    MinistryMember"/>
    </state>
    <state id="response_reviewed">
@@ -83,7 +85,7 @@
 		    Owner
 		    SpeakerSenate
 		    ClerkQuestionSenate.ClerkHead
-                    ClerkQuestionSenate.ClerkQuestion
+            ClerkQuestionSenate.ClerkQuestion
 		    ClerkSenate
 		    MinistryMember" />
     </state>
@@ -92,7 +94,7 @@
 		    Owner
 		    SpeakerSenate
 		    ClerkQuestionSenate.ClerkHead
-                    ClerkQuestionSenate.ClerkQuestion
+            ClerkQuestionSenate.ClerkQuestion
 		    ClerkSenate
 		    MinistryMember" />
     </state>
@@ -101,7 +103,7 @@
 		    Owner
 		    SpeakerSenate
 		    ClerkQuestionSenate.ClerkHead
-                    ClerkQuestionSenate.ClerkQuestion
+            ClerkQuestionSenate.ClerkQuestion
 		    ClerkSenate
 		    MinistryMember" />
     </state>
@@ -110,7 +112,7 @@
 		    Owner
 		    SpeakerSenate
 		    ClerkQuestionSenate.ClerkHead
-                    ClerkQuestionSenate.ClerkQuestion
+            ClerkQuestionSenate.ClerkQuestion
 		    ClerkSenate
 		    MinistryMember" />
     </state>
@@ -118,16 +120,16 @@
         <tab id="archive" 
 	     roles="Owner
 		    ClerkQuestionSenate.ClerkHead
-              	    ClerkQuestionSenate.ClerkQuestion
+            ClerkQuestionSenate.ClerkQuestion
 		    ClerkSenate
-                    SpeakerSenate" />
+            SpeakerSenate" />
     </state>
     <state id="withdrawn">
         <tab id="archive" roles="
 		    Owner
 		    SpeakerSenate
 		    ClerkQuestionSenate.ClerkHead
-                    ClerkQuestionSenate.ClerkQuestion
+            ClerkQuestionSenate.ClerkQuestion
 		    ClerkSenate
 		    MinistryMember" />
     </state>
@@ -137,6 +139,6 @@
 		    SpeakerSenate
 		    ClerkSenate
 		    ClerkQuestionSenate.ClerkHead
-                    ClerkQuestionSenate.ClerkQuestion" />
+            ClerkQuestionSenate.ClerkQuestion" />
     </state>
 </workspace>

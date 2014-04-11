@@ -65,7 +65,11 @@
         descriptor="assembly_tabled_document" workflow="assembly_tabled_document" 
         enabled="true"
         label="assembly tabled document" container_label="assembly tabled documents" />
-    
+
+    <event name="assembly_event" archetype="event" descriptor="assembly_event" 
+        workflow="assembly_event" enabled="true"
+        label="event" container_label="events" />
+
     <!-- SENATE -->
     <doc name="senate_bill" archetype="bill" 
          descriptor="senate_bill" workflow="senate_bill" 
@@ -84,7 +88,10 @@
          enabled="true"
          label="senate tabled document" container_label="senate tabled documents" />
 
-    
+    <event name="senate_event" archetype="event" descriptor="senate_event" 
+        workflow="senate_event" enabled="true" 
+        label="event" container_label="events" />
+
     <event name="event_response" archetype="event" workflow="event_response" enabled="true" 
          label="response" container_label="responses" />
     <event name="event_editor" archetype="event" workflow="event_editor" enabled="true" 

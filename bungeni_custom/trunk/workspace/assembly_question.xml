@@ -28,15 +28,15 @@
     </state>
     <state id="inadmissible">
         <tab id="archive" roles="
-		      Owner 
+            Owner 
 		      ClerkQuestionAssembly.ClerkHead
-                      ClerkQuestionAssembly.ClerkQuestion
-			ClerkAssembly
-                      SpeakerAssembly"/>
+              ClerkQuestionAssembly.ClerkQuestion
+                ClerkAssembly
+              SpeakerAssembly"/>
     </state>
-     <state id="clarification_required">
-        <tab id="inbox" roles="Owner"/>
-	      <tab id="pending" roles="
+    <state id="clarification_required">
+        <tab id="inbox" roles="Owner" />
+	    <tab id="pending" roles="
 			ClerkQuestionAssembly.ClerkHead ClerkQuestionAssembly.ClerkQuestion
 			ClerkAssembly
 			" />
@@ -46,7 +46,7 @@
 		    Owner
 		    SpeakerAssembly
 		    ClerkQuestionAssembly.ClerkHead
-                    ClerkQuestionAssembly.ClerkQuestion
+            ClerkQuestionAssembly.ClerkQuestion
 		    ClerkAssembly
 		    MinistryMember"/>
     </state>
@@ -56,7 +56,7 @@
 		    Owner
 		    SpeakerAssembly
 		    ClerkQuestionAssembly.ClerkHead
-                    ClerkQuestionAssembly.ClerkQuestion
+            ClerkQuestionAssembly.ClerkQuestion
 		    ClerkAssembly
 		    MinistryMember"/>
    </state>
@@ -67,15 +67,17 @@
 		    SpeakerAssembly
 		    ClerkAssembly
 		    ClerkQuestionAssembly.ClerkHead
-                    ClerkQuestionAssembly.ClerkQuestion" />
+            ClerkQuestionAssembly.ClerkQuestion" />
    </state>
    <state id="response_submitted">
-        <tab id="inbox" roles="ClerkQuestionAssembly.ClerkHead ClerkQuestionAssembly.ClerkQuestion" />
+        <tab id="inbox" roles="
+            ClerkQuestionAssembly.ClerkHead
+            ClerkQuestionAssembly.ClerkQuestion
+            ClerkAssembly" />
 	<tab id="pending" roles="
 		    Owner
 		    SpeakerAssembly
-                    ClerkQuestionAssembly.ClerkQuestion
-		    ClerkAssembly
+            ClerkQuestionAssembly.ClerkQuestion
 		    MinistryMember"/>
    </state>
    <state id="response_reviewed">
@@ -83,7 +85,7 @@
 		    Owner
 		    SpeakerAssembly
 		    ClerkQuestionAssembly.ClerkHead
-                    ClerkQuestionAssembly.ClerkQuestion
+            ClerkQuestionAssembly.ClerkQuestion
 		    ClerkAssembly
 		    MinistryMember" />
     </state>
@@ -92,7 +94,7 @@
 		    Owner
 		    SpeakerAssembly
 		    ClerkQuestionAssembly.ClerkHead
-                    ClerkQuestionAssembly.ClerkQuestion
+            ClerkQuestionAssembly.ClerkQuestion
 		    ClerkAssembly
 		    MinistryMember" />
     </state>
@@ -101,7 +103,7 @@
 		    Owner
 		    SpeakerAssembly
 		    ClerkQuestionAssembly.ClerkHead
-                    ClerkQuestionAssembly.ClerkQuestion
+            ClerkQuestionAssembly.ClerkQuestion
 		    ClerkAssembly
 		    MinistryMember" />
     </state>
@@ -110,7 +112,7 @@
 		    Owner
 		    SpeakerAssembly
 		    ClerkQuestionAssembly.ClerkHead
-                    ClerkQuestionAssembly.ClerkQuestion
+            ClerkQuestionAssembly.ClerkQuestion
 		    ClerkAssembly
 		    MinistryMember" />
     </state>
@@ -120,14 +122,14 @@
 		    ClerkQuestionAssembly.ClerkHead
               	    ClerkQuestionAssembly.ClerkQuestion
 		    ClerkAssembly
-                    SpeakerAssembly" />
+            SpeakerAssembly" />
     </state>
     <state id="withdrawn">
         <tab id="archive" roles="
 		    Owner
 		    SpeakerAssembly
 		    ClerkQuestionAssembly.ClerkHead
-                    ClerkQuestionAssembly.ClerkQuestion
+            ClerkQuestionAssembly.ClerkQuestion
 		    ClerkAssembly
 		    MinistryMember" />
     </state>
@@ -137,6 +139,6 @@
 		    SpeakerAssembly
 		    ClerkAssembly
 		    ClerkQuestionAssembly.ClerkHead
-                    ClerkQuestionAssembly.ClerkQuestion" />
+            ClerkQuestionAssembly.ClerkQuestion" />
     </state>
 </workspace>
