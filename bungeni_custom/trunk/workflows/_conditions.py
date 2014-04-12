@@ -64,7 +64,11 @@ from bungeni.core.workflows._conditions import (
     child, # (context, type_key) -> child
     
     # is context status one of the ones in state_ids?
-    in_state # (context, state_id, state_id, ...) -> bool
+    in_state, # (context, state_id, state_id, ...) -> bool
+    
+    # Is the context child document, identified by type_key, in one of the 
+    # specified state_ids?
+    child_in_state, # (context, type_key, state_id, state_id, ...) -> bool
 )
 
 
@@ -99,27 +103,22 @@ def is_oral_response_or_is_group_assigned(question):
 def response_allow_submit_assembly(question):
     """question: Require that the event response has been completed.
     """
-    event_response = child(question, "assembly_response")
-    return in_state(event_response, "completed")
+    return child_in_state(question, "assembly_response", "completed")
 
 def response_allow_submit_senate(question):
     """question: Require that the event response has been completed.
     """
-    event_response = child(question, "senate_response")
-    return in_state(event_response, "completed")
+    return child_in_state(question, "senate_response", "completed")
 
 def response_allow_publish_assembly(question):
     """question: Require that the event response has been reviewed.
     """
-    event_response = child(question, "assembly_response")
-    return in_state(event_response, "reviewed")
+    return child_in_state(question, "assembly_response", "reviewed")
 
 def response_allow_publish_senate(question):
     """question: Require that the event response has been reviewed.
     """
-    event_response = child(question, "senate_response")
-    return in_state(event_response, "reviewed")
-
+    return child_in_state(question, "senate_response", "reviewed")
 
 
 ''' !+composite_condition(mr, may-2012) ability to do this in xml directly?
