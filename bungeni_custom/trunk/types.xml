@@ -111,21 +111,35 @@
         label="political group" container_label="political groups"
         privilege_extent="group"
         >
-        <member name="political_group_member" workflow="group_member" enabled="true"
+        <member name="political_group_member" workflow="group_member" 
+            enabled="true"
             label="member" container_label="members" />
     </group>
-    <group name="committee" enabled="true" label="committee" container_label="committees"
+    <group name="committee" 
+        enabled="true" 
+        label="committee" container_label="committees"
         privilege_extent="group"
         note="A parliamentary committee of MPs.">
-        <member name="committee_member" workflow="group_member" enabled="true" 
+        <member name="committee_member" 
+            workflow="group_member" 
+            enabled="true" 
             label="member" container_label="members" />
-        <member name="committee_staff" workflow="group_member" enabled="true"
+        <member name="committee_staff" workflow="group_member" 
+            enabled="true"
             label="staff" container_label="staff members" />
     </group>
-    <group name="joint_committee" archetype="committee" workflow="committee" 
-        descriptor="committee" enabled="true" 
+    <group name="joint_committee" 
+        descriptor="joint_committee" workflow="committee" 
+        enabled="true" 
         label="joint committee" container_label="joint committees"
-        privilege_extent="group">
+        privilege_extent="group"
+        note="joint_committee should not have committee as its archetype, 
+            as this would mean also inheriting the member types from 
+            committee type.">
+        <member name="joint_committee_member"
+            descriptor="joint_committee_member" workflow="group_member" 
+            enabled="true" 
+            label="member" container_label="members" />
     </group>
     <group name="government" workflow="group" enabled="true"
         label="government" container_label="governments"

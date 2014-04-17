@@ -13,10 +13,10 @@ the deployment's python site-packages folder, containing a single line
 with the path to the parent folder of the "bungeni_custom" package.
 
 For example, create the file at:
-/home/{USER}/cinst/python25/lib/python2.5/site-packages/bungeni_custom.pth
+/opt/bungeni/bungeni_apps/python27/lib/python2.7/site-packages/bungeni_custom.pth
 
-Containing the one line:
-/home/{USER}/cinst/bungeni/src
+Containing the path to parent folder of the "bungeni_custom" package e.g.:
+/opt/bungeni/bungeni_apps/bungeni/src
 
 
 $Id$

@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<descriptor order="2">
+    <field name="full_name" label="Full Name" required="false" value_type="text" render_type="text_line">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="combined_name" label="Full Name [acronym]" required="false" value_type="text" render_type="text_line" derived="group_combined_name">
+        <show modes="listing" />
+    </field>
+    <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+        <show modes="view edit add" />
+        <hide modes="listing" />
+    </field>
+    <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
+        <show modes="view edit add" />
+        <hide modes="listing" />
+    </field>
+    <field name="end_date" label="End Date" required="false" value_type="date" render_type="date">
+        <show modes="view edit add" />
+        <hide modes="listing" />
+    </field>
+    <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
+        <show modes="view listing" />
+    </field>
+    <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
+        <show modes="view edit add" />
+    </field>
+    <field name="principal_name" label="Committee Identifier" description="Unique identifier for this Committee" required="true" value_type="text" render_type="single_select" vocabulary="committee_id"
+        note="
+            Should contain only letters, numbers, a period (.) and underscore (_). 
+            Should start with a letter and be between 3 and 20 characters long"
+        >
+        <show modes="view edit add" />
+    </field>
+    <field name="sub_type" label="Committee Type" required="false" value_type="vocabulary" render_type="single_select" vocabulary="committee_type">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="group_mandate" label="Committee Mandat Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="committee_mandate">
+        <show modes="view edit add listing" />
+    </field>
+
+    <field name="group_role" label="Role" description="Role given to members of this office" required="true" value_type="text" render_type="single_select" vocabulary="group_role">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="body" label="Body" required="false" value_type="text" render_type="rich_text">
+         <show modes="view edit add" />
+    </field>
+    
+    <container match="joint_committee_member.group_id" viewlet="true" />
+    <container match="title_type.group_id" />
+    
+    <integrity 
+        constraints="end_after_start"
+        validations="validate_date_range_within_parent"
+        note="!+handle legislature parent of joint_committee"
+    />
+    
+</descriptor>
+
