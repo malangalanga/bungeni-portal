@@ -32,7 +32,12 @@
         description="Unique identifier for this Role - 
             May contain only letters, numbers, a period (.) and underscore (_). 
             Should start with a letter and be between 3 and 20 characters long" 
-        required="true" value_type="login" render_type="text_line">
+        required="true" value_type="login" render_type="text_line"
+        note="!+LOGIN value_type should be 'login'?
+            This field is conceptually equivalent to User.login:
+            should contain only letters, numbers, a period (.) and underscore (_). 
+            should start with a letter and be between 3 and 20 characters long"
+        >
         <show modes="view edit add" />
     </field>
     <field name="group_role" label="Role" description="Role given to members of this office" required="true" value_type="text" render_type="single_select" vocabulary="group_role">

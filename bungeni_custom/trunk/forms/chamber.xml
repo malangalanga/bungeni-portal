@@ -7,9 +7,10 @@
         <show modes="view edit add listing" />
     </field>
     <field name="principal_name" label="Chamber/Legislature Identifier" description="Unique identifier for this Chamber/Legislature" required="true" value_type="text" render_type="text_line"
-        note="
-            Should contain only letters, numbers, a period (.) and underscore (_). 
-            Should start with a letter and be between 3 and 20 characters long"
+        note="!+LOGIN value_type should be 'login'?
+            This field is conceptually equivalent to User.login:
+            should contain only letters, numbers, a period (.) and underscore (_). 
+            should start with a letter and be between 3 and 20 characters long"
         >
         <show modes="view edit add listing" />
     </field>
