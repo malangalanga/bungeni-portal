@@ -54,9 +54,9 @@ def scheduled_date(context):
 @describe(_(u"Full Name : First name - middle name - last name"))
 def user_combined_name(user):
     return "{0} {1} {2}".format(
-            user.first_name, 
+            (user.first_name).encode('ascii', 'xmlcharrefreplace'), 
             user.middle_name or "", # may be None
-            user.last_name
+            (user.last_name).encode('ascii', 'xmlcharrefreplace')
         ).replace("  ", " ")
 
 
