@@ -53,10 +53,10 @@ def scheduled_date(context):
 
 @describe(_(u"Full Name : First name - middle name - last name"))
 def user_combined_name(user):
-    return "{0} {1} {2}".format(
-            (user.first_name).encode('ascii', 'xmlcharrefreplace'), 
+    return u"{0} {1} {2}".format(
+            user.first_name, 
             user.middle_name or "", # may be None
-            (user.last_name).encode('ascii', 'xmlcharrefreplace')
+            user.last_name,
         ).replace("  ", " ")
 
 
@@ -64,7 +64,7 @@ def user_combined_name(user):
 
 def group_combined_name(group):
     group = translated(group)
-    return "{0} [{1}]".format(
+    return u"{0} [{1}]".format(
             group.full_name,
             group.acronym
         ).replace("  ", " ")
