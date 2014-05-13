@@ -4,7 +4,7 @@
         joint committee (group), and may be members of either chamber as well 
         as non-members of any chamber.">
     
-    <field name="user_id" label="Name" required="true" value_type="user" render_type="single_select" vocabulary="user">
+    <field name="user_id" label="Name" required="true" value_type="user" render_type="single_select" vocabulary="user_not_in_group">
         <show modes="view add listing" />
     </field>
     <field name="start_date" label="Start Date" required="true" value_type="date" render_type="date">
