@@ -26,7 +26,9 @@
             note="!+associated (is oral) condition on transitions to schedulable_states?" />
         <parameter name="scheduled_states" value="scheduled" />
     </feature>
-    <feature name="workspace" enabled="true" />
+    <feature name="workspace" enabled="true">
+        <parameter name="group_names" value="AS_XIV" />
+    </feature>
     <feature name="notification" enabled="true" />
     <feature name="email" enabled="false" />
     <feature name="download" enabled="true" />

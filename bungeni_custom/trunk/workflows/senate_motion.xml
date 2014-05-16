@@ -28,7 +28,9 @@
         <parameter name="schedulable_states" value="admissible deferred adjourned" />
         <parameter name="scheduled_states" value="scheduled" />
     </feature>
-    <feature name="workspace" enabled="true" />
+    <feature name="workspace" enabled="true">
+        <parameter name="group_names" value="SE_XIV" />
+    </feature>
     <feature name="notification" enabled="true" />
     <feature name="email" enabled="false" />
     <feature name="download" enabled="true">
