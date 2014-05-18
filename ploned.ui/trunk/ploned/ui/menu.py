@@ -59,7 +59,7 @@ def check_availability(menu_item):
     available = True
     if menu_item.permission is not None:
         available = checkPermission(menu_item.permission, menu_item.context)
-    if menu_item.filter is not None:
+    if available and menu_item.filter is not None:
         try:
             available = menu_item.filter(Engine.getContext(
                 context = menu_item.context,
