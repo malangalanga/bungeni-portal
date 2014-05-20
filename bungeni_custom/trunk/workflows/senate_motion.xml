@@ -7,7 +7,7 @@
     <!-- global grants -->
     <allow permission=".Add" roles="ClerkSenate MemberSenate" />
     
-
+    
     <!-- features -->
     <feature name="audit" enabled="true">
         <parameter name="audit_actions" value="add modify workflow remove version translate" />
@@ -87,7 +87,7 @@
     <state id="submitted" title="Submitted" actions="version set_doc_registry_number">
         <facet>
             <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner Signatory MemberCommitteeSenate" />
-            <allow permission=".Edit" roles=" ClerkSenate MemberCommitteeSenate" />
+            <allow permission=".Edit" roles="ClerkSenate MemberCommitteeSenate" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
             <allow permission="senate_event.Add" roles="ClerkSenate" />
             <allow permission="group_assignment.Add" roles="ClerkSenate SpeakerSenate" />
@@ -262,6 +262,7 @@
         condition=""
         roles="ClerkSenate"
         trigger="manual"
+        require_confirmation="true"
         note="Sample transition to illustrate mechanism to transfer to other chamber"
     />
     

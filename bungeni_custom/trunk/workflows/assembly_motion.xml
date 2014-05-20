@@ -6,8 +6,8 @@
     
     <!-- global grants -->
     <allow permission=".Add" roles="ClerkAssembly MemberAssembly" />
-
-
+    
+    
     <!-- features -->
     <feature name="audit" enabled="true">
         <parameter name="audit_actions" value="add modify workflow remove version translate" />
@@ -262,6 +262,7 @@
         condition=""
         roles="ClerkAssembly"
         trigger="manual"
+        require_confirmation="true"
         note="Sample transition to illustrate mechanism to transfer to other chamber"
     />
     
