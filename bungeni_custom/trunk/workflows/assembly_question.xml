@@ -36,7 +36,9 @@
         <parameter name="assigner_roles" value="ClerkQuestionAssembly.ClerkHead ClerkAssembly" />
         <parameter name="assignable_roles" value="ClerkQuestionAssembly.ClerkQuestion ClerkAssembly" />
     </feature>
-    <feature name="group_assignment" enabled="true" />
+    <feature name="group_assignment" enabled="true">
+        <parameter name="assignable_group_types" value="ministry" />
+    </feature>
 
 
     <!-- STATES -->
