@@ -93,7 +93,7 @@
             <allow permission="group_assignment.Add" roles="ClerkSenate SpeakerSenate" />
         </facet>
     </state>
-    <state id="transfer_assembly" title="Transfer Assembly" actions="version send_motion_to_assembly"
+    <state id="transferred_assembly" title="Transferred Assembly" actions="version send_motion_to_assembly"
         note="Sample state to illustrate mechanism to transfer to other chamber">
         <facet>
             <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner Signatory MemberCommitteeSenate" />
@@ -258,7 +258,7 @@
     />
     <transition title="Transfer Assembly"
         source="submitted"
-        destination="transfer_assembly"
+        destination="transferred_assembly"
         condition=""
         roles="ClerkSenate"
         trigger="manual"
