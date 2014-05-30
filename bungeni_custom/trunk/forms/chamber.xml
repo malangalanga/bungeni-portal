@@ -39,8 +39,7 @@
     <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
         <show modes="view edit add" />
     </field>
-    <field name="group_role" label="Role" description="Role given to members of this office" required="true" value_type="text" render_type="single_select" vocabulary="group_role">
-        <show modes="view edit add listing" />
+    <field name="group_role" label="Role" description="Role given to members of this chamber" required="true" value_type="text" render_type="single_select" vocabulary="group_role">
     </field>
     <field name="body" label="Body" required="false" value_type="text" render_type="rich_text">
          <show modes="view edit add" />
