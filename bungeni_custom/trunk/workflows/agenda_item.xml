@@ -48,11 +48,10 @@
             <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly ClerkSenate ClerkQuestionSenate" />
         </facet>
     </state>
-    <state id="review_pending" title="Submitted to the Speaker" actions="version">
+    <state id="admissible" title="Admissible" actions="version">
         <facet>
-            <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
-            <allow permission=".Edit" roles="SpeakerSenate SpeakerAssembly" />
-            <allow permission="attachment.Add" roles="SpeakerAssembly  SpeakerSenate" />
+            <allow permission=".View" roles="Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
         </facet>
     </state>
     <state id="inadmissible" title="Inadmissible">
@@ -64,12 +63,6 @@
     <state id="withdrawn_internal" title="Withdrawn">
         <facet>
             <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
-        </facet>
-    </state>
-    <state id="admissible" title="Admissible" actions="version">
-        <facet>
-            <allow permission=".View" roles="Anonymous" />
             <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
         </facet>
     </state>
@@ -119,26 +112,19 @@
         trigger="manual"
         roles="Drafter"
     />
-    <transition title="Submit for Review"
+    <transition title="Admissible"
         source="submitted"
-        destination="review_pending"
+        destination="admissible"
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
     />
-    <transition title="Admissible"
-        source="review_pending"
-        destination="admissible"
-        condition=""
-        trigger="manual"
-        roles="SpeakerSenate SpeakerAssembly"
-    />
     <transition title="Inadmissible"
-        source="review_pending"
+        source="submitted"
         destination="inadmissible"
         condition=""
         trigger="manual"
-        roles="SpeakerSenate SpeakerAssembly"
+        roles="ClerkSenate ClerkAssembly"
         require_confirmation="true"
     />
     <transition title="Scheduled for Debate"
@@ -169,8 +155,7 @@
         condition=""
         trigger="manual"
         roles="ClerkSenate ClerkAssembly"
-        note="For reasons such as absence of the MemberSenate MemberAssembly, the item cannot be be 
-            debated in a sitting, so it is dropped."
+        note="Member absent, the item is dropped."
     />
     <transition title="Debate"
         source="scheduled"
@@ -187,7 +172,7 @@
         roles="ClerkSenate ClerkAssembly"
     />
     <transition title="Withdraw"
-        source="submitted review_pending clarification_required"
+        source="submitted clarification_required"
         destination="withdrawn_internal"
         grouping_unique_sources="withdrawn"
         condition=""
