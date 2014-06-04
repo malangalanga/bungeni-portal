@@ -86,8 +86,8 @@
     </state>
     <state id="submitted" title="Submitted" actions="version set_doc_registry_number">
         <facet>
-            <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner Signatory MemberCommitteeSenate" />
-            <allow permission=".Edit" roles="ClerkSenate MemberCommitteeSenate" />
+            <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner Signatory" />
+            <allow permission=".Edit" roles="ClerkSenate" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
             <allow permission="senate_event.Add" roles="ClerkSenate" />
             <allow permission="group_assignment.Add" roles="ClerkSenate SpeakerSenate" />
@@ -96,8 +96,8 @@
     <state id="transferred_assembly" title="Transferred Assembly" actions="version send_motion_to_assembly"
         note="Sample state to illustrate mechanism to transfer to other chamber">
         <facet>
-            <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner Signatory MemberCommitteeSenate" />
-            <allow permission=".Edit" roles=" ClerkSenate MemberCommitteeSenate" />
+            <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner Signatory" />
+            <allow permission=".Edit" roles=" ClerkSenate" />
         </facet>
     </state>
     <state id="clarification_required" title="Requires Clarification"
