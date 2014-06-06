@@ -1,0 +1,124 @@
+# user_bungeni = bungnei buildout folder
+# app_host = host name/ ip
+# user_plone = plone buildout folder
+# user_portal = portal buildout folder
+
+[inet_http_server]
+port = %(supervisor_host)s:%(supervisor_port)s
+username = admin
+password = admin
+
+[supervisord]
+logfile = %(user_logs)s/supervisord.log
+logfile_maxbytes = 50MB
+logfile_backups = 10
+loglevel = info
+pidfile = %(user_pid)s/supervisord.pid
+nodaemon = false
+
+[supervisorctl]
+serverurl = http://%(supervisor_host)s:%(supervisor_port)s
+username = admin
+password = admin
+
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory=supervisor.rpcinterface:make_main_rpcinterface
+
+[program:bungeni]
+command = %(user_bungeni)s/bin/paster serve %(bungeni_ini)s  --pid-file=%(user_pid)s/bungeni.pid
+process_name = bungeni
+stdout_logfile = %(user_logs)s/bungeni.log
+directory = %(user_bungeni)s/bin
+priority = 40
+redirect_stderr = true
+autostart = false
+
+[program:serializer]
+command = %(user_bungeni)s/bin/python %(user_bungeni)s/data/scripts/serializer_daemon.py
+process_name = serializer
+stdout_logfile = %(user_logs)s/serializer.log
+directory = %(user_bungeni)s/data/scripts
+priority = 20
+redirect_stderr = true
+autostart = false
+
+
+[program:plone]
+command = %(user_plone)s/bin/paster serve %(plone_ini)s --pid-file=%(user_pid)s/plone.pid
+process_name = plone
+stdout_logfile= %(user_logs)s/plone.log
+directory = %(user_plone)s/bin
+priority = 60
+redirect_stderr = true
+autostart = false
+
+[program:portal]
+command = %(user_portal)s/bin/deliverance-proxy %(user_portal)s/proxy.xml
+process_name = portal
+stdout_logfile = %(user_logs)s/portal.log
+directory = %(user_portal)s/bin
+priority = 60
+redirect_stderr = true
+autostart = false
+
+[program:static]
+command = %(user_portal)s/bin/paster serve %(static_ini)s  --pid-file=%(user_pid)s/static.pid
+stdout_logfile = %(user_logs)s/static.log
+process_name = static
+directory = %(user_portal)s/bin
+priority = 50
+redirect_stderr = true
+autostart = false
+
+
+[program:postgres]
+command = %(user_postgres)s/bin/postmaster -D %(user_postgres_data)s
+stdout_logfile = %(user_logs)s/postgres.log
+priority = 10
+redirect_stderr = true
+stopsignal = INT
+autostart = false
+
+[program:openoffice]
+command = soffice -headless -nologo -env:UserInstallation=file://%(user_config)s/.openoffice -accept="socket,port=2002;urp;"
+stdout_logfile= %(user_logs)s/openoffice.log
+priority = 10
+redirect_stderr = true
+autostart = false
+
+[program:rabbitmq]
+command = %(user_rabbitmq)s/sbin/rabbitmq-server
+environment = HOME="%(system_home)s",ERL_EPMD_RELAXED_COMMAND_CHECK="TRUE"
+stdout_logfile = %(user_logs)s/rabbitmq.log
+priority = 10
+redirect_stderr = true
+stopsignal = INT
+autostart = false
+
+[program:exist]
+command = %(java)s/bin/java -Xms%(exist_startup_mem)s -Xmx%(exist_max_mem)s -Dfile.encoding=UTF-8 -Djava.endorsed.dirs=%(user_exist)s/lib/endorsed -Dexist.home=%(user_exist)s -Djetty.port=%(exist_port)s -jar %(user_exist)s/start.jar jetty
+stdout_logfile = %(user_logs)s/exist.log
+environment = JAVA_HOME="%(java)s"
+priority = 60
+redirect_stderr = true
+stopsignal = INT
+autostart = false
+autorestart=false
+
+[program:exist-sync]
+command = %(jython_config)s %(user_glue)s/src/consumer.py -c %(user_config)s/glue.ini -i %(glue_interval)s
+stdout_logfile = %(user_logs)s/exist_sync.log
+priority = 90
+environment = JAVA_HOME="%(java)s"
+redirect_stderr = true
+stopsignal = INT
+autostart = false
+directory = %(user_glue)s
+
+[program:varnish]
+command = %(user_varnish)s/sbin/varnishd -f "%(varnish_vcl_file_path)s" -a %(varnish_bind_host)s:%(varnish_bind_port)s -F -s malloc,%(varnish_cache_size)s
+stdout_logfile = %(user_logs)s/varnish.log
+priority = 150
+redirect_stderr = true
+stopsignal = INT
+autostart = false

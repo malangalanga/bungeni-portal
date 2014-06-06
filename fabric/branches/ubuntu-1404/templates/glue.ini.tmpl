@@ -1,0 +1,58 @@
+# user_bungeni = bungeni buildout folder
+# user_glue = the glue install folder
+
+[general]
+bungeni_docs_folder = %(user_bungeni)s/parts/xml_db/
+bungeni_custom_folder = %(user_bungeni_custom)s
+xml_output_folder = %(user_glue)s/outputs/on-output/
+attachments_output_folder = %(user_glue)s/outputs/atts-output/
+temp_files_folder = %(user_glue)s/tmp/
+cache_file_folder = %(user_glue)s/cache/
+transformer_resources_folder = %(user_glue)s/resources/
+parliament_type_name = chamber
+
+[postprocess]
+# action = archive or delete or ignore
+# 'archive' requires specifying a archive folder where the processed file can be copied to 
+# 'delete' deletes the processed file
+# 'ignore' does nothing, leaves the processed file as is
+action = archive
+archive_folder = %(user_glue)s/archive/
+
+
+[translations]
+# po-files folder for downloaded .po files from paths in the messages section below
+# i18n folder holds the translated xml files awaiting upload to repository
+po_files_folder = %(user_glue)s/tmp/po-files/
+i18n_catalogues_folder = %(user_glue)s/tmp/i18n/
+
+[rabbitmq]
+username=%(rabbitmq_user)s
+password=%(rabbitmq_password)s
+vhost=%(rabbitmq_vhost)s
+hostname=%(rabbitmq_hostname)s
+port=%(rabbitmq_port)s
+
+[webdav]
+# eXist XML DB for storing the transformed documents
+username = admin
+password = 
+server = localhost
+port = 8088
+bungeni_xml_folder = /exist/webdav/db/bungeni-xml/
+bungeni_atts_folder = /exist/webdav/db/bungeni-atts/
+framework_i18n_folder = /exist/webdav/db/apps/framework/i18n/
+
+[messages]
+ar = http://bungeni-portal.googlecode.com/svn/bungeni_custom/trunk/translations/bungeni/ar/LC_MESSAGES/bungeni.po
+en = http://bungeni-portal.googlecode.com/svn/bungeni_custom/trunk/translations/bungeni/en/LC_MESSAGES/bungeni.po
+en_KE = http://bungeni-portal.googlecode.com/svn/bungeni_custom/trunk/translations/bungeni/en-ke/LC_MESSAGES/bungeni.po
+es = http://bungeni-portal.googlecode.com/svn/bungeni_custom/trunk/translations/bungeni/es/LC_MESSAGES/bungeni.po
+es_DO = http://bungeni-portal.googlecode.com/svn/bungeni_custom/trunk/translations/bungeni/es-do/LC_MESSAGES/bungeni.po
+fr = http://bungeni-portal.googlecode.com/svn/bungeni_custom/trunk/translations/bungeni/fr/LC_MESSAGES/bungeni.po
+it = http://bungeni-portal.googlecode.com/svn/bungeni_custom/trunk/translations/bungeni/it/LC_MESSAGES/bungeni.po
+nl = http://bungeni-portal.googlecode.com/svn/bungeni_custom/trunk/translations/bungeni/nl/LC_MESSAGES/bungeni.po
+pt = http://bungeni-portal.googlecode.com/svn/bungeni_custom/trunk/translations/bungeni/pt/LC_MESSAGES/bungeni.po
+sw = http://bungeni-portal.googlecode.com/svn/bungeni_custom/trunk/translations/bungeni/sw/LC_MESSAGES/bungeni.po
+ru = http://bungeni-portal.googlecode.com/svn/bungeni_custom/trunk/translations/bungeni/ru/LC_MESSAGES/bungeni.po
+tk = http://bungeni-portal.googlecode.com/svn/bungeni_custom/trunk/translations/bungeni/tk/LC_MESSAGES/bungeni.po
