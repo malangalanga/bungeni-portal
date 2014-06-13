@@ -2233,8 +2233,7 @@ class RabbitMQTasks:
                 run("mv %s rabbitmq-admin" % self.cfg.rabbitmq_download_admin_file)
                 print "Configuring rabbitmq, setting up admin and defaults"
                 run("chmod +x rabbitmq-admin rabbitmqctl")
-                run("./rabbitmq-server -detached")
-                run("sleep 3")
+                run("./rabbitmq-server -detached && sleep 5")
             self.add_admin()
             with cd(self.cfg.user_rabbitmq + "/sbin"):            
                 run("./rabbitmqctl stop_app")
