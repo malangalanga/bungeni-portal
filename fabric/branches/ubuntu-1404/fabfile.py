@@ -89,8 +89,10 @@ def presetup():
     essentials()
     build_python()
     postgres_install()
+    rabbitmq_install()
     setup_pylibs() 
     setup_docsplit()
+    varnish_install()
 
 
 def bungeni_setup():
