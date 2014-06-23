@@ -8,8 +8,8 @@ $Id$
 """
 
 # revision identifiers, used by Alembic.
-revision = '4c80c4a64aa5'
-down_revision = '386ce6463960'
+revision = "4c80c4a64aa5"
+down_revision = "386ce6463960"
 
 from alembic import op
 import sqlalchemy as sa
