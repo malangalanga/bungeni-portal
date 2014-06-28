@@ -21,11 +21,6 @@
     <field name="sub_type" label="Parliament Chamber Type" required="true" value_type="text" render_type="single_select" vocabulary="chamber_type">
         <show modes="view edit add listing" />
     </field>
-    <!-- election_date is now logically on legislature
-    <field name="election_date" label="Election Date" required="true" value_type="datetime" render_type="datetime" extended="datetime">
-        <show modes="view edit add listing" />
-    </field>
-    -->
     <field name="start_date" label="In power from" description="Date of the swearing in" required="true" value_type="date" render_type="date"
         note="!+ update label/description!"
         >

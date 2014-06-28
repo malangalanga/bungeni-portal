@@ -18,30 +18,34 @@ from bungeni.utils.misc import describe
 from bungeni import _
 
 
+# legislature
+
+def legislature_bicameral(context):
+    from bungeni.capi import capi
+    return capi.bicameral # bool
+def legislature_country_code(context):
+    from bungeni.capi import capi
+    return capi.country_code # 2-letter
+
 
 # derived fields based on doc workflow dates -- see:
 # models.domain.Doc._get_workflow_date
-
 
 @describe(_(u"Submission Date"))
 def submission_date(context):
     return context._get_workflow_date("submitted")
 
-
 @describe(_(u"Admissible Date"))
 def admissible_date(context):
     return context._get_workflow_date("admissible")
-
 
 @describe(_(u"Gazetted Date"))
 def gazetted_date(context):
     return context._get_workflow_date("gazetted")
 
-
 @describe(_(u"Scheduled Date"))
 def scheduled_date(context):
     return context._get_workflow_date("scheduled")
-
 
 
 # derived fields by combining values from other fields - recommendation 
@@ -58,7 +62,6 @@ def user_combined_name(user):
             user.middle_name or "", # may be None
             user.last_name,
         ).replace("  ", " ")
-
 
 # group
 

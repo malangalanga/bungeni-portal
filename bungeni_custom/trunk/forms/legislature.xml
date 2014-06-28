@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<descriptor order="1" sort_on="start_date">
+    <field name="full_name" label="Legislature Name" required="false" value_type="text" render_type="text_line">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="short_name" label="Short Name" description="Shorter name for the legislature" required="true" value_type="text" render_type="text_line">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="principal_name" label="Legislature System Name" description="Unique identifier for this Legislature" required="true" value_type="text" render_type="text_line"
+        note="!+LOGIN value_type should be 'login'?
+            This field is conceptually equivalent to User.login:
+            should contain only letters, numbers, a period (.) and underscore (_). 
+            should start with a letter and be between 3 and 20 characters long"
+        >
+        <show modes="view edit add listing" />
+    </field>
+
+    <field name="bicameral" label="Bicameral" required="false" value_type="bool" render_type="bool" derived="legislature_bicameral">
+        <show modes="view listing" />
+    </field>
+    <field name="country_code" label="Country Code" required="false" value_type="text" render_type="text_line" derived="legislature_country_code">
+        <show modes="view listing" />
+    </field>
+
+    <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+        <show modes="view edit add" />
+        <hide modes="listing" />
+    </field>
+    <field name="identifier" label="Identifier" description="the sequential identifier number of the parliament e.g. 9th parliament" required="true" value_type="number" render_type="number" extended="number">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="election_date" label="Election Date" required="true" value_type="date" render_type="date" extended="datetime">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="start_date" label="In Power From" description="Date of the swearing in" required="true" value_type="date" render_type="date">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="end_date" label="In Power Till" description="Date of the dissolution" required="false" value_type="date" render_type="date">
+        <show modes="view edit add listing" />
+    </field>
+    <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
+        <show modes="view edit add" />
+    </field>
+    <field name="group_role" label="Role" description="Role given to members of this chamber" required="true" value_type="text" render_type="single_select" vocabulary="group_role">
+        <show modes="view edit add" />
+    </field>
+    <field name="body" label="Body" required="false" value_type="text" render_type="rich_text">
+         <show modes="view edit add" />
+    </field>
+    
+    <!-- !+CHAMBER.PARENT_GROUP_ID these containers will only match sub-groups
+        that correctly set the parent_group_id to this legislature group instance -->
+    <container match="chamber.parent_group_id" name="chambers" viewlet="true" />
+    <container match="government.parent_group_id" name="governments" viewlet="true" />
+    <container match="joint_committee.parent_group_id" name="joint_committees" viewlet="true" />
+    <!-- container match="user.?" name="users" viewlet="true" /-->    
+
+</descriptor>
+
