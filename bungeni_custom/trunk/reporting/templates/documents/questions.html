@@ -1,24 +1,73 @@
 <html xml:lang="en" xmlns:br="http://bungeni.org/reports">
-  <br:config>
-    <title>Questions Under Consideration - Monthly</title>
-    <language>en</language>
-    <length>4w</length>
-    <doctypes>question</doctypes>
-  </br:config>
-  <head>
-    <title>Questions Under Consideration - Monthly</title>
-  </head>
-  <body> 
-    <div id="report-content">
-        <h1 class="heading" br:type="text" br:source="title"/>
-        <table border="1">
-            <tbody br:type="listing" br:source="questions">
-                <tr>
-                    <td br:type="text" br:source="doc_id"/>
-                    <td br:type="text" br:source="dc:title"/>
-                </tr>
-            </tbody>
-        </table>        
-    </div>
-   </body>
+    <br:config>
+        <title>Questions Under Consideration - Monthly</title>
+        <language>en</language>
+        <length>4w</length>
+        <doctypes>question assembly_question senate_question</doctypes>
+    </br:config>
+    <head>
+        <title>Questions Under Consideration - Monthly</title>
+        <style type="text/css" media="all">
+table {
+    text-align: left; 
+    vertical-align: top; 
+    border: 1px solid lightgray;
+}
+tbody {}
+tbody.assembly_questions {}
+tbody.senate_questions {}
+tr {
+    vertical-align: top;
+}
+td.left {
+    padding: 0.4em 2em 0 0;
+    text-align: right;
+}
+td.right {
+    text-align: left;
+}
+span.meta {
+    font-size: smaller;
+}
+        </style>
+    </head>
+    <body>
+        <div id="report-content">
+            <h1 class="heading" br:type="text" br:source="title" />
+            <table>
+                
+                <tbody class="assembly_questions" br:type="listing"
+                        br:source="assembly_questions" br:condition="assembly_questions">
+                    <tr style="">
+                        <td class="left">
+                            <span class="meta" br:type="text" br:source="doc_id" />
+                        </td>
+                        <td class="right">
+                            <span class="meta">Title:</span>
+                            <span br:type="text" br:source="dc:title" /><br />
+                            <span class="meta">Asked by:</span>
+                            <span br:type="text" br:source="dc:mover" />
+                        </td>
+                    </tr>                    
+                </tbody>
+
+                <tbody class="senate_questions" br:type="listing"
+                        br:source="senate_questions" br:condition="senate_questions">
+                    <tr style="">
+                        <td class="left">
+                            <span br:type="text" br:source="doc_id" />
+                        </td>
+                        <td class="right">
+                            <span class="meta">Title:</span>
+                            <span br:type="text" br:source="dc:title" /><br />
+                            <span class="meta">Asked by:</span>
+                            <span br:type="text" br:source="dc:mover" />
+                        </td>
+                    </tr>                    
+                </tbody>
+            
+            </table>
+        </div>
+    </body>
 </html>
+

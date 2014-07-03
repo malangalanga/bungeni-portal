@@ -1,66 +1,91 @@
 <html xml:lang="en" xmlns:br="http://bungeni.org/reports">
-  <br:config>
-    <title>Bi-Weekly Questions</title>
-    <length>2w</length>
-    <language>en</language>
-  </br:config>
-  <head>
-    <title>Bi-Weekly Questions</title>
-  </head>
-  <body>
-    <div id="report-content">
-        <h1 class="heading" br:type="text" br:source="title" />
-        <div id="listing-body">
-            <div br:type="listing" br:source="sittings">
-                <h2 br:type="text" br:source="dc:title" />
-                <h3>Questions</h3>
-                <div class="questions">
-                
-                    <ul br:type="listing" br:source="assembly_questions"
-                            br:condition="assembly_questions">
-                        <li>
-                            <span style="font-size: smaller">Title:</span> 
-                            <span br:type="text" br:source="dc:title" />
-                            <br />
-                            <span style="font-size: smaller">Asked by:</span> 
-                            <span br:type="text" br:source="dc:mover" />
-                            <p br:condition="attachments">
-                                <strong>Attachments:</strong>
-                                <ul br:type="listing" br:source="attachments">
-                                    <li>
-                                        <span style="font-size: smaller">Title:</span> 
-                                        <span br:type="text" br:source="title" />
-                                        <br />
-                                    </li>
-                                </ul>
-                            </p>
-                        </li>
-                    </ul>
-                    
-                    <ul br:type="listing" br:source="senate_questions"
-                            br:condition="senate_questions">
-                        <li>
-                            <span style="font-size: smaller">Title:</span> 
-                            <span br:type="text" br:source="dc:title" />
-                            <br />
-                            <span style="font-size: smaller">Asked by:</span> 
-                            <span br:type="text" br:source="dc:mover" />
-                            <p br:condition="attachments">
-                                <strong>Attachments:</strong>
-                                <ul br:type="listing" br:source="attachments">
-                                    <li>
-                                        <span style="font-size: smaller">Title:</span> 
-                                        <span br:type="text" br:source="title" />
-                                        <br />
-                                    </li>
-                                </ul>
-                            </p>
-                        </li>
-                    </ul>
+    <br:config>
+        <title>Bi-Weekly Questions</title>
+        <length>2w</length>
+        <language>en</language>
+    </br:config>
+    <head>
+        <title>Bi-Weekly Questions</title>
+        <style type="text/css" media="all">
+h1.heading {}
+div.sittings {
+    border: 1px solid lightgray;
+    margin: 0 0 2em 0;
+    padding: 0;
+}
+h2.sitting {
+    font-weight: bold;
+    color: slategray;
+    background-color: mistyrose;
+    padding: 0.3em 0.6em;
+    margin: 0;
+}
+div.questions {
+    margin: 0;
+    padding: 0 1em 1em 1em;
+}
+span.meta {
+    font-size: smaller;
+}
+        </style>
+    </head>
+    <body>
+        <div id="report-content">
+            <h1 class="heading" br:type="text" br:source="title" />
+            <div id="listing-body">
+                <div br:type="listing" br:source="sittings">
+                    <div class="sittings">
+                        <h2 class="sitting" br:type="text" br:source="dc:title" />
+                        <div class="questions">
+                            <h3>Questions</h3>
+                            
+                            <ul br:type="listing" br:source="assembly_questions"
+                                    br:condition="assembly_questions">
+                                <li>
+                                    <span class="meta">Title:</span> 
+                                    <span br:type="text" br:source="dc:title" />
+                                    <br />
+                                    <span class="meta">Asked by:</span> 
+                                    <span br:type="text" br:source="dc:mover" />
+                                    <p br:condition="attachments">
+                                        <strong><span class="meta">Attachments:</span></strong>
+                                        <ul br:type="listing" br:source="attachments">
+                                            <li>
+                                                <span class="meta">Title:</span> 
+                                                <span br:type="text" br:source="title" />
+                                                <br />
+                                            </li>
+                                        </ul>
+                                    </p>
+                                </li>
+                            </ul>
+                            
+                            <ul br:type="listing" br:source="senate_questions"
+                                    br:condition="senate_questions">
+                                <li>
+                                    <span class="meta">Title:</span> 
+                                    <span br:type="text" br:source="dc:title" />
+                                    <br />
+                                    <span class="meta">Asked by:</span> 
+                                    <span br:type="text" br:source="dc:mover" />
+                                    <p br:condition="attachments">
+                                        <strong><span class="meta">Attachments:</span></strong>
+                                        <ul br:type="listing" br:source="attachments">
+                                            <li>
+                                                <span class="meta">Title:</span> 
+                                                <span br:type="text" br:source="title" />
+                                                <br />
+                                            </li>
+                                        </ul>
+                                    </p>
+                                </li>
+                            </ul>
+                        
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-   </body>
+    </body>
 </html>
 
