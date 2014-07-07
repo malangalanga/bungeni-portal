@@ -11,13 +11,15 @@
     All custom types must be declared, enabled/disabled, here.
     
     The (base) system "archetype" of a custom type is indicated by a dedicated
-    tag name. A custom type may further refine which "archetype" by specifying 
-    another custom type as its "archetype", via the @archetype attribute.
+    element tag name. A custom type may further refine which "archetype" by 
+    specifying another custom type as its "archetype", via the @archetype 
+    attribute but note that such a custom "archetype" must be a sub-type of the
+    type implied by the element tag name.
     
-    Some custom types are dependent on another custom type e.g. a membership
-    on a group, hence the nesting of these declarations. 
+    The types <doc>, <event>, <group> must be declared at top-level while the
+    type <member> must be declared nested within <group>.
     
-    All custom types must specify a name, that is the "type key".
+    All custom types must specify a system-wide name, that is the "type key".
     
     All custom types are workflowed. When not explicitly specified, the 
     workflow name is the same as the type name.
@@ -25,18 +27,48 @@
     Disabling a type means the type will not be registered, and all associated 
     configuration e.g. workflow, descriptor, workspace, etc, will not be loaded.
     
-    Type element attributes:
-        @name: the type name used throughout the system as the type key, REQUIRED
-        @archetype: the "custom" archetype key (a custom sub-type of the system
-            archetype specified via the element tag name).
+    All type elements (<doc>, <event>, <group>, <member>) support the 
+    following attributes:
+        
+        @name: the UNIQUE name used throughout the system as the type key.
+            REQUIRED.
+        @archetype: the key for the type on which this type is based on (i.e. 
+            the archetype of this type). May be the key for any custom sub-type 
+            of system base archetype implied by the element tag name.
+            Defaults to the system archetype implied by the element tag name.
         @workflow: the worklow key (the name of the workflow definition file, 
-            in `workflows/` folder). If not set, defaults to @name.
+            in `workflows/` folder). 
+            Defaults to @name.
         @descriptor: the descriptor key (either the name of the descriptor 
             definition file in the `forms/` folder, or the descriptor name of 
-            a system archetype). If not set, defaults to @name.
-        @enabled: "true" | "false", default is "true"
-            note that if parent is disabled, then all nested elements are also 
-            disabled (even if they set enabled="true")
+            a system archetype). 
+            Defaults to @name.
+        @enabled: "true" | "false". When "false" the type (including ALL 
+            sub-types, even if these themselves set enabled="true") and 
+            ALL associated configuration e.g. workflow, descriptor, workspace, 
+            etc, are NOT loaded.
+            Defaults to "true".
+        @label: the i18n msgid for this type.
+            (Internally, this becomes descriptor.display_name.)
+            Defaults to @name.
+        @container_label: the i18n msgid for the container for this type.
+            (Internally, this becomes descriptor.container_name.)
+            Defaults to bungeni.utils.naming.plural(@name).
+        @note: any additional clarification or remark about this type.
+            No default.
+    
+    In addition to above, the <group> element also suppports the following 
+    attribute:
+        
+        @privilege_extent: "legislature" | "chamber" | "group". Specifies the
+            extent of any privileges gained by being a member of this group 
+            i.e. in concrete terms, do the permissions associated with the 
+            role of this group apply:
+                a) only to the group instance itself
+                b) or to the chamber (and sub-groups) this group is defined in
+                c) or application-wide i.e. to the entire legislature.
+            Defaults to "group".
+    
     -->
     
     
