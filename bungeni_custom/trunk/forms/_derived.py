@@ -15,16 +15,16 @@ log = __import__("logging").getLogger("bungeni_custom.forms")
 
 from bungeni.core.translation import translated
 from bungeni.utils.misc import describe
+from bungeni.capi import capi
 from bungeni import _
 
 
 # legislature
 
 def legislature_bicameral(context):
-    from bungeni.capi import capi
     return capi.bicameral # bool
+
 def legislature_country_code(context):
-    from bungeni.capi import capi
     return capi.country_code # 2-letter
 
 
