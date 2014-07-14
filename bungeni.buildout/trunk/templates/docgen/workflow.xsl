@@ -92,7 +92,7 @@
                 <!-- STATES -->
 
                 <a name="states"/>
-                <h3><xsl:value-of select="$wf-content-type"/>:States</h3>
+                <!--<h3><xsl:value-of select="$wf-content-type"/>:States</h3> -->
                 <div class="linkbar">
                     <a href="#table-of-contents">[Document Index]</a>
                     <xsl:text>,</xsl:text>
@@ -136,6 +136,8 @@
     <xsl:template name="match-state">
         <xsl:variable name="state-title" select="@title" />
         <xsl:variable name="state-actions" select="@actions" />
+        <xsl:variable name="state-id" select="@id" />
+        
         <xsl:for-each select="./facet">
             <xsl:call-template name="match-state-facet">
                 <xsl:with-param name="state-title">
@@ -144,6 +146,9 @@
                 <xsl:with-param name="state-actions">
                     <xsl:value-of select="$state-actions" />
                 </xsl:with-param>
+                <xsl:with-param name="state-id">
+                    <xsl:value-of select="$state-id" />
+                </xsl:with-param>
             </xsl:call-template>
         </xsl:for-each>
     </xsl:template>
@@ -151,12 +156,13 @@
     <xsl:template name="match-state-facet">
         <xsl:param name="state-title"/>
         <xsl:param name="state-actions" />
+        <xsl:param name="state-id" />
         <xsl:variable name="counter">
             <xsl:number/>
         </xsl:variable>
         <tr class="m{$counter mod 2}">
             <td>
-                <a name="{@id}"/>
+                <a name="{$state-id}"/>
                 <span class="state-title"><xsl:value-of select="$state-title"/></span>
                 <!-- uncomment the below to show the id on the page -->
                 <!--
