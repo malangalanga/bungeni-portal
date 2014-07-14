@@ -1,0 +1,1682 @@
+<?xml version="1.0" encoding="UTF-8"?><html>
+   <head>
+      <title>Motion Workflow</title>
+      <link rel="stylesheet" href="docs.css" type="text/css"></link>
+   </head>
+   <body>
+      <h1 class="main">Motion Workflow</h1>
+      <div id="toc">
+         <a name="table-of-contents"></a>
+         <h1 class="index">Document Index</h1> <ul id="menu">
+<li><a href="address.html">address</a></li>
+<li><a href="agenda_item.html">agenda_item</a></li>
+<li><a href="assembly_bill.html">assembly_bill</a></li>
+<li><a href="assembly_event.html">assembly_event</a></li>
+<li><a href="assembly_motion.html">assembly_motion</a></li>
+<li><a href="assembly_question.html">assembly_question</a></li>
+<li><a href="assembly_response.html">assembly_response</a></li>
+<li><a href="assembly_tabled_document.html">assembly_tabled_document</a></li>
+<li><a href="attachment.html">attachment</a></li>
+<li><a href="chamber.html">chamber</a></li>
+<li><a href="committee.html">committee</a></li>
+<li><a href="debate_record.html">debate_record</a></li>
+<li><a href="doc.html">doc</a></li>
+<li><a href="event.html">event</a></li>
+<li><a href="group.html">group</a></li>
+<li><a href="group_assignment.html">group_assignment</a></li>
+<li><a href="group_member.html">group_member</a></li>
+<li><a href="heading.html">heading</a></li>
+<li><a href="report.html">report</a></li>
+<li><a href="senate_bill.html">senate_bill</a></li>
+<li><a href="senate_event.html">senate_event</a></li>
+<li><a href="senate_motion.html">senate_motion</a></li>
+<li><a href="senate_question.html">senate_question</a></li>
+<li><a href="senate_response.html">senate_response</a></li>
+<li><a href="senate_tabled_document.html">senate_tabled_document</a></li>
+<li><a href="signatory.html">signatory</a></li>
+<li><a href="sitting.html">sitting</a></li>
+<li><a href="user.html">user</a></li>
+</ul>
+ 
+         
+         <h2 class="index">Index of 
+            <a href="#states">States</a>
+         </h2>
+         <div class="toc-links">
+            <a href="#draft">Draft</a>,
+            <a href="#submitted_signatories">Submitted to Signatories</a>,
+            <a href="#redraft">Redraft</a>,
+            <a href="#withdrawn_signatory">Dropped</a>,
+            <a href="#withdrawn_internal">Withdrawn</a>,
+            <a href="#submitted">Submitted</a>,
+            <a href="#transferred_senate">Transferred Senate</a>,
+            <a href="#clarification_required">Requires Clarification</a>,
+            <a href="#reviewed">Reviewed by Clerk Office</a>,
+            <a href="#inadmissible">Inadmissible</a>,
+            <a href="#admissible">Admissible</a>,
+            <a href="#scheduled">Scheduled</a>,
+            <a href="#adjourned">Debate adjourned</a>,
+            <a href="#deferred">Deferred</a>,
+            <a href="#adopted">Adopted</a>,
+            <a href="#adopted_amendments">Adopted with amendments</a>,
+            <a href="#elapsed">Elapsed</a>,
+            <a href="#dropped">Dropped</a>,
+            <a href="#rejected">Rejected</a>,
+            <a href="#withdrawn">Withdrawn</a>
+         </div>
+         <h2 class="index">Index of 
+            <a href="#transitions">Transitions</a>
+         </h2>
+         <div class="toc-links">
+            <a href="#d1e338">Create Motion</a>,
+            <a href="#d1e340">Submit</a>,
+            <a href="#d1e342">Submit to Signatories</a>,
+            <a href="#d1e344">Redraft</a>,
+            <a href="#d1e346">Drop</a>,
+            <a href="#d1e348">Require Clarification</a>,
+            <a href="#d1e351">Redraft (Automatic)</a>,
+            <a href="#d1e353">Reviewed</a>,
+            <a href="#d1e355">Transfer Senate</a>,
+            <a href="#d1e357">Admissible</a>,
+            <a href="#d1e359">Inadmissible</a>,
+            <a href="#d1e361">Scheduled for Debate</a>,
+            <a href="#d1e364">Resubmit</a>,
+            <a href="#d1e366">Defer</a>,
+            <a href="#d1e368">Elapse</a>,
+            <a href="#d1e370">Drop</a>,
+            <a href="#d1e372">Adjourn debate</a>,
+            <a href="#d1e374">Adopt</a>,
+            <a href="#d1e377">Adopt with amendments</a>,
+            <a href="#d1e379">Reject</a>,
+            <a href="#d1e381">Withdraw</a>,
+            <a href="#d1e383">Withdraw</a>
+         </div>
+      </div>
+      <a name="transitions"></a>
+      <h3>Motion:Transitions</h3>
+      <div class="linkbar">
+         <a href="#table-of-contents">[Document Index]</a>,
+         <a href="#states">[States]</a>,
+         <a href="./assembly_motion.dot.png" target="_blank">[Workflow Diagram]</a>
+      </div>
+      <table border="1">
+         <thead>
+            <tr class="yellow">
+               <th>Transition Name</th>
+               <th>Source</th>
+               <th>Destination</th>
+               <th>Roles</th>
+               <th>Condition</th>
+               <th>Confirm?</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr class="m1">
+               <td>
+                  <a name="d1e338"></a>
+                  <span class="transition-title">Create Motion</span>
+                  <div class="trig">(Auto)</div>
+               </td>
+               <td></td>
+               <td>
+                  <a href="#draft">draft</a>
+                  <br></br>
+               </td>
+               <td></td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e340"></a>
+                  <span class="transition-title">Submit</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#draft">draft</a>
+                  <br></br>
+                  <a href="#submitted_signatories">submitted_signatories</a>
+                  <br></br>
+                  <a href="#redraft">redraft</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#submitted">submitted</a>
+                  <br></br>
+               </td>
+               <td>Drafter
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">doc_valid_num_consented_signatories</span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e342"></a>
+                  <span class="transition-title">Submit to Signatories</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#draft">draft</a>
+                  <br></br>
+                  <a href="#redraft">redraft</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#submitted_signatories">submitted_signatories</a>
+                  <br></br>
+               </td>
+               <td>MemberAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">doc_has_signatories</span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e344"></a>
+                  <span class="transition-title">Redraft</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#submitted_signatories">submitted_signatories</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#redraft">redraft</a>
+                  <br></br>
+               </td>
+               <td>Drafter
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e346"></a>
+                  <span class="transition-title">Drop</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#redraft">redraft</a>
+                  <br></br>
+                  <a href="#submitted_signatories">submitted_signatories</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#withdrawn_signatory">withdrawn_signatory</a>
+                  <br></br>
+               </td>
+               <td>Owner
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e348"></a>
+                  <span class="transition-title">Require Clarification</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#submitted">submitted</a>
+                  <br></br>
+                  <a href="#reviewed">reviewed</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#clarification_required">clarification_required</a>
+                  <br></br>
+               </td>
+               <td>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e351"></a>
+                  <span class="transition-title">Redraft (Automatic)</span>
+                  <div class="trig">(Auto)</div>
+                  <div class="note">incomplete document needs to be resubmitted to signatories</div>
+               </td>
+               <td>
+                  <a href="#clarification_required">clarification_required</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#redraft">redraft</a>
+                  <br></br>
+               </td>
+               <td></td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">doc_has_signatories</span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e353"></a>
+                  <span class="transition-title">Reviewed</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#submitted">submitted</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#reviewed">reviewed</a>
+                  <br></br>
+               </td>
+               <td>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e355"></a>
+                  <span class="transition-title">Transfer Senate</span>
+                  <div class="trig">(Manual)</div>
+                  <div class="note">Sample transition to illustrate mechanism to transfer to other chamber</div>
+               </td>
+               <td>
+                  <a href="#submitted">submitted</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#transferred_senate">transferred_senate</a>
+                  <br></br>
+               </td>
+               <td>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e357"></a>
+                  <span class="transition-title">Admissible</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#reviewed">reviewed</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#admissible">admissible</a>
+                  <br></br>
+               </td>
+               <td>SpeakerAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e359"></a>
+                  <span class="transition-title">Inadmissible</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#reviewed">reviewed</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#inadmissible">inadmissible</a>
+                  <br></br>
+               </td>
+               <td>SpeakerAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e361"></a>
+                  <span class="transition-title">Scheduled for Debate</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#admissible">admissible</a>
+                  <br></br>
+                  <a href="#deferred">deferred</a>
+                  <br></br>
+                  <a href="#adjourned">adjourned</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#scheduled">scheduled</a>
+                  <br></br>
+               </td>
+               <td>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">is_scheduled</span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e364"></a>
+                  <span class="transition-title">Resubmit</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#clarification_required">clarification_required</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#submitted">submitted</a>
+                  <br></br>
+               </td>
+               <td>Owner
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e366"></a>
+                  <span class="transition-title">Defer</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#admissible">admissible</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#deferred">deferred</a>
+                  <br></br>
+               </td>
+               <td>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e368"></a>
+                  <span class="transition-title">Elapse</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#deferred">deferred</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#elapsed">elapsed</a>
+                  <br></br>
+               </td>
+               <td>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e370"></a>
+                  <span class="transition-title">Drop</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#scheduled">scheduled</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#dropped">dropped</a>
+                  <br></br>
+               </td>
+               <td>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e372"></a>
+                  <span class="transition-title">Adjourn debate</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#scheduled">scheduled</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#adjourned">adjourned</a>
+                  <br></br>
+               </td>
+               <td>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e374"></a>
+                  <span class="transition-title">Adopt</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#scheduled">scheduled</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#adopted">adopted</a>
+                  <br></br>
+               </td>
+               <td>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e377"></a>
+                  <span class="transition-title">Adopt with amendments</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#scheduled">scheduled</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#adopted_amendments">adopted_amendments</a>
+                  <br></br>
+               </td>
+               <td>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e379"></a>
+                  <span class="transition-title">Reject</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#scheduled">scheduled</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#rejected">rejected</a>
+                  <br></br>
+               </td>
+               <td>SpeakerAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e381"></a>
+                  <span class="transition-title">Withdraw</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#submitted">submitted</a>
+                  <br></br>
+                  <a href="#reviewed">reviewed</a>
+                  <br></br>
+                  <a href="#clarification_required">clarification_required</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#withdrawn_internal">withdrawn_internal</a>
+                  <br></br>
+               </td>
+               <td>ClerkAssembly
+                  <br></br>Owner
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e383"></a>
+                  <span class="transition-title">Withdraw</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#admissible">admissible</a>
+                  <br></br>
+                  <a href="#scheduled">scheduled</a>
+                  <br></br>
+                  <a href="#deferred">deferred</a>
+                  <br></br>
+                  <a href="#adjourned">adjourned</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#withdrawn">withdrawn</a>
+                  <br></br>
+               </td>
+               <td>ClerkAssembly
+                  <br></br>Owner
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+         </tbody>
+      </table>
+      <a href="#table-of-contents">[Document Index]</a>
+      <a name="states"></a>
+      <h3>Motion:States</h3>
+      <div class="linkbar">
+         <a href="#table-of-contents">[Document Index]</a>,
+         <a href="#transitions">[Transitions]</a>,
+         <a href="./assembly_motion.dot.png" target="_blank">[Workflow Diagram]</a>
+      </div>
+      <h4>Global Grants</h4>
+      <table border="1">
+         <tr>
+            <td>
+               <em>Permission</em>
+            </td>
+            <td>
+               <em>Role</em>
+            </td>
+         </tr>
+         <tr class="s1">
+            <td>.Add</td>
+            <td>ClerkAssembly
+               <br></br>MemberAssembly
+               <br></br>
+            </td>
+         </tr>
+      </table>
+      <h4>State Grants</h4>
+      <table border="1">
+         <thead>
+            <tr class="yellow">
+               <th>State Name</th>
+               <th>Grants</th>
+               <th>Actions</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Draft</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Drafter
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>.Edit</td>
+                        <td>Drafter
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.Delete</td>
+                        <td>Drafter
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>Drafter
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>signatory.Add</td>
+                        <td>Drafter
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Submitted to Signatories</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Drafter
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>version
+                  <br></br>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Redraft</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Drafter
+                           <br></br>Owner
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>.Edit</td>
+                        <td>Drafter
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.Add</td>
+                        <td>Drafter
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>version
+                  <br></br>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Dropped</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Drafter
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Withdrawn</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Drafter
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Submitted</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>ClerkAssembly
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>.Edit</td>
+                        <td>
+                           <br></br>ClerkAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>group_assignment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>SpeakerAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>version
+                  <br></br>set_doc_registry_number
+                  <br></br>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Transferred Senate</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>ClerkAssembly
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>.Edit</td>
+                        <td>
+                           <br></br>ClerkAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>version
+                  <br></br>send_motion_to_senate
+                  <br></br>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Requires Clarification</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Drafter
+                           <br></br>ClerkAssembly
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>.Edit</td>
+                        <td>Owner
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>version
+                  <br></br>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Reviewed by Clerk Office</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>ClerkAssembly
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>.Edit</td>
+                        <td>SpeakerAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>attachment.Add</td>
+                        <td>SpeakerAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>assembly_event.Add</td>
+                        <td>SpeakerAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>version
+                  <br></br>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Inadmissible</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Drafter
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Admissible</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>group_assignment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>SpeakerAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>version
+                  <br></br>set_doc_type_number
+                  <br></br>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Scheduled</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>group_assignment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>SpeakerAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Debate adjourned</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>group_assignment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>SpeakerAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Deferred</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>group_assignment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>SpeakerAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Adopted</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>version
+                  <br></br>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Adopted with amendments</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>version
+                  <br></br>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Elapsed</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Dropped</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Rejected</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Withdrawn</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+         </tbody>
+      </table>
+      <a href="#table-of-contents">[Document Index]</a>
+   </body>
+</html>

@@ -1,0 +1,1090 @@
+<?xml version="1.0" encoding="UTF-8"?><html>
+   <head>
+      <title>Group sitting workflow</title>
+      <link rel="stylesheet" href="docs.css" type="text/css"></link>
+   </head>
+   <body>
+      <h1 class="main">Group sitting workflow</h1>
+      <div id="toc">
+         <a name="table-of-contents"></a>
+         <h1 class="index">Document Index</h1> <ul id="menu">
+<li><a href="address.html">address</a></li>
+<li><a href="agenda_item.html">agenda_item</a></li>
+<li><a href="assembly_bill.html">assembly_bill</a></li>
+<li><a href="assembly_event.html">assembly_event</a></li>
+<li><a href="assembly_motion.html">assembly_motion</a></li>
+<li><a href="assembly_question.html">assembly_question</a></li>
+<li><a href="assembly_response.html">assembly_response</a></li>
+<li><a href="assembly_tabled_document.html">assembly_tabled_document</a></li>
+<li><a href="attachment.html">attachment</a></li>
+<li><a href="chamber.html">chamber</a></li>
+<li><a href="committee.html">committee</a></li>
+<li><a href="debate_record.html">debate_record</a></li>
+<li><a href="doc.html">doc</a></li>
+<li><a href="event.html">event</a></li>
+<li><a href="group.html">group</a></li>
+<li><a href="group_assignment.html">group_assignment</a></li>
+<li><a href="group_member.html">group_member</a></li>
+<li><a href="heading.html">heading</a></li>
+<li><a href="report.html">report</a></li>
+<li><a href="senate_bill.html">senate_bill</a></li>
+<li><a href="senate_event.html">senate_event</a></li>
+<li><a href="senate_motion.html">senate_motion</a></li>
+<li><a href="senate_question.html">senate_question</a></li>
+<li><a href="senate_response.html">senate_response</a></li>
+<li><a href="senate_tabled_document.html">senate_tabled_document</a></li>
+<li><a href="signatory.html">signatory</a></li>
+<li><a href="sitting.html">sitting</a></li>
+<li><a href="user.html">user</a></li>
+</ul>
+ 
+         
+         <h2 class="index">Index of 
+            <a href="#states">States</a>
+         </h2>
+         <div class="toc-links">
+            <a href="#sitting">Sitting</a>,
+            <a href="#draft_agenda">Draft Agenda</a>,
+            <a href="#published_agenda">Published Agenda</a>,
+            <a href="#published_agenda_internal">Published Agenda Internal</a>,
+            <a href="#draft_minutes">Draft Minutes</a>,
+            <a href="#published_minutes">Published Minutes</a>,
+            <a href="#published_minutes_internal">Published Minutes Internal</a>,
+            <a href="#archived">Archive</a>
+         </div>
+         <h2 class="index">Index of 
+            <a href="#transitions">Transitions</a>
+         </h2>
+         <div class="toc-links">
+            <a href="#d1e197">Create Sitting</a>,
+            <a href="#d1e199">Draft Agenda</a>,
+            <a href="#d1e201">Finalize Agenda</a>,
+            <a href="#d1e204">Publish Internal Agenda</a>,
+            <a href="#d1e206">Redraft Agenda</a>,
+            <a href="#d1e208">Draft Minutes</a>,
+            <a href="#d1e210">Publish Minutes</a>,
+            <a href="#d1e212">Publish Minutes Internal</a>,
+            <a href="#d1e214">Redraft Minutes</a>,
+            <a href="#d1e217">Auto Archive</a>
+         </div>
+      </div>
+      <a name="transitions"></a>
+      <h3>Group:Transitions</h3>
+      <div class="linkbar">
+         <a href="#table-of-contents">[Document Index]</a>,
+         <a href="#states">[States]</a>,
+         <a href="./sitting.dot.png" target="_blank">[Workflow Diagram]</a>
+      </div>
+      <table border="1">
+         <thead>
+            <tr class="yellow">
+               <th>Transition Name</th>
+               <th>Source</th>
+               <th>Destination</th>
+               <th>Roles</th>
+               <th>Condition</th>
+               <th>Confirm?</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr class="m1">
+               <td>
+                  <a name="d1e197"></a>
+                  <span class="transition-title">Create Sitting</span>
+                  <div class="trig">(Auto)</div>
+               </td>
+               <td></td>
+               <td>
+                  <a href="#sitting">sitting</a>
+                  <br></br>
+               </td>
+               <td></td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e199"></a>
+                  <span class="transition-title">Draft Agenda</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#sitting">sitting</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#draft_agenda">draft_agenda</a>
+                  <br></br>
+               </td>
+               <td>ClerkSenate
+                  <br></br>ClerkAssembly
+                  <br></br>SpeakerSenate
+                  <br></br>SpeakerAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e201"></a>
+                  <span class="transition-title">Finalize Agenda</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#draft_agenda">draft_agenda</a>
+                  <br></br>
+                  <a href="#published_agenda_internal">published_agenda_internal</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#published_agenda">published_agenda</a>
+                  <br></br>
+               </td>
+               <td>ClerkSenate
+                  <br></br>ClerkAssembly
+                  <br></br>SpeakerSenate
+                  <br></br>SpeakerAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">has_agenda</span>
+                  </p>
+               </td>
+               <td>false</td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e204"></a>
+                  <span class="transition-title">Publish Internal Agenda</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#draft_agenda">draft_agenda</a>
+                  <br></br>
+                  <a href="#published_agenda">published_agenda</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#published_agenda_internal">published_agenda_internal</a>
+                  <br></br>
+               </td>
+               <td>ClerkSenate
+                  <br></br>ClerkAssembly
+                  <br></br>SpeakerSenate
+                  <br></br>SpeakerAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">has_agenda</span>
+                  </p>
+               </td>
+               <td>false</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e206"></a>
+                  <span class="transition-title">Redraft Agenda</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#published_agenda">published_agenda</a>
+                  <br></br>
+                  <a href="#published_agenda_internal">published_agenda_internal</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#draft_agenda">draft_agenda</a>
+                  <br></br>
+               </td>
+               <td>ClerkSenate
+                  <br></br>ClerkAssembly
+                  <br></br>SpeakerSenate
+                  <br></br>SpeakerAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e208"></a>
+                  <span class="transition-title">Draft Minutes</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#published_agenda">published_agenda</a>
+                  <br></br>
+                  <a href="#published_agenda_internal">published_agenda_internal</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#draft_minutes">draft_minutes</a>
+                  <br></br>
+               </td>
+               <td>ClerkSenate
+                  <br></br>ClerkAssembly
+                  <br></br>SpeakerSenate
+                  <br></br>SpeakerAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e210"></a>
+                  <span class="transition-title">Publish Minutes</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#draft_minutes">draft_minutes</a>
+                  <br></br>
+                  <a href="#published_minutes_internal">published_minutes_internal</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#published_minutes">published_minutes</a>
+                  <br></br>
+               </td>
+               <td>ClerkSenate
+                  <br></br>ClerkAssembly
+                  <br></br>SpeakerSenate
+                  <br></br>SpeakerAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">agenda_finalized</span>
+                  </p>
+               </td>
+               <td>false</td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e212"></a>
+                  <span class="transition-title">Publish Minutes Internal</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#draft_minutes">draft_minutes</a>
+                  <br></br>
+                  <a href="#published_minutes">published_minutes</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#published_minutes_internal">published_minutes_internal</a>
+                  <br></br>
+               </td>
+               <td>ClerkSenate
+                  <br></br>ClerkAssembly
+                  <br></br>SpeakerSenate
+                  <br></br>SpeakerAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">agenda_finalized</span>
+                  </p>
+               </td>
+               <td>false</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e214"></a>
+                  <span class="transition-title">Redraft Minutes</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#published_minutes">published_minutes</a>
+                  <br></br>
+                  <a href="#published_minutes_internal">published_minutes_internal</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#draft_minutes">draft_minutes</a>
+                  <br></br>
+               </td>
+               <td>ClerkSenate
+                  <br></br>ClerkAssembly
+                  <br></br>SpeakerSenate
+                  <br></br>SpeakerAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e217"></a>
+                  <span class="transition-title">Auto Archive</span>
+                  <div class="trig">(Auto)</div>
+               </td>
+               <td>
+                  <a href="#sitting">sitting</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#archived">archived</a>
+                  <br></br>
+               </td>
+               <td></td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">sitting_dummy</span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+         </tbody>
+      </table>
+      <a href="#table-of-contents">[Document Index]</a>
+      <a name="states"></a>
+      <h3>Group:States</h3>
+      <div class="linkbar">
+         <a href="#table-of-contents">[Document Index]</a>,
+         <a href="#transitions">[Transitions]</a>,
+         <a href="./sitting.dot.png" target="_blank">[Workflow Diagram]</a>
+      </div>
+      <h4>Global Grants</h4>
+      <table border="1">
+         <tr>
+            <td>
+               <em>Permission</em>
+            </td>
+            <td>
+               <em>Role</em>
+            </td>
+         </tr>
+         <tr class="s1">
+            <td>.View</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s0">
+            <td>.Add</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s1">
+            <td>sitting_attendance.View</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>SpeakerSenate
+               <br></br>SpeakerAssembly
+               <br></br>MemberSenate
+               <br></br>MemberAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s0">
+            <td>sitting_attendance.Edit</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s1">
+            <td>sitting_attendance.Add</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s0">
+            <td>sitting_attendance.Delete</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s1">
+            <td>sitting_report.View</td>
+            <td>Anonymous
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s0">
+            <td>sitting_report.Edit</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s1">
+            <td>sitting_report.Add</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s0">
+            <td>sitting_report.Delete</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s1">
+            <td>item_schedule_vote.View</td>
+            <td>Anonymous
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s0">
+            <td>item_schedule_vote.Edit</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s1">
+            <td>item_schedule_vote.Add</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s0">
+            <td>item_schedule_vote.Delete</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s1">
+            <td>session.Add</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s0">
+            <td>session.Edit</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s1">
+            <td>session.Delete</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s0">
+            <td>session.View</td>
+            <td>Anonymous
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s1">
+            <td>venue.View</td>
+            <td>Anonymous
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s0">
+            <td>venue.Add</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s1">
+            <td>venue.Edit</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s0">
+            <td>venue.Delete</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s1">
+            <td>editorial_note.View</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s0">
+            <td>editorial_note.Add</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s1">
+            <td>editorial_note.Edit</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s0">
+            <td>editorial_note.Delete</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+      </table>
+      <h4>State Grants</h4>
+      <table border="1">
+         <thead>
+            <tr class="yellow">
+               <th>State Name</th>
+               <th>Grants</th>
+               <th>Actions</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Sitting</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>
+                           <br></br>Anonymous
+                           <br></br>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>MemberSenate
+                           <br></br>MemberAssembly
+                           <br></br>MinistryMember
+                           <br></br>
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>.Edit</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.Delete</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>item_schedule_discussion.View</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>debate_record.View</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>Transcriber
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Draft Agenda</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>
+                           <br></br>Anonymous
+                           <br></br>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>MemberSenate
+                           <br></br>MemberAssembly
+                           <br></br>MinistryMember
+                           <br></br>
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>.Edit</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.Delete</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>item_schedule.View</td>
+                        <td>
+                           <br></br>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>item_schedule.Edit</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>item_schedule.Add</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>item_schedule.Delete</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>item_schedule_discussion.View</td>
+                        <td>
+                           <br></br>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Published Agenda</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>
+                           <br></br>Anonymous
+                           <br></br>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>MemberSenate
+                           <br></br>MemberAssembly
+                           <br></br>MinistryMember
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>item_schedule.View</td>
+                        <td>
+                           <br></br>Anonymous
+                           <br></br>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>MemberSenate
+                           <br></br>MemberAssembly
+                           <br></br>MinistryMember
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>item_schedule_discussion.View</td>
+                        <td>
+                           <br></br>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>schedule_sitting_items
+                  <br></br>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Published Agenda Internal</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>MemberSenate
+                           <br></br>MemberAssembly
+                           <br></br>MinistryMember
+                           <br></br>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>item_schedule.View</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>MemberSenate
+                           <br></br>MemberAssembly
+                           <br></br>MinistryMember
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>item_schedule_discussion.View</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Draft Minutes</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>MemberSenate
+                           <br></br>MemberAssembly
+                           <br></br>MinistryMember
+                           <br></br>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>.Edit</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>item_schedule.View</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>MemberSenate
+                           <br></br>MemberAssembly
+                           <br></br>MinistryMember
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>item_schedule_discussion.View</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>item_schedule_discussion.Edit</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Published Minutes</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>MemberSenate
+                           <br></br>MemberAssembly
+                           <br></br>MinistryMember
+                           <br></br>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>item_schedule.View</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>MemberSenate
+                           <br></br>MemberAssembly
+                           <br></br>MinistryMember
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>item_schedule_discussion.View</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>MemberSenate
+                           <br></br>MemberAssembly
+                           <br></br>MinistryMember
+                           <br></br>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Published Minutes Internal</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>MemberSenate
+                           <br></br>MemberAssembly
+                           <br></br>MinistryMember
+                           <br></br>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>item_schedule.View</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>MemberSenate
+                           <br></br>MemberAssembly
+                           <br></br>MinistryMember
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>item_schedule_discussion.View</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>Signatory
+                           <br></br>MemberSenate
+                           <br></br>MemberAssembly
+                           <br></br>MinistryMember
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name=""></a>
+                  <span class="state-title">Archive</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>SpeakerSenate
+                           <br></br>SpeakerAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>item_schedule_discussion.View</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+         </tbody>
+      </table>
+      <a href="#table-of-contents">[Document Index]</a>
+   </body>
+</html>
