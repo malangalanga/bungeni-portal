@@ -28,11 +28,21 @@
     <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
         <show modes="view edit add" />
     </field>
-    <field name="principal_name" label="Ministry Identifier" description="Unique identifier for this Ministry" required="true" value_type="text" render_type="single_select" vocabulary="ministry_id"
+    <!--field name="principal_name" label="Ministry Identifier" description="Unique identifier for this Ministry" required="true" value_type="text" render_type="single_select" vocabulary="ministry_id"
         note="!+LOGIN value_type should be 'login'?
             This field is conceptually equivalent to User.login:
             should contain only letters, numbers, a period (.) and underscore (_). 
             should start with a letter and be between 3 and 20 characters long"
+        >
+        <show modes="view edit add" />
+    </field-->
+    <field name="conceptual_name" label="Ministry Identifier"
+        description="The logical identifier for this Ministry - 
+            May contain only letters, numbers, a period (.) and underscore (_). 
+            Should start with a letter and be between 3 and 20 characters long"
+        required="true" 
+        value_type="text" render_type="single_select" vocabulary="ministry_id"
+        note="may be up to 64 characters long"
         >
         <show modes="view edit add" />
     </field>

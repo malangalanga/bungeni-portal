@@ -6,11 +6,21 @@
     <field name="short_name" label="Short Name" description="Shorter name for the legislature" required="true" value_type="text" render_type="text_line">
         <show modes="view edit add listing" />
     </field>
-    <field name="principal_name" label="Legislature System Name" description="Unique identifier for this Legislature" required="true" value_type="text" render_type="text_line"
+    <!--field name="principal_name" label="Legislature System Name" description="Unique identifier for this Legislature" required="true" value_type="text" render_type="text_line"
         note="!+LOGIN value_type should be 'login'?
             This field is conceptually equivalent to User.login:
             should contain only letters, numbers, a period (.) and underscore (_). 
             should start with a letter and be between 3 and 20 characters long"
+        >
+        <show modes="view edit add listing" />
+    </field-->
+    <field name="conceptual_name" label="Legislature Identifier" 
+        description="The identifier for this Legislature - 
+            May contain only letters, numbers, a period (.) and underscore (_). 
+            Should start with a letter and be between 3 and 20 characters long"
+        required="true"
+        value_type="text" render_type="text_line"
+        note="may be up to 64 characters long"
         >
         <show modes="view edit add listing" />
     </field>
@@ -26,9 +36,11 @@
         <show modes="view edit add" />
         <hide modes="listing" />
     </field>
+    <!-- replaced by conceptual_name
     <field name="identifier" label="Identifier" description="the sequential identifier number of the parliament e.g. 9th parliament" required="true" value_type="number" render_type="number" extended="number">
         <show modes="view edit add listing" />
     </field>
+    -->
     <field name="election_date" label="Election Date" required="true" value_type="date" render_type="date" extended="datetime">
         <show modes="view edit add listing" />
     </field>

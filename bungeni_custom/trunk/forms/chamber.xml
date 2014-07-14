@@ -6,14 +6,25 @@
     <field name="short_name" label="Short Name" description="Shorter name for the chamber" required="true" value_type="text" render_type="text_line">
         <show modes="view edit add listing" />
     </field>
-    <field name="principal_name" label="Chamber/Legislature Identifier" description="Unique identifier for this Chamber/Legislature" required="true" value_type="text" render_type="text_line"
+    <!--field name="principal_name" label="Chamber/Legislature Identifier" description="Unique identifier for this Chamber/Legislature" required="true" value_type="text" render_type="text_line"
         note="!+LOGIN value_type should be 'login'?
             This field is conceptually equivalent to User.login:
             should contain only letters, numbers, a period (.) and underscore (_). 
             should start with a letter and be between 3 and 20 characters long"
         >
         <show modes="view edit add listing" />
+    </field-->
+    <field name="conceptual_name" label="Chamber Logical Type" 
+        description="The logical type for this Chamber - 
+            May contain only letters, numbers, a period (.) and underscore (_). 
+            Should start with a letter and be between 3 and 20 characters long" 
+        required="true" 
+        value_type="text" render_type="text_line"
+        note="may be up to 64 characters long"
+        >
+        <show modes="view edit add listing" />
     </field>
+
     <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
         <show modes="view edit add" />
         <hide modes="listing" />
@@ -40,7 +51,7 @@
     <field name="body" label="Body" required="false" value_type="text" render_type="rich_text">
          <show modes="view edit add" />
     </field>
-
+    
     <container match="assembly_bill.chamber_id" />
     <container match="assembly_motion.chamber_id" />
     <container match="assembly_question.chamber_id" />
@@ -57,7 +68,6 @@
     <container match="political_group.parent_group_id" />
     <container match="title_type.group_id" />
     <container match="venue.group_id" />
-
     
 </descriptor>
 

@@ -28,7 +28,7 @@
     <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
         <show modes="view edit add" />
     </field>
-    <field name="principal_name" label="Role Identifier"
+    <!--field name="principal_name" label="Role Identifier"
         description="Unique identifier for this Role - 
             May contain only letters, numbers, a period (.) and underscore (_). 
             Should start with a letter and be between 3 and 20 characters long" 
@@ -37,6 +37,15 @@
             This field is conceptually equivalent to User.login:
             should contain only letters, numbers, a period (.) and underscore (_). 
             should start with a letter and be between 3 and 20 characters long"
+        >
+        <show modes="view edit add" />
+    </field-->
+    <field name="conceptual_name" label="Role Identifier"
+        description="The logical identifier for this Role - 
+            May contain only letters, numbers, a period (.) and underscore (_). 
+            Should start with a letter and be between 3 and 20 characters long" 
+        required="true" value_type="login" render_type="text_line"
+        note="may be up to 64 characters long"
         >
         <show modes="view edit add" />
     </field>

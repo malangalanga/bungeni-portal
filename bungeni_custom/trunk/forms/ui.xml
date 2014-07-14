@@ -529,6 +529,9 @@
         <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
+        <field name="conceptual_name" label="Conceptual Name" required="true" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+        </field>
         <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
@@ -554,7 +557,7 @@
         <field name="body" label="Body" required="false" value_type="text" render_type="rich_text">
             <show modes="view edit add" />
         </field>
-        <field name="group_mandate" label="Group Mandate Type" required="false" value_type="text" render_type="text_line">
+        <field name="group_mandate_type" label="Group Mandate Type" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
         <field name="group_role" label="Group Role" required="true" value_type="vocabulary" render_type="single_select" vocabulary="group_role">
