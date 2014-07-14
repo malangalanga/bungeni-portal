@@ -76,7 +76,7 @@
                         <th>Source</th>
                         <th>Destination</th>
                         <th>Roles</th>
-                        <th>Action/Condition</th>                        
+                        <th>Condition</th>                        
                         <th>Confirm?</th>
                     </tr>
                     </thead>
@@ -101,22 +101,11 @@
                     <xsl:call-template name="diagram"/>
                 </div>
                
-                <xsl:if test="@tags">
-                    <div class="tag-container">
-                        <p>
-                            <h3><xsl:value-of select="$wf-content-type"/>:State Tags</h3>
-                            <xsl:call-template name="render-tags">
-                                <xsl:with-param name="tags" select="@tags"/>
-                                <xsl:with-param name="class">state-tag</xsl:with-param>
-                            </xsl:call-template>
-                        </p>
-                    </div>
-                </xsl:if>
                 
                 <h4>Global Grants</h4>
                 <table border="1">
                     <xsl:call-template name="grant-denies">
-                       <xsl:with-param name="grant-or-denies" select="./grant" />
+                       <xsl:with-param name="grant-or-denies" select="./allow" />
                     </xsl:call-template>
                 </table>
                                 
@@ -126,8 +115,8 @@
                     <thead>
                     <tr class="yellow">
                         <th>State Name</th>
-                        <th>Allow</th>
-                        <th>Deny</th>
+                        <th>Grants</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -145,41 +134,37 @@
 
     <!-- This template is called for each <state> -->
     <xsl:template name="match-state">
+        <xsl:variable name="state-title" select="@title" />
+        <xsl:variable name="state-actions" select="@actions" />
+        <xsl:for-each select="./facet">
+            <xsl:call-template name="match-state-facet">
+                <xsl:with-param name="state-title">
+                    <xsl:value-of select="$state-title" />
+                </xsl:with-param>
+                <xsl:with-param name="state-actions">
+                    <xsl:value-of select="$state-actions" />
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template name="match-state-facet">
+        <xsl:param name="state-title"/>
+        <xsl:param name="state-actions" />
         <xsl:variable name="counter">
             <xsl:number/>
         </xsl:variable>
         <tr class="m{$counter mod 2}">
             <td>
                 <a name="{@id}"/>
-                <span class="state-title"><xsl:value-of select="@title"/></span>
+                <span class="state-title"><xsl:value-of select="$state-title"/></span>
                 <!-- uncomment the below to show the id on the page -->
                 <!--
-                <div class="ident">
+                    <div class="ident">
                     <xsl:value-of select="@id"/>
-                </div>
+                    </div>
                 -->
-                <xsl:if test="@like_state">
-                    <div> Like:
-                        <a href="#{@like_state}">
-                            <!-- Query the state key using the id value in like_state and return the title -->
-                            <xsl:value-of select="key('query_state',@like_state)/@title" />
-                        </a>
-                    </div>
-                </xsl:if>
-                <xsl:if test="@tags">
-                    <div class="tag-container">
-                        <p>
-                            <strong>Tags:</strong>
-                            <xsl:call-template name="render-tags">
-                                <xsl:with-param name="tags" select="@tags"/>
-                                <xsl:with-param name="class">block-tag</xsl:with-param>
-                            </xsl:call-template>
-                        </p>
-                    </div>
-                </xsl:if>
-                <xsl:if test="@version">
-                    <div> Version: <span class="ident"><xsl:value-of select="@version"/></span> </div>
-                </xsl:if>
+                <!--
                 <xsl:if test="child::notification">
                     <div> Notify: <span class="ident">true</span> </div>
                 </xsl:if>
@@ -188,23 +173,30 @@
                         <xsl:value-of select="@note"/>
                     </div>
                 </xsl:if>
-
+                -->
             </td>
-            <td>&#160; <table border="0">
+            <td><table border="0">
                     <xsl:call-template name="grant-denies">
-                        <xsl:with-param name="grant-or-denies" select="./grant">
-                        </xsl:with-param>
-                    </xsl:call-template>
-                </table>`
-            </td>
-            <td>&#160; <table border="0">
-                    <xsl:call-template name="grant-denies">
-                        <xsl:with-param name="grant-or-denies" select="./deny">
+                        <xsl:with-param name="grant-or-denies" select="./allow">
                         </xsl:with-param>
                     </xsl:call-template>
                 </table>
             </td>
+            <td>
+                <xsl:variable name="tokActions" select="tokenize($state-actions, '\s+')"> </xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="string-length($state-actions) &gt; 0">
+                        <xsl:for-each select="$tokActions">
+                            <xsl:value-of select="." /><br />
+                        </xsl:for-each>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>None</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>  
+            </td>
         </tr>
+        
     </xsl:template>
 
     <!-- this template is called for each transition -->
@@ -275,13 +267,18 @@
 
             <!-- Action and Condition -->
             <td>
-                <!-- action -->
-                <p style="text-align:left"> A: <span class="ident"><xsl:value-of select="@action"
-                /></span>
-                </p>
                 <!-- condition -->
-                <p style="text-align:left"> C: <span class="ident"><xsl:value-of select="@condition"
-                /></span>
+                <p style="text-align:left">
+                    <span class="ident">
+                        <xsl:choose>
+                            <xsl:when test="string-length(@condition) &gt; 0">
+                                <xsl:value-of select="@condition" />        
+                            </xsl:when>
+                            <xsl:otherwise>
+                                None
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </span>
                 </p>
             </td>
             
@@ -300,24 +297,6 @@
             </td>
 
         </tr>
-    </xsl:template>
-
-    <!-- List the tags applicable to this content type -->
-    <xsl:template name="render-tags">
-        <xsl:param name="tags">
-            <!-- A list of space separated tags selected from workflow XML -->
-        </xsl:param>
-        <xsl:param name="class">
-            <!-- The class to apply to tags -->
-        </xsl:param>
-        <xsl:for-each select="tokenize(normalize-space($tags), ' ')">
-            <span>
-                <xsl:attribute name="class">
-                    <xsl:value-of select="$class"/>
-                </xsl:attribute>
-                <xsl:value-of select="."/>
-            </span>
-        </xsl:for-each>
     </xsl:template>
 
     <!-- This template matches grant or deny elements -->
@@ -343,11 +322,15 @@
                 </td>
                 <td>
                     <xsl:for-each select="current-group()">
-                        <xsl:call-template name="display-role">
-                            <xsl:with-param name="role">
-                                <xsl:value-of select="@role"/>
-                            </xsl:with-param>
-                        </xsl:call-template>
+                        <xsl:variable name="tokRoles" select="tokenize(@roles, '\s+')"/>
+                        <xsl:for-each select="$tokRoles">
+                            <xsl:call-template name="display-role">
+                                <xsl:with-param name="role">
+                                    <xsl:value-of select="."/>
+                                </xsl:with-param>
+                            </xsl:call-template>
+                            <br/>
+                        </xsl:for-each>
                         <xsl:if test="not(position() = last())">
                             <xsl:text> - </xsl:text>
                         </xsl:if>
