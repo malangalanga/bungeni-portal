@@ -2227,22 +2227,26 @@ class RabbitMQTasks:
             run("tar --strip-components=1 -xvf %(rabbitmq_download_file)s -C %(user_rabbitmq)s" %
                          {"user_rabbitmq":self.cfg.user_rabbitmq,
                           "rabbitmq_download_file":self.cfg.rabbitmq_download_file})
-            with cd(self.cfg.user_rabbitmq + "/sbin"):
+            binary_folder = self.cfg.user_rabbitmq
+            if os.path.exists(self.cfg.user_rabbitmq + "/sbin"):
+                binary_folder = self.cfg.user_rabbitmq + "/sbin"
+            else:
+                binary_folder = self.cfg.user_rabbitmq + "/scripts"
+            with cd(binary_folder):
                 run("./rabbitmq-plugins enable rabbitmq_management rabbitmq_management_visualiser")
                 run(self.cfg.rabbitmq_download_admin_command)
                 run("mv %s rabbitmq-admin" % self.cfg.rabbitmq_download_admin_file)
                 print "Configuring rabbitmq, setting up admin and defaults"
                 run("chmod +x rabbitmq-admin rabbitmqctl")
-                run("./rabbitmq-server -detached")
-                run("sleep 3")
-            self.add_admin()
-            with cd(self.cfg.user_rabbitmq + "/sbin"):            
+                run("./rabbitmq-server -detached && sleep 5")
+            self.add_admin(binary_folder)
+            with cd(binary_folder):            
                 run("./rabbitmqctl stop_app")
                 run("./rabbitmqctl stop")
                 
     
-    def add_admin(self):
-        with cd(self.cfg.user_rabbitmq + "/sbin"):
+    def add_admin(self, binary_folder):
+        with cd(binary_folder):
            run("./rabbitmqctl add_user %s %s" % (self.cfg.rabbitmq_user, self.cfg.rabbitmq_password))
            run("./rabbitmqctl set_user_tags %s administrator " % self.cfg.rabbitmq_user)
            run('./rabbitmqctl set_permissions -p / %s ".*" ".*" ".*"' % self.cfg.rabbitmq_user)
