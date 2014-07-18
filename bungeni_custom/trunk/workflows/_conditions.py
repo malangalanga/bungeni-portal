@@ -103,22 +103,22 @@ def is_oral_response_or_is_group_assigned(question):
 def response_allow_submit_assembly(question):
     """question: Require that the event response has been completed.
     """
-    return child_in_state(question, "assembly_response", "completed")
+    return child_in_state(question, "assembly_event_response", "completed")
 
 def response_allow_submit_senate(question):
     """question: Require that the event response has been completed.
     """
-    return child_in_state(question, "senate_response", "completed")
+    return child_in_state(question, "senate_event_response", "completed")
 
 def response_allow_publish_assembly(question):
     """question: Require that the event response has been reviewed.
     """
-    return child_in_state(question, "assembly_response", "reviewed")
+    return child_in_state(question, "assembly_event_response", "reviewed")
 
 def response_allow_publish_senate(question):
     """question: Require that the event response has been reviewed.
     """
-    return child_in_state(question, "senate_response", "reviewed")
+    return child_in_state(question, "senate_event_response", "reviewed")
 
 
 ''' !+composite_condition(mr, may-2012) ability to do this in xml directly?

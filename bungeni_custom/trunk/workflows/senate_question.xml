@@ -16,7 +16,7 @@
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
     <feature name="event" enabled="true">
-        <parameter name="types" value="senate_event senate_response" />
+        <parameter name="types" value="senate_event senate_event_response" />
     </feature>
     <feature name="signatory" enabled="false">
         <parameter name="open_states" value="admissible" />
@@ -107,7 +107,7 @@
             <allow permission=".View" roles="Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate ClerkQuestionSenate" />
             <allow permission="senate_event.Add" roles="ClerkSenate ClerkQuestionSenate" />
-            <allow permission="senate_response.Add" roles="MinistryMember" />
+            <allow permission="senate_event_response.Add" roles="MinistryMember" />
         </facet>
     </state>
     <state id="response_submitted" title="Response submitted">
