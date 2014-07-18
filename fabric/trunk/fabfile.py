@@ -793,6 +793,15 @@ def rabbitmq_switch_admin():
     tasks.add_admin()
 
 
+def jython_install():
+    """
+    Install/Reinstall jython
+    """    
+    tasks = bungeni.GlueScriptTasks()
+    tasks.setup_jython()
+    tasks.setup_jython_libs()
+
+
 def glue_install():
     """
     Installs Jython, WARNING: Will overwrite any existing installation
