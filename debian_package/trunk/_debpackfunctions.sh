@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# 19/7/2014 - updated getbungenideps to remove trailing comma in dependency list
 #<ini_file> <ini_section> <ini_key>
 getini(){	
 	
@@ -50,7 +50,7 @@ getosver(){
 #<distro_ini>
 getbungenideps(){
 	
-	echo $(cat $1 | awk -v "RS=\n\n" -F "=" '/'$(getosver)'/ {print $2}' | sed 's/#.*//' | tr -d '\n' | tr -s ' ' ', ' | sed 's/^.//')
+	echo $(cat $1 | awk -v "RS=\n\n" -F "=" '/'$(getosver)'/ {print $2}' | sed 's/#.*//' | tr -d '\n' | tr -s ' ' ', ' | sed 's/^.//' | sed 's/,$//' )
 }
 
 #<include> <exclude>
