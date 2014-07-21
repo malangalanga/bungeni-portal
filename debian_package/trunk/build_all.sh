@@ -91,15 +91,15 @@ logger.printTask "[Portal] Building..."
 		logger.printTask "[Portal] Finished."
 	fi
 logger.printTask "------------------------------------------------------------------" 
-logger.printTask "[Plone] Building..." 
-	if [ ! -d $PLONE_DIR ] ; then
-		logger.printFail "[Plone] directory does not exist!"
-	else
-		logger.printTask "[Plone] Started.." 
-		yes | ./plone.sh
-		logger.printTask "[Plone] Finished." 
-	fi		
-logger.printTask "------------------------------------------------------------------" 
+#logger.printTask "[Plone] Building..." 
+#	if [ ! -d $PLONE_DIR ] ; then
+#		logger.printFail "[Plone] directory does not exist!"
+#	else
+#		logger.printTask "[Plone] Started.." 
+#		yes | ./plone.sh
+#		logger.printTask "[Plone] Finished." 
+#	fi		
+#logger.printTask "------------------------------------------------------------------" 
 logger.printTask "[PostgreSQL] Building..." 
 	if [ ! -d $POSTGRES_DIR ] ; then
 		logger.printFail "[PostgreSQL] directory does not exist!"
