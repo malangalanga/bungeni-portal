@@ -488,8 +488,7 @@ class BungeniConfigs:
         self.varnish_build_path = self.user_build_root + "/varnish"
         self.varnish_install_path = self.user_install_root + "/varnish"
         self.user_varnish = self.varnish_install_path
-        self.varnish_vcl_folder = self.varnish_install_path + "/etc/varnish"
-        self.varnish_vcl_file_path = self.varnish_vcl_folder + "/default.vcl"
+        self.varnish_vcl_file_path = self.user_config + "/varnish.vcl"
         self.varnish_backend_host = self.cfg.get_config("varnish","backend_host")
         self.varnish_backend_port = self.cfg.get_config("varnish","backend_port")
         self.varnish_time_to_live = self.cfg.get_config("varnish","time_to_live")
@@ -2588,7 +2587,7 @@ class VarnishTasks:
     
     def __init__(self):
         self.cfg = BungeniConfigs() 
-        
+        self.templates = Templates(self.cfg)        
         
     def setup_varnish(self):
         """
@@ -2615,23 +2614,14 @@ class VarnishTasks:
         """
         Generate a new varnish VCL file (Replacing the old one)
         """
-        
-        with cd(self.cfg.varnish_vcl_folder):
-            run("mv default.vcl original.vcl")
-            
-            print("Creating varnish VCL file in %s " % self.cfg.varnish_vcl_folder)
-            
-            contents = "backend default { \n\t.host = \"%(server_name)s\"; \n\t.port = \"%(server_port)s\"; \n} \n\nsub vcl_recv { \n\t# allow PURGE from upon POST \n\tif (req.request == \"POST\" || req.request == \"PURGE\") { \n\t\tpurge(\"req.http.host == \" req.http.host); \n\t\tpurge(\"req.url == \" req.url \" && req.http.host == \" req.http.host); \n\t\tpurge(\"req.http.host == \" req.http.host \" && req.url ~ \" req.url \"$\"); \n\t\treturn (pass); \n\t} \n\n\t# remove unnecessary cookies \n\tif (req.http.cookie ~ \"wc.cookiecredentials\") { \n\t\t# found wc.cookiecredentials in request, passing to backend server \n\t\treturn (lookup); \n\t} else { \n\t\tunset req.http.cookie; \n\t} \n} \n\nsub vcl_fetch { \n\tunset beresp.http.Set-Cookie; \n\tset beresp.ttl = %(time_to_live)s; \n\treturn(deliver); \n} \n\n# Routine used to determine the cache key if storing/retrieving a cached page. \nsub vcl_hash { \n\t# Do NOT use this unless you want to store per-user caches. \n\tif (req.http.Cookie) { \n\t\tset req.hash += req.http.Cookie; \n\t} \n} \n\nsub vcl_deliver { \n\t# send some handy statistics back, useful for checking cache \n\tif (obj.hits > 0) { \n\t\tset resp.http.X-Cache-Action = \"HIT\"; \n\t\tset resp.http.X-Cache-Hits = obj.hits; \n\t} else { \n\t\tset resp.http.X-Cache-Action = \"MISS\"; \n\t} \n} \n" % {
-                    "server_name": self.cfg.varnish_backend_host, 
+        template_map =  {
+                    "server_name": self.cfg.varnish_backend_host,
                     "server_port": self.cfg.varnish_backend_port,
                     "time_to_live": self.cfg.varnish_time_to_live
-                }
-            
-            vcl_file = open("%(vcl_folder)s/default.vcl" % {"vcl_folder": self.cfg.varnish_vcl_folder}, "w")
-            vcl_file.write(contents)
-            vcl_file.close()
-            
-            
+        }
+        self.templates.new_file("varnish.vcl.tmpl", template_map, self.cfg.user_config) 
+     
+
     def varnish_config(self):
         """
         Update the varnish config file (VCL)
@@ -2645,9 +2635,9 @@ class VarnishTasks:
         """
         Create varnish secret file
         """
-        with cd(self.cfg.varnish_vcl_folder):
+        with cd(self.cfg.user_config):
             run("uuidgen > secret && chmod 0600 secret")
-            print("Created varnish secret file in %s " % self.cfg.varnish_vcl_folder)
+            print("Created varnish secret file in %s " % self.cfg.user_config)
         
         
     def varnish_warmup_cache(self):
