@@ -1,0 +1,56 @@
+#!/bin/bash
+#===============================================================================
+#
+#          FILE:  postrm
+#
+#
+#   DESCRIPTION:  Deletes /opt/bungeni folder; removes bungeni user; 
+#				  makes sure bungeni user is logged out; Deregisters bungeni service		
+#
+#       OPTIONS:  purge, remove, upgrade, failed-upgrade, abort-install, abort-upgrade, disappear
+#          BUGS:  ---
+#         NOTES:  ---
+#
+#       AUTHORS:  Ashok Hariharan <ashok@parliaments.info>
+#				  Samuel Weru <samweru@gmail.com>
+#
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
+
+set -e
+
+case "$1" in
+    purge)
+	
+	echo "Removing bungeni home folder"
+	rm -rf /opt/bungeni
+    ;;
+    remove|upgrade|failed-upgrade|abort-install|abort-upgrade)
+
+	echo "Removing bungeni group and user..."
+	if [ -z "$(getent passwd bungeni)" ]; then
+	    echo "user bungeni does not exist!"
+	else
+	    echo "force user bungeni logout"
+	    pkill -KILL -u bungeni > /dev/null || true	
+	    echo "delete user bungeni"
+	    deluser  --quiet bungeni > /dev/null || true
+	    echo "user bungeni deleted."
+	fi
+
+	echo "Removing supervisor startup scripts..."
+	update-rc.d bungeni_services remove
+    ;;
+    disappear)
+    ;;
+    *)
+
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
+
+exit 0

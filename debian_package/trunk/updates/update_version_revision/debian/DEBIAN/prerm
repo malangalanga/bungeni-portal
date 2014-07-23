@@ -1,0 +1,40 @@
+#!/bin/bash
+#===============================================================================
+#
+#          FILE:  prerm
+#
+#
+#   DESCRIPTION:  Stop bungeni service
+#
+#       OPTIONS:  remove, purge
+#          BUGS:  ---
+#         NOTES:  ---
+#
+#       AUTHORS:  Ashok Hariharan <ashok@parliaments.info>
+#				  Samuel Weru <samweru@gmail.com>
+#
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
+
+set -e
+
+case "$1" in
+remove|purge)
+
+		echo "Stopping services.."
+		service  bungeni_services stop
+
+		#while ps -A | grep supervisord; do sleep 1; done
+		#echo "Bungeni services stopped."
+    ;;
+*)
+
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
+
+exit 0

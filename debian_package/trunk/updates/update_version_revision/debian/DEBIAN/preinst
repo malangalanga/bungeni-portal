@@ -1,0 +1,37 @@
+#!/bin/bash
+#===============================================================================
+#
+#          FILE:  preinst
+#
+#
+#   DESCRIPTION:  Creates bungeni temporary directory 		
+#
+#       OPTIONS:  install
+#          BUGS:  ---
+#         NOTES:  ---
+#
+#       AUTHORS:  Ashok Hariharan <ashok@parliaments.info>
+#				  Samuel Weru <samweru@gmail.com>
+#
+#  ORGANIZATION:  UNDESA
+#       VERSION:  ---
+#       CREATED:  ---
+#      REVISION:  ---
+#===============================================================================
+
+set -e
+
+case "$1" in
+install)
+
+	echo "Preparing bungeni for installation..."
+	mkdir -p /opt/bungeni/.bungenitmp
+    ;;
+*)
+
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
+
+exit 0
