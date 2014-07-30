@@ -35,9 +35,21 @@ def _build_archive(archive_name,  update_config_folder):
     run("tar -czf %s  -T %s/update.include -X %s/update.exclude " % (archive, update_config_folder, update_config_folder))
     return os.path.join(env.cwd, archive)
 
-def _get_size():
-    size = run("echo $(du -sc $(tr '\\n' ' ' < ./update.include) -X ./update.exclude | tail -1 | awk -F ' ' '{print $1}')")
-    return size
+def _md5sums(target_folder):
+    with cd(target_folder):
+        run("cd ./debian && find .  -type f -not -path \"*.svn*\"  | grep -v 'DEBIAN'  | xargs md5sum > ../md5sums")
+        run("sed -i 's|./opt|opt|g' md5sums")
+        run("mv md5sums debian/DEBIAN")
+
+def _dpkg_deb(target_folder, archive_name):
+    with cd(target_folder):
+        run("dpkg-deb --build debian")
+        run("mv debian.deb ../%s.deb" % archive_name)
+
+def _get_size(update_config_folder):
+    with cd(update_config_folder):
+        size = run("echo $(du -sc $(tr '\\n' ' ' < ./update.include) -X ./update.exclude | tail -1 | awk -F ' ' '{print $1}')")
+        return size
 
     
 def build_update(in_folder, version):
@@ -66,7 +78,7 @@ def build_update(in_folder, version):
     with cd(parent_in_folder):
          archive_path = _build_archive(folder_name, update_config_folder)              
          run("mkdir -p %s" % target_folder)
-         size = _get_size()
+         size = _get_size(update_config_folder)
          template_map = {
                "size": size,
                "version": ver,
@@ -82,11 +94,14 @@ def build_update(in_folder, version):
              with cd("debian/DEBIAN"):
                 t = _tmpl()
                 t.new_file(
-                    os.path.join(update_config_folderi, "control.tmpl"),
+                    os.path.join(in_folder, "control.tmpl"),
                     template_map,
                     env.cwd
                 )
+         
          run("tar xvf %s -C %s" % (archive_path, os.path.join(target_folder, "debian")))
+         _md5sums(target_folder)
+         _dpkg_deb(target_folder, folder_name)
               
 def setup_version():
     run("echo $(date +%Y%m%d)")
