@@ -4,18 +4,15 @@
 #          FILE:  postrm
 #
 #
-#   DESCRIPTION:  Deletes /opt/bungeni folder; removes bungeni user; 
-#				  makes sure bungeni user is logged out; Deregisters bungeni service		
+#   DESCRIPTION:  Uninstalls the 1.20140730 update 
 #
 #       OPTIONS:  purge, remove, upgrade, failed-upgrade, abort-install, abort-upgrade, disappear
 #          BUGS:  ---
 #         NOTES:  ---
 #
 #       AUTHORS:  Ashok Hariharan <ashok@parliaments.info>
-#				  Samuel Weru <samweru@gmail.com>
 #
-#  ORGANIZATION:  UNDESA
-#       VERSION:  ---
+#       VERSION:  1.20140730
 #       CREATED:  ---
 #      REVISION:  ---
 #===============================================================================
@@ -23,26 +20,23 @@
 set -e
 
 case "$1" in
+    abort-install)
+    echo "Failed while attempting to install update"
+    exit 0
+    ;;
     purge)
 	
-	echo "Removing bungeni home folder"
-	rm -rf /opt/bungeni
+	echo "Removing installed varnish"
+	rm -rf /opt/bungeni/bungeni_apps/varnish
+    echo "Restoring earlier varnish folder"
+    mv /opt/bungeni/bungeni_apps/varnish.bak.1.20140730 /opt/bungeni/bungeni_apps/varnish
+    echo "Restoring earlier supervisor configuration"
+    mv /opt/bungeni/bungeni_apps/config/supervisord.conf /opt/bungeni/bungeni_apps/config/supervisord.conf.uninst.1.20140730
+    mv /opt/bungeni/bungeni_apps/config/supervisord.conf.bak.1.20140730 /opt/bungeni/bungeni_apps/config/supervisord.conf
+    
     ;;
     remove|upgrade|failed-upgrade|abort-install|abort-upgrade)
 
-	echo "Removing bungeni group and user..."
-	if [ -z "$(getent passwd bungeni)" ]; then
-	    echo "user bungeni does not exist!"
-	else
-	    echo "force user bungeni logout"
-	    pkill -KILL -u bungeni > /dev/null || true	
-	    echo "delete user bungeni"
-	    deluser  --quiet bungeni > /dev/null || true
-	    echo "user bungeni deleted."
-	fi
-
-	echo "Removing supervisor startup scripts..."
-	update-rc.d bungeni_services remove
     ;;
     disappear)
     ;;

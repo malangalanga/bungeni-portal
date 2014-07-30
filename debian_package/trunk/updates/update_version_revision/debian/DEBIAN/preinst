@@ -24,8 +24,14 @@ set -e
 case "$1" in
 install)
 
-	echo "Preparing bungeni for installation..."
-	mkdir -p /opt/bungeni/.bungenitmp
+	echo "Stopping varnish"
+    service bungeni_services stop  || true  
+    echo "Backing up current varnish installation"
+    if [ -d "/opt/bungeni/bungeni_apps/varnish" ]; then
+        mv /opt/bungeni/bungeni_apps/varnish /opt/bungeni/bungeni_apps/varnish.bak.1.20140730
+    fi
+    cp /opt/bungeni/bungeni_apps/config/supervisord.conf /opt/bungeni/bungeni_apps/config/supervisord.conf.bak.1.20140730
+    
     ;;
 *)
 
