@@ -1,37 +1,37 @@
 <configure
-   xmlns="http://namespaces.zope.org/zope"
-   xmlns:five="http://namespaces.zope.org/five"
-   xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-   xmlns:browser="http://namespaces.zope.org/browser"
-   xmlns:plone="http://namespaces.plone.org/plone">
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone">
    
-  <includeOverrides file="overrides.zcml" />
-  <include package="plone.app.layout.viewlets" />
-   <include package="plone.app.layout.navigation" />
-  <include package="plone.app.layout.presentation" />  
-  <include package="Products.ATContentTypes" />
-  <include package="Products.CMFPlone.browser" />  
+    <includeOverrides file="overrides.zcml" />
+    <include package="plone.app.layout.viewlets" />
+    <include package="plone.app.layout.navigation" />
+    <include package="plone.app.layout.presentation" />  
+    <include package="Products.ATContentTypes" />
+    <include package="Products.CMFPlone.browser" />  
 
-  <include file="skins.zcml" />
+    <include file="skins.zcml" />
 
-  <!-- The support page -->
-  <browser:page
-     for="Products.CMFCore.interfaces.ISiteRoot"
-     name="support"
-     template="skins/bungenicms_theme/support.pt"
-     permission="zope2.View"
-     />    
+    <!-- The support page -->
+    <browser:page
+        for="Products.CMFCore.interfaces.ISiteRoot"
+        name="support"
+        template="skins/bungenicms_theme/support.pt"
+        permission="zope2.View"
+    />    
 
-  <five:registerPackage package="." />    
+    <five:registerPackage package="." />    
   
-  <genericsetup:registerProfile
-     name="default"
-     title="Bungeni CMS theme"
-     description="Extension profile for the default Bungeni CMS theme."
-     directory="profile"
-     provides="Products.GenericSetup.interfaces.EXTENSION"
-     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-     />  
+    <genericsetup:registerProfile
+        name="default"
+        title="Bungeni CMS theme"
+        description="Extension profile for the default Bungeni CMS theme."
+        directory="profile"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    />  
      
     <browser:jbot directory="jbot_templates" />        
 
