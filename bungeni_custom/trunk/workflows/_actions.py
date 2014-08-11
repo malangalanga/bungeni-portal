@@ -37,8 +37,8 @@ from bungeni.core.workflows._actions import (
     
     # group
     activate, # set group role (grant via membership to all active members)
-    dissolve, # unset group role (disable inheritance via membership for all members)
-    deactivate, # end all memberships
+    deactivate, # unset group role (disable inheritance via membership for all members)
+    dissolve, # end all memberships and child groups (and their memberships)
     
     # sitting
     schedule_sitting_items,
