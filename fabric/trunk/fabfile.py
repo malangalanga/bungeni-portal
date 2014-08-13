@@ -177,14 +177,6 @@ def bungeni_build_opt():
     tasks = bungeni.BungeniTasks()
     tasks.build_opt()
 
-def setup_bungeni_custom():
-    """
-    Installs the bungeni_custom library into the bungeni python site-packages folder
-    """
-
-    tasks = bungeni.BungeniTasks()
-    tasks.install_bungeni_custom()
-
 
 def setup_bungeni_admin():
     """
@@ -667,6 +659,11 @@ def switch_bungeni_custom():
 
     tasks = bungeni.CustomTasks()
     tasks.switch_bungeni_custom()
+
+def restore_bungeni_custom():
+    
+    tasks = bungeni.BungeniTasks()
+    tasks.install_bungeni_custom()
 
 
 def enable_demo_theme():

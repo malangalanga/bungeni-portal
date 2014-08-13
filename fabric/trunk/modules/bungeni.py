@@ -2383,6 +2383,18 @@ class CustomTasks:
         return "%s/bungeni_custom" % bungeni_custom_path.strip("\n")
 
     def switch_bungeni_custom(self):
+        if os.path.exists(self.cfg.custom_folder):
+            """
+            if custom folder exists make backup
+            """
+            with cd(self.cfg.custom_folder):
+                # make backup folder
+                from datetime import datetime
+                t_today = datetime.now()
+                dir_name = t_today.strftime("%Y-%m-%d_%H-%M-%S") 
+                run("mkdir -p %s" % dir_name)
+                run("cp -R bungeni_custom/* %s" % dir_name)
+ 		print "Backed up existing custom config to %s" % dir_name 
         run("mkdir -p %s" % self.cfg.custom_folder)    
         with cd(self.cfg.user_bungeni):
             run("mkdir -p %s" % self.cfg.custom_folder)
@@ -2396,7 +2408,7 @@ class CustomTasks:
              }
            )
 
-    
+   
     def enable_demo_theme(self):
         demo_theme = self.cfg.demo_theme
         if demo_theme != "default" and demo_theme != "":
