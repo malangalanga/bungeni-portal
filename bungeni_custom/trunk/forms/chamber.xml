@@ -18,7 +18,7 @@
         description="The logical type for this Chamber - 
             May contain only letters, numbers, a period (.) and underscore (_). 
             Should start with a letter and be between 3 and 20 characters long" 
-        required="true" 
+        required="true"  value_type="text" render_type="single_select" 
         vocabulary="chamber_id"
         note="may be up to 64 characters long"
         >
