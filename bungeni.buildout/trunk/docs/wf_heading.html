@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?><html>
+   <head>
+      <title>Heading Workflow</title>
+      <link rel="stylesheet" href="docs.css" type="text/css"></link>
+   </head>
+   <body>
+      <h1 class="main">Heading Workflow</h1>
+      <div id="toc">
+         <a name="table-of-contents"></a>
+         <h1 class="index">Document Index</h1> <ul id="menu">
+<li><a href="wf_address.html">address</a></li>
+<li><a href="wf_agenda_item.html">agenda_item</a></li>
+<li><a href="wf_assembly_bill.html">assembly_bill</a></li>
+<li><a href="wf_assembly_event.html">assembly_event</a></li>
+<li><a href="wf_assembly_event_response.html">assembly_event_response</a></li>
+<li><a href="wf_assembly_motion.html">assembly_motion</a></li>
+<li><a href="wf_assembly_question.html">assembly_question</a></li>
+<li><a href="wf_assembly_tabled_document.html">assembly_tabled_document</a></li>
+<li><a href="wf_attachment.html">attachment</a></li>
+<li><a href="wf_chamber.html">chamber</a></li>
+<li><a href="wf_committee.html">committee</a></li>
+<li><a href="wf_debate_record.html">debate_record</a></li>
+<li><a href="wf_doc.html">doc</a></li>
+<li><a href="wf_event.html">event</a></li>
+<li><a href="wf_group.html">group</a></li>
+<li><a href="wf_group_assignment.html">group_assignment</a></li>
+<li><a href="wf_group_member.html">group_member</a></li>
+<li><a href="wf_heading.html">heading</a></li>
+<li><a href="wf_report.html">report</a></li>
+<li><a href="wf_senate_bill.html">senate_bill</a></li>
+<li><a href="wf_senate_event.html">senate_event</a></li>
+<li><a href="wf_senate_event_response.html">senate_event_response</a></li>
+<li><a href="wf_senate_motion.html">senate_motion</a></li>
+<li><a href="wf_senate_question.html">senate_question</a></li>
+<li><a href="wf_senate_tabled_document.html">senate_tabled_document</a></li>
+<li><a href="wf_signatory.html">signatory</a></li>
+<li><a href="wf_sitting.html">sitting</a></li>
+<li><a href="wf_user.html">user</a></li>
+</ul>
+ 
+         
+         <h2 class="index">Index of 
+            <a href="#states">States</a>
+         </h2>
+         <div class="toc-links">
+            <a href="#inactive">Inactive heading obsolete</a>,
+            <a href="#public">Public</a>
+         </div>
+         <h2 class="index">Index of 
+            <a href="#transitions">Transitions</a>
+         </h2>
+         <div class="toc-links">
+            <a href="#d1e32">Create</a>,
+            <a href="#d1e34">Deactivate</a>,
+            <a href="#d1e36">Reactivate</a>
+         </div>
+      </div>
+      <a name="transitions"></a>
+      <h3>Heading:Transitions</h3>
+      <div class="linkbar">
+         <a href="#table-of-contents">[Document Index]</a>,
+         <a href="#states">[States]</a>,
+         <a href="./heading.dot.png" target="_blank">[Workflow Diagram]</a>
+      </div>
+      <table border="1">
+         <thead>
+            <tr class="yellow">
+               <th>Transition Name</th>
+               <th>Source</th>
+               <th>Destination</th>
+               <th>Roles</th>
+               <th>Condition</th>
+               <th>Confirm?</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr class="m1">
+               <td>
+                  <a name="d1e32"></a>
+                  <span class="transition-title">Create</span>
+                  <div class="trig">(Auto)</div>
+               </td>
+               <td></td>
+               <td>
+                  <a href="#public">public</a>
+                  <br></br>
+               </td>
+               <td></td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e34"></a>
+                  <span class="transition-title">Deactivate</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#public">public</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#inactive">inactive</a>
+                  <br></br>
+               </td>
+               <td>ClerkSenate
+                  <br></br>ClerkAssembly
+                  <br></br>SpeakerSenate
+                  <br></br>SpeakerAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e36"></a>
+                  <span class="transition-title">Reactivate</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#inactive">inactive</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#public">public</a>
+                  <br></br>
+               </td>
+               <td>ClerkSenate
+                  <br></br>ClerkAssembly
+                  <br></br>SpeakerSenate
+                  <br></br>SpeakerAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+         </tbody>
+      </table>
+      <a href="#table-of-contents">[Document Index]</a>
+      <a name="states"></a>
+      <div class="linkbar">
+         <a href="#table-of-contents">[Document Index]</a>,
+         <a href="#transitions">[Transitions]</a>,
+         <a href="./heading.dot.png" target="_blank">[Workflow Diagram]</a>
+      </div>
+      <h4>Global Grants</h4>
+      <table border="1">
+         <tr>
+            <td>
+               <em>Permission</em>
+            </td>
+            <td>
+               <em>Role</em>
+            </td>
+         </tr>
+         <tr class="s1">
+            <td>.Add</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s0">
+            <td>.Edit</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+         <tr class="s1">
+            <td>.Delete</td>
+            <td>ClerkSenate
+               <br></br>ClerkAssembly
+               <br></br>
+            </td>
+         </tr>
+      </table>
+      <h4>State Grants</h4>
+      <table border="1">
+         <thead>
+            <tr class="yellow">
+               <th>State Name</th>
+               <th>Grants</th>
+               <th>Actions</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr class="m1">
+               <td>
+                  <a name="inactive"></a>
+                  <span class="state-title">Inactive heading obsolete</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>ClerkSenate
+                           <br></br>ClerkAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="public"></a>
+                  <span class="state-title">Public</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Authenticated
+                           <br></br>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+         </tbody>
+      </table>
+      <a href="#table-of-contents">[Document Index]</a>
+   </body>
+</html>

@@ -1,0 +1,1295 @@
+<?xml version="1.0" encoding="UTF-8"?><html>
+   <head>
+      <title>Question Workflow</title>
+      <link rel="stylesheet" href="docs.css" type="text/css"></link>
+   </head>
+   <body>
+      <h1 class="main">Question Workflow</h1>
+      <div id="toc">
+         <a name="table-of-contents"></a>
+         <h1 class="index">Document Index</h1> <ul id="menu">
+<li><a href="wf_address.html">address</a></li>
+<li><a href="wf_agenda_item.html">agenda_item</a></li>
+<li><a href="wf_assembly_bill.html">assembly_bill</a></li>
+<li><a href="wf_assembly_event.html">assembly_event</a></li>
+<li><a href="wf_assembly_event_response.html">assembly_event_response</a></li>
+<li><a href="wf_assembly_motion.html">assembly_motion</a></li>
+<li><a href="wf_assembly_question.html">assembly_question</a></li>
+<li><a href="wf_assembly_tabled_document.html">assembly_tabled_document</a></li>
+<li><a href="wf_attachment.html">attachment</a></li>
+<li><a href="wf_chamber.html">chamber</a></li>
+<li><a href="wf_committee.html">committee</a></li>
+<li><a href="wf_debate_record.html">debate_record</a></li>
+<li><a href="wf_doc.html">doc</a></li>
+<li><a href="wf_event.html">event</a></li>
+<li><a href="wf_group.html">group</a></li>
+<li><a href="wf_group_assignment.html">group_assignment</a></li>
+<li><a href="wf_group_member.html">group_member</a></li>
+<li><a href="wf_heading.html">heading</a></li>
+<li><a href="wf_report.html">report</a></li>
+<li><a href="wf_senate_bill.html">senate_bill</a></li>
+<li><a href="wf_senate_event.html">senate_event</a></li>
+<li><a href="wf_senate_event_response.html">senate_event_response</a></li>
+<li><a href="wf_senate_motion.html">senate_motion</a></li>
+<li><a href="wf_senate_question.html">senate_question</a></li>
+<li><a href="wf_senate_tabled_document.html">senate_tabled_document</a></li>
+<li><a href="wf_signatory.html">signatory</a></li>
+<li><a href="wf_sitting.html">sitting</a></li>
+<li><a href="wf_user.html">user</a></li>
+</ul>
+ 
+         
+         <h2 class="index">Index of 
+            <a href="#states">States</a>
+         </h2>
+         <div class="toc-links">
+            <a href="#draft">Draft</a>,
+            <a href="#withdrawn_internal">Withdrawn</a>,
+            <a href="#submitted">Submitted to Clerk</a>,
+            <a href="#reviewed">Submitted to the Speaker</a>,
+            <a href="#admissible">Admissible</a>,
+            <a href="#inadmissible">Inadmissible</a>,
+            <a href="#clarification_required">Requires Clarification to Receive</a>,
+            <a href="#scheduled">Scheduled for Debate</a>,
+            <a href="#adjourned">Debate adjourned</a>,
+            <a href="#response_pending">Pending response</a>,
+            <a href="#response_submitted">Response submitted</a>,
+            <a href="#response_reviewed">Response published</a>,
+            <a href="#deferred">Deferred</a>,
+            <a href="#debated">Debated</a>,
+            <a href="#elapsed">Elapsed</a>,
+            <a href="#dropped">Dropped</a>,
+            <a href="#withdrawn">Withdrawn</a>
+         </div>
+         <h2 class="index">Index of 
+            <a href="#transitions">Transitions</a>
+         </h2>
+         <div class="toc-links">
+            <a href="#d1e234">Create Question</a>,
+            <a href="#d1e237">Submit</a>,
+            <a href="#d1e239">Reviewed</a>,
+            <a href="#d1e241">Request clarifications</a>,
+            <a href="#d1e243">Admissible</a>,
+            <a href="#d1e245">Inadmissible</a>,
+            <a href="#d1e247">Request clarifications</a>,
+            <a href="#d1e250">Resubmit</a>,
+            <a href="#d1e252">Scheduled for Debate</a>,
+            <a href="#d1e254">Send to Ministry</a>,
+            <a href="#d1e256">Send to Ministry for Written Response</a>,
+            <a href="#d1e258">Submit Response</a>,
+            <a href="#d1e260">Redraft Response</a>,
+            <a href="#d1e263">Publish Response</a>,
+            <a href="#d1e265">Elapse</a>,
+            <a href="#d1e267">Defer</a>,
+            <a href="#d1e269">Drop</a>,
+            <a href="#d1e271">Debate adjourned</a>,
+            <a href="#d1e273">Debated</a>,
+            <a href="#d1e276">Withdraw</a>,
+            <a href="#d1e278">Withdraw</a>
+         </div>
+      </div>
+      <a name="transitions"></a>
+      <h3>Question:Transitions</h3>
+      <div class="linkbar">
+         <a href="#table-of-contents">[Document Index]</a>,
+         <a href="#states">[States]</a>,
+         <a href="./assembly_question.dot.png" target="_blank">[Workflow Diagram]</a>
+      </div>
+      <table border="1">
+         <thead>
+            <tr class="yellow">
+               <th>Transition Name</th>
+               <th>Source</th>
+               <th>Destination</th>
+               <th>Roles</th>
+               <th>Condition</th>
+               <th>Confirm?</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr class="m1">
+               <td>
+                  <a name="d1e234"></a>
+                  <span class="transition-title">Create Question</span>
+                  <div class="trig">(Auto)</div>
+               </td>
+               <td></td>
+               <td>
+                  <a href="#draft">draft</a>
+                  <br></br>
+               </td>
+               <td></td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e237"></a>
+                  <span class="transition-title">Submit</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#draft">draft</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#submitted">submitted</a>
+                  <br></br>
+               </td>
+               <td>Drafter
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e239"></a>
+                  <span class="transition-title">Reviewed</span>
+                  <div class="trig">(Manual)</div>
+                  <div class="note">The Question has all the formal requirements; forwarded to the             Speaker's Office for approval).</div>
+               </td>
+               <td>
+                  <a href="#submitted">submitted</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#reviewed">reviewed</a>
+                  <br></br>
+               </td>
+               <td>ClerkQuestionAssembly.ClerkQuestion
+                  <br></br>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e241"></a>
+                  <span class="transition-title">Request clarifications</span>
+                  <div class="trig">(Manual)</div>
+                  <div class="note">The Question need to be clarieid by the Member</div>
+               </td>
+               <td>
+                  <a href="#submitted">submitted</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#clarification_required">clarification_required</a>
+                  <br></br>
+               </td>
+               <td>ClerkQuestionAssembly.ClerkQuestion
+                  <br></br>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e243"></a>
+                  <span class="transition-title">Admissible</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#reviewed">reviewed</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#admissible">admissible</a>
+                  <br></br>
+               </td>
+               <td>SpeakerAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e245"></a>
+                  <span class="transition-title">Inadmissible</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#reviewed">reviewed</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#inadmissible">inadmissible</a>
+                  <br></br>
+               </td>
+               <td>SpeakerAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e247"></a>
+                  <span class="transition-title">Request clarifications</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#reviewed">reviewed</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#clarification_required">clarification_required</a>
+                  <br></br>
+               </td>
+               <td>SpeakerAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e250"></a>
+                  <span class="transition-title">Resubmit</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#clarification_required">clarification_required</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#submitted">submitted</a>
+                  <br></br>
+               </td>
+               <td>Owner
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e252"></a>
+                  <span class="transition-title">Scheduled for Debate</span>
+                  <div class="trig">(Auto)</div>
+               </td>
+               <td>
+                  <a href="#admissible">admissible</a>
+                  <br></br>
+                  <a href="#adjourned">adjourned</a>
+                  <br></br>
+                  <a href="#deferred">deferred</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#scheduled">scheduled</a>
+                  <br></br>
+               </td>
+               <td>ClerkQuestionAssembly.ClerkQuestion
+                  <br></br>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">is_scheduled</span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e254"></a>
+                  <span class="transition-title">Send to Ministry</span>
+                  <div class="trig">(Manual)</div>
+                  <div class="note">Written-response questions are never scheduled.</div>
+               </td>
+               <td>
+                  <a href="#admissible">admissible</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#response_pending">response_pending</a>
+                  <br></br>
+               </td>
+               <td>ClerkQuestionAssembly.ClerkQuestion
+                  <br></br>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">is_written_response</span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e256"></a>
+                  <span class="transition-title">Send to Ministry for Written Response</span>
+                  <div class="trig">(Manual)</div>
+                  <div class="note">Oral-response questions if not discussed may be answered in writing by the Ministry.</div>
+               </td>
+               <td>
+                  <a href="#deferred">deferred</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#response_pending">response_pending</a>
+                  <br></br>
+               </td>
+               <td>ClerkQuestionAssembly.ClerkQuestion
+                  <br></br>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e258"></a>
+                  <span class="transition-title">Submit Response</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#response_pending">response_pending</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#response_submitted">response_submitted</a>
+                  <br></br>
+               </td>
+               <td>MinistryMember
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">response_allow_submit_assembly</span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e260"></a>
+                  <span class="transition-title">Redraft Response</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#response_submitted">response_submitted</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#response_pending">response_pending</a>
+                  <br></br>
+               </td>
+               <td>ClerkQuestionAssembly.ClerkQuestion
+                  <br></br>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e263"></a>
+                  <span class="transition-title">Publish Response</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#response_submitted">response_submitted</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#response_reviewed">response_reviewed</a>
+                  <br></br>
+               </td>
+               <td>ClerkQuestionAssembly.ClerkQuestion
+                  <br></br>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">response_allow_publish_assembly</span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e265"></a>
+                  <span class="transition-title">Elapse</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#response_pending">response_pending</a>
+                  <br></br>
+                  <a href="#deferred">deferred</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#elapsed">elapsed</a>
+                  <br></br>
+               </td>
+               <td>ClerkQuestionAssembly.ClerkQuestion
+                  <br></br>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e267"></a>
+                  <span class="transition-title">Defer</span>
+                  <div class="trig">(Manual)</div>
+                  <div class="note">Oral question, postpone scheduling.</div>
+               </td>
+               <td>
+                  <a href="#admissible">admissible</a>
+                  <br></br>
+                  <a href="#scheduled">scheduled</a>
+                  <br></br>
+                  <a href="#adjourned">adjourned</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#deferred">deferred</a>
+                  <br></br>
+               </td>
+               <td>ClerkQuestionAssembly.ClerkQuestion
+                  <br></br>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e269"></a>
+                  <span class="transition-title">Drop</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#scheduled">scheduled</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#dropped">dropped</a>
+                  <br></br>
+               </td>
+               <td>ClerkQuestionAssembly.ClerkQuestion
+                  <br></br>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e271"></a>
+                  <span class="transition-title">Debate adjourned</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#scheduled">scheduled</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#adjourned">adjourned</a>
+                  <br></br>
+               </td>
+               <td>ClerkQuestionAssembly.ClerkQuestion
+                  <br></br>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e273"></a>
+                  <span class="transition-title">Debated</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#scheduled">scheduled</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#debated">debated</a>
+                  <br></br>
+               </td>
+               <td>ClerkQuestionAssembly.ClerkQuestion
+                  <br></br>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>false
+                  <br></br>[not declared]
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>
+                  <a name="d1e276"></a>
+                  <span class="transition-title">Withdraw</span>
+                  <div class="trig">(Manual)</div>
+                  <div class="note">The Member can withdraw his question at any stage where it can              still be presented to the ministry/house.</div>
+               </td>
+               <td>
+                  <a href="#submitted">submitted</a>
+                  <br></br>
+                  <a href="#reviewed">reviewed</a>
+                  <br></br>
+                  <a href="#clarification_required">clarification_required</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#withdrawn_internal">withdrawn_internal</a>
+                  <br></br>
+               </td>
+               <td>ClerkQuestionAssembly.ClerkQuestion
+                  <br></br>Owner
+                  <br></br>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="d1e278"></a>
+                  <span class="transition-title">Withdraw</span>
+                  <div class="trig">(Manual)</div>
+               </td>
+               <td>
+                  <a href="#admissible">admissible</a>
+                  <br></br>
+                  <a href="#scheduled">scheduled</a>
+                  <br></br>
+                  <a href="#deferred">deferred</a>
+                  <br></br>
+                  <a href="#adjourned">adjourned</a>
+                  <br></br>
+               </td>
+               <td>
+                  <a href="#withdrawn">withdrawn</a>
+                  <br></br>
+               </td>
+               <td>ClerkQuestionAssembly.ClerkQuestion
+                  <br></br>Owner
+                  <br></br>ClerkAssembly
+                  <br></br>
+               </td>
+               <td>
+                  <p style="text-align:left">
+                     <span class="ident">
+                        None
+                        
+                     </span>
+                  </p>
+               </td>
+               <td>true</td>
+            </tr>
+         </tbody>
+      </table>
+      <a href="#table-of-contents">[Document Index]</a>
+      <a name="states"></a>
+      <div class="linkbar">
+         <a href="#table-of-contents">[Document Index]</a>,
+         <a href="#transitions">[Transitions]</a>,
+         <a href="./assembly_question.dot.png" target="_blank">[Workflow Diagram]</a>
+      </div>
+      <h4>Global Grants</h4>
+      <table border="1">
+         <tr>
+            <td>
+               <em>Permission</em>
+            </td>
+            <td>
+               <em>Role</em>
+            </td>
+         </tr>
+         <tr class="s1">
+            <td>.Add</td>
+            <td>ClerkAssembly
+               <br></br>ClerkQuestionAssembly.ClerkHead
+               <br></br>MemberAssembly
+               <br></br>
+            </td>
+         </tr>
+      </table>
+      <h4>State Grants</h4>
+      <table border="1">
+         <thead>
+            <tr class="yellow">
+               <th>State Name</th>
+               <th>Grants</th>
+               <th>Actions</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr class="m1">
+               <td>
+                  <a name="draft"></a>
+                  <span class="state-title">Draft</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Drafter
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>.Edit</td>
+                        <td>Drafter
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.Delete</td>
+                        <td>Drafter
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>Drafter
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="withdrawn_internal"></a>
+                  <span class="state-title">Withdrawn</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Drafter
+                           <br></br>Owner
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>unschedule_doc
+                  <br></br>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="submitted"></a>
+                  <span class="state-title">Submitted to Clerk</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly.ClerkHead
+                           <br></br>ClerkQuestionAssembly.ClerkQuestion
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>.Edit</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly.ClerkHead
+                           <br></br>ClerkQuestionAssembly.ClerkQuestion
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>user_assignment.View</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly.ClerkHead
+                           <br></br>ClerkQuestionAssembly.ClerkQuestion
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>user_assignment.Edit</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly.ClerkHead
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>group_assignment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>SpeakerAssembly
+                           <br></br>ClerkQuestionAssembly.ClerkHead
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>version
+                  <br></br>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="reviewed"></a>
+                  <span class="state-title">Submitted to the Speaker</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly.ClerkHead
+                           <br></br>ClerkQuestionAssembly.ClerkQuestion
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>.Edit</td>
+                        <td>SpeakerAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>attachment.Add</td>
+                        <td>SpeakerAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>assembly_event.Add</td>
+                        <td>SpeakerAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>version
+                  <br></br>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="admissible"></a>
+                  <span class="state-title">Admissible</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>version
+                  <br></br>set_doc_type_number
+                  <br></br>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="inadmissible"></a>
+                  <span class="state-title">Inadmissible</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly.ClerkHead
+                           <br></br>ClerkQuestionAssembly.ClerkQuestion
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="clarification_required"></a>
+                  <span class="state-title">Requires Clarification to Receive</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly.ClerkHead
+                           <br></br>ClerkQuestionAssembly.ClerkQuestion
+                           <br></br>SpeakerAssembly
+                           <br></br>Owner
+                           <br></br>
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>.Edit</td>
+                        <td>Owner
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>version
+                  <br></br>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="response_pending"></a>
+                  <span class="state-title">Pending response</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>assembly_event_response.Add</td>
+                        <td>MinistryMember
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="response_submitted"></a>
+                  <span class="state-title">Response submitted</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="response_reviewed"></a>
+                  <span class="state-title">Response published</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+            <tr class="m1">
+               <td>
+                  <a name="debated"></a>
+                  <span class="state-title">Debated</span>
+               </td>
+               <td>
+                  <table border="0">
+                     <tr>
+                        <td>
+                           <em>Permission</em>
+                        </td>
+                        <td>
+                           <em>Role</em>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>.View</td>
+                        <td>Anonymous
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s0">
+                        <td>attachment.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                     <tr class="s1">
+                        <td>assembly_event.Add</td>
+                        <td>ClerkAssembly
+                           <br></br>ClerkQuestionAssembly
+                           <br></br>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+               <td>None</td>
+            </tr>
+         </tbody>
+      </table>
+      <a href="#table-of-contents">[Document Index]</a>
+   </body>
+</html>

@@ -1,53 +1,852 @@
-<html><head>
-<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
-  </head><body><h1>Table of Contents</h1>
-
-
-Below you can find detailed information about the fields required to set
- up a parliament and add users to the sysetm and the different status in
- which the parliamentary documents can be.
-<br>
-<ul id="menu">
-<li><a href="chamber.html">parliament</a></li> 
-  <li><a href="committee.html">committee</a></li>
-  <li><a href="group.html">group</a></li>
-<li><a href="user.html">user</a></li>
-</ul>
-<br>
-Below you can find detailed information about the fields that the 
-different parliamentary documents may have and the different status in 
-which the parliamentary documents can be.
-<br>
-<ul id="menu">
-<li><a href="assembly_question.html">assembly question</a></li>
-  <li><a href="assembly_motion.html">assembly motion</a></li>
-  <li><a href="assembly_bill.html">assembly bill</a></li>
-  <li><a href="assembly_tabled_document.html">assembly tabled document</a></li>
-  <li><a href="senate_question.html">senate question</a></li>
-  <li><a href="senate_motion.html">senate motion</a></li>
-  <li><a href="senate_bill.html">senate bill</a></li>
-  <li><a href="senate_tabled_document.html">senate tabled document</a></li>
-</ul>
-<br>
-Each document may have attachments and can be versioned. Below you find 
-detailed information about the fields and status that they may have.
-<br>
-<ul id="menu">
-<li><a href="attachment.html">attachment</a></li>
-</ul>
-<br>
-Below detailed information about fields and status of the other items present in Bungeni
-<br>
-<ul id="menu">
-<li><a href="agenda_item.html">agenda item</a></li>
-<li><a href="heading.html">heading</a></li>
-<li><a href="assembly_event.html">assembly event</a></li>
-  <li><a href="senate_event.html">senate event</a></li>
-  <li><a href="assembly_response.html">assembly response</a></li>
-  <li><a href="senate_response.html">senate response</a></li>
-  <li><a href="debate_record.html">debate record</a></li>
-<li><a href="address.html">address</a></li>
-<li><a href="sitting.html">sitting</a></li>
-  <li><a href="report.html">report</a></li>
-</ul>
-</body></html>
+<?xml version="1.0" encoding="UTF-8"?><html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="docs.css"></link>
+      <title>Bungeni Document Types</title>
+   </head>
+   <body>
+      <h1 class="main">Parliamentary Type Information </h1>
+      <ul style="font-family:arial;">
+         <li>Parliament Type : 
+            Bicameral
+         </li>
+         <li>Country Code : ke</li>
+      </ul>
+      <h2 class="index">Custom Archetypes</h2>
+      <table border="1">
+         <thead>
+            <tr class="yellow">
+               <th>Name</th>
+               <th>Form</th>
+               <th>Workflow</th>
+               <th>Workspace</th>
+               <th>Enabled</th>
+               <th>Labels</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr class="m1">
+               <td>bill</td>
+               <td>
+                  <a href="fm_doc.html">doc</a>
+               </td>
+               <td>
+                  <a href="wf_doc.html">doc</a>
+               </td>
+               <td>
+                  N/A
+                  
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        
+                        N/A
+                        
+                     </li>
+                     <li>Listing: 
+                        
+                        N/A
+                        
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>motion</td>
+               <td>
+                  <a href="fm_doc.html">doc</a>
+               </td>
+               <td>
+                  <a href="wf_doc.html">doc</a>
+               </td>
+               <td>
+                  N/A
+                  
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        
+                        N/A
+                        
+                     </li>
+                     <li>Listing: 
+                        
+                        N/A
+                        
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>question</td>
+               <td>
+                  <a href="fm_doc.html">doc</a>
+               </td>
+               <td>
+                  <a href="wf_doc.html">doc</a>
+               </td>
+               <td>
+                  N/A
+                  
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        
+                        N/A
+                        
+                     </li>
+                     <li>Listing: 
+                        
+                        N/A
+                        
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>tabled_document</td>
+               <td>
+                  <a href="fm_doc.html">doc</a>
+               </td>
+               <td>
+                  <a href="wf_doc.html">doc</a>
+               </td>
+               <td>
+                  N/A
+                  
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        
+                        N/A
+                        
+                     </li>
+                     <li>Listing: 
+                        
+                        N/A
+                        
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+      <h2 class="index">All Doc Types</h2>
+      <table border="1">
+         <thead>
+            <tr class="yellow">
+               <th>Name</th>
+               <th>Form</th>
+               <th>Workflow</th>
+               <th>Workspace</th>
+               <th>Enabled</th>
+               <th>Labels</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr class="m1">
+               <td>agenda_item</td>
+               <td>
+                  <a href="fm_agenda_item.html">agenda_item</a>
+               </td>
+               <td>
+                  <a href="wf_agenda_item.html">agenda_item</a>
+               </td>
+               <td>
+                  <a href="ws_agenda_item.html">agenda_item</a>
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        agenda item
+                     </li>
+                     <li>Listing: 
+                        agenda items
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>assembly_bill</td>
+               <td>
+                  <a href="fm_assembly_bill.html">assembly_bill</a>
+               </td>
+               <td>
+                  <a href="wf_assembly_bill.html">assembly_bill</a>
+               </td>
+               <td>
+                  <a href="ws_assembly_bill.html">assembly_bill</a>
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        bill
+                     </li>
+                     <li>Listing: 
+                        bills
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>assembly_motion</td>
+               <td>
+                  <a href="fm_assembly_motion.html">assembly_motion</a>
+               </td>
+               <td>
+                  <a href="wf_assembly_motion.html">assembly_motion</a>
+               </td>
+               <td>
+                  <a href="ws_assembly_motion.html">assembly_motion</a>
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        motion
+                     </li>
+                     <li>Listing: 
+                        motions
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>assembly_question</td>
+               <td>
+                  <a href="fm_assembly_question.html">assembly_question</a>
+               </td>
+               <td>
+                  <a href="wf_assembly_question.html">assembly_question</a>
+               </td>
+               <td>
+                  <a href="ws_assembly_question.html">assembly_question</a>
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        question
+                     </li>
+                     <li>Listing: 
+                        questions
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>assembly_tabled_document</td>
+               <td>
+                  <a href="fm_assembly_tabled_document.html">assembly_tabled_document</a>
+               </td>
+               <td>
+                  <a href="wf_assembly_tabled_document.html">assembly_tabled_document</a>
+               </td>
+               <td>
+                  <a href="ws_assembly_tabled_document.html">assembly_tabled_document</a>
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        tabled document
+                     </li>
+                     <li>Listing: 
+                        tabled documents
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>report</td>
+               <td>
+                  <a href="fm_report.html">report</a>
+               </td>
+               <td>
+                  <a href="wf_report.html">report</a>
+               </td>
+               <td>
+                  N/A
+                  
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        report
+                     </li>
+                     <li>Listing: 
+                        reports
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>senate_bill</td>
+               <td>
+                  <a href="fm_senate_bill.html">senate_bill</a>
+               </td>
+               <td>
+                  <a href="wf_senate_bill.html">senate_bill</a>
+               </td>
+               <td>
+                  <a href="ws_senate_bill.html">senate_bill</a>
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        bill
+                     </li>
+                     <li>Listing: 
+                        bills
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>senate_motion</td>
+               <td>
+                  <a href="fm_senate_motion.html">senate_motion</a>
+               </td>
+               <td>
+                  <a href="wf_senate_motion.html">senate_motion</a>
+               </td>
+               <td>
+                  <a href="ws_senate_motion.html">senate_motion</a>
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        motion
+                     </li>
+                     <li>Listing: 
+                        motions
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>senate_question</td>
+               <td>
+                  <a href="fm_senate_question.html">senate_question</a>
+               </td>
+               <td>
+                  <a href="wf_senate_question.html">senate_question</a>
+               </td>
+               <td>
+                  <a href="ws_senate_question.html">senate_question</a>
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        question
+                     </li>
+                     <li>Listing: 
+                        questions
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>senate_tabled_document</td>
+               <td>
+                  <a href="fm_senate_tabled_document.html">senate_tabled_document</a>
+               </td>
+               <td>
+                  <a href="wf_senate_tabled_document.html">senate_tabled_document</a>
+               </td>
+               <td>
+                  <a href="ws_senate_tabled_document.html">senate_tabled_document</a>
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        tabled document
+                     </li>
+                     <li>Listing: 
+                        tabled documents
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+      <h2 class="index">All Event Types</h2>
+      <table border="1">
+         <thead>
+            <tr class="yellow">
+               <th>Name</th>
+               <th>Form</th>
+               <th>Workflow</th>
+               <th>Workspace</th>
+               <th>Enabled</th>
+               <th>Labels</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr class="m1">
+               <td>assembly_event</td>
+               <td>
+                  <a href="fm_assembly_event.html">assembly_event</a>
+               </td>
+               <td>
+                  <a href="wf_assembly_event.html">assembly_event</a>
+               </td>
+               <td>
+                  N/A
+                  
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        event
+                     </li>
+                     <li>Listing: 
+                        events
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>assembly_event_response</td>
+               <td>
+                  <a href="fm_assembly_event_response.html">assembly_event_response</a>
+               </td>
+               <td>
+                  <a href="wf_assembly_event_response.html">assembly_event_response</a>
+               </td>
+               <td>
+                  N/A
+                  
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        response
+                     </li>
+                     <li>Listing: 
+                        responses
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>senate_event</td>
+               <td>
+                  <a href="fm_senate_event.html">senate_event</a>
+               </td>
+               <td>
+                  <a href="wf_senate_event.html">senate_event</a>
+               </td>
+               <td>
+                  N/A
+                  
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        event
+                     </li>
+                     <li>Listing: 
+                        events
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>senate_event_response</td>
+               <td>
+                  <a href="fm_senate_event_response.html">senate_event_response</a>
+               </td>
+               <td>
+                  <a href="wf_senate_event_response.html">senate_event_response</a>
+               </td>
+               <td>
+                  N/A
+                  
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        response
+                     </li>
+                     <li>Listing: 
+                        responses
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+      <h2 class="index">All Groups</h2>
+      <table border="1">
+         <thead>
+            <tr class="yellow">
+               <th>Name</th>
+               <th>Form</th>
+               <th>Workflow</th>
+               <th>Workspace</th>
+               <th>Enabled</th>
+               <th>Labels</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr class="m1">
+               <td>chamber</td>
+               <td>
+                  <a href="fm_chamber.html">chamber</a>
+               </td>
+               <td>
+                  <a href="wf_chamber.html">chamber</a>
+               </td>
+               <td>
+                  N/A
+                  
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        chamber
+                     </li>
+                     <li>Listing: 
+                        chambers
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr>
+               <td>
+                  Members Info for chamber
+               </td>
+               <td colspan="5" style="text-align:left; vertical-align:top">
+                  <h3 style="margin-below:1px;">member
+                     (Enabled)
+                     
+                  </h3>
+                  <ul>
+                     <li>Workflow : 
+                        
+                        <a href="wf_group_member.html">group_member</a>
+                     </li>
+                     <li>
+                        Listings appears as: members, Item type is shown as:member
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>committee</td>
+               <td>
+                  <a href="fm_committee.html">committee</a>
+               </td>
+               <td>
+                  <a href="wf_committee.html">committee</a>
+               </td>
+               <td>
+                  N/A
+                  
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        committee
+                     </li>
+                     <li>Listing: 
+                        committees
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr>
+               <td>
+                  Members Info for committee
+               </td>
+               <td colspan="5" style="text-align:left; vertical-align:top">
+                  <h3 style="margin-below:1px;">committee_member
+                     (Enabled)
+                     
+                  </h3>
+                  <ul>
+                     <li>Workflow : 
+                        
+                        <a href="wf_group_member.html">group_member</a>
+                     </li>
+                     <li>
+                        Listings appears as: members, Item type is shown as:member
+                     </li>
+                  </ul>
+                  <h3 style="margin-below:1px;">committee_staff
+                     (Enabled)
+                     
+                  </h3>
+                  <ul>
+                     <li>Workflow : 
+                        
+                        <a href="wf_group_member.html">group_member</a>
+                     </li>
+                     <li>
+                        Listings appears as: staff members, Item type is shown as:staff
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>government</td>
+               <td>
+                  <a href="fm_government.html">government</a>
+               </td>
+               <td>
+                  <a href="wf_group.html">group</a>
+               </td>
+               <td>
+                  N/A
+                  
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        government
+                     </li>
+                     <li>Listing: 
+                        governments
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>joint_committee</td>
+               <td>
+                  <a href="fm_joint_committee.html">joint_committee</a>
+               </td>
+               <td>
+                  <a href="wf_committee.html">committee</a>
+               </td>
+               <td>
+                  N/A
+                  
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        joint committee
+                     </li>
+                     <li>Listing: 
+                        joint committees
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr>
+               <td>
+                  Members Info for joint_committee
+               </td>
+               <td colspan="5" style="text-align:left; vertical-align:top">
+                  <h3 style="margin-below:1px;">joint_committee_member
+                     (Enabled)
+                     
+                  </h3>
+                  <ul>
+                     <li>Workflow : 
+                        
+                        <a href="wf_group_member.html">group_member</a>
+                     </li>
+                     <li>
+                        Listings appears as: members, Item type is shown as:member
+                     </li>
+                  </ul>
+                  <h3 style="margin-below:1px;">joint_committee_staff
+                     (Enabled)
+                     
+                  </h3>
+                  <ul>
+                     <li>Workflow : 
+                        
+                        <a href="wf_group_member.html">group_member</a>
+                     </li>
+                     <li>
+                        Listings appears as: staff members, Item type is shown as:staff
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>legislature</td>
+               <td>
+                  <a href="fm_legislature.html">legislature</a>
+               </td>
+               <td>
+                  <a href="wf_group.html">group</a>
+               </td>
+               <td>
+                  N/A
+                  
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        legislature
+                     </li>
+                     <li>Listing: 
+                        legislatures
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>ministry</td>
+               <td>
+                  <a href="fm_ministry.html">ministry</a>
+               </td>
+               <td>
+                  <a href="wf_group.html">group</a>
+               </td>
+               <td>
+                  N/A
+                  
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        ministry
+                     </li>
+                     <li>Listing: 
+                        ministries
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr>
+               <td>
+                  Members Info for ministry
+               </td>
+               <td colspan="5" style="text-align:left; vertical-align:top">
+                  <h3 style="margin-below:1px;">minister
+                     (Enabled)
+                     
+                  </h3>
+                  <ul>
+                     <li>Workflow : 
+                        
+                        <a href="wf_group_member.html">group_member</a>
+                     </li>
+                     <li>
+                        Listings appears as: members, Item type is shown as:member
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m1">
+               <td>office</td>
+               <td>
+                  <a href="fm_office.html">office</a>
+               </td>
+               <td>
+                  <a href="wf_group.html">group</a>
+               </td>
+               <td>
+                  N/A
+                  
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        role
+                     </li>
+                     <li>Listing: 
+                        roles
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr>
+               <td>
+                  Members Info for office
+               </td>
+               <td colspan="5" style="text-align:left; vertical-align:top">
+                  <h3 style="margin-below:1px;">office_member
+                     (Enabled)
+                     
+                  </h3>
+                  <ul>
+                     <li>Workflow : 
+                        
+                        <a href="wf_group_member.html">group_member</a>
+                     </li>
+                     <li>
+                        Listings appears as: members, Item type is shown as:member
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr class="m0">
+               <td>political_group</td>
+               <td>
+                  <a href="fm_political_group.html">political_group</a>
+               </td>
+               <td>
+                  <a href="wf_group.html">group</a>
+               </td>
+               <td>
+                  N/A
+                  
+               </td>
+               <td>Yes</td>
+               <td style="text-align:left;">
+                  <ul>
+                     <li>Item Type: 
+                        political group
+                     </li>
+                     <li>Listing: 
+                        political groups
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+            <tr>
+               <td>
+                  Members Info for political_group
+               </td>
+               <td colspan="5" style="text-align:left; vertical-align:top">
+                  <h3 style="margin-below:1px;">political_group_member
+                     (Enabled)
+                     
+                  </h3>
+                  <ul>
+                     <li>Workflow : 
+                        
+                        <a href="wf_group_member.html">group_member</a>
+                     </li>
+                     <li>
+                        Listings appears as: members, Item type is shown as:member
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+   </body>
+</html>
