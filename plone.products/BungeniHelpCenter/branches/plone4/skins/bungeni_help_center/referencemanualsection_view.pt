@@ -50,8 +50,8 @@
     </div>
 
     <div class="documentBody"
-      tal:condition="here/getBody"
-      tal:content="structure here/getBody">
+      tal:condition="python:here.getBody()"
+      tal:content="python:here.getBody()">
       Description
     </div>
 

@@ -1,31 +1,37 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      lang="en"
-      metal:use-macro="here/main_template/macros/master"
-      i18n:domain="plonehelpcenter">
+    lang="en"
+    metal:use-macro="here/main_template/macros/master"
+    i18n:domain="plonehelpcenter">
 
 <body>
 
 <div metal:fill-slot="main" class="referencemanual">
 
     <div metal:define-macro="main"
-         tal:define="toc python:here.getTOC(root = here);">
+        tal:define="toc python:here.getTOC(root = here);">
 
-        <h1>
-           <b><span tal:replace="here/Title" /></b>
-        </h1>
+        <h1><b><span tal:replace="here/Title" /></b></h1>
+
         <div id="content-core" class="rounded-eigh">
         <p class="discreet visualNoPrint">
-	  Note: Return to <a href="" tal:attributes="href here/absolute_url">hierarchical view</a>.
+	    Note: Return to 
+            <a href="" tal:attributes="href here/absolute_url">hierarchical view</a>.
         </p>
 
         <div class="documentDescription" 
-             tal:content="here/getReferenceManualDescription">
+            tal:content="here/getReferenceManualDescription">
             Reference Manual Description
         </div>
+
+        <div class="documentBody"
+            tal:condition="here/getBody"
+            tal:content="structure here/getBody">
+                Description
+        </div>
  
-    <metal:recursion use-macro="here/referencemanual_macros/macros/section_collation"/>       
+        <metal:recursion use-macro="here/referencemanual_macros/macros/section_collation"/>       
         
-    </div>        
+        </div>        
     </div>
     
     <div tal:replace="structure provider:plone.belowcontentbody" />    

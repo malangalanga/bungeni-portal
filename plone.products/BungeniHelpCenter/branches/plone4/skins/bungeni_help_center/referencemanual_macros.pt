@@ -217,7 +217,10 @@
                 description
             </div>
 
-            <div class="documentBody" tal:replace="structure body" />            
+            <div class="documentBody" tal:condition="itemObj/body"
+                tal:content="structure itemObj/body">
+                Description
+            </div> 
 
 
 
@@ -289,7 +292,10 @@
                 description
             </div>
 
-            <div class="documentBody" tal:replace="structure body" />            
+            <div class="documentBody" tal:condition="itemObj/body"
+                tal:content="structure itemObj/body">
+                Description
+            </div>        
 
 
 
