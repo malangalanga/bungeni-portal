@@ -6,10 +6,12 @@
 <body>
 
   <div metal:fill-slot="main" class="referencemanual">
-    <div metal:use-macro="here/referencemanual_view/macros/main">
+    <div metal:use-macro="here/referencemanual_view/macros/main-content">
+    <div id="content-core" class="rounded-eigh">    
 	<div metal:fill-slot="sectiontoc">
         <metal:recursion use-macro="here/referencemanual_macros/macros/section_toc_roman"/>
 	</div>
+    </div>
     </div>
   </div>
 </body>

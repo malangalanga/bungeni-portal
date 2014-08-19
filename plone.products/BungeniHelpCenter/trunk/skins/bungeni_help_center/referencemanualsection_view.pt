@@ -10,8 +10,9 @@
                    tocInfo python:here.getTOCInfo(fullToc);
                    currentIdx tocInfo/currentIdx|nothing;
                    tocList    tocInfo/tocList;
-                   currentInfo    python:currentIdx and tocList[currentIdx] or here;
-                   toc     tocInfo/localTOC|nothing">
+                   current    python:currentIdx and tocList[currentIdx] or here;
+                   numbering  current/numbering|nothing;
+                   toc     tocInfo/localTOC|nothing">               
 
     <span tal:omit-tag="" tal:condition="python:here.getNavBarPosition() in ['both', 'top']">
     <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
@@ -29,12 +30,11 @@
     </div>
 
     <h1 class="documentFirstHeading">
-        
-        <!--<span tal:content="currentInfo/numbering"></span>-->
+        <span tal:replace="python:here.castNav(numbering)" tal:condition="python:here.getNavType() == 'yes'">1.2.</span>
         <span tal:replace="here/Title">Title</span>
     </h1>
     
-
+    <div id="content-core" class="rounded-eigh">
 
     <div class="portalMessage"
          tal:condition="python:here.portal_workflow.getInfoFor(here, 'review_state') != 'published'"
@@ -50,8 +50,8 @@
     </div>
 
     <div class="documentBody"
-      tal:condition="here/getBody"
-      tal:content="structure here/getBody">
+      tal:condition="python:here.getBody()"
+      tal:content="python:here.getBody()">
       Description
     </div>
 
@@ -66,9 +66,8 @@
     <div metal:use-macro="here/referencemanual_macros/macros/navigation_bar"/>
     </span>
 
-    <div metal:use-macro="here/document_byline/macros/byline">
-      Get the byline - contains details about author and modification date.
-    </div>
+    <div tal:replace="structure provider:plone.belowcontenttitle"/>
+  </div>
   </div>
   <div tal:replace="structure provider:plone.belowcontentbody" />
   </div>
