@@ -2631,6 +2631,7 @@ class VarnishTasks:
                     "server_port": self.cfg.varnish_backend_port,
                     "time_to_live": self.cfg.varnish_time_to_live
         }
+        run("mkdir -p %s" % self.cfg.user_config)
         self.templates.new_file("varnish.vcl.tmpl", template_map, self.cfg.user_config) 
      
 
