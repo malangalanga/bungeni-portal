@@ -21,7 +21,8 @@ setup(
     install_requires = [
           'setuptools',
           'bungenicms.policy',
-          "Products.Scrawl",              
+          "Products.Scrawl", 
+          "bungenicms.repository",                           
         ],
     zip_safe = False,
     )

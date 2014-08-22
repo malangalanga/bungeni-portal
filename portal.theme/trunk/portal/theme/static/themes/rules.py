@@ -81,7 +81,7 @@ def redirect_group_workspace_links(request, response, response_headers, log):
     """ 
     link_url = request.url
     # !+CUSTOM(mn, jan-2013) move group variables to bungeni_custom 
-    if "group-political_group" or "group-committee" in link_url:
+    if "pol_group" or "committee" in link_url:
         group_url = link_url.replace("workspace/groups/my-groups","plone/groups") 
         group_url = group_url.replace("-",".") + "web_space"
         if check_url(group_url):

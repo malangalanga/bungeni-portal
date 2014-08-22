@@ -11,18 +11,22 @@ GLOBALS = globals()
 
 MEMBER_SPACE_CONTENT = [{"id": "my_blog", "title": "My Blog", 
                         "type":"Folder", "addable_types":["Blog Entry"]},
-                      {"id": "my_political_interests", 
+                        {"id": "my_political_interests", 
                         "type":"Folder", "title":"My Political Interests",
                         "addable_types":["Document","File", "Collection"]},
-                      {"id": "my_speeches", "title": "My Speeches",
+                        {"id": "my_speeches", "title": "My Speeches",
                         "type":"Folder", "addable_types":["Document","File", "Link"]}
                       ]
 GROUP_SPACE_CONTENT = [{"id": "members_blog", "title": "Members Blog", 
-                            "type":"Folder", "addable_types":["Blog Entry"]},
-                          {"id": "thematic_folders", "title": "Thematic Folders", 
-                            "type":"Folder", "addable_types":["Document","File", "Collection"]},
-                          {"id": "events", "title": "Events", 
-                            "type":"Folder", "addable_types":["Event"]}                            
+                        "type":"Folder", "addable_types":["Blog Entry"]},
+                        {"id": "thematic_folders", "title": "Thematic Folders", 
+                        "type":"Folder", 
+                        "addable_types":["Document","File", "Collection"]},
+                        {"id": "events", "title": "Events", 
+                        "type":"Folder", "addable_types":["Event"]},
+                        {"id": "events", "title": "Digital Repository", 
+                        "type":"RepositoryCollection", 
+                        "addable_types":["RepositoryCollection", "RepositoryItem"]}                            
                         ]
                         
 ROLES_FOR_WEB_SPACE = ["bungeni.MemberAssembly","bungeni.MemberSenate"]                                                
