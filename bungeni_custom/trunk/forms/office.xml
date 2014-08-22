@@ -44,7 +44,7 @@
         description="The logical identifier for this Role - 
             May contain only letters, numbers, a period (.) and underscore (_). 
             Should start with a letter and be between 3 and 20 characters long" 
-        required="true" value_type="login" render_type="text_line"
+        required="true" value_type="login" render_type="single_select" vocabulary="roles_id"
         note="may be up to 64 characters long"
         >
         <show modes="view edit add" />
