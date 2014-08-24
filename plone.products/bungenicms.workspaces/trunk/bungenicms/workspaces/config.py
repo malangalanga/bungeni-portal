@@ -24,7 +24,7 @@ GROUP_SPACE_CONTENT = [{"id": "members_blog", "title": "Members Blog",
                         "addable_types":["Document","File", "Collection"]},
                         {"id": "events", "title": "Events", 
                         "type":"Folder", "addable_types":["Event"]},
-                        {"id": "events", "title": "Digital Repository", 
+                        {"id": "repository", "title": "Digital Repository", 
                         "type":"RepositoryCollection", 
                         "addable_types":["RepositoryCollection", "RepositoryItem"]}                            
                         ]
