@@ -36,7 +36,7 @@
             <show modes="edit add" />
             <hide modes="view listing" roles="Anonymous" />
         </field>
-        <field name="group_id" label="Group" required="false" value_type="text" render_type="single_select" vocabulary="committee">
+        <field name="group_id" label="Group" required="false" value_type="text" render_type="single_select" vocabulary="chamber_committee">
             <show modes="view edit add listing" />
         </field>
         <field name="registry_number" label="Registry Number" required="false" value_type="text" render_type="text_line">
@@ -95,7 +95,7 @@
         <field name="source_contributors" label="Contributors" required="false" value_type="text" render_type="text_box">
             <show modes="view edit add" />
         </field>
-        <field name="source_date" label="Doc Date" required="false" value_type="date" render_type="date">
+        <field name="source_date" label="Source Doc Date" required="false" value_type="date" render_type="date">
             <show modes="view edit add" />
         </field>
         <field name="source_type" label="Source Type" required="false" value_type="text" render_type="text_line">
