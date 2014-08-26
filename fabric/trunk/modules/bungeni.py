@@ -777,7 +777,7 @@ class Presetup:
         sup_pycfg = PythonConfigs(self.cfg,"supervisor")
         # 16-10-2012 ; supervisor 3.0b1 doesnt daemonize with fabric
         # reverting back to 3.0a10
-        run(sup_pycfg.python_home + "/bin/easy_install supervisor==3.0a10"
+        run(sup_pycfg.python_home + "/bin/easy_install supervisor==3.0.a12"
             )
             
     def pika(self):
