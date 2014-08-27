@@ -69,7 +69,7 @@ def group_combined_name(group):
     group = translated(group)
     return u"{0} [{1}]".format(
             group.full_name,
-            group.acronym
+            group.short_name
         ).replace("  ", " ")
 
 
