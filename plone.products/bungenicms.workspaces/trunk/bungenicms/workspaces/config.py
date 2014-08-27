@@ -9,7 +9,7 @@ ADD_PERMISSIONS = {
 
 GLOBALS = globals()
 
-MEMBER_SPACE_CONTENT = [{"id": "my_blog", "title": "My Blog", 
+MEMBER_SPACE_CONTENT = [{"id": "my_blog", "title": "Blog", 
                         "type":"Folder", "addable_types":["Blog Entry"]},
                         {"id": "my_political_interests", 
                         "type":"Folder", "title":"My Political Interests",
@@ -24,7 +24,7 @@ GROUP_SPACE_CONTENT = [{"id": "members_blog", "title": "Members Blog",
                         "addable_types":["Document","File", "Collection"]},
                         {"id": "events", "title": "Events", 
                         "type":"Folder", "addable_types":["Event"]},
-                        {"id": "repository", "title": "Digital Repository", 
+                        {"id": "repository", "title": "Virtual Library", 
                         "type":"RepositoryCollection", 
                         "addable_types":["RepositoryCollection", "RepositoryItem"]}                            
                         ]
