@@ -637,6 +637,7 @@ def db_load_mindata():
     tasks = bungeni.BungeniTasks()
     tasks.reset_schema()
     tasks.load_min_data()
+    tasks.reset_attachments()
     __db_load_services_start()
 
 

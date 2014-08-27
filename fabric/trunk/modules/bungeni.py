@@ -1750,6 +1750,13 @@ class BungeniTasks:
         self.__create_bungenidb()
         self.load_schema()
     
+    def reset_attachments(self):
+        """
+        Clear the attachments folder
+        """
+        with cd(self.cfg.user_bungeni):
+            run("rm -rf fs/*")
+
 
     def load_demo_data(self):
        """
