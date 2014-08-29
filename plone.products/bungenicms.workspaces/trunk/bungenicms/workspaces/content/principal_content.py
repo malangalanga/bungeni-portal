@@ -88,14 +88,16 @@ def initializeAreas(pm_tool, acl_tool, request, member_folder_id=None):
 
 
     #All members get a private workspace area.
-    create_space(folder, "private_space", "Private Space", "private", member_id,
+    object_name = member_id +": Private Space"
+    create_space(folder, "private_space", object_name, "private", member_id,
                     member, PRIVATE_FOLDER_ENTRY_NAME)
     member_groupIds = member.getGroupIds()
     for member_groupId in member_groupIds:
         group_membership_roles = doSearch(acl_tool, member_groupId)
         
         if bool(set(ROLES_FOR_WEB_SPACE) & set(group_membership_roles)):
-            create_space(folder, "web_space", "Web Space", "publish", member_id,
+            object_name = member_id +": Web Space"
+            create_space(folder, "web_space", object_name, "publish", member_id,
                             member, PUBLIC_FOLDER_ENTRY_NAME)
             parent_space = getattr(folder, "web_space")
             mark(parent_space, IMemberSpace)    
@@ -114,16 +116,18 @@ def initializeAreas(pm_tool, acl_tool, request, member_folder_id=None):
             if ((member_groupId == bungeni_group["id"])
                 and (not bool(set(ROLES_FOR_WEB_SPACE) & set(group_membership_roles)))
                 and (bungeni_group["id"]not in groups_space.objectIds())):
-                group = acl_tool.bungeni_groups.getGroupById(bungeni_group["id"])                 
+                group = acl_tool.bungeni_groups.getGroupById(bungeni_group["id"])
                 create_space(groups_space, bungeni_group["id"],
                     bungeni_group["title"], "private", bungeni_group["id"], 
                     group, "Folder")
                 parent_space = getattr(groups_space, bungeni_group["id"]) 
-                mark(parent_space, IGroupSpace)              
-                create_space(parent_space, "private_space", "Private Space", 
+                mark(parent_space, IGroupSpace)    
+                object_name = bungeni_group["title"] + ": Private Space"           
+                create_space(parent_space, "private_space", object_name, 
                     "private", bungeni_group["id"], 
-                    group, PRIVATE_FOLDER_ENTRY_NAME)                       
-                create_space(parent_space, "web_space", "Web Space", 
+                    group, PRIVATE_FOLDER_ENTRY_NAME)
+                object_name = bungeni_group["title"] + ": Web Space"                                  
+                create_space(parent_space, "web_space", object_name, 
                     "publish", bungeni_group["id"], 
                      group, PUBLIC_FOLDER_ENTRY_NAME) 
                 parent_space = getattr(parent_space, "web_space")

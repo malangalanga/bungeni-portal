@@ -26,7 +26,10 @@ GROUP_SPACE_CONTENT = [{"id": "members_blog", "title": "Members Blog",
                         "type":"Folder", "addable_types":["Event"]},
                         {"id": "repository", "title": "Virtual Library", 
                         "type":"RepositoryCollection", 
-                        "addable_types":["RepositoryCollection", "RepositoryItem"]}                            
+                        "addable_types":["RepositoryCollection", "RepositoryItem"]},
+                        {"id": "forums", "title": "Forums", 
+                        "type":"Folder", 
+                        "addable_types":["Ploneboard","PlonePopoll"]},                           
                         ]
                         
 ROLES_FOR_WEB_SPACE = ["bungeni.MemberAssembly","bungeni.MemberSenate"]                                                
