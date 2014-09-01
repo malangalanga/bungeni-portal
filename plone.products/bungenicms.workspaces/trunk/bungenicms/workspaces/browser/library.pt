@@ -1,0 +1,52 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="bungenicms.workspaces">
+<body>
+<metal:content-core fill-slot="content-core">
+<metal:block define-macro="content-core"
+    tal:define="kssClassesView context/@@kss_field_decorator_view;
+        getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
+        templateId template/getId">
+
+        <table class="gridtable">
+            <tr>
+                <th><h2>Document Collections</h2></th>
+            </tr>
+            <tr><td valign="top">                        
+            <table tal:define="docCollections python:view.getCollections()" 
+                class="gridtable">
+            <tbody>
+            <tal:coll tal:repeat="collection docCollections">
+            <tr><td>
+	        <a tal:content="python: collection.getObject().aq_parent.aq_parent.title + ':' + collection.Title"
+                   tal:attributes="href collection/getURL"></a>
+            </td></tr>
+            </tal:coll>
+            </tbody>
+            </table>
+        </td>
+        </tr>
+                
+        <tr>
+        <td>
+            <div id="pageNavPos"></div>
+                <script type="text/javascript">// <!--
+                    var pagerDoc = new PagerNoHeader2('collListing', 10, 'pagerDoc', 'pageNavPos'); 
+                    pagerDoc.init(); 
+                    pagerDoc.showPageNav(); 
+                    pagerDoc.showPage(1);
+                //--></script>
+                    
+        </td>
+        </tr>
+        </table>
+						
+</metal:block>
+</metal:content-core>
+
+</body>
+</html>

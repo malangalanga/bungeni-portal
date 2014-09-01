@@ -12,6 +12,15 @@
     <browser:resource
         name="workspaces.css"
         file="resources/workspaces.css"
-    />                      
+    /> 
+
+  <browser:page
+    name="library-view"
+    for="*"
+    class=".library.LibraryView"
+    permission="zope2.View"
+    template="library.pt"
+    />    
+
                   
 </configure>
