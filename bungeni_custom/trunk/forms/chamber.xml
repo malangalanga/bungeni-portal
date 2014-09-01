@@ -10,17 +10,17 @@
         note="!+LOGIN value_type should be 'login'?
             This field is conceptually equivalent to User.login:
             should contain only letters, numbers, a period (.) and underscore (_). 
-            should start with a letter and be between 3 and 20 characters long"
+            should start with a letter and be between 3 and 64 characters long"
         >
         <show modes="view edit add listing" />
     </field-->
     <field name="conceptual_name" label="Chamber Logical Type" 
         description="The logical type for this Chamber - 
             May contain only letters, numbers, a period (.) and underscore (_). 
-            Should start with a letter and be between 3 and 20 characters long" 
+            Should start with a letter and be between 3 and 64 characters long" 
         required="true"  value_type="text" render_type="single_select" 
         vocabulary="chamber_id"
-        note="may be up to 64 characters long"
+        note="db limit is 64 characters long"
         >
         <show modes="view edit add listing" />
     </field>

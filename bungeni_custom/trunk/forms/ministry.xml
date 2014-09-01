@@ -9,7 +9,7 @@
     <field name="acronym" label="Acronym" required="false" value_type="text" render_type="text_line">
         <show modes="view edit add listing" />
     </field>
-    <field name="combined_name" label="Full Name [acronym]" required="false" value_type="text" render_type="text_line" derived="group_combined_name">
+    <field name="combined_name" label="Combined Name" required="false" value_type="text" render_type="text_line" derived="group_combined_name">
         <show modes="listing" />
     </field>
     <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
@@ -32,17 +32,17 @@
         note="!+LOGIN value_type should be 'login'?
             This field is conceptually equivalent to User.login:
             should contain only letters, numbers, a period (.) and underscore (_). 
-            should start with a letter and be between 3 and 20 characters long"
+            should start with a letter and be between 3 and 64 characters long"
         >
         <show modes="view edit add" />
     </field-->
     <field name="conceptual_name" label="Ministry Identifier"
         description="The logical identifier for this Ministry - 
             May contain only letters, numbers, a period (.) and underscore (_). 
-            Should start with a letter and be between 3 and 20 characters long"
+            Should start with a letter and be between 3 and 64 characters long"
         required="true" 
-        value_type="text" render_type="single_select" vocabulary="ministry_id"
-        note="may be up to 64 characters long"
+        value_type="login" render_type="single_select" vocabulary="ministry_id"
+        note="db limit is 64 characters long"
         >
         <show modes="view edit add" />
     </field>
