@@ -416,26 +416,30 @@ def bungeni_check():
     __check(tasks)
 
 
-def start_service(service_name):
+def start_service(*service_names):
     """
-    Starts a named service
+    Starts named services
     Example - to start bungeni: ./fl start_service:bungeni
+              to start postgres rabbitmq and bungeni : ./fl start_service:postgres,rabbitmq,bungeni
     Other services are listed above (Supervisor status page)
     """
 
     service = bungeni.Services()
-    service.start_service(service_name)
+    for service_name in service_names:
+        service.start_service(service_name)
 
 
-def stop_service(service_name):
+def stop_service(*service_names):
     """
-    Stops a named service
+    Stops named services
     Example - to stop postgres: ./fl stop_service:postgres
+              to stop postgres and bungeni: ./fl stop_service:postgres,bungeni
     Other services are listed above (Supervisor status page)
     """
 
     service = bungeni.Services()
-    service.stop_service(service_name)
+    for service_name in service_names:
+        service.stop_service(service_name)
 
 
 def start_bungeni(mode="ABORT_ON_ERROR"):
