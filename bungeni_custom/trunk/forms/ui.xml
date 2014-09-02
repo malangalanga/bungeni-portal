@@ -808,7 +808,7 @@
         <field name="title_name" label="Name" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
-        <field name="user_unique" label="Only one user may have this title" description="Limits persons with this title to one" required="false" value_type="text" render_type="single_select" vocabulary="yes_no">
+        <field name="user_unique" label="Only one user may have this title" description="Limits persons with this title to one" required="false" value_type="bool" render_type="single_select" vocabulary="yes_no">
             <show modes="view edit add listing" />
         </field>
         <field name="sort_order" label="Sort Order" description="The order in which members with this title will appear relative to other members" required="true" value_type="number" render_type="number">
