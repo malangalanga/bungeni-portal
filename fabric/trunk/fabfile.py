@@ -442,6 +442,14 @@ def stop_service(*service_names):
         service.stop_service(service_name)
 
 
+def restart_service(*service_names):
+    """
+    Restarts services
+    """ 
+    
+    stop_service(*service_names)
+    start_service(*service_names)
+
 def start_bungeni(mode="ABORT_ON_ERROR"):
     """
     Start bungeni
