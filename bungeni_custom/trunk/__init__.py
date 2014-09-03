@@ -56,4 +56,5 @@ oauth_authorization_token_expiry_time = 600
 # used to secure information during the OAuth flow
 oauth_hmac_key = "wNo1CvEW5eN4BbzisBdb7Af2Asx6XXoke0GZtIMN3h3HCdA3"
 
-
+# exist search service
+search_service_url = "http://localhost:8088/exist/restxq/ontology_bungeni"
