@@ -1,38 +1,12 @@
 # USED PACKAGES
 # core software
-bungeni.main -r10898 https://bungeni-portal.googlecode.com/svn/bungeni.main/trunk/
-bungeni_custom -r10898 https://bungeni-portal.googlecode.com/svn/bungeni_custom/trunk/
+bungeni.main -r11497 https://bungeni-portal.googlecode.com/svn/bungeni.main/trunk/
+bungeni_custom -r11497 https://bungeni-portal.googlecode.com/svn/bungeni_custom/trunk/
 # authentication package for both plone and bungeni
-portal.auth -r10898 https://bungeni-portal.googlecode.com/svn/portal.auth/trunk
+portal.auth -r11497 https://bungeni-portal.googlecode.com/svn/portal.auth/trunk
 # plone 3 skin
-ploned.ui   -r10898   https://bungeni-portal.googlecode.com/svn/ploned.ui/trunk/
+ploned.ui   -r11497   https://bungeni-portal.googlecode.com/svn/ploned.ui/trunk/
 # repoze.whooze z3 authentication
 repoze.whooze -r3893 http://svn.repoze.org/repoze.whooze/trunk
 # relational database support
 ore.alchemist -r403 http://zope-alchemist.googlecode.com/svn/ore.alchemist/trunk
-
-# DEPRECATED PACKAGES
-# rdb ui components
-#alchemist.ui -r400  http://zope-alchemist.googlecode.com/svn/alchemist.ui/trunk
-# rdb auto generation
-#alchemist.catalyst -r402 http://zope-alchemist.googlecode.com/svn/alchemist.catalyst/branches/dynamic-ui
-# various traversal mechanisms
-#alchemist.traversal -r400 http://zope-alchemist.googlecode.com/svn/alchemist.traversal/trunk
-# zope.securitypolicy rdb implementation
-#alchemist.security -r400  http://zope-alchemist.googlecode.com/svn/alchemist.security/trunk
-# schema diff 
-#z3c.traverser http://svn.zope.org/repos/main/z3c.traverser/tags/0.2.3
-# shows security information ( principal, permissions, views )
-# usage requires including security-debug.zcml
-# z3c.securitytool svn://svn.zope.org/repos/main/z3c.securitytool/trunk
-# lovely memcached
-# lovely.memcached svn://svn.zope.org/repos/main/lovely.memcached/trunk/
-# lovely.responsecache svn://svn.zope.org/repos/main/lovely.responsecache/trunk/ 
-# lovely.remoteinclude svn://svn.zope.org/repos/main/lovely.remoteinclude/trunk/ 
-# lovely.responsecache, allows us to set 
-#svn://svn.zope.org/repos/main/lovely.responsecache/trunk
-# lovely.memcached
-
-
-
-
