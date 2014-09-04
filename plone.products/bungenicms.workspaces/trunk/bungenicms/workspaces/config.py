@@ -17,7 +17,7 @@ MEMBER_SPACE_CONTENT = [{"id": "my_blog", "title": "Blog",
                         {"id": "my_speeches", "title": "My Speeches",
                         "type":"Folder", "addable_types":["Document","File", "Link"]}
                       ]
-GROUP_SPACE_CONTENT = [{"id": "members_blog", "title": "Members Blog", 
+GROUP_SPACE_CONTENT = [{"id": "members_blog", "title": "Committee Blog", 
                         "type":"Folder", "addable_types":["Blog Entry"]},
                         {"id": "thematic_folders", "title": "Thematic Folders", 
                         "type":"Folder", 
