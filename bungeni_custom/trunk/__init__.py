@@ -58,3 +58,5 @@ oauth_hmac_key = "wNo1CvEW5eN4BbzisBdb7Af2Asx6XXoke0GZtIMN3h3HCdA3"
 
 # exist search service
 search_service_url = "http://localhost:8088/exist/restxq/ontology_bungeni"
+
+
