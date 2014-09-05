@@ -57,6 +57,7 @@ def add_member_workspace_links(content, theme, resource_fetcher, log):
     """
     Add a member's 'private space' and 'web space' links to the workspace
     second level menu items (if they exist).
+    Add link to group digital repositories - all members can view.
     """
     link_items = content("#portal-personaltools span")
     member_id = link_items.pop(0).text
@@ -73,7 +74,10 @@ def add_member_workspace_links(content, theme, resource_fetcher, log):
         content('#portal-personaltools').append("<li class='navigation'>\
         <a href='/plone/membership/" + member_id + \
         "/web_space/folder_contents" + "'>web space</a></li>")
-        
+
+    content('#portal-personaltools').append("<li class='navigation'>\
+    <a href='/plone/groups/library-view'>library view</a></li>")
+
 def redirect_group_workspace_links(request, response, response_headers, log):
     """
     Redirect bungeni group workspace view to corresponding plone workspace view.
