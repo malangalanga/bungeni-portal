@@ -68,7 +68,8 @@ rm -rf $PLONE_REL_FOLDER/.svn $PLONE_REL_FOLDER/debian/.svn || true
 find  $PLONE_REL_FOLDER/debian/DEBIAN \( -name ".svn" \) -exec rm -rf {} \; || true
 find  $PLONE_REL_FOLDER/debian/etc    \( -name ".svn" \) -exec rm -rf {} \; || true
 rm -rf $PLONE_REL_FOLDER/debian/opt/.svn $PLONE_REL_FOLDER/debian/opt/bungeni/.svn || true
-find $PLONE_REL_FOLDER -name "*.svn" -exec rm -rf {} \;
+# uncomment the below to delete .svn files in the plone release folder
+#find $PLONE_REL_FOLDER -name "*.svn" -exec rm -rf {} \;
 
 
 logger.printTask "[Plone] Now run will attempt to execute run.sh in the ${PLONE_REL_FOLDER}"
