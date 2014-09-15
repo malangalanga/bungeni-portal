@@ -1,0 +1,35 @@
+<workspace id="agenda_item">
+    <state id="draft">
+        <tab id="draft" roles="Drafter" />
+    </state>
+    <state id="submitted">
+        <tab id="inbox" roles="ClerkAssembly" />
+        <tab id="pending" roles="Owner" />
+    </state>
+    <state id="clarification_required">
+        <tab id="inbox" roles="Owner" />
+        <tab id="pending" roles="ClerkAssembly" />
+    </state>
+     <state id="inadmissible">
+        <tab id="archive" roles="SpeakerAssembly ClerkAssembly Owner" />
+    </state>
+    <state id="admissible">
+        <tab id="schedule" roles="SpeakerAssembly ClerkAssembly" />
+        <tab id="pending" roles="Owner Signatory" />
+    </state>
+    <state id="scheduled">
+        <tab id="schedule" roles="SpeakerAssembly ClerkAssembly" />
+        <tab id="pending" roles="Owner Signatory" />
+    </state>
+    <state id="adjourned">
+        <tab id="schedule" roles="SpeakerAssembly ClerkAssembly" />
+        <tab id="pending" roles="Owner Signatory" />
+    </state>
+    <state id="dropped">
+        <tab id="archive" roles="SpeakerAssembly Owner" />
+    </state>
+    <state id="withdrawn">
+        <tab id="archive" roles="Owner ClerkAssembly SpeakerAssembly" />
+    </state>
+</workspace>
+

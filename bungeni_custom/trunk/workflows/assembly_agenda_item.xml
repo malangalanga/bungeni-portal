@@ -5,7 +5,7 @@
     >
     
     <!-- GLOBAL GRANTS -->
-    <allow permission=".Add" roles="ClerkSenate ClerkAssembly" />
+    <allow permission=".Add" roles="ClerkAssembly" />
     
 
     <!-- FEATURES -->
@@ -18,7 +18,7 @@
         <parameter name="scheduled_states" value="scheduled" />
     </feature>
     <feature name="workspace" enabled="true">
-        <parameter name="group_names" value="assembly_id senate_id" />
+        <parameter name="group_names" value="assembly_id" />
     </feature>
     <feature name="notification" enabled="true" />
     <feature name="download" enabled="true" />
@@ -36,64 +36,64 @@
     </state>
     <state id="submitted" title="Submitted" actions="version">
         <facet>
-            <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
-            <allow permission=".Edit" roles="ClerkSenate ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly ClerkSenate ClerkQuestionSenate" />
+            <allow permission=".View" roles="Owner ClerkAssembly SpeakerAssembly" />
+            <allow permission=".Edit" roles="ClerkAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
         </facet>
     </state>
     <state id="clarification_required" title="Requires Clarification to Receive" actions="version"   >
         <facet>
-            <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
+            <allow permission=".View" roles="Owner ClerkAssembly SpeakerAssembly" />
             <allow permission=".Edit" roles="Owner" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly ClerkSenate ClerkQuestionSenate" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
         </facet>
     </state>
     <state id="admissible" title="Admissible" actions="version">
         <facet>
             <allow permission=".View" roles="Anonymous" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
         </facet>
     </state>
     <state id="inadmissible" title="Inadmissible">
         <facet>
-            <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
+            <allow permission=".View" roles="Owner ClerkAssembly SpeakerAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
         </facet>
     </state>
     <state id="withdrawn_internal" title="Withdrawn">
         <facet>
-            <allow permission=".View" roles="Owner ClerkSenate ClerkAssembly SpeakerSenate SpeakerAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
+            <allow permission=".View" roles="Owner ClerkAssembly SpeakerAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
         </facet>
     </state>
     <state id="scheduled" title="Scheduled">
         <facet>
             <allow permission=".View" roles="Anonymous" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
         </facet>
     </state>
     <state id="adjourned" title="Debate adjourned">
         <facet>
             <allow permission=".View" roles="Anonymous" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
         </facet>
     </state>
     <state id="debated" title="Debated">
         <facet>
             <allow permission=".View" roles="Anonymous" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
         </facet>
     </state>
     <state id="dropped" title="Dropped">
         <facet>
             <allow permission=".View" roles="Anonymous" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
         </facet>
     </state>
     <state id="withdrawn" title="Withdrawn">
         <facet>
             <allow permission=".View" roles="Anonymous" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly  ClerkSenate ClerkQuestionSenate" />
+            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
         </facet>
     </state>
     
@@ -117,14 +117,14 @@
         destination="admissible"
         condition=""
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
+        roles="ClerkAssembly"
     />
     <transition title="Inadmissible"
         source="submitted"
         destination="inadmissible"
         condition=""
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
+        roles="ClerkAssembly"
         require_confirmation="true"
     />
     <transition title="Scheduled for Debate"
@@ -132,14 +132,14 @@
         destination="scheduled"
         condition="is_scheduled"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
+        roles="ClerkAssembly"
     />
     <transition title="Require Clarifications"
         source="submitted"
         destination="clarification_required"
         condition=""
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
+        roles="ClerkAssembly"
         require_confirmation="true"
     />
     <transition title="Resubmit"
@@ -154,7 +154,7 @@
         destination="dropped"
         condition=""
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
+        roles="ClerkAssembly"
         note="Member absent, the item is dropped."
     />
     <transition title="Debate"
@@ -162,14 +162,14 @@
         destination="debated"
         condition=""
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
+        roles="ClerkAssembly"
     />
     <transition title="Adjourn debate"
         source="scheduled"
         destination="adjourned"
         condition=""
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly"
+        roles="ClerkAssembly"
     />
     <transition title="Withdraw"
         source="submitted clarification_required"
@@ -177,7 +177,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly Owner"
+        roles="ClerkAssembly Owner"
         require_confirmation="true"
     />
     <transition title="Withdraw"
@@ -186,7 +186,7 @@
         grouping_unique_sources="withdrawn"
         condition=""
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly Owner"
+        roles="ClerkAssembly Owner"
         require_confirmation="true"
     />
 

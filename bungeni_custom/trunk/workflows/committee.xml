@@ -39,8 +39,11 @@
             <allow permission="committee_staff.Edit" roles="ClerkSenate ClerkAssembly" />
             <allow permission="committee_staff.Add" roles="ClerkSenate ClerkAssembly" />
             <allow permission="committee_staff.Delete" roles="ClerkSenate ClerkAssembly" />
-<!-- Flavio see types.xml <allow permission="assembly_agenda_item.Add" roles="MemberCommitteeAssembly MemberCommitteeSenate" />   -->
+            <allow permission="assembly_agenda_item.Add" roles="MemberCommitteeAssembly" />
+            <allow permission="senate_agenda_item.Add" roles="MemberCommitteeSenate" />
+            <!--
             <allow permission="agenda_item.Add" roles="MemberCommitteeAssembly MemberCommitteeSenate" />
+            -->
             <allow permission="address.Add" roles="ClerkSenate ClerkAssembly Drafter" />
         </facet>
     </state>
