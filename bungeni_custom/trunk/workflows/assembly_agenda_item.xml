@@ -7,9 +7,9 @@
     <!-- GLOBAL GRANTS -->
     <allow permission=".Add" roles="ClerkAssembly" />
     
-
+    
     <!-- FEATURES -->
-
+    
     <feature name="audit" enabled="true" />
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
@@ -24,8 +24,8 @@
     <feature name="download" enabled="true" />
     
     
-    <!-- STATES --> 
-   
+    <!-- STATES -->
+    
     <state id="draft" title="Draft">
         <facet>
             <allow permission=".View" roles="Drafter" />
@@ -97,7 +97,7 @@
         </facet>
     </state>
     
-
+    
     <!-- TRANSITIONS -->
     
     <transition title="Create Agenda Item"

@@ -203,7 +203,8 @@
             label="member" container_label="members"
             note="A Minister, defined as member of a ministry group." />
     </group>
-    <group name="chamber" enabled="true" label="chamber" container_label="chambers"
+    <group name="chamber" enabled="true" 
+        label="chamber" container_label="chambers"
         privilege_extent="group"
         note="A parliament chamber.">
         <member name="member" workflow="group_member" enabled="true" 

@@ -17,7 +17,9 @@
         <parameter name="display_columns" value="user date_active object description note" />
     </feature>
     <feature name="version" enabled="true" />
-    <feature name="sitting" enabled="true" />
+    <feature name="sitting" enabled="true">
+        <parameter name="calendar_doc_types" value="assembly_agenda_item senate_agenda_item" />
+    </feature>
     <feature name="address" enabled="true" />
     
     
