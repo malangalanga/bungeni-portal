@@ -19,30 +19,23 @@ from sqlalchemy.exc import UnboundExecutionError
 import sqlalchemy as rdb
 from sqlalchemy.orm import eagerload, lazyload
 
-from bungeni.models import domain, delegation
+from bungeni.models import domain, delegation, utils
 
 # !+MODEL_MAPPING(mn, oct-2011) import bungeni.models.orm is needed to ensure 
 # that mappings of domain classes to schema tables is executed.
 from bungeni.models import orm
 
 
-def get_user(login_id):
-    session = Session()
+def get_user_for_login(login):
+    """Return domain.User instance for login, or None.
+    """
     try:
-        db_user = session.query(domain.User).filter(
-            domain.User.login == login_id).one()
+        return utils.get_user_for_login(login)
     except rdb.orm.exc.NoResultFound:
-        log.warn("No user with login id, %s exists" % login_id)
-        return None
-    except rdb.orm.exc.MultipleResultsFound:
-        #Should never happen as login column is unique
-        log.error("Multiple users found with same login id, %s" % login_id)
-        raise
-    else:
-        return db_user
+        log.warn("No user with login id %r exists", login)
 
 
-def get_user_groups(login_id):
+def get_user_groups(login):
     """Get group for users:
     a) the groups defined by member
     b) the users who have him assigned as a delegation
@@ -59,9 +52,9 @@ def get_user_groups(login_id):
             principal_ids.append(member.group.principal_name)
         return principal_ids
     groups = set()
-    user = get_user(login_id)  # user may be None
+    user = get_user_for_login(login)  # user may be None
     if user:
-        groups.add(login_id)
+        groups.add(login)
         user_id = user.user_id
         for elem in get_groups(user_id):
             groups.add(elem)
@@ -75,22 +68,22 @@ def get_user_groups(login_id):
 class AlchemistWhoPlugin(object):
     interface.implements(IAuthenticator, IMetadataProvider)
 
-    def get_groups(self, login_id):
-        groups = get_user_groups(login_id)
+    def get_groups(self, login):
+        groups = get_user_groups(login)
         groups.add("zope.Authenticated")
         groups.add("zope.anybody")
         return groups
-
+    
     def authenticate(self, environ, identity):
-        if not ('login' in identity and 'password' in identity):
+        if not ("login" in identity and "password" in identity):
             return None
-        user = get_user(identity['login'])
-        if user and user.checkPassword(identity['password']):
-            return identity['login']
+        user = get_user_for_login(identity["login"])
+        if user and user.checkPassword(identity["password"]):
+            return identity["login"]
 
     def add_metadata(self, environ, identity):
-        userid = identity.get('repoze.who.userid')
-        user = get_user(userid)
+        userid = identity.get("repoze.who.userid")
+        user = get_user_for_login(userid)
         groups = None
         if user is not None:
             groups = tuple(self.get_groups(userid))
@@ -100,12 +93,12 @@ class AlchemistWhoPlugin(object):
                 log.warn(e)
             admin_user = session.query(domain.AdminUser).get(user.user_id)
             if admin_user:
-                groups = groups + ('zope.manager',)
+                groups = groups + ("zope.manager",)
             identity.update({
-                'email': user.email,
-                'title': u"%s, %s" % (user.last_name, user.first_name),
-                'groups': groups,
-                'home_language': user.home_language,
+                "email": user.email,
+                "title": u"%s, %s" % (user.last_name, user.first_name),
+                "groups": groups,
+                "home_language": user.home_language,
                 })
 
 
@@ -113,12 +106,12 @@ class GlobalAuthWhoPlugin(object):
     interface.implements(IAuthenticator, IMetadataProvider)
 
     def authenticate(self, environ, identity):
-        if not ('login' in identity and 'password' in identity):
+        if not ("login" in identity and "password" in identity):
             return None
 
-        principal = self.get_principal_by_login(identity['login'])
-        if principal and principal.validate(identity['password']):
-            return identity['login']
+        principal = self.get_principal_by_login(identity["login"])
+        if principal and principal.validate(identity["password"]):
+            return identity["login"]
 
     def get_principal(self, id):
         try:
@@ -137,25 +130,25 @@ class GlobalAuthWhoPlugin(object):
             pass
 
     def add_metadata(self, environ, identity):
-        login = identity.get('repoze.who.userid')
+        login = identity.get("repoze.who.userid")
         principal = self.get_principal_by_login(login)
         if principal is not None:
             identity.update({
-                'title': principal.title,
-                'groups': tuple(principal.groups) + (principal.id,),
+                "title": principal.title,
+                "groups": tuple(principal.groups) + (principal.id,),
                 })
 
 
 def bungeni_request_classifier(environ):
-    """ Returns one of the classifiers 'api', 'xmlpost', or 'browser',
+    """ Returns one of the classifiers "api", "xmlpost", or "browser",
     depending on the imperative logic below"""
     if PATH_INFO(environ).startswith("/api"):
-        return 'api'
+        return "api"
     request_method = REQUEST_METHOD(environ)
-    if request_method == 'POST':
-        if CONTENT_TYPE(environ) == 'text/xml':
-            return 'xmlpost'
-    return 'browser'
+    if request_method == "POST":
+        if CONTENT_TYPE(environ) == "text/xml":
+            return "xmlpost"
+    return "browser"
 interface.directlyProvides(bungeni_request_classifier, IRequestClassifier)
 
 
@@ -212,13 +205,6 @@ class OAuthAuthenticatorPlugin(AlchemistWhoPlugin):
         if access_token.authorization_token.authorization.active == False:
             return None
         return access_token.authorization_token.authorization.user.login
-
-
-
-
-
-
-
 
 
 
