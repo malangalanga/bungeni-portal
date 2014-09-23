@@ -22,7 +22,7 @@
     <field name="owner_id" label="Moved by" description="Select the user who moved the document" required="true" value_type="member" render_type="single_select" vocabulary="chamber_member_delegation">
         <show modes="add edit view listing" />
     </field>
-    <field name="group_id" label="Committee" required="false" value_type="group" render_type="single_select" vocabulary="group">
+    <field name="group_id" label="Committee" required="true" value_type="group" render_type="single_select" vocabulary="group">
         <show modes="edit add" roles="Admin" />
         <show modes="view listing" />
     </field>

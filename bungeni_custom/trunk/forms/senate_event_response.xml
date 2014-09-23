@@ -17,7 +17,7 @@
         <show modes="edit add" />
         <hide modes="view listing" roles="Anonymous" />
     </field>
-    <field name="group_id" label="Group" required="false" value_type="text" render_type="single_select" vocabulary="group">
+    <field name="group_id" label="Group" required="true" value_type="text" render_type="single_select" vocabulary="group">
         <show modes="view add listing" />
         <hide modes="edit" />
     </field>
