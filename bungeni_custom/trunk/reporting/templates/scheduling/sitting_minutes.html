@@ -6,13 +6,33 @@
   </br:config>
   <head>
     <title>Votes and Proceedings</title>
+        <style type="text/css" media="all">
+            div.sittings {
+                border: 1px solid lightgray;
+                margin: 0 0 2em 0;
+                padding: 0.5em;
+            }
+            h2.sittings {
+                font-weight: bold;
+                color: slategray;
+                background-color: mistyrose;
+                padding: 0.3em 0.6em;
+                margin: 0;
+            }
+            .logo {
+                margin-bottom: 1em;
+                width: 40px;
+                height: 40px;
+            }
+        </style>
   </head>
   <body> 
     <div id="report-content">
         <h1 class="heading" br:type="text" br:source="title"/>
+        <img class="logo" br:type="src" br:src="/@@/images/favicon.ico"/>
         <div id="listing-body">
-            <div br:type="listing" br:source="sittings">
-                <h2 br:type="text" br:source="dc:title"/>
+            <div class="sittings" br:type="listing" br:source="sittings">
+                <h2 class="sittings" br:type="text" br:source="dc:title"/>
 
                 <h3>Agenda and Minutes</h3>
                 <div class="agendaitems">

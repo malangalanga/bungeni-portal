@@ -6,17 +6,31 @@
     </br:config>
     <head>
         <title>Sitting Agenda</title>
+        <style type="text/css" media="all">
+            h2.agendaheading {
+                font-weight: bold;
+                color: slategray;
+                background-color: mistyrose;
+                padding: 0.3em 0.6em;
+                margin: 0;
+            }
+            .logo {
+                margin-bottom: 1em;
+                width: 40px;
+                height: 40px;
+            }
+        </style>
     </head>
     <body> 
         <div id="report-content">
             <h1 class="heading" br:type="text" br:source="title"/>
+            <img class="logo" br:type="src" br:src="/@@/images/favicon.ico"/>
             <div id="listing-body" class="body" background="color:green">
                 <div br:type="listing" br:source="sittings">
                     <div class="agendaitems">
                         <div br:type="listing" br:source="item_schedule">                           
                             <!-- heading -->                             
                             <h2 br:condition="type_heading" br:type="text" br:source="dc:title" class="agendaheading"/>
-                                                   
                             <!-- items -->
                             <div br:condition="type_document" class="items">
                                 <!-- pseudo-item (editorial notes) -->
