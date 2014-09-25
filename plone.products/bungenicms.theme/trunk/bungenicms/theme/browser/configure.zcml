@@ -1,0 +1,21 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="bungenicms.theme">
+        
+    <browser:resourceDirectory
+        name="bungenicms.theme.images"
+        directory="images"
+        />
+
+    <browser:viewlet  
+        name="bungenicms.theme.workspace_links"
+        manager="actionbar.panel.browser.interfaces.IActionbarPanel"
+        class="actionbar.panel.browser.viewlets.ActionViewlet"
+        permission="zope2.View" 
+        layer="bungenicms.theme.layer.ILayer"
+        template="./templates/workspace_viewlet.pt"
+        />
+
+</configure>
