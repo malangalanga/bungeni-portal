@@ -30,23 +30,23 @@
         <facet>
         <allow permission=".View" roles="Anonymous" />
         <allow permission=".Edit" roles="
-                ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
-                SpeakerSenate SpeakerAssembly" />
+                ClerkAssembly ClerkQuestionAssembly
+                SpeakerAssembly" />
         </facet>
     </state>
     <state id="internal" title="Internal">
         <facet>
 	    <allow permission=".View" roles="Authenticated" />
 	    <allow permission=".Edit" roles="
-		ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
-                SpeakerSenate SpeakerAssembly" />
+		ClerkAssembly ClerkQuestionAssembly
+                SpeakerAssembly" />
         </facet>
     </state>
     <state id="withdrawn" title="Withdrawn">
         <facet>
             <allow permission=".View" roles="
-		ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
-		SpeakerSenate SpeakerAssembly" />
+		ClerkAssembly ClerkQuestionAssembly
+		SpeakerAssembly" />
         </facet>
     </state>
     
@@ -62,21 +62,21 @@
         source="draft internal"
         destination="bound_to_parent"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly"
+        roles="ClerkAssembly ClerkQuestionAssembly SpeakerAssembly"
         require_confirmation="false"
     />
     <transition title="Visible Internally"
         source="draft bound_to_parent"
         destination="internal"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly"
+        roles="ClerkAssembly ClerkQuestionAssembly SpeakerAssembly"
         require_confirmation="false"
     />
     <transition title="Withdraw"
         source="internal bound_to_parent"
         destination="withdrawn"
         trigger="manual"
-        roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly"
+        roles="ClerkAssembly ClerkQuestionAssembly SpeakerAssembly"
         require_confirmation="false"
     />
 

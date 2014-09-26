@@ -49,46 +49,46 @@
             <allow permission=".Edit" roles="Drafter" />
             <allow permission=".Delete" roles="Drafter" />
             <allow permission="attachment.Add" roles="Drafter" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="signatory.Add" roles="Drafter" />
         </facet>
     </state>
     <state id="submitted_signatories" title="Submitted to Signatories" actions="version">
         <facet>
             <allow permission=".View" roles="Drafter Owner Signatory" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
         </facet>
     </state>
     <state id="redraft" title="Redraft" actions="version" note="document under review before resubmission">
         <facet>
             <allow permission=".View" roles="Drafter Owner" />
             <allow permission=".Edit" roles="Drafter" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="signatory.Add" roles="Drafter" />
         </facet>
     </state>
     <state id="withdrawn_signatory" title="Dropped">
         <facet>
             <allow permission=".View" roles="Drafter Owner Signatory" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" /><!-- !+private_frozen? -->
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" /><!-- !+private_frozen? -->
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
         </facet>
     </state>
     <state id="withdrawn_internal" title="Withdrawn">
         <facet>
             <allow permission=".View" roles="Drafter Owner Signatory" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
         </facet>
     </state>
     <state id="submitted" title="Submitted to Clerk" actions="set_doc_registry_number version">
         <facet>
             <allow permission=".View" roles="Owner ClerkAssembly SpeakerAssembly Signatory" />
             <allow permission=".Edit" roles="ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
@@ -105,8 +105,8 @@
         <facet>
             <allow permission=".View" roles="Owner ClerkAssembly SpeakerAssembly Signatory" />
             <allow permission=".Edit" roles="ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
@@ -141,8 +141,8 @@
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
@@ -150,8 +150,8 @@
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
@@ -159,8 +159,8 @@
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
@@ -168,8 +168,8 @@
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
@@ -177,8 +177,8 @@
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
@@ -186,8 +186,8 @@
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
@@ -195,8 +195,8 @@
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
@@ -204,8 +204,8 @@
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
@@ -213,8 +213,8 @@
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
@@ -222,8 +222,8 @@
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
@@ -231,8 +231,8 @@
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
@@ -240,8 +240,8 @@
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
@@ -249,8 +249,8 @@
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
@@ -258,72 +258,72 @@
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
     <state id="approved" title="Approved Bill">
         <facet>
             <allow permission=".View" roles="Anonymous" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
         </facet>
     </state>
     <state id="rejected" title="Rejected Bill">
         <facet>
             <allow permission=".View" roles="Anonymous" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
         </facet>
     </state>
     <state id="withdrawn" title="Bill Withdrawn">
         <facet>
             <allow permission=".View" roles="Anonymous" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
         </facet>
     </state>
     <state id="pending_presidential_assent" title="Pending Presidential Assent">
         <facet>
             <allow permission=".View" roles="Anonymous" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
         </facet>
     </state>
     <state id="assented" title="Assented">
         <facet>
             <allow permission=".View" roles="Anonymous" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
         </facet>
     </state>
     <state id="reconsideration" title="Referred Reconsideration">
         <facet>
             <allow permission=".View" roles="Anonymous" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
         </facet>
     </state>
     <state id="approved_with_amendments" title="Approved with Amendments">
         <facet>
             <allow permission=".View" roles="Anonymous" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
         </facet>
     </state>
     <state id="approved_without_amendments" title="Approved without Amendments">
         <facet>
             <allow permission=".View" roles="Anonymous" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
         </facet>
     </state>
     <state id="come_into_force" title="Come into Force">
         <facet>
             <allow permission=".View" roles="Anonymous" />
-            <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
         </facet>
     </state>
 
