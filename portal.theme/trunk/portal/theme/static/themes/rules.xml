@@ -71,7 +71,11 @@
             theme="children:#portal-globalnav > ul" />         
         <drop href="/plone"
             content="#portal-globalnav > li:first-child"/>           
-        <drop theme="#processing_indicatron" />           
+        <drop theme="#processing_indicatron" />
+        <prepend href="/plone"
+            content="div#footpanel"
+            theme="#portal-footer"
+        />            
     </rule>
     
     <rule class="load-exist-navigation">        
@@ -96,7 +100,11 @@
         <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
             theme="children:#portal-globalnav > ul" />
         <drop theme="#processing_indicatron" /> 
-        <drop content="attributes(class):#portal-globalnav li:first-child" />          
+        <drop content="attributes(class):#portal-globalnav li:first-child" />
+        <prepend href="/plone"
+            content="div#footpanel"
+            theme="#portal-footer"
+        />           
     </rule>    
     
     <rule class="load-workspace-navigation">    
@@ -134,8 +142,13 @@
         <prepend href="/exist" content="#portal-globalnav > li"
             theme="children:#portal-globalnav > ul" />        
         <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
-            theme="children:#portal-globalnav ul.level0" />       
-                                  
+            theme="children:#portal-globalnav ul.level0" />
+
+        <prepend href="/plone"
+            content="div#footpanel"
+            theme="#portal-footer"
+        /> 
+
     </rule>    
     
     <rule class="frontpage">
@@ -189,7 +202,11 @@
         <append href="/exist"
             content="ul#portal-personaltools li"
             theme="children:#portal-personaltools ul"
-        />          
+        />
+        <prepend href="/plone"
+            content="div#footpanel"
+            theme="#portal-footer"
+        />    
     </rule>  
     
     
