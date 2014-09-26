@@ -215,7 +215,10 @@
             label="member" container_label="members" 
             note="Member of a Chamber i.e. of Parliament" />
     </group>
-    <group name="legislature"
+    <!-- !+LEGISLATURE_AS_CHAMBER temporary, to take advantage for the 
+        "doc handling capabilities" currently are supported only by chamber 
+    -->
+    <group name="legislature" archetype="chamber"
         descriptor="legislature" workflow="group" 
         enabled="true"
         label="legislature" container_label="legislatures" 
