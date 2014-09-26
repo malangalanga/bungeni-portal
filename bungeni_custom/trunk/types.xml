@@ -90,63 +90,63 @@
     <doc name="assembly_agenda_item" archetype="agenda_item"
         workflow="assembly_agenda_item" descriptor="agenda_item"
         enabled="true"
-        label="agenda item" container_label="agenda items" />
+        label="agenda item (h)" container_label="agenda items" />
     <doc name="assembly_bill" archetype="bill" 
 	    descriptor="assembly_bill" workflow="assembly_bill" 
 	    enabled="true" 
-        label="bill" container_label="bills" />
+        label="bill (h)" container_label="bills" />
     <doc name="assembly_motion" archetype="motion" 
         descriptor="assembly_motion" workflow="assembly_motion" 
 	    enabled="true" 
-        label="motion" container_label="motions" />
+        label="motion (h)" container_label="motions" />
     <doc name="assembly_question" archetype="question" 
         descriptor="assembly_question" workflow="assembly_question" 
 	    enabled="true"
-        label="question" container_label="questions" />
+        label="question (h)" container_label="questions" />
     <doc name="assembly_tabled_document" archetype="tabled_document"
         descriptor="assembly_tabled_document" workflow="assembly_tabled_document" 
         enabled="true"
-        label="tabled document" container_label="tabled documents" />
+        label="tabled document (h)" container_label="tabled documents" />
     <doc name="assembly_matter_of_privileges" archetype="other_document"
         descriptor="assembly_matter_of_privileges" workflow="assembly_matter_of_privileges" 
         enabled="true"
-        label="matter of privileges" container_label="matters of privileges" />
+        label="matter of privileges (h)" container_label="matters of privileges" />
 
     <event name="assembly_event" archetype="event" descriptor="assembly_event" 
         workflow="assembly_event" enabled="true"
-        label="event" container_label="events" />
+        label="event (h)" container_label="events" />
     <event name="assembly_event_response" archetype="event" descriptor="assembly_event_response" 
         workflow="assembly_event_response" enabled="true"
-        label="response" container_label="responses" />  
+        label="response (h)" container_label="responses" />  
 
     <!-- SENATE -->
     <doc name="senate_agenda_item" archetype="agenda_item"
         workflow="senate_agenda_item" descriptor="agenda_item"
         enabled="true"
-        label="agenda item" container_label="agenda items" />
+        label="agenda item (s)" container_label="agenda items" />
     <doc name="senate_bill" archetype="bill" 
          descriptor="senate_bill" workflow="senate_bill" 
          enabled="true"
-         label="bill" container_label="bills" />
+         label="bill (s)" container_label="bills" />
     <doc name="senate_motion" archetype="motion" 
          descriptor="senate_motion" workflow="senate_motion" 
          enabled="true"
-         label="motion" container_label="motions" />
+         label="motion (s)" container_label="motions" />
     <doc name="senate_question" archetype="question" 
          descriptor="senate_question" workflow="senate_question" 
          enabled="true" 
-         label="question" container_label="questions" />
+         label="question (s)" container_label="questions" />
     <doc name="senate_tabled_document" archetype="tabled_document" 
          descriptor="senate_tabled_document" workflow="senate_tabled_document" 
          enabled="true"
-         label="tabled document" container_label="tabled documents" />
+         label="tabled document (s)" container_label="tabled documents" />
 
     <event name="senate_event" archetype="event" descriptor="senate_event" 
         workflow="senate_event" enabled="true" 
-        label="event" container_label="events" />
+        label="event (s)" container_label="events" />
     <event name="senate_event_response" archetype="event" descriptor="senate_event_response"
         workflow="senate_event_response" enabled="true"
-        label="response" container_label="responses" />
+        label="response (s)" container_label="responses" />
 
     
     <!-- GROUPS -->
@@ -155,7 +155,7 @@
         privilege_extent="chamber"
         note="Parliamentary Office like speakers office, clerks office, etc.">
         <member name="office_member" workflow="group_member" enabled="true"
-            label="member" container_label="members" />
+            label="member (o)" container_label="members" />
     </group>
     <group name="political_group" workflow="group" enabled="true" 
         label="political group" container_label="political groups"
@@ -163,7 +163,7 @@
         >
         <member name="political_group_member" workflow="group_member" 
             enabled="true"
-            label="member" container_label="members" />
+            label="member (pg)" container_label="members" />
     </group>
     <group name="committee" 
         enabled="true" 
@@ -173,10 +173,10 @@
         <member name="committee_member" 
             workflow="group_member" 
             enabled="true" 
-            label="member" container_label="members" />
+            label="member (c)" container_label="members" />
         <member name="committee_staff" workflow="group_member" 
             enabled="true"
-            label="staff" container_label="staff members" />
+            label="staff (c)" container_label="staff members" />
     </group>
     <group name="joint_committee" 
         descriptor="joint_committee" workflow="committee" 
@@ -189,11 +189,11 @@
         <member name="joint_committee_member"
             descriptor="joint_committee_member" workflow="group_member" 
             enabled="true" 
-            label="member" container_label="members" />
+            label="member (jc)" container_label="members" />
         <member name="joint_committee_staff" 
             descriptor="joint_committee_staff" workflow="group_member" 
             enabled="true"
-            label="staff" container_label="staff members" />
+            label="staff (jc)" container_label="staff members" />
     </group>
     <group name="government" workflow="group" enabled="true"
         label="government" container_label="governments"
@@ -204,7 +204,7 @@
         privilege_extent="group"
         note="A government ministry.">
         <member name="minister" workflow="group_member" enabled="true" 
-            label="member" container_label="members"
+            label="member (m)" container_label="members"
             note="A Minister, defined as member of a ministry group." />
     </group>
     <group name="chamber" enabled="true" 
@@ -215,8 +215,8 @@
             label="member" container_label="members" 
             note="Member of a Chamber i.e. of Parliament" />
     </group>
-    <!-- !+LEGISLATURE_AS_CHAMBER temporary, to take advantage for the 
-        "doc handling capabilities" currently are supported only by chamber 
+    <!-- !+LEGISLATURE_AS_CHAMBER to take advantage of capabilities 
+        (doc handling, sittings, etc) currently only available on chamber
     -->
     <group name="legislature" archetype="chamber"
         descriptor="legislature" workflow="group" 
