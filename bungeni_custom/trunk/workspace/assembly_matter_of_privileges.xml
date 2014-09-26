@@ -3,42 +3,40 @@
         <tab id="draft" roles="Drafter" />
     </state>
     <state id="submitted">
-        <tab id="inbox" roles="  ClerkAssembly"/>
+        <tab id="inbox" roles="ClerkAssembly"/>
         <tab id="pending" roles="Owner"/>
     </state>
-    <state id="reviewed">
-        <tab id="inbox" roles="  SpeakerAssembly"/>
-        <tab id="pending"
-	     roles="Owner
-		      ClerkAssembly"/>
+    <state id="inadmissible">
+        <tab id="archive" roles="ClerkAssembly Owner"/>
     </state>
     <state id="admissible">
-        <tab id="schedule"
-	     roles="  SpeakerAssembly
-		      ClerkAssembly"/>
-        <tab id="pending" roles="Owner"/>
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="SpeakerAssembly Owner"/>
     </state>
-    <state id="clarification_required">
-        <tab id="inbox" roles="Owner"/>
-        <tab id="pending" roles="  ClerkAssembly"/>
+    <state id="referred">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending"
+	     roles="Owner SpeakerAssembly"/>
     </state>
-    <state id="scheduled">
-        <tab id="schedule"
-	     roles="  SpeakerAssembly
-		      ClerkAssembly"/>
-        <tab id="pending" roles="Owner"/>
+    <state id="referred_prima_facie">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending"
+	     roles="Owner SpeakerAssembly"/>
     </state>
-    <state id="adjourned">
-        <tab id="schedule"
-	     roles="  SpeakerAssembly
-		      ClerkAssembly"/>
-        <tab id="pending" roles="Owner"/>
+    <state id="endorsed">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner SpeakerAssembly"/>
     </state>
-    <state id="tabled">
+    <state id="not_endorsed">
+        <tab id="archive" roles="ClerkAssembly Owner SpeakerAssembly"/>
+    </state>
+    <state id="ready_to_report">
+        <tab id="schedule" roles="ClerkAssembly"/>
+        <tab id="pending" roles="Owner SpeakerAssembly"/>
+    </state>
+    <state id="reported">
         <tab id="archive" 
-	     roles="Owner
-		      ClerkAssembly
-                      SpeakerAssembly"/>
+	     roles="Owner ClerkAssembly SpeakerAssembly"/>
     </state>
     <state id="withdrawn">
         <tab id="archive"

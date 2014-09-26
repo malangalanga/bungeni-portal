@@ -21,25 +21,25 @@
     </body>
   </block>
 
-  <block onstate="clarification_required">
+  <block onstate="admissible">
     <subject>
-      Clarification required for Matter of Privileges : 
+      Matter of Privileges is inadmissible : 
       <span tal:replace="item/title"/>
     </subject>
     <body>
       The Matter of Privileges 
-      <span tal:replace="item/title"/> requires clarification <span tal:replace="item/status_date"/>
+      <span tal:replace="item/title"/> was declared admissible on <span tal:replace="item/status_date"/>
     </body>
   </block>
 
-  <block onstate="debated">
+  <block onstate="reported">
     <subject>
       Matter of Privileges : 
       <span tal:replace="item/title"/> has been debated
     </subject>
     <body>
       The Matter of Privileges 
-      <span tal:replace="item/title"/> was debated on <span tal:replace="item/status_date"/>
+      <span tal:replace="item/title"/> was reported on <span tal:replace="item/status_date"/>
     </body>
   </block>
 
@@ -55,15 +55,4 @@
     </body>
   </block>
 
-  <block onstate="defered">
-    <subject>
-      Matter of Privileges 
-      <span tal:replace="item/title"/> has been deferred
-    </subject>
-    <body>
-      The Matter of Privileges 
-      <span tal:replace="item/title"/> was declared inadmissible on 
-      <span tal:replace="item/status_date"/>
-    </body>
-  </block>
 </template>
