@@ -30,7 +30,7 @@
         <facet>
         <allow permission=".View" roles="Anonymous" />
         <allow permission=".Edit" roles="
-                ClerkAssembly ClerkQuestionAssembly
+                ClerkAssembly ClerkQuestionAssembly MemberCommitteeAssembly.Clerk
                 SpeakerAssembly" />
         </facet>
     </state>
@@ -38,14 +38,14 @@
         <facet>
 	    <allow permission=".View" roles="Authenticated" />
 	    <allow permission=".Edit" roles="
-		ClerkAssembly ClerkQuestionAssembly
+		ClerkAssembly ClerkQuestionAssembly MemberCommitteeAssembly.Clerk
                 SpeakerAssembly" />
         </facet>
     </state>
     <state id="withdrawn" title="Withdrawn">
         <facet>
             <allow permission=".View" roles="
-		ClerkAssembly ClerkQuestionAssembly
+		ClerkAssembly ClerkQuestionAssembly MemberCommitteeAssembly.Clerk
 		SpeakerAssembly" />
         </facet>
     </state>
@@ -62,21 +62,21 @@
         source="draft internal"
         destination="bound_to_parent"
         trigger="manual"
-        roles="ClerkAssembly ClerkQuestionAssembly SpeakerAssembly"
+        roles="ClerkAssembly ClerkQuestionAssembly SpeakerAssembly MemberCommitteeAssembly.Clerk"
         require_confirmation="false"
     />
     <transition title="Visible Internally"
         source="draft bound_to_parent"
         destination="internal"
         trigger="manual"
-        roles="ClerkAssembly ClerkQuestionAssembly SpeakerAssembly"
+        roles="ClerkAssembly ClerkQuestionAssembly SpeakerAssembly MemberCommitteeAssembly.Clerk"
         require_confirmation="false"
     />
     <transition title="Withdraw"
         source="internal bound_to_parent"
         destination="withdrawn"
         trigger="manual"
-        roles="ClerkAssembly ClerkQuestionAssembly SpeakerAssembly"
+        roles="ClerkAssembly ClerkQuestionAssembly SpeakerAssembly MemberCommitteeAssembly.Clerk"
         require_confirmation="false"
     />
 

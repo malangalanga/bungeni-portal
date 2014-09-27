@@ -32,7 +32,10 @@
     
     <!-- SENATE roles -->
     <role id="MemberSenate" title="Senate - Member" />
-    <role id="MemberCommitteeSenate" title="Senate - Committee Member" />
+    <role id="MemberCommitteeSenate" title="Senate - Committee Member" >
+        <subrole id="MemberCommitteeSenate.Clerk" title="Senate - Committee Clerk" />
+        <subrole id="MemberCommitteeSenate.Researcher" title="Senate -  Committee Researcher" />
+    </role>
     <role id="MemberPoliticalGroupSenate" title="Senate - Political Group Member" />
     <role id="ClerkSenate" title="Senate - Clerk Office" />
     <role id="ClerkQuestionSenate" title="Senate - Clerk Questions Office">
@@ -45,7 +48,6 @@
     
     <!-- ASSEMBLY roles -->
     <role id="MemberAssembly" title="Assembly - Member" />
-    <!-- ASSEMBLY roles -->    <!-- ASSEMBLY roles -->    <!-- ASSEMBLY roles -->    <!-- ASSEMBLY roles -->    <!-- ASSEMBLY roles -->
     <role id="MemberCommitteeAssembly" title="Assembly - Committee Member" >
         <subrole id="MemberCommitteeAssembly.Clerk" title="Assembly - Committee Clerk" />
         <subrole id="MemberCommitteeAssembly.Researcher" title="Assembly -  Committee Researcher" />

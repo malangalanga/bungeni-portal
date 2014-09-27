@@ -14,34 +14,30 @@
         <tab id="pending" roles="SpeakerAssembly Owner"/>
     </state>
     <state id="referred">
-        <tab id="inbox" roles="ClerkAssembly"/>
-        <tab id="pending"
-	     roles="Owner SpeakerAssembly"/>
+        <tab id="inbox" roles="MemberCommitteeAssembly.Clerk"/>
+        <tab id="pending" roles="Owner ClerkAssembly SpeakerAssembly"/>
     </state>
     <state id="referred_prima_facie">
-        <tab id="inbox" roles="ClerkAssembly"/>
-        <tab id="pending"
-	     roles="Owner SpeakerAssembly"/>
+        <tab id="inbox" roles="MemberCommitteeAssembly.Clerk"/>
+        <tab id="pending" roles="Owner ClerkAssembly SpeakerAssembly"/>
     </state>
     <state id="endorsed">
         <tab id="inbox" roles="ClerkAssembly"/>
-        <tab id="pending" roles="Owner SpeakerAssembly"/>
+        <tab id="pending" roles="Owner SpeakerAssembly MemberCommitteeAssembly.Clerk"/>
     </state>
     <state id="not_endorsed">
-        <tab id="archive" roles="ClerkAssembly Owner SpeakerAssembly"/>
+        <tab id="archive" roles="ClerkAssembly Owner SpeakerAssembly MemberCommitteeAssembly.Clerk"/>
     </state>
     <state id="ready_to_report">
         <tab id="schedule" roles="ClerkAssembly"/>
-        <tab id="pending" roles="Owner SpeakerAssembly"/>
+        <tab id="pending" roles="Owner SpeakerAssembly MemberCommitteeAssembly.Clerk"/>
     </state>
     <state id="reported">
         <tab id="archive" 
-	     roles="Owner ClerkAssembly SpeakerAssembly"/>
+	     roles="Owner ClerkAssembly SpeakerAssembly MemberCommitteeAssembly.Clerk"/>
     </state>
     <state id="withdrawn">
         <tab id="archive"
-	     roles="Owner
-		      ClerkAssembly
-                      SpeakerAssembly"/>
+	     roles="Owner ClerkAssembly SpeakerAssembly MemberCommitteeAssembly.Clerk"/>
     </state>
 </workspace>

@@ -52,7 +52,6 @@
             <allow permission=".Edit" roles="ClerkAssembly" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
-            <allow permission="group_assignment.Add" roles="ClerkAssembly"  />
         </facet>
     </state>
     <state id="inadmissible" title="Not a breach of privileges">
@@ -67,20 +66,21 @@
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Add" roles="ClerkAssembly"  />
         </facet>
     </state>
-    <state id="referred" title="Plenary referred to the Committee on Ethics and Privileges" actions="version">
+    <state id="referred" title="Plenary referred to Com Ethics and Privileges" actions="version">
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly MemberCommitteeAssembly.Clerk" />
         </facet>
     </state>
-    <state id="referred_prima_facie" title="Presiding Officer referred to the Committee on Ethics and Privileges " actions="version">
+    <state id="referred_prima_facie" title="Referred to Com Ethics and Privileges " actions="version">
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly MemberCommitteeAssembly.Clerk" />
         </facet>
     </state>
     <state id="endorsed" title="Endorsed by the House" actions="version set_doc_type_number">
@@ -159,14 +159,14 @@
         roles="ClerkAssembly"
         require_confirmation="true"
     />
-    <transition title="Plenary refers to the Committee on Ethics and Privileges"
+    <transition title="Plenary refers to Com Ethics and Privileges"
         source="endorsed"
         destination="referred"
         condition=""
         trigger="manual"
         roles="ClerkAssembly"
     />
-    <transition title="Presiding Officer refers to the Committee on Ethics and Privileges"
+    <transition title="Refering to Com Ethics and Privileges"
         source="admissible"
         destination="referred_prima_facie"
         condition=""
@@ -188,11 +188,11 @@
         roles="ClerkAssembly"
     />
     <transition title="Committee ready to report"
-        source="referred"
+        source="referred referred_prima_facie"
         destination="ready_to_report"
         condition=""
         trigger="manual"
-        roles="ClerkAssembly"
+        roles="ClerkAssembly MemberCommitteeAssembly.Clerk"
     />
     <transition title="Scheduled for Debate"
         source="ready_to_report"
