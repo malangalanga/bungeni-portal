@@ -28,7 +28,7 @@
         class="load-workspace-navigation" />
     <match path="regex:^/(admin)/?"
         class="load-admin-navigation" />                        
-    <match path="regex:^/(workspace/groups/my-groups)/(group-committee|group-political_group)-([0-9])+(/)?(view)?$"
+    <match path="regex:^/(workspace/groups/my-groups)/?"
         class="load-workspace-group-navigation" />  
     <match path="regex:^/(plone/groups|plone/memberships)/?"
         class="drop-navigation" />               
@@ -62,47 +62,49 @@
         <drop content="children:#personaltools-logout" />
 
         <!-- navigation -->
-        <prepend href="/" content="children:#portal-globalnav > li:first-child"
-            theme="children:#portal-globalnav li#aux" />        
+        <prepend href="/"
+            content="#portal-globalnav > li:first-child"
+            theme="children:#portal-globalnav > ul" /> 
+        <append href="/exist" content="#portal-globalnav > li"
+            theme="children:#portal-globalnav > ul" />         
         <append content="#portal-globalnav > li:not(:first-child)"
-            theme="children:#portal-globalnav li#aux ul.hse-list" />
-
-        <append href="/exist" content="children:#portal-globalnav"
-            theme="children:#portal-globalnav" />     
-                
+            theme="children:#portal-globalnav > ul" />         
         <drop href="/plone"
             content="#portal-globalnav > li:first-child"/>           
-        <drop theme="#processing_indicatron" />           
+        <drop theme="#processing_indicatron" />
+        <prepend href="/plone"
+            content="div#footpanel"
+            theme="#portal-footer"
+        />            
     </rule>
     
     <rule class="load-exist-navigation">        
         
         <!-- navigation -->        
-        <append content="#portal-globalnav > li:not(:first-child)"
-            theme="children:#portal-globalnav > ul" />  
+        <append content="#portal-globalnav > li"
+            theme="children:#portal-globalnav > ul" />                   
+        <drop href="/exist"
+            content="#portal-globalnav > li:first-child"/>     
         <prepend href="/"
             content="#portal-globalnav > li:first-child"
-            theme="children:#portal-globalnav > ul" />    
-
-        <append content="children:#portal-globalnav"
-            theme="children:#portal-globalnav" />  
+            theme="children:#portal-globalnav > ul" />            
         <prepend content="ul#portal-personaltools li"
-            theme="children:#subnav ul.level1" />      
+            theme="children:#portal-globalnav ul.level1" />      
      
         <!-- login link -->
-        <prepend href="/"
-                content="children:ul#portal-personaltools li:not(.navigation)"
-                theme="children:#portal-footer"
+        <append href="/"
+                content="ul#portal-personaltools li:not(.navigation)"
+                theme="children:#portal-personaltools"
         />        
         
-        <!-- Plone as Home -->
-        <prepend href="/plone" content="children:#portal-globalnav > li:first-child"
-            theme="children:#portal-globalnav li#aux" />  
-        <!-- Append 2 menus from plone -->
         <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
-            theme="children:#portal-globalnav li#aux ul.hse-list" />
+            theme="children:#portal-globalnav > ul" />
         <drop theme="#processing_indicatron" /> 
-        <drop content="attributes(class):#portal-globalnav li:first-child" />          
+        <drop content="attributes(class):#portal-globalnav li:first-child" />
+        <prepend href="/plone"
+            content="div#footpanel"
+            theme="#portal-footer"
+        />           
     </rule>    
     
     <rule class="load-workspace-navigation">    
@@ -136,12 +138,17 @@
         <append content="children:#portal-column-one"
             theme="children:#portal-column-one"
         />        
-        <!-- navigation -->
-        <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
-            theme="children:#portal-globalnav > ul" />
-        
-        <prepend href="/exist" content="#portal-globalnav > li:not(:first-child)"
+        <!-- navigation -->    
+        <prepend href="/exist" content="#portal-globalnav > li"
             theme="children:#portal-globalnav > ul" />        
+        <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
+            theme="children:#portal-globalnav ul.level0" />
+
+        <prepend href="/plone"
+            content="div#footpanel"
+            theme="#portal-footer"
+        /> 
+
     </rule>    
     
     <rule class="frontpage">
@@ -163,7 +170,7 @@
         <append href="/bungeni"
             content="#portal-globalnav > li:first-child"
             theme="children:#portal-globalnav > ul" />
-        <append href="/exist" content="#portal-globalnav > li:not(:first-child)"
+        <append href="/exist" content="#portal-globalnav > li"
             theme="children:#portal-globalnav > ul" />          
         <append content="#portal-globalnav > li"
             theme="children:#portal-globalnav > ul" />
@@ -195,7 +202,11 @@
         <append href="/exist"
             content="ul#portal-personaltools li"
             theme="children:#portal-personaltools ul"
-        />          
+        />
+        <prepend href="/plone"
+            content="div#footpanel"
+            theme="#portal-footer"
+        />    
     </rule>  
     
     
@@ -214,7 +225,7 @@
         />
         
         <append content="children:#portal-personaltools"
-            theme="children:#subnav ul.level1"
+            theme="children:#portal-personaltools"
         />
         <pyquery pyref="portal.theme.static.themes.rules:image_links" />
         
@@ -269,4 +280,5 @@
         
     </rule>
 </ruleset>
+
 
