@@ -45,7 +45,11 @@
     
     <!-- ASSEMBLY roles -->
     <role id="MemberAssembly" title="Assembly - Member" />
-    <role id="MemberCommitteeAssembly" title="Assembly - Committee Member" />
+    <!-- ASSEMBLY roles -->    <!-- ASSEMBLY roles -->    <!-- ASSEMBLY roles -->    <!-- ASSEMBLY roles -->    <!-- ASSEMBLY roles -->
+    <role id="MemberCommitteeAssembly" title="Assembly - Committee Member" >
+        <subrole id="MemberCommitteeAssembly.Clerk" title="Assembly - Committee Clerk" />
+        <subrole id="MemberCommitteeAssembly.Researcher" title="Assembly -  Committee Researcher" />
+    </role>
     <role id="MemberPoliticalGroupAssembly" title="Assembly - Political Group Member" />
     <role id="ClerkAssembly" title="Assembly - Clerk Office" />
     <role id="ClerkQuestionAssembly" title="Assembly - Clerk Questions Office">
