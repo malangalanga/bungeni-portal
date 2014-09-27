@@ -89,7 +89,7 @@ def is_group_assigned(question):
     has been assigned to exactly one group.
     """
     if question.group_assignment_feature.enabled:
-        # must be assigned to exactly one group !+?
+        # must be assigned to exactly one group of a given type e.g. ministry !+?
         return len(question.group_assignments) == 1
     return False
 
@@ -98,6 +98,11 @@ def is_oral_response_or_is_group_assigned(question):
     it has been assigned to a group.
     """
     return is_oral_response(question) or is_group_assigned(question)
+
+def is_written_response_and_is_group_assigned(question):
+    """question: ok if question is written response and assigned to a group.
+    """
+    return is_written_response(question) and is_group_assigned(question)
 
 
 def response_allow_submit_assembly(question):
