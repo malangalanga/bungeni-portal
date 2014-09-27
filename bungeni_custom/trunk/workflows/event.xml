@@ -1,8 +1,84 @@
 <?xml version="1.0"?>
-<workflow title="Base Event Workflow" description="An event placeholder workflow"
-    permission_actions=".View .Edit .Add .Delete">
+<workflow title="Event Workflow"
+    description="Workflow for base Event"
+    permission_actions=".View .Edit .Add .Delete"
+    >
     
-    <state id="draft" title="Draft" />
-    <transition title="Create Event" source="" destination="draft" trigger="automatic" />
+    <!-- sub-item: NO global grants -->
+    
+
+    <!-- FEATURES -->
+
+    <feature name="audit" enabled="true">
+        <parameter name="audit_actions" value="add modify workflow remove version translate" />
+        <parameter name="display_columns" value="user date_active object description note" />
+    </feature>
+    <feature name="version" enabled="true" />
+    <feature name="attachment" enabled="true" />
+    
+    
+    <!-- STATES -->
+
+    <state id="draft" title="Draft"> 
+        <facet>
+            <allow permission=".View" roles="Drafter" />
+            <allow permission=".Edit" roles="Drafter" />
+            <allow permission=".Delete" roles="Drafter" />
+        </facet>
+    </state>
+    <state id="bound_to_parent" title="Bound to Main Document">
+        <facet>
+        <allow permission=".View" roles="Anonymous" />
+        <allow permission=".Edit" roles="
+                ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
+                SpeakerSenate SpeakerAssembly" />
+        </facet>
+    </state>
+    <state id="internal" title="Internal">
+        <facet>
+	    <allow permission=".View" roles="Authenticated" />
+	    <allow permission=".Edit" roles="
+		ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
+                SpeakerSenate SpeakerAssembly" />
+        </facet>
+    </state>
+    <state id="withdrawn" title="Withdrawn">
+        <facet>
+            <allow permission=".View" roles="
+		ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate
+		SpeakerSenate SpeakerAssembly" />
+        </facet>
+    </state>
+    
+
+    <!-- TRANSITIONS -->  
+  
+    <transition title="Create"
+        source=""
+        destination="draft"
+        trigger="automatic"
+    />
+    <transition title="Bind to main document"
+        source="draft internal"
+        destination="bound_to_parent"
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly"
+        require_confirmation="false"
+    />
+    <transition title="Visible Internally"
+        source="draft bound_to_parent"
+        destination="internal"
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly"
+        require_confirmation="false"
+    />
+    <transition title="Withdraw"
+        source="internal bound_to_parent"
+        destination="withdrawn"
+        trigger="manual"
+        roles="ClerkSenate ClerkAssembly ClerkQuestionAssembly ClerkQuestionSenate SpeakerSenate SpeakerAssembly"
+        require_confirmation="false"
+    />
+
 </workflow>
 
