@@ -2373,6 +2373,9 @@ class GlueScriptTasks:
         if os.path.exists(cache_folder):
             import shutil
             shutil.rmtree(cache_folder)
+        with cd(self.cfg.user_glue):
+            run("rm -rf ./tmp/*")
+            run("rm -rf ./archive/*")
 
 
 class CustomTasks:
