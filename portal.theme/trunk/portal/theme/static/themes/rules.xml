@@ -30,16 +30,21 @@
         class="load-admin-navigation" />                        
     <match path="regex:^/(workspace/groups/my-groups)/?"
         class="load-workspace-group-navigation" />  
-    <match path="regex:^/(plone/groups|plone/memberships)/?"
-        class="drop-navigation" />               
+    <match path="regex:^/(plone/groups|plone/membership)/?"
+        class="update-navigation" />               
     <match path="exact:/"
         class="frontpage" />
     <match path="exact:/front-page"
         class="frontpage" />
     <match path="/" class="primary" />
     
-    <rule class="drop-navigation">                    
-        <drop content="#portal-personaltools" />
+    <rule class="update-navigation">                    
+        <pyquery pyref=
+            "portal.theme.static.themes.rules:add_member_workspace_links"
+        />  
+        <prepend href="/"
+            content="ul#portal-personaltools li.navigation"
+            theme="children:#portal-globalnav ul.level1"/>
     </rule>
     
     <rule class="load-plone-navigation">        

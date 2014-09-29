@@ -509,6 +509,9 @@ a.calendar {
 a.groups { 
     background: url(++resource++bungenicms.theme.images/groups.png) no-repeat center center; 
 }
+#mainpanel a.home {
+    display: none !important;
+}
 a.profile {
     display: none !important;
 }
@@ -516,12 +519,6 @@ a.editprofile {
     display: none !important;
 }
 a.contacts {
-    display: none !important;
-}
-a#chatpanel {
-    display: none !important;
-}
-a#chatpanel_online_users {
     display: none !important;
 }
 /* </dtml-with> */

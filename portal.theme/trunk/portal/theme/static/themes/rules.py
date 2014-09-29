@@ -59,11 +59,20 @@ def add_member_workspace_links(content, theme, resource_fetcher, log):
     second level menu items (if they exist).
     Add link to group digital repositories - all members can view.
     """
-    link_items = content("#portal-personaltools span")
+    if len(content("#portal-personaltools span")) == 0:
+        link_items = theme("#portal-personaltools span")
+    else:
+        link_items = content("#portal-personaltools span")
     member_id = link_items.pop(0).text
-    content('#portal-personaltools').append(
+    if len(content("#portal-personaltools span")) == 0:
+        theme('ul.level1').append(
             "<li class='navigation'><a href='/plone/membership/" + member_id +
             "/private_space/folder_contents" + "'>private space</a></li>")
+    else:
+        content('#portal-personaltools').append(
+            "<li class='navigation'><a href='/plone/membership/" + member_id +
+            "/private_space/folder_contents" + "'>private space</a></li>")
+
     
     host_url = urlsplit(log.theme_url)
     theme_host = get_theme_host(log).split(":")[0]
@@ -71,12 +80,22 @@ def add_member_workspace_links(content, theme, resource_fetcher, log):
                 member_id + "/web_space"
                 
     if check_url(test_url):
-        content('#portal-personaltools').append("<li class='navigation'>\
-        <a href='/plone/membership/" + member_id + \
-        "/web_space/folder_contents" + "'>web space</a></li>")
+        if len(content("#portal-personaltools span")) == 0:
+            theme('ul.level1').append("<li class='navigation'>\
+            <a href='/plone/membership/" + member_id + \
+            "/web_space/folder_contents" + "'>web space</a></li>")
+        else:
+            content('#portal-personaltools').append("<li class='navigation'>\
+            <a href='/plone/membership/" + member_id + \
+            "/web_space/folder_contents" + "'>web space</a></li>")
 
-    content('#portal-personaltools').append("<li class='navigation'>\
-    <a href='/plone/groups/library-view'>library view</a></li>")
+    if len(content("#portal-personaltools span")) == 0:
+        theme('ul.level1').append("<li class='navigation'>\
+        <a href='/plone/groups/library-view'>library view</a></li>")
+    else:
+        content('#portal-personaltools').append("<li class='navigation'>\
+        <a href='/plone/groups/library-view'>library view</a></li>")
+
 
 def redirect_group_workspace_links(request, response, response_headers, log):
     """
