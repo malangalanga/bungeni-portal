@@ -90,8 +90,14 @@
             <allow permission=".Edit" roles="ClerkSenate" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
             <allow permission="senate_event.Add" roles="ClerkSenate" />
+            <allow permission="group_assignment.Edit" roles="ClerkSenate SpeakerSenate" />
             <allow permission="group_assignment.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="group_assignment.Delete" roles="ClerkSenate SpeakerSenate" />
         </facet>
+        <!-- !+GROUP_ASSIGNMENT_Edit_Add_Delete should let this "facet" group be defined 
+            in one place and reused by all the parent docs...
+        <facet ref="group_assignment.add_internal" />
+        -->
     </state>
     <state id="transferred_assembly" title="Transferred Assembly" actions="version send_motion_to_assembly"
         note="Sample state to illustrate mechanism to transfer to other chamber">
@@ -129,7 +135,9 @@
             <allow permission=".View" roles="Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
             <allow permission="senate_event.Add" roles="ClerkSenate" />
+            <allow permission="group_assignment.Edit" roles="ClerkSenate SpeakerSenate" />
             <allow permission="group_assignment.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="group_assignment.Delete" roles="ClerkSenate SpeakerSenate" />
         </facet>
     </state>
     <state id="scheduled" title="Scheduled">
@@ -137,7 +145,9 @@
             <allow permission=".View" roles="Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
             <allow permission="senate_event.Add" roles="ClerkSenate" />
+            <allow permission="group_assignment.Edit" roles="ClerkSenate SpeakerSenate" />
             <allow permission="group_assignment.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="group_assignment.Delete" roles="ClerkSenate SpeakerSenate" />
         </facet>
     </state>
     <state id="adjourned" title="Debate adjourned" note="a motion was debated and the debate adjourned">
@@ -145,7 +155,9 @@
             <allow permission=".View" roles="Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
             <allow permission="senate_event.Add" roles="ClerkSenate" />
+            <allow permission="group_assignment.Edit" roles="ClerkSenate SpeakerSenate" />
             <allow permission="group_assignment.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="group_assignment.Delete" roles="ClerkSenate SpeakerSenate" />
         </facet>
     </state>
     <state id="deferred" title="Deferred" note="An admissable motion that cannot be debated">
@@ -153,7 +165,9 @@
             <allow permission=".View" roles="Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
             <allow permission="senate_event.Add" roles="ClerkSenate" />
+            <allow permission="group_assignment.Edit" roles="ClerkSenate SpeakerSenate" />
             <allow permission="group_assignment.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="group_assignment.Delete" roles="ClerkSenate SpeakerSenate" />
         </facet>
     </state>
     <state id="adopted" title="Adopted" actions="version">

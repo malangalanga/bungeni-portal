@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
-<workflow title="Question Workflow" description="A question" permission_actions=".View .Edit .Add .Delete">
+<workflow title="Question Workflow" 
+    description="A question"
+    permission_actions=".View .Edit .Add .Delete"
+    >
     
     <!-- GLOBAL GRANTS -->
 
@@ -67,8 +70,14 @@
             <allow permission="user_assignment.Edit" roles="ClerkAssembly ClerkQuestionAssembly.ClerkHead" />
             <allow permission="attachment.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly ClerkQuestionAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly ClerkQuestionAssembly.ClerkHead"  />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly ClerkQuestionAssembly.ClerkHead"  />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly ClerkQuestionAssembly.ClerkHead"  />
         </facet>
+        <!-- !+GROUP_ASSIGNMENT_Edit_Add_Delete should let this "facet" group be defined 
+            in one place and reused by all the parent docs...
+        <facet ref="group_assignment.add_internal" />
+        -->
     </state>
     <state id="reviewed" title="Submitted to the Speaker" actions="version">
         <facet>

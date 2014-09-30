@@ -6,7 +6,7 @@
     
     <!-- GLOBAL GRANTS -->
     <allow permission=".Add" roles="ClerkAssembly MemberAssembly" />
-
+    
     <!-- FEATURES -->
     <feature name="audit" enabled="true">
         <parameter name="audit_actions" value="add modify workflow remove version translate" />
@@ -89,8 +89,14 @@
             <allow permission=".Edit" roles="ClerkAssembly" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
+        <!-- !+GROUP_ASSIGNMENT_Edit_Add_Delete should let this "facet" group be defined 
+            in one place and reused by all the parent docs...
+        <facet ref="group_assignment.add_internal" />
+        -->
     </state>
     <state id="reviewed" title="Reviewed by Clerk" actions="set_doc_registry_number">
         <facet>
@@ -98,7 +104,9 @@
             <allow permission=".Edit" roles="SpeakerAssembly" />
             <allow permission="attachment.Add" roles="SpeakerAssembly" />
             <allow permission="assembly_event.Add" roles="SpeakerAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state> 
     <state id="referred_committee" title="Referred to Committee for pre-publication scrutiny" actions="version">
@@ -107,7 +115,9 @@
             <allow permission=".Edit" roles="ClerkAssembly" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
     <state id="recommendations_committee" title="Recommendations of the Committee" actions="version">
@@ -116,7 +126,9 @@
             <allow permission=".Edit" roles="SpeakerAssembly" />
             <allow permission="attachment.Add" roles="SpeakerAssembly" />
             <allow permission="assembly_event.Add" roles="SpeakerAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state> 
     <state id="rejected_proposal" title="Legislative Proposal Rejected" actions="version">
@@ -125,7 +137,9 @@
             <allow permission=".Edit" roles="SpeakerAssembly" />
             <allow permission="attachment.Add" roles="SpeakerAssembly" />
             <allow permission="assembly_event.Add" roles="SpeakerAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state> 
     <state id="accepted_proposal" title="Legislative Proposal Approved" actions="version set_doc_type_number">
@@ -134,7 +148,9 @@
             <allow permission=".Edit" roles="SpeakerAssembly" />
             <allow permission="attachment.Add" roles="SpeakerAssembly" />
             <allow permission="assembly_event.Add" roles="SpeakerAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state> 
     <state id="gazetted" title="Bill Published in Gazette" actions="version">
@@ -143,7 +159,9 @@
             <allow permission=".Edit" roles="ClerkAssembly" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
     <state id="first_reading_scheduled" title="First Reading Scheduled">
@@ -152,7 +170,9 @@
             <allow permission=".Edit" roles="ClerkAssembly" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
     <state id="first_reading" title="First Reading">
@@ -161,7 +181,9 @@
             <allow permission=".Edit" roles="ClerkAssembly" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
     <state id="referred_committee_first_reading" title="Committed to Committees">
@@ -170,7 +192,9 @@
             <allow permission=".Edit" roles="ClerkAssembly" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
     <state id="first_reading_adjourned" title="First Reading Adjourned">
@@ -179,7 +203,9 @@
             <allow permission=".Edit" roles="ClerkAssembly" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
     <state id="second_reading_adjourned" title="Second Reading Adjourned">
@@ -188,7 +214,9 @@
             <allow permission=".Edit" roles="ClerkAssembly" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
     <state id="second_reading_scheduled" title="Second Reading Scheduled">
@@ -197,7 +225,9 @@
             <allow permission=".Edit" roles="ClerkAssembly" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
     <state id="second_reading" title="Second Reading" actions="version">
@@ -206,7 +236,9 @@
             <allow permission=".Edit" roles="ClerkAssembly" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
     <state id="whole_house_scheduled" title="Whole House Scheduled">
@@ -215,7 +247,9 @@
             <allow permission=".Edit" roles="ClerkAssembly" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
     <state id="whole_house_adjourned" title="Whole House Adjourned">
@@ -224,7 +258,9 @@
             <allow permission=".Edit" roles="ClerkAssembly" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
     <state id="whole_house" title="Whole House">
@@ -233,7 +269,9 @@
             <allow permission=".Edit" roles="ClerkAssembly" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
     <state id="third_reading_scheduled" title="Third Reading Scheduled">
@@ -242,7 +280,9 @@
             <allow permission=".Edit" roles="ClerkAssembly" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
     <state id="third_reading" title="Third Reading">
@@ -251,7 +291,9 @@
             <allow permission=".Edit" roles="ClerkAssembly" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
     <state id="third_reading_adjourned" title="Third Reading">
