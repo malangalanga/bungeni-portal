@@ -27,18 +27,15 @@
     </state>
     <state id="withdrawn_internal">
         <tab id="archive" 
-	     roles="Signatory Owner ClerkAssembly SpeakerAssembly" />
+         roles="Signatory Owner ClerkAssembly SpeakerAssembly" />
     </state>
      <state id="admissible">
-        <tab id="schedule" roles="  ClerkAssembly" />
+        <tab id="schedule" roles="ClerkAssembly" />
         <tab id="pending" roles="Owner Signatory SpeakerAssembly" />
     </state>
     <state id="scheduled">
-        <tab id="schedule" roles="  ClerkAssembly" />
-        <tab id="pending"
-	     roles="Owner
-		    Signatory
-		      SpeakerAssembly" />
+        <tab id="schedule" roles="ClerkAssembly" />
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly" />
     </state>
     <state id="adopted">
         <tab id="archive" roles="Signatory Owner ClerkAssembly SpeakerAssembly" />
@@ -47,11 +44,11 @@
          <tab id="archive" roles="Signatory Owner ClerkAssembly SpeakerAssembly" />
     </state>
     <state id="adjourned">
-        <tab id="schedule" roles="  ClerkAssembly" />
+        <tab id="schedule" roles="ClerkAssembly" />
         <tab id="pending" roles="Owner Signatory SpeakerAssembly" />
     </state>
     <state id="deferred">
-        <tab id="schedule" roles="  ClerkAssembly" />
+        <tab id="schedule" roles="ClerkAssembly" />
         <tab id="pending" roles="Owner Signatory SpeakerAssembly" />
     </state>
     <state id="elapsed">
@@ -69,6 +66,7 @@
     <state id="transferred_senate">
         <tab id="archive" roles="Signatory Owner ClerkAssembly SpeakerAssembly" />
     </state>
+    <state id="inadmissible" />
 
 </workspace>
 
