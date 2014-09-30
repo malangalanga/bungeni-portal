@@ -9,7 +9,23 @@ attachments_output_folder = %(user_glue)s/outputs/atts-output/
 temp_files_folder = %(user_glue)s/tmp/
 cache_file_folder = %(user_glue)s/cache/
 transformer_resources_folder = %(user_glue)s/resources/
-parliament_type_name = chamber
+#parliament_type_name = chamber
+
+
+[legislature_config]
+# this configures the recognized structure of parliament
+# legislature is a container for chambers
+legislature_type=legislature
+# chamber is the main house container
+chamber_type=chamber
+# these are typologies within chamber
+#chamber_lower=lower_house
+#chamber_higher=higher_house
+# any additional chamber containers use this type
+# if its unicameral this category of chamber
+# will be the default
+#default_for_unicameral=chamber_lower
+
 
 [postprocess]
 # action = archive or delete or ignore
