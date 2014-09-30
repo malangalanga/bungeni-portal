@@ -1,43 +1,44 @@
-<workspace id="matter_of_privileges">
+<workspace>
+
     <state id="draft">
         <tab id="draft" roles="Drafter" />
     </state>
     <state id="submitted">
-        <tab id="inbox" roles="ClerkAssembly"/>
-        <tab id="pending" roles="Owner"/>
+        <tab id="inbox" roles="ClerkAssembly" />
+        <tab id="pending" roles="Owner" />
     </state>
     <state id="inadmissible">
-        <tab id="archive" roles="ClerkAssembly Owner"/>
+        <tab id="archive" roles="ClerkAssembly Owner" />
     </state>
     <state id="admissible">
-        <tab id="inbox" roles="ClerkAssembly"/>
-        <tab id="pending" roles="SpeakerAssembly Owner"/>
+        <tab id="inbox" roles="ClerkAssembly" />
+        <tab id="pending" roles="SpeakerAssembly Owner" />
     </state>
     <state id="referred">
-        <tab id="inbox" roles="MemberCommitteeAssembly.Clerk"/>
-        <tab id="pending" roles="Owner ClerkAssembly SpeakerAssembly"/>
+        <tab id="inbox" roles="MemberCommitteeAssembly.Clerk" />
+        <tab id="pending" roles="Owner ClerkAssembly SpeakerAssembly" />
     </state>
     <state id="referred_prima_facie">
-        <tab id="inbox" roles="MemberCommitteeAssembly.Clerk"/>
-        <tab id="pending" roles="Owner ClerkAssembly SpeakerAssembly"/>
+        <tab id="inbox" roles="MemberCommitteeAssembly.Clerk" />
+        <tab id="pending" roles="Owner ClerkAssembly SpeakerAssembly" />
     </state>
     <state id="endorsed">
-        <tab id="inbox" roles="ClerkAssembly"/>
-        <tab id="pending" roles="Owner SpeakerAssembly MemberCommitteeAssembly.Clerk"/>
+        <tab id="inbox" roles="ClerkAssembly" />
+        <tab id="pending" roles="Owner SpeakerAssembly MemberCommitteeAssembly.Clerk" />
     </state>
     <state id="not_endorsed">
-        <tab id="archive" roles="ClerkAssembly Owner SpeakerAssembly MemberCommitteeAssembly.Clerk"/>
+        <tab id="archive" roles="ClerkAssembly Owner SpeakerAssembly MemberCommitteeAssembly.Clerk" />
     </state>
     <state id="ready_to_report">
-        <tab id="schedule" roles="ClerkAssembly"/>
-        <tab id="pending" roles="Owner SpeakerAssembly MemberCommitteeAssembly.Clerk"/>
+        <tab id="schedule" roles="ClerkAssembly" />
+        <tab id="pending" roles="Owner SpeakerAssembly MemberCommitteeAssembly.Clerk" />
     </state>
     <state id="reported">
-        <tab id="archive" 
-	     roles="Owner ClerkAssembly SpeakerAssembly MemberCommitteeAssembly.Clerk"/>
+        <tab id="archive" roles="Owner ClerkAssembly SpeakerAssembly MemberCommitteeAssembly.Clerk" />
     </state>
     <state id="withdrawn">
-        <tab id="archive"
-	     roles="Owner ClerkAssembly SpeakerAssembly MemberCommitteeAssembly.Clerk"/>
+        <tab id="archive" roles="Owner ClerkAssembly SpeakerAssembly MemberCommitteeAssembly.Clerk" />
     </state>
+
 </workspace>
+

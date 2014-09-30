@@ -1,144 +1,150 @@
-<workspace id="question">
+<workspace>
     <state id="draft">
-        <tab id="draft" roles="
-			Drafter" />
+        <tab id="draft" roles="Drafter" />
     </state>
     <state id="submitted">
         <tab id="inbox" roles="
-			ClerkAssembly
-			ClerkQuestionAssembly.ClerkHead
-          		ClerkQuestionAssembly.ClerkQuestion" />
+            ClerkAssembly
+            ClerkQuestionAssembly.ClerkHead
+            ClerkQuestionAssembly.ClerkQuestion
+            " />
         <tab id="pending" roles="Owner" />
     </state>
     <state id="reviewed">
-        <tab id="inbox" roles="
-			SpeakerAssembly" />
+        <tab id="inbox" roles="SpeakerAssembly" />
         <tab id="pending" roles="
-			ClerkQuestionAssembly.ClerkHead ClerkQuestionAssembly.ClerkQuestion Owner
-			ClerkAssembly
-			" />
+            ClerkQuestionAssembly.ClerkHead ClerkQuestionAssembly.ClerkQuestion Owner
+            ClerkAssembly
+            " />
     </state>
     <state id="admissible">
-        <tab id="schedule" roles="
-			ClerkQuestionAssembly.ClerkQuestion MinistryMember" />
-	<tab id="pending" roles="
-			ClerkQuestionAssembly.ClerkHead SpeakerAssembly Owner
-			ClerkAssembly
-			" />
+        <tab id="schedule" roles="ClerkQuestionAssembly.ClerkQuestion MinistryMember" />
+        <tab id="pending" roles="
+            ClerkQuestionAssembly.ClerkHead SpeakerAssembly Owner
+            ClerkAssembly
+            " />
     </state>
     <state id="inadmissible">
         <tab id="archive" roles="
             Owner 
-		      ClerkQuestionAssembly.ClerkHead
-              ClerkQuestionAssembly.ClerkQuestion
-                ClerkAssembly
-              SpeakerAssembly"/>
+            ClerkQuestionAssembly.ClerkHead
+            ClerkQuestionAssembly.ClerkQuestion
+            ClerkAssembly
+            SpeakerAssembly
+            " />
     </state>
     <state id="clarification_required">
         <tab id="inbox" roles="Owner" />
-	    <tab id="pending" roles="
-			ClerkQuestionAssembly.ClerkHead ClerkQuestionAssembly.ClerkQuestion
-			ClerkAssembly
-			" />
+        <tab id="pending" roles="
+            ClerkQuestionAssembly.ClerkHead ClerkQuestionAssembly.ClerkQuestion
+            ClerkAssembly
+            " />
     </state>
     <state id="scheduled">
         <tab id="schedule" roles="
-		    Owner
-		    SpeakerAssembly
-		    ClerkQuestionAssembly.ClerkHead
+            Owner
+            SpeakerAssembly
+            ClerkQuestionAssembly.ClerkHead
             ClerkQuestionAssembly.ClerkQuestion
-		    ClerkAssembly
-		    MinistryMember"/>
+            ClerkAssembly
+            MinistryMember
+            " />
     </state>
     <state id="adjourned">
-        <tab id="schedule" roles="  ClerkQuestionAssembly.ClerkQuestion" />
-	<tab id="pending" roles="
-		    Owner
-		    SpeakerAssembly
-		    ClerkQuestionAssembly.ClerkHead
+        <tab id="schedule" roles="ClerkQuestionAssembly.ClerkQuestion" />
+        <tab id="pending" roles="
+            Owner
+            SpeakerAssembly
+            ClerkQuestionAssembly.ClerkHead
             ClerkQuestionAssembly.ClerkQuestion
-		    ClerkAssembly
-		    MinistryMember"/>
-   </state>
-   <state id="response_pending">
-        <tab id="inbox" roles="MinistryMember"/>
-	<tab id="pending" roles="
-		    Owner
-		    SpeakerAssembly
-		    ClerkAssembly
-		    ClerkQuestionAssembly.ClerkHead
+            ClerkAssembly
+            MinistryMember
+            " />
+    </state>
+    <state id="response_pending">
+        <tab id="inbox" roles="MinistryMember" />
+        <tab id="pending" roles="
+            Owner
+            SpeakerAssembly
+            ClerkAssembly
+            ClerkQuestionAssembly.ClerkHead
             ClerkQuestionAssembly.ClerkQuestion" />
-   </state>
-   <state id="response_submitted">
+    </state>
+    <state id="response_submitted">
         <tab id="inbox" roles="
             ClerkQuestionAssembly.ClerkHead
             ClerkQuestionAssembly.ClerkQuestion
             ClerkAssembly" />
-	<tab id="pending" roles="
-		    Owner
-		    SpeakerAssembly
+    <tab id="pending" roles="
+            Owner
+            SpeakerAssembly
             ClerkQuestionAssembly.ClerkQuestion
-		    MinistryMember"/>
+            MinistryMember" />
    </state>
    <state id="response_reviewed">
         <tab id="archive" roles="
-		    Owner
-		    SpeakerAssembly
-		    ClerkQuestionAssembly.ClerkHead
+            Owner
+            SpeakerAssembly
+            ClerkQuestionAssembly.ClerkHead
             ClerkQuestionAssembly.ClerkQuestion
-		    ClerkAssembly
-		    MinistryMember" />
+            ClerkAssembly
+            MinistryMember" />
     </state>
     <state id="deferred">
         <tab id="schedule" roles="
-		    Owner
-		    SpeakerAssembly
-		    ClerkQuestionAssembly.ClerkHead
+            Owner
+            SpeakerAssembly
+            ClerkQuestionAssembly.ClerkHead
             ClerkQuestionAssembly.ClerkQuestion
-		    ClerkAssembly
-		    MinistryMember" />
+            ClerkAssembly
+            MinistryMember" />
     </state>
     <state id="debated">
         <tab id="archive" roles="
-		    Owner
-		    SpeakerAssembly
-		    ClerkQuestionAssembly.ClerkHead
+            Owner
+            SpeakerAssembly
+            ClerkQuestionAssembly.ClerkHead
             ClerkQuestionAssembly.ClerkQuestion
-		    ClerkAssembly
-		    MinistryMember" />
+            ClerkAssembly
+            MinistryMember" />
     </state>
     <state id="elapsed">
         <tab id="archive" roles="
-		    Owner
-		    SpeakerAssembly
-		    ClerkQuestionAssembly.ClerkHead
+            Owner
+            SpeakerAssembly
+            ClerkQuestionAssembly.ClerkHead
             ClerkQuestionAssembly.ClerkQuestion
-		    ClerkAssembly
-		    MinistryMember" />
+            ClerkAssembly
+            MinistryMember" />
     </state>
     <state id="dropped">
-        <tab id="archive" 
-	     roles="Owner
-		    ClerkQuestionAssembly.ClerkHead
-              	    ClerkQuestionAssembly.ClerkQuestion
-		    ClerkAssembly
-            SpeakerAssembly" />
+        <tab id="archive"   roles="
+            Owner
+            ClerkQuestionAssembly.ClerkHead
+            ClerkQuestionAssembly.ClerkQuestion
+            ClerkAssembly
+            SpeakerAssembly
+            " />
     </state>
     <state id="withdrawn">
         <tab id="archive" roles="
-		    Owner
-		    SpeakerAssembly
-		    ClerkQuestionAssembly.ClerkHead
+            Owner
+            SpeakerAssembly
+            ClerkQuestionAssembly.ClerkHead
             ClerkQuestionAssembly.ClerkQuestion
-		    ClerkAssembly
-		    MinistryMember" />
+            ClerkAssembly
+            MinistryMember
+            " />
     </state>
     <state id="withdrawn_internal">
         <tab id="archive" roles="
-		    Owner
-		    SpeakerAssembly
-		    ClerkAssembly
-		    ClerkQuestionAssembly.ClerkHead
-            ClerkQuestionAssembly.ClerkQuestion" />
+            Owner
+            SpeakerAssembly
+            ClerkAssembly
+            ClerkQuestionAssembly.ClerkHead
+            ClerkQuestionAssembly.ClerkQuestion
+            " />
     </state>
+
 </workspace>
+
