@@ -63,8 +63,14 @@
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly"  />
             <allow permission="group_assignment.Add" roles="ClerkAssembly"  />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly"  />
         </facet>
+   <!-- !+GROUP_ASSIGNMENT_Edit_Add_Delete should let this "facet" group be defined 
+            in one place and reused by all the parent docs...
+        <facet ref="group_assignment.add_internal" />
+        -->
     </state>
     <state id="endorsed" title="Indulgence not Granted by the Plenary" actions="version set_doc_type_number">
         <facet>
