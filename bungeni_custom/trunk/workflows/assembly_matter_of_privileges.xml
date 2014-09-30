@@ -163,14 +163,14 @@
     <transition title="Plenary refers to Com Ethics and Privileges"
         source="endorsed"
         destination="referred"
-        condition=""
+        condition="is_group_assigned"
         trigger="manual"
         roles="ClerkAssembly"
     />
     <transition title="Refering to Com Ethics and Privileges"
         source="admissible"
         destination="referred_prima_facie"
-        condition=""
+        condition="is_group_assigned"
         trigger="manual"
         roles="ClerkAssembly"
     />
