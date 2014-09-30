@@ -1,0 +1,180 @@
+<?xml version="1.0"?>
+<workflow title="Matter of Urgent Public Importance"
+    description="A Matter of Urgent Public Importance"
+    permission_actions=".View .Edit .Add .Delete"
+    >
+    
+    <!-- global grants -->
+    <allow permission=".Add" roles="ClerkAssembly MemberAssembly" />
+    
+
+    <!-- features -->
+
+    <feature name="audit" enabled="true">
+        <parameter name="audit_actions" value="add modify workflow remove version translate" />
+        <parameter name="include_subtypes" value="attachment event group_assignment" />
+        <parameter name="display_columns" value="user date_active object description note date_audit" />
+    </feature>
+    <feature name="version" enabled="true" />
+    <feature name="attachment" enabled="true" />
+    <feature name="event" enabled="true">
+        <parameter name="types" value="assembly_event" />
+    </feature>
+    <feature name="schedule" enabled="true">
+        <parameter name="schedulable_states" value="ready_to_report" />
+        <parameter name="scheduled_states" value="scheduled" />
+    </feature>
+    <feature name="workspace" enabled="true">
+        <parameter name="group_names" value="assembly_id" />
+    </feature>
+    <feature name="notification" enabled="true" />
+    <feature name="email" enabled="false" />
+    <feature name="download" enabled="true" />
+    <feature name="group_assignment" enabled="true">
+        <parameter name="assignable_group_types" value="committee" />
+        <parameter name="assignable_group_limit" value="chamber" />
+    </feature>
+    
+
+    <!-- states -->
+
+    <state id="draft" title="Draft">
+        <facet>
+            <allow permission=".View" roles="Drafter" />
+            <allow permission=".Edit" roles="Drafter" />
+            <allow permission=".Delete" roles="Drafter" />
+            <allow permission="attachment.Add" roles="Drafter" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+        </facet>
+    </state>
+    <state id="submitted" title="Submitted to the Presiding Officer" actions="version set_doc_registry_number">
+        <facet>
+            <allow permission=".View" roles="ClerkAssembly SpeakerAssembly Owner" />
+            <allow permission=".Edit" roles="ClerkAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+        </facet>
+    </state>
+    <state id="inadmissible" title="Claim not Allowed">
+        <facet>
+            <allow permission=".View" roles="ClerkAssembly SpeakerAssembly Owner" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+        </facet>
+    </state>
+    <state id="admissible" title="Claim not Allowed">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Add" roles="ClerkAssembly"  />
+        </facet>
+    </state>
+    <state id="endorsed" title="Leave Granted by the Plenary" actions="version set_doc_type_number">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission=".Edit" roles="ClerkAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+        </facet>
+    </state>
+    <state id="not_endorsed" title="Leave not Granted by the Plenary" actions="version set_doc_type_number">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+        </facet>
+    </state>
+    <state id="scheduled" title="Scheduled">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+        </facet>
+    </state>
+    <state id="debated" title="Matter Debated">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+        </facet>
+    </state>
+    <state id="withdrawn" title="Withdrawn">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+        </facet>
+    </state>
+    
+
+    <!-- transitions -->    
+
+    <transition title="Create Matter of Privileges"
+        source=""
+        destination="draft"
+        trigger="automatic"
+    />
+    <transition title="Submit to the Presiding Officer"
+        source="draft"
+        destination="submitted"
+        condition=""
+        trigger="manual"
+        roles="Drafter"
+    />
+    <transition title="Claim not Allowed"
+        source="submitted"
+        destination="inadmissible"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+        require_confirmation="true"
+    />
+    <transition title="Claim Allowed"
+        source="submitted"
+        destination="admissible"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+        require_confirmation="true"
+    />
+    <transition title="Leave not Granted by the Plenary"
+        source="admissible"
+        destination="endorsed"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Leave not Granted by the Plenary"
+        source="admissible"
+        destination="not_endorsed"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Scheduled for Debate"
+        source="endorsed"
+        destination="scheduled"
+        condition="is_scheduled"
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Matter Debated by the Plenary"
+        source="scheduled"
+        destination="debated"
+        trigger="manual"
+        roles="ClerkAssembly"
+        condition=""
+    />
+    <transition title="Withdraw"
+        source="endorsed scheduled"
+        destination="withdrawn"
+        grouping_unique_sources="withdrawn"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+        order="27"
+        require_confirmation="true"
+    />
+
+</workflow>

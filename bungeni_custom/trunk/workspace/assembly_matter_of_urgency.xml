@@ -1,0 +1,32 @@
+<workspace>
+
+    <state id="draft">
+        <tab id="draft" roles="Drafter" />
+    </state>
+    <state id="submitted">
+        <tab id="inbox" roles="ClerkAssembly" />
+        <tab id="pending" roles="Owner" />
+    </state>
+    <state id="inadmissible">
+        <tab id="archive" roles="ClerkAssembly Owner" />
+    </state>
+    <state id="admissible">
+        <tab id="inbox" roles="ClerkAssembly"/>
+        <tab id="pending" roles="SpeakerAssembly Owner" />
+    </state>
+    <state id="endorsed">
+        <tab id="inbox" roles="ClerkAssembly" />
+        <tab id="pending" roles="Owner SpeakerAssembly MemberCommitteeAssembly.Clerk" />
+    </state>
+    <state id="not_endorsed">
+        <tab id="archive" roles="ClerkAssembly Owner SpeakerAssembly MemberCommitteeAssembly.Clerk" />
+    </state>
+    <state id="debated">
+        <tab id="archive" 
+	     roles="Owner ClerkAssembly SpeakerAssembly MemberCommitteeAssembly.Clerk" />
+    </state>
+    <state id="withdrawn">
+        <tab id="archive"
+	     roles="Owner ClerkAssembly SpeakerAssembly MemberCommitteeAssembly.Clerk" />
+    </state>
+</workspace>
