@@ -79,7 +79,7 @@
     <state id="referred" title="Plenary referred to Com Ethics and Privileges" actions="version">
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
-            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly MemberCommitteeAssembly.Clerk" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly MemberCommitteeAssembly.Clerk" />
         </facet>
     </state>
