@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<template html="false"
+  xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <block onstate="submitted">
+    <subject>
+      A Petition has been submitted : <span tal:replace="item/title"/>
+    </subject>
+    <body>
+      The Petition
+      <span tal:replace="item/title"/> was submitted on <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+  <block onstate="received">
+    <subject>
+      The Petition is received : <span tal:replace="item/title"/>
+    </subject>
+    <body>
+      The Petition 
+      <span tal:replace="item/title"/> was declared admissible on <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+
+
+  <block onstate="referred">
+    <subject>
+      The Petition is referred to the Committee of Petitions : 
+      <span tal:replace="item/title"/>
+    </subject>
+    <body>
+      The Petition 
+      <span tal:replace="item/title"/> was referred to the Committee of Petitions on <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+  <block onstate="reported">
+    <subject>
+      Petition : 
+      <span tal:replace="item/title"/> has been reported
+    </subject>
+    <body>
+      The Petition 
+      <span tal:replace="item/title"/> was reported on <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+  <block onstate="scheduled">
+    <subject>
+      Petition 
+      <span tal:replace="item/title"/> has been scheduled
+    </subject>
+    <body>
+      The Petition 
+      <span tal:replace="item/title"/> was scheduled on 
+      <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+</template>

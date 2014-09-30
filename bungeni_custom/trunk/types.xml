@@ -79,6 +79,7 @@
     <doc name="motion" workflow="doc" descriptor="doc" enabled="true" />
     <doc name="question" workflow="doc" descriptor="doc" enabled="true" />
     <doc name="tabled_document" workflow="doc" descriptor="doc" enabled="true" />
+    <doc name="petition" workflow="doc" descriptor="doc" enabled="true" />
     <doc name="other_document" workflow="doc" descriptor="doc" enabled="true" />
     
     <!-- custom types -->
@@ -107,6 +108,10 @@
         descriptor="assembly_tabled_document" workflow="assembly_tabled_document" 
         enabled="true"
         label="tabled document (h)" container_label="tabled documents" />
+    <doc name="assembly_petition" archetype="petition"
+        descriptor="assembly_petition" workflow="assembly_petition" 
+        enabled="true"
+        label="petition (h)" container_label="petitions" />
     <doc name="assembly_matter_of_privileges" archetype="other_document"
         descriptor="assembly_matter_of_privileges" workflow="assembly_matter_of_privileges" 
         enabled="true"

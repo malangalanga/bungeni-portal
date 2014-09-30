@@ -1,0 +1,42 @@
+<workspace>
+
+    <state id="draft">
+        <tab id="draft" roles="Drafter" />
+    </state>
+    <state id="submitted">
+        <tab id="inbox" roles="ClerkAssembly" />
+        <tab id="pending" roles="Owner" />
+    </state>
+    <state id="not_received">
+        <tab id="archive" roles="ClerkAssembly Owner" />
+    </state>
+    <state id="received">
+        <tab id="inbox" roles="ClerkAssembly" />
+        <tab id="pending" roles="SpeakerAssembly Owner" />
+    </state>
+    <state id="information_required">
+        <tab id="inbox" roles="Owner" />
+        <tab id="pending" roles="SpeakerAssembly ClerkAssembly" />
+    </state>
+    <state id="laid_on_the_table">
+        <tab id="inbox" roles="ClerkAssembly" />
+        <tab id="pending" roles="SpeakerAssembly Owner" />
+    </state>
+    <state id="referred">
+        <tab id="inbox" roles="MemberCommitteeAssembly.Clerk" />
+        <tab id="pending" roles="Owner ClerkAssembly SpeakerAssembly" />
+    </state>
+    <state id="ready_to_report">
+        <tab id="schedule" roles="ClerkAssembly" />
+        <tab id="pending" roles="Owner SpeakerAssembly MemberCommitteeAssembly.Clerk" />
+    </state>
+    <state id="scheduled">
+        <tab id="schedule" roles="ClerkAssembly" />
+        <tab id="pending" roles="Owner SpeakerAssembly MemberCommitteeAssembly.Clerk" />
+    </state>
+    <state id="reported">
+        <tab id="archive" roles="Owner ClerkAssembly SpeakerAssembly MemberCommitteeAssembly.Clerk" />
+    </state>
+
+</workspace>
+
