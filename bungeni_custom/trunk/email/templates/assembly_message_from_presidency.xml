@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<template html="false"
+  xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <block onstate="submitted">
+    <subject>
+      A Message from the Presidency has been submitted : <span tal:replace="item/title"/>
+    </subject>
+    <body>
+      A Message from the Presidency
+      <span tal:replace="item/title"/> was submitted on <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+</template>

@@ -3,7 +3,7 @@
   xmlns:tal="http://xml.zope.org/namespaces/tal">
   <block onstate="submitted">
     <subject>
-      Matter of Urgent Public Importance has been submitted : <span tal:replace="item/title"/>
+      A Matter of Urgent Public Importance has been submitted : <span tal:replace="item/title"/>
     </subject>
     <body>
       The Matter of Urgent Public Importance
@@ -13,7 +13,7 @@
 
   <block onstate="inadmissible">
     <subject>
-      Matter of Urgent Public Importance is inadmissible : <span tal:replace="item/title"/>
+      The Matter of Urgent Public Importance is inadmissible : <span tal:replace="item/title"/>
     </subject>
     <body>
       The Matter of Urgent Public Importance 
@@ -23,7 +23,7 @@
 
   <block onstate="admissible">
     <subject>
-      Matter of Urgent Public Importance is inadmissible : 
+      The Matter of Urgent Public Importance is inadmissible : 
       <span tal:replace="item/title"/>
     </subject>
     <body>
