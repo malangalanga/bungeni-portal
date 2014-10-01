@@ -74,7 +74,7 @@
     
     <!-- custom "archetypes" -->
     <!-- !+DESCRIPTOR_KEY_DIFF_FIRST_USE agenda_item descriptor="doc" -->
-    <doc name="agenda_item" workflow="doc" descriptor="agenda_item" enabled="true" />
+    <doc name="agenda_item" workflow="doc" descriptor="doc" enabled="true" />
     <doc name="bill" workflow="doc" descriptor="doc" enabled="true" />
     <doc name="motion" workflow="doc" descriptor="doc" enabled="true" />
     <doc name="question" workflow="doc" descriptor="doc" enabled="true" />
@@ -90,7 +90,7 @@
     
     <!-- ASSEMBLY -->
     <doc name="assembly_agenda_item" archetype="agenda_item"
-        workflow="assembly_agenda_item" descriptor="agenda_item"
+        workflow="assembly_agenda_item" descriptor="assembly_agenda_item"
         enabled="true"
         label="agenda item (h)" container_label="agenda items" />
     <doc name="assembly_bill" archetype="bill" 
@@ -143,7 +143,7 @@
 
     <!-- SENATE -->
     <doc name="senate_agenda_item" archetype="agenda_item"
-        workflow="senate_agenda_item" descriptor="agenda_item"
+        workflow="senate_agenda_item" descriptor="senate_agenda_item"
         enabled="true"
         label="agenda item (s)" container_label="agenda items" />
     <doc name="senate_bill" archetype="bill" 
