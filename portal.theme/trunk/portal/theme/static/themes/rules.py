@@ -66,11 +66,11 @@ def add_member_workspace_links(content, theme, resource_fetcher, log):
     member_id = link_items.pop(0).text
     if len(content("#portal-personaltools span")) == 0:
         theme('ul.level1').append(
-            "<li class='navigation'><a href='/plone/membership/" + member_id +
+            "<li class='navigation' id='private'><a href='/plone/membership/" + member_id +
             "/private_space/folder_contents" + "'>private space</a></li>")
     else:
         content('#portal-personaltools').append(
-            "<li class='navigation'><a href='/plone/membership/" + member_id +
+            "<li class='navigation' id='private'><a href='/plone/membership/" + member_id +
             "/private_space/folder_contents" + "'>private space</a></li>")
 
     
@@ -81,20 +81,20 @@ def add_member_workspace_links(content, theme, resource_fetcher, log):
                 
     if check_url(test_url):
         if len(content("#portal-personaltools span")) == 0:
-            theme('ul.level1').append("<li class='navigation'>\
+            theme('ul.level1').append("<li class='navigation' id='public'>\
             <a href='/plone/membership/" + member_id + \
             "/web_space/folder_contents" + "'>web space</a></li>")
         else:
-            content('#portal-personaltools').append("<li class='navigation'>\
+            content('#portal-personaltools').append("<li class='navigation' id='public'>\
             <a href='/plone/membership/" + member_id + \
             "/web_space/folder_contents" + "'>web space</a></li>")
 
     if len(content("#portal-personaltools span")) == 0:
         theme('ul.level1').append("<li class='navigation'>\
-        <a href='/plone/groups/library-view'>library view</a></li>")
+        <a href='/plone/groups/library-view'>digital library</a></li>")
     else:
         content('#portal-personaltools').append("<li class='navigation'>\
-        <a href='/plone/groups/library-view'>library view</a></li>")
+        <a href='/plone/groups/library-view'>digital library</a></li>")
 
 
 def redirect_group_workspace_links(request, response, response_headers, log):

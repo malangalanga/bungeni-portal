@@ -218,6 +218,10 @@ div#portal-globalnav ul.level1 li {
     height: auto;
     display: block;
 }
+div#portal-globalnav ul.level1 li#private,
+div#portal-globalnav ul.level1 li#public {
+    float: right;
+}
 
 div#portal-globalnav ul.level1 li a {
 	padding: 0 10px !important;
@@ -1679,6 +1683,9 @@ body.template-workspace.section-bungeni-workspace #portal-column-content div#wha
 }
 .template-workspace.section-bungeni-workspace .contentActions, .template-portal .contentActions { /*toughie*/
        padding-top:-20px !important;
+       background-color: #CDE2A7;
+       border-left: 1px solid #74AE0B;
+       border-right: 1px solid #74AE0B;
 }
 
 .section-bungeni-workspace #text-records-dialog input.scheduler-bigtext {
