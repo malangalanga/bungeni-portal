@@ -14,6 +14,9 @@
         <tab id="schedule" roles="SpeakerAssembly ClerkAssembly" />
         <tab id="pending" roles="Owner" />
     </state>
+    <state id="inadmissible">
+        <tab id="archive" roles="Owner ClerkAssembly SpeakerAssembly" />
+    </state>
     <state id="clarification_required">
         <tab id="inbox" roles="Owner" />
         <tab id="pending" roles="ClerkAssembly" />
@@ -32,8 +35,9 @@
     <state id="withdrawn">
         <tab id="archive" roles="Owner ClerkAssembly SpeakerAssembly" />
     </state>
-    <state id="withdrawn_internal" />
-    <state id="inadmissible" />
+    <state id="withdrawn_internal">
+        <tab id="archive" roles="Owner ClerkAssembly SpeakerAssembly" />
+    </state>
 
 </workspace>
 

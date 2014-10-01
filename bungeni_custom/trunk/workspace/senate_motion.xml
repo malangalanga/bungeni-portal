@@ -32,6 +32,10 @@
         <tab id="schedule" roles="ClerkSenate" />
         <tab id="pending" roles="Owner Signatory SpeakerSenate" />
     </state>
+    <state id="inadmissible">
+        <tab id="archive" 
+         roles="Signatory Owner ClerkAssembly SpeakerAssembly" />
+    </state>
     <state id="scheduled">
         <tab id="schedule" roles="ClerkSenate" />
         <tab id="pending" roles="Owner Signatory SpeakerSenate" />
@@ -65,7 +69,6 @@
     <state id="transferred_assembly">
         <tab id="archive" roles="Signatory Owner ClerkSenate SpeakerSenate" />
     </state>
-    <state id="inadmissible" />
 
 </workspace>
 

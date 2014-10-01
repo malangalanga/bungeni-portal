@@ -11,8 +11,7 @@
         <tab id="draft" roles="Drafter" />
     </state>
     <state id="withdrawn_signatory">
-        <tab id="archive" 
-         roles="Owner ClerkAssembly Signatory" />
+        <tab id="archive" roles="Owner ClerkAssembly Signatory" />
     </state>
     <state id="submitted">
         <tab id="inbox" roles="ClerkAssembly" />
@@ -54,25 +53,29 @@
         <tab id="inbox" roles="ClerkAssembly" />
         <tab id="pending" roles="Owner Signatory SpeakerAssembly" />
     </state>
-    <state id="second_reading_adjourned">
-        <tab id="inbox" roles="ClerkAssembly" />
-        <tab id="pending" roles="Owner Signatory SpeakerAssembly" />
-    </state>
     <state id="referred_committee_first_reading">
         <tab id="inbox" roles="ClerkAssembly" />
         <tab id="pending" roles="Owner Signatory SpeakerAssembly" />
-    </state>
-    <state id="second_reading_scheduled">
-        <tab id="inbox" roles="ClerkAssembly" />
-        <tab id="pending" roles="Owner Signatory" />
     </state>
     <state id="second_reading">
         <tab id="inbox" roles="ClerkAssembly" />
         <tab id="pending" roles="Owner Signatory" />
     </state>
+    <state id="second_reading_adjourned">
+        <tab id="inbox" roles="ClerkAssembly" />
+        <tab id="pending" roles="Owner Signatory SpeakerAssembly" />
+    </state>
+    <state id="second_reading_scheduled">
+        <tab id="schedule" roles="ClerkAssembly" />
+        <tab id="pending" roles="Owner Signatory" />
+    </state>
     <state id="whole_house">
         <tab id="inbox" roles="ClerkAssembly" />
         <tab id="pending" roles="Owner Signatory SpeakerAssembly" />
+    </state>
+    <state id="whole_house_scheduled">
+        <tab id="schedule" roles="ClerkAssembly" />
+        <tab id="pending" roles="Owner Signatory" />
     </state>
     <state id="whole_house_adjourned">
         <tab id="inbox" roles="ClerkAssembly" />
@@ -82,8 +85,12 @@
         <tab id="inbox" roles="ClerkAssembly" />
         <tab id="pending" roles="Owner Signatory" />
     </state>
-    <state id="third_reading_adjourned">
+    <state id="third_reading_scheduled">
         <tab id="inbox" roles="ClerkAssembly" />
+        <tab id="pending" roles="Owner Signatory" />
+    </state>
+    <state id="third_reading_adjourned">
+        <tab id="schedule" roles="ClerkAssembly" />
         <tab id="pending" roles="Owner Signatory" />
     </state>
     <state id="approved">
@@ -120,8 +127,6 @@
     <state id="come_into_force">
         <tab id="archive" roles="ClerkAssembly Owner Signatory SpeakerAssembly" />
     </state>
-    <state id="third_reading_scheduled" />
-    <state id="whole_house_scheduled" />
 
 </workspace>
 
