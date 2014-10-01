@@ -81,6 +81,7 @@
     <doc name="tabled_document" workflow="doc" descriptor="doc" enabled="true" />
     <doc name="petition" workflow="doc" descriptor="doc" enabled="true" />
     <doc name="other_document" workflow="doc" descriptor="doc" enabled="true" />
+    <doc name="communication" workflow="doc" descriptor="doc" enabled="true" />
     
     <!-- custom types -->
     
@@ -128,6 +129,10 @@
         descriptor="assembly_message_from_presidency" workflow="assembly_message_from_presidency" 
         enabled="true"
         label="message from the presidency (h)" container_label="messages from the presidency" />
+    <doc name="assembly_communication" archetype="communication"
+        descriptor="assembly_communication" workflow="assembly_communication" 
+        enabled="true"
+        label="communication (h)" container_label="communications" />
 
     <event name="assembly_event" archetype="event" descriptor="assembly_event" 
         workflow="assembly_event" enabled="true"
