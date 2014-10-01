@@ -99,13 +99,6 @@
         <facet ref="group_assignment.add_internal" />
         -->
     </state>
-    <state id="transferred_assembly" title="Transferred Assembly" actions="version send_motion_to_assembly"
-        note="Sample state to illustrate mechanism to transfer to other chamber">
-        <facet>
-            <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner Signatory" />
-            <allow permission=".Edit" roles=" ClerkSenate" />
-        </facet>
-    </state>
     <state id="clarification_required" title="Requires Clarification"
             actions="version">
         <facet>
@@ -212,7 +205,13 @@
             <allow permission="senate_event.Add" roles="ClerkSenate" />
         </facet>
     </state>
-    
+    <state id="transferred_assembly" title="Forwarded to Assembly for concurrance" actions="version send_motion_to_assembly"
+        note="Sample to illustrate mechanism to transfer to other chamber">
+        <facet>
+            <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner Signatory" />
+            <allow permission=".Edit" roles=" ClerkSenate" />
+        </facet>
+    </state>
     
     <!-- transitions -->
 
@@ -270,16 +269,6 @@
         roles="ClerkSenate"
         trigger="manual"
     />
-    <transition title="Transfer Assembly"
-        source="submitted"
-        destination="transferred_assembly"
-        condition=""
-        roles="ClerkSenate"
-        trigger="manual"
-        require_confirmation="true"
-        note="Sample transition to illustrate mechanism to transfer to other chamber"
-    />
-    
     <transition title="Admissible" 
         source="reviewed"
         destination="admissible" 
@@ -379,6 +368,15 @@
         trigger="manual"
         roles="ClerkSenate Owner"
         require_confirmation="true"
+    />
+    <transition title="Forward to Assembly for concurrence"
+        source="adopted adopted_amendments"
+        destination="transferred_assembly"
+        condition=""
+        roles="ClerkSenate"
+        trigger="manual"
+        require_confirmation="true"
+        note="transition to forward the motion to other chamber for conconcurrance"
     />
 
 </workflow>
