@@ -18,7 +18,7 @@
         <parameter name="scheduled_states" value="scheduled" />
     </feature>
     <feature name="workspace" enabled="true">
-        <parameter name="group_names" value="senate_id" />
+        <parameter name="group_names" value="assembly_id" />
     </feature>
     <feature name="notification" enabled="true" />
     <feature name="download" enabled="true" />
@@ -26,7 +26,7 @@
     
     <!-- STATES -->
     
-    <state id="draft" title="Draft">
+    <state id="draft" title="draft">
         <facet>
             <allow permission=".View" roles="Drafter" />
             <allow permission=".Edit" roles="Drafter" />
@@ -34,63 +34,63 @@
             <allow permission="attachment.Add" roles="Drafter" />
         </facet>
     </state>
-    <state id="submitted" title="Submitted" actions="version">
+    <state id="submitted" title="submitted" actions="version">
         <facet>
             <allow permission=".View" roles="Owner ClerkSenate SpeakerSenate" />
             <allow permission=".Edit" roles="ClerkSenate" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
         </facet>
     </state>
-    <state id="clarification_required" title="Requires Clarification to Receive" actions="version"   >
+    <state id="clarification_required" title="requires Clarification to Receive" actions="version"   >
         <facet>
             <allow permission=".View" roles="Owner ClerkSenate SpeakerSenate" />
             <allow permission=".Edit" roles="Owner" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
         </facet>
     </state>
-    <state id="admissible" title="Admissible" actions="version">
+    <state id="admissible" title="admissible" actions="version">
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
         </facet>
     </state>
-    <state id="inadmissible" title="Inadmissible">
+    <state id="inadmissible" title="inadmissible">
         <facet>
             <allow permission=".View" roles="Owner ClerkSenate SpeakerSenate" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
         </facet>
     </state>
-    <state id="withdrawn_internal" title="Withdrawn">
+    <state id="withdrawn_internal" title="withdrawn">
         <facet>
             <allow permission=".View" roles="Owner ClerkSenate SpeakerSenate" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
         </facet>
     </state>
-    <state id="scheduled" title="Scheduled">
+    <state id="scheduled" title="scheduled">
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
         </facet>
     </state>
-    <state id="adjourned" title="Debate adjourned">
+    <state id="adjourned" title="debate adjourned">
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
         </facet>
     </state>
-    <state id="debated" title="Debated">
+    <state id="debated" title="debated">
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
         </facet>
     </state>
-    <state id="dropped" title="Dropped">
+    <state id="dropped" title="dropped">
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
         </facet>
     </state>
-    <state id="withdrawn" title="Withdrawn">
+    <state id="withdrawn" title="withdrawn">
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
@@ -100,26 +100,26 @@
     
     <!-- TRANSITIONS -->
     
-    <transition title="Create Agenda Item"
+    <transition title="create agenda item"
         source=""
         destination="draft"
         trigger="automatic"
     />
-    <transition title="Submit"
+    <transition title="submit"
         source="draft"
         destination="submitted"
         condition=""
         trigger="manual"
         roles="Drafter"
     />
-    <transition title="Admissible"
+    <transition title="admissible"
         source="submitted"
         destination="admissible"
         condition=""
         trigger="manual"
         roles="ClerkSenate"
     />
-    <transition title="Inadmissible"
+    <transition title="inadmissible"
         source="submitted"
         destination="inadmissible"
         condition=""
@@ -127,14 +127,14 @@
         roles="ClerkSenate"
         require_confirmation="true"
     />
-    <transition title="Scheduled for Debate"
+    <transition title="scheduled for debate"
         source="admissible adjourned"
         destination="scheduled"
         condition="is_scheduled"
         trigger="manual"
         roles="ClerkSenate"
     />
-    <transition title="Require Clarifications"
+    <transition title="require clarifications"
         source="submitted"
         destination="clarification_required"
         condition=""
@@ -142,14 +142,14 @@
         roles="ClerkSenate"
         require_confirmation="true"
     />
-    <transition title="Resubmit"
+    <transition title="resubmit"
         source="clarification_required"
         destination="submitted"
         condition=""
         trigger="manual"
         roles="Owner"
     />
-    <transition title="Drop"
+    <transition title="drop"
         source="scheduled"
         destination="dropped"
         condition=""
@@ -157,21 +157,21 @@
         roles="ClerkSenate"
         note="Member absent, the item is dropped."
     />
-    <transition title="Debate"
+    <transition title="debated"
         source="scheduled"
         destination="debated"
         condition=""
         trigger="manual"
         roles="ClerkSenate"
     />
-    <transition title="Adjourn debate"
+    <transition title="adjourn debate"
         source="scheduled"
         destination="adjourned"
         condition=""
         trigger="manual"
         roles="ClerkSenate"
     />
-    <transition title="Withdraw"
+    <transition title="withdraw"
         source="submitted clarification_required"
         destination="withdrawn_internal"
         grouping_unique_sources="withdrawn"
@@ -180,7 +180,7 @@
         roles="ClerkSenate Owner"
         require_confirmation="true"
     />
-    <transition title="Withdraw"
+    <transition title="withdraw"
         source="admissible scheduled adjourned"
         destination="withdrawn"
         grouping_unique_sources="withdrawn"
