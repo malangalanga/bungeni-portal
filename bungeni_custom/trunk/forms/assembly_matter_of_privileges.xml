@@ -14,10 +14,6 @@
         <show modes="add view edit" />
         <hide modes="listing" />
     </field>
-    <field name="doc_type" label="Document Type" required="true" value_type="vocabulary" 
-	render_type="single_select" vocabulary="tabled_doc_type">
-        <show modes="view edit add listing" />
-    </field>
     <field name="chamber_id" label="Chamber" required="true" value_type="text" render_type="single_select" vocabulary="chamber">
         <hide modes="view listing" />
     </field>
