@@ -13,8 +13,7 @@
         <hide modes="view listing" />
     </field>
     <field name="group_id" label="Group" required="true" value_type="text" render_type="single_select" vocabulary="ministry">
-        <show modes="view add listing" />
-        <hide modes="edit" />
+        <show modes="view edit add listing" />
     </field>
     <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
         <show modes="view listing" />
