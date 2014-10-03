@@ -18,10 +18,10 @@
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
     <feature name="event" enabled="true">
-        <parameter name="types" value="assembly_event" />
+        <parameter name="types" value="senate_event" />
     </feature>
     <feature name="workspace" enabled="true">
-        <parameter name="group_names" value="assembly_id" />
+        <parameter name="group_names" value="senate_id" />
     </feature>
     <feature name="notification" enabled="true" />
     <feature name="email" enabled="false" />
@@ -36,7 +36,7 @@
             <allow permission=".Edit" roles="Drafter" />
             <allow permission=".Delete" roles="Drafter" />
             <allow permission="attachment.Add" roles="Drafter" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate" />
         </facet>
     </state>
     <state id="submitted" title="Submitted to the Presiding Officer" actions="version set_doc_registry_number">
@@ -44,21 +44,21 @@
             <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner" />
             <allow permission=".Edit" roles="ClerkSenate" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate" />
         </facet>
     </state>
     <state id="inadmissible" title="Leave Denied">
         <facet>
             <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate" />
         </facet>
     </state>
     <state id="admissible" title="Leave Granted">
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate" />
         </facet>
     </state>
     <state id="endorsed" title="Indulgence not Granted by the Plenary" actions="version set_doc_type_number">
@@ -66,28 +66,28 @@
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission=".Edit" roles="ClerkSenate" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate" />
         </facet>
     </state>
     <state id="not_endorsed" title="Indulgence not Granted by the Plenary" actions="version set_doc_type_number">
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate" />
         </facet>
     </state>
     <state id="presented" title="Matter Presented">
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate" />
         </facet>
     </state>
     <state id="withdrawn" title="Withdrawn">
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate" />
         </facet>
     </state>
     

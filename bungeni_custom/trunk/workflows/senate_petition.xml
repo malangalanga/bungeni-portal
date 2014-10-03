@@ -19,14 +19,14 @@
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
     <feature name="event" enabled="true">
-        <parameter name="types" value="assembly_event" />
+        <parameter name="types" value="senate_event" />
     </feature>
     <feature name="schedule" enabled="true">
         <parameter name="schedulable_states" value="laid_on_the_table ready_to_report" />
         <parameter name="scheduled_states" value="scheduled tabled" />
     </feature>
     <feature name="workspace" enabled="true">
-        <parameter name="group_names" value="assembly_id" />
+        <parameter name="group_names" value="senate_id" />
     </feature>
     <feature name="notification" enabled="true" />
     <feature name="email" enabled="false" />
@@ -45,7 +45,7 @@
             <allow permission=".Edit" roles="Drafter" />
             <allow permission=".Delete" roles="Drafter" />
             <allow permission="attachment.Add" roles="Drafter" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate" />
         </facet>
     </state>
     <state id="submitted" title="Submitted to the Clerk" actions="version set_doc_registry_number">
@@ -53,21 +53,21 @@
             <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner" />
             <allow permission=".Edit" roles="ClerkSenate" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate" />
         </facet>
     </state>
     <state id="received" title="Petion is received" actions="version set_doc_type_number">
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate" />
         </facet>
     </state>
     <state id="not_received" title="Petition is not received" actions="version">
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate" />
         </facet>
     </state>
     <state id="information_required" title="Requested missing information" actions="version">
@@ -80,7 +80,7 @@
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate SpeakerSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate SpeakerSenate" />
             <allow permission="group_assignment.Edit" roles="ClerkSenate"  />
             <allow permission="group_assignment.Add" roles="ClerkSenate"  />
             <allow permission="group_assignment.Delete" roles="ClerkSenate"  />
@@ -95,28 +95,28 @@
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate MemberCommitteeSenate.Clerk" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate MemberCommitteeSenate.Clerk" />
+            <allow permission="senate_event.Add" roles="ClerkSenate MemberCommitteeSenate.Clerk" />
         </facet>
     </state>
     <state id="ready_to_report" title="Public Petitions Committee ready to report">
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate" />
         </facet>
     </state>
     <state id="scheduled" title="Public Petitions Committee report scheduled">
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate" />
         </facet>
     </state>
     <state id="reported" title="Public Petitions Committee reported to the Plenary">
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate SpeakerSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate SpeakerSenate" />
         </facet>
     </state>
 

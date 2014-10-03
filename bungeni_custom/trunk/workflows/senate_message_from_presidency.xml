@@ -18,14 +18,14 @@
     <feature name="version" enabled="true" />
     <feature name="attachment" enabled="true" />
     <feature name="event" enabled="true">
-        <parameter name="types" value="assembly_event" />
+        <parameter name="types" value="senate_event" />
     </feature>
     <feature name="schedule" enabled="true">
         <parameter name="schedulable_states" value="submitted message_to_be_considered" />
         <parameter name="scheduled_states" value="scheduled" />
     </feature>
     <feature name="workspace" enabled="true">
-        <parameter name="group_names" value="assembly_id" />
+        <parameter name="group_names" value="senate_id" />
     </feature>
     <feature name="notification" enabled="true" />
     <feature name="email" enabled="false" />
@@ -44,7 +44,7 @@
             <allow permission=".Edit" roles="Drafter" />
             <allow permission=".Delete" roles="Drafter" />
             <allow permission="attachment.Add" roles="Drafter" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate" />
         </facet>
     </state>
     <state id="submitted" title="Submitted to the Presiding Officer" actions="version set_doc_registry_number">
@@ -52,14 +52,14 @@
             <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner" />
             <allow permission=".Edit" roles="ClerkSenate SpeakerSenate" />
             <allow permission="attachment.Add" roles="ClerkSenate SpeakerSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate SpeakerSenate" />
         </facet>
     </state>
     <state id="message_read" title="Message read to the plenary" actions="version set_doc_type_number">
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate SpeakerSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate SpeakerSenate" />
             <allow permission="group_assignment.Edit" roles="ClerkSenate SpeakerSenate"  />
             <allow permission="group_assignment.Add" roles="ClerkSenate SpeakerSenate"  />
             <allow permission="group_assignment.Delete" roles="ClerkSenate SpeakerSenate"  />
@@ -73,14 +73,14 @@
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate SpeakerSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate SpeakerSenate" />
         </facet>
     </state>
     <state id="scheduled" title="Scheduled to be read in the plenary">
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate SpeakerSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate SpeakerSenate" />
         </facet>
     </state>
 
@@ -88,14 +88,14 @@
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate SpeakerSenate MemberCommitteeSenate.Clerk" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate SpeakerSenate MemberCommitteeSenate.Clerk" />
+            <allow permission="senate_event.Add" roles="ClerkSenate SpeakerSenate MemberCommitteeSenate.Clerk" />
         </facet>
     </state>
     <state id="considered" title="Message considered by the Committee">
         <facet>
             <allow permission=".View" roles="Authenticated Anonymous" />
             <allow permission="attachment.Add" roles="ClerkSenate SpeakerSenate" />
-            <allow permission="assembly_event.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="senate_event.Add" roles="ClerkSenate SpeakerSenate" />
         </facet>
     </state>
 
