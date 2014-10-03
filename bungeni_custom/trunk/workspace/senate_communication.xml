@@ -1,0 +1,22 @@
+<workspace>
+
+    <state id="draft">
+        <tab id="draft" roles="Drafter" />
+    </state>
+    <state id="submitted">
+        <tab id="inbox" roles="ClerkSenate" />
+        <tab id="pending" roles="Owner" />
+    </state>
+    <state id="received">
+        <tab id="inbox" roles="ClerkSenate"/>
+        <tab id="pending" roles="SpeakerSenate Owner" />
+    </state>
+    <state id="require_clarifications">
+        <tab id="inbox" roles="Owner " />
+        <tab id="pending" roles="SpeakerSenate ClerkSenate" />
+    </state>
+    <state id="published">
+        <tab id="archive"
+	     roles="Owner ClerkSenate SpeakerSenate" />
+    </state>
+</workspace>

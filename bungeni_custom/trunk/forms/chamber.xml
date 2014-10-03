@@ -67,7 +67,13 @@
     <container match="senate_motion.chamber_id" />
     <container match="senate_question.chamber_id" />
     <container match="senate_tabled_document.chamber_id" />
-    
+    <container match="senate_petition.chamber_id" />
+    <container match="senate_matter_of_privileges.chamber_id" />
+    <container match="senate_matter_of_urgency.chamber_id" />
+    <container match="senate_personal_explanation.chamber_id" />
+    <container match="senate_message_from_presidency.chamber_id" />
+    <container match="senate_communication.chamber_id" />
+
     <container match="session.chamber_id" viewlet="true" />
     <container match="committee.parent_group_id" />
     <container match="office.parent_group_id" />

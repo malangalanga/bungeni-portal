@@ -162,6 +162,30 @@
          descriptor="senate_tabled_document" workflow="senate_tabled_document" 
          enabled="true"
          label="tabled document (s)" container_label="tabled documents" />
+    <doc name="senate_petition" archetype="petition"
+        descriptor="senate_petition" workflow="senate_petition" 
+        enabled="true"
+        label="petition (s)" container_label="petitions" />
+    <doc name="senate_matter_of_privileges" archetype="other_document"
+        descriptor="senate_matter_of_privileges" workflow="senate_matter_of_privileges" 
+        enabled="true"
+        label="matter of privileges (s)" container_label="matters of privileges" />
+    <doc name="senate_matter_of_urgency" archetype="other_document"
+        descriptor="senate_matter_of_urgency" workflow="senate_matter_of_urgency" 
+        enabled="true"
+        label="matters of urgent public importance (s)" container_label="matters of urgency" />
+    <doc name="senate_personal_explanation" archetype="other_document"
+        descriptor="senate_personal_explanation" workflow="senate_personal_explanation" 
+        enabled="true"
+        label="personal explanation (s)" container_label="personal explanations" />
+    <doc name="senate_message_from_presidency" archetype="other_document"
+        descriptor="senate_message_from_presidency" workflow="senate_message_from_presidency" 
+        enabled="true"
+        label="message from the presidency (s)" container_label="messages from the presidency" />
+    <doc name="senate_communication" archetype="communication"
+        descriptor="senate_communication" workflow="senate_communication" 
+        enabled="true"
+        label="communication (s)" container_label="communications" />
 
     <event name="senate_event" archetype="event" descriptor="senate_event" 
         workflow="senate_event" enabled="true" 

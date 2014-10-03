@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<template html="false"
+  xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <block onstate="submitted">
+    <subject>
+      A Matter of Urgent Public Importance has been submitted : <span tal:replace="item/title"/>
+    </subject>
+    <body>
+      The Matter of Urgent Public Importance
+      <span tal:replace="item/title"/> was submitted on <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+  <block onstate="inadmissible">
+    <subject>
+      The Matter of Urgent Public Importance is inadmissible : <span tal:replace="item/title"/>
+    </subject>
+    <body>
+      The Matter of Urgent Public Importance 
+      <span tal:replace="item/title"/> was declared inadmissible on <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+  <block onstate="admissible">
+    <subject>
+      The Matter of Urgent Public Importance is inadmissible : 
+      <span tal:replace="item/title"/>
+    </subject>
+    <body>
+      The Matter of Urgent Public Importance 
+      <span tal:replace="item/title"/> was declared admissible on <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+  <block onstate="debated">
+    <subject>
+      Matter of Urgent Public Importance : 
+      <span tal:replace="item/title"/> has been debated
+    </subject>
+    <body>
+      The Matter of Urgent Public Importance 
+      <span tal:replace="item/title"/> was reported on <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+  <block onstate="scheduled">
+    <subject>
+      Matter of Urgent Public Importance 
+      <span tal:replace="item/title"/> has been scheduled
+    </subject>
+    <body>
+      The Matter of Urgent Public Importance 
+      <span tal:replace="item/title"/> was scheduled on 
+      <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+</template>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<template html="false"
+  xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <block onstate="submitted">
+    <subject>
+      The Personal Explanation has been submitted : <span tal:replace="item/title"/>
+    </subject>
+    <body>
+      The Personal Explanation
+      <span tal:replace="item/title"/> was submitted on <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+  <block onstate="inadmissible">
+    <subject>
+      The Personal Explanation is inadmissible : <span tal:replace="item/title"/>
+    </subject>
+    <body>
+      The Personal Explanation 
+      <span tal:replace="item/title"/> was declared inadmissible on <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+  <block onstate="admissible">
+    <subject>
+      The Personal Explanation is inadmissible : 
+      <span tal:replace="item/title"/>
+    </subject>
+    <body>
+      The Personal Explanation 
+      <span tal:replace="item/title"/> was declared admissible on <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+  <block onstate="presented">
+    <subject>
+      The Personal Explanation : 
+      <span tal:replace="item/title"/> has been debated
+    </subject>
+    <body>
+      The Personal Explanation 
+      <span tal:replace="item/title"/> was reported on <span tal:replace="item/status_date"/>
+    </body>
+  </block>
+
+
+</template>

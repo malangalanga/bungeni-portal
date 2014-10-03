@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<workflow title="Matter of Privileges Workflow"
+    description="A Matter of Privileges"
+    permission_actions=".View .Edit .Add .Delete"
+    >
+    
+    <!-- global grants -->
+    <allow permission=".Add" roles="ClerkSenate SpeakerSenate" />
+    
+
+    <!-- features -->
+
+    <feature name="audit" enabled="true">
+        <parameter name="audit_actions" value="add modify workflow remove version translate" />
+        <parameter name="include_subtypes" value="attachment event group_assignment" />
+        <parameter name="display_columns" value="user date_active object description note date_audit" />
+    </feature>
+    <feature name="version" enabled="true" />
+    <feature name="attachment" enabled="true" />
+    <feature name="event" enabled="true">
+        <parameter name="types" value="assembly_event" />
+    </feature>
+    <feature name="schedule" enabled="true">
+        <parameter name="schedulable_states" value="submitted message_to_be_considered" />
+        <parameter name="scheduled_states" value="scheduled" />
+    </feature>
+    <feature name="workspace" enabled="true">
+        <parameter name="group_names" value="assembly_id" />
+    </feature>
+    <feature name="notification" enabled="true" />
+    <feature name="email" enabled="false" />
+    <feature name="download" enabled="true" />
+    <feature name="group_assignment" enabled="true">
+        <parameter name="assignable_group_types" value="committee" />
+        <parameter name="assignable_group_limit" value="chamber" />
+    </feature>
+    
+
+    <!-- states -->
+
+    <state id="draft" title="Draft">
+        <facet>
+            <allow permission=".View" roles="Drafter" />
+            <allow permission=".Edit" roles="Drafter" />
+            <allow permission=".Delete" roles="Drafter" />
+            <allow permission="attachment.Add" roles="Drafter" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="submitted" title="Submitted to the Presiding Officer" actions="version set_doc_registry_number">
+        <facet>
+            <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner" />
+            <allow permission=".Edit" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="attachment.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate SpeakerSenate" />
+        </facet>
+    </state>
+    <state id="message_read" title="Message read to the plenary" actions="version set_doc_type_number">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="group_assignment.Edit" roles="ClerkSenate SpeakerSenate"  />
+            <allow permission="group_assignment.Add" roles="ClerkSenate SpeakerSenate"  />
+            <allow permission="group_assignment.Delete" roles="ClerkSenate SpeakerSenate"  />
+        </facet>
+        <!-- !+GROUP_ASSIGNMENT_Edit_Add_Delete should let this "facet" group be defined 
+            in one place and reused by all the parent docs...
+        <facet ref="group_assignment.add_internal" />
+        -->
+    </state>
+    <state id="message_to_be_considered" title="Message to be considered in a future date" actions="version">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate SpeakerSenate" />
+        </facet>
+    </state>
+    <state id="scheduled" title="Scheduled to be read in the plenary">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate SpeakerSenate" />
+        </facet>
+    </state>
+
+    <state id="referred" title="Message referred to a committee">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate SpeakerSenate MemberCommitteeSenate.Clerk" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate SpeakerSenate MemberCommitteeSenate.Clerk" />
+        </facet>
+    </state>
+    <state id="considered" title="Message considered by the Committee">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate SpeakerSenate" />
+        </facet>
+    </state>
+
+    
+
+    <!-- transitions -->    
+
+    <transition title="Create Message from the Presidency"
+        source=""
+        destination="draft"
+        trigger="automatic"
+    />
+    <transition title="Submit to the Presiding Officer"
+        source="draft"
+        destination="submitted"
+        condition=""
+        trigger="manual"
+        roles="Drafter"
+    />
+    <transition title="Scheduled"
+        source="submitted message_to_be_considered"
+        destination="scheduled"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate SpeakerSenate"
+        require_confirmation="true"
+    />
+    <transition title="Message read at the Plenary"
+        source="scheduled"
+        destination="message_read"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate SpeakerSenate"
+    />
+    <transition title="Message to be considered at a future date"
+        source="scheduled"
+        destination="message_to_be_considered"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate SpeakerSenate"
+    />
+    <transition title="Message referred to a committee"
+        source="message_read"
+        destination="referred"
+        condition="is_group_assigned"
+        trigger="manual"
+        roles="ClerkSenate SpeakerSenate"
+    />
+
+    <transition title="Message has been considered by the committee"
+        source="referred"
+        destination="considered"
+        condition=""
+        trigger="manual"
+        roles="MemberCommitteeSenate.Clerk"
+    />
+
+</workflow>

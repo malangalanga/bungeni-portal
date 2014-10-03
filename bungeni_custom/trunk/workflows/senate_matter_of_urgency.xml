@@ -1,0 +1,175 @@
+<?xml version="1.0"?>
+<workflow title="Matter of Urgent Public Importance"
+    description="A Matter of Urgent Public Importance"
+    permission_actions=".View .Edit .Add .Delete"
+    >
+    
+    <!-- global grants -->
+    <allow permission=".Add" roles="ClerkSenate MemberSenate" />
+    
+
+    <!-- features -->
+
+    <feature name="audit" enabled="true">
+        <parameter name="audit_actions" value="add modify workflow remove version translate" />
+        <parameter name="include_subtypes" value="attachment event group_assignment" />
+        <parameter name="display_columns" value="user date_active object description note date_audit" />
+    </feature>
+    <feature name="version" enabled="true" />
+    <feature name="attachment" enabled="true" />
+    <feature name="event" enabled="true">
+        <parameter name="types" value="assembly_event" />
+    </feature>
+    <feature name="schedule" enabled="true">
+        <parameter name="schedulable_states" value="admissible" />
+        <parameter name="scheduled_states" value="scheduled" />
+    </feature>
+    <feature name="workspace" enabled="true">
+        <parameter name="group_names" value="assembly_id" />
+    </feature>
+    <feature name="notification" enabled="true" />
+    <feature name="email" enabled="false" />
+    <feature name="download" enabled="true" />
+    
+
+    <!-- states -->
+
+    <state id="draft" title="Draft">
+        <facet>
+            <allow permission=".View" roles="Drafter" />
+            <allow permission=".Edit" roles="Drafter" />
+            <allow permission=".Delete" roles="Drafter" />
+            <allow permission="attachment.Add" roles="Drafter" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="submitted" title="Submitted to the Presiding Officer" actions="version set_doc_registry_number">
+        <facet>
+            <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner" />
+            <allow permission=".Edit" roles="ClerkSenate" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="inadmissible" title="Claim not Allowed">
+        <facet>
+            <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="admissible" title="Claim Allowed">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="endorsed" title="Leave Granted by the Plenary" actions="version set_doc_type_number">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission=".Edit" roles="ClerkSenate" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="not_endorsed" title="Leave not Granted by the Plenary" actions="version set_doc_type_number">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="scheduled" title="Scheduled">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="debated" title="Matter Debated">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="withdrawn" title="Withdrawn">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    
+
+    <!-- transitions -->    
+
+    <transition title="Create Matter of Urgent Public Importance"
+        source=""
+        destination="draft"
+        trigger="automatic"
+    />
+    <transition title="Submit to the Presiding Officer"
+        source="draft"
+        destination="submitted"
+        condition=""
+        trigger="manual"
+        roles="Drafter"
+    />
+    <transition title="Claim not Allowed"
+        source="submitted"
+        destination="inadmissible"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+        require_confirmation="true"
+    />
+    <transition title="Claim Allowed"
+        source="submitted"
+        destination="admissible"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+        require_confirmation="true"
+    />
+    <transition title="Leave Granted by the Plenary"
+        source="admissible"
+        destination="endorsed"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+    <transition title="Leave not Granted by the Plenary"
+        source="admissible"
+        destination="not_endorsed"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+    <transition title="Scheduled for Debate"
+        source="endorsed"
+        destination="scheduled"
+        condition="is_scheduled"
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+    <transition title="Matter Debated by the Plenary"
+        source="scheduled"
+        destination="debated"
+        trigger="manual"
+        roles="ClerkSenate"
+        condition=""
+    />
+    <transition title="Withdraw"
+        source="endorsed scheduled"
+        destination="withdrawn"
+        grouping_unique_sources="withdrawn"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+        order="27"
+        require_confirmation="true"
+    />
+
+</workflow>

@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<workflow title="Personal Explanation"
+    description="Personal Explanation"
+    permission_actions=".View .Edit .Add .Delete"
+    >
+    
+    <!-- global grants -->
+    <allow permission=".Add" roles="ClerkSenate MemberSenate" />
+    
+
+    <!-- features -->
+
+    <feature name="audit" enabled="true">
+        <parameter name="audit_actions" value="add modify workflow remove version translate" />
+        <parameter name="include_subtypes" value="attachment event group_assignment" />
+        <parameter name="display_columns" value="user date_active object description note date_audit" />
+    </feature>
+    <feature name="version" enabled="true" />
+    <feature name="attachment" enabled="true" />
+    <feature name="event" enabled="true">
+        <parameter name="types" value="assembly_event" />
+    </feature>
+    <feature name="workspace" enabled="true">
+        <parameter name="group_names" value="assembly_id" />
+    </feature>
+    <feature name="notification" enabled="true" />
+    <feature name="email" enabled="false" />
+    <feature name="download" enabled="true" />
+    
+
+    <!-- states -->
+
+    <state id="draft" title="Draft">
+        <facet>
+            <allow permission=".View" roles="Drafter" />
+            <allow permission=".Edit" roles="Drafter" />
+            <allow permission=".Delete" roles="Drafter" />
+            <allow permission="attachment.Add" roles="Drafter" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="submitted" title="Submitted to the Presiding Officer" actions="version set_doc_registry_number">
+        <facet>
+            <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner" />
+            <allow permission=".Edit" roles="ClerkSenate" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="inadmissible" title="Leave Denied">
+        <facet>
+            <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="admissible" title="Leave Granted">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="endorsed" title="Indulgence not Granted by the Plenary" actions="version set_doc_type_number">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission=".Edit" roles="ClerkSenate" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="not_endorsed" title="Indulgence not Granted by the Plenary" actions="version set_doc_type_number">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="presented" title="Matter Presented">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="withdrawn" title="Withdrawn">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    
+
+    <!-- transitions -->    
+
+    <transition title="Create Personal Explanation"
+        source=""
+        destination="draft"
+        trigger="automatic"
+    />
+    <transition title="Submit to the Presiding Officer"
+        source="draft"
+        destination="submitted"
+        condition=""
+        trigger="manual"
+        roles="Drafter"
+    />
+    <transition title="Leave Denied"
+        source="submitted"
+        destination="inadmissible"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+        require_confirmation="true"
+    />
+    <transition title="Leave Granted"
+        source="submitted"
+        destination="admissible"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+        require_confirmation="true"
+    />
+    <transition title="Indulgence Granted by the Plenary"
+        source="admissible"
+        destination="endorsed"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+    <transition title="Indulgence not Granted by the Plenary"
+        source="admissible"
+        destination="not_endorsed"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+
+    <transition title="Personal Explanation Presented to the Plenary"
+        source="endorsed"
+        destination="presented"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+    <transition title="Withdraw"
+        source="endorsed"
+        destination="withdrawn"
+        grouping_unique_sources="withdrawn"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+        order="27"
+        require_confirmation="true"
+    />
+
+</workflow>

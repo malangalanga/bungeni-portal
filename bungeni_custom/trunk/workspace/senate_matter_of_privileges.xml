@@ -1,0 +1,48 @@
+<workspace>
+
+    <state id="draft">
+        <tab id="draft" roles="Drafter" />
+    </state>
+    <state id="submitted">
+        <tab id="inbox" roles="ClerkSenate" />
+        <tab id="pending" roles="Owner" />
+    </state>
+    <state id="inadmissible">
+        <tab id="archive" roles="ClerkSenate Owner" />
+    </state>
+    <state id="admissible">
+        <tab id="inbox" roles="ClerkSenate" />
+        <tab id="pending" roles="SpeakerSenate Owner" />
+    </state>
+    <state id="referred">
+        <tab id="inbox" roles="MemberCommitteeSenate.Clerk" />
+        <tab id="pending" roles="Owner ClerkSenate SpeakerSenate" />
+    </state>
+    <state id="referred_prima_facie">
+        <tab id="inbox" roles="MemberCommitteeSenate.Clerk" />
+        <tab id="pending" roles="Owner ClerkSenate SpeakerSenate" />
+    </state>
+    <state id="endorsed">
+        <tab id="inbox" roles="ClerkSenate" />
+        <tab id="pending" roles="Owner SpeakerSenate MemberCommitteeSenate.Clerk" />
+    </state>
+    <state id="not_endorsed">
+        <tab id="archive" roles="ClerkSenate Owner SpeakerSenate MemberCommitteeSenate.Clerk" />
+    </state>
+    <state id="ready_to_report">
+        <tab id="schedule" roles="ClerkSenate" />
+        <tab id="pending" roles="Owner SpeakerSenate MemberCommitteeSenate.Clerk" />
+    </state>
+    <state id="scheduled">
+        <tab id="schedule" roles="ClerkSenate" />
+        <tab id="pending" roles="Owner SpeakerSenate MemberCommitteeSenate.Clerk" />
+    </state>
+    <state id="reported">
+        <tab id="archive" roles="Owner ClerkSenate SpeakerSenate MemberCommitteeSenate.Clerk" />
+    </state>
+    <state id="withdrawn">
+        <tab id="archive" roles="Owner ClerkSenate SpeakerSenate MemberCommitteeSenate.Clerk" />
+    </state>
+
+</workspace>
+

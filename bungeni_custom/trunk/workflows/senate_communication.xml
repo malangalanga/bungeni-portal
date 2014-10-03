@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<workflow title="Personal Explanation"
+    description="Personal Explanation"
+    permission_actions=".View .Edit .Add .Delete"
+    >
+    
+    <!-- global grants -->
+    <allow permission=".Add" roles="ClerkSenate MemberSenate" />
+    
+
+    <!-- features -->
+
+    <feature name="audit" enabled="true">
+        <parameter name="audit_actions" value="add modify workflow remove version translate" />
+        <parameter name="include_subtypes" value="attachment event group_assignment" />
+        <parameter name="display_columns" value="user date_active object description note date_audit" />
+    </feature>
+    <feature name="version" enabled="true" />
+    <feature name="attachment" enabled="true" />
+    <feature name="event" enabled="true">
+        <parameter name="types" value="assembly_event" />
+    </feature>
+    <feature name="workspace" enabled="true">
+        <parameter name="group_names" value="assembly_id" />
+    </feature>
+    <feature name="notification" enabled="true" />
+    <feature name="email" enabled="false" />
+    <feature name="download" enabled="true" />
+    
+
+    <!-- states -->
+
+    <state id="draft" title="Draft">
+        <facet>
+            <allow permission=".View" roles="Drafter" />
+            <allow permission=".Edit" roles="Drafter" />
+            <allow permission=".Delete" roles="Drafter" />
+            <allow permission="attachment.Add" roles="Drafter" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="submitted" title="Submitted to the Presiding Officer" actions="version set_doc_registry_number">
+        <facet>
+            <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner" />
+            <allow permission=".Edit" roles="ClerkSenate" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="received" title="Received" actions="version set_doc_type_number">
+        <facet>
+            <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="require_clarifications" title="Provide clarifications">
+        <facet>
+            <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner" />
+            <allow permission=".Edit" roles="Owner" />
+            <allow permission="attachment.Add" roles="Owner" />
+        </facet>
+    </state>
+    <state id="published" title="Published">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    
+
+    <!-- transitions -->    
+
+    <transition title="Create Communication"
+        source=""
+        destination="draft"
+        trigger="automatic"
+    />
+    <transition title="Submit to the Clerk"
+        source="draft require_clarifications"
+        destination="submitted"
+        condition=""
+        trigger="manual"
+        roles="Drafter"
+    />
+    <transition title="Received"
+        source="submitted"
+        destination="received"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+        require_confirmation="true"
+    />
+    <transition title="Request clarifications"
+        source="received"
+        destination="require_clarifications"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+    <transition title="Published"
+        source="received"
+        destination="published"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+
+</workflow>

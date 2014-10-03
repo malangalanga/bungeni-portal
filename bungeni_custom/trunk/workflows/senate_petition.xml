@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+
+<workflow title="Petition"
+    description="A Petition"
+    permission_actions=".View .Edit .Add .Delete"
+    >
+    
+    <!-- global grants -->
+    <allow permission=".Add" roles="ClerkSenate MemberSenate" />
+ 
+
+    <!-- features -->
+
+    <feature name="audit" enabled="true">
+        <parameter name="audit_actions" value="add modify workflow remove version translate" />
+        <parameter name="include_subtypes" value="attachment event group_assignment" />
+        <parameter name="display_columns" value="user date_active object description note date_audit" />
+    </feature>
+    <feature name="version" enabled="true" />
+    <feature name="attachment" enabled="true" />
+    <feature name="event" enabled="true">
+        <parameter name="types" value="assembly_event" />
+    </feature>
+    <feature name="schedule" enabled="true">
+        <parameter name="schedulable_states" value="laid_on_the_table ready_to_report" />
+        <parameter name="scheduled_states" value="scheduled tabled" />
+    </feature>
+    <feature name="workspace" enabled="true">
+        <parameter name="group_names" value="assembly_id" />
+    </feature>
+    <feature name="notification" enabled="true" />
+    <feature name="email" enabled="false" />
+    <feature name="download" enabled="true" />
+    <feature name="group_assignment" enabled="true">
+        <parameter name="assignable_group_types" value="committee" />
+        <parameter name="assignable_group_limit" value="chamber" />
+    </feature>
+    
+
+    <!-- states -->
+
+    <state id="draft" title="Draft">
+        <facet>
+            <allow permission=".View" roles="Drafter" />
+            <allow permission=".Edit" roles="Drafter" />
+            <allow permission=".Delete" roles="Drafter" />
+            <allow permission="attachment.Add" roles="Drafter" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="submitted" title="Submitted to the Clerk" actions="version set_doc_registry_number">
+        <facet>
+            <allow permission=".View" roles="ClerkSenate SpeakerSenate Owner" />
+            <allow permission=".Edit" roles="ClerkSenate" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="received" title="Petion is received" actions="version set_doc_type_number">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="not_received" title="Petition is not received" actions="version">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="information_required" title="Requested missing information" actions="version">
+        <facet>
+            <allow permission=".Edit" roles="Drafter Owner" />         
+            <allow permission=".View" roles="ClerkSenate SpeakerSenate" />
+        </facet>
+    </state>
+    <state id="laid_on_the_table" title="Laid on the Table">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="group_assignment.Edit" roles="ClerkSenate"  />
+            <allow permission="group_assignment.Add" roles="ClerkSenate"  />
+            <allow permission="group_assignment.Delete" roles="ClerkSenate"  />
+        </facet>
+        <!-- !+GROUP_ASSIGNMENT_Edit_Add_Delete should let this "facet" group be defined 
+            in one place and reused by all the parent docs...
+        <facet ref="group_assignment.add_internal" />
+        -->
+    </state>
+
+    <state id="referred" title="Petition referred to Public Petitions Committee">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate MemberCommitteeSenate.Clerk" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate MemberCommitteeSenate.Clerk" />
+        </facet>
+    </state>
+    <state id="ready_to_report" title="Public Petitions Committee ready to report">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="scheduled" title="Public Petitions Committee report scheduled">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate" />
+        </facet>
+    </state>
+    <state id="reported" title="Public Petitions Committee reported to the Plenary">
+        <facet>
+            <allow permission=".View" roles="Authenticated Anonymous" />
+            <allow permission="attachment.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="assembly_event.Add" roles="ClerkSenate SpeakerSenate" />
+        </facet>
+    </state>
+
+    <!-- transitions -->    
+
+    <transition title="Create Petition"
+        source=""
+        destination="draft"
+        trigger="automatic"
+    />
+    <transition title="Submit to the Clerk"
+        source="draft information_required"
+        destination="submitted"
+        condition=""
+        trigger="manual"
+        roles="Drafter"
+    />
+    <transition title="Petition is received"
+        source="submitted"
+        destination="received"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+    <transition title="Petition is not received"
+        source="submitted"
+        destination="not_received"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+    <transition title="Petition missing information"
+        source="scheduled"
+        destination="information_required"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+    <transition title="Petition is laid on the Table"
+        source="received"
+        destination="laid_on_the_table"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+    <transition title="Petition is referred to Public Petitions Committee"
+        source="laid_on_the_table"
+        destination="referred"
+        condition="is_group_assigned"
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+
+    <transition title="Public Petitions Committee ready to report"
+        source="referred"
+        destination="ready_to_report"
+        condition=""
+        trigger="manual"
+        roles="MemberCommitteeSenate.Clerk"
+    />
+
+    <transition title="Scheduled"
+        source="laid_on_the_table ready_to_report"
+        destination="scheduled"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+        require_confirmation="true"
+    />
+
+    <transition title="Public Petitions Committee reported to the Plenary"
+        source="scheduled"
+        destination="reported"
+        condition=""
+        trigger="manual"
+        roles="ClerkSenate"
+    />
+
+</workflow>
