@@ -2070,6 +2070,7 @@ span.yui-button.yui-link-button span a {
     list-style: none;
     border-top: 1px solid #fff; /*--Gives the bevel feel on the panel--*/
     font-size: 1em;
+    height: 80px !important;
 }
 
 #footpanel ul li{
@@ -2077,15 +2078,16 @@ span.yui-button.yui-link-button span a {
     padding: 0;
     float: left;
     position: relative;
+    margin: 0 0.5em 0 0 !important;
 }
 
 #footpanel ul li a {
     padding: 5px;
     float: left;
-    height: 32px; 
-    width: 32px;
     color: #333;
     position: relative;
+    height: 40px !important;
+    width: 40px !important;
 }
 
 html #footpanel ul li a:hover {
@@ -2116,6 +2118,12 @@ html #footpanel ul li a.active { /*--Active state when sub-panel is open--*/
 
 /*--Reset hover style for sub-panel links--*/
 #footpanel ul li div a:hover {	text-decoration: underline; } 
+
+#footpanel ul li p {
+    font-size: 0.8em;
+    text-align: center;
+    width: 48px;
+}
 
 #footpanel .subpanel {
     position: absolute;
@@ -2167,7 +2175,7 @@ html #footpanel ul li a.active { /*--Active state when sub-panel is open--*/
 }
 
 a.alerts { 
-    background: url(/static/images/newspaper_32.png) no-repeat center center;  
+    background: url(/static/images/news.png) no-repeat center center;  
 }
 
 a.draft { 
@@ -2194,12 +2202,24 @@ a.tracked {
     background: url(/static/images/tracked.png) no-repeat center center; 
 }
 
-a.calendar { 
+a.scheduling { 
     background: url(/static/images/calendar.png) no-repeat center center; 
 }
 
 a.groups { 
     background: url(/static/images/groups.png) no-repeat center center; 
+}
+a.pubs { 
+    background: url(/static/images/pubs.png) no-repeat center center; 
+}
+a.library { 
+    background: url(/static/images/library.png) no-repeat center center;  
+}
+a.news { 
+    background: url(/static/images/news.png) no-repeat center center;  
+}
+a.private { 
+    background: url(/static/images/privatespace.png) no-repeat center center;  
 }
 a#chatpanel_online_users {
     background: url(/static/images/comment_user_32.png) no-repeat center center; 
@@ -2244,13 +2264,16 @@ a#chatpanel_online_users {
         width: 126px;
         border-left: 1px solid #bbb;
         border-right: 1px solid #bbb;
-        padding-left: 40px;
+        padding-left: 45px !important;
         text-indent: 0; 
     /*--Reset text indent since there will be a combination of both text and image--*/
 }
 
 #footpanel #mainpanel a.home {
     display: none !important;
+}
+a.alerts { 
+    display: none !important;  
 }
 a.profile {
     display: none !important;

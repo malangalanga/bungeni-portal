@@ -478,6 +478,36 @@ body.mceContentBody h2.content-tab {
     padding-bottom: 4em !important;
 }
 
+#footpanel {
+    background: #66ff99 !important;
+}
+
+#footpanel ul {
+    height: 80px !important;
+}
+
+#footpanel ul li {
+    margin: 0 0.5em 0 0 !important;
+}
+
+#footpanel ul li a {
+    height: 40px !important;
+    width: 40px !important;
+}
+
+
+#footpanel ul li p {
+    font-size: 0.8em;
+    text-align: center;
+    width: 48px;
+}
+#footpanel a.chat {
+    background: url("++resource++bungenicms.theme.images/comment_user_32.png") no-repeat scroll 3px center transparent !important;
+    padding-left: 45px !important;
+}
+a.alerts { 
+    display: none !important;  
+}
 a.draft { 
     background: url(++resource++bungenicms.theme.images/draft.png) no-repeat center center;  
 }
@@ -502,12 +532,23 @@ a.tracked {
     background: url(++resource++bungenicms.theme.images/tracked.png) no-repeat center center; 
 }
 
-a.calendar { 
+a.scheduling { 
     background: url(++resource++bungenicms.theme.images/calendar.png) no-repeat center center; 
 }
-
 a.groups { 
     background: url(++resource++bungenicms.theme.images/groups.png) no-repeat center center; 
+}
+a.pubs { 
+    background: url(++resource++bungenicms.theme.images/pubs.png) no-repeat center center; 
+}
+a.library { 
+    background: url(++resource++bungenicms.theme.images/library.png) no-repeat center center;  
+}
+a.news { 
+    background: url(++resource++bungenicms.theme.images/news.png) no-repeat center center;  
+}
+a.private { 
+    background: url(++resource++bungenicms.theme.images/privatespace.png) no-repeat center center;  
 }
 #mainpanel a.home {
     display: none !important;
