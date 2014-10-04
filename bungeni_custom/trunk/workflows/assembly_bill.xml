@@ -22,11 +22,11 @@
         <parameter name="open_states" value="gazetted" />
     </feature>
     <feature name="schedule" enabled="true">
-        <parameter name="schedulable_states" value="gazetted first_reading_adjourned 
+        <parameter name="schedulable_states" value="reviewed first_reading_adjourned 
             first_reading referred_committee_first_reading 
             second_reading second_reading_adjourned 
             whole_house whole_house_adjourned 
-            third_reading third_reading_adjourned" />
+            third_reading third_reading_adjourned re_committal" />
         <parameter name="scheduled_states" value="first_reading_scheduled
             second_reading_scheduled 
             whole_house_scheduled third_reading_scheduled" />
@@ -99,50 +99,6 @@
         -->
     </state>
     <state id="reviewed" title="Reviewed by Clerk" actions="set_doc_registry_number">
-        <facet>
-            <allow permission=".View" roles="Owner ClerkAssembly SpeakerAssembly Signatory" />
-            <allow permission=".Edit" roles="SpeakerAssembly" />
-            <allow permission="attachment.Add" roles="SpeakerAssembly" />
-            <allow permission="assembly_event.Add" roles="SpeakerAssembly" />
-            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
-            <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
-            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
-        </facet>
-    </state> 
-    <state id="referred_committee" title="Referred to Committee for pre-publication scrutiny" actions="version">
-        <facet>
-            <allow permission=".View" roles="Owner ClerkAssembly SpeakerAssembly Signatory" />
-            <allow permission=".Edit" roles="ClerkAssembly" />
-            <allow permission="attachment.Add" roles="ClerkAssembly" />
-            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
-            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
-            <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
-            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
-        </facet>
-    </state>
-    <state id="recommendations_committee" title="Recommendations of the Committee" actions="version">
-        <facet>
-            <allow permission=".View" roles="Owner ClerkAssembly SpeakerAssembly Signatory" />
-            <allow permission=".Edit" roles="SpeakerAssembly" />
-            <allow permission="attachment.Add" roles="SpeakerAssembly" />
-            <allow permission="assembly_event.Add" roles="SpeakerAssembly" />
-            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
-            <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
-            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
-        </facet>
-    </state> 
-    <state id="rejected_proposal" title="Legislative Proposal Rejected" actions="version">
-        <facet>
-            <allow permission=".View" roles="Owner ClerkAssembly SpeakerAssembly Signatory" />
-            <allow permission=".Edit" roles="SpeakerAssembly" />
-            <allow permission="attachment.Add" roles="SpeakerAssembly" />
-            <allow permission="assembly_event.Add" roles="SpeakerAssembly" />
-            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
-            <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
-            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
-        </facet>
-    </state> 
-    <state id="accepted_proposal" title="Legislative Proposal Approved" actions="version set_doc_type_number">
         <facet>
             <allow permission=".View" roles="Owner ClerkAssembly SpeakerAssembly Signatory" />
             <allow permission=".Edit" roles="SpeakerAssembly" />
@@ -307,6 +263,17 @@
             <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
+    <state id="re_committal" title="Re-committed to the Committee of the Whole-House">
+        <facet>
+            <allow permission=".View" roles="Anonymous" />
+            <allow permission=".Edit" roles="ClerkAssembly" />
+            <allow permission="attachment.Add" roles="ClerkAssembly" />
+            <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
+        </facet>
+    </state>
     <state id="approved" title="Approved Bill">
         <facet>
             <allow permission=".View" roles="Anonymous" />
@@ -370,6 +337,13 @@
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
         </facet>
     </state>
+    <state id="transferred_senate" title="Forwarded to Senate for concurrance" actions="version send_motion_to_senate"
+        note="To transfer the bill to the Senate">
+        <facet>
+            <allow permission=".View" roles="Anonymous" />
+            <allow permission=".Edit" roles=" ClerkAssembly" />
+        </facet>
+    </state>
 
     
     <!-- TRANSITIONS -->
@@ -405,50 +379,22 @@
         roles="Owner"
         trigger="manual"
     />
-    <transition title="Clerk reviewed Legislative Proposal"
+    <transition title="Bill publised in the Gazette"
         source="submitted"
-        destination="reviewed"
-        condition=""
-        trigger="manual"
-        roles="ClerkAssembly"
-    />
-    <transition title="Speaker refers to Committee for scrutiny"
-        source="reviewed"
-        destination="referred_committee"
-        condition=""
-        trigger="manual"
-        roles="SpeakerAssembly"
-    />
-    <transition title="Committee Submits recommendations"
-        source="referred_committee"
-        destination="recommendations_committee"
-        condition=""
-        trigger="manual"
-        roles="ClerkAssembly"
-    />
-    <transition title="Accept Legislative Proposal"
-        source="recommendations_committee"
-        destination="accepted_proposal"
-        condition=""
-        trigger="manual"
-        roles="SpeakerAssembly"
-    />
-    <transition title="Reject Legislative Proposal"
-        source="recommendations_committee"
-        destination="rejected_proposal"
-        condition=""
-        trigger="manual"
-        roles="SpeakerAssembly"
-    />
-    <transition title="Publish Bill in Gazette"
-        source="accepted_proposal"
         destination="gazetted"
         condition=""
         trigger="manual"
         roles="ClerkAssembly"
     />
+    <transition title="Clerk reviewed Legislative Proposal"
+        source="gazetted"
+        destination="reviewed"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
     <transition title="First Reading Scheduled"
-        source="gazetted first_reading_adjourned"
+        source="reviewed first_reading_adjourned"
         destination="first_reading_scheduled"
         condition="is_scheduled"
         trigger="manual"
@@ -497,7 +443,7 @@
         roles="ClerkAssembly"
     />
     <transition title="Committee of the Whole House Scheduled"
-        source="second_reading whole_house_adjourned"
+        source="second_reading whole_house_adjourned re_committal"
         destination="whole_house_scheduled"
         condition="is_scheduled"
         trigger="manual"
@@ -538,6 +484,13 @@
         trigger="manual"
         roles="ClerkAssembly"
     />
+    <transition title="Re-commital"
+        source="third_reading"
+        destination="re_committal"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
     <transition title="Reject"
         source="first_reading second_reading third_reading whole_house"
         destination="rejected"
@@ -548,6 +501,13 @@
     <transition title="Approve"
         source="third_reading"
         destination="approved"
+        condition=""
+        trigger="manual"
+        roles="ClerkAssembly"
+    />
+    <transition title="Forwarded to Senate for Concurrance"
+        source="approved"
+        destination="transferred_senate"
         condition=""
         trigger="manual"
         roles="ClerkAssembly"

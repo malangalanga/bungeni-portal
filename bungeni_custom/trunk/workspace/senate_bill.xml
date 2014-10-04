@@ -18,27 +18,11 @@
         <tab id="pending" roles="Owner Signatory" />
     </state>
     <state id="reviewed">
-        <tab id="inbox" roles="SpeakerSenate" />
+        <tab id="schedule" roles="SpeakerSenate" />
         <tab id="pending" roles="Owner ClerkSenate" />
-    </state>
-    <state id="referred_committee">
-        <tab id="inbox" roles="ClerkSenate" />
-        <tab id="pending" roles="Owner SpeakerSenate " />
-    </state>
-    <state id="recommendations_committee">
-        <tab id="inbox" roles="SpeakerSenate" />
-        <tab id="pending" roles="Owner ClerkSenate" />
-    </state>
-    <state id="rejected_proposal">
-      <tab id="archive"
-       roles="ClerkSenate Owner Signatory SpeakerSenate" />
-    </state>
-    <state id="accepted_proposal">
-        <tab id="inbox" roles="ClerkSenate" />
-        <tab id="pending" roles="Owner   SpeakerSenate " />
     </state>
     <state id="gazetted">
-        <tab id="schedule" roles="ClerkSenate" />
+        <tab id="inbox" roles="ClerkSenate" />
         <tab id="pending" roles="Owner Signatory SpeakerSenate" />
     </state>
     <state id="first_reading_scheduled">
@@ -46,11 +30,11 @@
         <tab id="pending" roles="Owner Signatory SpeakerSenate" />
     </state>
     <state id="first_reading">
-        <tab id="inbox" roles="ClerkSenate" />
+        <tab id="schedule" roles="ClerkSenate" />
         <tab id="pending" roles="Owner Signatory SpeakerSenate" />
     </state>
     <state id="first_reading_adjourned">
-        <tab id="inbox" roles="ClerkSenate" />
+        <tab id="schedule" roles="ClerkSenate" />
         <tab id="pending" roles="Owner Signatory SpeakerSenate" />
     </state>
     <state id="referred_committee_first_reading">
@@ -58,11 +42,15 @@
         <tab id="pending" roles="Owner Signatory SpeakerSenate" />
     </state>
     <state id="second_reading">
-        <tab id="inbox" roles="ClerkSenate" />
+        <tab id="schedule" roles="ClerkSenate" />
+        <tab id="pending" roles="Owner Signatory" />
+    </state>
+    <state id="re_committal">
+        <tab id="schedule" roles="ClerkSenate" />
         <tab id="pending" roles="Owner Signatory" />
     </state>
     <state id="second_reading_adjourned">
-        <tab id="inbox" roles="ClerkSenate" />
+        <tab id="schedule" roles="ClerkSenate" />
         <tab id="pending" roles="Owner Signatory SpeakerSenate" />
     </state>
     <state id="second_reading_scheduled">
@@ -70,7 +58,7 @@
         <tab id="pending" roles="Owner Signatory" />
     </state>
     <state id="whole_house">
-        <tab id="inbox" roles="ClerkSenate" />
+        <tab id="schedule" roles="ClerkSenate" />
         <tab id="pending" roles="Owner Signatory SpeakerSenate" />
     </state>
     <state id="whole_house_scheduled">
@@ -78,15 +66,15 @@
         <tab id="pending" roles="Owner Signatory" />
     </state>
     <state id="whole_house_adjourned">
-        <tab id="inbox" roles="ClerkSenate" />
+        <tab id="schedule" roles="ClerkSenate" />
         <tab id="pending" roles="Owner Signatory" />
     </state>
     <state id="third_reading">
-        <tab id="inbox" roles="ClerkSenate" />
+        <tab id="schedule" roles="ClerkSenate" />
         <tab id="pending" roles="Owner Signatory" />
     </state>
     <state id="third_reading_scheduled">
-        <tab id="inbox" roles="ClerkSenate" />
+        <tab id="schedule" roles="ClerkSenate" />
         <tab id="pending" roles="Owner Signatory" />
     </state>
     <state id="third_reading_adjourned">
@@ -96,6 +84,9 @@
     <state id="approved">
         <tab id="inbox" roles="ClerkSenate" />
         <tab id="pending" roles="Owner Signatory SpeakerSenate" />
+    </state>
+    <state id="transferred_senate">
+      <tab id="archive" roles="ClerkSenate Owner Signatory SpeakerSenate" />
     </state>
     <state id="pending_presidential_assent">
         <tab id="inbox" roles="ClerkSenate" />

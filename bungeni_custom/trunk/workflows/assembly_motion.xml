@@ -209,7 +209,7 @@
     <state id="transferred_senate" title="Forwarded to Senate for concurrance" actions="version send_motion_to_senate"
         note="To transfer the motion to the Senate">
         <facet>
-            <allow permission=".View" roles="ClerkAssembly SpeakerAssembly Owner Signatory" />
+            <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles=" ClerkAssembly" />
         </facet>
     </state>
