@@ -302,7 +302,9 @@
             <allow permission=".Edit" roles="ClerkSenate" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
             <allow permission="senate_event.Add" roles="ClerkSenate" />
+            <allow permission="group_assignment.Edit" roles="ClerkSenate SpeakerSenate" />
             <allow permission="group_assignment.Add" roles="ClerkSenate SpeakerSenate" />
+            <allow permission="group_assignment.Delete" roles="ClerkSenate SpeakerSenate" />
         </facet>
     </state>
     <state id="approved" title="Approved Bill">

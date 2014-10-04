@@ -302,7 +302,9 @@
             <allow permission=".Edit" roles="ClerkAssembly" />
             <allow permission="attachment.Add" roles="ClerkAssembly" />
             <allow permission="assembly_event.Add" roles="ClerkAssembly" />
+            <allow permission="group_assignment.Edit" roles="ClerkAssembly SpeakerAssembly" />
             <allow permission="group_assignment.Add" roles="ClerkAssembly SpeakerAssembly" />
+            <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state>
     <state id="approved" title="Approved Bill">
