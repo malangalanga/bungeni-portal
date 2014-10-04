@@ -58,7 +58,7 @@ def send_motion_to_senate(motion):
     """
     # from {motion}, spawn a new doc of type "senate_motion", set its chamber
     # to be the (expected singular) active "higher_house", and set the initial 
-    # workflow state of the new doc to be "submitted".
+    # workflow state of the new doc to be "admissible".
     sm = spawn_doc(motion, "higher_house", "senate_motion", "admissible")
 
 
@@ -67,7 +67,24 @@ def send_motion_to_assembly(motion):
     """
     # from {motion}, spawn a new doc of type "assemby_motion", set its chamber
     # to be the (expected singular) active "lower_house", and set the initial 
-    # workflow state of the new doc to be "submitted".
+    # workflow state of the new doc to be "admissible".
     sm = spawn_doc(motion, "lower_house", "assembly_motion", "admissible")
 
+
+def send_bill_to_senate(bill):
+    """A sample action to "send" (spawn new) a document to other chamber.
+    """
+    # from {bill}, spawn a new doc of type "senate_bill", set its chamber
+    # to be the (expected singular) active "higher_house", and set the initial 
+    # workflow state of the new doc to be "reviewed".
+    sm = spawn_doc(bill, "higher_house", "senate_bill", "reviewed")
+
+
+def send_bill_to_assembly(bill):
+    """A sample action to "send" (spawn new) a document to other chamber.
+    """
+    # from {bill}, spawn a new doc of type "assemby_bill", set its chamber
+    # to be the (expected singular) active "lower_house", and set the initial 
+    # workflow state of the new doc to be "reviewed".
+    sm = spawn_doc(bill, "lower_house", "assembly_bill", "reviewed")
 

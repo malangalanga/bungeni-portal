@@ -175,7 +175,7 @@
             <allow permission="group_assignment.Delete" roles="ClerkSenate SpeakerSenate" />
         </facet>
     </state>
-    <state id="first_reading" title="First Reading">
+    <state id="first_reading" title="Read the First Time">
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkSenate" />
@@ -206,7 +206,6 @@
             <allow permission="group_assignment.Edit" roles="ClerkSenate SpeakerSenate" />
             <allow permission="group_assignment.Add" roles="ClerkSenate SpeakerSenate" />
             <allow permission="group_assignment.Delete" roles="ClerkSenate SpeakerSenate" />
-
         </facet>
     </state>
     <state id="second_reading_adjourned" title="Second Reading Adjourned">
@@ -231,7 +230,7 @@
             <allow permission="group_assignment.Delete" roles="ClerkSenate SpeakerSenate" />
         </facet>
     </state>
-    <state id="second_reading" title="Second Reading" actions="version">
+    <state id="second_reading" title="Read the Second Time" actions="version">
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkSenate" />
@@ -240,7 +239,6 @@
             <allow permission="group_assignment.Edit" roles="ClerkSenate SpeakerSenate" />
             <allow permission="group_assignment.Add" roles="ClerkSenate SpeakerSenate" />
             <allow permission="group_assignment.Delete" roles="ClerkSenate SpeakerSenate" />
-
         </facet>
     </state>
     <state id="whole_house_scheduled" title="Whole House Scheduled">
@@ -265,7 +263,7 @@
             <allow permission="group_assignment.Delete" roles="ClerkSenate SpeakerSenate" />
         </facet>
     </state>
-    <state id="whole_house" title="Whole House">
+    <state id="whole_house" title="Debated at the Committee of Whole House">
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkSenate" />
@@ -287,7 +285,7 @@
             <allow permission="group_assignment.Delete" roles="ClerkSenate SpeakerSenate" />
         </facet>
     </state>
-    <state id="third_reading" title="Third Reading">
+    <state id="third_reading" title="Read the Third Time">
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkSenate" />
@@ -304,9 +302,7 @@
             <allow permission=".Edit" roles="ClerkSenate" />
             <allow permission="attachment.Add" roles="ClerkSenate" />
             <allow permission="senate_event.Add" roles="ClerkSenate" />
-            <allow permission="group_assignment.Edit" roles="ClerkSenate SpeakerSenate" />
             <allow permission="group_assignment.Add" roles="ClerkSenate SpeakerSenate" />
-            <allow permission="group_assignment.Delete" roles="ClerkSenate SpeakerSenate" />
         </facet>
     </state>
     <state id="approved" title="Approved Bill">
