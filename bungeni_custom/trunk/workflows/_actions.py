@@ -43,48 +43,33 @@ from bungeni.core.workflows._actions import (
     # sitting
     schedule_sitting_items,
     
-    # utility to help create parametrized "transfer to chamber" actions
-    # notes: 
+    # utility to help create parametrized "transfer to chamber" actions notes:
     # - sub-docs "signatories", "attachments", "events" are not carried over
     # - the "owner" of the new doc is the original owner i.e. the member of the
     #   originating chamber
     # PARAMETERS: (source_doc, target_chamber_type, target_type_key, target_state_id)
-    spawn_doc, 
+    # RETURNS the newly created doc (should anything need to be tweaked further on it)
+    spawn_doc,
 )
-
-
-def send_motion_to_senate(motion):
+'''
+def send_motion_to_senate(assembly_motion):
     """A sample action to "send" (spawn new) a document to other chamber.
     """
-    # from {motion}, spawn a new doc of type "senate_motion", set its chamber
-    # to be the (expected singular) active "higher_house", and set the initial 
-    # workflow state of the new doc to be "admissible".
-    sm = spawn_doc(motion, "higher_house", "senate_motion", "admissible")
+    # from {assembly_motion}, spawn a new doc of type "senate_motion", 
+    # set its chamber to be the (expected singular) active "higher_house", 
+    # and set the initial workflow state of the new doc to be "admissible".
+    new_doc = spawn_doc(assembly_motion, "higher_house", "senate_motion", "admissible")
+'''
+def send_motion_to_senate(assembly_motion):
+    d = spawn_doc(assembly_motion, "higher_house", "senate_motion", "admissible")
 
+def send_motion_to_assembly(senate_motion):
+    d = spawn_doc(senate_motion, "lower_house", "assembly_motion", "admissible")
 
-def send_motion_to_assembly(motion):
-    """A sample action to "send" (spawn new) a document to other chamber.
-    """
-    # from {motion}, spawn a new doc of type "assemby_motion", set its chamber
-    # to be the (expected singular) active "lower_house", and set the initial 
-    # workflow state of the new doc to be "admissible".
-    sm = spawn_doc(motion, "lower_house", "assembly_motion", "admissible")
+def send_bill_to_senate(assembly_bill):
+    d = spawn_doc(assembly_bill, "higher_house", "senate_bill", "reviewed")
 
+def send_bill_to_assembly(senate_bill):
+    d = spawn_doc(senate_bill, "lower_house", "assembly_bill", "reviewed")
 
-def send_bill_to_senate(bill):
-    """A sample action to "send" (spawn new) a document to other chamber.
-    """
-    # from {bill}, spawn a new doc of type "senate_bill", set its chamber
-    # to be the (expected singular) active "higher_house", and set the initial 
-    # workflow state of the new doc to be "reviewed".
-    sm = spawn_doc(bill, "higher_house", "senate_bill", "reviewed")
-
-
-def send_bill_to_assembly(bill):
-    """A sample action to "send" (spawn new) a document to other chamber.
-    """
-    # from {bill}, spawn a new doc of type "assemby_bill", set its chamber
-    # to be the (expected singular) active "lower_house", and set the initial 
-    # workflow state of the new doc to be "reviewed".
-    sm = spawn_doc(bill, "lower_house", "assembly_bill", "reviewed")
 

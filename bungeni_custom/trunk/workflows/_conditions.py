@@ -59,14 +59,14 @@ from bungeni.core.workflows._conditions import (
 
 # condition building-block utilities
 from bungeni.core.workflows._conditions import (
-
+    
     # get child document of specified type
     child, # (context, type_key) -> child
     
     # is context status one of the ones in state_ids?
     in_state, # (context, state_id, state_id, ...) -> bool
     
-    # Is the context child document, identified by type_key, in one of the 
+    # is the context child document, identified by type_key, in one of the 
     # specified state_ids?
     child_in_state, # (context, type_key, state_id, state_id, ...) -> bool
 )
