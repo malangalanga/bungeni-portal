@@ -360,7 +360,7 @@
         </field>
     </descriptor>
     
-    <descriptor name="editorial_note">
+    <descriptor name="editorial_note" order="15">
         <field name="text" label="Text" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add listing" />
         </field>
@@ -491,7 +491,7 @@
         </field>
     </descriptor>
     
-    <descriptor name="group_address">
+    <descriptor name="group_address" order="20">
         <field name="logical_address_type" label="Address Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="logical_address_type">
             <show modes="view edit add listing" />
         </field>
@@ -595,7 +595,7 @@
         <integrity constraints="end_after_start active_and_substituted substituted_end_date inactive_no_end_date" validations="validate_date_range_within_parent validate_group_member_dates" />
     </descriptor>
     
-    <descriptor name="heading" order="3">
+    <descriptor name="heading" order="13">
         <field name="text" label="Heading" required="true" value_type="text" render_type="text_box">
             <show modes="view edit add listing" />
         </field>
@@ -688,7 +688,7 @@
         </field>
     </descriptor>
     
-    <descriptor name="member_title">
+    <descriptor name="member_title" order="3">
         <field name="title_type_id" label="Title" required="true" value_type="vocabulary" render_type="single_select" vocabulary="group_title_type">
             <show modes="view edit add listing" />
         </field>
@@ -705,7 +705,7 @@
         <integrity constraints="end_after_start" validations="validate_date_range_within_parent validate_member_titles" />
     </descriptor>
     
-    <descriptor name="session" order="16">
+    <descriptor name="session" order="10">
         <field name="short_name" label="Short Name" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
@@ -750,7 +750,7 @@
         </field>
     </descriptor>
     
-    <descriptor name="sitting" order="17">
+    <descriptor name="sitting" order="11">
         <field name="duration" label="Duration" required="false" value_type="text" render_type="text_line">
             <show modes="listing" />
         </field>
@@ -804,7 +804,7 @@
         </field>
     </descriptor>
     
-    <descriptor name="title_type" order="22">
+    <descriptor name="title_type" order="3">
         <field name="title_name" label="Name" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
