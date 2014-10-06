@@ -17,13 +17,13 @@
         <tab id="inbox" roles="ClerkSenate" />
         <tab id="pending" roles="Owner Signatory" />
     </state>
-    <state id="reviewed">
-        <tab id="schedule" roles="SpeakerSenate" />
-        <tab id="pending" roles="Owner ClerkSenate" />
-    </state>
     <state id="gazetted">
         <tab id="inbox" roles="ClerkSenate" />
         <tab id="pending" roles="Owner Signatory SpeakerSenate" />
+    </state>
+    <state id="reviewed">
+        <tab id="schedule" roles="ClerkSenate" />
+        <tab id="pending" roles="Owner SpeakerSenate" />
     </state>
     <state id="first_reading_scheduled">
         <tab id="schedule" roles="ClerkSenate" />

@@ -98,7 +98,7 @@
         <facet ref="group_assignment.add_internal" />
         -->
     </state>
-    <state id="reviewed" title="Reviewed by Clerk" actions="set_doc_registry_number">
+    <state id="reviewed" title="Reviewed by Clerk" actions="">
         <facet>
             <allow permission=".View" roles="Owner ClerkAssembly SpeakerAssembly Signatory" />
             <allow permission=".Edit" roles="SpeakerAssembly" />
@@ -109,7 +109,7 @@
             <allow permission="group_assignment.Delete" roles="ClerkAssembly SpeakerAssembly" />
         </facet>
     </state> 
-    <state id="gazetted" title="Bill Published in Gazette" actions="version">
+    <state id="gazetted" title="Bill Published in Gazette" actions="set_doc_type_number version">
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkAssembly" />

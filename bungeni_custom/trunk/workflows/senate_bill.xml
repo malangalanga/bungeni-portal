@@ -109,7 +109,7 @@
             <allow permission="group_assignment.Delete" roles="ClerkSenate SpeakerSenate" />
         </facet>
     </state> 
-    <state id="gazetted" title="Bill Published in Gazette" actions="version">
+    <state id="gazetted" title="Bill Published in Gazette" actions="set_doc_type_number version">
         <facet>
             <allow permission=".View" roles="Anonymous" />
             <allow permission=".Edit" roles="ClerkSenate" />
