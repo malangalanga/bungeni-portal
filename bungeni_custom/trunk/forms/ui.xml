@@ -1,6 +1,19 @@
 <?xml version="1.0"?>
 <ui>
     
+    <descriptor name="agenda_text_record">
+        <field name="text" label="Text" required="true" value_type="text" render_type="rich_text">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="record_type" label="Text Record Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="text_record_type">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+    </descriptor>
+    
     <descriptor name="attachment">
         <field name="title" label="Title" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
@@ -99,6 +112,30 @@
             <show modes="view edit add listing" />
         </field>
         <field name="country_name" label="Country" description="Name of the Country" required="true" value_type="text" render_type="text_line">
+            <show modes="view edit add listing" />
+        </field>
+    </descriptor>
+    
+    <descriptor name="debate_media">
+        <field name="media_path" label="Media Path" required="true" value_type="text" render_type="text_line">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="media_type" label="Media Type" required="true" value_type="text" render_type="single_select" vocabulary="debate_media_type">
+            <show modes="view edit add listing" />
+        </field>
+    </descriptor>
+    
+    <descriptor name="debate_take">
+        <field name="transcriber_id" label="Transcriber" required="true" value_type="user" render_type="single_select" vocabulary="user">
+            <show modes="view listing" />
+        </field>
+        <field name="start_date" label="Start Date" required="true" value_type="datetime" render_type="datetime">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="end_date" label="End Date" required="true" value_type="datetime" render_type="datetime">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="debate_take_name" label="Debate Take Name" required="true" value_type="text" render_type="rich_text">
             <show modes="view edit add listing" />
         </field>
     </descriptor>
@@ -522,6 +559,15 @@
         </field>
     </descriptor>
     
+    <descriptor name="group_assignment">
+        <field name="principal_id" label="Group" required="true" value_type="vocabulary" render_type="single_select" vocabulary="group_assignment">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="date" label="Date Active" required="true" value_type="datetime" render_type="datetime">
+            <show modes="view edit add listing" />
+        </field>
+    </descriptor>
+    
     <descriptor name="group">
         <field name="full_name" label="Full Name" required="false" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
@@ -685,6 +731,15 @@
         <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
             <show modes="view edit add" />
             <hide modes="listing" />
+        </field>
+    </descriptor>
+    
+    <descriptor name="member_role">
+        <field name="role_id" label="sub role" description="the sub role this member will get" required="true" value_type="text" render_type="single_select" vocabulary="group_sub_role">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="is_global" label="is global" description="whether or not this role is granted globally" required="true" value_type="bool" render_type="bool">
+            <show modes="view edit add listing" />
         </field>
     </descriptor>
     
@@ -941,6 +996,24 @@
             <show modes="view edit add" />
         </field>
         <integrity constraints="user_birth_death_dates" validations="validate_email_availability" />
+    </descriptor>
+    
+    <descriptor name="venue">
+        <field name="short_name" label="Title" required="true" value_type="text" render_type="text_line">
+            <show modes="view edit add listing" />
+        </field>
+        <field name="description" label="Description" required="false" value_type="text" render_type="text_box">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="body" label="Body" required="false" value_type="text" render_type="rich_text">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language">
+            <show modes="view edit add" />
+            <hide modes="listing" />
+        </field>
     </descriptor>
 
 </ui>
