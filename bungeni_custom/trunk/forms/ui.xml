@@ -998,7 +998,7 @@
         <integrity constraints="user_birth_death_dates" validations="validate_email_availability" />
     </descriptor>
     
-    <descriptor name="venue">
+    <descriptor name="venue" order="11">
         <field name="short_name" label="Title" required="true" value_type="text" render_type="text_line">
             <show modes="view edit add listing" />
         </field>
