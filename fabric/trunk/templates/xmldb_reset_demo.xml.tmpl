@@ -28,6 +28,10 @@
         <xdb:remove uri="${root-uri}" collection="bungeni-xml" user="${user}" password="${password}"/>
         <echo message="Reset bungeni-atts data"/>
         <xdb:remove uri="${root-uri}" collection="bungeni-atts" user="${user}" password="${password}"/>
+        <echo message="Create bungeni-xml"/>
+        <xdb:create  uri="${root-uri}" collection="bungeni-xml" user="${user}" password="${password}"/>
+        <echo message="Create bungeni-atts"/>
+        <xdb:create  uri="${root-uri}" collection="bungeni-atts" user="${user}" password="${password}"/>
     </target>
  
     <target name="show-properties">
