@@ -126,6 +126,12 @@ def response_allow_publish_senate(question):
     return child_in_state(question, "senate_event_response", "reviewed")
 
 
+def chamber_is_lower_house(group):
+    """Is the sub_type of this chamber group set to "lower_house"?
+    """
+    return group.sub_type == "lower_house"
+
+
 ''' !+composite_condition(mr, may-2012) ability to do this in xml directly?
 def may_edit_context_parent_and_is_not_public(context):
     """A composite condition, combines two conditions."""
