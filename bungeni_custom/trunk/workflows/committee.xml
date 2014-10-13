@@ -19,6 +19,10 @@
     <feature name="version" enabled="true" />
     <feature name="sitting" enabled="true">
         <parameter name="calendar_doc_types" value="assembly_agenda_item senate_agenda_item" />
+        <parameter name="report_templates" value="
+                sitting_agenda sitting_minutes
+                weekly_business bi_weekly_questions
+            " />
     </feature>
     <feature name="address" enabled="true" />
       
