@@ -31,6 +31,9 @@
         </a><br>
         <p>archive</p>
     </li>
+
+    <li class="spacer"/>
+
     <li tal:condition="member/getId">
         <a href="#" 
             title="under consideration"
@@ -43,10 +46,13 @@
         <a href="#" 
             title="Tracked Items"
             class="tracked"
-            tal:attributes="href string:${view/portal_url}workspace/under-consideration/tracked-documents">
+            tal:attributes="href string:${view/portal_url}workspace/tracked-documents">
         </a><br>
         <p>tracked</p>
     </li>
+
+    <li class="spacer"/>
+
     <li tal:condition="member/getId">
         <a href="#" 
             title="scheduling"
@@ -63,11 +69,14 @@
         </a><br>
         <p>my groups</p>
     </li>
+
+    <li class="spacer"/>
+
     <li tal:condition="member/getId">
         <a href="#" 
             title="publications"
             class="pubs"
-            tal:attributes="href string:${view/portal_url}/../workspace/groups">
+            tal:attributes="href string:${view/portal_url}/../publications">
         </a><br>
         <p>publications</p>
     </li>
@@ -75,7 +84,7 @@
         <a href="#" 
             title="digital library"
             class="library"
-            tal:attributes="href string:${view/portal_url}/../workspace/groups">
+            tal:attributes="href string:${view/portal_url}/../groups/library-view">
         </a><br>
         <p>digital library</p>
     </li>
@@ -89,6 +98,8 @@
         </a><br>
         <p>news</p>
     </li>
+
+    <li class="spacer"/>
 
 <tal:get define="member view/member">
     <li tal:condition="member/getId">

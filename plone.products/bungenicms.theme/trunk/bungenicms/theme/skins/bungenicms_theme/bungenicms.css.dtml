@@ -478,12 +478,25 @@ body.mceContentBody h2.content-tab {
     padding-bottom: 4em !important;
 }
 
+.userrole-anonymous #footpanel {
+    display: none !important;
+}
+
 #footpanel {
-    background: #66ff99 !important;
+    background: #ffffff !important;
 }
 
 #footpanel ul {
     height: 80px !important;
+    border-left: 2px solid #000;
+    border-right: 2px solid #000;
+    font-size: 1em;
+    height: 80px !important;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    border: 2px solid;
+    background: #66FF99;
 }
 
 #footpanel ul li {
@@ -546,6 +559,9 @@ a.library {
 }
 a.news { 
     background: url(++resource++bungenicms.theme.images/news.png) no-repeat center center;  
+}
+a.web { 
+    background: url(++resource++bungenicms.theme.images/webspace.png) no-repeat center center;  
 }
 a.private { 
     background: url(++resource++bungenicms.theme.images/privatespace.png) no-repeat center center;  

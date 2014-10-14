@@ -2044,12 +2044,17 @@ span.yui-button.yui-link-button span a {
     display: none;
 }
 
+/*--Dashboard updates-*/
+.template-portal #footpanel {
+    display: none !important;
+}
+
 #footpanel {
     position: fixed;
     bottom: 0; left: 0;
     z-index: 9999; /*--Keeps the panel on top of all other elements--*/
-    background: #66ff99;
-    border: 1px solid #c3c3c3;
+    background: #ffffff;
+    border: 0px;
     border-bottom: none;
     width: 94%;
     margin: 0 3%;
@@ -2068,9 +2073,16 @@ span.yui-button.yui-link-button span a {
     float: left;
     width: 100%;
     list-style: none;
-    border-top: 1px solid #fff; /*--Gives the bevel feel on the panel--*/
+    border-top: 2px solid #000; /*--Gives the bevel feel on the panel--*/
+    border-left: 2px solid #000;
+    border-right: 2px solid #000;
     font-size: 1em;
     height: 80px !important;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    border: 2px solid;
+    background: #66FF99;
 }
 
 #footpanel ul li{
@@ -2079,6 +2091,13 @@ span.yui-button.yui-link-button span a {
     float: left;
     position: relative;
     margin: 0 0.5em 0 0 !important;
+}
+
+#footpanel ul li.spacer{
+    background-color: black !important; 
+    width: 0.25em;
+    float: left;
+    height: 8em !important;
 }
 
 #footpanel ul li a {
@@ -2217,6 +2236,9 @@ a.library {
 }
 a.news { 
     background: url(/static/images/news.png) no-repeat center center;  
+}
+a.web { 
+    background: url(/static/images/webspace.png) no-repeat center center;  
 }
 a.private { 
     background: url(/static/images/privatespace.png) no-repeat center center;  
