@@ -128,7 +128,7 @@ class OsEssentials:
         Checks if this is a gandi server by looking for the /etc/gandi folder
         """
 
-        return os.path.exists("/etc/gandi")
+        return exists("/etc/gandi")
 
     def get_reqd_libs(self, dist_id, dist_rel):
         """
@@ -517,10 +517,10 @@ class BungeniConfigs:
         java_package = osent.get_distro_jdk(osinfo.release_id, osinfo.release_no)
         java_home_path = self.cfg.get_config("java", java_package)
         path_dir_suffix = "-" + osent.get_platform_suffix()
-        if os.path.exists(java_home_path + path_dir_suffix):
+        if exists(java_home_path + path_dir_suffix):
             return java_home_path + path_dir_suffix
         else:
-            if os.path.exists(java_home_path):
+            if exists(java_home_path):
                 return java_home_path
         abort("Unsupported Java Installation - cannot determine java home")
         return "UNSUPPORTED_JAVA_HOME"                   
@@ -590,7 +590,7 @@ class Presetup:
              + " ".join(liLibs))
         if not self.ossent.is_gandi_server():
             print "Installing Linux Headers"
-            if os.path.exists("/proc/vz") or os.path.exists("/proc/xen"):
+            if exists("/proc/vz") or exists("/proc/xen"):
                 # this is a vps installation, headers are shared so just ininstall generic headers
                 #sudo(self.ossent.get_install_method(self.osinfo.release_id)
                 #     + " linux-headers-generic")
@@ -876,7 +876,7 @@ class Presetup:
         supervisor_path = run(
             "%s -c 'import supervisor;print supervisor.__path__[0]'" % python_bin
         )
-        if not os.path.exists(supervisor_path):
+        if not exists(supervisor_path):
             print red("No supervisor install found - skipping docs setup ")
             return
         utils = Utils()
@@ -999,7 +999,7 @@ class SCM:
        """
 
        working_copy_map = {"working_folder": self.working_copy}
-       if not os.path.exists("%(working_folder)s/svn_ans_t.txt"
+       if not exists("%(working_folder)s/svn_ans_t.txt"
                              % working_copy_map):
            run("echo 'p' > %(working_folder)s/svn_ans_t.txt"
                % working_copy_map)
@@ -1228,7 +1228,7 @@ class Tasks:
 
     def build_exists(self, li_files):
         for file in li_files:
-            if not os.path.exists(file):
+            if not exists(file):
                 return False
         return True
 
@@ -1349,7 +1349,7 @@ class PloneTasks:
         elif current_release["plone"] == "HEAD":
             self.tasks.src_checkout(current_release["plone"])
             with cd(self.cfg.user_plone):    
-                if os.path.exists(os.path.join(self.cfg.user_plone, "parts")):    
+                if exists(os.path.join(self.cfg.user_plone, "parts")):    
                     with cd("parts/svneggs"):      
                         run("svn up -rHEAD ./apkn.repository ./apkn.templates" \
                                 " ./bungenicms.plonepas ./bungenicms.policy" \
@@ -1464,7 +1464,7 @@ class PloneTasks:
         elif current_release["plone"] == "HEAD":
             self.tasks.src_update(current_release["plone"])
             with cd(self.cfg.user_plone):
-                if os.path.exists(os.path.join(self.cfg.user_plone, "parts")):
+                if exists(os.path.join(self.cfg.user_plone, "parts")):
                     with cd("parts/svneggs"):      
                         run("svn up -rHEAD ./apkn.repository ./apkn.templates" \
                                 " ./bungenicms.plonepas ./bungenicms.policy" \
@@ -2234,7 +2234,7 @@ class RabbitMQTasks:
                          {"user_rabbitmq":self.cfg.user_rabbitmq,
                           "rabbitmq_download_file":self.cfg.rabbitmq_download_file})
             binary_folder = self.cfg.user_rabbitmq
-            if os.path.exists(self.cfg.user_rabbitmq + "/sbin"):
+            if exists(self.cfg.user_rabbitmq + "/sbin"):
                 binary_folder = self.cfg.user_rabbitmq + "/sbin"
             else:
                 binary_folder = self.cfg.user_rabbitmq + "/scripts"
@@ -2370,7 +2370,7 @@ class GlueScriptTasks:
         cfg = SafeConfigParser()
         cfg.read(os.path.join(self.cfg.user_config, "glue.ini"))
         cache_folder = cfg.get("general", "cache_file_folder")
-        if os.path.exists(cache_folder):
+        if exists(cache_folder):
             import shutil
             shutil.rmtree(cache_folder)
         with cd(self.cfg.user_glue):
@@ -2393,7 +2393,7 @@ class CustomTasks:
         return "%s/bungeni_custom" % bungeni_custom_path.strip("\n")
 
     def switch_bungeni_custom(self):
-        if os.path.exists(self.cfg.custom_folder):
+        if exists(os.path.join(self.cfg.custom_folder, "bungeni_custom")):
             """
             if custom folder exists make backup
             """
@@ -2425,7 +2425,7 @@ class CustomTasks:
             theme_path = os.path.join(os.path.dirname(self.cfg.user_bungeni),
                                       "bungeni/portal/src/portal.theme/portal/",
                                       "theme/static/themes",demo_theme)
-            if os.path.exists(theme_path):
+            if exists(theme_path):
                         print red("Cannot enable '%s' theme. Another theme file " 
                         "already exists in the target folder." % demo_theme)
                         return
@@ -2462,7 +2462,7 @@ class CustomTasks:
         path_to_wf_xml_dir = os.path.join(self.cfg.user_bungeni,
                                     "src/bungeni_custom/workflows")
         
-        if not os.path.exists(path_to_po):
+        if not exists(path_to_po):
             print red(to_language + " po file not found !")
             abort("aborting !!!!!!!!")
         else:
@@ -2494,7 +2494,7 @@ class CustomTasks:
         
         import shutil
         str_backup_dir = os.path.join(os.path.dirname(wf_xml_file), "orig")
-        if not os.path.exists(str_backup_dir):
+        if not exists(str_backup_dir):
             os.mkdir(str_backup_dir)
         str_backup_path = os.path.join(str_backup_dir,
                                         os.path.basename(wf_xml_file))
