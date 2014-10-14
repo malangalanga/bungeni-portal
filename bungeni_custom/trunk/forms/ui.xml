@@ -854,8 +854,8 @@
             <hide modes="edit add listing" />
         </field>
         <field name="status_date" label="Status Date" required="false" value_type="date" render_type="date">
-            <show modes="view listing" />
-            <hide modes="edit add" />
+            <show modes="listing" />
+            <hide modes="view edit add" />
         </field>
     </descriptor>
     

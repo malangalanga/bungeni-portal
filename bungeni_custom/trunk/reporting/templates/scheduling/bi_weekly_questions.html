@@ -8,17 +8,18 @@
         <title>Bi-Weekly Questions</title>
         <style type="text/css" media="all">
             h1.heading {}
-            div.sittings {
-                border: 1px solid lightgray;
-                margin: 0 0 2em 0;
-                padding: 0;
-            }
             h2.sitting {
-                font-weight: bold;
                 color: slategray;
-                background-color: mistyrose;
                 padding: 0.3em 0.6em;
                 margin: 0;
+            }
+            h3 {
+                text-align: center !important;
+                font-weight: normal !important;
+            }
+            div.sittings {
+                margin: 0 0 2em 0;
+                padding: 0;
             }
             div.questions {
                 margin: 0;
@@ -29,15 +30,23 @@
             }
             .logo {
                 margin-bottom: 1em;
-                width: 40px;
-                height: 40px;
+                width: 104px;
+                height: 104px;
+                display: block !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+            li.title,
+            li.mover {
+                list-style-type:none;
+                list-style-image:none !important;
             }
         </style>
     </head>
     <body>
         <div id="report-content">
             <h1 class="heading" br:type="text" br:source="title" />
-            <img class="logo" br:type="src" br:src="/@@/images/favicon.ico" />
+            <img class="logo" br:type="src" br:src="bungeni-logo.png" />
             <div id="listing-body">
                 <div br:type="listing" br:source="sittings">
                     <div class="sittings" br:condition="questions">
@@ -46,7 +55,7 @@
                             <h3>Questions</h3>
                             <ul br:type="listing" br:source="questions"
                                     br:condition="questions">
-                                <li>
+                                <li class="title">
                                     <span class="meta">Title:</span> 
                                     <span br:type="text" br:source="dc:title" />
                                     <br />
@@ -55,7 +64,7 @@
                                     <p br:condition="attachments">
                                         <strong><span class="meta">Attachments:</span></strong>
                                         <ul br:type="listing" br:source="attachments">
-                                            <li>
+                                            <li class="mover">
                                                 <span class="meta">Title:</span> 
                                                 <span br:type="text" br:source="title" />
                                                 <br />
@@ -71,4 +80,425 @@
         </div>
     </body>
 </html>
+
+
+<html xml:lang="en" xmlns:br="http://bungeni.org/reports">
+    <br:config>
+        <title>Bi-Weekly Questions</title>
+        <length>2w</length>
+        <language>en</language>
+    </br:config>
+    <head>
+        <title>Bi-Weekly Questions</title>
+        <style type="text/css" media="all">
+            h1.heading {}
+            h2.sitting {
+                color: slategray;
+                padding: 0.3em 0.6em;
+                margin: 0;
+            }
+            h3 {
+                text-align: center !important;
+                font-weight: normal !important;
+            }
+            div.sittings {
+                margin: 0 0 2em 0;
+                padding: 0;
+            }
+            div.questions {
+                margin: 0;
+                padding: 0 1em 1em 1em;
+            }
+            span.meta {
+                font-size: smaller;
+            }
+            .logo {
+                margin-bottom: 1em;
+                width: 104px;
+                height: 104px;
+                display: block !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+            li.title,
+            li.mover {
+                list-style-type:none;
+                list-style-image:none !important;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="report-content">
+            <h1 class="heading" br:type="text" br:source="title" />
+            <img class="logo" br:type="src" br:src="bungeni-logo.png" />
+            <div id="listing-body">
+                <div br:type="listing" br:source="sittings">
+                    <div class="sittings" br:condition="questions">
+                        <h2 class="sitting" br:type="text" br:source="dc:title" />
+                        <div class="questions">
+                            <h3>Questions</h3>
+                            <ul br:type="listing" br:source="questions"
+                                    br:condition="questions">
+                                <li class="title">
+                                    <span class="meta">Title:</span> 
+                                    <span br:type="text" br:source="dc:title" />
+                                    <br />
+                                    <span class="meta">Asked by:</span> 
+                                    <span br:type="text" br:source="dc:mover" />
+                                    <p br:condition="attachments">
+                                        <strong><span class="meta">Attachments:</span></strong>
+                                        <ul br:type="listing" br:source="attachments">
+                                            <li class="mover">
+                                                <span class="meta">Title:</span> 
+                                                <span br:type="text" br:source="title" />
+                                                <br />
+                                            </li>
+                                        </ul>
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+
+<html xml:lang="en" xmlns:br="http://bungeni.org/reports">
+    <br:config>
+        <title>Bi-Weekly Questions</title>
+        <length>2w</length>
+        <language>en</language>
+    </br:config>
+    <head>
+        <title>Bi-Weekly Questions</title>
+        <style type="text/css" media="all">
+            h1.heading {}
+            h2.sitting {
+                color: slategray;
+                padding: 0.3em 0.6em;
+                margin: 0;
+            }
+            h3 {
+                text-align: center !important;
+                font-weight: normal !important;
+            }
+            div.sittings {
+                margin: 0 0 2em 0;
+                padding: 0;
+            }
+            div.questions {
+                margin: 0;
+                padding: 0 1em 1em 1em;
+            }
+            span.meta {
+                font-size: smaller;
+            }
+            .logo {
+                margin-bottom: 1em;
+                width: 104px;
+                height: 104px;
+                display: block !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+            li.title,
+            li.mover {
+                list-style-type:none;
+                list-style-image:none !important;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="report-content">
+            <h1 class="heading" br:type="text" br:source="title" />
+            <img class="logo" br:type="src" br:src="bungeni-logo.png" />
+            <div id="listing-body">
+                <div br:type="listing" br:source="sittings">
+                    <div class="sittings" br:condition="questions">
+                        <h2 class="sitting" br:type="text" br:source="dc:title" />
+                        <div class="questions">
+                            <h3>Questions</h3>
+                            <ul br:type="listing" br:source="questions"
+                                    br:condition="questions">
+                                <li class="title">
+                                    <span class="meta">Title:</span> 
+                                    <span br:type="text" br:source="dc:title" />
+                                    <br />
+                                    <span class="meta">Asked by:</span> 
+                                    <span br:type="text" br:source="dc:mover" />
+                                    <p br:condition="attachments">
+                                        <strong><span class="meta">Attachments:</span></strong>
+                                        <ul br:type="listing" br:source="attachments">
+                                            <li class="mover">
+                                                <span class="meta">Title:</span> 
+                                                <span br:type="text" br:source="title" />
+                                                <br />
+                                            </li>
+                                        </ul>
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+
+<html xml:lang="en" xmlns:br="http://bungeni.org/reports">
+    <br:config>
+        <title>Bi-Weekly Questions</title>
+        <length>2w</length>
+        <language>en</language>
+    </br:config>
+    <head>
+        <title>Bi-Weekly Questions</title>
+        <style type="text/css" media="all">
+            h1.heading {}
+            h2.sitting {
+                color: slategray;
+                padding: 0.3em 0.6em;
+                margin: 0;
+            }
+            h3 {
+                text-align: center !important;
+                font-weight: normal !important;
+            }
+            div.sittings {
+                margin: 0 0 2em 0;
+                padding: 0;
+            }
+            div.questions {
+                margin: 0;
+                padding: 0 1em 1em 1em;
+            }
+            span.meta {
+                font-size: smaller;
+            }
+            .logo {
+                margin-bottom: 1em;
+                width: 104px;
+                height: 104px;
+                display: block !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+            li.title,
+            li.mover {
+                list-style-type:none;
+                list-style-image:none !important;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="report-content">
+            <h1 class="heading" br:type="text" br:source="title" />
+            <img class="logo" br:type="src" br:src="bungeni-logo.png" />
+            <div id="listing-body">
+                <div br:type="listing" br:source="sittings">
+                    <div class="sittings" br:condition="questions">
+                        <h2 class="sitting" br:type="text" br:source="dc:title" />
+                        <div class="questions">
+                            <h3>Questions</h3>
+                            <ul br:type="listing" br:source="questions"
+                                    br:condition="questions">
+                                <li class="title">
+                                    <span class="meta">Title:</span> 
+                                    <span br:type="text" br:source="dc:title" />
+                                    <br />
+                                    <span class="meta">Asked by:</span> 
+                                    <span br:type="text" br:source="dc:mover" />
+                                    <p br:condition="attachments">
+                                        <strong><span class="meta">Attachments:</span></strong>
+                                        <ul br:type="listing" br:source="attachments">
+                                            <li class="mover">
+                                                <span class="meta">Title:</span> 
+                                                <span br:type="text" br:source="title" />
+                                                <br />
+                                            </li>
+                                        </ul>
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+
+<html xml:lang="en" xmlns:br="http://bungeni.org/reports">
+    <br:config>
+        <title>Bi-Weekly Questions</title>
+        <length>2w</length>
+        <language>en</language>
+    </br:config>
+    <head>
+        <title>Bi-Weekly Questions</title>
+        <style type="text/css" media="all">
+            h1.heading {}
+            h2.sitting {
+                color: slategray;
+                padding: 0.3em 0.6em;
+                margin: 0;
+            }
+            h3 {
+                text-align: center !important;
+                font-weight: normal !important;
+            }
+            div.sittings {
+                margin: 0 0 2em 0;
+                padding: 0;
+            }
+            div.questions {
+                margin: 0;
+                padding: 0 1em 1em 1em;
+            }
+            span.meta {
+                font-size: smaller;
+            }
+            .logo {
+                margin-bottom: 1em;
+                width: 104px;
+                height: 104px;
+                display: block !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+            li.title,
+            li.mover {
+                list-style-type:none;
+                list-style-image:none !important;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="report-content">
+            <h1 class="heading" br:type="text" br:source="title" />
+            <img class="logo" br:type="src" br:src="bungeni-logo.png" />
+            <div id="listing-body">
+                <div br:type="listing" br:source="sittings">
+                    <div class="sittings" br:condition="questions">
+                        <h2 class="sitting" br:type="text" br:source="dc:title" />
+                        <div class="questions">
+                            <h3>Questions</h3>
+                            <ul br:type="listing" br:source="questions"
+                                    br:condition="questions">
+                                <li class="title">
+                                    <span class="meta">Title:</span> 
+                                    <span br:type="text" br:source="dc:title" />
+                                    <br />
+                                    <span class="meta">Asked by:</span> 
+                                    <span br:type="text" br:source="dc:mover" />
+                                    <p br:condition="attachments">
+                                        <strong><span class="meta">Attachments:</span></strong>
+                                        <ul br:type="listing" br:source="attachments">
+                                            <li class="mover">
+                                                <span class="meta">Title:</span> 
+                                                <span br:type="text" br:source="title" />
+                                                <br />
+                                            </li>
+                                        </ul>
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+
+<html xml:lang="en" xmlns:br="http://bungeni.org/reports">
+    <br:config>
+        <title>Bi-Weekly Questions</title>
+        <length>2w</length>
+        <language>en</language>
+    </br:config>
+    <head>
+        <title>Bi-Weekly Questions</title>
+        <style type="text/css" media="all">
+            h1.heading {}
+            h2.sitting {
+                color: slategray;
+                padding: 0.3em 0.6em;
+                margin: 0;
+            }
+            h3 {
+                text-align: center !important;
+                font-weight: normal !important;
+            }
+            div.sittings {
+                margin: 0 0 2em 0;
+                padding: 0;
+            }
+            div.questions {
+                margin: 0;
+                padding: 0 1em 1em 1em;
+            }
+            span.meta {
+                font-size: smaller;
+            }
+            .logo {
+                margin-bottom: 1em;
+                width: 104px;
+                height: 104px;
+                display: block !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+            li.title,
+            li.mover {
+                list-style-type:none;
+                list-style-image:none !important;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="report-content">
+            <h1 class="heading" br:type="text" br:source="title" />
+            <img class="logo" br:type="src" br:src="bungeni-logo.png" />
+            <div id="listing-body">
+                <div br:type="listing" br:source="sittings">
+                    <div class="sittings" br:condition="questions">
+                        <h2 class="sitting" br:type="text" br:source="dc:title" />
+                        <div class="questions">
+                            <h3>Questions</h3>
+                            <ul br:type="listing" br:source="questions"
+                                    br:condition="questions">
+                                <li class="title">
+                                    <span class="meta">Title:</span> 
+                                    <span br:type="text" br:source="dc:title" />
+                                    <br />
+                                    <span class="meta">Asked by:</span> 
+                                    <span br:type="text" br:source="dc:mover" />
+                                    <p br:condition="attachments">
+                                        <strong><span class="meta">Attachments:</span></strong>
+                                        <ul br:type="listing" br:source="attachments">
+                                            <li class="mover">
+                                                <span class="meta">Title:</span> 
+                                                <span br:type="text" br:source="title" />
+                                                <br />
+                                            </li>
+                                        </ul>
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
 

@@ -1,32 +1,55 @@
 <html xml:lang="en" xmlns:br="http://bungeni.org/reports">
     <br:config>
-        <title>Sitting Agenda</title>
-        <length>1w</length>
+        <title>Order of the day</title>
+        <length>1d</length>
         <language>en</language>
     </br:config>
     <head>
-        <title>Sitting Agenda</title>
+        <title>Order of the day</title>
         <style type="text/css" media="all">
-            h2.agendaheading {
+            h1.heading {
                 font-weight: bold;
+                font-size: 1.5em;
+                text-align: center !important;
+            }
+            h1 {
+                text-align: center !important;
+            }
+            h2.agendaheading {
                 color: slategray;
-                background-color: mistyrose;
                 padding: 0.3em 0.6em;
-                margin: 0;
+                margin: 0.5em 0 0.5em 0;
             }
             .logo {
                 margin-bottom: 1em;
-                width: 40px;
-                height: 40px;
+                width: 104px;
+                height: 104px;
+                display: block !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+            .date {
+                font-weight: bold;
+                text-align: center !important;
+                margin-bottom: 1em;
+            }
+            .items {
+                margin-bottom: 0.5em;
+            }
+            .agendaitem .title {
+                color: brown !important;
+                font-weight: normal !important;
             }
         </style>
     </head>
     <body> 
         <div id="report-content">
-            <h1 class="heading" br:type="text" br:source="title"/>
-            <img class="logo" br:type="src" br:src="/@@/images/favicon.ico"/>
-            <div id="listing-body" class="body" background="color:green">
+            <img class="logo" br:type="src" br:src="bungeni-logo.png"/>
+            <h1 br:type="text" br:source="title"/>
+
+            <div id="listing-body" class="body">
                 <div br:type="listing" br:source="sittings">
+            	    <div class="date" br:type="text" br:source="duration"/>
                     <div class="agendaitems">
                         <div br:type="listing" br:source="item_schedule">                           
                             <!-- heading -->                             
@@ -40,10 +63,9 @@
                                 <!-- proper-item (document) -->
                                 <div br:condition="item_mover" class="agendaitem">
                                     <!-- item order number -->
-                                    (<span class="item-order" br:condition="planned_order" br:type="text" br:source="planned_order"/>)&#160;&#160;<span br:type="text" br:source="dc:title"/> - 
-                                    <span class="itemtype" br:type="text" br:condition="dc:mover" br:source="item_type"/>
+                                    (<span class="item-order" br:condition="planned_order" br:type="text" br:source="planned_order"/>)&#160;&#160;<span class="title" br:type="text" br:source="dc:title"/> 
                                     <span class="mover" br:condition="dc:mover">
-                                        <i>by:</i> <b><span class="agendamovername" br:type="text" br:source="dc:mover"/></b>
+                                        <i>by:</i><span class="agendamovername" br:type="text" br:source="dc:mover"/>
                                     </span>
                                 </div>
                             </div>                           
@@ -54,3 +76,4 @@
         </div>
     </body>
 </html>
+

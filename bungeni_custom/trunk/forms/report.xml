@@ -8,7 +8,9 @@
         <show modes="add view edit listing" />
     </field>
     <field name="status_date" label="Published Date" required="true" value_type="date" render_type="date">
-        <show modes="view listing" />
+        <show modes="listing" />
+        <hide modes="view" />
+
     </field>
     <field name="body" label="Text" required="true" value_type="text" render_type="rich_text">
         <show modes="view edit add" />
