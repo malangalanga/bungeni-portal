@@ -28,7 +28,7 @@ from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.pagetemplate.engine import Engine
 #from bungeni.ui import z3evoque
 
-from bungeni.ui.utils import url, debug
+from bungeni.ui.utils import url
 #from ploned.ui.interfaces import IViewView
 
 def pos_action_in_url(action, request_url):
