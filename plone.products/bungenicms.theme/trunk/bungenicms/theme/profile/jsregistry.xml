@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <object name="portal_javascripts" meta_type="JavaScripts Registry">
-  <javascript id="tiny_mce.js" remove="True"/>
-  <javascript id="tiny_mce_init.js" remove="True"/>
+  <javascript id="tiny_mce.js" remove="True" enabled="False"/>
+  <javascript id="tiny_mce_init.js" remove="True" enabled="False"/>
+  <javascript id="++resource++tabr.js" remove="True" enabled="False"/>
+  <javascript id="++resource++collective.dynatree/dynatree-init.js" remove="True" enabled="False"/>
   <javascript
      cacheable="False"
      compression="safe"
@@ -11,5 +13,42 @@
      id="activator.js"
      inline="False"
      />
-  
+
+  <!-- Collapsible Divs javascript -->
+
+  <javascript
+     id="collapsible.js"
+     cacheable="True"
+     compression="safe"
+     cookable="True"
+     enabled="True"
+     expression=""
+     authenticated="False"
+     inline="False"
+     />
+
+  <!-- Tabs javascript -->
+
+  <javascript
+     id="tabr.js"
+     cacheable="True"
+     compression="none"
+     cookable="True"
+     enabled="True"
+     expression=""
+     authenticated="False"
+     inline="False"
+     />
+
+  <!-- Dynatree javascript -->
+  <javascript
+     id="dynatree-init.js"
+     cacheable="True"
+     compression="none"
+     cookable="True"
+     enabled="True"
+     expression=""
+     authenticated="False"
+     inline="False"
+     />   
 </object>
