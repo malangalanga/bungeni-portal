@@ -2049,6 +2049,20 @@ span.yui-button.yui-link-button span a {
     display: none !important;
 }
 
+dl.expandedInlineCollapsible dt.collapsibleHeader,
+dl.expandedBlockCollapsible dt.collapsibleHeader {
+    padding: 0 6px 0 22px;
+    background: White url(/static/images/treeExpanded.png) no-repeat 6px 50% !important;
+    cursor: pointer;
+}
+
+dl.collapsedInlineCollapsible dt.collapsibleHeader,
+dl.collapsedBlockCollapsible dt.collapsibleHeader {
+    padding: 0 6px 0 22px;
+    background: transparent url(/static/images/treeCollapsed.png) no-repeat 6px 50% !important;
+    cursor: pointer;
+}
+
 #footpanel {
     position: fixed;
     bottom: 0; left: 0;
@@ -2068,7 +2082,7 @@ span.yui-button.yui-link-button span a {
     top:expression(eval(document.compatMode &&document.compatMode=='CSS1Compat') ?documentElement.scrollTop+(documentElement.clientHeight-this.clientHeight) : document.body.scrollTop +(document.body.clientHeight-this.clientHeight));
 }
 
-#footpanel ul {
+#footpanel dd {
     padding: 0; margin: 0;
     float: left;
     width: 100%;
@@ -2081,39 +2095,40 @@ span.yui-button.yui-link-button span a {
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px;
-    border: 2px solid;
-    background: #66FF99;
+    border: 1px solid;
+    background: #CDE2A7;
 }
 
-#footpanel ul li{
-    margin: 0px; 
-    padding: 0;
+#footpanel dd li{
+    margin: 0em 0.5em 0 0 !important;
     float: left;
     position: relative;
-    margin: 0 0.5em 0 0 !important;
+    list-style-type: none !important;
+    display: list-item !important;
 }
 
-#footpanel ul li.spacer{
+#footpanel dd li.spacer{
     background-color: black !important; 
-    width: 0.25em;
+    width: 0.1em;
     float: left;
     height: 8em !important;
 }
 
-#footpanel ul li a {
-    padding: 5px;
+#footpanel dd li a {
     float: left;
     color: #333;
     position: relative;
     height: 40px !important;
     width: 40px !important;
+    padding-left: 10px !important;
+    padding-top: 10px !important;
 }
 
-html #footpanel ul li a:hover {
+html #footpanel dd li a:hover {
     background-color: #fff;
 }
 
-html #footpanel ul li a.active { /*--Active state when sub-panel is open--*/
+html #footpanel dd li a.active { /*--Active state when sub-panel is open--*/
     background-color: #fff;
     height: 32px;
     margin-top: -2px; /*--Push it up 2px to attach the active button to sub-panel--*/
@@ -2125,7 +2140,7 @@ html #footpanel ul li a.active { /*--Active state when sub-panel is open--*/
 }
 
 /*--Reset link style for sub-panel links--*/
-#footpanel ul li div a { 
+#footpanel dd li div a { 
     text-indent: 0;
     width: auto;
     height: auto;
@@ -2136,9 +2151,9 @@ html #footpanel ul li a.active { /*--Active state when sub-panel is open--*/
 }
 
 /*--Reset hover style for sub-panel links--*/
-#footpanel ul li div a:hover {	text-decoration: underline; } 
+#footpanel dd li div a:hover {	text-decoration: underline; } 
 
-#footpanel ul li p {
+#footpanel dd li p {
     font-size: 0.8em;
     text-align: center;
     width: 48px;
@@ -2245,6 +2260,9 @@ a.private {
 }
 a#chatpanel_online_users {
     background: url(/static/images/comment_user_32.png) no-repeat center center; 
+}
+div.spacer {
+    background: url(/static/images/spacer.png) no-repeat center center; 
 }
 
 /*--Right align the chat and alert panels--*/

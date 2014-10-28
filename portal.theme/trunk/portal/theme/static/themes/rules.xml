@@ -78,7 +78,7 @@
             content="#portal-globalnav > li:first-child"/>           
         <drop theme="#processing_indicatron" />
         <prepend href="/plone"
-            content="div#footpanel"
+            content="dl#footpanel"
             theme="#portal-footer"
         />            
     </rule>
@@ -107,7 +107,7 @@
         <drop theme="#processing_indicatron" /> 
         <drop content="attributes(class):#portal-globalnav li:first-child" />
         <prepend href="/plone"
-            content="div#footpanel"
+            content="dl#footpanel"
             theme="#portal-footer"
         />           
     </rule>    
@@ -150,7 +150,7 @@
             theme="children:#portal-globalnav ul.level0" />
 
         <prepend href="/plone"
-            content="div#footpanel"
+            content="dl#footpanel"
             theme="#portal-footer"
         /> 
 
@@ -209,7 +209,7 @@
             theme="children:#portal-personaltools ul"
         />
         <prepend href="/plone"
-            content="div#footpanel"
+            content="dl#footpanel"
             theme="#portal-footer"
         />    
     </rule>  

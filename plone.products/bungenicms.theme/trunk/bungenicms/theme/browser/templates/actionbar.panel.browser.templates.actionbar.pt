@@ -1,0 +1,8 @@
+<dl id="footpanel" class="collapsible inline collapsedOnLoad">
+  <dt class="collapsibleHeader"> Dashboard</dt>
+    <dd id="mainpanel" class="collapsibleContent">
+        <tal:viewlets repeat="viewlet options/viewlets">
+            <tal:render replace="structure viewlet/render"/>
+        </tal:viewlets>
+    </dd>
+</dl>

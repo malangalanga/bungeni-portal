@@ -3,7 +3,10 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="bungenicms.theme">
+
+    <include package="z3c.jbot" file="meta.zcml" />
         
+    <!-- Resource directory for images-->    
     <browser:resourceDirectory
         name="bungenicms.theme.images"
         directory="images"
@@ -16,6 +19,10 @@
         permission="zope2.View" 
         layer="bungenicms.theme.layer.ILayer"
         template="./templates/workspace_viewlet.pt"
+        />
+
+    <browser:jbot
+        directory="templates"
         />
 
 </configure>

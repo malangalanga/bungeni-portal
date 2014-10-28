@@ -486,7 +486,7 @@ body.mceContentBody h2.content-tab {
     background: #ffffff !important;
 }
 
-#footpanel ul {
+#footpanel dd {
     height: 80px !important;
     border-left: 2px solid #000;
     border-right: 2px solid #000;
@@ -496,20 +496,24 @@ body.mceContentBody h2.content-tab {
     -webkit-border-radius: 10px;
     border-radius: 10px;
     border: 2px solid;
-    background: #66FF99;
+    background: #CDE2A7;
 }
 
-#footpanel ul li {
-    margin: 0 0.5em 0 0 !important;
+#footpanel dd li {
+    list-style-type: none !important;
+    display: list-item !important;
+    float: left;
 }
 
-#footpanel ul li a {
+#footpanel dd li a {
     height: 40px !important;
     width: 40px !important;
+    padding-left: 40px;
+    padding-top: 20px;
 }
 
 
-#footpanel ul li p {
+#footpanel dd li p {
     font-size: 0.8em;
     text-align: center;
     width: 48px;
@@ -518,64 +522,64 @@ body.mceContentBody h2.content-tab {
     background: url("++resource++bungenicms.theme.images/comment_user_32.png") no-repeat scroll 3px center transparent !important;
     padding-left: 45px !important;
 }
-a.alerts { 
+#footpanel a.alerts { 
     display: none !important;  
 }
-a.draft { 
+#footpanel a.draft { 
     background: url(++resource++bungenicms.theme.images/draft.png) no-repeat center center;  
 }
 
-a.inbox { 
+#footpanel a.inbox { 
     background: url(++resource++bungenicms.theme.images/inbox.png) no-repeat center center; 
 }
 
-a.pending { 
+#footpanel a.pending { 
     background: url(++resource++bungenicms.theme.images/pending.png) no-repeat center center; 
 }
 
-a.archive { 
+#footpanel a.archive { 
     background: url(++resource++bungenicms.theme.images/archive.png) no-repeat center center; 
 }
 
-a.consideration { 
+#footpanel a.consideration { 
     background: url(++resource++bungenicms.theme.images/consideration.png) no-repeat center center; 
 }
 
-a.tracked { 
+#footpanel a.tracked { 
     background: url(++resource++bungenicms.theme.images/tracked.png) no-repeat center center; 
 }
 
-a.scheduling { 
+#footpanel a.scheduling { 
     background: url(++resource++bungenicms.theme.images/calendar.png) no-repeat center center; 
 }
-a.groups { 
+#footpanel a.groups { 
     background: url(++resource++bungenicms.theme.images/groups.png) no-repeat center center; 
 }
-a.pubs { 
+#footpanel a.pubs { 
     background: url(++resource++bungenicms.theme.images/pubs.png) no-repeat center center; 
 }
-a.library { 
+#footpanel a.library { 
     background: url(++resource++bungenicms.theme.images/library.png) no-repeat center center;  
 }
-a.news { 
+#footpanel a.news { 
     background: url(++resource++bungenicms.theme.images/news.png) no-repeat center center;  
 }
-a.web { 
+#footpanel a.web { 
     background: url(++resource++bungenicms.theme.images/webspace.png) no-repeat center center;  
 }
-a.private { 
+#footpanel a.private { 
     background: url(++resource++bungenicms.theme.images/privatespace.png) no-repeat center center;  
 }
 #mainpanel a.home {
     display: none !important;
 }
-a.profile {
+#mainpanel a.profile {
     display: none !important;
 }
-a.editprofile {
+#mainpanel a.editprofile {
     display: none !important;
 }
-a.contacts {
+#mainpanel a.contacts {
     display: none !important;
 }
 /* </dtml-with> */

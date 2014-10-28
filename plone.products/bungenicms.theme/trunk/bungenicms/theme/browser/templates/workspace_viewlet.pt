@@ -46,7 +46,7 @@
         <a href="#" 
             title="Tracked Items"
             class="tracked"
-            tal:attributes="href string:${view/portal_url}workspace/tracked-documents">
+            tal:attributes="href string:${view/portal_url}/../workspace/tracked-documents">
         </a><br>
         <p>tracked</p>
     </li>
@@ -76,7 +76,7 @@
         <a href="#" 
             title="publications"
             class="pubs"
-            tal:attributes="href string:${view/portal_url}/../publications">
+            tal:attributes="href string:${view/portal_url}/../scheduling/publications">
         </a><br>
         <p>publications</p>
     </li>
@@ -84,7 +84,7 @@
         <a href="#" 
             title="digital library"
             class="library"
-            tal:attributes="href string:${view/portal_url}/../groups/library-view">
+            tal:attributes="href string:${view/portal_url}/groups/library-view">
         </a><br>
         <p>digital library</p>
     </li>
