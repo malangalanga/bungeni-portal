@@ -31,7 +31,11 @@
     <match path="regex:^/(workspace/groups/my-groups)/?"
         class="load-workspace-group-navigation" />  
     <match path="regex:^/(plone/groups|plone/membership)/?"
-        class="update-navigation" />               
+        class="update-navigation" />
+    <match path="exact:/exist/higher_house"
+        class="load-senate-content" />
+    <match path="exact:/exist/lower_house"
+        class="load-hreps-content" />                
     <match path="exact:/"
         class="frontpage" />
     <match path="exact:/front-page"
@@ -154,7 +158,19 @@
             theme="#portal-footer"
         /> 
 
-    </rule>    
+    </rule>
+
+    <rule class="load-senate-content"> 
+        <pyquery pyref=
+            "portal.theme.static.themes.rules:add_exist_content"
+        />
+    </rule>  
+
+    <rule class="load-hreps-content"> 
+        <pyquery pyref=
+            "portal.theme.static.themes.rules:add_exist_content"
+        />
+    </rule> 
     
     <rule class="frontpage">
         <append href="/plone"
@@ -202,6 +218,10 @@
         <pyquery pyref=
             "portal.theme.static.themes.rules:add_menu_items"
         />
+
+        <pyquery pyref=
+            "portal.theme.static.themes.rules:add_exist_content"
+        />
         <drop content="#portal-column-content" /> 
         
         <append href="/exist"
@@ -232,7 +252,7 @@
         <append content="children:#portal-personaltools"
             theme="children:#portal-personaltools"
         />
-        <pyquery pyref="portal.theme.static.themes.rules:image_links" />
+        <pyquery pyref="portal.theme.static.themes.rules:update_links" />
         
         <!-- language selector -->
         <replace content="#portal-languageselector"

@@ -527,6 +527,11 @@ div#portal-globalnav-bottom:empty{
     background: #7E7E7E;
     bottom:inherit;
 }
+.section-bungeni-.template-portal div#portal-globalnav ul.level1,
+.template-portal.site-plone div#portal-globalnav ul.level1 {
+    margin-top: -0.5em !important;
+}
+
 .template-portal div#portal-globalnav ul.level1 {
     background: #016d9a;
 }
@@ -2095,7 +2100,7 @@ dl.collapsedBlockCollapsible dt.collapsibleHeader {
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px;
-    border: 1px solid;
+    border: 1px solid blue;
     background: #CDE2A7;
 }
 
@@ -2108,7 +2113,7 @@ dl.collapsedBlockCollapsible dt.collapsibleHeader {
 }
 
 #footpanel dd li.spacer{
-    background-color: black !important; 
+    background-color: blue !important; 
     width: 0.1em;
     float: left;
     height: 8em !important;
@@ -2325,3 +2330,116 @@ a.contacts {
     display: none !important;
 }
 
+div.row {
+    z-index: 1 !important;
+}
+
+.portletNews .portletHeader,
+.portlet-static-legislative-documents  .portletHeader {
+    background: #016D9A;
+    color: white;
+    -webkit-border-top-left-radius: 10px;
+    -khtml-border-radius-topleft: 10px;	
+    -moz-border-radius-topleft: 10px;
+    border-top-left-radius: 10px;
+    -webkit-border-top-right-radius: 10px;
+    -khtml-border-radius-topright: 10px;	
+    -moz-border-radius-topright: 10px;
+    border-top-right-radius: 10px;
+}
+
+.slideshowPortlet {
+    margin-top: -0.8em !important;
+    margin-left: -0.5em !important;
+}
+   
+.slideshowPortlet .portletHeader,
+.portletNews .portletFooter {
+    display: none !important;
+}
+
+.slideshowPortlet .portletItem,
+.slideshowPortlet .portletPics {
+    border: 0px !important;
+}
+
+.portlet-static-whats-on-senate,
+.portlet-static-whats-on-house-of-representatives {
+    font-size: 90% !important;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    border-bottom: 0px !important;
+}
+
+.portlet-static-whats-on-senate .portletHeader,
+.portlet-static-whats-on-house-of-representatives .portletHeader {
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    color: white;
+}
+
+.portlet-static-whats-on-senate .portletHeader {
+    background: #B22B14;
+}
+
+.portlet-static-whats-on-house-of-representatives .portletHeader {
+    background: #F79F10;
+}
+
+.portlet-static-whats-on-senate .portletItem,
+.portlet-static-whats-on-house-of-representatives .portletItem {
+    border: 0px !important;
+}
+
+
+.portlet-static-whats-on-senate .portletItem .toggler-list,
+.portlet-static-whats-on-house-of-representatives .portletItem .toggler-list,
+.portlet-static-whats-on-senate .portletItem .tgl-pad-right,
+.portlet-static-whats-on-house-of-representatives .portletItem .tgl-pad-right {
+    display: none !important;
+}
+
+.section-bungeni-.template-portal .schedule-block {
+    clear: both;
+    height: 15px;
+    width: 99%;
+}
+
+.section-bungeni-.template-portal .schedule-block .header {
+    font-style: italic;
+}
+
+.section-bungeni-.template-portal .schedule-block .left {
+    display: inline-block;
+    float: left;
+    margin-right: 10px;
+    min-width: 80px;
+    white-space: nowrap;
+}
+
+.section-bungeni-.template-portal .schedule-block .left a {
+    color: #DD3519;
+}
+.section-bungeni-.template-portal .schedule-block .right {
+    display: inline-block;
+    float: left;
+}
+
+.section-bungeni-.template-portal ul.scheduling {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+.section-bungeni-.template-portal ul.scheduling li {
+    list-style-type: none !important;
+    list-style-image: none !important;
+    margin-left: -1.7em;
+    margin-top: -0.5em;
+}
+
+ul.ls-row li {
+    text-align: left;
+}

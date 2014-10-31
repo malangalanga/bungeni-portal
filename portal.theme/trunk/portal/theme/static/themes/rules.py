@@ -31,9 +31,10 @@ def add_section_links(content, theme, resource_fetcher, log):
         else:
             theme('body').addClass('template-portal')
 
-def image_links(content, theme, resource_fetcher, log):
+def update_links(content, theme, resource_fetcher, log):
     """
     Use absolute links to the members image and political groups logo.
+    Change home page tab name if necessary
     """
     
     if content('#region-content').html() != None:
@@ -51,7 +52,13 @@ def image_links(content, theme, resource_fetcher, log):
                                                str(link_id)+'/'+image)
                 link_node.replaceWith('<div id="region-content" \
                 class="documentContent">' + new_value + '</div>')
-                
+
+    if theme('#portal-globalnav').html() != None:
+	tab_content = theme('#portal-globalnav').html()
+        tab_content = tab_content.replace("home", "National Assembly")
+        tab_node = theme('#portal-globalnav')
+        tab_node.replaceWith('<div id="portal-globalnav" \
+                ">' + tab_content + '</div>')                
        
 def add_member_workspace_links(content, theme, resource_fetcher, log):
     """
@@ -118,7 +125,37 @@ def add_member_public_links(content, theme, resource_fetcher, log):
     member_id = content(".MemberOfParliament .User .content-right-column")\
                 .pop(4).text_content()
     link_value = "/plone/membership/" +  member_id.strip() + "/web_space"
-    
+
+def add_exist_content(content, theme, resource_fetcher, log):
+    """
+    Add content from exist to frontpage placeholders
+    """
+    theme_host = get_theme_host(log)
+    theme_url = "http://" + theme_host
+    if len(theme_host.split(":")) > 1:
+        theme_port = ":" + theme_host.split(":")[1]
+
+    exist_port = ":8080" 
+    plone_port = ":8082" 
+    exist_url = theme_url.split(":")[0] + ":" + theme_url.split(":")[1] + \
+                exist_port + "/exist/"
+    plone_url = theme_url.split(":")[0] + ":" + theme_url.split(":")[1] + \
+                plone_port
+
+    link_val = exist_url +"higher_house/whatson?tab=sittings&showing=old"
+    if check_url(link_val):
+        eurl = pq(link_val)
+        econtent = eurl(".whatson-wrapper .left").html()
+        theme(".portlet-static-whats-on-senate .portletItem").append(pq(econtent))
+        content("#main-wrapper").append(pq(econtent))
+
+    link_val = exist_url +"lower_house/whatson?tab=sittings&showing=old"
+    if check_url(link_val):
+        eurl = pq(link_val)
+        econtent = eurl(".whatson-wrapper .left").html()
+        theme(".portlet-static-whats-on-house-of-representatives .portletItem").append(pq(econtent))
+        content("#main-wrapper").append(pq(econtent))
+  
 def add_space_tab(content, theme, resource_fetcher, log, space_type):
     """
     Add the member's or groups web space as a tab
