@@ -5,7 +5,7 @@ username = 'ploneadmin'
 password = 'ploneadmin'
 url = 'localhost:8082/plone'
 
-ids_to_transfer = ['front-page','images', 'plone-bungeni-content-types']
+ids_to_transfer = ['front-page','images', 'highlights', 'content-types']
 
 for id in ids_to_transfer:
 
