@@ -21,12 +21,10 @@
         <parameter name="calendar_doc_types" value="assembly_agenda_item senate_agenda_item" />
         <parameter name="report_templates" 
             value="sitting_agenda sitting_minutes weekly_business bi_weekly_questions" 
-            note="the default/fallback list of report templates when no matching when scenario"    
-        />
+            note="the default/fallback list of report templates when no matching when scenario" />
         <when condition="chamber_is_lower_house" enabled="true"
-            note="in case of the assembly, we want precisely these report templates"
-            >
-            <parameter name="report_templates" value="weekly_business bi_weekly_questions" />
+            note="in case ofthe assembly, we want precisely these report templates" >
+            <parameter name="report_templates" value="sitting_agenda sitting_minutes weekly_business bi_weekly_questions" />
         </when>
     </feature>
     <feature name="address" enabled="true" />
