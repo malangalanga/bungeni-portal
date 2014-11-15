@@ -12,10 +12,13 @@ def check_url(url):
     Get the header for a given url and check response code.
     """
     parsed_url = urlparse(url)
-    http_instance = httplib.HTTP(parsed_url[1])
-    http_instance.putrequest('HEAD', parsed_url[2])
-    http_instance.endheaders()
-    return http_instance.getreply()[0] == httplib.OK
+    try:
+        http_instance = httplib.HTTP(parsed_url[1])
+        http_instance.putrequest('HEAD', parsed_url[2])
+        http_instance.endheaders()
+        return http_instance.getreply()[0] == httplib.OK
+    except Exception, e:
+        print e
 
 def add_section_links(content, theme, resource_fetcher, log):
     """
@@ -135,10 +138,10 @@ def add_exist_content(content, theme, resource_fetcher, log):
     if len(theme_host.split(":")) > 1:
         theme_port = ":" + theme_host.split(":")[1]
 
-    exist_port = ":8080" 
+    exist_port = ":8088" 
     plone_port = ":8082" 
     exist_url = theme_url.split(":")[0] + ":" + theme_url.split(":")[1] + \
-                exist_port + "/exist/"
+                exist_port + "/exist/apps/framework/bungeni/"
     plone_url = theme_url.split(":")[0] + ":" + theme_url.split(":")[1] + \
                 plone_port
 
